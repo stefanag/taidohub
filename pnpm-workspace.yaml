@@ -7,6 +7,7 @@ allowBuilds:
   '@swc/core': true
   esbuild: true
   msw: true
+  unrs-resolver: true
 overrides:
   # Vitest 2 declares vite ^5 as peer but the frontend pins vite ^6;
   # without this override pnpm installs both, and tsc sees two copies of
