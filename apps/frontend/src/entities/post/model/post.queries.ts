@@ -55,9 +55,9 @@ export function useCreatePost(
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: createPost,
-    onSuccess: (data, vars, ctx) => {
+    onSuccess: (...args) => {
       void queryClient.invalidateQueries({ queryKey: postKeys.lists() });
-      options?.onSuccess?.(data, vars, ctx);
+      options?.onSuccess?.(...args);
     },
     ...options,
   });
@@ -74,10 +74,10 @@ export function useUpdatePost(
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ id, input }: UpdatePostVariables) => updatePost(id, input),
-    onSuccess: (data, vars, ctx) => {
+    onSuccess: (data, vars, ...rest) => {
       void queryClient.invalidateQueries({ queryKey: postKeys.detail(vars.id) });
       void queryClient.invalidateQueries({ queryKey: postKeys.lists() });
-      options?.onSuccess?.(data, vars, ctx);
+      options?.onSuccess?.(data, vars, ...rest);
     },
     ...options,
   });
@@ -89,9 +89,9 @@ export function useDeletePost(
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => deletePost(id),
-    onSuccess: (data, vars, ctx) => {
+    onSuccess: (...args) => {
       void queryClient.invalidateQueries({ queryKey: postKeys.all });
-      options?.onSuccess?.(data, vars, ctx);
+      options?.onSuccess?.(...args);
     },
     ...options,
   });

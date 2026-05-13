@@ -136,9 +136,15 @@ export const postHandlers = [
         { status: 400 },
       );
     }
+    // Strip `undefined` values from the parsed patch so they don't overwrite
+    // populated fields on `existing` — under exactOptionalPropertyTypes the
+    // raw spread would also typecheck-fail.
+    const patch = Object.fromEntries(
+      Object.entries(parsed.data).filter(([, v]) => v !== undefined),
+    );
     const next: Post = {
       ...existing,
-      ...parsed.data,
+      ...patch,
       updatedAt: new Date().toISOString(),
     };
     store.set(id, next);
