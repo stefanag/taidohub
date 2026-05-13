@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@casl/ability": "^6.7.1",
-    "@casl/react": "^4.0.0",
+    "@casl/react": "^6.0.0",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@repo/contracts": "workspace:*",
@@ -30,7 +30,7 @@
     "better-auth": "^1.0.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
-    "lucide-react": "^0.460.0",
+    "lucide-react": "^1.14.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwind-merge": "^3.6.0",
