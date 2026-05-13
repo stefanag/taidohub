@@ -1,0 +1,99 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-test:
+    name: lint • typecheck • arch • build • test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 11.1.1 }
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ github.sha }}
+          restore-keys: turbo-${{ runner.os }}-
+      - run: pnpm turbo run lint typecheck arch build test
+      - name: Build Storybook
+        run: pnpm --filter frontend build-storybook
+      - uses: actions/upload-artifact@v4
+        with:
+          name: storybook
+          path: apps/frontend/storybook-static
+          if-no-files-found: warn
+
+  backend-e2e:
+    name: backend e2e
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: app_test
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+        ports:
+          - 5432:5432
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/app_test
+      DIRECT_URL: postgresql://postgres:postgres@localhost:5432/app_test
+      TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/app_test
+      WEB_ORIGIN: http://localhost:5173,http://localhost:8080
+      BETTER_AUTH_SECRET: test-secret-32-bytes-long-12345678
+      BETTER_AUTH_URL: http://localhost:3001
+      NODE_ENV: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 11.1.1 }
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @repo/contracts build
+      - run: pnpm --filter backend db:generate
+      - run: pnpm --filter backend db:migrate
+      - run: pnpm --filter backend test:e2e
+
+  openapi-sync:
+    name: openapi spec is committed
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 11.1.1 }
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @repo/contracts build
+      - run: pnpm --filter backend openapi:generate
+      - name: Diff openapi artifacts
+        run: |
+          git diff --exit-code packages/contracts/openapi/ \
+            || (echo "::error::openapi spec is stale — run 'pnpm --filter backend openapi:generate' and commit." && exit 1)
+      - uses: actions/upload-artifact@v4
+        with:
+          name: openapi
+          path: packages/contracts/openapi/

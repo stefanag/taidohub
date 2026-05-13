@@ -1,0 +1,76 @@
+{
+  "name": "@repo/contracts",
+  "version": "0.0.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "description": "Single source of truth for the HTTP boundary: Zod schemas, route constants, CASL subjects/actions, and OpenAPI helpers shared between the NestJS backend and the React frontend.",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./posts": {
+      "types": "./dist/posts.d.ts",
+      "import": "./dist/posts.js",
+      "require": "./dist/posts.cjs"
+    },
+    "./users": {
+      "types": "./dist/users.d.ts",
+      "import": "./dist/users.js",
+      "require": "./dist/users.cjs"
+    },
+    "./auth": {
+      "types": "./dist/auth.d.ts",
+      "import": "./dist/auth.js",
+      "require": "./dist/auth.cjs"
+    },
+    "./casl": {
+      "types": "./dist/casl.d.ts",
+      "import": "./dist/casl.js",
+      "require": "./dist/casl.cjs"
+    },
+    "./errors": {
+      "types": "./dist/errors.d.ts",
+      "import": "./dist/errors.js",
+      "require": "./dist/errors.cjs"
+    },
+    "./routes": {
+      "types": "./dist/routes.d.ts",
+      "import": "./dist/routes.js",
+      "require": "./dist/routes.cjs"
+    },
+    "./openapi": {
+      "types": "./dist/openapi.d.ts",
+      "import": "./dist/openapi.js",
+      "require": "./dist/openapi.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "openapi"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true});require('node:fs').rmSync('.turbo',{recursive:true,force:true})\""
+  },
+  "dependencies": {
+    "zod": "^3.23.8",
+    "@anatine/zod-openapi": "^2.2.7",
+    "openapi3-ts": "^4.4.0"
+  },
+  "devDependencies": {
+    "tsup": "^8.3.5",
+    "typescript": "^5.6.3",
+    "eslint": "^9.14.0",
+    "@repo/tsconfig": "workspace:*",
+    "@repo/eslint-config": "workspace:*"
+  }
+}

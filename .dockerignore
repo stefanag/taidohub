@@ -1,0 +1,61 @@
+# Dependencies
+node_modules
+**/node_modules
+
+# Build artifacts
+**/dist
+**/build
+**/.next
+**/out
+
+# Turborepo
+.turbo
+**/.turbo
+
+# Git / VCS
+.git
+.gitignore
+.gitattributes
+
+# CI / GitHub
+.github
+
+# Environment files (keep .env.example)
+**/.env
+**/.env.*
+!**/.env.example
+
+# Coverage / tests
+coverage
+**/coverage
+test-results
+playwright-report
+
+# Storybook
+storybook-static
+**/storybook-static
+
+# Docs / markdown (keep README files for app context)
+*.md
+!README.md
+!**/README.md
+
+# IDE / Editor
+.vscode
+.idea
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Docker
+Dockerfile
+**/Dockerfile
+.dockerignore
+docker-compose*.yml

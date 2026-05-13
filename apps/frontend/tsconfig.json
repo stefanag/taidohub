@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@repo/tsconfig/react-vite.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "composite": false,
+    "noEmit": true
+  },
+  "include": ["src", "vite.config.ts", "vitest.config.ts", ".storybook"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}

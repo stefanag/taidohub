@@ -1,0 +1,67 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build artifacts
+dist/
+build/
+.next/
+out/
+*.tsbuildinfo
+
+# Turborepo
+.turbo/
+
+# Coverage
+coverage/
+*.lcov
+
+# Testing
+test-results/
+playwright-report/
+
+# Storybook
+storybook-static/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Environment files (keep .env.example)
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+
+# IDE / Editors
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+.idea/
+*.swp
+*.swo
+*~
+
+# Misc
+*.pem
+.cache/
+.eslintcache
+.prettiercache
+.tmp/
+tmp/
+
+# Claude Code (user-local config; share .claude/settings.json if you want team defaults)
+.claude/settings.local.json
+
+# Note: packages/contracts/openapi/openapi.json IS committed (CI sync check).

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "NestJS",
+  "extends": "./base.json",
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "useDefineForClassFields": false,
+    "declaration": true,
+    "outDir": "./dist",
+    "sourceMap": true,
+    "removeComments": false,
+    "noEmit": false
+  }
+}
