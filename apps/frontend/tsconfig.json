@@ -6,9 +6,8 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "composite": false,
+    "types": ["node", "vite/client"],
     "noEmit": true
   },
-  "include": ["src", "vite.config.ts", "vitest.config.ts", ".storybook"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["src", "vite.config.ts", "vitest.config.ts", ".storybook"]
 }
