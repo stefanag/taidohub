@@ -1,15 +1,14 @@
 /**
- * Side-effecting module: installs OpenAPI metadata support on `z` so any Zod
- * schema in the package (or downstream consumers) can call `.openapi({...})`.
+ * Re-export of `z` from Zod 4.
  *
- * Every resource file imports this module to guarantee the extension is loaded
- * before any `.openapi()` call evaluates. Splitting it out of `./openapi.ts`
- * avoids a circular dependency (`openapi.ts` itself imports the resource
- * registries to build a default `registerContractSchemas`).
+ * Historically this module installed `@anatine/zod-openapi`'s prototype patch
+ * so every Zod schema gained a `.openapi({...})` method. That library is not
+ * compatible with Zod 4 (it patches `ZodSchema.prototype`, which no longer
+ * exists). Zod 4 provides `.meta({...})` natively, so no extension step is
+ * required.
+ *
+ * The file is kept as a thin re-export so existing
+ * `import { z } from './zod-openapi.js'` imports across the package continue
+ * to work without rippling through every file.
  */
-import { extendZodWithOpenApi } from '@anatine/zod-openapi';
-import { z } from 'zod';
-
-extendZodWithOpenApi(z);
-
-export { extendZodWithOpenApi, z };
+export { z } from 'zod';

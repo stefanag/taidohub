@@ -14,8 +14,8 @@ export const SignInWithEmailSchema = z
     email: z.string().email().describe('Registered email address.'),
     password: z.string().min(8).describe('Account password (8+ chars).'),
   })
-  .openapi({
-    title: 'SignInWithEmail',
+  .meta({
+    id: 'SignInWithEmail',
     description: 'Payload for `POST /api/auth/sign-in/email`.',
     example: {
       email: 'ada@example.com',
@@ -29,8 +29,8 @@ export const SignUpWithEmailSchema = z
     password: z.string().min(8).describe('New account password (8+ chars).'),
     name: z.string().min(1).optional().describe('Optional display name.'),
   })
-  .openapi({
-    title: 'SignUpWithEmail',
+  .meta({
+    id: 'SignUpWithEmail',
     description: 'Payload for `POST /api/auth/sign-up/email`.',
     example: {
       email: 'ada@example.com',
@@ -47,8 +47,8 @@ export const SessionSchema = z
       expiresAt: z.string().datetime().describe('ISO-8601 timestamp the session expires at.'),
     }),
   })
-  .openapi({
-    title: 'Session',
+  .meta({
+    id: 'Session',
     description:
       'The session payload returned by `GET /api/auth/get-session` for an authenticated request.',
     example: {

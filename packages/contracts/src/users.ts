@@ -14,8 +14,8 @@ export const UserSchema = z
     createdAt: z.string().datetime().describe('ISO-8601 timestamp the account was created.'),
     updatedAt: z.string().datetime().describe('ISO-8601 timestamp the account was last modified.'),
   })
-  .openapi({
-    title: 'User',
+  .meta({
+    id: 'User',
     description: 'A user account exposed to API clients.',
     example: {
       id: '4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5',

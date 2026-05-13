@@ -17,8 +17,8 @@ export const PostSchema = z
     createdAt: z.string().datetime().describe('ISO-8601 timestamp the post was created.'),
     updatedAt: z.string().datetime().describe('ISO-8601 timestamp the post was last modified.'),
   })
-  .openapi({
-    title: 'Post',
+  .meta({
+    id: 'Post',
     description: 'A blog post.',
     example: {
       id: '7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5',
@@ -40,8 +40,8 @@ export const CreatePostSchema = z
       .default(false)
       .describe('Whether to publish immediately (defaults to draft).'),
   })
-  .openapi({
-    title: 'CreatePostInput',
+  .meta({
+    id: 'CreatePostInput',
     description: 'Payload for creating a new post.',
     example: {
       title: 'Hello, world!',
@@ -50,8 +50,8 @@ export const CreatePostSchema = z
     },
   });
 
-export const UpdatePostSchema = CreatePostSchema.partial().openapi({
-  title: 'UpdatePostInput',
+export const UpdatePostSchema = CreatePostSchema.partial().meta({
+  id: 'UpdatePostInput',
   description: 'Payload for partially updating an existing post.',
   example: {
     title: 'Hello, world! (revised)',
@@ -76,8 +76,8 @@ export const ListPostsQuerySchema = z
       .describe('Filter by published flag.'),
     q: z.string().optional().describe('Full-text-ish search across title/content.'),
   })
-  .openapi({
-    title: 'ListPostsQuery',
+  .meta({
+    id: 'ListPostsQuery',
     description: 'Query parameters accepted by `GET /api/posts`.',
     example: {
       page: 1,
@@ -93,8 +93,8 @@ export const ListPostsResponseSchema = z
     perPage: z.number().int().positive(),
     total: z.number().int().nonnegative(),
   })
-  .openapi({
-    title: 'ListPostsResponse',
+  .meta({
+    id: 'ListPostsResponse',
     description: 'A page of posts plus pagination metadata.',
     example: {
       data: [
