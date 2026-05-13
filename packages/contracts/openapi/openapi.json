@@ -1,0 +1,1588 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/auth/sign-in/email": {
+      "post": {
+        "description": "Issues a `better-auth.session_token` HTTP-only cookie on success. The actual handler is provided by better-auth.",
+        "operationId": "AuthController_signInEmail",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignInWithEmailDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Sign in with email + password.",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/auth/sign-up/email": {
+      "post": {
+        "operationId": "AuthController_signUpEmail",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignUpWithEmailDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Create a new account with email + password.",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/auth/sign-out": {
+      "post": {
+        "operationId": "AuthController_signOut",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "Session terminated."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Sign out and clear the session cookie.",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/auth/get-session": {
+      "get": {
+        "operationId": "AuthController_getSession",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Get the active session for the caller.",
+        "tags": [
+          "auth"
+        ]
+      },
+      "post": {
+        "operationId": "AuthController_getSession",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Get the active session for the caller.",
+        "tags": [
+          "auth"
+        ]
+      },
+      "put": {
+        "operationId": "AuthController_getSession",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Get the active session for the caller.",
+        "tags": [
+          "auth"
+        ]
+      },
+      "delete": {
+        "operationId": "AuthController_getSession",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Get the active session for the caller.",
+        "tags": [
+          "auth"
+        ]
+      },
+      "patch": {
+        "operationId": "AuthController_getSession",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Get the active session for the caller.",
+        "tags": [
+          "auth"
+        ]
+      },
+      "options": {
+        "operationId": "AuthController_getSession",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Get the active session for the caller.",
+        "tags": [
+          "auth"
+        ]
+      },
+      "head": {
+        "operationId": "AuthController_getSession",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Get the active session for the caller.",
+        "tags": [
+          "auth"
+        ]
+      },
+      "search": {
+        "operationId": "AuthController_getSession",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Get the active session for the caller.",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/health": {
+      "get": {
+        "operationId": "HealthController_check",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The service is up.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "ok"
+                    },
+                    "uptime": {
+                      "type": "number",
+                      "example": 42.13
+                    },
+                    "version": {
+                      "type": "string",
+                      "example": "0.0.0"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "uptime",
+                    "version"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {}
+        ],
+        "summary": "Liveness/readiness probe.",
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/api/users/me": {
+      "get": {
+        "operationId": "UsersController_me",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Get the currently authenticated user.",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/users": {
+      "get": {
+        "operationId": "UsersController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "List users (admin only).",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/users/{id}": {
+      "get": {
+        "operationId": "UsersController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "User UUID.",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Get a single user by id.",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/api/posts": {
+      "get": {
+        "operationId": "PostsController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListPostsResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "List posts (paginated).",
+        "tags": [
+          "posts"
+        ]
+      },
+      "post": {
+        "operationId": "PostsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePostDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Create a post.",
+        "tags": [
+          "posts"
+        ]
+      }
+    },
+    "/api/posts/{id}": {
+      "get": {
+        "operationId": "PostsController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Post UUID.",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Get a post by id.",
+        "tags": [
+          "posts"
+        ]
+      },
+      "patch": {
+        "operationId": "PostsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Post UUID.",
+            "schema": {}
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePostDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Update a post.",
+        "tags": [
+          "posts"
+        ]
+      },
+      "delete": {
+        "operationId": "PostsController_delete",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Post UUID.",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Post deleted."
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Delete a post.",
+        "tags": [
+          "posts"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "taidohub API",
+    "description": "HTTP boundary for taidohub — schemas derived from `@repo/contracts`, enforced at runtime by `ZodValidationPipe` and documented here.",
+    "version": "0.0.0",
+    "contact": {}
+  },
+  "tags": [
+    {
+      "name": "auth",
+      "description": ""
+    },
+    {
+      "name": "users",
+      "description": ""
+    },
+    {
+      "name": "posts",
+      "description": ""
+    },
+    {
+      "name": "health",
+      "description": ""
+    }
+  ],
+  "servers": [
+    {
+      "url": "http://localhost:3001",
+      "description": "Local"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "session": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "better-auth.session_token"
+      },
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "session-token",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "SignInWithEmailDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "SessionDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "SignUpWithEmailDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "UserDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "ErrorEnvelopeDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "ListPostsResponseDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "PostDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "CreatePostDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "UpdatePostDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "ErrorEnvelope": {
+        "type": [
+          "object"
+        ],
+        "properties": {
+          "error": {
+            "type": [
+              "object"
+            ],
+            "properties": {
+              "code": {
+                "type": [
+                  "string"
+                ],
+                "description": "Stable, machine-readable error code (e.g. `VALIDATION_FAILED`)."
+              },
+              "message": {
+                "type": [
+                  "string"
+                ],
+                "description": "Human-readable error message safe to surface to end users."
+              },
+              "details": {
+                "description": "Optional structured context — e.g. per-field validation errors."
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "title": "ErrorPayload",
+            "description": "The body of a uniform error envelope.",
+            "example": {
+              "code": "NOT_FOUND",
+              "message": "The requested resource could not be found."
+            }
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "title": "ErrorEnvelope",
+        "description": "The uniform error envelope returned for every non-2xx response from the API.",
+        "example": {
+          "error": {
+            "code": "NOT_FOUND",
+            "message": "The requested resource could not be found."
+          }
+        }
+      },
+      "ErrorPayload": {
+        "type": [
+          "object"
+        ],
+        "properties": {
+          "code": {
+            "type": [
+              "string"
+            ],
+            "description": "Stable, machine-readable error code (e.g. `VALIDATION_FAILED`)."
+          },
+          "message": {
+            "type": [
+              "string"
+            ],
+            "description": "Human-readable error message safe to surface to end users."
+          },
+          "details": {
+            "description": "Optional structured context — e.g. per-field validation errors."
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "title": "ErrorPayload",
+        "description": "The body of a uniform error envelope.",
+        "example": {
+          "code": "NOT_FOUND",
+          "message": "The requested resource could not be found."
+        }
+      },
+      "SignInWithEmail": {
+        "type": [
+          "object"
+        ],
+        "properties": {
+          "email": {
+            "type": [
+              "string"
+            ],
+            "format": "email",
+            "description": "Registered email address."
+          },
+          "password": {
+            "type": [
+              "string"
+            ],
+            "minLength": 8,
+            "description": "Account password (8+ chars)."
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ],
+        "title": "SignInWithEmail",
+        "description": "Payload for `POST /api/auth/sign-in/email`.",
+        "example": {
+          "email": "ada@example.com",
+          "password": "correct-horse-battery-staple"
+        }
+      },
+      "SignUpWithEmail": {
+        "type": [
+          "object"
+        ],
+        "properties": {
+          "email": {
+            "type": [
+              "string"
+            ],
+            "format": "email",
+            "description": "Email address to register."
+          },
+          "password": {
+            "type": [
+              "string"
+            ],
+            "minLength": 8,
+            "description": "New account password (8+ chars)."
+          },
+          "name": {
+            "type": [
+              "string"
+            ],
+            "minLength": 1,
+            "description": "Optional display name."
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ],
+        "title": "SignUpWithEmail",
+        "description": "Payload for `POST /api/auth/sign-up/email`.",
+        "example": {
+          "email": "ada@example.com",
+          "password": "correct-horse-battery-staple",
+          "name": "Ada Lovelace"
+        }
+      },
+      "Session": {
+        "type": [
+          "object"
+        ],
+        "properties": {
+          "user": {
+            "type": [
+              "object"
+            ],
+            "properties": {
+              "id": {
+                "type": [
+                  "string"
+                ],
+                "format": "uuid",
+                "description": "Unique identifier (UUID v4)."
+              },
+              "email": {
+                "type": [
+                  "string"
+                ],
+                "format": "email",
+                "description": "The user’s primary email address."
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Display name; null until the user sets one."
+              },
+              "emailVerified": {
+                "type": [
+                  "boolean"
+                ],
+                "description": "Whether the email address has been verified."
+              },
+              "image": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "uri",
+                "description": "URL to the user’s avatar, if any."
+              },
+              "createdAt": {
+                "type": [
+                  "string"
+                ],
+                "format": "date-time",
+                "description": "ISO-8601 timestamp the account was created."
+              },
+              "updatedAt": {
+                "type": [
+                  "string"
+                ],
+                "format": "date-time",
+                "description": "ISO-8601 timestamp the account was last modified."
+              }
+            },
+            "required": [
+              "id",
+              "email",
+              "name",
+              "emailVerified",
+              "image",
+              "createdAt",
+              "updatedAt"
+            ],
+            "title": "User",
+            "description": "A user account exposed to API clients.",
+            "example": {
+              "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+              "email": "ada@example.com",
+              "name": "Ada Lovelace",
+              "emailVerified": true,
+              "image": "https://example.com/avatars/ada.png",
+              "createdAt": "2025-01-15T12:34:56.000Z",
+              "updatedAt": "2025-04-02T08:00:00.000Z"
+            }
+          },
+          "session": {
+            "type": [
+              "object"
+            ],
+            "properties": {
+              "id": {
+                "type": [
+                  "string"
+                ],
+                "description": "Opaque session identifier."
+              },
+              "expiresAt": {
+                "type": [
+                  "string"
+                ],
+                "format": "date-time",
+                "description": "ISO-8601 timestamp the session expires at."
+              }
+            },
+            "required": [
+              "id",
+              "expiresAt"
+            ]
+          }
+        },
+        "required": [
+          "user",
+          "session"
+        ],
+        "title": "Session",
+        "description": "The session payload returned by `GET /api/auth/get-session` for an authenticated request.",
+        "example": {
+          "user": {
+            "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+            "email": "ada@example.com",
+            "name": "Ada Lovelace",
+            "emailVerified": true,
+            "image": null,
+            "createdAt": "2025-01-15T12:34:56.000Z",
+            "updatedAt": "2025-04-02T08:00:00.000Z"
+          },
+          "session": {
+            "id": "sess_01HXYZ…",
+            "expiresAt": "2025-05-13T08:00:00.000Z"
+          }
+        }
+      },
+      "User": {
+        "type": [
+          "object"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string"
+            ],
+            "format": "uuid",
+            "description": "Unique identifier (UUID v4)."
+          },
+          "email": {
+            "type": [
+              "string"
+            ],
+            "format": "email",
+            "description": "The user’s primary email address."
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Display name; null until the user sets one."
+          },
+          "emailVerified": {
+            "type": [
+              "boolean"
+            ],
+            "description": "Whether the email address has been verified."
+          },
+          "image": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uri",
+            "description": "URL to the user’s avatar, if any."
+          },
+          "createdAt": {
+            "type": [
+              "string"
+            ],
+            "format": "date-time",
+            "description": "ISO-8601 timestamp the account was created."
+          },
+          "updatedAt": {
+            "type": [
+              "string"
+            ],
+            "format": "date-time",
+            "description": "ISO-8601 timestamp the account was last modified."
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "name",
+          "emailVerified",
+          "image",
+          "createdAt",
+          "updatedAt"
+        ],
+        "title": "User",
+        "description": "A user account exposed to API clients.",
+        "example": {
+          "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+          "email": "ada@example.com",
+          "name": "Ada Lovelace",
+          "emailVerified": true,
+          "image": "https://example.com/avatars/ada.png",
+          "createdAt": "2025-01-15T12:34:56.000Z",
+          "updatedAt": "2025-04-02T08:00:00.000Z"
+        }
+      },
+      "Post": {
+        "type": [
+          "object"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string"
+            ],
+            "format": "uuid",
+            "description": "Unique identifier (UUID v4)."
+          },
+          "authorId": {
+            "type": [
+              "string"
+            ],
+            "format": "uuid",
+            "description": "Identifier of the user who authored the post."
+          },
+          "title": {
+            "type": [
+              "string"
+            ],
+            "minLength": 1,
+            "maxLength": 200,
+            "description": "Post title (1–200 chars)."
+          },
+          "content": {
+            "type": [
+              "string"
+            ],
+            "description": "Body content; Markdown allowed."
+          },
+          "published": {
+            "type": [
+              "boolean"
+            ],
+            "description": "Whether the post is visible to non-author readers."
+          },
+          "createdAt": {
+            "type": [
+              "string"
+            ],
+            "format": "date-time",
+            "description": "ISO-8601 timestamp the post was created."
+          },
+          "updatedAt": {
+            "type": [
+              "string"
+            ],
+            "format": "date-time",
+            "description": "ISO-8601 timestamp the post was last modified."
+          }
+        },
+        "required": [
+          "id",
+          "authorId",
+          "title",
+          "content",
+          "published",
+          "createdAt",
+          "updatedAt"
+        ],
+        "title": "Post",
+        "description": "A blog post.",
+        "example": {
+          "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+          "authorId": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+          "title": "Hello, world!",
+          "content": "My first post.",
+          "published": true,
+          "createdAt": "2025-04-02T08:00:00.000Z",
+          "updatedAt": "2025-04-02T08:00:00.000Z"
+        }
+      },
+      "CreatePostInput": {
+        "type": [
+          "object"
+        ],
+        "properties": {
+          "title": {
+            "type": [
+              "string"
+            ],
+            "minLength": 1,
+            "maxLength": 200,
+            "description": "Post title (1–200 chars)."
+          },
+          "content": {
+            "type": [
+              "string"
+            ],
+            "description": "Body content; Markdown allowed."
+          },
+          "published": {
+            "default": false,
+            "type": [
+              "boolean"
+            ],
+            "description": "Whether to publish immediately (defaults to draft)."
+          }
+        },
+        "required": [
+          "title",
+          "content"
+        ],
+        "title": "CreatePostInput",
+        "description": "Payload for creating a new post.",
+        "example": {
+          "title": "Hello, world!",
+          "content": "My first post.",
+          "published": false
+        }
+      },
+      "UpdatePostInput": {
+        "type": [
+          "object"
+        ],
+        "properties": {
+          "title": {
+            "type": [
+              "string"
+            ],
+            "minLength": 1,
+            "maxLength": 200,
+            "description": "Post title (1–200 chars)."
+          },
+          "content": {
+            "type": [
+              "string"
+            ],
+            "description": "Body content; Markdown allowed."
+          },
+          "published": {
+            "default": false,
+            "type": [
+              "boolean"
+            ],
+            "description": "Whether to publish immediately (defaults to draft)."
+          }
+        },
+        "title": "UpdatePostInput",
+        "description": "Payload for partially updating an existing post.",
+        "example": {
+          "title": "Hello, world! (revised)"
+        }
+      },
+      "ListPostsQuery": {
+        "type": [
+          "object"
+        ],
+        "properties": {
+          "page": {
+            "default": 1,
+            "type": [
+              "integer"
+            ],
+            "exclusiveMinimum": 0,
+            "description": "1-indexed page number."
+          },
+          "perPage": {
+            "default": 20,
+            "type": [
+              "integer"
+            ],
+            "exclusiveMinimum": 0,
+            "maximum": 100,
+            "description": "Page size (max 100)."
+          },
+          "published": {
+            "oneOf": [
+              {
+                "type": [
+                  "string"
+                ],
+                "enum": [
+                  "true"
+                ]
+              },
+              {
+                "type": [
+                  "string"
+                ],
+                "enum": [
+                  "false"
+                ]
+              },
+              {
+                "type": [
+                  "boolean"
+                ]
+              }
+            ],
+            "description": "Filter by published flag."
+          },
+          "q": {
+            "type": [
+              "string"
+            ],
+            "description": "Full-text-ish search across title/content."
+          }
+        },
+        "title": "ListPostsQuery",
+        "description": "Query parameters accepted by `GET /api/posts`.",
+        "example": {
+          "page": 1,
+          "perPage": 20,
+          "published": true
+        }
+      },
+      "ListPostsResponse": {
+        "type": [
+          "object"
+        ],
+        "properties": {
+          "data": {
+            "type": [
+              "array"
+            ],
+            "items": {
+              "type": [
+                "object"
+              ],
+              "properties": {
+                "id": {
+                  "type": [
+                    "string"
+                  ],
+                  "format": "uuid",
+                  "description": "Unique identifier (UUID v4)."
+                },
+                "authorId": {
+                  "type": [
+                    "string"
+                  ],
+                  "format": "uuid",
+                  "description": "Identifier of the user who authored the post."
+                },
+                "title": {
+                  "type": [
+                    "string"
+                  ],
+                  "minLength": 1,
+                  "maxLength": 200,
+                  "description": "Post title (1–200 chars)."
+                },
+                "content": {
+                  "type": [
+                    "string"
+                  ],
+                  "description": "Body content; Markdown allowed."
+                },
+                "published": {
+                  "type": [
+                    "boolean"
+                  ],
+                  "description": "Whether the post is visible to non-author readers."
+                },
+                "createdAt": {
+                  "type": [
+                    "string"
+                  ],
+                  "format": "date-time",
+                  "description": "ISO-8601 timestamp the post was created."
+                },
+                "updatedAt": {
+                  "type": [
+                    "string"
+                  ],
+                  "format": "date-time",
+                  "description": "ISO-8601 timestamp the post was last modified."
+                }
+              },
+              "required": [
+                "id",
+                "authorId",
+                "title",
+                "content",
+                "published",
+                "createdAt",
+                "updatedAt"
+              ],
+              "title": "Post",
+              "description": "A blog post.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "authorId": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "title": "Hello, world!",
+                "content": "My first post.",
+                "published": true,
+                "createdAt": "2025-04-02T08:00:00.000Z",
+                "updatedAt": "2025-04-02T08:00:00.000Z"
+              }
+            }
+          },
+          "page": {
+            "type": [
+              "integer"
+            ],
+            "exclusiveMinimum": 0
+          },
+          "perPage": {
+            "type": [
+              "integer"
+            ],
+            "exclusiveMinimum": 0
+          },
+          "total": {
+            "type": [
+              "integer"
+            ],
+            "minimum": 0
+          }
+        },
+        "required": [
+          "data",
+          "page",
+          "perPage",
+          "total"
+        ],
+        "title": "ListPostsResponse",
+        "description": "A page of posts plus pagination metadata.",
+        "example": {
+          "data": [
+            {
+              "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+              "authorId": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+              "title": "Hello, world!",
+              "content": "My first post.",
+              "published": true,
+              "createdAt": "2025-04-02T08:00:00.000Z",
+              "updatedAt": "2025-04-02T08:00:00.000Z"
+            }
+          ],
+          "page": 1,
+          "perPage": 20,
+          "total": 1
+        }
+      }
+    }
+  }
+}
