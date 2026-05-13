@@ -43,9 +43,11 @@ async function bootstrap(): Promise<void> {
   // routing for /api/auth/* and the documentation-only `AuthController`
   // never actually executes.
   const auth = app.get<Auth>(BETTER_AUTH);
-  // Express 4 wildcard syntax; pinned via @nestjs/platform-express@^10 which
-  // ships Express 4 transitively.
-  app.use('/api/auth/*', toNodeHandler(auth));
+  // Prefix mount — Express 5's path-to-regexp 8 no longer accepts the bare
+  // `/api/auth/*` glob. Using the prefix alone is equivalent: middleware
+  // attached with `app.use(prefix, ...)` matches every path that starts
+  // with `prefix`, so all of better-auth's sub-routes still flow through.
+  app.use('/api/auth', toNodeHandler(auth));
 
   // --- Nest pipeline ------------------------------------------------------
   app.setGlobalPrefix('api');

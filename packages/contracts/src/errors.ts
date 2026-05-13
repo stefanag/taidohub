@@ -14,8 +14,8 @@ export const ErrorPayloadSchema = z
       .optional()
       .describe('Optional structured context — e.g. per-field validation errors.'),
   })
-  .openapi({
-    title: 'ErrorPayload',
+  .meta({
+    id: 'ErrorPayload',
     description: 'The body of a uniform error envelope.',
     example: {
       code: 'NOT_FOUND',
@@ -27,8 +27,8 @@ export const ErrorEnvelopeSchema = z
   .object({
     error: ErrorPayloadSchema,
   })
-  .openapi({
-    title: 'ErrorEnvelope',
+  .meta({
+    id: 'ErrorEnvelope',
     description:
       'The uniform error envelope returned for every non-2xx response from the API.',
     example: {

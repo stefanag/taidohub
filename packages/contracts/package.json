@@ -103,7 +103,7 @@
   },
   "dependencies": {
     "zod": "^4.4.3",
-    "@anatine/zod-openapi": "^2.2.7",
+    "zod-openapi": "^5.4.6",
     "openapi3-ts": "^4.4.0"
   },
   "devDependencies": {

@@ -1,23 +1,17 @@
 /**
  * Central OpenAPI integration helper.
  *
- * The actual Zod ↔ OpenAPI extension lives in `./zod-openapi.ts` (a small side-
- * effecting module) so resource files can import `z` without depending on this
- * file — that breaks the circular dependency that would otherwise arise from
- * the default registry below.
+ * Zod 4 has `.meta({...})` built-in, so no prototype extension is required.
+ * Schema → OpenAPI conversion is delegated to `zod-openapi`'s `createSchema`.
  */
-import { generateSchema } from '@anatine/zod-openapi';
 import type { OpenAPIObject, SchemaObject, ReferenceObject } from 'openapi3-ts/oas31';
 import { type ZodTypeAny } from 'zod';
+import { createSchema } from 'zod-openapi';
 
 import { AuthOpenApiRegistry } from './auth.js';
 import { ErrorEnvelopeOpenApiRegistry } from './errors.js';
 import { PostsOpenApiRegistry } from './posts.js';
 import { UsersOpenApiRegistry } from './users.js';
-
-// Pull in the side-effecting extension so callers that import `./openapi.js`
-// directly (without going through the barrel) still get `.openapi()`.
-import './zod-openapi.js';
 
 /**
  * A registry maps OpenAPI component names to the Zod schemas that describe them.
@@ -51,7 +45,11 @@ export function registerContractSchemas(
 
   for (const registry of registries) {
     for (const [name, schema] of Object.entries(registry)) {
-      target[name] = generateSchema(schema) as SchemaObject;
+      // `io: 'input'` lets schemas with `.default()` / other transforms
+      // render — they describe how request bodies *enter* the API. For
+      // pure response shapes this is a no-op (input === output).
+      const { schema: openApiSchema } = createSchema(schema, { io: 'input' });
+      target[name] = openApiSchema as unknown as SchemaObject;
     }
   }
 

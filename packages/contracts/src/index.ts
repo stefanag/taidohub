@@ -2,13 +2,11 @@
  * `@repo/contracts` — single source of truth for the HTTP boundary between
  * `apps/backend` and `apps/frontend`.
  *
- * Importing the package barrel installs the Zod ↔ OpenAPI extension (via the
- * `./openapi.js` re-export) so `.openapi()` is available everywhere downstream
- * without needing to import the helper explicitly.
+ * Zod 4 provides `.meta({...})` natively, so no prototype extension is
+ * required. The `./zod-openapi.js` re-export is kept for import stability
+ * (existing files import `z` from there).
  */
 
-// Side effect first: ensure `.openapi()` is installed before any resource
-// module's schema definitions are referenced.
 export * from './zod-openapi.js';
 
 export * from './errors.js';

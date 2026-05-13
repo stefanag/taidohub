@@ -6,15 +6,15 @@
 import { z } from './zod-openapi.js';
 
 /** Zod enum for runtime validation (e.g. parsing config or JSON). */
-export const ActionSchema = z.enum(['create', 'read', 'update', 'delete', 'manage']).openapi({
-  title: 'Action',
+export const ActionSchema = z.enum(['create', 'read', 'update', 'delete', 'manage']).meta({
+  id: 'Action',
   description: 'A CASL action (verb) — `manage` is a wildcard covering every other action.',
   example: 'read',
 });
 
 /** Zod enum for runtime validation of subject names. */
-export const SubjectSchema = z.enum(['Post', 'User', 'all']).openapi({
-  title: 'Subject',
+export const SubjectSchema = z.enum(['Post', 'User', 'all']).meta({
+  id: 'Subject',
   description:
     'A CASL subject (noun) the user can act upon. `all` is the wildcard covering every subject.',
   example: 'Post',
