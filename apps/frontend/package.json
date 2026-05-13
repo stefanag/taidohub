@@ -40,13 +40,10 @@
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",
-    "@storybook/addon-a11y": "^8.4.0",
-    "@storybook/addon-essentials": "^8.4.0",
-    "@storybook/addon-interactions": "^8.4.0",
-    "@storybook/addon-themes": "^8.4.0",
-    "@storybook/react": "^8.4.0",
-    "@storybook/react-vite": "^8.4.0",
-    "@storybook/test": "^8.4.0",
+    "@storybook/addon-a11y": "^10.3.6",
+    "@storybook/addon-themes": "^10.3.6",
+    "@storybook/react": "^10.3.6",
+    "@storybook/react-vite": "^10.3.6",
     "@tailwindcss/postcss": "^4.3.0",
     "@tanstack/router-plugin": "^1.81.0",
     "@testing-library/jest-dom": "^6.6.0",
@@ -64,10 +61,12 @@
     "msw-storybook-addon": "^2.0.4",
     "postcss": "^8.4.49",
     "steiger": "^0.5.11",
-    "storybook": "^8.4.0",
+    "storybook": "^10.3.6",
     "tailwindcss": "^4.3.0",
     "typescript": "^6.0.3",
     "vite": "^8.0.12",
-    "vitest": "^4.1.6"
+    "vitest": "^4.1.6",
+    "eslint-plugin-storybook": "10.3.6",
+    "@storybook/addon-docs": "^10.3.6"
   }
 }

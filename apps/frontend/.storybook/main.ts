@@ -1,19 +1,21 @@
-import path from 'node:path';
+// This file has been automatically migrated to valid ESM format by Storybook.
+import path, { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import type { StorybookConfig } from '@storybook/react-vite';
 
+const __filename = fileURLToPath(import.meta.url);
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const config: StorybookConfig = {
-  framework: '@storybook/react-vite',
+  framework: getAbsolutePath("@storybook/react-vite"),
   stories: ['../src/**/*.stories.@(ts|tsx)'],
   addons: [
-    '@storybook/addon-essentials',
-    '@storybook/addon-a11y',
-    '@storybook/addon-interactions',
-    '@storybook/addon-themes',
-    'msw-storybook-addon',
+    getAbsolutePath("@storybook/addon-a11y"),
+    getAbsolutePath("@storybook/addon-themes"),
+    getAbsolutePath("msw-storybook-addon"),
+    getAbsolutePath("@storybook/addon-docs")
   ],
   staticDirs: ['../public'],
   docs: {},
@@ -31,3 +33,7 @@ const config: StorybookConfig = {
 };
 
 export default config;
+
+function getAbsolutePath(value: string): any {
+  return dirname(fileURLToPath(import.meta.resolve(`${value}/package.json`)));
+}
