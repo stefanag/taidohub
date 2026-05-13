@@ -8,9 +8,3 @@ allowBuilds:
   esbuild: true
   msw: true
   unrs-resolver: true
-overrides:
-  # Vitest 2 declares vite ^5 as peer but the frontend pins vite ^6;
-  # without this override pnpm installs both, and tsc sees two copies of
-  # vite's types simultaneously (PluginOption mismatch). Forced to v6.
-  # Batch 3 (Vitest 4) will drop this constraint.
-  vite: ^6.0.0
