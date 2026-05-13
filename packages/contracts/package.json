@@ -102,7 +102,7 @@
     "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true});require('node:fs').rmSync('.turbo',{recursive:true,force:true})\""
   },
   "dependencies": {
-    "zod": "^3.23.8",
+    "zod": "^4.4.3",
     "@anatine/zod-openapi": "^2.2.7",
     "openapi3-ts": "^4.4.0"
   },
