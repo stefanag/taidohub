@@ -3,11 +3,12 @@ import {
   type AppAbilityTuple,
   type AppAction,
   type AppSubject,
+  type AppSubjectName,
 } from '@repo/contracts/casl';
 
 import { type AuthenticatedUser } from '../auth/auth.types.js';
 
-export { type AppAbilityTuple, type AppAction, type AppSubject };
+export { type AppAbilityTuple, type AppAction, type AppSubject, type AppSubjectName };
 
 /** The concrete CASL ability type used everywhere in the backend. */
 export type AppAbility = MongoAbility<AppAbilityTuple>;

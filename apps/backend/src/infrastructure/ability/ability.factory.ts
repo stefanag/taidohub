@@ -7,7 +7,7 @@ import {
   ABILITY_RULES,
   type AbilityRuleContributor,
   type AppAbility,
-  type AppAbilityTuple,
+  type AppSubjectName,
 } from './ability.types.js';
 
 @Injectable()
@@ -33,7 +33,7 @@ export class AbilityFactory {
     return builder.build({
       detectSubjectType: (subject) =>
         ((subject as { __caslSubjectType__?: string }).__caslSubjectType__ ??
-          (subject.constructor as { name: string }).name) as AppAbilityTuple[1],
+          (subject.constructor as { name: string }).name) as AppSubjectName,
     });
   }
 }

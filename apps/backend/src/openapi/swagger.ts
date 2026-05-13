@@ -45,7 +45,10 @@ export function buildOpenApiDocument(
     deepScanRoutes: true,
   });
 
-  registerContractSchemas(document);
+  // @nestjs/swagger ships its own `OpenAPIObject` type that drifts from
+  // openapi3-ts's stricter 3.1 shape under exactOptionalPropertyTypes. The
+  // runtime payloads are interchangeable — bridge the types here.
+  registerContractSchemas(document as unknown as Parameters<typeof registerContractSchemas>[0]);
 
   return document;
 }
