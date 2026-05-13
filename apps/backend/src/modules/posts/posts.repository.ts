@@ -5,8 +5,8 @@ import { and, count, desc, eq, ilike, or, type SQL } from 'drizzle-orm';
 import {
   DRIZZLE,
   type DrizzleDb,
-} from '../../infrastructure/database/client';
-import { posts, type DbPost } from '../../infrastructure/database/schema';
+} from '../../infrastructure/database/client.js';
+import { posts, type DbPost } from '../../infrastructure/database/schema/index.js';
 
 export interface ListFilter {
   page: number;

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { HealthController } from './health.controller';
+import { HealthController } from './health.controller.js';
 
 describe('HealthController', () => {
   it('returns status ok with uptime and version', () => {

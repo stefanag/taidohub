@@ -25,19 +25,19 @@ import {
   type Post as PostT,
 } from '@repo/contracts/posts';
 
-import { ErrorEnvelopeDto } from '../../common/dto/error-envelope.dto';
-import { ApiEndpoint } from '../../common/swagger/api-endpoint.decorator';
-import { CurrentUser } from '../../infrastructure/auth/current-user.decorator';
-import { Public } from '../../infrastructure/auth/public.decorator';
-import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types';
-import { CheckAbility } from '../../infrastructure/ability/check-ability.decorator';
+import { ErrorEnvelopeDto } from '../../common/dto/error-envelope.dto.js';
+import { ApiEndpoint } from '../../common/swagger/api-endpoint.decorator.js';
+import { CurrentUser } from '../../infrastructure/auth/current-user.decorator.js';
+import { Public } from '../../infrastructure/auth/public.decorator.js';
+import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
+import { CheckAbility } from '../../infrastructure/ability/check-ability.decorator.js';
 
-import { CreatePostDto } from './dto/create-post.dto';
-import { ListPostsQueryDto } from './dto/list-posts-query.dto';
-import { ListPostsResponseDto } from './dto/list-posts-response.dto';
-import { PostDto } from './dto/post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
-import { PostsService } from './posts.service';
+import { CreatePostDto } from './dto/create-post.dto.js';
+import { ListPostsQueryDto } from './dto/list-posts-query.dto.js';
+import { ListPostsResponseDto } from './dto/list-posts-response.dto.js';
+import { PostDto } from './dto/post.dto.js';
+import { UpdatePostDto } from './dto/update-post.dto.js';
+import { PostsService } from './posts.service.js';
 
 @ApiTags('posts')
 @ApiCookieAuth('session')

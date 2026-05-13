@@ -1,6 +1,6 @@
 import { SetMetadata } from '@nestjs/common';
 
-import { type AppAction, type AppSubject } from './ability.types';
+import { type AppAction, type AppSubject } from './ability.types.js';
 
 export interface RequiredAbility {
   action: AppAction;

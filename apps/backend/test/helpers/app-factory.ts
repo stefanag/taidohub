@@ -7,10 +7,10 @@ import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 
-import { AppModule } from '../../src/app.module';
-import { type Env } from '../../src/config/env.schema';
-import { BETTER_AUTH, type Auth } from '../../src/infrastructure/auth/better-auth';
-import { setupSwagger } from '../../src/openapi/swagger';
+import { AppModule } from '../../src/app.module.js';
+import { type Env } from '../../src/config/env.schema.js';
+import { BETTER_AUTH, type Auth } from '../../src/infrastructure/auth/better-auth.js';
+import { setupSwagger } from '../../src/openapi/swagger.js';
 
 /**
  * Boots a real Nest application against the AppModule with the same Express

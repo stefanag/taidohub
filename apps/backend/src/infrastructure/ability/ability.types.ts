@@ -5,7 +5,7 @@ import {
   type AppSubject,
 } from '@repo/contracts/casl';
 
-import { type AuthenticatedUser } from '../auth/auth.types';
+import { type AuthenticatedUser } from '../auth/auth.types.js';
 
 export { type AppAbilityTuple, type AppAction, type AppSubject };
 

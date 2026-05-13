@@ -1,14 +1,14 @@
 import { AbilityBuilder, createMongoAbility } from '@casl/ability';
 import { Inject, Injectable, Optional } from '@nestjs/common';
 
-import { type AuthenticatedUser } from '../auth/auth.types';
+import { type AuthenticatedUser } from '../auth/auth.types.js';
 
 import {
   ABILITY_RULES,
   type AbilityRuleContributor,
   type AppAbility,
   type AppAbilityTuple,
-} from './ability.types';
+} from './ability.types.js';
 
 @Injectable()
 export class AbilityFactory {

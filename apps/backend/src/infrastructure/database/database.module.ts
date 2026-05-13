@@ -1,9 +1,9 @@
 import { Global, Module, type Provider } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-import { type Env } from '../../config/env.schema';
+import { type Env } from '../../config/env.schema.js';
 
-import { createDrizzleClient, DRIZZLE } from './client';
+import { createDrizzleClient, DRIZZLE } from './client.js';
 
 const drizzleProvider: Provider = {
   provide: DRIZZLE,

@@ -3,8 +3,8 @@ import { AuthRoutes, PostsRoutes } from '@repo/contracts/routes';
 import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
-import { buildTestApp, hasDatabase } from '../helpers/app-factory';
-import { resetDatabase } from '../helpers/db-reset';
+import { buildTestApp, hasDatabase } from '../helpers/app-factory.js';
+import { resetDatabase } from '../helpers/db-reset.js';
 
 describe.skipIf(!hasDatabase())('posts e2e', () => {
   let app: NestExpressApplication;

@@ -2,16 +2,16 @@ import { Module } from '@nestjs/common';
 import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { ZodValidationPipe } from 'nestjs-zod';
 
-import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
-import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
-import { AppConfigModule } from './config/config.module';
-import { AbilityModule } from './infrastructure/ability/ability.module';
-import { InfraAuthModule } from './infrastructure/auth/auth.module';
-import { DatabaseModule } from './infrastructure/database/database.module';
-import { AuthDocsModule } from './modules/auth/auth.module';
-import { HealthModule } from './modules/health/health.module';
-import { PostsModule } from './modules/posts/posts.module';
-import { UsersModule } from './modules/users/users.module';
+import { AllExceptionsFilter } from './common/filters/all-exceptions.filter.js';
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor.js';
+import { AppConfigModule } from './config/config.module.js';
+import { AbilityModule } from './infrastructure/ability/ability.module.js';
+import { InfraAuthModule } from './infrastructure/auth/auth.module.js';
+import { DatabaseModule } from './infrastructure/database/database.module.js';
+import { AuthDocsModule } from './modules/auth/auth.module.js';
+import { HealthModule } from './modules/health/health.module.js';
+import { PostsModule } from './modules/posts/posts.module.js';
+import { UsersModule } from './modules/users/users.module.js';
 
 @Module({
   imports: [

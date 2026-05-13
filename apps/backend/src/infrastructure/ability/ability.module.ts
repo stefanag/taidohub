@@ -1,8 +1,8 @@
 import { Global, Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 
-import { AbilityFactory } from './ability.factory';
-import { AbilityGuard } from './ability.guard';
+import { AbilityFactory } from './ability.factory.js';
+import { AbilityGuard } from './ability.guard.js';
 
 /**
  * Global ability module.

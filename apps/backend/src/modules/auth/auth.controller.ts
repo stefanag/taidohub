@@ -8,11 +8,11 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { Public } from '../../infrastructure/auth/public.decorator';
+import { Public } from '../../infrastructure/auth/public.decorator.js';
 
-import { SessionDto } from './dto/session.dto';
-import { SignInWithEmailDto } from './dto/sign-in.dto';
-import { SignUpWithEmailDto } from './dto/sign-up.dto';
+import { SessionDto } from './dto/session.dto.js';
+import { SignInWithEmailDto } from './dto/sign-in.dto.js';
+import { SignUpWithEmailDto } from './dto/sign-up.dto.js';
 
 /**
  * **Documentation-only controller.**

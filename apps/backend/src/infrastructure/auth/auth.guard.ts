@@ -9,9 +9,9 @@ import { Reflector } from '@nestjs/core';
 import { fromNodeHeaders } from 'better-auth/node';
 import { type Request } from 'express';
 
-import { type Auth, BETTER_AUTH } from './better-auth';
-import { IS_PUBLIC_KEY } from './public.decorator';
-import { type AuthenticatedUser } from './auth.types';
+import { type Auth, BETTER_AUTH } from './better-auth.js';
+import { IS_PUBLIC_KEY } from './public.decorator.js';
+import { type AuthenticatedUser } from './auth.types.js';
 
 /**
  * Global guard that turns the better-auth session cookie into `req.user`.

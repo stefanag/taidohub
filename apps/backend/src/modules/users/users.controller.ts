@@ -8,14 +8,14 @@ import {
 } from '@nestjs/swagger';
 import { type User } from '@repo/contracts/users';
 
-import { ErrorEnvelopeDto } from '../../common/dto/error-envelope.dto';
-import { ApiEndpoint } from '../../common/swagger/api-endpoint.decorator';
-import { CurrentUser } from '../../infrastructure/auth/current-user.decorator';
-import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types';
-import { CheckAbility } from '../../infrastructure/ability/check-ability.decorator';
+import { ErrorEnvelopeDto } from '../../common/dto/error-envelope.dto.js';
+import { ApiEndpoint } from '../../common/swagger/api-endpoint.decorator.js';
+import { CurrentUser } from '../../infrastructure/auth/current-user.decorator.js';
+import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
+import { CheckAbility } from '../../infrastructure/ability/check-ability.decorator.js';
 
-import { UserDto } from './dto/user.dto';
-import { UsersService } from './users.service';
+import { UserDto } from './dto/user.dto.js';
+import { UsersService } from './users.service.js';
 
 @ApiTags('users')
 @ApiCookieAuth('session')

@@ -1,11 +1,11 @@
 import { type AbilityBuilder } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
 
-import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types';
+import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import {
   type AbilityRuleContributor,
   type AppAbility,
-} from '../../infrastructure/ability/ability.types';
+} from '../../infrastructure/ability/ability.types.js';
 
 /**
  * Post rules:

@@ -3,7 +3,7 @@ import { type ConfigService } from '@nestjs/config';
 import { DocumentBuilder, type OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 import { registerContractSchemas } from '@repo/contracts/openapi';
 
-import { type Env } from '../config/env.schema';
+import { type Env } from '../config/env.schema.js';
 
 /**
  * Build the OpenAPI document for the running Nest app, register the shared

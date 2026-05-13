@@ -1,6 +1,6 @@
 import { boolean, index, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
-import { user } from './users';
+import { user } from './users.js';
 
 /**
  * `posts` — application-owned table. `authorId` references the better-auth

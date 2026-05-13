@@ -1,6 +1,6 @@
 import { createParamDecorator, type ExecutionContext } from '@nestjs/common';
 
-import { type AuthenticatedUser } from './auth.types';
+import { type AuthenticatedUser } from './auth.types.js';
 
 /**
  * Resolves the user attached by `AuthGuard`. Throws nothing — if the route is

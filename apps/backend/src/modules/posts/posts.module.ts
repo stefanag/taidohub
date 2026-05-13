@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 
-import { ABILITY_RULES } from '../../infrastructure/ability/ability.types';
+import { ABILITY_RULES } from '../../infrastructure/ability/ability.types.js';
 
-import { PostsAbilityRules } from './posts.abilities';
-import { PostsController } from './posts.controller';
-import { PostsRepository } from './posts.repository';
-import { PostsService } from './posts.service';
+import { PostsAbilityRules } from './posts.abilities.js';
+import { PostsController } from './posts.controller.js';
+import { PostsRepository } from './posts.repository.js';
+import { PostsService } from './posts.service.js';
 
 @Module({
   controllers: [PostsController],

@@ -1,7 +1,7 @@
 import { Global, Module } from '@nestjs/common';
 import { ConfigModule as NestConfigModule } from '@nestjs/config';
 
-import { EnvSchema } from './env.schema';
+import { EnvSchema } from './env.schema.js';
 
 /**
  * Global config module. Loads `.env` from the monorepo root and `apps/backend`
