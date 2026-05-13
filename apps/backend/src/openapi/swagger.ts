@@ -3,7 +3,7 @@ import { type ConfigService } from '@nestjs/config';
 import { DocumentBuilder, type OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 import { registerContractSchemas } from '@repo/contracts/openapi';
 
-import { type Env } from '../config/env.schema';
+import { type Env } from '../config/env.schema.js';
 
 /**
  * Build the OpenAPI document for the running Nest app, register the shared
@@ -45,7 +45,10 @@ export function buildOpenApiDocument(
     deepScanRoutes: true,
   });
 
-  registerContractSchemas(document);
+  // @nestjs/swagger ships its own `OpenAPIObject` type that drifts from
+  // openapi3-ts's stricter 3.1 shape under exactOptionalPropertyTypes. The
+  // runtime payloads are interchangeable — bridge the types here.
+  registerContractSchemas(document as unknown as Parameters<typeof registerContractSchemas>[0]);
 
   return document;
 }

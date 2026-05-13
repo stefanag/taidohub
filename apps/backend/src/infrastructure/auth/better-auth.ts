@@ -1,9 +1,9 @@
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 
-import { type Env } from '../../config/env.schema';
-import { createDrizzleClient } from '../database/client';
-import * as schema from '../database/schema';
+import { type Env } from '../../config/env.schema.js';
+import { createDrizzleClient } from '../database/client.js';
+import * as schema from '../database/schema/index.js';
 
 /**
  * Build the better-auth server instance for a given environment.

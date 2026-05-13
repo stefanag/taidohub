@@ -9,10 +9,10 @@ import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 
-import { AppModule } from './app.module';
-import { type Env } from './config/env.schema';
-import { BETTER_AUTH, type Auth } from './infrastructure/auth/better-auth';
-import { setupSwagger } from './openapi/swagger';
+import { AppModule } from './app.module.js';
+import { type Env } from './config/env.schema.js';
+import { BETTER_AUTH, type Auth } from './infrastructure/auth/better-auth.js';
+import { setupSwagger } from './openapi/swagger.js';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {

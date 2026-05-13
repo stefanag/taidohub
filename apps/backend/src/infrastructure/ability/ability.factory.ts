@@ -1,14 +1,14 @@
 import { AbilityBuilder, createMongoAbility } from '@casl/ability';
 import { Inject, Injectable, Optional } from '@nestjs/common';
 
-import { type AuthenticatedUser } from '../auth/auth.types';
+import { type AuthenticatedUser } from '../auth/auth.types.js';
 
 import {
   ABILITY_RULES,
   type AbilityRuleContributor,
   type AppAbility,
-  type AppAbilityTuple,
-} from './ability.types';
+  type AppSubjectName,
+} from './ability.types.js';
 
 @Injectable()
 export class AbilityFactory {
@@ -33,7 +33,7 @@ export class AbilityFactory {
     return builder.build({
       detectSubjectType: (subject) =>
         ((subject as { __caslSubjectType__?: string }).__caslSubjectType__ ??
-          (subject.constructor as { name: string }).name) as AppAbilityTuple[1],
+          (subject.constructor as { name: string }).name) as AppSubjectName,
     });
   }
 }

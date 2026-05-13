@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiSecurity, ApiTags } from '@nestjs/swagger';
 
-import { Public } from '../../infrastructure/auth/public.decorator';
+import { Public } from '../../infrastructure/auth/public.decorator.js';
 
 /** Plain liveness/readiness probe — intentionally `@Public()`. */
 @ApiTags('health')

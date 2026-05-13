@@ -17,6 +17,11 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/test/setup.ts'],
+    // env.ts validates VITE_API_URL at module load; supply a dummy for tests
+    // so the validation passes without depending on a real `.env`.
+    env: {
+      VITE_API_URL: 'http://localhost:3001',
+    },
     include: ['src/**/*.{test,spec}.{ts,tsx}'],
     css: false,
     coverage: {

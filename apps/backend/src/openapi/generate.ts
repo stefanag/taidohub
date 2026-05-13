@@ -18,15 +18,15 @@ import { NestFactory } from '@nestjs/core';
 import { type NestExpressApplication } from '@nestjs/platform-express';
 import yaml from 'yaml';
 
-import { AppModule } from '../app.module';
-import { type Env, EnvSchema } from '../config/env.schema';
+import { AppModule } from '../app.module.js';
+import { type Env, EnvSchema } from '../config/env.schema.js';
 
-import { buildOpenApiDocument } from './swagger';
+import { buildOpenApiDocument } from './swagger.js';
+
+// ESM-friendly equivalent of CJS's `__dirname`.
+const here = dirname(fileURLToPath(import.meta.url));
 
 async function main(): Promise<void> {
-  // `import.meta.url` is unavailable in CJS — derive paths the old-school way.
-  const thisFile = typeof __filename === 'string' ? __filename : fileURLToPath(import.meta.url);
-  const here = dirname(thisFile);
   const outDir = resolve(here, '../../../../packages/contracts/openapi');
   mkdirSync(outDir, { recursive: true });
 

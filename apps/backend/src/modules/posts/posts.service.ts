@@ -8,11 +8,11 @@ import {
   type UpdatePostInput,
 } from '@repo/contracts/posts';
 
-import { AbilityFactory } from '../../infrastructure/ability/ability.factory';
-import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types';
-import { type DbPost } from '../../infrastructure/database/schema';
+import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
+import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
+import { type DbPost } from '../../infrastructure/database/schema/index.js';
 
-import { PostsRepository } from './posts.repository';
+import { PostsRepository } from './posts.repository.js';
 
 @Injectable()
 export class PostsService {

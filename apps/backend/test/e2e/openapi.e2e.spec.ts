@@ -2,7 +2,7 @@ import { type NestExpressApplication } from '@nestjs/platform-express';
 import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
-import { buildTestApp, hasDatabase } from '../helpers/app-factory';
+import { buildTestApp, hasDatabase } from '../helpers/app-factory.js';
 
 /**
  * Contract test: assert that the OpenAPI document fully describes the running

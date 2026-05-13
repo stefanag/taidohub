@@ -2,10 +2,10 @@ import { Global, Module, type Provider } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 
-import { type Env } from '../../config/env.schema';
+import { type Env } from '../../config/env.schema.js';
 
-import { AuthGuard } from './auth.guard';
-import { BETTER_AUTH, buildBetterAuth } from './better-auth';
+import { AuthGuard } from './auth.guard.js';
+import { BETTER_AUTH, buildBetterAuth } from './better-auth.js';
 
 const betterAuthProvider: Provider = {
   provide: BETTER_AUTH,

@@ -3,8 +3,7 @@
   "ui": "tui",
   "globalDependencies": [
     "**/.env",
-    "**/.env.*",
-    "!**/.env.example"
+    "**/.env.*"
   ],
   "globalEnv": [
     "NODE_ENV",

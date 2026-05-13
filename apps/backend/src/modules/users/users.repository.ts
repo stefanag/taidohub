@@ -4,8 +4,8 @@ import { eq } from 'drizzle-orm';
 import {
   DRIZZLE,
   type DrizzleDb,
-} from '../../infrastructure/database/client';
-import { user } from '../../infrastructure/database/schema';
+} from '../../infrastructure/database/client.js';
+import { user } from '../../infrastructure/database/schema/index.js';
 
 /**
  * Repository — the only file in the users module allowed to touch Drizzle.

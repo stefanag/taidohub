@@ -1,6 +1,5 @@
 import { AbilityBuilder, createMongoAbility } from '@casl/ability';
 
-import type { AppAbilityTuple } from '@repo/contracts/casl';
 import type { User } from '@repo/contracts/users';
 
 import type { AppAbility } from './ability-context.js';
@@ -27,9 +26,7 @@ export interface AbilityUser extends Pick<User, 'id'> {
  * never disagree.
  */
 export function defineAbilityFor(user: AbilityUser | null | undefined): AppAbility {
-  const { can, build } = new AbilityBuilder<AppAbility>(
-    createMongoAbility<AppAbilityTuple>,
-  );
+  const { can, build } = new AbilityBuilder<AppAbility>(createMongoAbility);
 
   if (!user) {
     can('read', 'Post', { published: true });

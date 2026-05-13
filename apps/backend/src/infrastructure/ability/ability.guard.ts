@@ -6,10 +6,10 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
-import { type AuthenticatedUser } from '../auth/auth.types';
+import { type AuthenticatedUser } from '../auth/auth.types.js';
 
-import { AbilityFactory } from './ability.factory';
-import { CHECK_ABILITY_KEY, type RequiredAbility } from './check-ability.decorator';
+import { AbilityFactory } from './ability.factory.js';
+import { CHECK_ABILITY_KEY, type RequiredAbility } from './check-ability.decorator.js';
 
 @Injectable()
 export class AbilityGuard implements CanActivate {

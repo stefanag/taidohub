@@ -22,7 +22,44 @@ export const SubjectSchema = z.enum(['Post', 'User', 'all']).openapi({
 
 /** TypeScript string-literal unions inferred from the Zod enums. */
 export type AppAction = z.infer<typeof ActionSchema>;
-export type AppSubject = z.infer<typeof SubjectSchema>;
+/** String-only subject name union (matches the Zod enum). */
+export type AppSubjectName = z.infer<typeof SubjectSchema>;
+
+/**
+ * Typed subject shapes used by CASL for instance-level rule matching.
+ *
+ * These describe ONLY the "condition surface area" — the fields that any
+ * `builder.can(action, 'Foo', { ... })` rule actually filters on. They are
+ * intentionally decoupled from the API DTO (`Post`, `User`) and the Drizzle
+ * row types (`DbPost`, `DbUser`): both can be tagged with the
+ * `__caslSubjectType__` discriminator and still satisfy these shapes, even
+ * though they disagree on e.g. `Date` vs `string` for timestamps.
+ *
+ * All fields are optional because CASL needs to match arbitrary subsets of
+ * conditions and a partially-hydrated subject must still typecheck.
+ *
+ * If you add a new condition field to a rule (e.g.
+ * `builder.can('read', 'Post', { archived: false })`), add the same field
+ * here so the rule still typechecks.
+ */
+export type PostSubjectShape = {
+  readonly __caslSubjectType__: 'Post';
+  authorId?: string;
+  published?: boolean;
+};
+
+export type UserSubjectShape = {
+  readonly __caslSubjectType__: 'User';
+  id?: string;
+};
+
+/**
+ * The full CASL subject union: either a bare subject name (for class-level
+ * rules like `can('create', 'Post')`) or a tagged subject shape (for
+ * instance-level rules like `can('read', 'Post', { authorId })` and for
+ * dispatching on a real row passed to `throwUnlessCan`).
+ */
+export type AppSubject = AppSubjectName | PostSubjectShape | UserSubjectShape;
 
 /**
  * Tuple type compatible with `MongoAbility<[AppAction, AppSubject]>` from
