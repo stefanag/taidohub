@@ -1,19 +1,30 @@
 import { Global, Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 
+import { PostsAbilityRules } from '../../modules/posts/posts.abilities.js';
+import { UsersAbilityRules } from '../../modules/users/users.abilities.js';
+
 import { AbilityFactory } from './ability.factory.js';
 import { AbilityGuard } from './ability.guard.js';
 
 /**
  * Global ability module.
  *
- * Modules contribute rules via multi-providers on the `ABILITY_RULES` token,
- * declared in each module file. The `AbilityGuard` runs after `AuthGuard`
- * (Nest invokes guards in registration order).
+ * Rule contributors are registered as providers here so `AbilityFactory`
+ * can inject them directly. The previous design tried to multi-bind them
+ * under the `ABILITY_RULES` token from each feature module — but NestJS
+ * doesn't aggregate multiple providers under a single token (that pattern
+ * is Angular-specific). Centralising registration here is the simplest
+ * approach that actually wires them up.
+ *
+ * The `AbilityGuard` runs after `AuthGuard` (Nest invokes guards in
+ * registration order).
  */
 @Global()
 @Module({
   providers: [
+    PostsAbilityRules,
+    UsersAbilityRules,
     AbilityFactory,
     AbilityGuard,
     { provide: APP_GUARD, useClass: AbilityGuard },
