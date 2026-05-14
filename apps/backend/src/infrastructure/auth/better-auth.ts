@@ -35,6 +35,16 @@ export function buildBetterAuth(env: Env) {
       enabled: true,
       autoSignIn: true,
     },
+    user: {
+      additionalFields: {
+        role: {
+          type: 'string',
+          defaultValue: 'user',
+          required: false,
+          input: false,
+        },
+      },
+    },
     advanced: {
       // Default cookie name is `better-auth.session_token`; do not change it
       // unless `swagger.ts`'s `addCookieAuth(...)` name is updated to match.
