@@ -73,6 +73,7 @@ export const FormMessage = React.forwardRef<HTMLParagraphElement, FormMessagePro
     return (
       <p
         ref={ref}
+        role="alert"
         className={cn('text-sm font-medium text-destructive', className)}
         {...props}
       >

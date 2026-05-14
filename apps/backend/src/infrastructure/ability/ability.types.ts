@@ -24,6 +24,3 @@ export interface AbilityRuleContributor {
     user: AuthenticatedUser | null,
   ): void;
 }
-
-/** Multi-provider DI token for `AbilityRuleContributor` implementations. */
-export const ABILITY_RULES = Symbol('ABILITY_RULES');

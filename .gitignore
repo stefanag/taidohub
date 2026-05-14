@@ -63,5 +63,7 @@ tmp/
 
 # Claude Code (user-local config; share .claude/settings.json if you want team defaults)
 .claude/settings.local.json
+# Ephemeral subagent worktrees — never commit these.
+.claude/worktrees/
 
 # Note: packages/contracts/openapi/openapi.json IS committed (CI sync check).

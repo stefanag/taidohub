@@ -21,6 +21,8 @@ const betterAuthProvider: Provider = {
       DIRECT_URL: config.get('DIRECT_URL', { infer: true }),
       BETTER_AUTH_SECRET: config.get('BETTER_AUTH_SECRET', { infer: true }),
       BETTER_AUTH_URL: config.get('BETTER_AUTH_URL', { infer: true }),
+      SYSADMIN_EMAIL: config.get('SYSADMIN_EMAIL', { infer: true }),
+      SYSADMIN_PASSWORD: config.get('SYSADMIN_PASSWORD', { infer: true }),
       ...(backendUrl !== undefined ? { BACKEND_URL: backendUrl } : {}),
       ...(enableSwagger !== undefined ? { ENABLE_SWAGGER: enableSwagger } : {}),
     };
