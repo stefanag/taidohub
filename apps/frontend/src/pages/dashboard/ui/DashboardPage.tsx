@@ -13,9 +13,9 @@ export function DashboardPage(): React.ReactElement {
   return (
     <main className="container py-8">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold tracking-tight">Posts</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Dashboard</h1>
         <Can I="create" a="Post">
-          <Button>New post</Button>
+          <div>You can do it!</div>
         </Can>
       </div>
 

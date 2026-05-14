@@ -22,7 +22,7 @@ export function LoginPage(): React.ReactElement {
       {/* Left hero panel */}
       <div className="hidden lg:flex w-1/2 taido-gradient flex-col justify-between p-16">
         <div>
-          <h1 className="font-headline font-extrabold text-4xl text-white tracking-tight">Taidopass</h1>
+          <h1 className="font-headline font-extrabold text-4xl text-white tracking-tight">TaidoHub</h1>
         </div>
         <div>
           <p className="japanese-text text-6xl font-bold text-secondary leading-tight mb-6">
@@ -38,8 +38,8 @@ export function LoginPage(): React.ReactElement {
 
         <Card className="w-full max-w-sm">
           <CardHeader>
-            <CardTitle>Sign in</CardTitle>
-            <CardDescription>
+            <CardTitle className="font-headline font-extrabold text-3xl tracking-tight text-on-surface">Sign in</CardTitle>
+            <CardDescription className="text-sm text-on-surface-variant mt-2">
               Sign in with your email address to manage posts.
             </CardDescription>
           </CardHeader>
