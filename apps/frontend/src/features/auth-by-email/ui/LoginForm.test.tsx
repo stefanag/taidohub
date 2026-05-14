@@ -1,10 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { http, HttpResponse } from 'msw';
 import { describe, expect, it, vi } from 'vitest';
 
-import { env } from '@/shared/lib/env';
-import { server } from '@/test/msw-server';
+import * as authApi from '../api/auth.api';
 
 import { LoginForm } from './LoginForm.js';
 
@@ -17,31 +15,22 @@ describe('<LoginForm>', () => {
     expect(screen.getAllByRole('alert', { hidden: true }).length).toBeGreaterThanOrEqual(0);
   });
 
-  it('posts the credentials to the better-auth email endpoint on submit', async () => {
-    const seen = vi.fn();
-    server.use(
-      http.post(`${env.VITE_API_URL}/api/auth/sign-in/email`, async ({ request }) => {
-        const body = (await request.json()) as { email?: string; password?: string };
-        seen(body);
-        return HttpResponse.json({ user: null, session: null });
-      }),
-    );
-
-    const onSuccess = vi.fn();
+  it('posts the credentials to signInWithEmail on submit', async () => {
+    const signInSpy = vi.spyOn(authApi, 'signInWithEmail').mockResolvedValue();
     const user = userEvent.setup();
-    render(<LoginForm onSuccess={onSuccess} />);
+    render(<LoginForm />);
 
     await user.type(screen.getByLabelText(/email/i), 'ada@example.com');
     await user.type(screen.getByLabelText(/password/i), 'correct-horse-battery-staple');
     await user.click(screen.getByRole('button', { name: /sign in/i }));
 
     await vi.waitFor(() => {
-      expect(seen).toHaveBeenCalledWith(
-        expect.objectContaining({
-          email: 'ada@example.com',
-          password: 'correct-horse-battery-staple',
-        }),
-      );
+      expect(signInSpy).toHaveBeenCalledWith({
+        email: 'ada@example.com',
+        password: 'correct-horse-battery-staple',
+      });
     });
+
+    signInSpy.mockRestore();
   });
 });
