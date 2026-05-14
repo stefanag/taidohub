@@ -20,8 +20,8 @@ describe('<LoginForm>', () => {
     const user = userEvent.setup();
     render(<LoginForm />);
 
-    await user.type(screen.getByLabelText(/email/i), 'ada@example.com');
-    await user.type(screen.getByLabelText(/password/i), 'correct-horse-battery-staple');
+    await user.type(screen.getByLabelText(/e-post/i), 'ada@example.com');
+    await user.type(screen.getByLabelText(/lösenord/i), 'correct-horse-battery-staple');
     await user.click(screen.getByRole('button', { name: /sign in/i }));
 
     await vi.waitFor(() => {
@@ -40,8 +40,8 @@ describe('<LoginForm>', () => {
     const user = userEvent.setup();
     render(<LoginForm onSuccess={onSuccess} />);
 
-    await user.type(screen.getByLabelText(/email/i), 'ada@example.com');
-    await user.type(screen.getByLabelText(/password/i), 'correct-horse-battery-staple');
+    await user.type(screen.getByLabelText(/e-post/i), 'ada@example.com');
+    await user.type(screen.getByLabelText(/lösenord/i), 'correct-horse-battery-staple');
     await user.click(screen.getByRole('button', { name: /sign in/i }));
 
     await vi.waitFor(() => {

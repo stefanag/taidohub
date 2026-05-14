@@ -27,7 +27,7 @@ export function LoginForm({ onSuccess }: LoginFormProps): React.ReactElement {
   const [submitting, setSubmitting] = React.useState(false);
   const [submitError, setSubmitError] = React.useState<string | undefined>();
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSubmitError(undefined);
     const result = form.validate();
@@ -46,7 +46,7 @@ export function LoginForm({ onSuccess }: LoginFormProps): React.ReactElement {
   return (
     <form onSubmit={handleSubmit} className="space-y-4" noValidate>
       <FormField>
-        <Label htmlFor="login-email">Email</Label>
+        <Label htmlFor="login-email">E-POST</Label>
         <Input
           id="login-email"
           name="email"
@@ -55,12 +55,13 @@ export function LoginForm({ onSuccess }: LoginFormProps): React.ReactElement {
           value={String(form.values.email ?? '')}
           onChange={form.onChange('email')}
           aria-invalid={Boolean(form.errors.email)}
-        />
+          variant="cleanauth"
+          />
         <FormMessage message={form.errors.email} />
       </FormField>
 
       <FormField>
-        <Label htmlFor="login-password">Password</Label>
+        <Label htmlFor="login-password">LÖSENORD</Label>
         <Input
           id="login-password"
           name="password"
@@ -69,6 +70,7 @@ export function LoginForm({ onSuccess }: LoginFormProps): React.ReactElement {
           value={String(form.values.password ?? '')}
           onChange={form.onChange('password')}
           aria-invalid={Boolean(form.errors.password)}
+          variant="cleanauth"
         />
         <FormMessage message={form.errors.password} />
       </FormField>

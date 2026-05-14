@@ -26,7 +26,7 @@ export function SignupForm({ onSuccess }: SignupFormProps): React.ReactElement {
   const [submitting, setSubmitting] = React.useState(false);
   const [submitError, setSubmitError] = React.useState<string | undefined>();
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSubmitError(undefined);
     const result = form.validate();
