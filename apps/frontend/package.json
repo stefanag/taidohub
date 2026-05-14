@@ -68,5 +68,10 @@
     "vitest": "^4.1.6",
     "eslint-plugin-storybook": "10.3.6",
     "@storybook/addon-docs": "^10.3.6"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
   }
 }
