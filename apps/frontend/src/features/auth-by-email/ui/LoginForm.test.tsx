@@ -33,4 +33,21 @@ describe('<LoginForm>', () => {
 
     signInSpy.mockRestore();
   });
+
+  it('calls onSuccess after a successful sign-in', async () => {
+    const signInSpy = vi.spyOn(authApi, 'signInWithEmail').mockResolvedValue();
+    const onSuccess = vi.fn();
+    const user = userEvent.setup();
+    render(<LoginForm onSuccess={onSuccess} />);
+
+    await user.type(screen.getByLabelText(/email/i), 'ada@example.com');
+    await user.type(screen.getByLabelText(/password/i), 'correct-horse-battery-staple');
+    await user.click(screen.getByRole('button', { name: /sign in/i }));
+
+    await vi.waitFor(() => {
+      expect(onSuccess).toHaveBeenCalledTimes(1);
+    });
+
+    signInSpy.mockRestore();
+  });
 });
