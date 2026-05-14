@@ -10,7 +10,7 @@ describe('<LoginForm>', () => {
   it('shows validation errors when fields are empty', async () => {
     const user = userEvent.setup();
     render(<LoginForm />);
-    await user.click(screen.getByRole('button', { name: /sign in/i }));
+    await user.click(screen.getByRole('button', { name: /logga in/i }));
     // Zod min-length / email errors should surface
     expect(screen.getAllByRole('alert', { hidden: true }).length).toBeGreaterThanOrEqual(0);
   });
@@ -22,7 +22,7 @@ describe('<LoginForm>', () => {
 
     await user.type(screen.getByLabelText(/e-post/i), 'ada@example.com');
     await user.type(screen.getByLabelText(/lösenord/i), 'correct-horse-battery-staple');
-    await user.click(screen.getByRole('button', { name: /sign in/i }));
+    await user.click(screen.getByRole('button', { name: /logga in/i }));
 
     await vi.waitFor(() => {
       expect(signInSpy).toHaveBeenCalledWith({
@@ -42,7 +42,7 @@ describe('<LoginForm>', () => {
 
     await user.type(screen.getByLabelText(/e-post/i), 'ada@example.com');
     await user.type(screen.getByLabelText(/lösenord/i), 'correct-horse-battery-staple');
-    await user.click(screen.getByRole('button', { name: /sign in/i }));
+    await user.click(screen.getByRole('button', { name: /logga in/i }));
 
     await vi.waitFor(() => {
       expect(onSuccess).toHaveBeenCalledTimes(1);

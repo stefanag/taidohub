@@ -44,9 +44,13 @@ export function LoginForm({ onSuccess }: LoginFormProps): React.ReactElement {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+    <form onSubmit={handleSubmit} className="space-y-5" noValidate>
       <FormField>
-        <Label htmlFor="login-email">E-POST</Label>
+        <Label
+          htmlFor="login-email"
+          className='block font-label text-xs font-medium text-on-surface-variant uppercase tracking-widest mb-1.5'>
+          E-POST
+        </Label>
         <Input
           id="login-email"
           name="email"
@@ -61,7 +65,11 @@ export function LoginForm({ onSuccess }: LoginFormProps): React.ReactElement {
       </FormField>
 
       <FormField>
-        <Label htmlFor="login-password">LÖSENORD</Label>
+        <Label
+          htmlFor="login-password"
+          className='block font-label text-xs font-medium text-on-surface-variant uppercase tracking-widest mb-1.5'>
+          LÖSENORD
+        </Label>
         <Input
           id="login-password"
           name="password"
@@ -77,7 +85,7 @@ export function LoginForm({ onSuccess }: LoginFormProps): React.ReactElement {
 
       <FormMessage message={submitError} />
 
-      <Button type="submit" disabled={submitting} className="w-full">
+      <Button type="submit" disabled={submitting} className="inline-flex items-center justify-center gap-2 rounded-sm transition-all disabled:opacity-50 outline-hidden font-bold tracking-wide px-5 py-2.5 text-sm bg-primary text-on-primary hover:bg-primary/90 w-full mt-2">
         {submitting ? 'Loggar in…' : 'Logga in'}
       </Button>
     </form>
