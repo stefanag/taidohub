@@ -43,6 +43,14 @@ export const EnvSchema = z.object({
   ENABLE_SWAGGER: z
     .union([z.literal('true'), z.literal('false')])
     .optional(),
+
+  /**
+   * Seed-only: identity for the sysadmin user created by
+   * `pnpm --filter backend run db:seed`. Defaults are dev-friendly;
+   * override in `.env` for staging/prod.
+   */
+  SYSADMIN_EMAIL: z.string().email().default('sysadmin@example.com'),
+  SYSADMIN_PASSWORD: z.string().min(8).default('sysadmin'),
 });
 
 export type Env = z.infer<typeof EnvSchema>;
