@@ -20,6 +20,9 @@
   "dependencies": {
     "@casl/ability": "^6.7.1",
     "@casl/react": "^6.0.0",
+    "@fontsource/manrope": "^5.2.8",
+    "@fontsource/noto-sans-jp": "^5.2.9",
+    "@fontsource/space-grotesk": "^5.2.10",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@repo/contracts": "workspace:*",
@@ -41,6 +44,7 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",
     "@storybook/addon-a11y": "^10.3.6",
+    "@storybook/addon-docs": "^10.3.6",
     "@storybook/addon-themes": "^10.3.6",
     "@storybook/react": "^10.3.6",
     "@storybook/react-vite": "^10.3.6",
@@ -56,6 +60,7 @@
     "@vitest/coverage-v8": "^4.1.6",
     "@vitest/ui": "^4.1.6",
     "eslint": "^10.3.0",
+    "eslint-plugin-storybook": "10.3.6",
     "jsdom": "^29.1.1",
     "msw": "^2.6.0",
     "msw-storybook-addon": "^2.0.4",
@@ -65,9 +70,7 @@
     "tailwindcss": "^4.3.0",
     "typescript": "^6.0.3",
     "vite": "^8.0.12",
-    "vitest": "^4.1.6",
-    "eslint-plugin-storybook": "10.3.6",
-    "@storybook/addon-docs": "^10.3.6"
+    "vitest": "^4.1.6"
   },
   "msw": {
     "workerDirectory": [

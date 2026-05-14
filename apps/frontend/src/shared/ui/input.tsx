@@ -4,7 +4,7 @@ import * as React from 'react';
 import { cn } from '@/shared/lib/utils';
 
 export const inputVariants = cva(
-  'inline-flex items-center px-2.5 py-0.5 text-xs font-semibold transition-colors',
+  'inline-flex items-center px-2.5 py-0.5 text-xs transition-colors',
   {
     variants: {
       variant: {

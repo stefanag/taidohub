@@ -78,7 +78,7 @@ export function LoginForm({ onSuccess }: LoginFormProps): React.ReactElement {
       <FormMessage message={submitError} />
 
       <Button type="submit" disabled={submitting} className="w-full">
-        {submitting ? 'Signing in…' : 'Sign in'}
+        {submitting ? 'Loggar in…' : 'Logga in'}
       </Button>
     </form>
   );

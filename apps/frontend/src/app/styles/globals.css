@@ -1,3 +1,12 @@
+/* Fonts (self-hosted via @fontsource — Vite bundles the woff2 files). */
+@import '@fontsource/manrope/400.css';
+@import '@fontsource/manrope/600.css';
+@import '@fontsource/manrope/800.css';
+@import '@fontsource/space-grotesk/500.css';
+@import '@fontsource/space-grotesk/700.css';
+@import '@fontsource/noto-sans-jp/400.css';
+@import '@fontsource/noto-sans-jp/700.css';
+
 @import 'tailwindcss';
 
 @utility container {
