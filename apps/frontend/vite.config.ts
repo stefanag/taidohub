@@ -8,6 +8,10 @@ import { defineConfig } from 'vite';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
+  // Load VITE_* env vars from the repo-root `.env` (matches the backend's
+  // NestJS `envFilePath: ['../../.env', '.env']`). Single source of truth
+  // for the monorepo.
+  envDir: path.resolve(__dirname, '../..'),
   plugins: [
     TanStackRouterVite({
       routesDirectory: './src/app/router/routes',
