@@ -14,3 +14,5 @@ export {
   CardTitle,
 } from './card.js';
 export { FormField, FormMessage, useZodForm, type FormMessageProps } from './form.js';
+export { Badge, badgeVariants, type BadgeProps } from './badge.js';
+
