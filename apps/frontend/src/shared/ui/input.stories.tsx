@@ -14,5 +14,5 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = { args: { children: 'New' } };
 
 export const Cleanauth: Story = {
-  args: { variant: 'cleanuth', children: 'Secondary' },
+  args: { variant: 'cleanauth', children: 'Cleanauth' },
 };

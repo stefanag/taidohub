@@ -54,6 +54,7 @@ export function SignupForm({ onSuccess }: SignupFormProps): React.ReactElement {
           value={String(form.values.name ?? '')}
           onChange={form.onChange('name')}
           aria-invalid={Boolean(form.errors.name)}
+          variant="cleanauth"
         />
         <FormMessage message={form.errors.name} />
       </FormField>
@@ -68,6 +69,7 @@ export function SignupForm({ onSuccess }: SignupFormProps): React.ReactElement {
           value={String(form.values.email ?? '')}
           onChange={form.onChange('email')}
           aria-invalid={Boolean(form.errors.email)}
+          variant="cleanauth"
         />
         <FormMessage message={form.errors.email} />
       </FormField>
@@ -82,6 +84,7 @@ export function SignupForm({ onSuccess }: SignupFormProps): React.ReactElement {
           value={String(form.values.password ?? '')}
           onChange={form.onChange('password')}
           aria-invalid={Boolean(form.errors.password)}
+          variant="cleanauth"
         />
         <FormMessage message={form.errors.password} />
       </FormField>

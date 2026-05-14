@@ -38,9 +38,9 @@ export function LoginPage(): React.ReactElement {
 
         <Card className="w-full max-w-sm">
           <CardHeader>
-            <CardTitle className="font-headline font-extrabold text-3xl tracking-tight text-on-surface">Sign in</CardTitle>
+            <CardTitle className="font-headline font-extrabold text-3xl tracking-tight text-on-surface">Logga in</CardTitle>
             <CardDescription className="text-sm text-on-surface-variant mt-2">
-              Sign in with your email address to manage posts.
+              Välkommen tillbaka
             </CardDescription>
           </CardHeader>
           <CardContent>
