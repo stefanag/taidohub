@@ -6,7 +6,7 @@ import { Header } from '@/widgets/header';
 
 // Routes that should render full-bleed without the global app Header
 // (e.g. auth pages with their own hero layout).
-const ROUTES_WITHOUT_HEADER = new Set(['/login']);
+const ROUTES_WITHOUT_HEADER = new Set(['/login', '/signup']);
 
 function RootComponent(): React.ReactElement {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
