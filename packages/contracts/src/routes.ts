@@ -24,3 +24,8 @@ export const PostsRoutes = {
 } as const;
 
 export const HealthRoute = '/api/health' as const;
+
+export const OrganisationsRoutes = {
+  base: '/api/admin/organisations',
+  byId: (id: string) => `/api/admin/organisations/${id}` as const,
+} as const;

@@ -13,7 +13,7 @@ export const ActionSchema = z.enum(['create', 'read', 'update', 'delete', 'manag
 });
 
 /** Zod enum for runtime validation of subject names. */
-export const SubjectSchema = z.enum(['Post', 'User', 'all']).meta({
+export const SubjectSchema = z.enum(['Post', 'User', 'Organisation', 'all']).meta({
   id: 'Subject',
   description:
     'A CASL subject (noun) the user can act upon. `all` is the wildcard covering every subject.',
@@ -53,13 +53,22 @@ export type UserSubjectShape = {
   id?: string;
 };
 
+export type OrganisationSubjectShape = {
+  readonly __caslSubjectType__: 'Organisation';
+  id?: string;
+};
+
 /**
  * The full CASL subject union: either a bare subject name (for class-level
  * rules like `can('create', 'Post')`) or a tagged subject shape (for
  * instance-level rules like `can('read', 'Post', { authorId })` and for
  * dispatching on a real row passed to `throwUnlessCan`).
  */
-export type AppSubject = AppSubjectName | PostSubjectShape | UserSubjectShape;
+export type AppSubject =
+  | AppSubjectName
+  | PostSubjectShape
+  | UserSubjectShape
+  | OrganisationSubjectShape;
 
 /**
  * Tuple type compatible with `MongoAbility<[AppAction, AppSubject]>` from

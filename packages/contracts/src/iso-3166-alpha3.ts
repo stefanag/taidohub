@@ -1,0 +1,23 @@
+/**
+ * Static ISO 3166-1 alpha-3 country codes. Trimmed for runtime cost.
+ * If you need a code that isn't here, add it — don't fall back to free text.
+ */
+export const ISO_3166_ALPHA3_CODES = [
+  'AFG','ALB','DZA','AND','AGO','ATG','ARG','ARM','AUS','AUT','AZE','BHS','BHR','BGD','BRB','BLR','BEL','BLZ','BEN','BTN',
+  'BOL','BIH','BWA','BRA','BRN','BGR','BFA','BDI','CPV','KHM','CMR','CAN','CAF','TCD','CHL','CHN','COL','COM','COG','COD',
+  'CRI','CIV','HRV','CUB','CYP','CZE','DNK','DJI','DMA','DOM','ECU','EGY','SLV','GNQ','ERI','EST','SWZ','ETH','FJI','FIN',
+  'FRA','GAB','GMB','GEO','DEU','GHA','GRC','GRD','GTM','GIN','GNB','GUY','HTI','HND','HUN','ISL','IND','IDN','IRN','IRQ',
+  'IRL','ISR','ITA','JAM','JPN','JOR','KAZ','KEN','KIR','KWT','KGZ','LAO','LVA','LBN','LSO','LBR','LBY','LIE','LTU','LUX',
+  'MDG','MWI','MYS','MDV','MLI','MLT','MHL','MRT','MUS','MEX','FSM','MDA','MCO','MNG','MNE','MAR','MOZ','MMR','NAM','NRU',
+  'NPL','NLD','NZL','NIC','NER','NGA','PRK','MKD','NOR','OMN','PAK','PLW','PSE','PAN','PNG','PRY','PER','PHL','POL','PRT',
+  'QAT','ROU','RUS','RWA','KNA','LCA','VCT','WSM','SMR','STP','SAU','SEN','SRB','SYC','SLE','SGP','SVK','SVN','SLB','SOM',
+  'ZAF','KOR','SSD','ESP','LKA','SDN','SUR','SWE','CHE','SYR','TWN','TJK','TZA','THA','TLS','TGO','TON','TTO','TUN','TUR',
+  'TKM','TUV','UGA','UKR','ARE','GBR','USA','URY','UZB','VUT','VAT','VEN','VNM','YEM','ZMB','ZWE',
+] as const;
+
+export type IsoAlpha3 = (typeof ISO_3166_ALPHA3_CODES)[number];
+
+const SET = new Set<string>(ISO_3166_ALPHA3_CODES);
+export function isIsoAlpha3(code: string): code is IsoAlpha3 {
+  return SET.has(code);
+}
