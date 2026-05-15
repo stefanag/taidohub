@@ -21,6 +21,10 @@
     "signIn": "Kirjaudu sisään",
     "signOut": "Kirjaudu ulos"
   },
+  "nav": {
+    "dashboard": "Kojelauta",
+    "posts": "Julkaisut"
+  },
   "dashboard": {
     "title": "Kojelauta"
   },

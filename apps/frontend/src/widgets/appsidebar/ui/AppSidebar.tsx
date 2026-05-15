@@ -1,176 +1,97 @@
-import * as React from "react"
+import { Link, useNavigate, useRouterState } from '@tanstack/react-router';
+import { FileText, LayoutDashboard, LogOut } from 'lucide-react';
+import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 
+import { signOut, useSession } from '@/features/auth-by-email';
+import { Button } from '@/shared/ui';
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-} from "@/components/ui/sidebar"
+} from '@/shared/ui/sidebar';
+import { LocaleSwitcher } from '@/widgets/locale-switcher';
 
-// This is sample data.
-const data = {
-  versions: ["1.0.1", "1.1.0-alpha", "2.0.0-beta1"],
-  navMain: [
-    {
-      title: "Getting Started",
-      url: "#",
-      items: [
-        {
-          title: "Installation",
-          url: "#",
-        },
-        {
-          title: "Project Structure",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Build Your Application",
-      url: "#",
-      items: [
-        {
-          title: "Routing",
-          url: "#",
-        },
-        {
-          title: "Data Fetching",
-          url: "#",
-          isActive: true,
-        },
-        {
-          title: "Rendering",
-          url: "#",
-        },
-        {
-          title: "Caching",
-          url: "#",
-        },
-        {
-          title: "Styling",
-          url: "#",
-        },
-        {
-          title: "Optimizing",
-          url: "#",
-        },
-        {
-          title: "Configuring",
-          url: "#",
-        },
-        {
-          title: "Testing",
-          url: "#",
-        },
-        {
-          title: "Authentication",
-          url: "#",
-        },
-        {
-          title: "Deploying",
-          url: "#",
-        },
-        {
-          title: "Upgrading",
-          url: "#",
-        },
-        {
-          title: "Examples",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "API Reference",
-      url: "#",
-      items: [
-        {
-          title: "Components",
-          url: "#",
-        },
-        {
-          title: "File Conventions",
-          url: "#",
-        },
-        {
-          title: "Functions",
-          url: "#",
-        },
-        {
-          title: "next.config.js Options",
-          url: "#",
-        },
-        {
-          title: "CLI",
-          url: "#",
-        },
-        {
-          title: "Edge Runtime",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Architecture",
-      url: "#",
-      items: [
-        {
-          title: "Accessibility",
-          url: "#",
-        },
-        {
-          title: "Fast Refresh",
-          url: "#",
-        },
-        {
-          title: "Next.js Compiler",
-          url: "#",
-        },
-        {
-          title: "Supported Browsers",
-          url: "#",
-        },
-        {
-          title: "Turbopack",
-          url: "#",
-        },
-      ],
-    },
-  ],
-}
+// Static nav config. Each entry is a route the authenticated user can reach
+// from the sidebar. When new sections land, add a row here.
+const NAV = [
+  { to: '/dashboard', icon: LayoutDashboard, labelKey: 'nav.dashboard' as const },
+  { to: '/posts', icon: FileText, labelKey: 'nav.posts' as const },
+] as const;
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar(): React.ReactElement {
+  const { t } = useTranslation();
+  const session = useSession();
+  const user = session.data?.user;
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut();
+    void navigate({ to: '/' });
+  };
+
   return (
-    <Sidebar {...props}>
-      <SidebarHeader>
-        <h1>TaidoHub</h1>
+    <Sidebar collapsible="icon">
+      <SidebarHeader className="px-4 py-3">
+        <span className="font-headline text-xl font-extrabold tracking-tight">
+          taidohub
+        </span>
       </SidebarHeader>
+
       <SidebarContent>
-        {/* We create a SidebarGroup for each parent. */}
-        {data.navMain.map((item) => (
-          <SidebarGroup key={item.title}>
-            <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {item.items.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild isActive={item.isActive}>
-                      <a href={item.url}>{item.title}</a>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        ))}
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {NAV.map((item) => (
+                <SidebarMenuItem key={item.to}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={pathname.startsWith(item.to)}
+                  >
+                    <Link to={item.to}>
+                      <item.icon />
+                      <span>{t(item.labelKey)}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
+
+      <SidebarFooter className="gap-3 p-3">
+        {user ? (
+          <span
+            className="truncate text-xs text-on-surface-variant"
+            title={user.email}
+          >
+            {user.email}
+          </span>
+        ) : null}
+        <LocaleSwitcher />
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            void handleSignOut();
+          }}
+          className="justify-start gap-2"
+        >
+          <LogOut className="size-4" />
+          {t('header.signOut')}
+        </Button>
+      </SidebarFooter>
+
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }
