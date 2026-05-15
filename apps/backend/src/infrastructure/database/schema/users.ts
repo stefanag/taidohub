@@ -15,6 +15,7 @@ export const user = pgTable('user', {
   name: text('name'),
   image: text('image'),
   role: text('role').notNull().default('user'),
+  locale: text('locale').notNull().default('en'),
   createdAt: timestamp('createdAt', { withTimezone: true, mode: 'date' })
     .notNull()
     .defaultNow(),
