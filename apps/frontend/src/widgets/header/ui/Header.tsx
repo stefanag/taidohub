@@ -1,14 +1,15 @@
 import { Link } from '@tanstack/react-router';
+import { useTranslation } from 'react-i18next';
 
 import { signOut, useSession } from '@/features/auth-by-email';
 import { Button } from '@/shared/ui';
+import { LocaleSwitcher } from '@/widgets/locale-switcher';
 
 /**
  * Top navigation bar — links to landing/posts and shows auth state.
- * Reads the current session from better-auth's React `useSession()` and
- * offers a sign-out button when authenticated.
  */
 export function Header(): React.ReactElement {
+  const { t } = useTranslation();
   const session = useSession();
   const user = session.data?.user;
 
@@ -20,11 +21,12 @@ export function Header(): React.ReactElement {
             taidohub
           </Link>
           <Link to="/posts" className="text-sm text-muted-foreground hover:text-foreground">
-            Posts
+            {t('header.posts')}
           </Link>
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          <LocaleSwitcher />
           {user ? (
             <>
               <span className="text-sm text-muted-foreground">{user.email}</span>
@@ -35,12 +37,12 @@ export function Header(): React.ReactElement {
                   void signOut();
                 }}
               >
-                Sign out
+                {t('header.signOut')}
               </Button>
             </>
           ) : (
             <Button asChild variant="outline" size="sm">
-              <Link to="/login">Sign in</Link>
+              <Link to="/login">{t('header.signIn')}</Link>
             </Button>
           )}
         </div>
