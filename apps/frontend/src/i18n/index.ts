@@ -1,10 +1,12 @@
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
+import { z } from 'zod';
 
 import en from './locales/en.json' with { type: 'json' };
 import fi from './locales/fi.json' with { type: 'json' };
 import sv from './locales/sv.json' with { type: 'json' };
+import { i18nZodErrorMap } from './zod-error-map.js';
 
 export const SUPPORTED_LOCALES = ['en', 'sv', 'fi'] as const;
 export type SupportedLocale = (typeof SUPPORTED_LOCALES)[number];
@@ -30,5 +32,7 @@ void i18n
     },
     returnNull: false,
   });
+
+z.setErrorMap(i18nZodErrorMap);
 
 export default i18n;
