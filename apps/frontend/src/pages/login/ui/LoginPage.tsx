@@ -1,4 +1,5 @@
 import { useNavigate } from '@tanstack/react-router';
+import { useTranslation } from 'react-i18next';
 
 import { LoginForm } from '@/features/auth-by-email';
 import {
@@ -8,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/shared/ui';
+import { LocaleSwitcher } from '@/widgets/locale-switcher';
 
 /**
  * Sign-in page. Wraps the `LoginForm` feature in a centered Card and
@@ -17,6 +19,7 @@ import {
  */
 export function LoginPage(): React.ReactElement {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   return (
     <main className="min-h-screen flex">
       {/* Left hero panel */}
@@ -28,8 +31,9 @@ export function LoginPage(): React.ReactElement {
           <p className="japanese-text text-6xl font-bold text-secondary leading-tight mb-6">
             精神一到<br />何事か成らざらん
           </p>
-          <p className="text-secondary text-m italic">Where the mind is concentrated, nothing is impossible.</p>
+          <p className="text-secondary text-m italic">{t('auth.motto')}</p>
         </div>
+        <LocaleSwitcher variant="onDark" className="self-start" />
         <p className="text-inverse-primary text-xs">© {new Date().getFullYear()} TaidoHub</p>
       </div>
 
@@ -38,9 +42,9 @@ export function LoginPage(): React.ReactElement {
 
         <Card className="w-full max-w-sm">
           <CardHeader>
-            <CardTitle className="font-headline font-extrabold text-3xl tracking-tight text-on-surface">Logga in</CardTitle>
+            <CardTitle className="font-headline font-extrabold text-3xl tracking-tight text-on-surface">{t('auth.login.title')}</CardTitle>
             <CardDescription className="text-sm text-on-surface-variant mt-2">
-              Välkommen tillbaka
+              {t('auth.login.description')}
             </CardDescription>
           </CardHeader>
           <CardContent>

@@ -43,6 +43,12 @@ export function buildBetterAuth(env: Env) {
           required: false,
           input: false,
         },
+        locale: {
+          type: 'string',
+          defaultValue: 'en',
+          required: false,
+          input: true,
+        },
       },
     },
     advanced: {

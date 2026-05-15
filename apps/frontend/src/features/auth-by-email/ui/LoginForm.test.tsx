@@ -1,12 +1,18 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import i18n from '@/i18n';
 
 import * as authApi from '../api/auth.api';
 
 import { LoginForm } from './LoginForm.js';
 
 describe('<LoginForm>', () => {
+  beforeEach(async () => {
+    await i18n.changeLanguage('sv');
+  });
+
   it('shows validation errors when fields are empty', async () => {
     const user = userEvent.setup();
     render(<LoginForm />);

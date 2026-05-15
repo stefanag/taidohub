@@ -12,6 +12,7 @@ export interface AuthenticatedUser {
   image: string | null;
   /** Optional role claim used by CASL rules; populated when present in the session. */
   role?: string | null;
+  locale: string;
 }
 
 export interface AuthenticatedRequest {

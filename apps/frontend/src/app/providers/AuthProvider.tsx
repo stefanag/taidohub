@@ -1,18 +1,33 @@
 import * as React from 'react';
 
+import { useSession } from '@/features/auth-by-email';
+import i18n from '@/i18n';
+
 /**
- * `AuthProvider` is intentionally a pass-through.
+ * `AuthProvider` keeps the active i18n language in sync with the logged-in
+ * user's persisted locale (better-auth `user.locale`). It does not own any
+ * state itself; `useSession()` is stateless inside better-auth's React client.
  *
- * better-auth's React client (`createAuthClient`) is **stateless** — it does
- * not require a wrapping provider. We expose this component anyway because:
- *   1. The spec calls for a discrete `AuthProvider` so other providers can be
- *      slotted in here later (e.g. wrap with an org/role provider).
- *   2. Consumers can mount it once at the app root without thinking about
- *      "do I need a provider for hooks like `useSession`?".
- *
- * Session is hydrated automatically by `useSession()` (called from
- * `widgets/header` and `AbilityProvider`).
+ * Flow:
+ *  - Anonymous: `session.data?.user` is undefined → effect no-ops.
+ *  - On login or session refresh: reconcile i18n if the DB locale differs.
+ *  - On logout: locale stays at the last-used value (we don't reset).
  */
-export function AuthProvider({ children }: { children: React.ReactNode }): React.ReactElement {
+export function AuthProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}): React.ReactElement {
+  const session = useSession();
+  const dbLocale = session.data?.user
+    ? (session.data.user as { locale?: string }).locale
+    : undefined;
+
+  React.useEffect(() => {
+    if (!dbLocale) return;
+    if (i18n.resolvedLanguage === dbLocale) return;
+    void i18n.changeLanguage(dbLocale);
+  }, [dbLocale]);
+
   return <>{children}</>;
 }

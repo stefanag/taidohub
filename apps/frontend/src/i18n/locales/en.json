@@ -1,0 +1,48 @@
+{
+  "auth": {
+    "login": {
+      "title": "Sign in",
+      "description": "Sign in with your email address to manage posts.",
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
+      "submit": "Sign in",
+      "submitting": "Signing in…",
+      "failed": "Sign in failed."
+    },
+    "motto": "Where the mind is concentrated, nothing is impossible."
+  },
+  "common": {
+    "loading": "Loading…",
+    "browse": "Browse posts",
+    "unknownError": "unknown error"
+  },
+  "header": {
+    "posts": "Posts",
+    "signIn": "Sign in",
+    "signOut": "Sign out"
+  },
+  "dashboard": {
+    "title": "Dashboard"
+  },
+  "home": {
+    "tagline": "A Feature-Sliced Design seed for a Vite + React + TypeScript app, wired to a NestJS backend over a typed `@repo/contracts` HTTP boundary."
+  },
+  "posts": {
+    "title": "Posts",
+    "newPost": "New post",
+    "loadFailed": "Failed to load posts: {{message}}",
+    "published": "Published",
+    "draft": "Draft"
+  },
+  "locale": {
+    "switch": "Language"
+  },
+  "zod": {
+    "invalidType": "Expected {{expected}}.",
+    "tooSmall": "Must be at least {{min}}.",
+    "tooBig": "Must be at most {{max}}.",
+    "invalidEmail": "Please enter a valid email address.",
+    "invalidString": "Invalid value.",
+    "fallback": "Invalid value."
+  }
+}
