@@ -21,6 +21,9 @@
     "signIn": "Kirjaudu sisään",
     "signOut": "Kirjaudu ulos"
   },
+  "dashboard": {
+    "title": "Kojelauta"
+  },
   "home": {
     "tagline": "Feature-Sliced Design -pohja Vite + React + TypeScript -sovellukselle, joka on kytketty NestJS-taustaan typitetyn `@repo/contracts`-HTTP-rajapinnan kautta."
   },

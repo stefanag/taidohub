@@ -1,23 +1,24 @@
 import { createRoute, Link } from '@tanstack/react-router';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/shared/ui';
 
 import { rootRoute } from './__root.js';
 
 function IndexComponent(): React.ReactElement {
+  const { t } = useTranslation();
   return (
     <main className="container py-16">
       <h1 className="text-4xl font-bold tracking-tight">taidohub</h1>
       <p className="mt-4 max-w-prose text-muted-foreground">
-        A Feature-Sliced Design seed for a Vite + React + TypeScript app, wired
-        to a NestJS backend over a typed `@repo/contracts` HTTP boundary.
+        {t('home.tagline')}
       </p>
       <div className="mt-8 flex gap-2">
         <Button asChild>
-          <Link to="/posts">Browse posts</Link>
+          <Link to="/posts">{t('common.browse')}</Link>
         </Button>
         <Button asChild variant="outline">
-          <Link to="/login">Sign in</Link>
+          <Link to="/login">{t('header.signIn')}</Link>
         </Button>
       </div>
     </main>

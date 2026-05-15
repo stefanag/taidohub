@@ -21,6 +21,9 @@
     "signIn": "Sign in",
     "signOut": "Sign out"
   },
+  "dashboard": {
+    "title": "Dashboard"
+  },
   "home": {
     "tagline": "A Feature-Sliced Design seed for a Vite + React + TypeScript app, wired to a NestJS backend over a typed `@repo/contracts` HTTP boundary."
   },
