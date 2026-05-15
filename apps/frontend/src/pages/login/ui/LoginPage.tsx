@@ -2,6 +2,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 
 import { LoginForm } from '@/features/auth-by-email';
+import { APP_LANDING_ROUTE } from '@/shared/lib/routes';
 import {
   Card,
   CardContent,
@@ -13,9 +14,10 @@ import { LocaleSwitcher } from '@/widgets/locale-switcher';
 
 /**
  * Sign-in page. Wraps the `LoginForm` feature in a centered Card and
- * navigates to `/posts` on a successful sign-in. The route definition in
- * `app/router/routes/login.tsx` delegates to this component — keep page
- * structure here and routing concerns there.
+ * navigates to `APP_LANDING_ROUTE` (currently `/dashboard`) on a successful
+ * sign-in. The route definition in `app/router/routes/_public.login.tsx`
+ * delegates to this component — keep page structure here and routing
+ * concerns there.
  */
 export function LoginPage(): React.ReactElement {
   const navigate = useNavigate();
@@ -49,7 +51,7 @@ export function LoginPage(): React.ReactElement {
           <CardContent>
             <LoginForm
               onSuccess={() => {
-                void navigate({ to: '/posts' });
+                void navigate({ to: APP_LANDING_ROUTE });
               }}
             />
           </CardContent>
