@@ -1,5 +1,8 @@
+import { useTranslation } from 'react-i18next';
+
 import type { Post } from '@repo/contracts/posts';
 
+import { formatDate } from '@/i18n/formatters';
 import {
   Card,
   CardContent,
@@ -17,13 +20,14 @@ export interface PostCardProps {
  * verbatim so server, MSW handlers, and UI all share one definition.
  */
 export function PostCard({ post }: PostCardProps): React.ReactElement {
-  const subtitle = post.published ? 'Published' : 'Draft';
+  const { t } = useTranslation();
+  const subtitle = post.published ? t('posts.published') : t('posts.draft');
   return (
     <Card>
       <CardHeader>
         <CardTitle>{post.title}</CardTitle>
         <CardDescription>
-          {subtitle} · {new Date(post.createdAt).toLocaleDateString()}
+          {subtitle} · {formatDate(post.createdAt)}
         </CardDescription>
       </CardHeader>
       <CardContent>
