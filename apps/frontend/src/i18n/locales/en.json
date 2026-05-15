@@ -21,6 +21,10 @@
     "signIn": "Sign in",
     "signOut": "Sign out"
   },
+  "nav": {
+    "dashboard": "Dashboard",
+    "posts": "Posts"
+  },
   "dashboard": {
     "title": "Dashboard"
   },

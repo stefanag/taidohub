@@ -21,6 +21,10 @@
     "signIn": "Logga in",
     "signOut": "Logga ut"
   },
+  "nav": {
+    "dashboard": "Översikt",
+    "posts": "Inlägg"
+  },
   "dashboard": {
     "title": "Översikt"
   },
