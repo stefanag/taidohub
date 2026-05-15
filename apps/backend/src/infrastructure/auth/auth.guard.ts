@@ -54,6 +54,7 @@ export class AuthGuard implements CanActivate {
       name: session.user.name ?? null,
       image: (session.user as { image?: string | null }).image ?? null,
       role: (session.user as { role?: string | null }).role ?? null,
+      locale: (session.user as { locale?: string }).locale ?? 'en',
     };
 
     return true;
