@@ -1,0 +1,45 @@
+{
+  "auth": {
+    "login": {
+      "title": "Kirjaudu sisään",
+      "description": "Kirjaudu sisään sähköpostiosoitteellasi hallitaksesi julkaisuja.",
+      "emailLabel": "Sähköposti",
+      "passwordLabel": "Salasana",
+      "submit": "Kirjaudu sisään",
+      "submitting": "Kirjaudutaan…",
+      "failed": "Kirjautuminen epäonnistui."
+    },
+    "motto": "Kun mieli on keskittynyt, mikään ei ole mahdotonta."
+  },
+  "common": {
+    "loading": "Ladataan…",
+    "browse": "Selaa julkaisuja",
+    "unknownError": "tuntematon virhe"
+  },
+  "header": {
+    "posts": "Julkaisut",
+    "signIn": "Kirjaudu sisään",
+    "signOut": "Kirjaudu ulos"
+  },
+  "home": {
+    "tagline": "Feature-Sliced Design -pohja Vite + React + TypeScript -sovellukselle, joka on kytketty NestJS-taustaan typitetyn `@repo/contracts`-HTTP-rajapinnan kautta."
+  },
+  "posts": {
+    "title": "Julkaisut",
+    "newPost": "Uusi julkaisu",
+    "loadFailed": "Julkaisujen lataus epäonnistui: {{message}}",
+    "published": "Julkaistu",
+    "draft": "Luonnos"
+  },
+  "locale": {
+    "switch": "Kieli"
+  },
+  "zod": {
+    "invalidType": "Odotettu {{expected}}.",
+    "tooSmall": "Vähintään {{min}}.",
+    "tooBig": "Enintään {{max}}.",
+    "invalidEmail": "Anna kelvollinen sähköpostiosoite.",
+    "invalidString": "Virheellinen arvo.",
+    "fallback": "Virheellinen arvo."
+  }
+}

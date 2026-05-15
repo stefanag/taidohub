@@ -1,0 +1,45 @@
+{
+  "auth": {
+    "login": {
+      "title": "Logga in",
+      "description": "Logga in med din e-postadress för att hantera inlägg.",
+      "emailLabel": "E-post",
+      "passwordLabel": "Lösenord",
+      "submit": "Logga in",
+      "submitting": "Loggar in…",
+      "failed": "Inloggning misslyckades."
+    },
+    "motto": "Där sinnet är samlat är inget omöjligt."
+  },
+  "common": {
+    "loading": "Laddar…",
+    "browse": "Bläddra bland inlägg",
+    "unknownError": "okänt fel"
+  },
+  "header": {
+    "posts": "Inlägg",
+    "signIn": "Logga in",
+    "signOut": "Logga ut"
+  },
+  "home": {
+    "tagline": "En Feature-Sliced Design-mall för en Vite + React + TypeScript-app, kopplad till en NestJS-backend över ett typat `@repo/contracts`-HTTP-gränssnitt."
+  },
+  "posts": {
+    "title": "Inlägg",
+    "newPost": "Nytt inlägg",
+    "loadFailed": "Det gick inte att hämta inlägg: {{message}}",
+    "published": "Publicerad",
+    "draft": "Utkast"
+  },
+  "locale": {
+    "switch": "Språk"
+  },
+  "zod": {
+    "invalidType": "Förväntat {{expected}}.",
+    "tooSmall": "Måste vara minst {{min}}.",
+    "tooBig": "Måste vara högst {{max}}.",
+    "invalidEmail": "Ange en giltig e-postadress.",
+    "invalidString": "Ogiltigt värde.",
+    "fallback": "Ogiltigt värde."
+  }
+}
