@@ -17,6 +17,7 @@ export default defineConfig({
       routesDirectory: './src/app/router/routes',
       generatedRouteTree: './src/app/router/routeTree.gen.ts',
       autoCodeSplitting: true,
+      routeFileIgnorePattern: '\\.test\\.(ts|tsx)$',
     }),
     react(),
   ],
