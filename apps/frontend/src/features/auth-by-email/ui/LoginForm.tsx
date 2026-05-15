@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { SignInWithEmailSchema } from '@repo/contracts/auth';
 
@@ -24,6 +25,7 @@ export interface LoginFormProps {
  */
 export function LoginForm({ onSuccess }: LoginFormProps): React.ReactElement {
   const form = useZodForm(SignInWithEmailSchema, { email: '', password: '' });
+  const { t } = useTranslation();
   const [submitting, setSubmitting] = React.useState(false);
   const [submitError, setSubmitError] = React.useState<string | undefined>();
 
@@ -37,7 +39,7 @@ export function LoginForm({ onSuccess }: LoginFormProps): React.ReactElement {
       await signInWithEmail(result.data);
       onSuccess?.();
     } catch (err) {
-      setSubmitError(err instanceof Error ? err.message : 'Sign in failed.');
+      setSubmitError(err instanceof Error ? err.message : t('auth.login.failed'));
     } finally {
       setSubmitting(false);
     }
@@ -49,7 +51,7 @@ export function LoginForm({ onSuccess }: LoginFormProps): React.ReactElement {
         <Label
           htmlFor="login-email"
           className='block font-label text-xs font-medium text-on-surface-variant uppercase tracking-widest mb-1.5'>
-          E-POST
+          {t('auth.login.emailLabel')}
         </Label>
         <Input
           id="login-email"
@@ -68,7 +70,7 @@ export function LoginForm({ onSuccess }: LoginFormProps): React.ReactElement {
         <Label
           htmlFor="login-password"
           className='block font-label text-xs font-medium text-on-surface-variant uppercase tracking-widest mb-1.5'>
-          LÖSENORD
+          {t('auth.login.passwordLabel')}
         </Label>
         <Input
           id="login-password"
@@ -86,7 +88,7 @@ export function LoginForm({ onSuccess }: LoginFormProps): React.ReactElement {
       <FormMessage message={submitError} />
 
       <Button type="submit" disabled={submitting} className="inline-flex items-center justify-center gap-2 rounded-sm transition-all disabled:opacity-50 outline-hidden font-bold tracking-wide px-5 py-2.5 text-sm bg-primary text-on-primary hover:bg-primary/90 w-full mt-2">
-        {submitting ? 'Loggar in…' : 'Logga in'}
+        {submitting ? t('auth.login.submitting') : t('auth.login.submit')}
       </Button>
     </form>
   );
