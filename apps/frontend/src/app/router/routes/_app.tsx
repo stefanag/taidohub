@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import { authClient } from '@/features/auth-by-email';
 import { SidebarProvider, SidebarTrigger } from '@/shared/ui/sidebar';
-import { AppSidebar } from '@/widgets/appsidebar/ui/AppSidebar';
+import { AppSidebar } from '@/widgets/appsidebar';
 
 import { rootRoute } from './__root.js';
 
