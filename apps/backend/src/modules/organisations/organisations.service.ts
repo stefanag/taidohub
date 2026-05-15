@@ -1,0 +1,172 @@
+import {
+  BadRequestException,
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { ForbiddenError } from '@casl/ability';
+import type {
+  CreateOrganisationInput,
+  IsoAlpha3,
+  ListOrganisationsQuery,
+  ListOrganisationsResponse,
+  Organisation,
+  OrganisationType,
+  UpdateOrganisationInput,
+} from '@repo/contracts/organisations';
+
+import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
+import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
+import { type DbOrganisation } from '../../infrastructure/database/schema/index.js';
+
+import { OrganisationsRepository } from './organisations.repository.js';
+
+@Injectable()
+export class OrganisationsService {
+  constructor(
+    private readonly repo: OrganisationsRepository,
+    private readonly abilities: AbilityFactory,
+  ) {}
+
+  async list(query: ListOrganisationsQuery, user: AuthenticatedUser | null): Promise<ListOrganisationsResponse> {
+    this.assertCan(user, 'read');
+    const { data, total } = await this.repo.list(query);
+    return { data: data.map((r) => this.toApi(r)), total };
+  }
+
+  async findOne(id: string, user: AuthenticatedUser | null): Promise<Organisation> {
+    this.assertCan(user, 'read');
+    const row = await this.requireById(id);
+    return this.toApi(row);
+  }
+
+  async create(input: CreateOrganisationInput, user: AuthenticatedUser): Promise<Organisation> {
+    this.assertCan(user, 'create');
+    await this.validateHierarchy(input.type, input.parentId);
+    const row = await this.repo.create(input);
+    return this.toApi(row);
+  }
+
+  async update(id: string, input: UpdateOrganisationInput, user: AuthenticatedUser): Promise<Organisation> {
+    this.assertCan(user, 'update');
+    const existing = await this.requireById(id);
+
+    if (input.parentId !== undefined) {
+      await this.validateHierarchy(existing.type, input.parentId);
+      if (input.parentId !== null) {
+        await this.assertNoCycle(id, input.parentId);
+      }
+    }
+
+    const row = await this.repo.update(id, input);
+    if (!row) throw new NotFoundException(this.notFound(id));
+    return this.toApi(row);
+  }
+
+  async delete(id: string, user: AuthenticatedUser): Promise<void> {
+    this.assertCan(user, 'delete');
+    await this.requireById(id);
+    const childCount = await this.repo.countChildren(id);
+    if (childCount > 0) {
+      throw new ConflictException({
+        error: { code: 'HAS_CHILDREN', message: `Organisation ${id} still has ${childCount} child(ren).` },
+      });
+    }
+    await this.repo.delete(id);
+  }
+
+  private async validateHierarchy(type: OrganisationType, parentId: string | null): Promise<void> {
+    if (type === 'international_federation') {
+      if (parentId !== null) {
+        throw new BadRequestException({
+          error: { code: 'INVALID_PARENT', message: 'International federations cannot have a parent.' },
+        });
+      }
+      return;
+    }
+    if (parentId === null) {
+      throw new BadRequestException({
+        error: { code: 'INVALID_PARENT', message: `A ${type} must have a parent.` },
+      });
+    }
+    const parent = await this.repo.findById(parentId);
+    if (!parent) {
+      throw new BadRequestException({
+        error: { code: 'INVALID_PARENT', message: `Parent ${parentId} not found.` },
+      });
+    }
+    if (type === 'national_federation' && parent.type !== 'international_federation') {
+      throw new BadRequestException({
+        error: { code: 'INVALID_PARENT', message: 'National federations must be parented by an international federation.' },
+      });
+    }
+    if (type === 'club' && parent.type !== 'national_federation' && parent.type !== 'club') {
+      throw new BadRequestException({
+        error: { code: 'INVALID_PARENT', message: 'A club must be parented by a national federation or another club.' },
+      });
+    }
+  }
+
+  /** Walk up from `parentId`; if we reach `nodeId`, that's a cycle. */
+  private async assertNoCycle(nodeId: string, parentId: string): Promise<void> {
+    let cursor: string | null = parentId;
+    const visited = new Set<string>();
+    while (cursor !== null) {
+      if (cursor === nodeId) {
+        throw new BadRequestException({
+          error: { code: 'CYCLE', message: 'Reparenting would create a cycle.' },
+        });
+      }
+      if (visited.has(cursor)) break;
+      visited.add(cursor);
+      const row = await this.repo.findById(cursor);
+      cursor = row?.parentId ?? null;
+    }
+  }
+
+  private assertCan(user: AuthenticatedUser | null, action: 'create' | 'read' | 'update' | 'delete'): void {
+    const ability = this.abilities.createForUser(user);
+    try {
+      ForbiddenError.from(ability).throwUnlessCan(action, 'Organisation');
+    } catch (err) {
+      if (err instanceof ForbiddenError) {
+        throw new ForbiddenException({
+          error: { code: 'FORBIDDEN', message: err.message },
+        });
+      }
+      throw err;
+    }
+  }
+
+  private async requireById(id: string): Promise<DbOrganisation> {
+    const row = await this.repo.findById(id);
+    if (!row) throw new NotFoundException(this.notFound(id));
+    return row;
+  }
+
+  private notFound(id: string) {
+    return { error: { code: 'NOT_FOUND', message: `Organisation ${id} not found.` } };
+  }
+
+  private toApi(row: DbOrganisation): Organisation {
+    return {
+      id: row.id,
+      parentId: row.parentId,
+      type: row.type as OrganisationType,
+      shortCode: row.shortCode,
+      slug: row.slug,
+      country: row.country as IsoAlpha3,
+      nameEn: row.nameEn,
+      nameSv: row.nameSv,
+      nameFi: row.nameFi,
+      nameJa: row.nameJa,
+      logoUrl: row.logoUrl,
+      address: row.address,
+      contactEmail: row.contactEmail,
+      headInstructorId: row.headInstructorId,
+      createdAt: row.createdAt.toISOString(),
+      updatedAt: row.updatedAt.toISOString(),
+    };
+  }
+}
