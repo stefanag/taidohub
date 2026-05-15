@@ -28,7 +28,7 @@ describe('/ route beforeLoad', () => {
       error: null,
     });
 
-    const { indexRoute } = await import('./index.js');
+    const { indexRoute } = await import('./_public.index.js');
     const beforeLoad = indexRoute.options.beforeLoad as () => Promise<void>;
 
     await expect(beforeLoad()).resolves.toBeUndefined();
@@ -40,7 +40,7 @@ describe('/ route beforeLoad', () => {
       error: null,
     });
 
-    const { indexRoute } = await import('./index.js');
+    const { indexRoute } = await import('./_public.index.js');
     const beforeLoad = indexRoute.options.beforeLoad as () => Promise<void>;
 
     await expect(beforeLoad()).rejects.toMatchObject({

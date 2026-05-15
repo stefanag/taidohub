@@ -33,7 +33,6 @@ export function LoginPage(): React.ReactElement {
           </p>
           <p className="text-secondary text-m italic">{t('auth.motto')}</p>
         </div>
-        <LocaleSwitcher variant="onDark" className="self-start" />
         <p className="text-inverse-primary text-xs">© {new Date().getFullYear()} TaidoHub</p>
       </div>
 
@@ -55,6 +54,7 @@ export function LoginPage(): React.ReactElement {
             />
           </CardContent>
         </Card>
+        <LocaleSwitcher variant="onDark" className="self-start" />
       </div>
     </main>
   );
