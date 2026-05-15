@@ -31,6 +31,7 @@ export const organisations = pgTable(
     parentIdx: index('organisations_parent_id_idx').on(table.parentId),
     typeIdx: index('organisations_type_idx').on(table.type),
     countryIdx: index('organisations_country_idx').on(table.country),
+    headInstructorIdx: index('organisations_head_instructor_id_idx').on(table.headInstructorId),
     slugUnique: uniqueIndex('organisations_slug_unique').on(table.slug),
     shortCodeUnique: uniqueIndex('organisations_short_code_country_type_unique').on(
       table.country,
