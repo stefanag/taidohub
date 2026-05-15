@@ -1,9 +1,10 @@
-import { createRoute, Link } from '@tanstack/react-router';
+import { createRoute, Link, redirect } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 
+import { authClient } from '@/features/auth-by-email';
 import { Button } from '@/shared/ui';
 
-import { rootRoute } from './__root.js';
+import { publicLayoutRoute } from './_public.js';
 
 function IndexComponent(): React.ReactElement {
   const { t } = useTranslation();
@@ -26,8 +27,20 @@ function IndexComponent(): React.ReactElement {
 }
 
 export const indexRoute = createRoute({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => publicLayoutRoute,
   path: '/',
+  beforeLoad: async () => {
+    let hasSession = false;
+    try {
+      const result = await authClient.getSession();
+      hasSession = Boolean(result.data);
+    } catch {
+      hasSession = false;
+    }
+    if (hasSession) {
+      throw redirect({ to: '/dashboard' });
+    }
+  },
   component: IndexComponent,
 });
 
