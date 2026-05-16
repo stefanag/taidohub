@@ -47,7 +47,10 @@ export async function buildTestApp(): Promise<{
   });
 
   const auth = app.get<Auth>(BETTER_AUTH);
-  app.use('/api/auth/*', toNodeHandler(auth));
+  // Use a prefix mount (not a glob) — Express 5 / path-to-regexp v8 rejects
+  // the legacy `/api/auth/*` pattern. The bare prefix matches every nested
+  // path identically and is what `main.ts` uses in production.
+  app.use('/api/auth', toNodeHandler(auth));
 
   app.setGlobalPrefix('api');
   setupSwagger(app, config);
