@@ -1,7 +1,6 @@
 import {
   AuthRoutes,
   HealthRoute,
-  PostsRoutes,
   UsersRoutes,
 } from '@repo/contracts/routes';
 
@@ -13,6 +12,5 @@ import {
 export const ApiRoutes = {
   Auth: AuthRoutes,
   Users: UsersRoutes,
-  Posts: PostsRoutes,
   Health: HealthRoute,
 } as const;

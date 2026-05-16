@@ -33,7 +33,7 @@ describe.skipIf(!hasDatabase())('OpenAPI contract', () => {
   it('has at least one path documented per resource', () => {
     expect(doc.paths).toBeDefined();
     const flat = Object.keys(doc.paths);
-    expect(flat.some((p) => p.includes('/posts'))).toBe(true);
+    expect(flat.some((p) => p.includes('/admin/organisations'))).toBe(true);
     expect(flat.some((p) => p.includes('/users'))).toBe(true);
     expect(flat.some((p) => p.includes('/auth'))).toBe(true);
     expect(flat.some((p) => p.includes('/health'))).toBe(true);

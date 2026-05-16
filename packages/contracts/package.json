@@ -19,16 +19,6 @@
         "default": "./dist/index.cjs"
       }
     },
-    "./posts": {
-      "import": {
-        "types": "./dist/posts.d.ts",
-        "default": "./dist/posts.js"
-      },
-      "require": {
-        "types": "./dist/posts.d.cts",
-        "default": "./dist/posts.cjs"
-      }
-    },
     "./users": {
       "import": {
         "types": "./dist/users.d.ts",

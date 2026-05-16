@@ -1,10 +1,9 @@
 import { setupServer } from 'msw/node';
 
-import { postHandlers } from '@/entities/post';
-
 /**
- * Centralised MSW server for Vitest. Reuses the same handlers each entity
- * exports from `model/*.msw.ts` so behavior under test == behavior in
- * Storybook == documented response shape in `@repo/contracts`.
+ * Centralised MSW server for Vitest. Currently starts with an empty handler
+ * set — each test that needs network mocking uses `server.use(...)` to push
+ * its own handlers. When a long-lived entity gains an MSW handler set,
+ * re-add it here so it's available to every test.
  */
-export const server = setupServer(...postHandlers);
+export const server = setupServer();

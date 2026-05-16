@@ -3,7 +3,6 @@ import { ConflictException, ForbiddenException, NotFoundException, BadRequestExc
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
-import { PostsAbilityRules } from '../posts/posts.abilities.js';
 import { UsersAbilityRules } from '../users/users.abilities.js';
 import { OrganisationsAbilityRules } from './organisations.abilities.js';
 import { OrganisationsRepository } from './organisations.repository.js';
@@ -55,7 +54,6 @@ async function makeService(repo: ReturnType<typeof repoStub>) {
       OrganisationsService,
       AbilityFactory,
       OrganisationsAbilityRules,
-      { provide: PostsAbilityRules, useValue: { contributeTo: () => {} } },
       { provide: UsersAbilityRules, useValue: { contributeTo: () => {} } },
       { provide: OrganisationsRepository, useValue: repo },
     ],

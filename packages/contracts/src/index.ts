@@ -13,7 +13,6 @@ export * from './errors.js';
 export * from './casl.js';
 export * from './routes.js';
 export * from './users.js';
-export * from './posts.js';
 export * from './auth.js';
 export * from './openapi.js';
 export * from './organisations.js';

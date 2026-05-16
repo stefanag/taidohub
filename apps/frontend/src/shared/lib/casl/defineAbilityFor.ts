@@ -17,8 +17,8 @@ export interface AbilityUser extends Pick<User, 'id'> {
 /**
  * Build the CASL `Ability` instance for the current user.
  *
- *   anonymous → can read published Posts only.
- *   user      → also can create Posts and update/delete their own.
+ *   anonymous → no permissions.
+ *   user      → no domain permissions (yet).
  *   admin     → `manage all`.
  *
  * Mirrors (and should stay in lock-step with) the backend's
@@ -28,21 +28,9 @@ export interface AbilityUser extends Pick<User, 'id'> {
 export function defineAbilityFor(user: AbilityUser | null | undefined): AppAbility {
   const { can, build } = new AbilityBuilder<AppAbility>(createMongoAbility);
 
-  if (!user) {
-    can('read', 'Post', { published: true });
-    return build();
-  }
-
-  if (user.role === 'admin') {
+  if (user?.role === 'admin') {
     can('manage', 'all');
-    return build();
   }
-
-  // Authenticated, non-admin user
-  can('read', 'Post');
-  can('create', 'Post');
-  can('update', 'Post', { authorId: user.id });
-  can('delete', 'Post', { authorId: user.id });
 
   return build();
 }

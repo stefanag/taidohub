@@ -16,9 +16,6 @@ function IndexComponent(): React.ReactElement {
       </p>
       <div className="mt-8 flex gap-2">
         <Button asChild>
-          <Link to="/posts">{t('common.browse')}</Link>
-        </Button>
-        <Button asChild variant="outline">
           <Link to="/login">{t('header.signIn')}</Link>
         </Button>
       </div>

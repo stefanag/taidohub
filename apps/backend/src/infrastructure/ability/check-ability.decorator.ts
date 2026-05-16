@@ -14,7 +14,7 @@ export const CHECK_ABILITY_KEY = 'check-ability';
  * the metadata and throws `ForbiddenException` when the current user's
  * ability rejects it.
  *
- *   @CheckAbility('read', 'Post')
+ *   @CheckAbility('read', 'Organisation')
  *   @Get(':id')
  *   findOne(@Param('id') id: string) { ... }
  */

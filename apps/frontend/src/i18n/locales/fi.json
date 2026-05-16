@@ -2,7 +2,7 @@
   "auth": {
     "login": {
       "title": "Kirjaudu sisään",
-      "description": "Kirjaudu sisään sähköpostiosoitteellasi hallitaksesi julkaisuja.",
+      "description": "Kirjaudu sisään sähköpostiosoitteellasi.",
       "emailLabel": "Sähköposti",
       "passwordLabel": "Salasana",
       "submit": "Kirjaudu sisään",
@@ -13,7 +13,6 @@
   },
   "common": {
     "loading": "Ladataan…",
-    "browse": "Selaa julkaisuja",
     "unknownError": "tuntematon virhe",
     "create": "Luo",
     "save": "Tallenna",
@@ -21,13 +20,11 @@
     "confirm": "Vahvista"
   },
   "header": {
-    "posts": "Julkaisut",
     "signIn": "Kirjaudu sisään",
     "signOut": "Kirjaudu ulos"
   },
   "nav": {
     "dashboard": "Kojelauta",
-    "posts": "Julkaisut",
     "adminOrganisations": "Organisaatiot"
   },
   "dashboard": {
@@ -35,13 +32,6 @@
   },
   "home": {
     "tagline": "Feature-Sliced Design -pohja Vite + React + TypeScript -sovellukselle, joka on kytketty NestJS-taustaan typitetyn `@repo/contracts`-HTTP-rajapinnan kautta."
-  },
-  "posts": {
-    "title": "Julkaisut",
-    "newPost": "Uusi julkaisu",
-    "loadFailed": "Julkaisujen lataus epäonnistui: {{message}}",
-    "published": "Julkaistu",
-    "draft": "Luonnos"
   },
   "admin": {
     "title": "Hallinta",

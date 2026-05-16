@@ -4,7 +4,6 @@ import { Injectable } from '@nestjs/common';
 import { type AuthenticatedUser } from '../auth/auth.types.js';
 
 import { OrganisationsAbilityRules } from '../../modules/organisations/organisations.abilities.js';
-import { PostsAbilityRules } from '../../modules/posts/posts.abilities.js';
 import { UsersAbilityRules } from '../../modules/users/users.abilities.js';
 
 import {
@@ -24,11 +23,10 @@ export class AbilityFactory {
   private readonly contributors: AbilityRuleContributor[];
 
   constructor(
-    postsRules: PostsAbilityRules,
     usersRules: UsersAbilityRules,
     organisationsRules: OrganisationsAbilityRules,
   ) {
-    this.contributors = [postsRules, usersRules, organisationsRules];
+    this.contributors = [usersRules, organisationsRules];
   }
 
   /**

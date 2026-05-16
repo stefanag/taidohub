@@ -18,11 +18,6 @@ export const UsersRoutes = {
   byId: (id: string) => `/api/users/${id}` as const,
 } as const;
 
-export const PostsRoutes = {
-  base: '/api/posts',
-  byId: (id: string) => `/api/posts/${id}` as const,
-} as const;
-
 export const HealthRoute = '/api/health' as const;
 
 export const OrganisationsRoutes = {

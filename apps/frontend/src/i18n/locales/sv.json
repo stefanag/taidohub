@@ -2,7 +2,7 @@
   "auth": {
     "login": {
       "title": "Logga in",
-      "description": "Logga in med din e-postadress för att hantera inlägg.",
+      "description": "Logga in med din e-postadress.",
       "emailLabel": "E-post",
       "passwordLabel": "Lösenord",
       "submit": "Logga in",
@@ -13,7 +13,6 @@
   },
   "common": {
     "loading": "Laddar…",
-    "browse": "Bläddra bland inlägg",
     "unknownError": "okänt fel",
     "create": "Skapa",
     "save": "Spara",
@@ -21,13 +20,11 @@
     "confirm": "Bekräfta"
   },
   "header": {
-    "posts": "Inlägg",
     "signIn": "Logga in",
     "signOut": "Logga ut"
   },
   "nav": {
     "dashboard": "Översikt",
-    "posts": "Inlägg",
     "adminOrganisations": "Organisationer"
   },
   "dashboard": {
@@ -35,13 +32,6 @@
   },
   "home": {
     "tagline": "En Feature-Sliced Design-mall för en Vite + React + TypeScript-app, kopplad till en NestJS-backend över ett typat `@repo/contracts`-HTTP-gränssnitt."
-  },
-  "posts": {
-    "title": "Inlägg",
-    "newPost": "Nytt inlägg",
-    "loadFailed": "Det gick inte att hämta inlägg: {{message}}",
-    "published": "Publicerad",
-    "draft": "Utkast"
   },
   "admin": {
     "title": "Administration",

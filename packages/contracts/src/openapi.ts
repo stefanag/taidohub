@@ -11,7 +11,6 @@ import { createSchema } from 'zod-openapi';
 import { AuthOpenApiRegistry } from './auth.js';
 import { ErrorEnvelopeOpenApiRegistry } from './errors.js';
 import { OrganisationsOpenApiRegistry } from './organisations.js';
-import { PostsOpenApiRegistry } from './posts.js';
 import { UsersOpenApiRegistry } from './users.js';
 
 /**
@@ -36,7 +35,6 @@ export function registerContractSchemas(
     ErrorEnvelopeOpenApiRegistry,
     AuthOpenApiRegistry,
     UsersOpenApiRegistry,
-    PostsOpenApiRegistry,
     OrganisationsOpenApiRegistry,
   ],
 ): OpenAPIObject {
@@ -66,6 +64,5 @@ export const ContractRegistries = {
   errors: ErrorEnvelopeOpenApiRegistry,
   auth: AuthOpenApiRegistry,
   users: UsersOpenApiRegistry,
-  posts: PostsOpenApiRegistry,
   organisations: OrganisationsOpenApiRegistry,
 } as const;

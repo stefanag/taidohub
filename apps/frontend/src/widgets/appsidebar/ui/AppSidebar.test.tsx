@@ -28,7 +28,7 @@ beforeAll(() => {
 // Partial-mock TanStack Router so `Link` keeps working while we control
 // `useRouterState` and `useNavigate`.
 const navigateMock = vi.fn();
-const useRouterStateMock = vi.fn<() => string>(() => '/posts');
+const useRouterStateMock = vi.fn<() => string>(() => '/dashboard');
 
 vi.mock('@tanstack/react-router', async (orig) => {
   const actual = await orig<typeof import('@tanstack/react-router')>();
@@ -71,7 +71,7 @@ function renderInProviderWithAbility(
 describe('<AppSidebar>', () => {
   beforeEach(async () => {
     await i18n.changeLanguage('en');
-    useRouterStateMock.mockReturnValue('/posts');
+    useRouterStateMock.mockReturnValue('/dashboard');
   });
 
   afterEach(() => {
@@ -91,7 +91,6 @@ describe('<AppSidebar>', () => {
     renderInProvider();
 
     expect(screen.getByRole('link', { name: /Dashboard/i })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /Posts/i })).toBeInTheDocument();
   });
 
   it('renders the signed-in user email in the footer', () => {
