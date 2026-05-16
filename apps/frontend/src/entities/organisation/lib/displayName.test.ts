@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { displayName } from './displayName.js';
 
 const ORG = {
-  id: 'x', parentId: null, type: 'club' as const, shortCode: 'X', slug: null, country: 'SWE',
+  id: 'x', parentId: null, type: 'club' as const, shortCode: 'X', slug: null, country: 'SWE' as const,
   nameEn: 'Stockholm', nameSv: 'Stockholm SE', nameFi: 'Tukholma', nameJa: 'ストックホルム',
   logoUrl: null, address: null, contactEmail: null, headInstructorId: null,
   createdAt: '', updatedAt: '',
