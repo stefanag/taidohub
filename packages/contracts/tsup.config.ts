@@ -10,6 +10,7 @@ export default defineConfig({
     errors: 'src/errors.ts',
     routes: 'src/routes.ts',
     openapi: 'src/openapi.ts',
+    organisations: 'src/organisations.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,

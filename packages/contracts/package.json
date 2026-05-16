@@ -88,6 +88,16 @@
         "types": "./dist/openapi.d.cts",
         "default": "./dist/openapi.cjs"
       }
+    },
+    "./organisations": {
+      "import": {
+        "types": "./dist/organisations.d.ts",
+        "default": "./dist/organisations.js"
+      },
+      "require": {
+        "types": "./dist/organisations.d.cts",
+        "default": "./dist/organisations.cjs"
+      }
     }
   },
   "files": [
@@ -99,6 +109,8 @@
     "dev": "tsup --watch --no-clean",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true});require('node:fs').rmSync('.turbo',{recursive:true,force:true})\""
   },
   "dependencies": {
@@ -110,6 +122,7 @@
     "tsup": "^8.3.5",
     "typescript": "^6.0.3",
     "eslint": "^10.3.0",
+    "vitest": "^4.1.6",
     "@repo/tsconfig": "workspace:*",
     "@repo/eslint-config": "workspace:*"
   }

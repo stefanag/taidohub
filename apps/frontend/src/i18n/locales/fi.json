@@ -14,7 +14,11 @@
   "common": {
     "loading": "Ladataan…",
     "browse": "Selaa julkaisuja",
-    "unknownError": "tuntematon virhe"
+    "unknownError": "tuntematon virhe",
+    "create": "Luo",
+    "save": "Tallenna",
+    "cancel": "Peruuta",
+    "confirm": "Vahvista"
   },
   "header": {
     "posts": "Julkaisut",
@@ -23,7 +27,8 @@
   },
   "nav": {
     "dashboard": "Kojelauta",
-    "posts": "Julkaisut"
+    "posts": "Julkaisut",
+    "adminOrganisations": "Organisaatiot"
   },
   "dashboard": {
     "title": "Kojelauta"
@@ -37,6 +42,50 @@
     "loadFailed": "Julkaisujen lataus epäonnistui: {{message}}",
     "published": "Julkaistu",
     "draft": "Luonnos"
+  },
+  "admin": {
+    "title": "Hallinta",
+    "organisations": {
+      "title": "Organisaatiot",
+      "newOrganisation": "Uusi organisaatio",
+      "actions": {
+        "edit": "Muokkaa",
+        "move": "Siirrä…",
+        "delete": "Poista"
+      },
+      "types": {
+        "internationalFederation": "Kansainvälinen liitto",
+        "nationalFederation": "Kansallinen liitto",
+        "club": "Seura"
+      },
+      "fields": {
+        "type": "Tyyppi",
+        "shortCode": "Lyhenne",
+        "slug": "Slug",
+        "country": "Maa",
+        "names": "Nimet",
+        "nameEn": "Nimi (englanniksi)",
+        "nameSv": "Nimi (ruotsiksi)",
+        "nameFi": "Nimi (suomeksi)",
+        "nameJa": "Nimi (japaniksi)",
+        "address": "Osoite",
+        "contactEmail": "Yhteyssähköposti",
+        "logoUrl": "Logon URL",
+        "headInstructor": "Pääohjaaja",
+        "parent": "Vanhempi"
+      },
+      "move": {
+        "description": "Valitse uusi vanhempiorganisaatio."
+      },
+      "confirm": {
+        "delete": "Poistetaanko \"{{name}}\"? Tätä ei voi peruuttaa."
+      },
+      "errors": {
+        "hasChildren": "Tällä organisaatiolla on vielä {{count}} alaorganisaatio(ta). Siirrä tai poista ne ensin.",
+        "invalidParent": "Tämä vanhempi ei ole sallittu tälle tyypille.",
+        "cycle": "Siirto loisi syklin."
+      }
+    }
   },
   "locale": {
     "switch": "Kieli"

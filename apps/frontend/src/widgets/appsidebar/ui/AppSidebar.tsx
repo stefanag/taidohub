@@ -1,9 +1,11 @@
 import { Link, useNavigate, useRouterState } from '@tanstack/react-router';
-import { FileText, LayoutDashboard, LogOut } from 'lucide-react';
+import { Building2, FileText, LayoutDashboard, LogOut } from 'lucide-react';
 import * as React from 'react';
+import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { signOut, useSession } from '@/features/auth-by-email';
+import { AbilityContext } from '@/shared/lib/casl/ability-context';
 import { Button } from '@/shared/ui';
 import {
   Sidebar,
@@ -11,6 +13,7 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -32,6 +35,7 @@ export function AppSidebar(): React.ReactElement {
   const user = session.data?.user;
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
+  const ability = useContext(AbilityContext);
 
   const handleSignOut = async () => {
     await signOut();
@@ -66,6 +70,27 @@ export function AppSidebar(): React.ReactElement {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        {ability?.can('manage', 'Organisation') ? (
+          <SidebarGroup>
+            <SidebarGroupLabel>{t('admin.title')}</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={pathname.startsWith('/admin/organisations')}
+                  >
+                    <Link to="/admin/organisations">
+                      <Building2 />
+                      <span>{t('nav.adminOrganisations')}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ) : null}
       </SidebarContent>
 
       <SidebarFooter className="gap-3 p-3">

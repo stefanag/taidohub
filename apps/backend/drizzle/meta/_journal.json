@@ -22,6 +22,20 @@
       "when": 1778829801568,
       "tag": "0002_useful_zaladane",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1778869316465,
+      "tag": "0003_glorious_true_believers",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1778883234765,
+      "tag": "0004_dear_kingpin",
+      "breakpoints": true
     }
   ]
 }

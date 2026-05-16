@@ -14,7 +14,11 @@
   "common": {
     "loading": "Laddar…",
     "browse": "Bläddra bland inlägg",
-    "unknownError": "okänt fel"
+    "unknownError": "okänt fel",
+    "create": "Skapa",
+    "save": "Spara",
+    "cancel": "Avbryt",
+    "confirm": "Bekräfta"
   },
   "header": {
     "posts": "Inlägg",
@@ -23,7 +27,8 @@
   },
   "nav": {
     "dashboard": "Översikt",
-    "posts": "Inlägg"
+    "posts": "Inlägg",
+    "adminOrganisations": "Organisationer"
   },
   "dashboard": {
     "title": "Översikt"
@@ -37,6 +42,50 @@
     "loadFailed": "Det gick inte att hämta inlägg: {{message}}",
     "published": "Publicerad",
     "draft": "Utkast"
+  },
+  "admin": {
+    "title": "Administration",
+    "organisations": {
+      "title": "Organisationer",
+      "newOrganisation": "Ny organisation",
+      "actions": {
+        "edit": "Redigera",
+        "move": "Flytta…",
+        "delete": "Ta bort"
+      },
+      "types": {
+        "internationalFederation": "Internationellt förbund",
+        "nationalFederation": "Nationellt förbund",
+        "club": "Klubb"
+      },
+      "fields": {
+        "type": "Typ",
+        "shortCode": "Kortkod",
+        "slug": "Slug",
+        "country": "Land",
+        "names": "Namn",
+        "nameEn": "Namn (engelska)",
+        "nameSv": "Namn (svenska)",
+        "nameFi": "Namn (finska)",
+        "nameJa": "Namn (japanska)",
+        "address": "Adress",
+        "contactEmail": "Kontakt-e-post",
+        "logoUrl": "Logotyp-URL",
+        "headInstructor": "Huvudinstruktör",
+        "parent": "Förälder"
+      },
+      "move": {
+        "description": "Välj en ny föräldraorganisation."
+      },
+      "confirm": {
+        "delete": "Ta bort \"{{name}}\"? Detta kan inte ångras."
+      },
+      "errors": {
+        "hasChildren": "Den här organisationen har fortfarande {{count}} underorganisation(er). Flytta eller ta bort dem först.",
+        "invalidParent": "Den föräldern är inte tillåten för den här typen.",
+        "cycle": "Flytten skulle skapa en cykel."
+      }
+    }
   },
   "locale": {
     "switch": "Språk"

@@ -16,10 +16,10 @@
     "test:watch": "vitest",
     "test:e2e": "vitest run --config vitest.e2e.config.ts",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "tsx --env-file=../../.env src/infrastructure/database/migrate.ts",
-    "db:seed": "tsx --env-file=../../.env src/infrastructure/database/seed.ts",
+    "db:migrate": "tsx --env-file-if-exists=../../.env src/infrastructure/database/migrate.ts",
+    "db:seed": "tsx --env-file-if-exists=../../.env src/infrastructure/database/seed.ts",
     "db:studio": "drizzle-kit studio",
-    "openapi:generate": "tsx --env-file=../../.env src/openapi/generate.ts"
+    "openapi:generate": "tsx --env-file-if-exists=../../.env src/openapi/generate.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.1.19",

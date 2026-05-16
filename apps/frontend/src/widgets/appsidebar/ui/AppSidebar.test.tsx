@@ -4,6 +4,8 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vite
 
 import * as authApi from '@/features/auth-by-email/api/auth.api';
 import i18n from '@/i18n';
+import { AbilityContext } from '@/shared/lib/casl/ability-context';
+import { defineAbilityFor } from '@/shared/lib/casl/defineAbilityFor';
 import { SidebarProvider } from '@/shared/ui/sidebar';
 
 // jsdom doesn't implement matchMedia; shadcn's `useIsMobile` hook calls it.
@@ -49,6 +51,19 @@ function renderInProvider(): ReturnType<typeof render> {
   return render(
     <SidebarProvider>
       <AppSidebar />
+    </SidebarProvider>,
+  );
+}
+
+function renderInProviderWithAbility(
+  role: 'admin' | 'user',
+): ReturnType<typeof render> {
+  const ability = defineAbilityFor({ id: 'u1', role });
+  return render(
+    <SidebarProvider>
+      <AbilityContext.Provider value={ability}>
+        <AppSidebar />
+      </AbilityContext.Provider>
     </SidebarProvider>,
   );
 }
@@ -110,5 +125,39 @@ describe('<AppSidebar>', () => {
     await vi.waitFor(() => {
       expect(navigateMock).toHaveBeenCalledWith({ to: '/' });
     });
+  });
+
+  it('renders the admin organisations link when the user is an admin', () => {
+    vi.spyOn(authApi, 'useSession').mockReturnValue({
+      data: { user: { id: 'u1', email: 'a@b' }, session: { id: 's1' } },
+      isPending: false,
+      error: null,
+      refetch: () => Promise.resolve(),
+    } as unknown as ReturnType<typeof authApi.useSession>);
+
+    renderInProviderWithAbility('admin');
+
+    const adminLink = screen.getByRole('link', { name: /^Organisations$/i });
+    expect(adminLink).toBeInTheDocument();
+    expect(adminLink).toHaveAttribute('href', '/admin/organisations');
+  });
+
+  it('hides the admin organisations link for non-admin users', () => {
+    vi.spyOn(authApi, 'useSession').mockReturnValue({
+      data: { user: { id: 'u1', email: 'a@b' }, session: { id: 's1' } },
+      isPending: false,
+      error: null,
+      refetch: () => Promise.resolve(),
+    } as unknown as ReturnType<typeof authApi.useSession>);
+
+    renderInProviderWithAbility('user');
+
+    expect(
+      screen.queryByRole('link', { name: /^Organisations$/i }),
+    ).not.toBeInTheDocument();
+    const links = screen.queryAllByRole('link');
+    expect(
+      links.find((l) => l.getAttribute('href') === '/admin/organisations'),
+    ).toBeUndefined();
   });
 });

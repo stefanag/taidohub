@@ -19,6 +19,10 @@ export default [
       '**/storybook-static/**',
       '**/.next/**',
       '**/*.min.js',
+      // tsup writes a transient bundled config sibling to the source config
+      // while it builds. The file gets deleted before lint normally finishes,
+      // but CI's parallel `turbo lint build` races and ESLint can hit ENOENT.
+      '**/tsup.config.bundled_*.mjs',
     ],
   },
   js.configs.recommended,
