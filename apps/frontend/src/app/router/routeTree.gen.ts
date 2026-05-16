@@ -15,6 +15,7 @@ import { Route as PublicIndexRouteImport } from './routes/_public.index'
 import { Route as PublicLoginRouteImport } from './routes/_public.login'
 import { Route as AppPostsRouteImport } from './routes/_app.posts'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
+import { Route as AppAdminOrganisationsRouteImport } from './routes/_app.admin.organisations'
 
 const PublicRoute = PublicRouteImport.update({
   id: '/_public',
@@ -44,18 +45,25 @@ const AppDashboardRoute = AppDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AppRoute,
 } as any)
+const AppAdminOrganisationsRoute = AppAdminOrganisationsRouteImport.update({
+  id: '/admin/organisations',
+  path: '/admin/organisations',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof PublicIndexRoute
   '/dashboard': typeof AppDashboardRoute
   '/posts': typeof AppPostsRoute
   '/login': typeof PublicLoginRoute
+  '/admin/organisations': typeof AppAdminOrganisationsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof PublicIndexRoute
   '/dashboard': typeof AppDashboardRoute
   '/posts': typeof AppPostsRoute
   '/login': typeof PublicLoginRoute
+  '/admin/organisations': typeof AppAdminOrganisationsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -65,12 +73,13 @@ export interface FileRoutesById {
   '/_app/posts': typeof AppPostsRoute
   '/_public/login': typeof PublicLoginRoute
   '/_public/': typeof PublicIndexRoute
+  '/_app/admin/organisations': typeof AppAdminOrganisationsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/posts' | '/login'
+  fullPaths: '/' | '/dashboard' | '/posts' | '/login' | '/admin/organisations'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/posts' | '/login'
+  to: '/' | '/dashboard' | '/posts' | '/login' | '/admin/organisations'
   id:
     | '__root__'
     | '/_app'
@@ -79,6 +88,7 @@ export interface FileRouteTypes {
     | '/_app/posts'
     | '/_public/login'
     | '/_public/'
+    | '/_app/admin/organisations'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -130,17 +140,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDashboardRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/admin/organisations': {
+      id: '/_app/admin/organisations'
+      path: '/admin/organisations'
+      fullPath: '/admin/organisations'
+      preLoaderRoute: typeof AppAdminOrganisationsRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
 interface AppRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
   AppPostsRoute: typeof AppPostsRoute
+  AppAdminOrganisationsRoute: typeof AppAdminOrganisationsRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
   AppPostsRoute: AppPostsRoute,
+  AppAdminOrganisationsRoute: AppAdminOrganisationsRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)

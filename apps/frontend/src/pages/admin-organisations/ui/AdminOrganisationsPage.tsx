@@ -1,0 +1,211 @@
+import { useQuery } from '@tanstack/react-query';
+import * as React from 'react';
+import { useTranslation } from 'react-i18next';
+
+import {
+  buildTree,
+  listOrganisationsQueryOptions,
+  type Organisation,
+  type OrganisationNode,
+  useCreateOrganisation,
+  useDeleteOrganisation,
+  useUpdateOrganisation,
+} from '@/entities/organisation';
+import { OrganisationDeleteDialog } from '@/features/organisation-delete-dialog';
+import { OrganisationForm } from '@/features/organisation-form';
+import { OrganisationMoveDialog } from '@/features/organisation-move-dialog';
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/shared/ui';
+import { OrganisationTree } from '@/widgets/organisation-tree';
+
+type PageMode =
+  | { kind: 'idle' }
+  | { kind: 'create' }
+  | { kind: 'edit'; org: Organisation }
+  | { kind: 'move'; org: Organisation }
+  | { kind: 'delete'; org: Organisation };
+
+/**
+ * Admin page for managing the organisation hierarchy. Pure composition: the
+ * tree widget renders the list, dialogs do the editing, and the page itself
+ * is a small state machine that picks which dialog is open. All data flow
+ * goes through the entity's react-query hooks.
+ */
+export function AdminOrganisationsPage(): React.ReactElement {
+  const { t } = useTranslation();
+  const { data, isLoading, isError, error } = useQuery(
+    listOrganisationsQueryOptions(),
+  );
+  const [mode, setMode] = React.useState<PageMode>({ kind: 'idle' });
+
+  const createMut = useCreateOrganisation({
+    onSuccess: () => setMode({ kind: 'idle' }),
+  });
+  const updateMut = useUpdateOrganisation({
+    onSuccess: () => setMode({ kind: 'idle' }),
+  });
+  const deleteMut = useDeleteOrganisation({
+    onSuccess: () => setMode({ kind: 'idle' }),
+  });
+
+  const tree = React.useMemo(() => buildTree(data?.data ?? []), [data]);
+
+  // Flat child-count lookup for the delete dialog (so we can tell the user
+  // "you must reparent N children first").
+  const childCount = React.useMemo(() => {
+    const m = new Map<string, number>();
+    for (const row of data?.data ?? []) {
+      if (row.parentId) m.set(row.parentId, (m.get(row.parentId) ?? 0) + 1);
+    }
+    return m;
+  }, [data]);
+
+  // Tree-node lookup by id, for walking the descendants of the currently
+  // edited org when computing legal parent candidates.
+  const treeById = React.useMemo(() => {
+    const m = new Map<string, OrganisationNode>();
+    const walk = (nodes: OrganisationNode[]): void => {
+      for (const n of nodes) {
+        m.set(n.id, n);
+        walk(n.children);
+      }
+    };
+    walk(tree);
+    return m;
+  }, [tree]);
+
+  const candidatesFor = (org: Organisation | null): Organisation[] => {
+    if (!org || !data) return data?.data ?? [];
+    const node = treeById.get(org.id);
+    if (!node) return data.data;
+    const exclude = descendantIds(node);
+    return data.data.filter((r) => !exclude.has(r.id));
+  };
+
+  return (
+    <main className="container py-8">
+      <div className="mb-6 flex items-center justify-between">
+        <h1 className="text-2xl font-semibold tracking-tight">
+          {t('admin.organisations.title', { defaultValue: 'Organisations' })}
+        </h1>
+        <Button onClick={() => setMode({ kind: 'create' })}>
+          {t('admin.organisations.newOrganisation', {
+            defaultValue: 'New organisation',
+          })}
+        </Button>
+      </div>
+
+      {isLoading ? (
+        <p className="text-muted-foreground">
+          {t('common.loading', { defaultValue: 'Loading…' })}
+        </p>
+      ) : isError ? (
+        <p className="text-destructive">
+          {error instanceof Error
+            ? error.message
+            : t('common.unknownError', { defaultValue: 'Unknown error' })}
+        </p>
+      ) : (
+        <OrganisationTree
+          nodes={tree}
+          onEdit={(org) => setMode({ kind: 'edit', org })}
+          onMove={(org) => setMode({ kind: 'move', org })}
+          onDelete={(org) => setMode({ kind: 'delete', org })}
+        />
+      )}
+
+      {/* Create / Edit dialog */}
+      <Dialog
+        open={mode.kind === 'create' || mode.kind === 'edit'}
+        onOpenChange={(open) => {
+          if (!open) setMode({ kind: 'idle' });
+        }}
+      >
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>
+              {mode.kind === 'edit'
+                ? t('admin.organisations.actions.edit', { defaultValue: 'Edit' })
+                : t('admin.organisations.newOrganisation', {
+                    defaultValue: 'New organisation',
+                  })}
+            </DialogTitle>
+          </DialogHeader>
+
+          {mode.kind === 'create' ? (
+            <OrganisationForm
+              mode="create"
+              parentCandidates={data?.data ?? []}
+              submitting={createMut.isPending}
+              onSubmit={async (values) => {
+                await createMut.mutateAsync(
+                  values as Parameters<typeof createMut.mutateAsync>[0],
+                );
+              }}
+            />
+          ) : mode.kind === 'edit' ? (
+            <OrganisationForm
+              mode="edit"
+              initialValues={mode.org}
+              parentCandidates={candidatesFor(mode.org)}
+              submitting={updateMut.isPending}
+              onSubmit={async (values) => {
+                await updateMut.mutateAsync({
+                  id: mode.org.id,
+                  input: values,
+                });
+              }}
+            />
+          ) : null}
+        </DialogContent>
+      </Dialog>
+
+      {/* Move dialog */}
+      {mode.kind === 'move' ? (
+        <OrganisationMoveDialog
+          organisation={mode.org}
+          candidates={candidatesFor(mode.org)}
+          open
+          onOpenChange={(open) => {
+            if (!open) setMode({ kind: 'idle' });
+          }}
+          onConfirm={async (parentId) => {
+            await updateMut.mutateAsync({
+              id: mode.org.id,
+              input: { parentId },
+            });
+          }}
+        />
+      ) : null}
+
+      {/* Delete dialog */}
+      {mode.kind === 'delete' ? (
+        <OrganisationDeleteDialog
+          organisation={mode.org}
+          childCount={childCount.get(mode.org.id) ?? 0}
+          open
+          onOpenChange={(open) => {
+            if (!open) setMode({ kind: 'idle' });
+          }}
+          onConfirm={async () => {
+            await deleteMut.mutateAsync(mode.org.id);
+          }}
+        />
+      ) : null}
+    </main>
+  );
+}
+
+/** Collects an org's id plus every descendant id; used to forbid cycles. */
+function descendantIds(node: OrganisationNode): Set<string> {
+  const set = new Set<string>([node.id]);
+  for (const child of node.children) {
+    for (const id of descendantIds(child)) set.add(id);
+  }
+  return set;
+}
