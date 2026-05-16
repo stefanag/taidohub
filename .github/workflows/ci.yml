@@ -19,7 +19,7 @@ jobs:
         with: { version: 11.1.2 }
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - uses: actions/cache@v4
@@ -67,7 +67,7 @@ jobs:
         with: { version: 11.1.2 }
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @repo/contracts build
@@ -84,7 +84,7 @@ jobs:
         with: { version: 11.1.2 }
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @repo/contracts build
