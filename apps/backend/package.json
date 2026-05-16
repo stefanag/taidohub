@@ -19,7 +19,7 @@
     "db:migrate": "tsx --env-file-if-exists=../../.env src/infrastructure/database/migrate.ts",
     "db:seed": "tsx --env-file-if-exists=../../.env src/infrastructure/database/seed.ts",
     "db:studio": "drizzle-kit studio",
-    "openapi:generate": "tsx --env-file-if-exists=../../.env src/openapi/generate.ts"
+    "openapi:generate": "nest build && node --env-file-if-exists=../../.env dist/src/openapi/generate.js"
   },
   "dependencies": {
     "@nestjs/common": "^11.1.19",

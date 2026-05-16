@@ -435,7 +435,9 @@
             "required": true,
             "in": "path",
             "description": "User UUID.",
-            "schema": {}
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -501,22 +503,129 @@
         ]
       }
     },
-    "/api/posts": {
+    "/api/admin/organisations": {
       "get": {
-        "operationId": "PostsController_list",
-        "parameters": [],
+        "operationId": "OrganisationsController_list",
+        "parameters": [
+          {
+            "name": "type",
+            "required": false,
+            "in": "query",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            },
+            "schema": {
+              "$ref": "#/$defs/OrganisationType"
+            }
+          },
+          {
+            "name": "country",
+            "required": false,
+            "in": "query",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            },
+            "schema": {
+              "pattern": "^[A-Z]{3}$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "parentId",
+            "required": false,
+            "in": "query",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            },
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            },
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ListPostsResponseDto"
+                  "$ref": "#/components/schemas/ListOrganisationsResponseDto"
                 }
               }
             }
           },
-          "400": {
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "403": {
             "description": "",
             "content": {
               "application/json": {
@@ -532,20 +641,20 @@
             "session": []
           }
         ],
-        "summary": "List posts (paginated).",
+        "summary": "List organisations (flat).",
         "tags": [
-          "posts"
+          "organisations"
         ]
       },
       "post": {
-        "operationId": "PostsController_create",
+        "operationId": "OrganisationsController_create",
         "parameters": [],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreatePostDto"
+                "$ref": "#/components/schemas/CreateOrganisationDto"
               }
             }
           }
@@ -556,7 +665,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PostDto"
+                  "$ref": "#/components/schemas/OrganisationDto"
                 }
               }
             }
@@ -597,22 +706,24 @@
             "session": []
           }
         ],
-        "summary": "Create a post.",
+        "summary": "Create an organisation.",
         "tags": [
-          "posts"
+          "organisations"
         ]
       }
     },
-    "/api/posts/{id}": {
+    "/api/admin/organisations/{id}": {
       "get": {
-        "operationId": "PostsController_findOne",
+        "operationId": "OrganisationsController_findOne",
         "parameters": [
           {
             "name": "id",
             "required": true,
             "in": "path",
-            "description": "Post UUID.",
-            "schema": {}
+            "description": "Organisation UUID.",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -621,12 +732,22 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PostDto"
+                  "$ref": "#/components/schemas/OrganisationDto"
                 }
               }
             }
           },
           "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "401": {
             "description": "",
             "content": {
               "application/json": {
@@ -662,20 +783,22 @@
             "session": []
           }
         ],
-        "summary": "Get a post by id.",
+        "summary": "Get an organisation by id.",
         "tags": [
-          "posts"
+          "organisations"
         ]
       },
       "patch": {
-        "operationId": "PostsController_update",
+        "operationId": "OrganisationsController_update",
         "parameters": [
           {
             "name": "id",
             "required": true,
             "in": "path",
-            "description": "Post UUID.",
-            "schema": {}
+            "description": "Organisation UUID.",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "requestBody": {
@@ -683,7 +806,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdatePostDto"
+                "$ref": "#/components/schemas/UpdateOrganisationDto"
               }
             }
           }
@@ -694,7 +817,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PostDto"
+                  "$ref": "#/components/schemas/OrganisationDto"
                 }
               }
             }
@@ -745,25 +868,27 @@
             "session": []
           }
         ],
-        "summary": "Update a post.",
+        "summary": "Update or move an organisation.",
         "tags": [
-          "posts"
+          "organisations"
         ]
       },
       "delete": {
-        "operationId": "PostsController_delete",
+        "operationId": "OrganisationsController_delete",
         "parameters": [
           {
             "name": "id",
             "required": true,
             "in": "path",
-            "description": "Post UUID.",
-            "schema": {}
+            "description": "Organisation UUID.",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "204": {
-            "description": "Post deleted."
+            "description": "Organisation deleted."
           },
           "401": {
             "description": "",
@@ -794,6 +919,16 @@
                 }
               }
             }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -801,9 +936,9 @@
             "session": []
           }
         ],
-        "summary": "Delete a post.",
+        "summary": "Delete an organisation (must be childless).",
         "tags": [
-          "posts"
+          "organisations"
         ]
       }
     }
@@ -824,7 +959,7 @@
       "description": ""
     },
     {
-      "name": "posts",
+      "name": "organisations",
       "description": ""
     },
     {
@@ -854,373 +989,459 @@
     "schemas": {
       "SignInWithEmailDto": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$",
+            "description": "Registered email address.",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Payload for `POST /api/auth/sign-in/email`.",
+              "example": {
+                "email": "ada@example.com",
+                "password": "correct-horse-battery-staple"
+              }
+            }
+          },
+          "password": {
+            "type": "string",
+            "minLength": 8,
+            "description": "Account password (8+ chars).",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Payload for `POST /api/auth/sign-in/email`.",
+              "example": {
+                "email": "ada@example.com",
+                "password": "correct-horse-battery-staple"
+              }
+            }
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
       },
       "SessionDto": {
         "type": "object",
-        "properties": {}
-      },
-      "SignUpWithEmailDto": {
-        "type": "object",
-        "properties": {}
-      },
-      "UserDto": {
-        "type": "object",
-        "properties": {}
-      },
-      "ErrorEnvelopeDto": {
-        "type": "object",
-        "properties": {}
-      },
-      "ListPostsResponseDto": {
-        "type": "object",
-        "properties": {}
-      },
-      "PostDto": {
-        "type": "object",
-        "properties": {}
-      },
-      "CreatePostDto": {
-        "type": "object",
-        "properties": {}
-      },
-      "UpdatePostDto": {
-        "type": "object",
-        "properties": {}
-      },
-      "ErrorEnvelope": {
-        "type": [
-          "object"
-        ],
-        "properties": {
-          "error": {
-            "type": [
-              "object"
-            ],
-            "properties": {
-              "code": {
-                "type": [
-                  "string"
-                ],
-                "description": "Stable, machine-readable error code (e.g. `VALIDATION_FAILED`)."
-              },
-              "message": {
-                "type": [
-                  "string"
-                ],
-                "description": "Human-readable error message safe to surface to end users."
-              },
-              "details": {
-                "description": "Optional structured context — e.g. per-field validation errors."
-              }
-            },
-            "required": [
-              "code",
-              "message"
-            ],
-            "title": "ErrorPayload",
-            "description": "The body of a uniform error envelope.",
-            "example": {
-              "code": "NOT_FOUND",
-              "message": "The requested resource could not be found."
-            }
-          }
-        },
-        "required": [
-          "error"
-        ],
-        "title": "ErrorEnvelope",
-        "description": "The uniform error envelope returned for every non-2xx response from the API.",
-        "example": {
-          "error": {
-            "code": "NOT_FOUND",
-            "message": "The requested resource could not be found."
-          }
-        }
-      },
-      "ErrorPayload": {
-        "type": [
-          "object"
-        ],
-        "properties": {
-          "code": {
-            "type": [
-              "string"
-            ],
-            "description": "Stable, machine-readable error code (e.g. `VALIDATION_FAILED`)."
-          },
-          "message": {
-            "type": [
-              "string"
-            ],
-            "description": "Human-readable error message safe to surface to end users."
-          },
-          "details": {
-            "description": "Optional structured context — e.g. per-field validation errors."
-          }
-        },
-        "required": [
-          "code",
-          "message"
-        ],
-        "title": "ErrorPayload",
-        "description": "The body of a uniform error envelope.",
-        "example": {
-          "code": "NOT_FOUND",
-          "message": "The requested resource could not be found."
-        }
-      },
-      "SignInWithEmail": {
-        "type": [
-          "object"
-        ],
-        "properties": {
-          "email": {
-            "type": [
-              "string"
-            ],
-            "format": "email",
-            "description": "Registered email address."
-          },
-          "password": {
-            "type": [
-              "string"
-            ],
-            "minLength": 8,
-            "description": "Account password (8+ chars)."
-          }
-        },
-        "required": [
-          "email",
-          "password"
-        ],
-        "title": "SignInWithEmail",
-        "description": "Payload for `POST /api/auth/sign-in/email`.",
-        "example": {
-          "email": "ada@example.com",
-          "password": "correct-horse-battery-staple"
-        }
-      },
-      "SignUpWithEmail": {
-        "type": [
-          "object"
-        ],
-        "properties": {
-          "email": {
-            "type": [
-              "string"
-            ],
-            "format": "email",
-            "description": "Email address to register."
-          },
-          "password": {
-            "type": [
-              "string"
-            ],
-            "minLength": 8,
-            "description": "New account password (8+ chars)."
-          },
-          "name": {
-            "type": [
-              "string"
-            ],
-            "minLength": 1,
-            "description": "Optional display name."
-          }
-        },
-        "required": [
-          "email",
-          "password"
-        ],
-        "title": "SignUpWithEmail",
-        "description": "Payload for `POST /api/auth/sign-up/email`.",
-        "example": {
-          "email": "ada@example.com",
-          "password": "correct-horse-battery-staple",
-          "name": "Ada Lovelace"
-        }
-      },
-      "Session": {
-        "type": [
-          "object"
-        ],
         "properties": {
           "user": {
-            "type": [
-              "object"
-            ],
-            "properties": {
-              "id": {
-                "type": [
-                  "string"
+            "$ref": "#/$defs/User",
+            "type": "",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "User": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                    "description": "Unique identifier (UUID v4)."
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$",
+                    "description": "The user’s primary email address."
+                  },
+                  "name": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "Display name; null until the user sets one."
+                  },
+                  "emailVerified": {
+                    "type": "boolean",
+                    "description": "Whether the email address has been verified."
+                  },
+                  "image": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "URL to the user’s avatar, if any."
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                    "description": "ISO-8601 timestamp the account was created."
+                  },
+                  "updatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                    "description": "ISO-8601 timestamp the account was last modified."
+                  }
+                },
+                "required": [
+                  "id",
+                  "email",
+                  "name",
+                  "emailVerified",
+                  "image",
+                  "createdAt",
+                  "updatedAt"
                 ],
-                "format": "uuid",
-                "description": "Unique identifier (UUID v4)."
-              },
-              "email": {
-                "type": [
-                  "string"
-                ],
-                "format": "email",
-                "description": "The user’s primary email address."
-              },
-              "name": {
-                "type": [
-                  "string",
-                  "null"
-                ],
-                "description": "Display name; null until the user sets one."
-              },
-              "emailVerified": {
-                "type": [
-                  "boolean"
-                ],
-                "description": "Whether the email address has been verified."
-              },
-              "image": {
-                "type": [
-                  "string",
-                  "null"
-                ],
-                "format": "uri",
-                "description": "URL to the user’s avatar, if any."
-              },
-              "createdAt": {
-                "type": [
-                  "string"
-                ],
-                "format": "date-time",
-                "description": "ISO-8601 timestamp the account was created."
-              },
-              "updatedAt": {
-                "type": [
-                  "string"
-                ],
-                "format": "date-time",
-                "description": "ISO-8601 timestamp the account was last modified."
+                "description": "A user account exposed to API clients.",
+                "example": {
+                  "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "email": "ada@example.com",
+                  "name": "Ada Lovelace",
+                  "emailVerified": true,
+                  "image": "https://example.com/avatars/ada.png",
+                  "createdAt": "2025-01-15T12:34:56.000Z",
+                  "updatedAt": "2025-04-02T08:00:00.000Z"
+                }
               }
             },
-            "required": [
-              "id",
-              "email",
-              "name",
-              "emailVerified",
-              "image",
-              "createdAt",
-              "updatedAt"
-            ],
-            "title": "User",
-            "description": "A user account exposed to API clients.",
-            "example": {
-              "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
-              "email": "ada@example.com",
-              "name": "Ada Lovelace",
-              "emailVerified": true,
-              "image": "https://example.com/avatars/ada.png",
-              "createdAt": "2025-01-15T12:34:56.000Z",
-              "updatedAt": "2025-04-02T08:00:00.000Z"
+            "x-nestjs_zod-parent-metadata": {
+              "description": "The session payload returned by `GET /api/auth/get-session` for an authenticated request.",
+              "example": {
+                "user": {
+                  "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "email": "ada@example.com",
+                  "name": "Ada Lovelace",
+                  "emailVerified": true,
+                  "image": null,
+                  "createdAt": "2025-01-15T12:34:56.000Z",
+                  "updatedAt": "2025-04-02T08:00:00.000Z"
+                },
+                "session": {
+                  "id": "sess_01HXYZ…",
+                  "expiresAt": "2025-05-13T08:00:00.000Z"
+                }
+              }
             }
           },
           "session": {
-            "type": [
-              "object"
-            ],
+            "type": "object",
             "properties": {
               "id": {
-                "type": [
-                  "string"
-                ],
+                "type": "string",
                 "description": "Opaque session identifier."
               },
               "expiresAt": {
-                "type": [
-                  "string"
-                ],
+                "type": "string",
                 "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
                 "description": "ISO-8601 timestamp the session expires at."
               }
             },
             "required": [
               "id",
               "expiresAt"
-            ]
+            ],
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-self-required": true,
+            "x-nestjs_zod-$defs": {
+              "User": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                    "description": "Unique identifier (UUID v4)."
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$",
+                    "description": "The user’s primary email address."
+                  },
+                  "name": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "Display name; null until the user sets one."
+                  },
+                  "emailVerified": {
+                    "type": "boolean",
+                    "description": "Whether the email address has been verified."
+                  },
+                  "image": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "URL to the user’s avatar, if any."
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                    "description": "ISO-8601 timestamp the account was created."
+                  },
+                  "updatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                    "description": "ISO-8601 timestamp the account was last modified."
+                  }
+                },
+                "required": [
+                  "id",
+                  "email",
+                  "name",
+                  "emailVerified",
+                  "image",
+                  "createdAt",
+                  "updatedAt"
+                ],
+                "description": "A user account exposed to API clients.",
+                "example": {
+                  "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "email": "ada@example.com",
+                  "name": "Ada Lovelace",
+                  "emailVerified": true,
+                  "image": "https://example.com/avatars/ada.png",
+                  "createdAt": "2025-01-15T12:34:56.000Z",
+                  "updatedAt": "2025-04-02T08:00:00.000Z"
+                }
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "The session payload returned by `GET /api/auth/get-session` for an authenticated request.",
+              "example": {
+                "user": {
+                  "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "email": "ada@example.com",
+                  "name": "Ada Lovelace",
+                  "emailVerified": true,
+                  "image": null,
+                  "createdAt": "2025-01-15T12:34:56.000Z",
+                  "updatedAt": "2025-04-02T08:00:00.000Z"
+                },
+                "session": {
+                  "id": "sess_01HXYZ…",
+                  "expiresAt": "2025-05-13T08:00:00.000Z"
+                }
+              }
+            }
           }
         },
         "required": [
           "user",
           "session"
-        ],
-        "title": "Session",
-        "description": "The session payload returned by `GET /api/auth/get-session` for an authenticated request.",
-        "example": {
-          "user": {
-            "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
-            "email": "ada@example.com",
-            "name": "Ada Lovelace",
-            "emailVerified": true,
-            "image": null,
-            "createdAt": "2025-01-15T12:34:56.000Z",
-            "updatedAt": "2025-04-02T08:00:00.000Z"
-          },
-          "session": {
-            "id": "sess_01HXYZ…",
-            "expiresAt": "2025-05-13T08:00:00.000Z"
-          }
-        }
+        ]
       },
-      "User": {
-        "type": [
-          "object"
-        ],
+      "SignUpWithEmailDto": {
+        "type": "object",
         "properties": {
-          "id": {
-            "type": [
-              "string"
-            ],
-            "format": "uuid",
-            "description": "Unique identifier (UUID v4)."
-          },
           "email": {
-            "type": [
-              "string"
-            ],
+            "type": "string",
             "format": "email",
-            "description": "The user’s primary email address."
+            "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$",
+            "description": "Email address to register.",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Payload for `POST /api/auth/sign-up/email`.",
+              "example": {
+                "email": "ada@example.com",
+                "password": "correct-horse-battery-staple",
+                "name": "Ada Lovelace"
+              }
+            }
+          },
+          "password": {
+            "type": "string",
+            "minLength": 8,
+            "description": "New account password (8+ chars).",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Payload for `POST /api/auth/sign-up/email`.",
+              "example": {
+                "email": "ada@example.com",
+                "password": "correct-horse-battery-staple",
+                "name": "Ada Lovelace"
+              }
+            }
           },
           "name": {
-            "type": [
-              "string",
-              "null"
+            "description": "Optional display name.",
+            "type": "string",
+            "minLength": 1,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Payload for `POST /api/auth/sign-up/email`.",
+              "example": {
+                "email": "ada@example.com",
+                "password": "correct-horse-battery-staple",
+                "name": "Ada Lovelace"
+              }
+            }
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "UserDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "Unique identifier (UUID v4).",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A user account exposed to API clients.",
+              "example": {
+                "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "email": "ada@example.com",
+                "name": "Ada Lovelace",
+                "emailVerified": true,
+                "image": "https://example.com/avatars/ada.png",
+                "createdAt": "2025-01-15T12:34:56.000Z",
+                "updatedAt": "2025-04-02T08:00:00.000Z"
+              }
+            }
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$",
+            "description": "The user’s primary email address.",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A user account exposed to API clients.",
+              "example": {
+                "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "email": "ada@example.com",
+                "name": "Ada Lovelace",
+                "emailVerified": true,
+                "image": "https://example.com/avatars/ada.png",
+                "createdAt": "2025-01-15T12:34:56.000Z",
+                "updatedAt": "2025-04-02T08:00:00.000Z"
+              }
+            }
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
             ],
-            "description": "Display name; null until the user sets one."
+            "description": "Display name; null until the user sets one.",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A user account exposed to API clients.",
+              "example": {
+                "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "email": "ada@example.com",
+                "name": "Ada Lovelace",
+                "emailVerified": true,
+                "image": "https://example.com/avatars/ada.png",
+                "createdAt": "2025-01-15T12:34:56.000Z",
+                "updatedAt": "2025-04-02T08:00:00.000Z"
+              }
+            }
           },
           "emailVerified": {
-            "type": [
-              "boolean"
-            ],
-            "description": "Whether the email address has been verified."
+            "type": "boolean",
+            "description": "Whether the email address has been verified.",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A user account exposed to API clients.",
+              "example": {
+                "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "email": "ada@example.com",
+                "name": "Ada Lovelace",
+                "emailVerified": true,
+                "image": "https://example.com/avatars/ada.png",
+                "createdAt": "2025-01-15T12:34:56.000Z",
+                "updatedAt": "2025-04-02T08:00:00.000Z"
+              }
+            }
           },
           "image": {
-            "type": [
-              "string",
-              "null"
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
             ],
-            "format": "uri",
-            "description": "URL to the user’s avatar, if any."
+            "description": "URL to the user’s avatar, if any.",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A user account exposed to API clients.",
+              "example": {
+                "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "email": "ada@example.com",
+                "name": "Ada Lovelace",
+                "emailVerified": true,
+                "image": "https://example.com/avatars/ada.png",
+                "createdAt": "2025-01-15T12:34:56.000Z",
+                "updatedAt": "2025-04-02T08:00:00.000Z"
+              }
+            }
           },
           "createdAt": {
-            "type": [
-              "string"
-            ],
+            "type": "string",
             "format": "date-time",
-            "description": "ISO-8601 timestamp the account was created."
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "description": "ISO-8601 timestamp the account was created.",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A user account exposed to API clients.",
+              "example": {
+                "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "email": "ada@example.com",
+                "name": "Ada Lovelace",
+                "emailVerified": true,
+                "image": "https://example.com/avatars/ada.png",
+                "createdAt": "2025-01-15T12:34:56.000Z",
+                "updatedAt": "2025-04-02T08:00:00.000Z"
+              }
+            }
           },
           "updatedAt": {
-            "type": [
-              "string"
-            ],
+            "type": "string",
             "format": "date-time",
-            "description": "ISO-8601 timestamp the account was last modified."
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "description": "ISO-8601 timestamp the account was last modified.",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A user account exposed to API clients.",
+              "example": {
+                "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "email": "ada@example.com",
+                "name": "Ada Lovelace",
+                "emailVerified": true,
+                "image": "https://example.com/avatars/ada.png",
+                "createdAt": "2025-01-15T12:34:56.000Z",
+                "updatedAt": "2025-04-02T08:00:00.000Z"
+              }
+            }
           }
         },
         "required": [
@@ -1231,357 +1452,1599 @@
           "image",
           "createdAt",
           "updatedAt"
-        ],
-        "title": "User",
-        "description": "A user account exposed to API clients.",
-        "example": {
-          "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
-          "email": "ada@example.com",
-          "name": "Ada Lovelace",
-          "emailVerified": true,
-          "image": "https://example.com/avatars/ada.png",
-          "createdAt": "2025-01-15T12:34:56.000Z",
-          "updatedAt": "2025-04-02T08:00:00.000Z"
-        }
+        ]
       },
-      "Post": {
-        "type": [
-          "object"
-        ],
+      "ErrorEnvelopeDto": {
+        "type": "object",
         "properties": {
-          "id": {
-            "type": [
-              "string"
-            ],
-            "format": "uuid",
-            "description": "Unique identifier (UUID v4)."
-          },
-          "authorId": {
-            "type": [
-              "string"
-            ],
-            "format": "uuid",
-            "description": "Identifier of the user who authored the post."
-          },
-          "title": {
-            "type": [
-              "string"
-            ],
-            "minLength": 1,
-            "maxLength": 200,
-            "description": "Post title (1–200 chars)."
-          },
-          "content": {
-            "type": [
-              "string"
-            ],
-            "description": "Body content; Markdown allowed."
-          },
-          "published": {
-            "type": [
-              "boolean"
-            ],
-            "description": "Whether the post is visible to non-author readers."
-          },
-          "createdAt": {
-            "type": [
-              "string"
-            ],
-            "format": "date-time",
-            "description": "ISO-8601 timestamp the post was created."
-          },
-          "updatedAt": {
-            "type": [
-              "string"
-            ],
-            "format": "date-time",
-            "description": "ISO-8601 timestamp the post was last modified."
-          }
-        },
-        "required": [
-          "id",
-          "authorId",
-          "title",
-          "content",
-          "published",
-          "createdAt",
-          "updatedAt"
-        ],
-        "title": "Post",
-        "description": "A blog post.",
-        "example": {
-          "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
-          "authorId": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
-          "title": "Hello, world!",
-          "content": "My first post.",
-          "published": true,
-          "createdAt": "2025-04-02T08:00:00.000Z",
-          "updatedAt": "2025-04-02T08:00:00.000Z"
-        }
-      },
-      "CreatePostInput": {
-        "type": [
-          "object"
-        ],
-        "properties": {
-          "title": {
-            "type": [
-              "string"
-            ],
-            "minLength": 1,
-            "maxLength": 200,
-            "description": "Post title (1–200 chars)."
-          },
-          "content": {
-            "type": [
-              "string"
-            ],
-            "description": "Body content; Markdown allowed."
-          },
-          "published": {
-            "default": false,
-            "type": [
-              "boolean"
-            ],
-            "description": "Whether to publish immediately (defaults to draft)."
-          }
-        },
-        "required": [
-          "title",
-          "content"
-        ],
-        "title": "CreatePostInput",
-        "description": "Payload for creating a new post.",
-        "example": {
-          "title": "Hello, world!",
-          "content": "My first post.",
-          "published": false
-        }
-      },
-      "UpdatePostInput": {
-        "type": [
-          "object"
-        ],
-        "properties": {
-          "title": {
-            "type": [
-              "string"
-            ],
-            "minLength": 1,
-            "maxLength": 200,
-            "description": "Post title (1–200 chars)."
-          },
-          "content": {
-            "type": [
-              "string"
-            ],
-            "description": "Body content; Markdown allowed."
-          },
-          "published": {
-            "default": false,
-            "type": [
-              "boolean"
-            ],
-            "description": "Whether to publish immediately (defaults to draft)."
-          }
-        },
-        "title": "UpdatePostInput",
-        "description": "Payload for partially updating an existing post.",
-        "example": {
-          "title": "Hello, world! (revised)"
-        }
-      },
-      "ListPostsQuery": {
-        "type": [
-          "object"
-        ],
-        "properties": {
-          "page": {
-            "default": 1,
-            "type": [
-              "integer"
-            ],
-            "exclusiveMinimum": 0,
-            "description": "1-indexed page number."
-          },
-          "perPage": {
-            "default": 20,
-            "type": [
-              "integer"
-            ],
-            "exclusiveMinimum": 0,
-            "maximum": 100,
-            "description": "Page size (max 100)."
-          },
-          "published": {
-            "oneOf": [
-              {
-                "type": [
-                  "string"
+          "error": {
+            "$ref": "#/$defs/ErrorPayload",
+            "type": "",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "ErrorPayload": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "Stable, machine-readable error code (e.g. `VALIDATION_FAILED`)."
+                  },
+                  "message": {
+                    "type": "string",
+                    "description": "Human-readable error message safe to surface to end users."
+                  },
+                  "details": {
+                    "description": "Optional structured context — e.g. per-field validation errors."
+                  }
+                },
+                "required": [
+                  "code",
+                  "message"
                 ],
-                "enum": [
-                  "true"
-                ]
-              },
-              {
-                "type": [
-                  "string"
-                ],
-                "enum": [
-                  "false"
-                ]
-              },
-              {
-                "type": [
-                  "boolean"
-                ]
+                "description": "The body of a uniform error envelope.",
+                "example": {
+                  "code": "NOT_FOUND",
+                  "message": "The requested resource could not be found."
+                }
               }
-            ],
-            "description": "Filter by published flag."
-          },
-          "q": {
-            "type": [
-              "string"
-            ],
-            "description": "Full-text-ish search across title/content."
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "The uniform error envelope returned for every non-2xx response from the API.",
+              "example": {
+                "error": {
+                  "code": "NOT_FOUND",
+                  "message": "The requested resource could not be found."
+                }
+              }
+            }
           }
         },
-        "title": "ListPostsQuery",
-        "description": "Query parameters accepted by `GET /api/posts`.",
-        "example": {
-          "page": 1,
-          "perPage": 20,
-          "published": true
-        }
+        "required": [
+          "error"
+        ]
       },
-      "ListPostsResponse": {
-        "type": [
-          "object"
-        ],
+      "ListOrganisationsResponseDto": {
+        "type": "object",
         "properties": {
           "data": {
-            "type": [
-              "array"
-            ],
+            "type": "array",
             "items": {
-              "type": [
-                "object"
-              ],
-              "properties": {
-                "id": {
-                  "type": [
-                    "string"
-                  ],
-                  "format": "uuid",
-                  "description": "Unique identifier (UUID v4)."
+              "$ref": "#/$defs/Organisation"
+            },
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "Organisation": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                    "description": "Unique identifier."
+                  },
+                  "parentId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "Parent organisation id, null for international federations."
+                  },
+                  "type": {
+                    "$ref": "#/$defs/OrganisationType"
+                  },
+                  "shortCode": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 20,
+                    "description": "Short display code, e.g. \"WTF\"."
+                  },
+                  "slug": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "URL-safe full name. Unique when present."
+                  },
+                  "country": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{3}$",
+                    "description": "ISO 3166-1 alpha-3 country code."
+                  },
+                  "nameEn": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  },
+                  "nameSv": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  },
+                  "nameFi": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  },
+                  "nameJa": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "logoUrl": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "address": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "contactEmail": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "email",
+                        "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "headInstructorId": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                  },
+                  "updatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                  }
                 },
-                "authorId": {
-                  "type": [
-                    "string"
-                  ],
-                  "format": "uuid",
-                  "description": "Identifier of the user who authored the post."
-                },
-                "title": {
-                  "type": [
-                    "string"
-                  ],
-                  "minLength": 1,
-                  "maxLength": 200,
-                  "description": "Post title (1–200 chars)."
-                },
-                "content": {
-                  "type": [
-                    "string"
-                  ],
-                  "description": "Body content; Markdown allowed."
-                },
-                "published": {
-                  "type": [
-                    "boolean"
-                  ],
-                  "description": "Whether the post is visible to non-author readers."
-                },
-                "createdAt": {
-                  "type": [
-                    "string"
-                  ],
-                  "format": "date-time",
-                  "description": "ISO-8601 timestamp the post was created."
-                },
-                "updatedAt": {
-                  "type": [
-                    "string"
-                  ],
-                  "format": "date-time",
-                  "description": "ISO-8601 timestamp the post was last modified."
+                "required": [
+                  "id",
+                  "parentId",
+                  "type",
+                  "shortCode",
+                  "slug",
+                  "country",
+                  "nameEn",
+                  "nameSv",
+                  "nameFi",
+                  "nameJa",
+                  "logoUrl",
+                  "address",
+                  "headInstructorId",
+                  "createdAt",
+                  "updatedAt"
+                ],
+                "example": {
+                  "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "parentId": null,
+                  "type": "international_federation",
+                  "shortCode": "WTF",
+                  "slug": "world-taido-federation",
+                  "country": "JPN",
+                  "nameEn": "World Taido Federation",
+                  "nameSv": "Världstaidoförbundet",
+                  "nameFi": "Maailman Taidoliitto",
+                  "nameJa": "世界躰道連盟",
+                  "logoUrl": null,
+                  "address": null,
+                  "contactEmail": null,
+                  "headInstructorId": null,
+                  "createdAt": "2025-04-02T08:00:00.000Z",
+                  "updatedAt": "2025-04-02T08:00:00.000Z"
                 }
               },
-              "required": [
-                "id",
-                "authorId",
-                "title",
-                "content",
-                "published",
-                "createdAt",
-                "updatedAt"
-              ],
-              "title": "Post",
-              "description": "A blog post.",
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            }
+          },
+          "total": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "Organisation": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                    "description": "Unique identifier."
+                  },
+                  "parentId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "Parent organisation id, null for international federations."
+                  },
+                  "type": {
+                    "$ref": "#/$defs/OrganisationType"
+                  },
+                  "shortCode": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 20,
+                    "description": "Short display code, e.g. \"WTF\"."
+                  },
+                  "slug": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "URL-safe full name. Unique when present."
+                  },
+                  "country": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{3}$",
+                    "description": "ISO 3166-1 alpha-3 country code."
+                  },
+                  "nameEn": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  },
+                  "nameSv": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  },
+                  "nameFi": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  },
+                  "nameJa": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "logoUrl": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "address": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "contactEmail": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "email",
+                        "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "headInstructorId": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                  },
+                  "updatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                  }
+                },
+                "required": [
+                  "id",
+                  "parentId",
+                  "type",
+                  "shortCode",
+                  "slug",
+                  "country",
+                  "nameEn",
+                  "nameSv",
+                  "nameFi",
+                  "nameJa",
+                  "logoUrl",
+                  "address",
+                  "headInstructorId",
+                  "createdAt",
+                  "updatedAt"
+                ],
+                "example": {
+                  "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "parentId": null,
+                  "type": "international_federation",
+                  "shortCode": "WTF",
+                  "slug": "world-taido-federation",
+                  "country": "JPN",
+                  "nameEn": "World Taido Federation",
+                  "nameSv": "Världstaidoförbundet",
+                  "nameFi": "Maailman Taidoliitto",
+                  "nameJa": "世界躰道連盟",
+                  "logoUrl": null,
+                  "address": null,
+                  "contactEmail": null,
+                  "headInstructorId": null,
+                  "createdAt": "2025-04-02T08:00:00.000Z",
+                  "updatedAt": "2025-04-02T08:00:00.000Z"
+                }
+              },
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            }
+          }
+        },
+        "required": [
+          "data",
+          "total"
+        ]
+      },
+      "OrganisationDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "Unique identifier.",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
               "example": {
                 "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
-                "authorId": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
-                "title": "Hello, world!",
-                "content": "My first post.",
-                "published": true,
+                "parentId": null,
+                "type": "international_federation",
+                "shortCode": "WTF",
+                "slug": "world-taido-federation",
+                "country": "JPN",
+                "nameEn": "World Taido Federation",
+                "nameSv": "Världstaidoförbundet",
+                "nameFi": "Maailman Taidoliitto",
+                "nameJa": "世界躰道連盟",
+                "logoUrl": null,
+                "address": null,
+                "contactEmail": null,
+                "headInstructorId": null,
                 "createdAt": "2025-04-02T08:00:00.000Z",
                 "updatedAt": "2025-04-02T08:00:00.000Z"
               }
             }
           },
-          "page": {
-            "type": [
-              "integer"
+          "parentId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              {
+                "type": "null"
+              }
             ],
-            "exclusiveMinimum": 0
+            "description": "Parent organisation id, null for international federations.",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "parentId": null,
+                "type": "international_federation",
+                "shortCode": "WTF",
+                "slug": "world-taido-federation",
+                "country": "JPN",
+                "nameEn": "World Taido Federation",
+                "nameSv": "Världstaidoförbundet",
+                "nameFi": "Maailman Taidoliitto",
+                "nameJa": "世界躰道連盟",
+                "logoUrl": null,
+                "address": null,
+                "contactEmail": null,
+                "headInstructorId": null,
+                "createdAt": "2025-04-02T08:00:00.000Z",
+                "updatedAt": "2025-04-02T08:00:00.000Z"
+              }
+            }
           },
-          "perPage": {
-            "type": [
-              "integer"
-            ],
-            "exclusiveMinimum": 0
+          "type": {
+            "$ref": "#/$defs/OrganisationType",
+            "type": "",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "parentId": null,
+                "type": "international_federation",
+                "shortCode": "WTF",
+                "slug": "world-taido-federation",
+                "country": "JPN",
+                "nameEn": "World Taido Federation",
+                "nameSv": "Världstaidoförbundet",
+                "nameFi": "Maailman Taidoliitto",
+                "nameJa": "世界躰道連盟",
+                "logoUrl": null,
+                "address": null,
+                "contactEmail": null,
+                "headInstructorId": null,
+                "createdAt": "2025-04-02T08:00:00.000Z",
+                "updatedAt": "2025-04-02T08:00:00.000Z"
+              }
+            }
           },
-          "total": {
-            "type": [
-              "integer"
+          "shortCode": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20,
+            "description": "Short display code, e.g. \"WTF\".",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "parentId": null,
+                "type": "international_federation",
+                "shortCode": "WTF",
+                "slug": "world-taido-federation",
+                "country": "JPN",
+                "nameEn": "World Taido Federation",
+                "nameSv": "Världstaidoförbundet",
+                "nameFi": "Maailman Taidoliitto",
+                "nameJa": "世界躰道連盟",
+                "logoUrl": null,
+                "address": null,
+                "contactEmail": null,
+                "headInstructorId": null,
+                "createdAt": "2025-04-02T08:00:00.000Z",
+                "updatedAt": "2025-04-02T08:00:00.000Z"
+              }
+            }
+          },
+          "slug": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
             ],
-            "minimum": 0
+            "description": "URL-safe full name. Unique when present.",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "parentId": null,
+                "type": "international_federation",
+                "shortCode": "WTF",
+                "slug": "world-taido-federation",
+                "country": "JPN",
+                "nameEn": "World Taido Federation",
+                "nameSv": "Världstaidoförbundet",
+                "nameFi": "Maailman Taidoliitto",
+                "nameJa": "世界躰道連盟",
+                "logoUrl": null,
+                "address": null,
+                "contactEmail": null,
+                "headInstructorId": null,
+                "createdAt": "2025-04-02T08:00:00.000Z",
+                "updatedAt": "2025-04-02T08:00:00.000Z"
+              }
+            }
+          },
+          "country": {
+            "type": "string",
+            "pattern": "^[A-Z]{3}$",
+            "description": "ISO 3166-1 alpha-3 country code.",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "parentId": null,
+                "type": "international_federation",
+                "shortCode": "WTF",
+                "slug": "world-taido-federation",
+                "country": "JPN",
+                "nameEn": "World Taido Federation",
+                "nameSv": "Världstaidoförbundet",
+                "nameFi": "Maailman Taidoliitto",
+                "nameJa": "世界躰道連盟",
+                "logoUrl": null,
+                "address": null,
+                "contactEmail": null,
+                "headInstructorId": null,
+                "createdAt": "2025-04-02T08:00:00.000Z",
+                "updatedAt": "2025-04-02T08:00:00.000Z"
+              }
+            }
+          },
+          "nameEn": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "parentId": null,
+                "type": "international_federation",
+                "shortCode": "WTF",
+                "slug": "world-taido-federation",
+                "country": "JPN",
+                "nameEn": "World Taido Federation",
+                "nameSv": "Världstaidoförbundet",
+                "nameFi": "Maailman Taidoliitto",
+                "nameJa": "世界躰道連盟",
+                "logoUrl": null,
+                "address": null,
+                "contactEmail": null,
+                "headInstructorId": null,
+                "createdAt": "2025-04-02T08:00:00.000Z",
+                "updatedAt": "2025-04-02T08:00:00.000Z"
+              }
+            }
+          },
+          "nameSv": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "parentId": null,
+                "type": "international_federation",
+                "shortCode": "WTF",
+                "slug": "world-taido-federation",
+                "country": "JPN",
+                "nameEn": "World Taido Federation",
+                "nameSv": "Världstaidoförbundet",
+                "nameFi": "Maailman Taidoliitto",
+                "nameJa": "世界躰道連盟",
+                "logoUrl": null,
+                "address": null,
+                "contactEmail": null,
+                "headInstructorId": null,
+                "createdAt": "2025-04-02T08:00:00.000Z",
+                "updatedAt": "2025-04-02T08:00:00.000Z"
+              }
+            }
+          },
+          "nameFi": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "parentId": null,
+                "type": "international_federation",
+                "shortCode": "WTF",
+                "slug": "world-taido-federation",
+                "country": "JPN",
+                "nameEn": "World Taido Federation",
+                "nameSv": "Världstaidoförbundet",
+                "nameFi": "Maailman Taidoliitto",
+                "nameJa": "世界躰道連盟",
+                "logoUrl": null,
+                "address": null,
+                "contactEmail": null,
+                "headInstructorId": null,
+                "createdAt": "2025-04-02T08:00:00.000Z",
+                "updatedAt": "2025-04-02T08:00:00.000Z"
+              }
+            }
+          },
+          "nameJa": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "parentId": null,
+                "type": "international_federation",
+                "shortCode": "WTF",
+                "slug": "world-taido-federation",
+                "country": "JPN",
+                "nameEn": "World Taido Federation",
+                "nameSv": "Världstaidoförbundet",
+                "nameFi": "Maailman Taidoliitto",
+                "nameJa": "世界躰道連盟",
+                "logoUrl": null,
+                "address": null,
+                "contactEmail": null,
+                "headInstructorId": null,
+                "createdAt": "2025-04-02T08:00:00.000Z",
+                "updatedAt": "2025-04-02T08:00:00.000Z"
+              }
+            }
+          },
+          "logoUrl": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "parentId": null,
+                "type": "international_federation",
+                "shortCode": "WTF",
+                "slug": "world-taido-federation",
+                "country": "JPN",
+                "nameEn": "World Taido Federation",
+                "nameSv": "Världstaidoförbundet",
+                "nameFi": "Maailman Taidoliitto",
+                "nameJa": "世界躰道連盟",
+                "logoUrl": null,
+                "address": null,
+                "contactEmail": null,
+                "headInstructorId": null,
+                "createdAt": "2025-04-02T08:00:00.000Z",
+                "updatedAt": "2025-04-02T08:00:00.000Z"
+              }
+            }
+          },
+          "address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "parentId": null,
+                "type": "international_federation",
+                "shortCode": "WTF",
+                "slug": "world-taido-federation",
+                "country": "JPN",
+                "nameEn": "World Taido Federation",
+                "nameSv": "Världstaidoförbundet",
+                "nameFi": "Maailman Taidoliitto",
+                "nameJa": "世界躰道連盟",
+                "logoUrl": null,
+                "address": null,
+                "contactEmail": null,
+                "headInstructorId": null,
+                "createdAt": "2025-04-02T08:00:00.000Z",
+                "updatedAt": "2025-04-02T08:00:00.000Z"
+              }
+            }
+          },
+          "contactEmail": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "email",
+                "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "parentId": null,
+                "type": "international_federation",
+                "shortCode": "WTF",
+                "slug": "world-taido-federation",
+                "country": "JPN",
+                "nameEn": "World Taido Federation",
+                "nameSv": "Världstaidoförbundet",
+                "nameFi": "Maailman Taidoliitto",
+                "nameJa": "世界躰道連盟",
+                "logoUrl": null,
+                "address": null,
+                "contactEmail": null,
+                "headInstructorId": null,
+                "createdAt": "2025-04-02T08:00:00.000Z",
+                "updatedAt": "2025-04-02T08:00:00.000Z"
+              }
+            }
+          },
+          "headInstructorId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "parentId": null,
+                "type": "international_federation",
+                "shortCode": "WTF",
+                "slug": "world-taido-federation",
+                "country": "JPN",
+                "nameEn": "World Taido Federation",
+                "nameSv": "Världstaidoförbundet",
+                "nameFi": "Maailman Taidoliitto",
+                "nameJa": "世界躰道連盟",
+                "logoUrl": null,
+                "address": null,
+                "contactEmail": null,
+                "headInstructorId": null,
+                "createdAt": "2025-04-02T08:00:00.000Z",
+                "updatedAt": "2025-04-02T08:00:00.000Z"
+              }
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "parentId": null,
+                "type": "international_federation",
+                "shortCode": "WTF",
+                "slug": "world-taido-federation",
+                "country": "JPN",
+                "nameEn": "World Taido Federation",
+                "nameSv": "Världstaidoförbundet",
+                "nameFi": "Maailman Taidoliitto",
+                "nameJa": "世界躰道連盟",
+                "logoUrl": null,
+                "address": null,
+                "contactEmail": null,
+                "headInstructorId": null,
+                "createdAt": "2025-04-02T08:00:00.000Z",
+                "updatedAt": "2025-04-02T08:00:00.000Z"
+              }
+            }
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "parentId": null,
+                "type": "international_federation",
+                "shortCode": "WTF",
+                "slug": "world-taido-federation",
+                "country": "JPN",
+                "nameEn": "World Taido Federation",
+                "nameSv": "Världstaidoförbundet",
+                "nameFi": "Maailman Taidoliitto",
+                "nameJa": "世界躰道連盟",
+                "logoUrl": null,
+                "address": null,
+                "contactEmail": null,
+                "headInstructorId": null,
+                "createdAt": "2025-04-02T08:00:00.000Z",
+                "updatedAt": "2025-04-02T08:00:00.000Z"
+              }
+            }
           }
         },
         "required": [
-          "data",
-          "page",
-          "perPage",
-          "total"
-        ],
-        "title": "ListPostsResponse",
-        "description": "A page of posts plus pagination metadata.",
-        "example": {
-          "data": [
-            {
-              "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
-              "authorId": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
-              "title": "Hello, world!",
-              "content": "My first post.",
-              "published": true,
-              "createdAt": "2025-04-02T08:00:00.000Z",
-              "updatedAt": "2025-04-02T08:00:00.000Z"
+          "id",
+          "parentId",
+          "type",
+          "shortCode",
+          "slug",
+          "country",
+          "nameEn",
+          "nameSv",
+          "nameFi",
+          "nameJa",
+          "logoUrl",
+          "address",
+          "headInstructorId",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "CreateOrganisationDto": {
+        "type": "object",
+        "properties": {
+          "parentId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Parent organisation id, null for international federations.",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
             }
-          ],
-          "page": 1,
-          "perPage": 20,
-          "total": 1
+          },
+          "type": {
+            "$ref": "#/$defs/OrganisationType",
+            "type": "",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            }
+          },
+          "shortCode": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20,
+            "description": "Short display code, e.g. \"WTF\".",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            }
+          },
+          "slug": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "URL-safe full name. Unique when present.",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            }
+          },
+          "country": {
+            "type": "string",
+            "pattern": "^[A-Z]{3}$",
+            "description": "ISO 3166-1 alpha-3 country code.",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            }
+          },
+          "nameEn": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            }
+          },
+          "nameSv": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            }
+          },
+          "nameFi": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            }
+          },
+          "nameJa": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            }
+          },
+          "logoUrl": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            }
+          },
+          "address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            }
+          },
+          "contactEmail": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "email",
+                "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            }
+          },
+          "headInstructorId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            }
+          }
+        },
+        "required": [
+          "parentId",
+          "type",
+          "shortCode",
+          "slug",
+          "country",
+          "nameEn",
+          "nameSv",
+          "nameFi",
+          "nameJa",
+          "logoUrl",
+          "address",
+          "headInstructorId"
+        ]
+      },
+      "UpdateOrganisationDto": {
+        "type": "object",
+        "properties": {
+          "parentId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Parent organisation id, null for international federations.",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-additional-properties": false
+          },
+          "shortCode": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20,
+            "description": "Short display code, e.g. \"WTF\".",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-additional-properties": false
+          },
+          "slug": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "URL-safe full name. Unique when present.",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-additional-properties": false
+          },
+          "country": {
+            "type": "string",
+            "pattern": "^[A-Z]{3}$",
+            "description": "ISO 3166-1 alpha-3 country code.",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-additional-properties": false
+          },
+          "nameEn": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-additional-properties": false
+          },
+          "nameSv": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-additional-properties": false
+          },
+          "nameFi": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-additional-properties": false
+          },
+          "nameJa": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-additional-properties": false
+          },
+          "logoUrl": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-additional-properties": false
+          },
+          "address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-additional-properties": false
+          },
+          "contactEmail": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "email",
+                "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-additional-properties": false
+          },
+          "headInstructorId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-additional-properties": false
+          }
         }
+      },
+      "ErrorEnvelope": {
+        "$ref": "#/components/schemas/ErrorEnvelope"
+      },
+      "ErrorPayload": {
+        "$ref": "#/components/schemas/ErrorPayload"
+      },
+      "SignInWithEmail": {
+        "$ref": "#/components/schemas/SignInWithEmail"
+      },
+      "SignUpWithEmail": {
+        "$ref": "#/components/schemas/SignUpWithEmail"
+      },
+      "Session": {
+        "$ref": "#/components/schemas/Session"
+      },
+      "User": {
+        "$ref": "#/components/schemas/User"
+      },
+      "Organisation": {
+        "$ref": "#/components/schemas/Organisation"
+      },
+      "OrganisationType": {
+        "$ref": "#/components/schemas/OrganisationType"
+      },
+      "CreateOrganisationInput": {
+        "$ref": "#/components/schemas/CreateOrganisationInput"
+      },
+      "UpdateOrganisationInput": {
+        "$ref": "#/components/schemas/UpdateOrganisationInput"
+      },
+      "ListOrganisationsQuery": {
+        "$ref": "#/components/schemas/ListOrganisationsQuery"
+      },
+      "ListOrganisationsResponse": {
+        "$ref": "#/components/schemas/ListOrganisationsResponse"
       }
     }
   }

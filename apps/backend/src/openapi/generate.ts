@@ -9,10 +9,16 @@
  *   - `packages/contracts/openapi/openapi.yaml`
  *
  * CI compares the committed files against fresh output to catch drift.
+ *
+ * `reflect-metadata` MUST be imported before `@nestjs/core` so Nest's
+ * `@Injectable()` / `@Inject()` decorators register their parameter metadata.
+ * `main.ts` does this for the runtime app; this generator runs in its own
+ * process and has to opt in independently.
  */
+import 'reflect-metadata';
+
 import { mkdirSync, writeFileSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { resolve } from 'node:path';
 
 import { NestFactory } from '@nestjs/core';
 import { type NestExpressApplication } from '@nestjs/platform-express';
@@ -23,11 +29,11 @@ import { type Env, EnvSchema } from '../config/env.schema.js';
 
 import { buildOpenApiDocument } from './swagger.js';
 
-// ESM-friendly equivalent of CJS's `__dirname`.
-const here = dirname(fileURLToPath(import.meta.url));
-
 async function main(): Promise<void> {
-  const outDir = resolve(here, '../../../../packages/contracts/openapi');
+  // `cwd` is `apps/backend` whether this runs via `pnpm --filter backend
+  // openapi:generate` or via `node` directly. Using `import.meta.url` here
+  // would break after compile (dist/ adds an extra path segment).
+  const outDir = resolve(process.cwd(), '../../packages/contracts/openapi');
   mkdirSync(outDir, { recursive: true });
 
   // We construct the app without listening. Skip strict env validation in case
