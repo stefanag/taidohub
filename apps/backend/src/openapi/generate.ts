@@ -49,7 +49,10 @@ async function main(): Promise<void> {
   const env: Env = EnvSchema.parse(process.env);
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    logger: false,
+    // Keep error/warn on so a bootstrap failure surfaces. The script
+    // exits silently otherwise — Nest's ExceptionHandler swallows the
+    // stack when `logger: false`.
+    logger: ['error', 'warn'],
   });
   app.setGlobalPrefix('api');
   await app.init();

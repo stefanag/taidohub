@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import * as authApi from '@/features/auth-by-email/api/auth.api';
+import * as authApi from '@/features/auth-by-email';
 import i18n from '@/i18n';
 
 import { AuthProvider } from './AuthProvider.js';

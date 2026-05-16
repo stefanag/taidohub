@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 
-import * as authApi from '@/features/auth-by-email/api/auth.api';
+import * as authApi from '@/features/auth-by-email';
 import i18n from '@/i18n';
 
 // Replace the auth.api module's `authClient` with a plain object whose

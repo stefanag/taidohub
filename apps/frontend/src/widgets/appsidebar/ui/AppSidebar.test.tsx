@@ -2,11 +2,10 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import * as authApi from '@/features/auth-by-email/api/auth.api';
+import * as authApi from '@/features/auth-by-email';
 import i18n from '@/i18n';
-import { AbilityContext } from '@/shared/lib/casl/ability-context';
-import { defineAbilityFor } from '@/shared/lib/casl/defineAbilityFor';
-import { SidebarProvider } from '@/shared/ui/sidebar';
+import { AbilityContext, defineAbilityFor } from '@/shared/lib/casl';
+import { SidebarProvider } from '@/shared/ui';
 
 // jsdom doesn't implement matchMedia; shadcn's `useIsMobile` hook calls it.
 beforeAll(() => {

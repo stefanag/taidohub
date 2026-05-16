@@ -3,6 +3,8 @@ import { describe, expect, it, vi, afterEach } from 'vitest';
 // better-auth's React client is a Proxy — `vi.spyOn(authClient, 'getSession')`
 // fails with "property not defined". Replace the whole `authClient` with a
 // plain stub via module-mock so we can drive `getSession` from each test.
+// vi.mock targets the internal module by path because that's where the symbol
+// is actually defined; Steiger's static-import rule doesn't see this string.
 vi.mock('@/features/auth-by-email/api/auth.api', async (orig) => {
   const actual =
     await orig<typeof import('@/features/auth-by-email/api/auth.api')>();
@@ -15,7 +17,7 @@ vi.mock('@/features/auth-by-email/api/auth.api', async (orig) => {
   };
 });
 
-import { authClient } from '@/features/auth-by-email/api/auth.api';
+import { authClient } from '@/features/auth-by-email';
 
 type GetSessionMock = ReturnType<typeof vi.fn>;
 
