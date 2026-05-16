@@ -8,6 +8,14 @@ export type {
 } from '@repo/contracts/organisations';
 
 export {
+  CreateOrganisationSchema,
+  UpdateOrganisationSchema,
+  OrganisationSchema,
+  OrganisationTypeSchema,
+  ISO_3166_ALPHA3_CODES,
+} from '@repo/contracts/organisations';
+
+export {
   createOrganisation,
   deleteOrganisation,
   getOrganisation,
