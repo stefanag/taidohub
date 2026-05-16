@@ -14,7 +14,11 @@
   "common": {
     "loading": "Loading…",
     "browse": "Browse posts",
-    "unknownError": "unknown error"
+    "unknownError": "unknown error",
+    "create": "Create",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
   },
   "header": {
     "posts": "Posts",
@@ -23,7 +27,8 @@
   },
   "nav": {
     "dashboard": "Dashboard",
-    "posts": "Posts"
+    "posts": "Posts",
+    "adminOrganisations": "Organisations"
   },
   "dashboard": {
     "title": "Dashboard"
@@ -37,6 +42,50 @@
     "loadFailed": "Failed to load posts: {{message}}",
     "published": "Published",
     "draft": "Draft"
+  },
+  "admin": {
+    "title": "Admin",
+    "organisations": {
+      "title": "Organisations",
+      "newOrganisation": "New organisation",
+      "actions": {
+        "edit": "Edit",
+        "move": "Move…",
+        "delete": "Delete"
+      },
+      "types": {
+        "internationalFederation": "International federation",
+        "nationalFederation": "National federation",
+        "club": "Club"
+      },
+      "fields": {
+        "type": "Type",
+        "shortCode": "Short code",
+        "slug": "Slug",
+        "country": "Country",
+        "names": "Names",
+        "nameEn": "Name (English)",
+        "nameSv": "Name (Swedish)",
+        "nameFi": "Name (Finnish)",
+        "nameJa": "Name (Japanese)",
+        "address": "Address",
+        "contactEmail": "Contact email",
+        "logoUrl": "Logo URL",
+        "headInstructor": "Head instructor",
+        "parent": "Parent"
+      },
+      "move": {
+        "description": "Pick a new parent organisation."
+      },
+      "confirm": {
+        "delete": "Delete \"{{name}}\"? This cannot be undone."
+      },
+      "errors": {
+        "hasChildren": "This organisation still has {{count}} child(ren). Reparent or delete them first.",
+        "invalidParent": "That parent isn't allowed for this type.",
+        "cycle": "Move would create a cycle."
+      }
+    }
   },
   "locale": {
     "switch": "Language"
