@@ -4,5 +4,4 @@
  * adapter receives it verbatim — so any new table must be re-exported here.
  */
 export * from './users.js';
-export * from './posts.js';
 export * from './organisations.js';

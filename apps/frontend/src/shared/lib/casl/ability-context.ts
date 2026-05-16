@@ -15,7 +15,7 @@ export const AbilityContext = createContext<AppAbility | null>(null);
 
 /**
  * `<Can>` component bound to our `AbilityContext`. Usage:
- *   <Can I="create" a="Post">{() => <Button>New post</Button>}</Can>
+ *   <Can I="manage" a="Organisation">{() => <Button>New organisation</Button>}</Can>
  */
 export const Can = createContextualCan(
   AbilityContext.Consumer as React.Consumer<AppAbility>,

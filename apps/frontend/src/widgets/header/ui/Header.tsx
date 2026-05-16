@@ -20,9 +20,6 @@ export function Header(): React.ReactElement {
           <Link to="/" className="text-sm font-semibold">
             taidohub
           </Link>
-          <Link to="/posts" className="text-sm text-muted-foreground hover:text-foreground">
-            {t('header.posts')}
-          </Link>
         </nav>
 
         <div className="flex items-center gap-3">

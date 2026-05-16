@@ -11,7 +11,6 @@ import { DatabaseModule } from './infrastructure/database/database.module.js';
 import { AuthDocsModule } from './modules/auth/auth.module.js';
 import { HealthModule } from './modules/health/health.module.js';
 import { OrganisationsModule } from './modules/organisations/organisations.module.js';
-import { PostsModule } from './modules/posts/posts.module.js';
 import { UsersModule } from './modules/users/users.module.js';
 
 @Module({
@@ -23,7 +22,6 @@ import { UsersModule } from './modules/users/users.module.js';
     AuthDocsModule,
     HealthModule,
     UsersModule,
-    PostsModule,
     OrganisationsModule,
   ],
   providers: [

@@ -3,7 +3,6 @@ import { defineConfig } from 'tsup';
 export default defineConfig({
   entry: {
     index: 'src/index.ts',
-    posts: 'src/posts.ts',
     users: 'src/users.ts',
     auth: 'src/auth.ts',
     casl: 'src/casl.ts',
