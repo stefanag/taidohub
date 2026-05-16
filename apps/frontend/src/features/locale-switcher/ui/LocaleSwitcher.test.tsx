@@ -5,16 +5,15 @@ import { describe, expect, it, vi, beforeEach } from 'vitest';
 import * as authApi from '@/features/auth-by-email';
 import i18n from '@/i18n';
 
-// Replace the auth.api module's `authClient` with a plain object whose
+// Replace the feature barrel's `authClient` with a plain object whose
 // `updateUser` we can spy on. better-auth's real React client is a Proxy
 // whose `get` trap always resolves to a dynamic dispatcher, so assigning
 // to `authClient.updateUser` from the test would silently no-op. The real
 // `useSession` is preserved so individual tests can `vi.spyOn` it.
-vi.mock('@/features/auth-by-email/api/auth.api', async () => {
-  const actual =
-    await vi.importActual<typeof import('@/features/auth-by-email/api/auth.api')>(
-      '@/features/auth-by-email/api/auth.api',
-    );
+vi.mock('@/features/auth-by-email', async () => {
+  const actual = await vi.importActual<typeof import('@/features/auth-by-email')>(
+    '@/features/auth-by-email',
+  );
   return {
     ...actual,
     authClient: {
