@@ -10,24 +10,17 @@
  *
  * CI compares the committed files against fresh output to catch drift.
  *
+ * Required env vars (`WEB_ORIGIN`, `DATABASE_URL`, etc.) come from
+ * `openapi-stub.env` passed by the `openapi:generate` npm script — see the
+ * comment in that file for why an env file is needed instead of in-script
+ * stubs. The real `.env` (when present) overrides the stubs.
+ *
  * `reflect-metadata` MUST be imported before `@nestjs/core` so Nest's
  * `@Injectable()` / `@Inject()` decorators register their parameter metadata.
  * `main.ts` does this for the runtime app; this generator runs in its own
  * process and has to opt in independently.
  */
 import 'reflect-metadata';
-
-// Env stubs MUST run before any `@/` import that pulls in `AppModule`.
-// `AppConfigModule` calls `NestConfigModule.forRoot({...})` at decorator
-// time, which captures `process.env` and the validate lambda immediately.
-// Setting these later (e.g. inside main()) would happen after the snapshot
-// and Zod would reject the missing keys at Nest bootstrap.
-process.env.NODE_ENV ??= 'development';
-process.env.WEB_ORIGIN ??= 'http://localhost:8080';
-process.env.DATABASE_URL ??= 'postgresql://placeholder:placeholder@localhost:5432/placeholder';
-process.env.DIRECT_URL ??= process.env.DATABASE_URL;
-process.env.BETTER_AUTH_SECRET ??= 'placeholder-placeholder-placeholder-placeholder';
-process.env.BETTER_AUTH_URL ??= 'http://localhost:3001';
 
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -51,9 +44,9 @@ async function main(): Promise<void> {
   const env: Env = EnvSchema.parse(process.env);
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    // Keep error/warn on so a bootstrap failure surfaces. The script
-    // exits silently otherwise — Nest's ExceptionHandler swallows the
-    // stack when `logger: false`.
+    // Keep error/warn on so a bootstrap failure surfaces in CI. The
+    // script exits silently otherwise — Nest's ExceptionHandler swallows
+    // the stack when `logger: false`.
     logger: ['error', 'warn'],
   });
   app.setGlobalPrefix('api');
