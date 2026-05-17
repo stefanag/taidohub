@@ -10,6 +10,7 @@ export default defineConfig({
     routes: 'src/routes.ts',
     openapi: 'src/openapi.ts',
     organisations: 'src/organisations.ts',
+    'audit-log': 'src/audit-log.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,
