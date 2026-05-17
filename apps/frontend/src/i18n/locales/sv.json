@@ -74,7 +74,9 @@
       "errors": {
         "hasChildren": "Den här organisationen har fortfarande {{count}} underorganisation(er). Flytta eller ta bort dem först.",
         "invalidParent": "Den föräldern är inte tillåten för den här typen.",
-        "cycle": "Flytten skulle skapa en cykel."
+        "cycle": "Flytten skulle skapa en cykel.",
+        "tabInvalid": "har fel",
+        "validationSummary": "Fyll i obligatoriska fält: {{fields}}"
       }
     },
     "auditLog": {

@@ -61,6 +61,35 @@ const TYPE_LABEL_KEYS: Record<(typeof ORG_TYPES)[number], string> = {
   club: 'club',
 };
 
+// Tabs in display order. Used to find the first invalid one after submit.
+const NAME_TABS = ['en', 'sv', 'fi', 'ja'] as const;
+type NameTab = (typeof NAME_TABS)[number];
+
+const NAME_TAB_FIELD: Record<NameTab, 'nameEn' | 'nameSv' | 'nameFi' | 'nameJa'> = {
+  en: 'nameEn',
+  sv: 'nameSv',
+  fi: 'nameFi',
+  ja: 'nameJa',
+};
+
+// Form field key → i18n label key under `admin.organisations.fields.*`.
+// Used to render human-readable names in the validation summary.
+const FIELD_LABEL_KEYS = {
+  type: 'type',
+  shortCode: 'shortCode',
+  slug: 'slug',
+  country: 'country',
+  parentId: 'parent',
+  nameEn: 'nameEn',
+  nameSv: 'nameSv',
+  nameFi: 'nameFi',
+  nameJa: 'nameJa',
+  logoUrl: 'logoUrl',
+  address: 'address',
+  contactEmail: 'contactEmail',
+  headInstructorId: 'headInstructor',
+} as const;
+
 export interface OrganisationFormProps {
   mode: 'create' | 'edit';
   /** Pre-populated values for edit mode (or initial defaults in create). */
@@ -96,6 +125,12 @@ export function OrganisationForm({
   ) as unknown as ZodTypeAny;
   const form = useZodForm(schema, { ...DEFAULTS, ...initialValues });
   const [submitError, setSubmitError] = React.useState<string | undefined>();
+  // Controlled active name tab so we can auto-jump to a tab that has a
+  // validation error after a failed submit.
+  const [activeNameTab, setActiveNameTab] = React.useState<'en' | 'sv' | 'fi' | 'ja'>('en');
+  // Field keys that failed the last validation pass. Drives the global
+  // "fix these" summary at the bottom of the form.
+  const [invalidFieldKeys, setInvalidFieldKeys] = React.useState<string[]>([]);
 
   const handleSubmit = async (
     event: React.FormEvent<HTMLFormElement>,
@@ -103,12 +138,34 @@ export function OrganisationForm({
     event.preventDefault();
     setSubmitError(undefined);
     const result = form.validate();
-    if (!result.ok) return;
+    if (!result.ok) {
+      const keys = Object.keys(result.errors);
+      setInvalidFieldKeys(keys);
+
+      // If the failure is on a name field, jump to its tab so the user can
+      // see the inline error message and fix it.
+      const firstNameTab = NAME_TABS.find((tab) => keys.includes(NAME_TAB_FIELD[tab]));
+      if (firstNameTab) {
+        setActiveNameTab(firstNameTab);
+      }
+      return;
+    }
+    setInvalidFieldKeys([]);
     try {
       await onSubmit(result.data as CreateOrganisationInput | UpdateOrganisationInput);
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : 'Submit failed');
     }
+  };
+
+  // Label resolver for the global "fix these fields" summary. Falls back to
+  // the raw key if a translation is missing so we never render an empty list.
+  const fieldLabel = (key: string): string => {
+    if (key in FIELD_LABEL_KEYS) {
+      const labelKey = FIELD_LABEL_KEYS[key as keyof typeof FIELD_LABEL_KEYS];
+      return t(`admin.organisations.fields.${labelKey}`, { defaultValue: labelKey });
+    }
+    return key;
   };
 
   const typeValue = (form.values.type as string | undefined) ?? 'club';
@@ -221,12 +278,25 @@ export function OrganisationForm({
         <Label>
           {t('admin.organisations.fields.names', { defaultValue: 'Names' })}
         </Label>
-        <Tabs defaultValue="en">
+        <Tabs value={activeNameTab} onValueChange={(v) => setActiveNameTab(v as NameTab)}>
           <TabsList>
-            <TabsTrigger value="en">EN</TabsTrigger>
-            <TabsTrigger value="sv">SV</TabsTrigger>
-            <TabsTrigger value="fi">FI</TabsTrigger>
-            <TabsTrigger value="ja">JA</TabsTrigger>
+            {NAME_TABS.map((tab) => {
+              const fieldKey = NAME_TAB_FIELD[tab];
+              const hasError = Boolean(form.errors[fieldKey]);
+              return (
+                <TabsTrigger key={tab} value={tab}>
+                  <span className="inline-flex items-center gap-1">
+                    {tab.toUpperCase()}
+                    {hasError ? (
+                      <span
+                        aria-label={t('admin.organisations.errors.tabInvalid', { defaultValue: 'has errors' })}
+                        className="inline-block size-1.5 rounded-full bg-destructive"
+                      />
+                    ) : null}
+                  </span>
+                </TabsTrigger>
+              );
+            })}
           </TabsList>
           <TabsContent value="en">
             <Input
@@ -317,6 +387,15 @@ export function OrganisationForm({
         />
         <FormMessage message={form.errors.headInstructorId} />
       </FormField>
+
+      {invalidFieldKeys.length > 0 ? (
+        <FormMessage
+          message={t('admin.organisations.errors.validationSummary', {
+            defaultValue: 'Please complete required fields: {{fields}}',
+            fields: invalidFieldKeys.map(fieldLabel).join(', '),
+          })}
+        />
+      ) : null}
 
       <FormMessage message={submitError} />
 

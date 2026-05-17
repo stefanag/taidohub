@@ -74,7 +74,9 @@
       "errors": {
         "hasChildren": "This organisation still has {{count}} child(ren). Reparent or delete them first.",
         "invalidParent": "That parent isn't allowed for this type.",
-        "cycle": "Move would create a cycle."
+        "cycle": "Move would create a cycle.",
+        "tabInvalid": "has errors",
+        "validationSummary": "Please complete required fields: {{fields}}"
       }
     },
     "auditLog": {

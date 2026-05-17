@@ -74,7 +74,9 @@
       "errors": {
         "hasChildren": "Tällä organisaatiolla on vielä {{count}} alaorganisaatio(ta). Siirrä tai poista ne ensin.",
         "invalidParent": "Tämä vanhempi ei ole sallittu tälle tyypille.",
-        "cycle": "Siirto loisi syklin."
+        "cycle": "Siirto loisi syklin.",
+        "tabInvalid": "sisältää virheitä",
+        "validationSummary": "Täytä pakolliset kentät: {{fields}}"
       }
     },
     "auditLog": {
