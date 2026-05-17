@@ -37,6 +37,7 @@ export function buildOpenApiDocument(
     .addTag('auth')
     .addTag('users')
     .addTag('organisations')
+    .addTag('audit-log')
     .addTag('health')
     .build();
 

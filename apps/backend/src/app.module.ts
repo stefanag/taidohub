@@ -8,6 +8,7 @@ import { AppConfigModule } from './config/config.module.js';
 import { AbilityModule } from './infrastructure/ability/ability.module.js';
 import { InfraAuthModule } from './infrastructure/auth/auth.module.js';
 import { DatabaseModule } from './infrastructure/database/database.module.js';
+import { AuditLogModule } from './modules/audit-log/audit-log.module.js';
 import { AuthDocsModule } from './modules/auth/auth.module.js';
 import { HealthModule } from './modules/health/health.module.js';
 import { OrganisationsModule } from './modules/organisations/organisations.module.js';
@@ -23,6 +24,7 @@ import { UsersModule } from './modules/users/users.module.js';
     HealthModule,
     UsersModule,
     OrganisationsModule,
+    AuditLogModule,
   ],
   providers: [
     { provide: APP_PIPE, useClass: ZodValidationPipe },
