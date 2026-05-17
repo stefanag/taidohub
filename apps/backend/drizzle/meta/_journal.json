@@ -43,6 +43,13 @@
       "when": 1778938024666,
       "tag": "0005_free_toad_men",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1779030642788,
+      "tag": "0006_flat_thor",
+      "breakpoints": true
     }
   ]
 }
