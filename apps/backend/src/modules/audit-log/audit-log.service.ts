@@ -9,13 +9,13 @@ import type {
 
 import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
-import { type DrizzleDb } from '../../infrastructure/database/client.js';
+import { type DrizzleExecutor } from '../../infrastructure/database/client.js';
 import { type DbAuditLog } from '../../infrastructure/database/schema/index.js';
 
 import { AuditLogRepository } from './audit-log.repository.js';
 
 export interface RecordInput {
-  tx: DrizzleDb;
+  tx: DrizzleExecutor;
   entityType: string;
   entityId: string;
   action: AuditLogAction;

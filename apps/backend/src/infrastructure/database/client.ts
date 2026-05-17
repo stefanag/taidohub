@@ -19,5 +19,16 @@ export function createDrizzleClient(databaseUrl: string) {
 
 export type DrizzleDb = ReturnType<typeof createDrizzleClient>;
 
+/**
+ * The argument Drizzle hands to a `db.transaction(async (tx) => …)` callback.
+ * Structurally compatible with `DrizzleDb` for query-builder calls (insert,
+ * update, delete, select), but lacks `$client`, so we expose this as a separate
+ * narrower type for code that runs inside a transaction.
+ */
+export type DrizzleTx = Parameters<Parameters<DrizzleDb['transaction']>[0]>[0];
+
+/** Either the root db or a transaction handle — accepted by repo methods. */
+export type DrizzleExecutor = DrizzleDb | DrizzleTx;
+
 /** DI token for injecting the Drizzle client into providers. */
 export const DRIZZLE = Symbol('DRIZZLE');

@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import type { ListAuditLogQuery } from '@repo/contracts/audit-log';
 import { and, count, desc, eq, gte, lte, type SQL } from 'drizzle-orm';
 
-import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
+import { DRIZZLE, type DrizzleDb, type DrizzleExecutor } from '../../infrastructure/database/client.js';
 import { auditLog, type DbAuditLog, type DbNewAuditLog } from '../../infrastructure/database/schema/index.js';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class AuditLogRepository {
    * back to the injected `db` (only useful for tests that don't care about
    * transactional consistency).
    */
-  async insert(input: DbNewAuditLog, tx?: DrizzleDb): Promise<void> {
+  async insert(input: DbNewAuditLog, tx?: DrizzleExecutor): Promise<void> {
     await (tx ?? this.db).insert(auditLog).values(input);
   }
 

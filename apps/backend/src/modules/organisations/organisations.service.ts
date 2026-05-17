@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   ForbiddenException,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -18,7 +19,9 @@ import type {
 
 import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
+import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
 import { type DbOrganisation } from '../../infrastructure/database/schema/index.js';
+import { AuditLogService } from '../audit-log/audit-log.service.js';
 
 import { OrganisationsRepository } from './organisations.repository.js';
 
@@ -27,6 +30,8 @@ export class OrganisationsService {
   constructor(
     private readonly repo: OrganisationsRepository,
     private readonly abilities: AbilityFactory,
+    private readonly audit: AuditLogService,
+    @Inject(DRIZZLE) private readonly db: DrizzleDb,
   ) {}
 
   async list(query: ListOrganisationsQuery, user: AuthenticatedUser | null): Promise<ListOrganisationsResponse> {
@@ -44,8 +49,20 @@ export class OrganisationsService {
   async create(input: CreateOrganisationInput, user: AuthenticatedUser): Promise<Organisation> {
     this.assertCan(user, 'create');
     await this.validateHierarchy(input.type, input.parentId);
-    const row = await this.repo.create(input);
-    return this.toApi(row);
+    return this.db.transaction(async (tx) => {
+      const row = await this.repo.create(input, tx);
+      const after = this.toApi(row);
+      await this.audit.record({
+        tx,
+        entityType: 'organisation',
+        entityId: row.id,
+        action: 'create',
+        userId: user.id,
+        before: null,
+        after,
+      });
+      return after;
+    });
   }
 
   async update(id: string, input: UpdateOrganisationInput, user: AuthenticatedUser): Promise<Organisation> {
@@ -59,21 +76,53 @@ export class OrganisationsService {
       }
     }
 
-    const row = await this.repo.update(id, input);
-    if (!row) throw new NotFoundException(this.notFound(id));
-    return this.toApi(row);
+    return this.db.transaction(async (tx) => {
+      const row = await this.repo.update(id, input, tx);
+      if (!row) throw new NotFoundException(this.notFound(id));
+      const before = this.toApi(existing);
+      const after = this.toApi(row);
+
+      // Pure reparent → action = 'move'; otherwise 'update'.
+      const inputKeys = Object.keys(input);
+      const isOnlyParentChange =
+        inputKeys.length === 1 &&
+        inputKeys[0] === 'parentId' &&
+        input.parentId !== existing.parentId;
+
+      await this.audit.record({
+        tx,
+        entityType: 'organisation',
+        entityId: row.id,
+        action: isOnlyParentChange ? 'move' : 'update',
+        userId: user.id,
+        before,
+        after,
+      });
+      return after;
+    });
   }
 
   async delete(id: string, user: AuthenticatedUser): Promise<void> {
     this.assertCan(user, 'delete');
-    await this.requireById(id);
+    const existing = await this.requireById(id);
     const childCount = await this.repo.countChildren(id);
     if (childCount > 0) {
       throw new ConflictException({
         error: { code: 'HAS_CHILDREN', message: `Organisation ${id} still has ${childCount} child(ren).` },
       });
     }
-    await this.repo.delete(id);
+    await this.db.transaction(async (tx) => {
+      await this.repo.delete(id, tx);
+      await this.audit.record({
+        tx,
+        entityType: 'organisation',
+        entityId: id,
+        action: 'delete',
+        userId: user.id,
+        before: this.toApi(existing),
+        after: null,
+      });
+    });
   }
 
   private async validateHierarchy(type: OrganisationType, parentId: string | null): Promise<void> {
