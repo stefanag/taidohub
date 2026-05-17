@@ -1,9 +1,9 @@
 import { describe, expect, it, vi, afterEach } from 'vitest';
 
 // better-auth's React client is a Proxy — replace authClient via module-mock.
-vi.mock('@/features/auth-by-email/api/auth.api', async (orig) => {
-  const actual =
-    await orig<typeof import('@/features/auth-by-email/api/auth.api')>();
+// Mock targets the feature barrel (matches the SUT's import path).
+vi.mock('@/features/auth-by-email', async (orig) => {
+  const actual = await orig<typeof import('@/features/auth-by-email')>();
   return {
     ...actual,
     authClient: {
@@ -13,7 +13,7 @@ vi.mock('@/features/auth-by-email/api/auth.api', async (orig) => {
   };
 });
 
-import { authClient } from '@/features/auth-by-email/api/auth.api';
+import { authClient } from '@/features/auth-by-email';
 
 type GetSessionMock = ReturnType<typeof vi.fn>;
 

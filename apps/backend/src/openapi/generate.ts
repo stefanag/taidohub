@@ -17,6 +17,18 @@
  */
 import 'reflect-metadata';
 
+// Env stubs MUST run before any `@/` import that pulls in `AppModule`.
+// `AppConfigModule` calls `NestConfigModule.forRoot({...})` at decorator
+// time, which captures `process.env` and the validate lambda immediately.
+// Setting these later (e.g. inside main()) would happen after the snapshot
+// and Zod would reject the missing keys at Nest bootstrap.
+process.env.NODE_ENV ??= 'development';
+process.env.WEB_ORIGIN ??= 'http://localhost:8080';
+process.env.DATABASE_URL ??= 'postgresql://placeholder:placeholder@localhost:5432/placeholder';
+process.env.DIRECT_URL ??= process.env.DATABASE_URL;
+process.env.BETTER_AUTH_SECRET ??= 'placeholder-placeholder-placeholder-placeholder';
+process.env.BETTER_AUTH_URL ??= 'http://localhost:3001';
+
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
@@ -36,20 +48,13 @@ async function main(): Promise<void> {
   const outDir = resolve(process.cwd(), '../../packages/contracts/openapi');
   mkdirSync(outDir, { recursive: true });
 
-  // We construct the app without listening. Skip strict env validation in case
-  // the developer hasn't filled in every secret — the doc generator does not
-  // need a real database to introspect routes.
-  process.env.NODE_ENV ??= 'development';
-  process.env.WEB_ORIGIN ??= 'http://localhost:8080';
-  process.env.DATABASE_URL ??= 'postgresql://placeholder:placeholder@localhost:5432/placeholder';
-  process.env.DIRECT_URL ??= process.env.DATABASE_URL;
-  process.env.BETTER_AUTH_SECRET ??= 'placeholder-placeholder-placeholder-placeholder';
-  process.env.BETTER_AUTH_URL ??= 'http://localhost:3001';
-
   const env: Env = EnvSchema.parse(process.env);
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    logger: false,
+    // Keep error/warn on so a bootstrap failure surfaces. The script
+    // exits silently otherwise — Nest's ExceptionHandler swallows the
+    // stack when `logger: false`.
+    logger: ['error', 'warn'],
   });
   app.setGlobalPrefix('api');
   await app.init();

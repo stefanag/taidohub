@@ -5,9 +5,10 @@ import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { signOut, useSession } from '@/features/auth-by-email';
-import { AbilityContext } from '@/shared/lib/casl/ability-context';
-import { Button } from '@/shared/ui';
+import { LocaleSwitcher } from '@/features/locale-switcher';
+import { AbilityContext } from '@/shared/lib/casl';
 import {
+  Button,
   Sidebar,
   SidebarContent,
   SidebarFooter,
@@ -19,8 +20,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-} from '@/shared/ui/sidebar';
-import { LocaleSwitcher } from '@/widgets/locale-switcher';
+} from '@/shared/ui';
 
 // Static nav config. Each entry is a route the authenticated user can reach
 // from the sidebar. When new sections land, add a row here.

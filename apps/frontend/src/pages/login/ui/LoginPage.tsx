@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/shared/ui';
-import { LocaleSwitcher } from '@/widgets/locale-switcher';
+import { LocaleSwitcher } from '@/features/locale-switcher';
 
 /**
  * Sign-in page. Wraps the `LoginForm` feature in a centered Card and

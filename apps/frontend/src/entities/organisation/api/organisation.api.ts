@@ -9,7 +9,7 @@ import {
 } from '@repo/contracts/organisations';
 import { OrganisationsRoutes } from '@repo/contracts/routes';
 
-import { httpClient } from '@/shared/api/httpClient';
+import { httpClient } from '@/shared/api';
 
 /**
  * Network surface for the Organisation entity.

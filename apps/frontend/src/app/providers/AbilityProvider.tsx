@@ -1,8 +1,7 @@
 import * as React from 'react';
 
 import { useSession } from '@/features/auth-by-email';
-import { AbilityContext } from '@/shared/lib/casl/ability-context';
-import { defineAbilityFor, type AbilityUser } from '@/shared/lib/casl/defineAbilityFor';
+import { AbilityContext, defineAbilityFor, type AbilityUser } from '@/shared/lib/casl';
 
 export interface AbilityProviderProps {
   children: React.ReactNode;
