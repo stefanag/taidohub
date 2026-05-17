@@ -1,6 +1,7 @@
 import { Global, Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 
+import { AuditLogAbilityRules } from '../../modules/audit-log/audit-log.abilities.js';
 import { OrganisationsAbilityRules } from '../../modules/organisations/organisations.abilities.js';
 import { UsersAbilityRules } from '../../modules/users/users.abilities.js';
 
@@ -23,6 +24,7 @@ import { AbilityGuard } from './ability.guard.js';
 @Global()
 @Module({
   providers: [
+    AuditLogAbilityRules,
     OrganisationsAbilityRules,
     UsersAbilityRules,
     AbilityFactory,
