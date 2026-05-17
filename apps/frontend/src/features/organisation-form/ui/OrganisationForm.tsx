@@ -31,6 +31,7 @@ import {
   TabsList,
   TabsTrigger,
 } from '@/shared/ui/tabs.js';
+import { AuditLogTable } from '@/widgets/audit-log-table';
 
 const ORG_TYPES = [
   'international_federation',
@@ -63,7 +64,7 @@ const TYPE_LABEL_KEYS: Record<(typeof ORG_TYPES)[number], string> = {
 export interface OrganisationFormProps {
   mode: 'create' | 'edit';
   /** Pre-populated values for edit mode (or initial defaults in create). */
-  initialValues?: Partial<CreateOrganisationInput>;
+  initialValues?: Partial<CreateOrganisationInput> & { id?: string };
   /** Other orgs (excluding this one + its descendants in edit mode). Used to populate the parent picker. */
   parentCandidates: Organisation[];
   onSubmit: (
@@ -114,7 +115,7 @@ export function OrganisationForm({
   const countryValue = (form.values.country as string | undefined) ?? 'SWE';
   const parentValue = (form.values.parentId as string | null | undefined) ?? null;
 
-  return (
+  const formBody = (
     <form onSubmit={handleSubmit} className="space-y-4" noValidate>
       {/* Type */}
       <FormField>
@@ -326,4 +327,32 @@ export function OrganisationForm({
       </Button>
     </form>
   );
+
+  if (mode === 'edit' && initialValues?.id) {
+    return (
+      <Tabs defaultValue="details">
+        <TabsList>
+          <TabsTrigger value="details">
+            {t('admin.auditLog.tabs.details', { defaultValue: 'Details' })}
+          </TabsTrigger>
+          <TabsTrigger value="activity">
+            {t('admin.auditLog.tabs.activity', { defaultValue: 'Activity' })}
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="details">{formBody}</TabsContent>
+        <TabsContent value="activity">
+          <AuditLogTable
+            query={{
+              entityType: 'organisation',
+              entityId: initialValues.id,
+              page: 1,
+              perPage: 25,
+            }}
+          />
+        </TabsContent>
+      </Tabs>
+    );
+  }
+
+  return formBody;
 }
