@@ -25,7 +25,8 @@
   },
   "nav": {
     "dashboard": "Översikt",
-    "adminOrganisations": "Organisationer"
+    "adminOrganisations": "Organisationer",
+    "adminAuditLog": "Granskningslogg"
   },
   "dashboard": {
     "title": "Översikt"
@@ -74,6 +75,45 @@
         "hasChildren": "Den här organisationen har fortfarande {{count}} underorganisation(er). Flytta eller ta bort dem först.",
         "invalidParent": "Den föräldern är inte tillåten för den här typen.",
         "cycle": "Flytten skulle skapa en cykel."
+      }
+    },
+    "auditLog": {
+      "title": "Granskningslogg",
+      "empty": "Inga granskningsposter än.",
+      "actions": {
+        "created": "skapad",
+        "updated": "uppdaterad",
+        "deleted": "borttagen",
+        "moved": "flyttad"
+      },
+      "filters": {
+        "entityType": "Entitetstyp",
+        "userId": "Användar-id",
+        "action": "Åtgärd",
+        "from": "Från",
+        "to": "Till",
+        "clear": "Rensa",
+        "allEntities": "Alla entiteter",
+        "allActions": "Alla åtgärder"
+      },
+      "entityTypes": {
+        "organisation": "Organisation"
+      },
+      "columns": {
+        "when": "När",
+        "who": "Vem",
+        "entity": "Entitet",
+        "action": "Åtgärd",
+        "diff": "Skillnad"
+      },
+      "tabs": {
+        "details": "Detaljer",
+        "activity": "Aktivitet"
+      },
+      "diff": {
+        "created": "skapade",
+        "changed": "ändrade",
+        "removed": "borttagna"
       }
     }
   },

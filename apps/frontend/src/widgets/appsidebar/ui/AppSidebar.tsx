@@ -1,5 +1,5 @@
 import { Link, useNavigate, useRouterState } from '@tanstack/react-router';
-import { Building2, LayoutDashboard, LogOut } from 'lucide-react';
+import { Building2, History, LayoutDashboard, LogOut } from 'lucide-react';
 import * as React from 'react';
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -83,6 +83,17 @@ export function AppSidebar(): React.ReactElement {
                     <Link to="/admin/organisations">
                       <Building2 />
                       <span>{t('nav.adminOrganisations')}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={pathname.startsWith('/admin/audit-log')}
+                  >
+                    <Link to="/admin/audit-log">
+                      <History />
+                      <span>{t('nav.adminAuditLog')}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
