@@ -2,7 +2,11 @@ import { ChevronDown, ChevronRight, MoreHorizontal } from 'lucide-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import type { IsoAlpha3 } from '@repo/contracts/organisations';
+
 import {
+  countryAlpha2,
+  countryName,
   displayName,
   type Organisation,
   type OrganisationNode,
@@ -96,7 +100,18 @@ function TreeRow({ node, depth, onEdit, onMove, onDelete }: TreeRowProps): React
           {t(`admin.organisations.types.${typeKey}`, { defaultValue: node.type })}
         </Badge>
         {node.country ? (
-          <Badge variant="secondary" className="font-mono text-xs">{node.country}</Badge>
+          <Badge variant="secondary" className="inline-flex items-center gap-1 font-mono text-xs">
+            {(() => {
+              const alpha2 = countryAlpha2(node.country as IsoAlpha3);
+              return alpha2 ? (
+                <span
+                  className={`fi fi-${alpha2}`}
+                  aria-label={countryName(node.country as IsoAlpha3, i18n.language)}
+                />
+              ) : null;
+            })()}
+            {node.country}
+          </Badge>
         ) : null}
 
         <DropdownMenu>

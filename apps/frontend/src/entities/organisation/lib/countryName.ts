@@ -58,3 +58,12 @@ export function countryName(code: IsoAlpha3, locale: string): string {
   if (!alpha2) return code;
   return getDisplayNames(locale).of(alpha2) ?? code;
 }
+
+/**
+ * ISO 3166-1 alpha-2 code (lowercase) for the given alpha-3, or `null`
+ * if not mapped. Used to build `flag-icons` classnames like `fi fi-se`.
+ */
+export function countryAlpha2(code: IsoAlpha3): string | null {
+  const alpha2 = ALPHA3_TO_ALPHA2[code];
+  return alpha2 ? alpha2.toLowerCase() : null;
+}
