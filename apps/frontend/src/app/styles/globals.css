@@ -80,6 +80,19 @@
   --color-outline: #6b7a94;
   --color-outline-variant: #bcc5d4;
 
+  /* ── Belt colours (DESIGN.md §10) ────────────────────────────────────────── */
+  /* Used by `GreetingHeader` and related rank indicators. These are
+     identity colours — they intentionally sit outside the brand
+     three-voice palette and must NOT be reused for general UI accents. */
+  --color-belt-yellow: #FFD700;
+  --color-belt-orange: #FF8C00;
+  --color-belt-purple: #800080;
+  --color-belt-green: #228B22;
+  --color-belt-blue: #1E3A8A;
+  --color-belt-brown: #8B4513;
+  --color-belt-black: #111827;
+  --color-belt-default: #9CA3AF;
+
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));

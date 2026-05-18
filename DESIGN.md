@@ -19,7 +19,7 @@ Concrete principles flowing from this:
 2. **Japanese aesthetic.** Kanji displayed prominently. Serif italic for quote passages. Generous line-height on Japanese passages.
 3. **Readable hierarchy.** Large headlines, muted secondary text, clear section numbering, weight-driven separation rather than dividers.
 4. **Three-voice palette.** Deep navy primary ("The Authority"), bright gold secondary ("The Energy"), slate-blue tertiary ("The Atmosphere"). Surfaces are navy-tinted neutrals so the system reads cohesive.
-5. **Sharp by default, restrained roundedness when softening.** 2 px base radius; 4 px for buttons and standard cards. Never large rounded corners.
+5. **Sharp by default, restrained roundedness when softening.** 4 px base radius (cards, chips, buttons); 6–8 px when a container is elevated or modal; full pill only for chips and avatars. Never sloppy, oversized corners.
 6. **Tonal layering over outlines.** Section boundaries come from background-color shifts and whitespace first; borders are reserved for accent and accessibility fallback (see §4 and §5).
 7. **Asymmetric where it matters.** Hero rows and feature blocks use intentional column ratios (3+2, 8+4) over uniform grids. Repeating content cards may use uniform grids (3+3+3) — the rule is *intentional sizing*, not "no grids".
 
@@ -98,10 +98,10 @@ Navy-tinted neutrals — never raw grays.
 | Variable | Stack | Usage |
 |---|---|---|
 | `font-headline` | Manrope + Noto Sans JP | Headings, card titles, nav branding |
-| `font-body` | Inter + Noto Sans JP | Body text, descriptions, form labels |
-| `font-label` | Inter | Compact labels, badges, stat tiles |
+| `font-body` | Manrope + Noto Sans JP | Body text, descriptions, form labels |
+| `font-label` | Space Grotesk | Compact labels, badges, stat tiles, technical/metadata strings |
 
-Japanese characters always render in **Noto Sans JP** (included as fallback in all stacks).
+Japanese characters render in **Noto Sans JP** wherever the stack falls back to it (i.e. `font-headline` and `font-body`). Pure-label surfaces (`font-label`) intentionally stay Latin-only — they're not where Japanese text belongs.
 
 ### Type scale (Tailwind classes in use)
 | Class | Usage |
@@ -124,39 +124,42 @@ Japanese characters always render in **Noto Sans JP** (included as fallback in a
 ```
 Applied on large kanji headings and quote passages.
 
-### Future direction (not yet implemented)
+### Three voices, one rule
 
-A typographic third voice — **Space Grotesk** — is on the roadmap as a "technical label" font for overlines, metadata strings, and stat tile units. It would pair against Manrope's humanist clarity for editorial contrast. Adding it requires a Tailwind theme + index.css change; until that lands, `font-label` (Inter) covers the same role.
+Manrope is the humanist anchor (headlines + body); Space Grotesk is the technical foil for labels, overlines, and stat-tile units; Noto Sans JP carries Japanese passages. The split exists so editorial contrast comes from typographic *role* — when you reach for `font-label`, the type immediately reads as metadata, not as continuation of body copy.
 
 ---
 
 ## 4. Spacing, Radius, Layout
 
-### Border radius (5-level scale)
+### Border radius scale
 | Level | Variable | Value | Usage |
 |---|---|---|---|
 | 0 | (no variable) | 0 px | Extra-crisp surfaces; rare |
-| 1 | `--radius` | 2 px | Default (`rounded-sm`) — cards, chips, eyebrows |
-| 2 | `--radius-lg` | 4 px | Buttons, slightly elevated elements |
-| 3 | `--radius-xl` | 8 px | Modal-type containers |
-| 4 | `--radius-full` | 12 px | Pills, avatars |
+| 1 | `--radius-xs` / `--radius-sm` | 4 px | Default — cards, chips, buttons, inputs, eyebrows |
+| 2 | `--radius-md` | 6 px | Slightly elevated containers |
+| 3 | `--radius-lg` | 8 px | Modal-type containers |
+| 4 | `--radius-xl` | 12 px | Larger modals, content cards |
+| Pill | `--radius-full` | 9999 px | Pills, avatars, fully-rounded toggles |
 
-The design deliberately avoids large rounded corners. Default is Level 1; reach for higher only when softening matters.
+The design deliberately avoids large rounded corners. Default is Level 1 (Tailwind's `rounded-xs` / `rounded-sm` both resolve to 4 px); reach for higher only when softening matters. Pill is for fully-circular shapes only.
 
 ### Spacing & layout
 
 - **Page width.** Content pages wrapped in `max-w-4xl mx-auto` for a consistent column.
 - **Vertical rhythm.** `space-y-5` for stacked sections; `gap-4` / `gap-8` for grid gaps.
 - **Asymmetric hero rows.** When the page has a feature row, prefer ratios like `grid-cols-5` split as `col-span-3` + `col-span-2`, or 8+4 — not uniform 6+6. Repeating content cards (StatTile, HokeiCard) use uniform grids; that's fine.
-- **Sidebar.** Fixed left, ~`w-60`. Content area offset with `ml-60`. Background is `bg-slate-300` (light neutral — sits visually behind content).
+- **Sidebar.** Built on shadcn's `<SidebarProvider>` + `<Sidebar>` primitives ([`shared/ui/sidebar.tsx`](apps/frontend/src/shared/ui/sidebar.tsx), composed in [`widgets/appsidebar/`](apps/frontend/src/widgets/appsidebar/)). Width is driven by the `--sidebar-width` CSS variable (currently 48 rem expanded, 3 rem icon-rail). The provider lays itself out beside the main content via CSS grid — no manual `ml-*` offset on the content area.
 - **"Ma" rule.** When a section feels crowded, prioritise whitespace over dividers.
 
 ### Sidebar specifics
 
-- Logo: `text-primary font-headline font-extrabold text-xl tracking-tight`
-- Active nav item: `bg-primary text-white rounded-sm`
-- Inactive nav item: `text-on-surface-variant hover:bg-surface-container`
-- Bottom section: Settings + Support links, small `text-[10px]` labels
+- **Width.** `SIDEBAR_WIDTH` in [`shared/ui/sidebar.tsx`](apps/frontend/src/shared/ui/sidebar.tsx) is the single source of truth; mobile (`SIDEBAR_WIDTH_MOBILE`) and the collapsed rail (`SIDEBAR_WIDTH_ICON`) are tuned independently.
+- **Logo.** `<SidebarHeader>` carries the `taidohub` wordmark in `font-headline text-xl font-extrabold tracking-tight`.
+- **Nav.** Items render via shadcn's `<SidebarMenuButton>` with `isActive` driven from the current route. Active/inactive styling comes from the primitive — don't reach in with bespoke classes for these states.
+- **Admin group.** Wrapped in a CASL `ability.can('manage', 'Organisation')` gate. Admin-only entries (`/admin/organisations`, `/admin/audit-log`) are grouped under a `<SidebarGroupLabel>`.
+- **Footer.** `<SidebarFooter>` shows the signed-in user's email, the `LocaleSwitcher`, and a `Sign out` button (`variant="outline"`, `size="sm"`, leading `LogOut` icon).
+- **Rail.** `<SidebarRail>` is included so the collapse/expand affordance is always reachable.
 
 ---
 
@@ -403,18 +406,20 @@ The frontend follows Feature-Sliced Design ([`apps/frontend/src/`](apps/frontend
 
 ## 10. Belt Color Mapping
 
-Used in `GreetingHeader` for the rank-dot indicator.
+Belt swatches are identity colours: they represent ranks, not brand voice, and intentionally sit outside the three-voice palette in §2. Defined as tokens in [`globals.css`](apps/frontend/src/app/styles/globals.css) so consumers reference them by name (`bg-belt-yellow`, `text-belt-blue`, …) rather than re-typing the hex. Used by `GreetingHeader` for the rank-dot indicator and any future belt-aware UI.
 
-| Belt | CSS color |
-|---|---|
-| yellow | `#FFD700` |
-| orange | `#FF8C00` |
-| purple | `#800080` |
-| green | `#228B22` |
-| blue | `#1E3A8A` |
-| brown | `#8B4513` |
-| black | `#111827` |
-| _(default)_ | `#9CA3AF` (gray) |
+**Do not** reuse these tokens for general accents — gold for "highlight," brown for "warmth", etc. — that's what `secondary` and friends are for.
+
+| Belt | Token | Hex |
+|---|---|---|
+| yellow | `--color-belt-yellow` | `#FFD700` |
+| orange | `--color-belt-orange` | `#FF8C00` |
+| purple | `--color-belt-purple` | `#800080` |
+| green | `--color-belt-green` | `#228B22` |
+| blue | `--color-belt-blue` | `#1E3A8A` |
+| brown | `--color-belt-brown` | `#8B4513` |
+| black | `--color-belt-black` | `#111827` |
+| _(default)_ | `--color-belt-default` | `#9CA3AF` |
 
 ---
 
