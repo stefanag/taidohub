@@ -208,41 +208,43 @@ When using photographic imagery (athletic action, etc.), images don't have to be
 
 ## 7. Icons
 
-All icons use **Material Symbols Outlined** loaded from Google Fonts.
+All icons use **Lucide** via `lucide-react`. Icons are React components, not glyph fonts — import per icon and size with the `size` prop (defaults to 24 px, matching Material Symbols' default optical size). Stroke width defaults to 2; nudge to 1.5 for small UI (badges, inline indicators) when it feels too heavy.
 
-Default variation settings:
-```css
-.material-symbols-outlined {
-  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-}
+```tsx
+import { LayoutDashboard } from 'lucide-react';
+<LayoutDashboard className="size-4" aria-hidden />
 ```
 
-Icons used throughout the app:
+Pair Lucide with the surrounding text colour (`text-on-surface`, `text-primary`, etc.) rather than fixed greys. For decorative icons set `aria-hidden`; for icon-only buttons provide an `aria-label`.
 
-| Icon name | Location |
+### Target icon set (component → Lucide name)
+
+Where a martial-art-specific Material Symbol had no direct Lucide analogue, the table picks the closest neutral equivalent so the abstraction stays readable.
+
+| Location | Lucide component |
 |---|---|
-| `dashboard` | Sidebar nav |
-| `history` | Sidebar nav |
-| `military_tech` | Sidebar nav (Requirements) |
-| `person` | Sidebar nav (Profile) |
-| `admin_panel_settings` | Sidebar nav (Permissions) |
-| `fitness_center` | Sidebar nav + Kihon section |
-| `self_improvement` | Hokei section + General session type |
-| `sports_kabaddi` | Jissen section + session type |
-| `swords` | Kobo section |
-| `accessibility_new` | Teknik section |
-| `directions_walk` | Unsoku section |
-| `analytics` | Progress card |
-| `award_star` | GradeCard background decoration |
-| `calendar_month` | ExamCountdownCard |
-| `location_on` | ExamCountdownCard dojo |
-| `schedule` | ExamCountdownCard time |
-| `sports_martial_arts` | RecentWorkouts empty state |
-| `bedtime` / `bed` | SleepCard |
-| `sentiment_very_dissatisfied` … `sentiment_very_satisfied` | Sleep quality |
-| `play_circle` | HokeiCard |
-| `check_box` / `check_box_outline_blank` | TechniqueRow completion |
-| `progress_activity` | LoadingSpinner (animated) |
+| Sidebar nav — Dashboard | `LayoutDashboard` |
+| Sidebar nav — Historik | `History` |
+| Sidebar nav — Krav (Requirements) | `Award` |
+| Sidebar nav — Profil | `User` |
+| Sidebar nav — Behörigheter | `ShieldCheck` |
+| Sidebar nav — Tekniker / Kihon section | `Dumbbell` |
+| Hokei section + general session type | `Activity` |
+| Jissen section + session type | `Swords` |
+| Kobo section | `Swords` |
+| Teknik section | `Accessibility` |
+| Unsoku section | `Footprints` |
+| Progress card | `TrendingUp` |
+| GradeCard background decoration | `Trophy` |
+| ExamCountdownCard — date | `CalendarDays` |
+| ExamCountdownCard — dojo | `MapPin` |
+| ExamCountdownCard — time | `Clock` |
+| RecentWorkouts empty state | `Activity` |
+| SleepCard | `Moon` (sleeping), `Bed` (logged session) |
+| Sleep quality scale | `Frown` → `Meh` → `Smile` |
+| HokeiCard | `PlayCircle` |
+| TechniqueRow completion | `CheckSquare` (done) / `Square` (todo) |
+| LoadingSpinner (animated) | `Loader2` with `animate-spin` |
 
 ---
 
@@ -258,7 +260,7 @@ The frontend follows Feature-Sliced Design ([`apps/frontend/src/`](apps/frontend
 ### Shared
 | Component | Target slot | Props | Description |
 |---|---|---|---|
-| `LoadingSpinner` | `apps/frontend/src/shared/ui/` | — | Centered animated icon (Lucide today; Material Symbols if §7 lands) |
+| `LoadingSpinner` | `apps/frontend/src/shared/ui/` | — | Centered animated `Loader2` (Lucide) with `animate-spin` |
 | `ProtectedRoute` | `apps/frontend/src/shared/ui/` | `children`, `requiredPermission?` | Auth guard, redirects to `/login` or `/dashboard` |
 
 ### Dashboard (target slot: `apps/frontend/src/widgets/dashboard-*/`)
@@ -424,12 +426,12 @@ Used in `GreetingHeader` for the rank-dot indicator.
 
 Sidebar nav order:
 
-1. Dashboard (`dashboard`)
-2. Historik (`history`)
-3. Krav (`military_tech`)
-4. Profil (`person`)
-5. Behörigheter (`admin_panel_settings`)
-6. Tekniker (`fitness_center`)
+1. Dashboard (`LayoutDashboard`)
+2. Historik (`History`)
+3. Krav (`Award`)
+4. Profil (`User`)
+5. Behörigheter (`ShieldCheck`)
+6. Tekniker (`Dumbbell`)
 
 Bottom of sidebar: Settings, Support (smaller, muted).
 
@@ -491,7 +493,7 @@ border-l-2 border-primary/20
 - **Use "Ma" (intentional space).** If a section feels crowded, prioritise whitespace over dividers.
 - **Tint your neutrals.** All grays and surfaces are tinted with the primary navy seed — never raw Tailwind grays.
 - **Lead with tonal surface shifts.** When marking off a section, change the surface tone before reaching for a border.
-- **Match icons to the domain.** Use the Material Symbols catalogue sparingly and consistently per the §7 table.
+- **Match icons to the domain.** Use the Lucide catalogue sparingly and consistently per the §7 table.
 
 ### Don't
 - **No pure black.** Use the navy-tinted near-blacks (`#191c1d`, `#0f1112`) for text and dark surfaces.
