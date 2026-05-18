@@ -143,7 +143,7 @@ function FilterField({
 }): React.ReactElement {
   return (
     <Label className="space-y-1 block">
-      <span className="text-xs text-muted-foreground">{label}</span>
+      <span className="text-xs text-on-surface-variant">{label}</span>
       {children}
     </Label>
   );

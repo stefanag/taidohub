@@ -82,7 +82,7 @@ function TreeRow({ node, depth, onEdit, onMove, onDelete }: TreeRowProps): React
       aria-selected={false}
     >
       <div
-        className="flex items-center gap-2 rounded-md py-1.5 pr-2 hover:bg-muted/50"
+        className="flex items-center gap-2 rounded-md py-1.5 pr-2 hover:bg-surface-container-low/50"
         style={indent}
       >
         {hasChildren ? (
@@ -90,7 +90,7 @@ function TreeRow({ node, depth, onEdit, onMove, onDelete }: TreeRowProps): React
             type="button"
             aria-label={expanded ? 'Collapse' : 'Expand'}
             onClick={() => setExpanded((v) => !v)}
-            className="flex size-5 items-center justify-center rounded text-muted-foreground hover:text-foreground"
+            className="flex size-5 items-center justify-center rounded text-on-surface-variant hover:text-on-surface"
           >
             {expanded ? <ChevronDown className="size-4" /> : <ChevronRight className="size-4" />}
           </button>

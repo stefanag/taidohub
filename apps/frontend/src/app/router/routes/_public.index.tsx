@@ -11,7 +11,7 @@ function IndexComponent(): React.ReactElement {
   return (
     <main className="container py-16">
       <h1 className="text-4xl font-bold tracking-tight">taidohub</h1>
-      <p className="mt-4 max-w-prose text-muted-foreground">
+      <p className="mt-4 max-w-prose text-on-surface-variant">
         {t('home.tagline')}
       </p>
       <div className="mt-8 flex gap-2">

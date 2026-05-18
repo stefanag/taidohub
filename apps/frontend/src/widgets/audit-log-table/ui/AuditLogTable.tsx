@@ -52,14 +52,14 @@ export function AuditLogTable({ query }: AuditLogTableProps): React.ReactElement
 
   if (isLoading) {
     return (
-      <p className="text-muted-foreground">
+      <p className="text-on-surface-variant">
         {t('common.loading', { defaultValue: 'Loading…' })}
       </p>
     );
   }
   if (isError) {
     return (
-      <p className="text-destructive">
+      <p className="text-error">
         {error instanceof Error
           ? error.message
           : t('common.unknownError', { defaultValue: 'unknown error' })}
@@ -68,7 +68,7 @@ export function AuditLogTable({ query }: AuditLogTableProps): React.ReactElement
   }
   if (!data || data.data.length === 0) {
     return (
-      <p className="text-muted-foreground">
+      <p className="text-on-surface-variant">
         {t('admin.auditLog.empty', { defaultValue: 'No audit entries yet.' })}
       </p>
     );
@@ -76,7 +76,7 @@ export function AuditLogTable({ query }: AuditLogTableProps): React.ReactElement
 
   return (
     <table className="w-full text-sm">
-      <thead className="border-b text-left text-xs uppercase text-muted-foreground">
+      <thead className="border-b text-left text-xs uppercase text-on-surface-variant">
         <tr>
           <th className="w-6" />
           <th className="px-2 py-2">
@@ -130,7 +130,7 @@ function RowAndDetail({ row, expanded, onToggle, locale, t }: RowProps): React.R
 
   return (
     <>
-      <tr className="border-b hover:bg-muted/50">
+      <tr className="border-b hover:bg-surface-container-low/50">
         <td>
           <button
             type="button"
@@ -151,24 +151,24 @@ function RowAndDetail({ row, expanded, onToggle, locale, t }: RowProps): React.R
           </code>
         </td>
         <td className="px-2 py-2">{actionLabel}</td>
-        <td className="px-2 py-2 text-xs text-muted-foreground">
+        <td className="px-2 py-2 text-xs text-on-surface-variant">
           +{diff.created.length} ~{diff.changed.length} -{diff.removed.length}
         </td>
       </tr>
       {expanded ? (
-        <tr className="bg-muted/30">
+        <tr className="bg-surface-container-low/30">
           <td />
           <td colSpan={5} className="px-2 py-3">
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <h4 className="text-xs font-semibold mb-1">before</h4>
-                <pre className="overflow-auto rounded bg-background p-2 text-xs">
+                <pre className="overflow-auto rounded bg-surface-container-lowest p-2 text-xs">
                   {row.before === null ? '(null)' : JSON.stringify(row.before, null, 2)}
                 </pre>
               </div>
               <div>
                 <h4 className="text-xs font-semibold mb-1">after</h4>
-                <pre className="overflow-auto rounded bg-background p-2 text-xs">
+                <pre className="overflow-auto rounded bg-surface-container-lowest p-2 text-xs">
                   {row.after === null ? '(null)' : JSON.stringify(row.after, null, 2)}
                 </pre>
               </div>

@@ -14,7 +14,7 @@ export function AdminAuditLogPage(): React.ReactElement {
       <h1 className="mb-6 text-2xl font-semibold tracking-tight">
         {t('admin.auditLog.title', { defaultValue: 'Audit log' })}
       </h1>
-      <div className="mb-6 rounded-md border bg-background/50 p-4">
+      <div className="mb-6 rounded-md border bg-surface-container/50 p-4">
         <AuditLogFilters value={query} onChange={setQuery} />
       </div>
       <AuditLogTable query={query} />

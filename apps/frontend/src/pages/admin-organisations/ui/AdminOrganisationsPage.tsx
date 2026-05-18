@@ -101,11 +101,11 @@ export function AdminOrganisationsPage(): React.ReactElement {
       </div>
 
       {isLoading ? (
-        <p className="text-muted-foreground">
+        <p className="text-on-surface-variant">
           {t('common.loading', { defaultValue: 'Loading…' })}
         </p>
       ) : isError ? (
-        <p className="text-destructive">
+        <p className="text-error">
           {error instanceof Error
             ? error.message
             : t('common.unknownError', { defaultValue: 'Unknown error' })}

@@ -96,7 +96,10 @@
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
-  --color-background: hsl(0 0% 100%);
+  /* `--color-background` is declared in the MD3 surface block above so the
+     page actually renders the navy-tinted neutral DESIGN.md §2 calls for —
+     don't redefine it here. `--color-foreground` is kept for shadcn
+     primitives (`text-foreground` in badge/sheet/tabs) that consume it. */
   --color-foreground: hsl(222.2 84% 4.9%);
 
   --color-destructive: hsl(0 84.2% 60.2%);

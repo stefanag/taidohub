@@ -14,7 +14,7 @@ export function Header(): React.ReactElement {
   const { t } = useTranslation();
 
   return (
-    <header className="border-b border-border bg-background">
+    <header className="border-b border-outline-variant bg-surface">
       <div className="container flex h-14 items-center justify-between">
         <nav className="flex items-center gap-4">
           <Link to="/" className="text-sm font-semibold">

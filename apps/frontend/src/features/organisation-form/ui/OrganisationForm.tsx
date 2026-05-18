@@ -349,7 +349,7 @@ export function OrganisationForm({
                     {hasError ? (
                       <span
                         aria-label={t('admin.organisations.errors.tabInvalid', { defaultValue: 'has errors' })}
-                        className="inline-block size-1.5 rounded-full bg-destructive"
+                        className="inline-block size-1.5 rounded-full bg-error"
                       />
                     ) : null}
                   </span>
