@@ -410,16 +410,35 @@ Belt swatches are identity colours: they represent ranks, not brand voice, and i
 
 **Do not** reuse these tokens for general accents — gold for "highlight," brown for "warmth", etc. — that's what `secondary` and friends are for.
 
+### Solid belt colours
+
 | Belt | Token | Hex |
 |---|---|---|
-| yellow | `--color-belt-yellow` | `#FFD700` |
+| yellow | `--color-belt-yellow` | `#FFDF00` |
 | orange | `--color-belt-orange` | `#FF8C00` |
 | purple | `--color-belt-purple` | `#800080` |
+| magenta | `--color-belt-magenta` | `#AC92EC` |
 | green | `--color-belt-green` | `#228B22` |
 | blue | `--color-belt-blue` | `#1E3A8A` |
 | brown | `--color-belt-brown` | `#8B4513` |
 | black | `--color-belt-black` | `#111827` |
-| _(default)_ | `--color-belt-default` | `#9CA3AF` |
+| white | `--color-belt-white` | `#FEFEFE` |
+| _(default)_ | `--color-belt-default` | aliases `--color-belt-white` |
+
+### Belt gradients
+
+Six belts ship with a paired start/end pair and a composed `linear-gradient(to bottom, start, end)` token. Use the gradient form when a rank visual benefits from a subtle vertical fade (large swatches, hero indicators); flat fills (the solid tokens above) are fine elsewhere. Orange, purple, and blue are intentionally solid-only at the moment — add a gradient set if/when a use case appears.
+
+| Belt | Gradient token | Stops |
+|---|---|---|
+| yellow | `--color-gradient-belt-yellow` | `--color-belt-yellow` (#FFDF00) → `#FFBF00` |
+| magenta | `--color-gradient-belt-magenta` | `--color-belt-magenta` (#AC92EC) → `#967ADC` |
+| green | `--color-gradient-belt-green` | `--color-belt-green` (#228B22) → `#1B601C` |
+| brown | `--color-gradient-belt-brown` | `--color-belt-brown` (#8B4513) → `#704A07` |
+| black | `--color-gradient-belt-black` | `--color-belt-black` (#111827) → `#2F4F4F` |
+| white | `--color-gradient-belt-white` | `--color-belt-white` (#FEFEFE) → `#FDFDFD` |
+
+Each gradient exposes its stops as `--color-gradient-{name}-start` and `--color-gradient-{name}-end` separately, so a consumer can build a custom angle or shape (`linear-gradient(45deg, …)`, `radial-gradient(…)`) without re-typing the hex.
 
 ---
 
