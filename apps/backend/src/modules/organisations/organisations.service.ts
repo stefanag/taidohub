@@ -76,6 +76,11 @@ export class OrganisationsService {
       }
     }
 
+    // The country/type cross-field rule can't be enforced by
+    // `UpdateOrganisationSchema` — patches don't carry `type` (it's
+    // immutable). Apply it here against the existing row's type.
+    this.validateCountryForType(existing.type as OrganisationType, input.country);
+
     return this.db.transaction(async (tx) => {
       const row = await this.repo.update(id, input, tx);
       if (!row) throw new NotFoundException(this.notFound(id));
@@ -157,6 +162,26 @@ export class OrganisationsService {
     }
   }
 
+  private validateCountryForType(type: OrganisationType, country: string | null | undefined): void {
+    if (country === undefined) return; // not being patched
+    if (type === 'international_federation' && country !== null) {
+      throw new BadRequestException({
+        error: {
+          code: 'INVALID_COUNTRY',
+          message: 'International federations must not have a country.',
+        },
+      });
+    }
+    if (type !== 'international_federation' && country === null) {
+      throw new BadRequestException({
+        error: {
+          code: 'INVALID_COUNTRY',
+          message: 'Country is required for national federations and clubs.',
+        },
+      });
+    }
+  }
+
   /** Walk up from `parentId`; if we reach `nodeId`, that's a cycle. */
   private async assertNoCycle(nodeId: string, parentId: string): Promise<void> {
     let cursor: string | null = parentId;
@@ -205,7 +230,7 @@ export class OrganisationsService {
       type: row.type as OrganisationType,
       shortCode: row.shortCode,
       slug: row.slug,
-      country: row.country as IsoAlpha3,
+      country: row.country as IsoAlpha3 | null,
       nameEn: row.nameEn,
       nameSv: row.nameSv,
       nameFi: row.nameFi,

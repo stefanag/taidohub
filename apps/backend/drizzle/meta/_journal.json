@@ -50,6 +50,13 @@
       "when": 1779030642788,
       "tag": "0006_flat_thor",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1779085285447,
+      "tag": "0007_hard_nekra",
+      "breakpoints": true
     }
   ]
 }

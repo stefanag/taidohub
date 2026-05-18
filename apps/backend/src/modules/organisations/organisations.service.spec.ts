@@ -32,7 +32,7 @@ const civilian = {
 
 const IF_ROW = {
   id: 'if-1', parentId: null, type: 'international_federation', shortCode: 'WTF',
-  slug: null, country: 'JPN', nameEn: 'WTF', nameSv: 'WTF', nameFi: 'WTF', nameJa: null,
+  slug: null, country: null, nameEn: 'WTF', nameSv: 'WTF', nameFi: 'WTF', nameJa: null,
   logoUrl: null, address: null, contactEmail: null, headInstructorId: null,
   createdAt: new Date(), updatedAt: new Date(),
 };
@@ -132,6 +132,36 @@ describe('OrganisationsService — hierarchy', () => {
     await expect(
       service.create({ ...CLUB_ROW, parentId: 'if-1', type: 'club' } as any, admin),
     ).rejects.toThrow(BadRequestException);
+  });
+});
+
+describe('OrganisationsService — country/type rule on update', () => {
+  let repo: ReturnType<typeof repoStub>;
+  let service: OrganisationsService;
+  beforeEach(async () => {
+    repo = repoStub();
+    ({ service } = await makeService(repo));
+  });
+
+  it('rejects setting a country on an international federation', async () => {
+    repo.findById.mockResolvedValue(IF_ROW);
+    await expect(service.update('if-1', { country: 'JPN' as any }, admin)).rejects.toThrow(
+      BadRequestException,
+    );
+  });
+
+  it('rejects clearing the country on a national federation', async () => {
+    repo.findById.mockResolvedValue(NF_ROW);
+    await expect(service.update('nf-1', { country: null }, admin)).rejects.toThrow(
+      BadRequestException,
+    );
+  });
+
+  it('accepts a country change between two valid ISO codes on a club', async () => {
+    repo.findById.mockResolvedValue(CLUB_ROW);
+    repo.update.mockResolvedValue({ ...CLUB_ROW, country: 'FIN' });
+    const out = await service.update('club-1', { country: 'FIN' as any }, admin);
+    expect(out.country).toBe('FIN');
   });
 });
 

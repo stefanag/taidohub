@@ -72,7 +72,7 @@ describe('<OrganisationMoveDialog>', () => {
     render(
       <I18nextProvider i18n={i18n}>
         <OrganisationMoveDialog
-          organisation={ORG({ type: 'international_federation', parentId: null })}
+          organisation={ORG({ type: 'international_federation', parentId: null, country: null })}
           candidates={[CANDIDATE_A]}
           open={true}
           onOpenChange={vi.fn()}
@@ -134,7 +134,7 @@ describe('<OrganisationMoveDialog>', () => {
     render(
       <I18nextProvider i18n={i18n}>
         <OrganisationMoveDialog
-          organisation={ORG({ type: 'international_federation', parentId: null })}
+          organisation={ORG({ type: 'international_federation', parentId: null, country: null })}
           candidates={[CANDIDATE_A]}
           open={true}
           onOpenChange={vi.fn()}

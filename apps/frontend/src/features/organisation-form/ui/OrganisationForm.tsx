@@ -44,6 +44,9 @@ const DEFAULTS: CreateOrganisationInput = {
   type: 'club',
   shortCode: '',
   slug: null,
+  // `null` for an IF, an ISO-3 code otherwise. Default `type` here is
+  // `'club'` so we seed a real code; `handleTypeChange` swaps to/from
+  // `null` if the user picks a different `type`.
   country: 'SWE',
   nameEn: '',
   nameSv: '',
@@ -191,8 +194,23 @@ export function OrganisationForm({
   };
 
   const typeValue = (form.values.type as string | undefined) ?? 'club';
-  const countryValue = (form.values.country as string | undefined) ?? 'SWE';
+  const countryValue = (form.values.country as string | null | undefined) ?? null;
   const parentValue = (form.values.parentId as string | null | undefined) ?? null;
+  const isInternationalFederation = typeValue === 'international_federation';
+
+  // Keep `country` consistent with `type`: IFs require null; NF/club
+  // require a non-null ISO code. When the user toggles `type` we swap the
+  // country value in tandem so the form never sits in a state the schema
+  // (or backend) would reject. `'SWE'` is just the fallback default —
+  // matches `DEFAULTS.country`.
+  const handleTypeChange = (next: string): void => {
+    form.setField('type', next);
+    if (next === 'international_federation' && countryValue !== null) {
+      form.setField('country', null);
+    } else if (next !== 'international_federation' && countryValue === null) {
+      form.setField('country', 'SWE');
+    }
+  };
 
   const formBody = (
     <form onSubmit={handleSubmit} className="space-y-4" noValidate>
@@ -203,7 +221,7 @@ export function OrganisationForm({
         </Label>
         <Select
           value={typeValue}
-          onValueChange={(v) => form.setField('type', v)}
+          onValueChange={handleTypeChange}
           disabled={mode === 'edit'}
         >
           <SelectTrigger id="org-type" aria-label={t('admin.organisations.fields.type', { defaultValue: 'Type' })}>
@@ -248,28 +266,31 @@ export function OrganisationForm({
         </FormField>
       </div>
 
-      {/* Country */}
-      <FormField>
-        <Label htmlFor="org-country">
-          {t('admin.organisations.fields.country', { defaultValue: 'Country' })}
-        </Label>
-        <Select
-          value={countryValue}
-          onValueChange={(v) => form.setField('country', v)}
-        >
-          <SelectTrigger id="org-country" aria-label={t('admin.organisations.fields.country', { defaultValue: 'Country' })}>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent className="max-h-64">
-            {ISO_3166_ALPHA3_CODES.map((c) => (
-              <SelectItem key={c} value={c}>
-                {c}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <FormMessage message={form.errors.country} />
-      </FormField>
+      {/* Country — hidden for international federations (they're
+          supra-national; the schema enforces `country: null` for IFs). */}
+      {!isInternationalFederation ? (
+        <FormField>
+          <Label htmlFor="org-country">
+            {t('admin.organisations.fields.country', { defaultValue: 'Country' })}
+          </Label>
+          <Select
+            value={countryValue ?? ''}
+            onValueChange={(v) => form.setField('country', v)}
+          >
+            <SelectTrigger id="org-country" aria-label={t('admin.organisations.fields.country', { defaultValue: 'Country' })}>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="max-h-64">
+              {ISO_3166_ALPHA3_CODES.map((c) => (
+                <SelectItem key={c} value={c}>
+                  {c}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <FormMessage message={form.errors.country} />
+        </FormField>
+      ) : null}
 
       {/* Parent */}
       <FormField>
