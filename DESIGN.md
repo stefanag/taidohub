@@ -2,7 +2,7 @@
 
 > Reference document for reviewing and maintaining the visual design of the Taidohub webapp.
 
-> **Status: target spec — components and routes not yet implemented, but the design tokens are now real.** The §2 hex values are the source of truth and have been written into [`apps/frontend/src/app/styles/globals.css`](apps/frontend/src/app/styles/globals.css); the §7 Lucide catalog matches what the codebase imports. Most components/routes/page inventories below still describe the visual *destination* — the shipping app today only renders admin/organisations, admin/audit-log, login, and a dashboard scaffold on top of the FSD layout under [`apps/frontend/src`](apps/frontend/src/). Treat any remaining mismatch as "implementation lagging the spec," not "spec is wrong."
+> **Status: design tokens (§2) and icon system (§7) are descriptive — they document what's actually in the codebase today. Components, routes, and page inventories elsewhere are aspirational** and describe the visual *destination*. The shipping app today renders admin/organisations, admin/audit-log, login, and a dashboard scaffold on top of the FSD layout under [`apps/frontend/src`](apps/frontend/src/). If §2 ever drifts from [`apps/frontend/src/app/styles/globals.css`](apps/frontend/src/app/styles/globals.css), reconcile by updating the doc — the CSS file is the source of truth for tokens.
 
 ---
 
@@ -18,7 +18,7 @@ Concrete principles flowing from this:
 1. **Minimalist & disciplined.** No decorative clutter. No effects for their own sake.
 2. **Japanese aesthetic.** Kanji displayed prominently. Serif italic for quote passages. Generous line-height on Japanese passages.
 3. **Readable hierarchy.** Large headlines, muted secondary text, clear section numbering, weight-driven separation rather than dividers.
-4. **Monochromatic primary.** Deep navy-tinted near-black palette with a single warm secondary accent.
+4. **Three-voice palette.** Deep navy primary ("The Authority"), bright gold secondary ("The Energy"), slate-blue tertiary ("The Atmosphere"). Surfaces are navy-tinted neutrals so the system reads cohesive.
 5. **Sharp by default, restrained roundedness when softening.** 2 px base radius; 4 px for buttons and standard cards. Never large rounded corners.
 6. **Tonal layering over outlines.** Section boundaries come from background-color shifts and whitespace first; borders are reserved for accent and accessibility fallback (see §4 and §5).
 7. **Asymmetric where it matters.** Hero rows and feature blocks use intentional column ratios (3+2, 8+4) over uniform grids. Repeating content cards may use uniform grids (3+3+3) — the rule is *intentional sizing*, not "no grids".
@@ -27,60 +27,68 @@ Concrete principles flowing from this:
 
 ## 2. Color Tokens
 
-All colors come from [`apps/frontend/src/app/styles/globals.css`](apps/frontend/src/app/styles/globals.css) via the Tailwind `@theme` directive. The hex values below are the source of truth — if a discrepancy appears, the spec wins and the CSS file is what needs updating.
+All colors come from [`apps/frontend/src/app/styles/globals.css`](apps/frontend/src/app/styles/globals.css) via the Tailwind `@theme` directive. The hex values below mirror what's declared in that file — if you change a token, update both. Every CSS token is also a Tailwind utility: `--color-primary` → `bg-primary`, `text-primary`, `border-primary`, etc.
 
 ### Surface scale (light → dark)
+Navy-tinted neutrals — never raw grays.
+
 | Token | Hex | Usage |
 |---|---|---|
 | `surface-container-lowest` | `#ffffff` | Innermost card backgrounds (sensei note) |
-| `surface-container-low` | `#f3f4f5` | Section card backgrounds (Requirements, Admin) |
-| `surface-container` | `#edeeef` | Mid-level containers |
-| `surface-container-high` | `#e7e8e9` | Elevated surfaces |
-| `surface` / `background` | `#f8f9fa` | Page background |
-| `surface-dim` | `#d9dadb` | Dividers, disabled |
-| `surface-variant` | `#e1e3e4` | Input backgrounds, chips |
+| `surface-container-low` | `#eef2f9` | Section card backgrounds (Requirements, Admin) |
+| `surface-container` | `#e4eaf4` | Mid-level containers |
+| `surface-container-high` | `#dbe3f0` | Elevated surfaces |
+| `surface` / `background` | `#f5f7fb` | Page background |
+| `surface-dim` | `#c8d5e8` | Dividers, disabled |
+| `surface-variant` | `#dce4f0` | Input backgrounds, chips |
 
-### Primary scale
+### Primary scale — "The Authority" (deep navy)
 | Token | Hex | Usage |
 |---|---|---|
-| `primary` | `#051125` | Brand color — nav, headings, CTA buttons, accents |
-| `primary-container` | `#1b263b` | Dark card backgrounds (GradeCard) |
+| `primary` | `#2D5FA2` | Brand color — nav, headings, CTA buttons, accents |
+| `primary-container` | `#1b3a6b` | Dark card backgrounds (GradeCard) — high-contrast moments |
+| `primary-foreground` | `#f5f8fa` | shadcn-style foreground pair for `bg-primary` |
 | `on-primary` | `#ffffff` | Text/icons on primary bg |
-| `on-primary-container` | `#828da7` | Muted text on dark card |
-| `inverse-primary` | `#bbc6e2` | Light text on very dark bg |
+| `on-primary-container` | `#a8c8ff` | Muted text on dark navy card |
+| `inverse-primary` | `#a8c8ff` | Light primary tint for very dark backgrounds |
 
-### Secondary / warm accent
+### Secondary scale — "The Energy" (gold)
 | Token | Hex | Usage |
 |---|---|---|
-| `secondary` | `#77574d` | Warm brown accents |
-| `secondary-container` | `#fed3c7` | Warm pastel chip bg |
-| `on-secondary-container` | `#795950` | Text in warm chips |
+| `secondary` | `#FEC922` | Bright gold accent — chips, status flags, decorative highlights |
+| `secondary-container` | `#FEC922` | Same swatch — chip background paired with `on-secondary-container` |
+| `secondary-foreground` | `#0f172a` | shadcn-style dark foreground for `bg-secondary` |
+| `on-secondary` | `#3a2e00` | Dark brown text on gold |
+| `on-secondary-container` | `#3a2e00` | Text in gold chips |
 
-### Tertiary / near-black
+### Tertiary scale — "The Atmosphere" (slate / soft blue)
 | Token | Hex | Usage |
 |---|---|---|
-| `tertiary` | `#0f1112` | Darkest surfaces (JissenCard bg) |
-| `tertiary-container` | `#242626` | Dark secondary card bg |
+| `tertiary` | `#3b475c` | Slate dark surface — quiet card backgrounds, atmospheric panels |
+| `tertiary-container` | `#CDDAF4` | Soft pastel-blue chip / illustration background |
+| `on-tertiary` | `#ffffff` | Text on the slate surface |
+| `on-tertiary-container` | `#1a2740` | Dark text on the pastel container |
 
 ### Text
 | Token | Hex | Usage |
 |---|---|---|
-| `on-surface` | `#191c1d` | Body text — navy-tinted near-black, never pure `#000` |
-| `on-surface-variant` | `#45474d` | Secondary/muted text |
-| `on-background` | `#191c1d` | Same as on-surface |
+| `on-surface` | `#0d1b2e` | Body text — navy-tinted near-black, never pure `#000` |
+| `on-surface-variant` | `#3b4559` | Secondary/muted text |
+| `on-background` | `#0d1b2e` | Same as on-surface |
 
 ### Semantic
 | Token | Hex | Usage |
 |---|---|---|
 | `error` | `#ba1a1a` | Error messages |
 | `error-container` | `#ffdad6` | Error backgrounds |
-| `outline` | `#75777d` | Borders |
-| `outline-variant` | `#c5c6cd` | Subtle dividers / "ghost border" fallback |
+| `outline` | `#6b7a94` | Borders |
+| `outline-variant` | `#bcc5d4` | Subtle dividers / "ghost border" fallback |
 
 ### Rules
 
-- **No pure black.** All "blacks" in the system are navy-tinted near-blacks (`#191c1d`, `#0f1112`). When picking a new dark token, tint it with the primary navy seed — never use `#000000`.
+- **No pure black.** All "blacks" in the system are navy-tinted near-blacks (`#0d1b2e`, `#1b3a6b`, `#3b475c`). When picking a new dark token, tint it with the primary navy seed — never use `#000000`.
 - **All grays are tinted.** Picking a generic Tailwind gray (`gray-500`) is a smell; prefer the surface/outline tokens above so the palette stays cohesive.
+- **Shadcn HSL pairs.** [`globals.css`](apps/frontend/src/app/styles/globals.css) also declares a parallel block of HSL tokens (`--color-border`, `--color-input`, `--color-ring`, `--color-destructive`, `--color-muted`, `--color-accent`, `--color-popover`, `--color-card`) that the shadcn primitives consume. They aren't part of the brand palette above — they're there so dropped-in shadcn components don't render unstyled. Reach for the MD3 tokens above for first-party styling.
 
 ---
 
@@ -161,7 +169,7 @@ Depth is achieved through **tonal layering** rather than drop shadows. Treat the
 1. **Base layer:** `surface` / `background` for the page itself.
 2. **Elevated content:** `surface-container-low` and friends — separation through tonal lift, not shadow.
 3. **Sunken content:** Sidebar (`bg-slate-300`) and search-bar-style utilities use deeper neutral tints.
-4. **Dark accent surfaces:** `primary-container` (GradeCard) and `tertiary-container` (JissenCard) for high-contrast moments.
+4. **Dark accent surfaces:** `primary-container` (deep navy, GradeCard) and `tertiary` (slate, JissenCard) for high-contrast moments. `tertiary-container` is the *light* pastel blue — use it for chips and illustration backgrounds, not for dark accent.
 
 ### Borders & dividers — when, when not
 
@@ -357,7 +365,7 @@ The frontend follows Feature-Sliced Design ([`apps/frontend/src/`](apps/frontend
 
 **`HokeiCard`.** `play_circle` icon top-right; Japanese name bold; romaji in muted small text; description paragraph; left border accent on hover (`border-l-2 border-primary`); slightly different opacity treatment when completed.
 
-**`JissenCard` (used for Jissen + Kobo).** Dark background (`bg-tertiary-container` or similar); white text; tag badge top-right (`text-[9px] uppercase tracking-widest border border-white/20 px-2 py-0.5`); Japanese name bold; description in smaller muted text; three-dot proficiency indicator at bottom (filled dots up to `proficiency_level`).
+**`JissenCard` (used for Jissen + Kobo).** Slate background (`bg-tertiary`); white text; tag badge top-right (`text-[9px] uppercase tracking-widest border border-white/20 px-2 py-0.5`); Japanese name bold; description in smaller muted text; three-dot proficiency indicator at bottom (filled dots up to `proficiency_level`).
 
 ### 9.4 Admin — Permissions (`/admin/permissions`)
 
@@ -467,9 +475,9 @@ bg-surface-container-low p-6 lg:p-10 rounded-sm
 bg-primary-container text-white rounded-sm p-6
 ```
 
-### Dark tertiary card (JissenCard)
+### Slate tertiary card (JissenCard)
 ```
-bg-tertiary-container text-white rounded-sm p-5
+bg-tertiary text-white rounded-sm p-5
 ```
 
 ### Decorative large number
@@ -496,7 +504,7 @@ border-l-2 border-primary/20
 - **Match icons to the domain.** Use the Lucide catalogue sparingly and consistently per the §7 table.
 
 ### Don't
-- **No pure black.** Use the navy-tinted near-blacks (`#191c1d`, `#0f1112`) for text and dark surfaces.
+- **No pure black.** Use the navy-tinted near-blacks (`#0d1b2e` body text, `#1b3a6b` primary-container, `#3b475c` tertiary) for text and dark surfaces.
 - **No opaque outlines holding cards together.** A 1 px solid border around a content card is a smell — move to tonal lift instead. Accent borders (`border-l-2`) are fine.
 - **No standard-grid laziness.** Generic 6+6 splits on hero rows feel templated. Use intentional sizing. (Repeating content cards may use uniform grids — this rule is about *hero* compositions.)
 - **No drop shadows for stationary cards.** Static cards earn their depth through tone, not shadow. Reserve shadows for popovers / tooltips that genuinely float.
