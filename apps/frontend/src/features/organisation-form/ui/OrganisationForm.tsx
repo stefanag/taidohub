@@ -55,6 +55,28 @@ const DEFAULTS: CreateOrganisationInput = {
   headInstructorId: null,
 };
 
+// The keys the form is actually responsible for. The full `Organisation` row
+// (passed as `initialValues` in edit mode) carries `id`, `createdAt`,
+// `updatedAt` which `UpdateOrganisationSchema.strict()` rejects as
+// unrecognized keys — that surfaces as a `_root` error on submit. Filtering
+// to these keys at form init keeps the values clean.
+const EDITABLE_KEYS = Object.keys(DEFAULTS) as Array<keyof CreateOrganisationInput>;
+
+function pickEditable(
+  source: Partial<CreateOrganisationInput> & Record<string, unknown> | undefined,
+): Partial<CreateOrganisationInput> {
+  if (!source) return {};
+  const out: Partial<CreateOrganisationInput> = {};
+  for (const key of EDITABLE_KEYS) {
+    if (key in source) {
+      // The assignment is sound because EDITABLE_KEYS is statically typed
+      // against `CreateOrganisationInput`; TypeScript can't track that here.
+      (out as Record<string, unknown>)[key] = (source as Record<string, unknown>)[key];
+    }
+  }
+  return out;
+}
+
 const TYPE_LABEL_KEYS: Record<(typeof ORG_TYPES)[number], string> = {
   international_federation: 'internationalFederation',
   national_federation: 'nationalFederation',
@@ -123,7 +145,7 @@ export function OrganisationForm({
   const schema = (
     mode === 'create' ? CreateOrganisationSchema : UpdateOrganisationSchema
   ) as unknown as ZodTypeAny;
-  const form = useZodForm(schema, { ...DEFAULTS, ...initialValues });
+  const form = useZodForm(schema, { ...DEFAULTS, ...pickEditable(initialValues) });
   const [submitError, setSubmitError] = React.useState<string | undefined>();
   // Controlled active name tab so we can auto-jump to a tab that has a
   // validation error after a failed submit.
