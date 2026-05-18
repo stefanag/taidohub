@@ -1,6 +1,8 @@
 # TaidoHub — Design Specification
 
-> Reference document for reviewing and maintaining the visual design of the Taidohub webapp. 
+> Reference document for reviewing and maintaining the visual design of the Taidohub webapp.
+
+> **Status: target spec — not yet implemented.** Most components, routes, and page inventories below describe the visual *destination*. The shipping app today renders a small surface area (admin/organisations, admin/audit-log, login, dashboard scaffold) on top of the FSD scaffolding under [`apps/frontend/src`](apps/frontend/src/). Token values in [`apps/frontend/src/app/styles/globals.css`](apps/frontend/src/app/styles/globals.css) also still diverge from the values quoted in §2 (e.g. `--color-primary` currently `#2D5FA2`, doc target `#051125`). Treat any mismatch as "implementation lagging the spec," not "spec is wrong."
 
 ---
 
@@ -25,7 +27,7 @@ Concrete principles flowing from this:
 
 ## 2. Color Tokens
 
-All colors come from `client/src/index.css` via the Tailwind `@theme` directive (Material Design 3 scheme).
+All colors come from [`apps/frontend/src/app/styles/globals.css`](apps/frontend/src/app/styles/globals.css) via the Tailwind `@theme` directive. Hex values below are the design target; the file currently ships slightly different values (see the banner at the top).
 
 ### Surface scale (light → dark)
 | Token | Hex | Usage |
@@ -246,18 +248,20 @@ Icons used throughout the app:
 
 ## 8. Components
 
+The frontend follows Feature-Sliced Design ([`apps/frontend/src/`](apps/frontend/src/) — `entities/`, `features/`, `widgets/`, `pages/`, `shared/`). Paths below are target slot locations; the existing `AppSidebar` widget at [`apps/frontend/src/widgets/appsidebar/`](apps/frontend/src/widgets/appsidebar/) is the closest implemented analogue of the `Sidebar` row.
+
 ### Layout
-| Component | Path |
+| Component | Target slot |
 |---|---|
-| `Sidebar` | `client/src/components/layout/Sidebar.jsx` |
+| `Sidebar` | `apps/frontend/src/widgets/sidebar/` |
 
 ### Shared
-| Component | Props | Description |
-|---|---|---|
-| `LoadingSpinner` | — | Centered animated Material icon |
-| `ProtectedRoute` | `children`, `requiredPermission?` | Auth guard, redirects to `/login` or `/dashboard` |
+| Component | Target slot | Props | Description |
+|---|---|---|---|
+| `LoadingSpinner` | `apps/frontend/src/shared/ui/` | — | Centered animated icon (Lucide today; Material Symbols if §7 lands) |
+| `ProtectedRoute` | `apps/frontend/src/shared/ui/` | `children`, `requiredPermission?` | Auth guard, redirects to `/login` or `/dashboard` |
 
-### Dashboard (`client/src/components/dashboard/`)
+### Dashboard (target slot: `apps/frontend/src/widgets/dashboard-*/`)
 | Component | Key Props |
 |---|---|
 | `GreetingHeader` | `greeting`, `dateLabel`, `rank` |
@@ -270,7 +274,7 @@ Icons used throughout the app:
 | `SessionRow` | `icon`, `title`, `instructor`, `duration`, `date`, `status`, `statusMuted` |
 | `SenseiNote` | `note` (object or null) |
 
-### Requirements cards (`client/src/components/cards/`)
+### Requirements cards (target slot: `apps/frontend/src/widgets/requirements-*/`)
 | Component | Key Props |
 |---|---|
 | `ProgressCard` | `percent`, `mastered`, `total` |
