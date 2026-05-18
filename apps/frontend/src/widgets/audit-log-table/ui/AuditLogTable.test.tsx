@@ -4,13 +4,15 @@ import userEvent from '@testing-library/user-event';
 import * as React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import * as auditLogApi from '@/entities/audit-log/api/audit-log.api.js';
+import { listAuditLog } from '@/entities/audit-log';
 import i18n from '@/i18n';
 
-// The `listAuditLogQueryOptions` factory captures the real `listAuditLog`
-// reference at import time, so mocking the barrel (`@/entities/audit-log`)
-// would have no effect on the query function. Mock the API module that
-// owns the exported fetcher instead.
+// `vi.mock` has to target the *underlying* module — the
+// `listAuditLogQueryOptions` factory grabs `listAuditLog` from that path
+// at import time, so mocking only the barrel re-export wouldn't reach
+// the captured reference. Importing the binding via the barrel still
+// resolves to the same mocked module under ESM, so FSD's public-API
+// rule is satisfied and the mock still applies.
 vi.mock('@/entities/audit-log/api/audit-log.api.js', async (orig) => {
   const actual = await orig<typeof import('@/entities/audit-log/api/audit-log.api.js')>();
   return { ...actual, listAuditLog: vi.fn() };
@@ -44,7 +46,7 @@ describe('<AuditLogTable>', () => {
   });
 
   it('shows the empty state when the API returns no rows', async () => {
-    vi.mocked(auditLogApi.listAuditLog).mockResolvedValue({
+    vi.mocked(listAuditLog).mockResolvedValue({
       data: [],
       page: 1,
       perPage: 25,
@@ -59,7 +61,7 @@ describe('<AuditLogTable>', () => {
   });
 
   it('renders one row per entry with the right action label', async () => {
-    vi.mocked(auditLogApi.listAuditLog).mockResolvedValue({
+    vi.mocked(listAuditLog).mockResolvedValue({
       data: [FIXTURE_ROW],
       page: 1,
       perPage: 25,
@@ -76,7 +78,7 @@ describe('<AuditLogTable>', () => {
   });
 
   it('expands a row to reveal before / after JSON, then collapses', async () => {
-    vi.mocked(auditLogApi.listAuditLog).mockResolvedValue({
+    vi.mocked(listAuditLog).mockResolvedValue({
       data: [FIXTURE_ROW],
       page: 1,
       perPage: 25,

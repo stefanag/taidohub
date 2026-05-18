@@ -76,7 +76,11 @@ function TreeRow({ node, depth, onEdit, onMove, onDelete }: TreeRowProps): React
         : 'club';
 
   return (
-    <li role="treeitem" aria-expanded={hasChildren ? expanded : undefined}>
+    <li
+      role="treeitem"
+      aria-expanded={hasChildren ? expanded : undefined}
+      aria-selected={false}
+    >
       <div
         className="flex items-center gap-2 rounded-md py-1.5 pr-2 hover:bg-muted/50"
         style={indent}

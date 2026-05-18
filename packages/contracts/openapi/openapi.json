@@ -941,6 +941,225 @@
           "organisations"
         ]
       }
+    },
+    "/api/admin/audit-log": {
+      "get": {
+        "operationId": "AuditLogController_list",
+        "parameters": [
+          {
+            "name": "entityType",
+            "required": false,
+            "in": "query",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "AuditLogAction": {
+                "type": "string",
+                "enum": [
+                  "create",
+                  "update",
+                  "delete",
+                  "move"
+                ]
+              }
+            },
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "entityId",
+            "required": false,
+            "in": "query",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "AuditLogAction": {
+                "type": "string",
+                "enum": [
+                  "create",
+                  "update",
+                  "delete",
+                  "move"
+                ]
+              }
+            },
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "required": false,
+            "in": "query",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "AuditLogAction": {
+                "type": "string",
+                "enum": [
+                  "create",
+                  "update",
+                  "delete",
+                  "move"
+                ]
+              }
+            },
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "action",
+            "required": false,
+            "in": "query",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "AuditLogAction": {
+                "type": "string",
+                "enum": [
+                  "create",
+                  "update",
+                  "delete",
+                  "move"
+                ]
+              }
+            },
+            "schema": {
+              "$ref": "#/$defs/AuditLogAction"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "AuditLogAction": {
+                "type": "string",
+                "enum": [
+                  "create",
+                  "update",
+                  "delete",
+                  "move"
+                ]
+              }
+            },
+            "schema": {
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "AuditLogAction": {
+                "type": "string",
+                "enum": [
+                  "create",
+                  "update",
+                  "delete",
+                  "move"
+                ]
+              }
+            },
+            "schema": {
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "AuditLogAction": {
+                "type": "string",
+                "enum": [
+                  "create",
+                  "update",
+                  "delete",
+                  "move"
+                ]
+              }
+            },
+            "schema": {
+              "maximum": 9007199254740991,
+              "exclusiveMinimum": 0,
+              "default": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "name": "perPage",
+            "required": false,
+            "in": "query",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "AuditLogAction": {
+                "type": "string",
+                "enum": [
+                  "create",
+                  "update",
+                  "delete",
+                  "move"
+                ]
+              }
+            },
+            "schema": {
+              "maximum": 100,
+              "exclusiveMinimum": 0,
+              "default": 25,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListAuditLogResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "List audit log entries (paginated, latest first).",
+        "tags": [
+          "audit-log"
+        ]
+      }
     }
   },
   "info": {
@@ -960,6 +1179,10 @@
     },
     {
       "name": "organisations",
+      "description": ""
+    },
+    {
+      "name": "audit-log",
       "description": ""
     },
     {
@@ -1559,9 +1782,16 @@
                     "description": "URL-safe full name. Unique when present."
                   },
                   "country": {
-                    "type": "string",
-                    "pattern": "^[A-Z]{3}$",
-                    "description": "ISO 3166-1 alpha-3 country code."
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^[A-Z]{3}$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "ISO 3166-1 alpha-3 country code. Null for international federations."
                   },
                   "nameEn": {
                     "type": "string",
@@ -1666,7 +1896,7 @@
                   "type": "international_federation",
                   "shortCode": "WTF",
                   "slug": "world-taido-federation",
-                  "country": "JPN",
+                  "country": null,
                   "nameEn": "World Taido Federation",
                   "nameSv": "Världstaidoförbundet",
                   "nameFi": "Maailman Taidoliitto",
@@ -1741,9 +1971,16 @@
                     "description": "URL-safe full name. Unique when present."
                   },
                   "country": {
-                    "type": "string",
-                    "pattern": "^[A-Z]{3}$",
-                    "description": "ISO 3166-1 alpha-3 country code."
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^[A-Z]{3}$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "ISO 3166-1 alpha-3 country code. Null for international federations."
                   },
                   "nameEn": {
                     "type": "string",
@@ -1848,7 +2085,7 @@
                   "type": "international_federation",
                   "shortCode": "WTF",
                   "slug": "world-taido-federation",
-                  "country": "JPN",
+                  "country": null,
                   "nameEn": "World Taido Federation",
                   "nameSv": "Världstaidoförbundet",
                   "nameFi": "Maailman Taidoliitto",
@@ -1906,7 +2143,7 @@
                 "type": "international_federation",
                 "shortCode": "WTF",
                 "slug": "world-taido-federation",
-                "country": "JPN",
+                "country": null,
                 "nameEn": "World Taido Federation",
                 "nameSv": "Världstaidoförbundet",
                 "nameFi": "Maailman Taidoliitto",
@@ -1953,7 +2190,7 @@
                 "type": "international_federation",
                 "shortCode": "WTF",
                 "slug": "world-taido-federation",
-                "country": "JPN",
+                "country": null,
                 "nameEn": "World Taido Federation",
                 "nameSv": "Världstaidoförbundet",
                 "nameFi": "Maailman Taidoliitto",
@@ -1991,7 +2228,7 @@
                 "type": "international_federation",
                 "shortCode": "WTF",
                 "slug": "world-taido-federation",
-                "country": "JPN",
+                "country": null,
                 "nameEn": "World Taido Federation",
                 "nameSv": "Världstaidoförbundet",
                 "nameFi": "Maailman Taidoliitto",
@@ -2030,7 +2267,7 @@
                 "type": "international_federation",
                 "shortCode": "WTF",
                 "slug": "world-taido-federation",
-                "country": "JPN",
+                "country": null,
                 "nameEn": "World Taido Federation",
                 "nameSv": "Världstaidoförbundet",
                 "nameFi": "Maailman Taidoliitto",
@@ -2077,7 +2314,7 @@
                 "type": "international_federation",
                 "shortCode": "WTF",
                 "slug": "world-taido-federation",
-                "country": "JPN",
+                "country": null,
                 "nameEn": "World Taido Federation",
                 "nameSv": "Världstaidoförbundet",
                 "nameFi": "Maailman Taidoliitto",
@@ -2092,11 +2329,19 @@
             }
           },
           "country": {
-            "type": "string",
-            "pattern": "^[A-Z]{3}$",
-            "description": "ISO 3166-1 alpha-3 country code.",
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "ISO 3166-1 alpha-3 country code. Null for international federations.",
             "x-nestjs_zod-has-null": true,
             "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
               "OrganisationType": {
                 "type": "string",
@@ -2115,7 +2360,7 @@
                 "type": "international_federation",
                 "shortCode": "WTF",
                 "slug": "world-taido-federation",
-                "country": "JPN",
+                "country": null,
                 "nameEn": "World Taido Federation",
                 "nameSv": "Världstaidoförbundet",
                 "nameFi": "Maailman Taidoliitto",
@@ -2153,7 +2398,7 @@
                 "type": "international_federation",
                 "shortCode": "WTF",
                 "slug": "world-taido-federation",
-                "country": "JPN",
+                "country": null,
                 "nameEn": "World Taido Federation",
                 "nameSv": "Världstaidoförbundet",
                 "nameFi": "Maailman Taidoliitto",
@@ -2191,7 +2436,7 @@
                 "type": "international_federation",
                 "shortCode": "WTF",
                 "slug": "world-taido-federation",
-                "country": "JPN",
+                "country": null,
                 "nameEn": "World Taido Federation",
                 "nameSv": "Världstaidoförbundet",
                 "nameFi": "Maailman Taidoliitto",
@@ -2229,7 +2474,7 @@
                 "type": "international_federation",
                 "shortCode": "WTF",
                 "slug": "world-taido-federation",
-                "country": "JPN",
+                "country": null,
                 "nameEn": "World Taido Federation",
                 "nameSv": "Världstaidoförbundet",
                 "nameFi": "Maailman Taidoliitto",
@@ -2274,7 +2519,7 @@
                 "type": "international_federation",
                 "shortCode": "WTF",
                 "slug": "world-taido-federation",
-                "country": "JPN",
+                "country": null,
                 "nameEn": "World Taido Federation",
                 "nameSv": "Världstaidoförbundet",
                 "nameFi": "Maailman Taidoliitto",
@@ -2319,7 +2564,7 @@
                 "type": "international_federation",
                 "shortCode": "WTF",
                 "slug": "world-taido-federation",
-                "country": "JPN",
+                "country": null,
                 "nameEn": "World Taido Federation",
                 "nameSv": "Världstaidoförbundet",
                 "nameFi": "Maailman Taidoliitto",
@@ -2363,7 +2608,7 @@
                 "type": "international_federation",
                 "shortCode": "WTF",
                 "slug": "world-taido-federation",
-                "country": "JPN",
+                "country": null,
                 "nameEn": "World Taido Federation",
                 "nameSv": "Världstaidoförbundet",
                 "nameFi": "Maailman Taidoliitto",
@@ -2409,7 +2654,7 @@
                 "type": "international_federation",
                 "shortCode": "WTF",
                 "slug": "world-taido-federation",
-                "country": "JPN",
+                "country": null,
                 "nameEn": "World Taido Federation",
                 "nameSv": "Världstaidoförbundet",
                 "nameFi": "Maailman Taidoliitto",
@@ -2453,7 +2698,7 @@
                 "type": "international_federation",
                 "shortCode": "WTF",
                 "slug": "world-taido-federation",
-                "country": "JPN",
+                "country": null,
                 "nameEn": "World Taido Federation",
                 "nameSv": "Världstaidoförbundet",
                 "nameFi": "Maailman Taidoliitto",
@@ -2491,7 +2736,7 @@
                 "type": "international_federation",
                 "shortCode": "WTF",
                 "slug": "world-taido-federation",
-                "country": "JPN",
+                "country": null,
                 "nameEn": "World Taido Federation",
                 "nameSv": "Världstaidoförbundet",
                 "nameFi": "Maailman Taidoliitto",
@@ -2529,7 +2774,7 @@
                 "type": "international_federation",
                 "shortCode": "WTF",
                 "slug": "world-taido-federation",
-                "country": "JPN",
+                "country": null,
                 "nameEn": "World Taido Federation",
                 "nameSv": "Världstaidoförbundet",
                 "nameFi": "Maailman Taidoliitto",
@@ -2657,11 +2902,19 @@
             }
           },
           "country": {
-            "type": "string",
-            "pattern": "^[A-Z]{3}$",
-            "description": "ISO 3166-1 alpha-3 country code.",
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "ISO 3166-1 alpha-3 country code. Null for international federations.",
             "x-nestjs_zod-has-null": true,
             "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
               "OrganisationType": {
                 "type": "string",
@@ -2884,16 +3137,14 @@
             ],
             "description": "Parent organisation id, null for international federations.",
             "x-nestjs_zod-has-null": true,
-            "x-nestjs_zod-empty-type": true,
-            "x-nestjs_zod-parent-additional-properties": false
+            "x-nestjs_zod-empty-type": true
           },
           "shortCode": {
             "type": "string",
             "minLength": 1,
             "maxLength": 20,
             "description": "Short display code, e.g. \"WTF\".",
-            "x-nestjs_zod-has-null": true,
-            "x-nestjs_zod-parent-additional-properties": false
+            "x-nestjs_zod-has-null": true
           },
           "slug": {
             "anyOf": [
@@ -2908,36 +3159,39 @@
             ],
             "description": "URL-safe full name. Unique when present.",
             "x-nestjs_zod-has-null": true,
-            "x-nestjs_zod-empty-type": true,
-            "x-nestjs_zod-parent-additional-properties": false
+            "x-nestjs_zod-empty-type": true
           },
           "country": {
-            "type": "string",
-            "pattern": "^[A-Z]{3}$",
-            "description": "ISO 3166-1 alpha-3 country code.",
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "ISO 3166-1 alpha-3 country code. Null for international federations.",
             "x-nestjs_zod-has-null": true,
-            "x-nestjs_zod-parent-additional-properties": false
+            "x-nestjs_zod-empty-type": true
           },
           "nameEn": {
             "type": "string",
             "minLength": 1,
             "maxLength": 200,
-            "x-nestjs_zod-has-null": true,
-            "x-nestjs_zod-parent-additional-properties": false
+            "x-nestjs_zod-has-null": true
           },
           "nameSv": {
             "type": "string",
             "minLength": 1,
             "maxLength": 200,
-            "x-nestjs_zod-has-null": true,
-            "x-nestjs_zod-parent-additional-properties": false
+            "x-nestjs_zod-has-null": true
           },
           "nameFi": {
             "type": "string",
             "minLength": 1,
             "maxLength": 200,
-            "x-nestjs_zod-has-null": true,
-            "x-nestjs_zod-parent-additional-properties": false
+            "x-nestjs_zod-has-null": true
           },
           "nameJa": {
             "anyOf": [
@@ -2950,8 +3204,7 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
-            "x-nestjs_zod-empty-type": true,
-            "x-nestjs_zod-parent-additional-properties": false
+            "x-nestjs_zod-empty-type": true
           },
           "logoUrl": {
             "anyOf": [
@@ -2964,8 +3217,7 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
-            "x-nestjs_zod-empty-type": true,
-            "x-nestjs_zod-parent-additional-properties": false
+            "x-nestjs_zod-empty-type": true
           },
           "address": {
             "anyOf": [
@@ -2977,8 +3229,7 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
-            "x-nestjs_zod-empty-type": true,
-            "x-nestjs_zod-parent-additional-properties": false
+            "x-nestjs_zod-empty-type": true
           },
           "contactEmail": {
             "anyOf": [
@@ -2992,8 +3243,7 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
-            "x-nestjs_zod-empty-type": true,
-            "x-nestjs_zod-parent-additional-properties": false
+            "x-nestjs_zod-empty-type": true
           },
           "headInstructorId": {
             "anyOf": [
@@ -3005,10 +3255,405 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
-            "x-nestjs_zod-empty-type": true,
-            "x-nestjs_zod-parent-additional-properties": false
+            "x-nestjs_zod-empty-type": true
           }
         }
+      },
+      "ListAuditLogResponseDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/AuditLogEntry"
+            },
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "AuditLogEntry": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "entityType": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Lowercase singular noun, e.g. \"organisation\"."
+                  },
+                  "entityId": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Caller-defined id of the audited row (uuid for orgs, text for users)."
+                  },
+                  "action": {
+                    "$ref": "#/$defs/AuditLogAction"
+                  },
+                  "userId": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "Null when the audited user has since been deleted."
+                  },
+                  "before": {
+                    "anyOf": [
+                      {},
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "after": {
+                    "anyOf": [
+                      {},
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                  }
+                },
+                "required": [
+                  "id",
+                  "entityType",
+                  "entityId",
+                  "action",
+                  "userId",
+                  "before",
+                  "after",
+                  "createdAt"
+                ],
+                "example": {
+                  "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "entityType": "organisation",
+                  "entityId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "action": "update",
+                  "userId": "u-admin",
+                  "before": {
+                    "name": "Old"
+                  },
+                  "after": {
+                    "name": "New"
+                  },
+                  "createdAt": "2026-05-17T08:00:00.000Z"
+                }
+              },
+              "AuditLogAction": {
+                "type": "string",
+                "enum": [
+                  "create",
+                  "update",
+                  "delete",
+                  "move"
+                ]
+              }
+            }
+          },
+          "page": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "AuditLogEntry": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "entityType": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Lowercase singular noun, e.g. \"organisation\"."
+                  },
+                  "entityId": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Caller-defined id of the audited row (uuid for orgs, text for users)."
+                  },
+                  "action": {
+                    "$ref": "#/$defs/AuditLogAction"
+                  },
+                  "userId": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "Null when the audited user has since been deleted."
+                  },
+                  "before": {
+                    "anyOf": [
+                      {},
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "after": {
+                    "anyOf": [
+                      {},
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                  }
+                },
+                "required": [
+                  "id",
+                  "entityType",
+                  "entityId",
+                  "action",
+                  "userId",
+                  "before",
+                  "after",
+                  "createdAt"
+                ],
+                "example": {
+                  "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "entityType": "organisation",
+                  "entityId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "action": "update",
+                  "userId": "u-admin",
+                  "before": {
+                    "name": "Old"
+                  },
+                  "after": {
+                    "name": "New"
+                  },
+                  "createdAt": "2026-05-17T08:00:00.000Z"
+                }
+              },
+              "AuditLogAction": {
+                "type": "string",
+                "enum": [
+                  "create",
+                  "update",
+                  "delete",
+                  "move"
+                ]
+              }
+            }
+          },
+          "perPage": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "AuditLogEntry": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "entityType": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Lowercase singular noun, e.g. \"organisation\"."
+                  },
+                  "entityId": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Caller-defined id of the audited row (uuid for orgs, text for users)."
+                  },
+                  "action": {
+                    "$ref": "#/$defs/AuditLogAction"
+                  },
+                  "userId": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "Null when the audited user has since been deleted."
+                  },
+                  "before": {
+                    "anyOf": [
+                      {},
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "after": {
+                    "anyOf": [
+                      {},
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                  }
+                },
+                "required": [
+                  "id",
+                  "entityType",
+                  "entityId",
+                  "action",
+                  "userId",
+                  "before",
+                  "after",
+                  "createdAt"
+                ],
+                "example": {
+                  "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "entityType": "organisation",
+                  "entityId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "action": "update",
+                  "userId": "u-admin",
+                  "before": {
+                    "name": "Old"
+                  },
+                  "after": {
+                    "name": "New"
+                  },
+                  "createdAt": "2026-05-17T08:00:00.000Z"
+                }
+              },
+              "AuditLogAction": {
+                "type": "string",
+                "enum": [
+                  "create",
+                  "update",
+                  "delete",
+                  "move"
+                ]
+              }
+            }
+          },
+          "total": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "AuditLogEntry": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "entityType": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Lowercase singular noun, e.g. \"organisation\"."
+                  },
+                  "entityId": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Caller-defined id of the audited row (uuid for orgs, text for users)."
+                  },
+                  "action": {
+                    "$ref": "#/$defs/AuditLogAction"
+                  },
+                  "userId": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "Null when the audited user has since been deleted."
+                  },
+                  "before": {
+                    "anyOf": [
+                      {},
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "after": {
+                    "anyOf": [
+                      {},
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                  }
+                },
+                "required": [
+                  "id",
+                  "entityType",
+                  "entityId",
+                  "action",
+                  "userId",
+                  "before",
+                  "after",
+                  "createdAt"
+                ],
+                "example": {
+                  "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "entityType": "organisation",
+                  "entityId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "action": "update",
+                  "userId": "u-admin",
+                  "before": {
+                    "name": "Old"
+                  },
+                  "after": {
+                    "name": "New"
+                  },
+                  "createdAt": "2026-05-17T08:00:00.000Z"
+                }
+              },
+              "AuditLogAction": {
+                "type": "string",
+                "enum": [
+                  "create",
+                  "update",
+                  "delete",
+                  "move"
+                ]
+              }
+            }
+          }
+        },
+        "required": [
+          "data",
+          "page",
+          "perPage",
+          "total"
+        ]
       },
       "ErrorEnvelope": {
         "$ref": "#/components/schemas/ErrorEnvelope"
@@ -3045,6 +3690,18 @@
       },
       "ListOrganisationsResponse": {
         "$ref": "#/components/schemas/ListOrganisationsResponse"
+      },
+      "AuditLogAction": {
+        "$ref": "#/components/schemas/AuditLogAction"
+      },
+      "AuditLogEntry": {
+        "$ref": "#/components/schemas/AuditLogEntry"
+      },
+      "ListAuditLogQuery": {
+        "$ref": "#/components/schemas/ListAuditLogQuery"
+      },
+      "ListAuditLogResponse": {
+        "$ref": "#/components/schemas/ListAuditLogResponse"
       }
     }
   }
