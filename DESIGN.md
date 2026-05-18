@@ -2,7 +2,7 @@
 
 > Reference document for reviewing and maintaining the visual design of the Taidohub webapp.
 
-> **Status: target spec — not yet implemented.** Most components, routes, and page inventories below describe the visual *destination*. The shipping app today renders a small surface area (admin/organisations, admin/audit-log, login, dashboard scaffold) on top of the FSD scaffolding under [`apps/frontend/src`](apps/frontend/src/). Token values in [`apps/frontend/src/app/styles/globals.css`](apps/frontend/src/app/styles/globals.css) also still diverge from the values quoted in §2 (e.g. `--color-primary` currently `#2D5FA2`, doc target `#051125`). Treat any mismatch as "implementation lagging the spec," not "spec is wrong."
+> **Status: target spec — components and routes not yet implemented, but the design tokens are now real.** The §2 hex values are the source of truth and have been written into [`apps/frontend/src/app/styles/globals.css`](apps/frontend/src/app/styles/globals.css); the §7 Lucide catalog matches what the codebase imports. Most components/routes/page inventories below still describe the visual *destination* — the shipping app today only renders admin/organisations, admin/audit-log, login, and a dashboard scaffold on top of the FSD layout under [`apps/frontend/src`](apps/frontend/src/). Treat any remaining mismatch as "implementation lagging the spec," not "spec is wrong."
 
 ---
 
@@ -27,7 +27,7 @@ Concrete principles flowing from this:
 
 ## 2. Color Tokens
 
-All colors come from [`apps/frontend/src/app/styles/globals.css`](apps/frontend/src/app/styles/globals.css) via the Tailwind `@theme` directive. Hex values below are the design target; the file currently ships slightly different values (see the banner at the top).
+All colors come from [`apps/frontend/src/app/styles/globals.css`](apps/frontend/src/app/styles/globals.css) via the Tailwind `@theme` directive. The hex values below are the source of truth — if a discrepancy appears, the spec wins and the CSS file is what needs updating.
 
 ### Surface scale (light → dark)
 | Token | Hex | Usage |

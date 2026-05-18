@@ -36,55 +36,57 @@
   --font-body: 'Manrope', 'Noto Sans JP', sans-serif;
   --font-label: 'Space Grotesk', sans-serif;
 
-  /* ── Primary: "The Authority" — Deep navy ───────────────────────────────── */
-  --color-primary: #2D5FA2;
-  --color-primary-container: #1b3a6b;
-  --color-primary-foreground: #f5f8fa;
+  /* ── Primary: navy-tinted near-black (DESIGN.md §2) ──────────────────────── */
+  --color-primary: #051125;
+  --color-primary-container: #1b263b;
+  --color-primary-foreground: #ffffff;
   --color-on-primary: #ffffff;
-  --color-on-primary-container: #a8c8ff;
-  --color-inverse-primary: #a8c8ff;
+  --color-on-primary-container: #828da7;
+  --color-inverse-primary: #bbc6e2;
 
-  /* ── Secondary: "The Energy" — Gold ──────────────────────────────────────── */
-  --color-secondary: #FEC922;
-  --color-secondary-container: #FEC922;
-  --color-secondary-foreground: #0f172a;
-  --color-on-secondary: #3a2e00;
-  --color-on-secondary-container: #3a2e00;
+  /* ── Secondary: warm brown accent (DESIGN.md §2) ─────────────────────────── */
+  --color-secondary: #77574d;
+  --color-secondary-container: #fed3c7;
+  --color-secondary-foreground: #ffffff;
+  --color-on-secondary: #ffffff;
+  --color-on-secondary-container: #795950;
 
-  /* ── Tertiary: "The Atmosphere" — Soft blue ──────────────────────────────── */
-  --color-tertiary: #3b475c;
-  --color-tertiary-container: #CDDAF4;
-
+  /* ── Tertiary: darkest near-blacks (DESIGN.md §2) ────────────────────────── */
+  --color-tertiary: #0f1112;
+  --color-tertiary-container: #242626;
   --color-on-tertiary: #ffffff;
-  --color-on-tertiary-container: #1a2740;
+  --color-on-tertiary-container: #ffffff;
 
-  /* ── Surfaces: Navy-tinted neutrals ──────────────────────────────────────── */
-  --color-surface: #f5f7fb;
-  --color-surface-dim: #c8d5e8;
-  --color-surface-variant: #dce4f0;
+  /* ── Surfaces: navy-tinted neutrals (DESIGN.md §2) ───────────────────────── */
+  --color-surface: #f8f9fa;
+  --color-surface-dim: #d9dadb;
+  --color-surface-variant: #e1e3e4;
   --color-surface-container-lowest: #ffffff;
-  --color-surface-container-low: #eef2f9;
-  --color-surface-container: #e4eaf4;
-  --color-surface-container-high: #dbe3f0;
+  --color-surface-container-low: #f3f4f5;
+  --color-surface-container: #edeeef;
+  --color-surface-container-high: #e7e8e9;
 
-  --color-background: #f5f7fb;
-  --color-on-surface: #0d1b2e;
-  --color-on-surface-variant: #3b4559;
-  --color-on-background: #0d1b2e;
+  --color-on-surface: #191c1d;
+  --color-on-surface-variant: #45474d;
+  --color-on-background: #191c1d;
 
-  /* ── Error ───────────────────────────────────────────────────────────────── */
+  /* ── Error (DESIGN.md §2) ────────────────────────────────────────────────── */
   --color-error: #ba1a1a;
   --color-error-container: #ffdad6;
 
-  /* ── Outline (ghost borders only — use sparingly) ────────────────────────── */
-  --color-outline: #6b7a94;
-  --color-outline-variant: #bcc5d4;
+  /* ── Outline (ghost borders only — use sparingly, DESIGN.md §2) ──────────── */
+  --color-outline: #75777d;
+  --color-outline-variant: #c5c6cd;
 
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
-  --color-background: hsl(0 0% 100%);
-  --color-foreground: hsl(222.2 84% 4.9%);
+  /* `--color-background` is set above by the MD3 surface block (matches
+     DESIGN.md §2). Don't re-define it here — earlier the shadcn block
+     overrode it to plain white, which silently dropped the navy-tinted
+     neutral the design language calls for. */
+  --color-background: var(--color-surface);
+  --color-foreground: var(--color-on-background);
 
   --color-destructive: hsl(0 84.2% 60.2%);
   --color-destructive-foreground: hsl(210 40% 98%);
@@ -164,8 +166,15 @@
 }
 
 /* ── Signature Textures ──────────────────────────────────────────────────── */
+/* DESIGN.md §6 "Taido Gradient": primary → primary-container. Reserved
+   for primary CTAs and hero backgrounds — treats a dark surface like a
+   developed photo print. Currently unused in the live UI. */
 .taido-gradient {
-  background: linear-gradient(135deg, #2D5FA2 0%, #1b3a6b 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-primary-container) 100%
+  );
 }
 
 :root {
