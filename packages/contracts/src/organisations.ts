@@ -64,9 +64,14 @@ export const CreateOrganisationSchema = OrganisationSchema.omit({
   updatedAt: true,
 }).meta({ id: 'CreateOrganisationInput' });
 
+// Not `.strict()` deliberately: clients (and the `OrganisationForm` in
+// particular) routinely round-trip the full `Organisation` row, including
+// `id` / `createdAt` / `updatedAt` / `type`. Stripping silently keeps the
+// API permissive on the wire; the repo's writable-key allow-list is what
+// actually enforces immutability of `type` (and prevents mass-assignment
+// of `id`, timestamps, etc.).
 export const UpdateOrganisationSchema = CreateOrganisationSchema.partial()
   .omit({ type: true }) // type is immutable
-  .strict()
   .meta({ id: 'UpdateOrganisationInput' });
 
 export const ListOrganisationsQuerySchema = z

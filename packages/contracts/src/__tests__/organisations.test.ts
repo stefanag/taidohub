@@ -64,9 +64,12 @@ describe('CreateOrganisationSchema', () => {
 });
 
 describe('UpdateOrganisationSchema', () => {
-  it('rejects `type` field', () => {
+  it('silently strips `type` field (immutable, enforced by repo allow-list)', () => {
     const result = UpdateOrganisationSchema.safeParse({ type: 'club' });
-    expect(result.success).toBe(false);
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect('type' in result.data).toBe(false);
+    }
   });
 
   it('accepts a partial update', () => {
