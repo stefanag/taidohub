@@ -84,14 +84,42 @@
   /* Used by `GreetingHeader` and related rank indicators. These are
      identity colours — they intentionally sit outside the brand
      three-voice palette and must NOT be reused for general UI accents. */
-  --color-belt-yellow: #FFD700;
+  --color-belt-yellow: #FFDF00;
   --color-belt-orange: #FF8C00;
   --color-belt-purple: #800080;
+  --color-belt-magenta: #AC92EC;
   --color-belt-green: #228B22;
   --color-belt-blue: #1E3A8A;
   --color-belt-brown: #8B4513;
   --color-belt-black: #111827;
-  --color-belt-default: #9CA3AF;
+  --color-belt-white: #FEFEFE;
+  --color-belt-default: var(--color-belt-white);
+   
+  /* Belt gradients */
+  --color-gradient-yellow-start: var(--color-belt-yellow);
+  --color-gradient-yellow-end: #FFBF00;
+  --color-gradient-belt-yellow: linear-gradient(to-bottom, var(--color-gradient-yellow-start), var(--color-gradient-yellow-end));
+  
+  --color-gradient-magenta-start: var(--color-belt-magenta);
+  --color-gradient-magenta-end: #967ADC;
+  --color-gradient-belt-magenta: linear-gradient(to-bottom, var(--color-gradient-magenta-start), var(--color-gradient-magenta-end));
+  
+  --color-gradient-green-start: var(--color-belt-green);
+  --color-gradient-green-end: #1B601C;
+  --color-gradient-belt-green: linear-gradient(to-bottom, var(--color-gradient-green-start), var(--color-gradient-green-end));
+
+  --color-gradient-brown-start: var(--color-belt-brown);
+  --color-gradient-brown-end: #704A07;
+  --color-gradient-belt-brown: linear-gradient(to-bottom, var(--color-gradient-brown-start), var(--color-gradient-brown-end));
+
+  --color-gradient-black-start: var(--color-belt-black);
+  --color-gradient-black-end: #2F4F4F;
+  --color-gradient-belt-black: linear-gradient(to-bottom, var(--color-gradient-black-start), var(--color-gradient-black-end));
+
+  --color-gradient-white-start: var(--color-belt-white);
+  --color-gradient-white-end: #FDFDFD;
+  --color-gradient-belt-white: linear-gradient(to-bottom, var(--color-gradient-white-start), var(--color-gradient-white-end));
+
 
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
