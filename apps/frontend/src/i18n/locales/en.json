@@ -25,7 +25,8 @@
   },
   "nav": {
     "dashboard": "Dashboard",
-    "adminOrganisations": "Organisations"
+    "adminOrganisations": "Organisations",
+    "adminAuditLog": "Audit log"
   },
   "dashboard": {
     "title": "Dashboard"
@@ -73,7 +74,48 @@
       "errors": {
         "hasChildren": "This organisation still has {{count}} child(ren). Reparent or delete them first.",
         "invalidParent": "That parent isn't allowed for this type.",
-        "cycle": "Move would create a cycle."
+        "cycle": "Move would create a cycle.",
+        "tabInvalid": "has errors",
+        "validationSummary": "Please complete required fields: {{fields}}"
+      }
+    },
+    "auditLog": {
+      "title": "Audit log",
+      "empty": "No audit entries yet.",
+      "actions": {
+        "created": "created",
+        "updated": "updated",
+        "deleted": "deleted",
+        "moved": "moved"
+      },
+      "filters": {
+        "entityType": "Entity type",
+        "userId": "User id",
+        "action": "Action",
+        "from": "From",
+        "to": "To",
+        "clear": "Clear",
+        "allEntities": "All entities",
+        "allActions": "All actions"
+      },
+      "entityTypes": {
+        "organisation": "Organisation"
+      },
+      "columns": {
+        "when": "When",
+        "who": "Who",
+        "entity": "Entity",
+        "action": "Action",
+        "diff": "Diff"
+      },
+      "tabs": {
+        "details": "Details",
+        "activity": "Activity"
+      },
+      "diff": {
+        "created": "created",
+        "changed": "changed",
+        "removed": "removed"
       }
     }
   },

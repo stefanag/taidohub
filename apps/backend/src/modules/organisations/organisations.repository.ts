@@ -6,7 +6,7 @@ import type {
 } from '@repo/contracts/organisations';
 import { and, count, eq, ilike, isNull, or, type SQL } from 'drizzle-orm';
 
-import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
+import { DRIZZLE, type DrizzleDb, type DrizzleExecutor } from '../../infrastructure/database/client.js';
 import { organisations, type DbOrganisation } from '../../infrastructure/database/schema/index.js';
 
 @Injectable()
@@ -44,8 +44,9 @@ export class OrganisationsRepository {
     return { data, total: Number(totalRows[0]?.value ?? 0) };
   }
 
-  async create(input: CreateOrganisationInput): Promise<DbOrganisation> {
-    const rows = await this.db
+  async create(input: CreateOrganisationInput, tx?: DrizzleExecutor): Promise<DbOrganisation> {
+    const conn = tx ?? this.db;
+    const rows = await conn
       .insert(organisations)
       .values({
         parentId: input.parentId,
@@ -67,7 +68,8 @@ export class OrganisationsRepository {
     return rows[0];
   }
 
-  async update(id: string, input: UpdateOrganisationInput): Promise<DbOrganisation | null> {
+  async update(id: string, input: UpdateOrganisationInput, tx?: DrizzleExecutor): Promise<DbOrganisation | null> {
+    const conn = tx ?? this.db;
     const patch: Record<string, unknown> = { updatedAt: new Date() };
     for (const key of [
       'parentId','shortCode','slug','country','nameEn','nameSv','nameFi','nameJa',
@@ -75,12 +77,13 @@ export class OrganisationsRepository {
     ] as const) {
       if (input[key] !== undefined) patch[key] = input[key];
     }
-    const rows = await this.db.update(organisations).set(patch).where(eq(organisations.id, id)).returning();
+    const rows = await conn.update(organisations).set(patch).where(eq(organisations.id, id)).returning();
     return rows[0] ?? null;
   }
 
-  async delete(id: string): Promise<boolean> {
-    const rows = await this.db.delete(organisations).where(eq(organisations.id, id)).returning({ id: organisations.id });
+  async delete(id: string, tx?: DrizzleExecutor): Promise<boolean> {
+    const conn = tx ?? this.db;
+    const rows = await conn.delete(organisations).where(eq(organisations.id, id)).returning({ id: organisations.id });
     return rows.length > 0;
   }
 

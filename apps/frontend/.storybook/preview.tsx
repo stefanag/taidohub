@@ -2,7 +2,6 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import type { Preview } from '@storybook/react-vite';
 import { initialize, mswLoader } from 'msw-storybook-addon';
 
-import { postHandlers } from '../src/entities/post';
 import { AbilityContext } from '../src/shared/lib/casl/ability-context';
 import { defineAbilityFor } from '../src/shared/lib/casl/defineAbilityFor';
 import { createQueryClient } from '../src/shared/api/queryClient';
@@ -22,7 +21,10 @@ const preview: Preview = {
     layout: 'centered',
     a11y: { config: {} },
     controls: { matchers: { color: /(background|color)$/i, date: /Date$/ } },
-    msw: { handlers: postHandlers },
+    // No default MSW handlers — individual stories opt-in via their own
+    // `parameters.msw.handlers`. We kept the `msw-storybook-addon` boot
+    // above so stories that DO declare handlers still get them.
+    msw: { handlers: [] },
   },
   loaders: [mswLoader],
   decorators: [

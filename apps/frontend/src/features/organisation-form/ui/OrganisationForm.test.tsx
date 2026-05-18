@@ -14,7 +14,7 @@ const PARENT_CANDIDATE: Organisation = {
   type: 'international_federation',
   shortCode: 'WTF',
   slug: 'world-taido-federation',
-  country: 'JPN',
+  country: null,
   nameEn: 'World Taido Federation',
   nameSv: 'Världstaidoförbundet',
   nameFi: 'Maailman Taidoliitto',

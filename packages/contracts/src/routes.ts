@@ -24,3 +24,7 @@ export const OrganisationsRoutes = {
   base: '/api/admin/organisations',
   byId: (id: string) => `/api/admin/organisations/${id}` as const,
 } as const;
+
+export const AuditLogRoutes = {
+  base: '/api/admin/audit-log',
+} as const;

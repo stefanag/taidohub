@@ -15,7 +15,7 @@ export const organisations = pgTable(
     type: text('type', { enum: ['international_federation', 'national_federation', 'club'] }).notNull(),
     shortCode: text('short_code').notNull(),
     slug: text('slug'),
-    country: text('country').notNull(),
+    country: text('country'),
     nameEn: text('name_en').notNull(),
     nameSv: text('name_sv').notNull(),
     nameFi: text('name_fi').notNull(),

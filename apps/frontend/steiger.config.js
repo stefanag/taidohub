@@ -41,4 +41,28 @@ export default defineConfig([
       'fsd/forbidden-imports': 'off',
     },
   },
+  {
+    // OrganisationForm renders the AuditLogTable widget in its "Activity"
+    // tab when editing an existing org — the widget is the right unit to
+    // own all the audit-log query/render/pagination logic, but FSD's strict
+    // layering forbids features from importing widgets. Lifting the form
+    // out of features/ would force a much larger rearrangement (the page
+    // already composes form+tree+dialogs as features). Allow the cross-
+    // import here only.
+    files: ['src/features/organisation-form/**'],
+    rules: {
+      'fsd/forbidden-imports': 'off',
+    },
+  },
+  {
+    // The AuditLogTable test mocks the entity's API module by its deep
+    // path because `audit-log.queries.ts` imports the fetcher from there
+    // directly (not via the barrel). Mocking the barrel wouldn't reach
+    // that import, so `vi.mock` MUST target the deep path. Allow the
+    // public-API sidestep for this test file only.
+    files: ['src/widgets/audit-log-table/**/*.test.{ts,tsx}'],
+    rules: {
+      'fsd/no-public-api-sidestep': 'off',
+    },
+  },
 ]);

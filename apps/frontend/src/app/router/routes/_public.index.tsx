@@ -32,7 +32,7 @@ export const indexRoute = createRoute({
       const result = await authClient.getSession();
       hasSession = Boolean(result.data);
     } catch {
-      hasSession = false;
+      /* swallow — `hasSession` stays false */
     }
     if (hasSession) {
       throw redirect({ to: '/dashboard' });

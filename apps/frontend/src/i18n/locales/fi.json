@@ -25,7 +25,8 @@
   },
   "nav": {
     "dashboard": "Kojelauta",
-    "adminOrganisations": "Organisaatiot"
+    "adminOrganisations": "Organisaatiot",
+    "adminAuditLog": "Auditointiloki"
   },
   "dashboard": {
     "title": "Kojelauta"
@@ -73,7 +74,48 @@
       "errors": {
         "hasChildren": "Tällä organisaatiolla on vielä {{count}} alaorganisaatio(ta). Siirrä tai poista ne ensin.",
         "invalidParent": "Tämä vanhempi ei ole sallittu tälle tyypille.",
-        "cycle": "Siirto loisi syklin."
+        "cycle": "Siirto loisi syklin.",
+        "tabInvalid": "sisältää virheitä",
+        "validationSummary": "Täytä pakolliset kentät: {{fields}}"
+      }
+    },
+    "auditLog": {
+      "title": "Auditointiloki",
+      "empty": "Ei vielä auditointimerkintöjä.",
+      "actions": {
+        "created": "luotu",
+        "updated": "päivitetty",
+        "deleted": "poistettu",
+        "moved": "siirretty"
+      },
+      "filters": {
+        "entityType": "Entiteettityyppi",
+        "userId": "Käyttäjä-id",
+        "action": "Toiminto",
+        "from": "Mistä",
+        "to": "Mihin",
+        "clear": "Tyhjennä",
+        "allEntities": "Kaikki entiteetit",
+        "allActions": "Kaikki toiminnot"
+      },
+      "entityTypes": {
+        "organisation": "Organisaatio"
+      },
+      "columns": {
+        "when": "Milloin",
+        "who": "Kuka",
+        "entity": "Entiteetti",
+        "action": "Toiminto",
+        "diff": "Erot"
+      },
+      "tabs": {
+        "details": "Tiedot",
+        "activity": "Aktiviteetti"
+      },
+      "diff": {
+        "created": "luotuja",
+        "changed": "muutettuja",
+        "removed": "poistettuja"
       }
     }
   },

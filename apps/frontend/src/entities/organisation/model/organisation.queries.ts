@@ -49,17 +49,21 @@ export function organisationQueryOptions(id: string) {
   });
 }
 
+// The composed-onSuccess pattern below intentionally spreads `options` FIRST
+// and defines `onSuccess` AFTER. Reverse order silently lets a caller-supplied
+// `onSuccess` overwrite the invalidating one — the dialog closes but the
+// list never refetches.
 export function useCreateOrganisation(
   options?: Omit<UseMutationOptions<Organisation, Error, CreateOrganisationInput>, 'mutationFn'>,
 ) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: createOrganisation,
+    ...options,
     onSuccess: (...args) => {
       void queryClient.invalidateQueries({ queryKey: organisationKeys.lists() });
       options?.onSuccess?.(...args);
     },
-    ...options,
   });
 }
 
@@ -74,12 +78,12 @@ export function useUpdateOrganisation(
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ id, input }: UpdateOrganisationVariables) => updateOrganisation(id, input),
+    ...options,
     onSuccess: (data, vars, ...rest) => {
       void queryClient.invalidateQueries({ queryKey: organisationKeys.detail(vars.id) });
       void queryClient.invalidateQueries({ queryKey: organisationKeys.lists() });
       options?.onSuccess?.(data, vars, ...rest);
     },
-    ...options,
   });
 }
 
@@ -89,10 +93,10 @@ export function useDeleteOrganisation(
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => deleteOrganisation(id),
+    ...options,
     onSuccess: (...args) => {
       void queryClient.invalidateQueries({ queryKey: organisationKeys.all });
       options?.onSuccess?.(...args);
     },
-    ...options,
   });
 }

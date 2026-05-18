@@ -1,0 +1,1 @@
+ALTER TABLE "organisations" ALTER COLUMN "country" DROP NOT NULL;

@@ -138,6 +138,10 @@ describe('<AppSidebar>', () => {
     const adminLink = screen.getByRole('link', { name: /^Organisations$/i });
     expect(adminLink).toBeInTheDocument();
     expect(adminLink).toHaveAttribute('href', '/admin/organisations');
+
+    const auditLogLink = screen.getByRole('link', { name: /^Audit log$/i });
+    expect(auditLogLink).toBeInTheDocument();
+    expect(auditLogLink).toHaveAttribute('href', '/admin/audit-log');
   });
 
   it('hides the admin organisations link for non-admin users', () => {
@@ -153,9 +157,15 @@ describe('<AppSidebar>', () => {
     expect(
       screen.queryByRole('link', { name: /^Organisations$/i }),
     ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('link', { name: /^Audit log$/i }),
+    ).not.toBeInTheDocument();
     const links = screen.queryAllByRole('link');
     expect(
       links.find((l) => l.getAttribute('href') === '/admin/organisations'),
+    ).toBeUndefined();
+    expect(
+      links.find((l) => l.getAttribute('href') === '/admin/audit-log'),
     ).toBeUndefined();
   });
 });

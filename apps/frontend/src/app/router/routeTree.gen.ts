@@ -13,9 +13,9 @@ import { Route as PublicRouteImport } from './routes/_public'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as PublicIndexRouteImport } from './routes/_public.index'
 import { Route as PublicLoginRouteImport } from './routes/_public.login'
-import { Route as AppPostsRouteImport } from './routes/_app.posts'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
 import { Route as AppAdminOrganisationsRouteImport } from './routes/_app.admin.organisations'
+import { Route as AppAdminAuditLogRouteImport } from './routes/_app.admin.audit-log'
 
 const PublicRoute = PublicRouteImport.update({
   id: '/_public',
@@ -35,11 +35,6 @@ const PublicLoginRoute = PublicLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => PublicRoute,
 } as any)
-const AppPostsRoute = AppPostsRouteImport.update({
-  id: '/posts',
-  path: '/posts',
-  getParentRoute: () => AppRoute,
-} as any)
 const AppDashboardRoute = AppDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -50,19 +45,24 @@ const AppAdminOrganisationsRoute = AppAdminOrganisationsRouteImport.update({
   path: '/admin/organisations',
   getParentRoute: () => AppRoute,
 } as any)
+const AppAdminAuditLogRoute = AppAdminAuditLogRouteImport.update({
+  id: '/admin/audit-log',
+  path: '/admin/audit-log',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof PublicIndexRoute
   '/dashboard': typeof AppDashboardRoute
-  '/posts': typeof AppPostsRoute
   '/login': typeof PublicLoginRoute
+  '/admin/audit-log': typeof AppAdminAuditLogRoute
   '/admin/organisations': typeof AppAdminOrganisationsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof PublicIndexRoute
   '/dashboard': typeof AppDashboardRoute
-  '/posts': typeof AppPostsRoute
   '/login': typeof PublicLoginRoute
+  '/admin/audit-log': typeof AppAdminAuditLogRoute
   '/admin/organisations': typeof AppAdminOrganisationsRoute
 }
 export interface FileRoutesById {
@@ -70,24 +70,34 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteWithChildren
   '/_public': typeof PublicRouteWithChildren
   '/_app/dashboard': typeof AppDashboardRoute
-  '/_app/posts': typeof AppPostsRoute
   '/_public/login': typeof PublicLoginRoute
   '/_public/': typeof PublicIndexRoute
+  '/_app/admin/audit-log': typeof AppAdminAuditLogRoute
   '/_app/admin/organisations': typeof AppAdminOrganisationsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/posts' | '/login' | '/admin/organisations'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/login'
+    | '/admin/audit-log'
+    | '/admin/organisations'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/posts' | '/login' | '/admin/organisations'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/login'
+    | '/admin/audit-log'
+    | '/admin/organisations'
   id:
     | '__root__'
     | '/_app'
     | '/_public'
     | '/_app/dashboard'
-    | '/_app/posts'
     | '/_public/login'
     | '/_public/'
+    | '/_app/admin/audit-log'
     | '/_app/admin/organisations'
   fileRoutesById: FileRoutesById
 }
@@ -126,13 +136,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicLoginRouteImport
       parentRoute: typeof PublicRoute
     }
-    '/_app/posts': {
-      id: '/_app/posts'
-      path: '/posts'
-      fullPath: '/posts'
-      preLoaderRoute: typeof AppPostsRouteImport
-      parentRoute: typeof AppRoute
-    }
     '/_app/dashboard': {
       id: '/_app/dashboard'
       path: '/dashboard'
@@ -147,18 +150,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdminOrganisationsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/admin/audit-log': {
+      id: '/_app/admin/audit-log'
+      path: '/admin/audit-log'
+      fullPath: '/admin/audit-log'
+      preLoaderRoute: typeof AppAdminAuditLogRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
 interface AppRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
-  AppPostsRoute: typeof AppPostsRoute
+  AppAdminAuditLogRoute: typeof AppAdminAuditLogRoute
   AppAdminOrganisationsRoute: typeof AppAdminOrganisationsRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
-  AppPostsRoute: AppPostsRoute,
+  AppAdminAuditLogRoute: AppAdminAuditLogRoute,
   AppAdminOrganisationsRoute: AppAdminOrganisationsRoute,
 }
 

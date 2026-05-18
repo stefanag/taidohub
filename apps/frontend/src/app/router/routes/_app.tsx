@@ -33,14 +33,14 @@ export const appLayoutRoute = createRoute({
   getParentRoute: () => rootRoute,
   id: '_app',
   beforeLoad: async () => {
+    // Network/server failure is treated as "no session" so the user lands
+    // on /login rather than a blank error screen.
     let hasSession = false;
     try {
       const result = await authClient.getSession();
       hasSession = Boolean(result.data);
     } catch {
-      // Network/server failure: treat as no session so the user lands on
-      // /login rather than a blank error screen.
-      hasSession = false;
+      /* swallow — `hasSession` stays false */
     }
     if (!hasSession) {
       throw redirect({ to: '/login' });

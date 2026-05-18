@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 
 import { App } from './App.js';
 import './styles/globals.css';
+import 'flag-icons/css/flag-icons.min.css';
 import '@/i18n';
 
 const rootEl = document.getElementById('root');

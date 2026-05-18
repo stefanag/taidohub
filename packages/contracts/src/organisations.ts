@@ -17,56 +17,103 @@ const CountrySchema = z
 
 const OptionalEmail = z.string().email().nullable().optional();
 
-export const OrganisationSchema = z
-  .object({
-    id: z.string().uuid().describe('Unique identifier.'),
-    parentId: z.string().uuid().nullable().describe('Parent organisation id, null for international federations.'),
-    type: OrganisationTypeSchema,
-    shortCode: z.string().min(1).max(20).describe('Short display code, e.g. "WTF".'),
-    slug: z.string().min(1).max(100).nullable().describe('URL-safe full name. Unique when present.'),
-    country: CountrySchema.describe('ISO 3166-1 alpha-3 country code.'),
-    nameEn: z.string().min(1).max(200),
-    nameSv: z.string().min(1).max(200),
-    nameFi: z.string().min(1).max(200),
-    nameJa: z.string().max(200).nullable(),
-    logoUrl: z.string().url().nullable(),
-    address: z.string().nullable(),
-    contactEmail: OptionalEmail,
-    headInstructorId: z.string().nullable(),
-    createdAt: z.string().datetime(),
-    updatedAt: z.string().datetime(),
-  })
-  .meta({
-    id: 'Organisation',
-    example: {
-      id: UUID_EXAMPLE,
-      parentId: null,
-      type: 'international_federation',
-      shortCode: 'WTF',
-      slug: 'world-taido-federation',
-      country: 'JPN',
-      nameEn: 'World Taido Federation',
-      nameSv: 'Världstaidoförbundet',
-      nameFi: 'Maailman Taidoliitto',
-      nameJa: '世界躰道連盟',
-      logoUrl: null,
-      address: null,
-      contactEmail: null,
-      headInstructorId: null,
-      createdAt: ISO_DATETIME_EXAMPLE,
-      updatedAt: ISO_DATETIME_EXAMPLE,
-    },
-  });
+// Bare object shape (no refine, no meta). Kept as a plain `ZodObject` so we
+// can derive Create/Update via `.omit()` / `.partial()` — once you wrap a
+// schema in `.superRefine()` it becomes `ZodEffects` and those methods are
+// no longer available.
+const OrganisationObject = z.object({
+  id: z.string().uuid().describe('Unique identifier.'),
+  parentId: z.string().uuid().nullable().describe('Parent organisation id, null for international federations.'),
+  type: OrganisationTypeSchema,
+  shortCode: z.string().min(1).max(20).describe('Short display code, e.g. "WTF".'),
+  slug: z.string().min(1).max(100).nullable().describe('URL-safe full name. Unique when present.'),
+  country: CountrySchema.nullable().describe(
+    'ISO 3166-1 alpha-3 country code. Null for international federations.',
+  ),
+  nameEn: z.string().min(1).max(200),
+  nameSv: z.string().min(1).max(200),
+  nameFi: z.string().min(1).max(200),
+  nameJa: z.string().max(200).nullable(),
+  logoUrl: z.string().url().nullable(),
+  address: z.string().nullable(),
+  contactEmail: OptionalEmail,
+  headInstructorId: z.string().nullable(),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+});
 
-export const CreateOrganisationSchema = OrganisationSchema.omit({
+// Country presence is dictated by `type`: international federations must
+// have `country: null` (they're supra-national), and national federations
+// / clubs must have a valid ISO code. Reported as an issue on `country` so
+// the form surfaces it under the country field.
+function enforceCountryByType(
+  data: { type: OrganisationType; country: string | null },
+  ctx: z.RefinementCtx,
+): void {
+  if (data.type === 'international_federation' && data.country !== null) {
+    ctx.addIssue({
+      code: 'custom',
+      path: ['country'],
+      message: 'International federations must not have a country.',
+    });
+  }
+  if (data.type !== 'international_federation' && data.country === null) {
+    ctx.addIssue({
+      code: 'custom',
+      path: ['country'],
+      message: 'Country is required for national federations and clubs.',
+    });
+  }
+}
+
+export const OrganisationSchema = OrganisationObject.superRefine(enforceCountryByType).meta({
+  id: 'Organisation',
+  example: {
+    id: UUID_EXAMPLE,
+    parentId: null,
+    type: 'international_federation',
+    shortCode: 'WTF',
+    slug: 'world-taido-federation',
+    country: null,
+    nameEn: 'World Taido Federation',
+    nameSv: 'Världstaidoförbundet',
+    nameFi: 'Maailman Taidoliitto',
+    nameJa: '世界躰道連盟',
+    logoUrl: null,
+    address: null,
+    contactEmail: null,
+    headInstructorId: null,
+    createdAt: ISO_DATETIME_EXAMPLE,
+    updatedAt: ISO_DATETIME_EXAMPLE,
+  },
+});
+
+export const CreateOrganisationSchema = OrganisationObject.omit({
   id: true,
   createdAt: true,
   updatedAt: true,
-}).meta({ id: 'CreateOrganisationInput' });
+})
+  .superRefine(enforceCountryByType)
+  .meta({ id: 'CreateOrganisationInput' });
 
-export const UpdateOrganisationSchema = CreateOrganisationSchema.partial()
-  .omit({ type: true }) // type is immutable
-  .strict()
+// Not `.strict()` deliberately: clients (and the `OrganisationForm` in
+// particular) routinely round-trip the full `Organisation` row, including
+// `id` / `createdAt` / `updatedAt` / `type`. Stripping silently keeps the
+// API permissive on the wire; the repo's writable-key allow-list is what
+// actually enforces immutability of `type` (and prevents mass-assignment
+// of `id`, timestamps, etc.).
+//
+// No cross-field refine here: a partial update can't see `type` (it's
+// immutable and stripped above), so we can't validate the country rule
+// from the patch alone. The service layer enforces it against the
+// existing row's type before writing.
+export const UpdateOrganisationSchema = OrganisationObject.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  type: true,
+})
+  .partial()
   .meta({ id: 'UpdateOrganisationInput' });
 
 export const ListOrganisationsQuerySchema = z

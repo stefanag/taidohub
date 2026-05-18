@@ -8,6 +8,7 @@ import type { OpenAPIObject, SchemaObject, ReferenceObject } from 'openapi3-ts/o
 import { type ZodTypeAny } from 'zod';
 import { createSchema } from 'zod-openapi';
 
+import { AuditLogOpenApiRegistry } from './audit-log.js';
 import { AuthOpenApiRegistry } from './auth.js';
 import { ErrorEnvelopeOpenApiRegistry } from './errors.js';
 import { OrganisationsOpenApiRegistry } from './organisations.js';
@@ -36,6 +37,7 @@ export function registerContractSchemas(
     AuthOpenApiRegistry,
     UsersOpenApiRegistry,
     OrganisationsOpenApiRegistry,
+    AuditLogOpenApiRegistry,
   ],
 ): OpenAPIObject {
   document.components ??= {};
@@ -65,4 +67,5 @@ export const ContractRegistries = {
   auth: AuthOpenApiRegistry,
   users: UsersOpenApiRegistry,
   organisations: OrganisationsOpenApiRegistry,
+  auditLog: AuditLogOpenApiRegistry,
 } as const;

@@ -2,7 +2,10 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ZodTypeAny } from 'zod';
 
+import type { IsoAlpha3 } from '@repo/contracts/organisations';
+
 import {
+  countryName,
   CreateOrganisationSchema,
   ISO_3166_ALPHA3_CODES,
   type CreateOrganisationInput,
@@ -31,6 +34,7 @@ import {
   TabsList,
   TabsTrigger,
 } from '@/shared/ui/tabs.js';
+import { AuditLogTable } from '@/widgets/audit-log-table';
 
 const ORG_TYPES = [
   'international_federation',
@@ -43,6 +47,9 @@ const DEFAULTS: CreateOrganisationInput = {
   type: 'club',
   shortCode: '',
   slug: null,
+  // `null` for an IF, an ISO-3 code otherwise. Default `type` here is
+  // `'club'` so we seed a real code; `handleTypeChange` swaps to/from
+  // `null` if the user picks a different `type`.
   country: 'SWE',
   nameEn: '',
   nameSv: '',
@@ -54,16 +61,67 @@ const DEFAULTS: CreateOrganisationInput = {
   headInstructorId: null,
 };
 
+// The keys the form is actually responsible for. The full `Organisation` row
+// (passed as `initialValues` in edit mode) carries `id`, `createdAt`,
+// `updatedAt` which `UpdateOrganisationSchema.strict()` rejects as
+// unrecognized keys — that surfaces as a `_root` error on submit. Filtering
+// to these keys at form init keeps the values clean.
+const EDITABLE_KEYS = Object.keys(DEFAULTS) as Array<keyof CreateOrganisationInput>;
+
+function pickEditable(
+  source: Partial<CreateOrganisationInput> & Record<string, unknown> | undefined,
+): Partial<CreateOrganisationInput> {
+  if (!source) return {};
+  const out: Partial<CreateOrganisationInput> = {};
+  for (const key of EDITABLE_KEYS) {
+    if (key in source) {
+      // The assignment is sound because EDITABLE_KEYS is statically typed
+      // against `CreateOrganisationInput`; TypeScript can't track that here.
+      (out as Record<string, unknown>)[key] = (source as Record<string, unknown>)[key];
+    }
+  }
+  return out;
+}
+
 const TYPE_LABEL_KEYS: Record<(typeof ORG_TYPES)[number], string> = {
   international_federation: 'internationalFederation',
   national_federation: 'nationalFederation',
   club: 'club',
 };
 
+// Tabs in display order. Used to find the first invalid one after submit.
+const NAME_TABS = ['en', 'sv', 'fi', 'ja'] as const;
+type NameTab = (typeof NAME_TABS)[number];
+
+const NAME_TAB_FIELD: Record<NameTab, 'nameEn' | 'nameSv' | 'nameFi' | 'nameJa'> = {
+  en: 'nameEn',
+  sv: 'nameSv',
+  fi: 'nameFi',
+  ja: 'nameJa',
+};
+
+// Form field key → i18n label key under `admin.organisations.fields.*`.
+// Used to render human-readable names in the validation summary.
+const FIELD_LABEL_KEYS = {
+  type: 'type',
+  shortCode: 'shortCode',
+  slug: 'slug',
+  country: 'country',
+  parentId: 'parent',
+  nameEn: 'nameEn',
+  nameSv: 'nameSv',
+  nameFi: 'nameFi',
+  nameJa: 'nameJa',
+  logoUrl: 'logoUrl',
+  address: 'address',
+  contactEmail: 'contactEmail',
+  headInstructorId: 'headInstructor',
+} as const;
+
 export interface OrganisationFormProps {
   mode: 'create' | 'edit';
   /** Pre-populated values for edit mode (or initial defaults in create). */
-  initialValues?: Partial<CreateOrganisationInput>;
+  initialValues?: Partial<CreateOrganisationInput> & { id?: string };
   /** Other orgs (excluding this one + its descendants in edit mode). Used to populate the parent picker. */
   parentCandidates: Organisation[];
   onSubmit: (
@@ -85,7 +143,20 @@ export function OrganisationForm({
   onSubmit,
   submitting,
 }: OrganisationFormProps): React.ReactElement {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const locale = i18n.resolvedLanguage ?? i18n.language ?? 'en';
+
+  // Country dropdown options, sorted by localised name in the current
+  // locale. Memoised because the codes list is static (~195 entries) and
+  // the sort uses an `Intl.Collator` allocation we don't want to repeat
+  // on every render.
+  const countryOptions = React.useMemo(() => {
+    const collator = new Intl.Collator(locale, { sensitivity: 'base' });
+    return ISO_3166_ALPHA3_CODES.map((code) => ({
+      code,
+      label: countryName(code as IsoAlpha3, locale),
+    })).sort((a, b) => collator.compare(a.label, b.label));
+  }, [locale]);
   // `useZodForm` is generic over a single schema; we pick one based on mode.
   // The two schemas have compatible shapes for the fields we touch, but the
   // generic can't widen across them in TS — cast the schema here so the
@@ -93,8 +164,14 @@ export function OrganisationForm({
   const schema = (
     mode === 'create' ? CreateOrganisationSchema : UpdateOrganisationSchema
   ) as unknown as ZodTypeAny;
-  const form = useZodForm(schema, { ...DEFAULTS, ...initialValues });
+  const form = useZodForm(schema, { ...DEFAULTS, ...pickEditable(initialValues) });
   const [submitError, setSubmitError] = React.useState<string | undefined>();
+  // Controlled active name tab so we can auto-jump to a tab that has a
+  // validation error after a failed submit.
+  const [activeNameTab, setActiveNameTab] = React.useState<'en' | 'sv' | 'fi' | 'ja'>('en');
+  // Field keys that failed the last validation pass. Drives the global
+  // "fix these" summary at the bottom of the form.
+  const [invalidFieldKeys, setInvalidFieldKeys] = React.useState<string[]>([]);
 
   const handleSubmit = async (
     event: React.FormEvent<HTMLFormElement>,
@@ -102,7 +179,19 @@ export function OrganisationForm({
     event.preventDefault();
     setSubmitError(undefined);
     const result = form.validate();
-    if (!result.ok) return;
+    if (!result.ok) {
+      const keys = Object.keys(result.errors);
+      setInvalidFieldKeys(keys);
+
+      // If the failure is on a name field, jump to its tab so the user can
+      // see the inline error message and fix it.
+      const firstNameTab = NAME_TABS.find((tab) => keys.includes(NAME_TAB_FIELD[tab]));
+      if (firstNameTab) {
+        setActiveNameTab(firstNameTab);
+      }
+      return;
+    }
+    setInvalidFieldKeys([]);
     try {
       await onSubmit(result.data as CreateOrganisationInput | UpdateOrganisationInput);
     } catch (err) {
@@ -110,11 +199,36 @@ export function OrganisationForm({
     }
   };
 
-  const typeValue = (form.values.type as string | undefined) ?? 'club';
-  const countryValue = (form.values.country as string | undefined) ?? 'SWE';
-  const parentValue = (form.values.parentId as string | null | undefined) ?? null;
+  // Label resolver for the global "fix these fields" summary. Falls back to
+  // the raw key if a translation is missing so we never render an empty list.
+  const fieldLabel = (key: string): string => {
+    if (key in FIELD_LABEL_KEYS) {
+      const labelKey = FIELD_LABEL_KEYS[key as keyof typeof FIELD_LABEL_KEYS];
+      return t(`admin.organisations.fields.${labelKey}`, { defaultValue: labelKey });
+    }
+    return key;
+  };
 
-  return (
+  const typeValue = (form.values.type as string | undefined) ?? 'club';
+  const countryValue = (form.values.country as string | null | undefined) ?? null;
+  const parentValue = (form.values.parentId as string | null | undefined) ?? null;
+  const isInternationalFederation = typeValue === 'international_federation';
+
+  // Keep `country` consistent with `type`: IFs require null; NF/club
+  // require a non-null ISO code. When the user toggles `type` we swap the
+  // country value in tandem so the form never sits in a state the schema
+  // (or backend) would reject. `'SWE'` is just the fallback default —
+  // matches `DEFAULTS.country`.
+  const handleTypeChange = (next: string): void => {
+    form.setField('type', next);
+    if (next === 'international_federation' && countryValue !== null) {
+      form.setField('country', null);
+    } else if (next !== 'international_federation' && countryValue === null) {
+      form.setField('country', 'SWE');
+    }
+  };
+
+  const formBody = (
     <form onSubmit={handleSubmit} className="space-y-4" noValidate>
       {/* Type */}
       <FormField>
@@ -123,7 +237,7 @@ export function OrganisationForm({
         </Label>
         <Select
           value={typeValue}
-          onValueChange={(v) => form.setField('type', v)}
+          onValueChange={handleTypeChange}
           disabled={mode === 'edit'}
         >
           <SelectTrigger id="org-type" aria-label={t('admin.organisations.fields.type', { defaultValue: 'Type' })}>
@@ -168,28 +282,31 @@ export function OrganisationForm({
         </FormField>
       </div>
 
-      {/* Country */}
-      <FormField>
-        <Label htmlFor="org-country">
-          {t('admin.organisations.fields.country', { defaultValue: 'Country' })}
-        </Label>
-        <Select
-          value={countryValue}
-          onValueChange={(v) => form.setField('country', v)}
-        >
-          <SelectTrigger id="org-country" aria-label={t('admin.organisations.fields.country', { defaultValue: 'Country' })}>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent className="max-h-64">
-            {ISO_3166_ALPHA3_CODES.map((c) => (
-              <SelectItem key={c} value={c}>
-                {c}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <FormMessage message={form.errors.country} />
-      </FormField>
+      {/* Country — hidden for international federations (they're
+          supra-national; the schema enforces `country: null` for IFs). */}
+      {!isInternationalFederation ? (
+        <FormField>
+          <Label htmlFor="org-country">
+            {t('admin.organisations.fields.country', { defaultValue: 'Country' })}
+          </Label>
+          <Select
+            value={countryValue ?? ''}
+            onValueChange={(v) => form.setField('country', v)}
+          >
+            <SelectTrigger id="org-country" aria-label={t('admin.organisations.fields.country', { defaultValue: 'Country' })}>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="max-h-64">
+              {countryOptions.map(({ code, label }) => (
+                <SelectItem key={code} value={code}>
+                  {label} ({code})
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <FormMessage message={form.errors.country} />
+        </FormField>
+      ) : null}
 
       {/* Parent */}
       <FormField>
@@ -220,12 +337,25 @@ export function OrganisationForm({
         <Label>
           {t('admin.organisations.fields.names', { defaultValue: 'Names' })}
         </Label>
-        <Tabs defaultValue="en">
+        <Tabs value={activeNameTab} onValueChange={(v) => setActiveNameTab(v as NameTab)}>
           <TabsList>
-            <TabsTrigger value="en">EN</TabsTrigger>
-            <TabsTrigger value="sv">SV</TabsTrigger>
-            <TabsTrigger value="fi">FI</TabsTrigger>
-            <TabsTrigger value="ja">JA</TabsTrigger>
+            {NAME_TABS.map((tab) => {
+              const fieldKey = NAME_TAB_FIELD[tab];
+              const hasError = Boolean(form.errors[fieldKey]);
+              return (
+                <TabsTrigger key={tab} value={tab}>
+                  <span className="inline-flex items-center gap-1">
+                    {tab.toUpperCase()}
+                    {hasError ? (
+                      <span
+                        aria-label={t('admin.organisations.errors.tabInvalid', { defaultValue: 'has errors' })}
+                        className="inline-block size-1.5 rounded-full bg-destructive"
+                      />
+                    ) : null}
+                  </span>
+                </TabsTrigger>
+              );
+            })}
           </TabsList>
           <TabsContent value="en">
             <Input
@@ -317,6 +447,15 @@ export function OrganisationForm({
         <FormMessage message={form.errors.headInstructorId} />
       </FormField>
 
+      {invalidFieldKeys.length > 0 ? (
+        <FormMessage
+          message={t('admin.organisations.errors.validationSummary', {
+            defaultValue: 'Please complete required fields: {{fields}}',
+            fields: invalidFieldKeys.map(fieldLabel).join(', '),
+          })}
+        />
+      ) : null}
+
       <FormMessage message={submitError} />
 
       <Button type="submit" disabled={submitting}>
@@ -326,4 +465,32 @@ export function OrganisationForm({
       </Button>
     </form>
   );
+
+  if (mode === 'edit' && initialValues?.id) {
+    return (
+      <Tabs defaultValue="details">
+        <TabsList>
+          <TabsTrigger value="details">
+            {t('admin.auditLog.tabs.details', { defaultValue: 'Details' })}
+          </TabsTrigger>
+          <TabsTrigger value="activity">
+            {t('admin.auditLog.tabs.activity', { defaultValue: 'Activity' })}
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="details">{formBody}</TabsContent>
+        <TabsContent value="activity">
+          <AuditLogTable
+            query={{
+              entityType: 'organisation',
+              entityId: initialValues.id,
+              page: 1,
+              perPage: 25,
+            }}
+          />
+        </TabsContent>
+      </Tabs>
+    );
+  }
+
+  return formBody;
 }

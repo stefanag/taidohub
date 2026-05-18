@@ -15,15 +15,30 @@ Deferred from the v1 organisations admin (spec: `superpowers/specs/2026-05-15-or
 - **Bulk import / CSV**: sysadmin uploads a CSV of organisations (e.g. seed
   a country's club list). Needs a dry-run validation step and a row-level
   error report.
-- **Audit log**: structured log of every create/update/move/delete on
-  organisations — who, when, before/after. Probably a generic
-  `audit_log` table reusable across admin features.
 - **Soft delete**: today `DELETE` is hard; with audit + recovery in mind,
   switch to `deleted_at` and a "Recently deleted" view.
 - **Non-admin read access to the tree**: the API supports read-by-anyone
   if we relax the CASL rule, but no UI surfaces it yet. Decide where
   authenticated non-admin users should see the federation tree (public
   marketing page? authenticated dashboard widget?) and build it then.
+
+## Audit log
+
+Deferred from the v1 audit log (spec: `superpowers/specs/2026-05-17-audit-log-design.md`).
+
+- **Hydrate the "Who" column from users.** v1 shows the raw `user_id`.
+  Join in the list endpoint and display the email (with the id as a
+  tooltip). Trivial once we have a Users admin module to share the
+  lookup with.
+- **CSV export of audit rows.** "Download filtered results" button on
+  the dedicated admin page. Streams CSV from the same
+  `GET /admin/audit-log` endpoint with `?format=csv`.
+- **Saved filter presets.** Let admins bookmark
+  `entityType=organisation&action=delete` etc. as named filters
+  (localStorage v1, server-side later).
+- **Semantic diff viewer.** v1 uses two JSON blocks with key-level
+  highlighting. Replace with a proper structural diff (e.g.
+  `jsondiffpatch`) — easier to scan large records.
 
 ## Hygiene
 

@@ -88,6 +88,16 @@
         "types": "./dist/organisations.d.cts",
         "default": "./dist/organisations.cjs"
       }
+    },
+    "./audit-log": {
+      "import": {
+        "types": "./dist/audit-log.d.ts",
+        "default": "./dist/audit-log.js"
+      },
+      "require": {
+        "types": "./dist/audit-log.d.cts",
+        "default": "./dist/audit-log.cjs"
+      }
     }
   },
   "files": [
