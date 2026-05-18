@@ -2,7 +2,10 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ZodTypeAny } from 'zod';
 
+import type { IsoAlpha3 } from '@repo/contracts/organisations';
+
 import {
+  countryName,
   CreateOrganisationSchema,
   ISO_3166_ALPHA3_CODES,
   type CreateOrganisationInput,
@@ -140,7 +143,20 @@ export function OrganisationForm({
   onSubmit,
   submitting,
 }: OrganisationFormProps): React.ReactElement {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const locale = i18n.resolvedLanguage ?? i18n.language ?? 'en';
+
+  // Country dropdown options, sorted by localised name in the current
+  // locale. Memoised because the codes list is static (~195 entries) and
+  // the sort uses an `Intl.Collator` allocation we don't want to repeat
+  // on every render.
+  const countryOptions = React.useMemo(() => {
+    const collator = new Intl.Collator(locale, { sensitivity: 'base' });
+    return ISO_3166_ALPHA3_CODES.map((code) => ({
+      code,
+      label: countryName(code as IsoAlpha3, locale),
+    })).sort((a, b) => collator.compare(a.label, b.label));
+  }, [locale]);
   // `useZodForm` is generic over a single schema; we pick one based on mode.
   // The two schemas have compatible shapes for the fields we touch, but the
   // generic can't widen across them in TS — cast the schema here so the
@@ -281,9 +297,9 @@ export function OrganisationForm({
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="max-h-64">
-              {ISO_3166_ALPHA3_CODES.map((c) => (
-                <SelectItem key={c} value={c}>
-                  {c}
+              {countryOptions.map(({ code, label }) => (
+                <SelectItem key={code} value={code}>
+                  {label} ({code})
                 </SelectItem>
               ))}
             </SelectContent>

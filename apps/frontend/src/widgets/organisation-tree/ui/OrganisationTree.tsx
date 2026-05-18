@@ -95,7 +95,9 @@ function TreeRow({ node, depth, onEdit, onMove, onDelete }: TreeRowProps): React
         <Badge variant="outline" className="font-mono text-xs">
           {t(`admin.organisations.types.${typeKey}`, { defaultValue: node.type })}
         </Badge>
-        <Badge variant="secondary" className="font-mono text-xs">{node.country}</Badge>
+        {node.country ? (
+          <Badge variant="secondary" className="font-mono text-xs">{node.country}</Badge>
+        ) : null}
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

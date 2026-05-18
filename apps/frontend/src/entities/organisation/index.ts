@@ -34,4 +34,5 @@ export {
 } from './model/organisation.queries.js';
 
 export { buildTree, type OrganisationNode } from './lib/buildTree.js';
+export { countryName } from './lib/countryName.js';
 export { displayName } from './lib/displayName.js';
