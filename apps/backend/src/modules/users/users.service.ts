@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { type User } from '@repo/contracts/users';
+import { type Role, type User } from '@repo/contracts/users';
 
 import { UsersRepository } from './users.repository.js';
 
@@ -29,6 +29,8 @@ export class UsersService {
     name: string | null;
     emailVerified: boolean;
     image: string | null;
+    role: string;
+    deactivatedAt: Date | null;
     createdAt: Date;
     updatedAt: Date;
   }): User {
@@ -38,6 +40,8 @@ export class UsersService {
       name: row.name,
       emailVerified: row.emailVerified,
       image: row.image,
+      role: row.role as Role,
+      deactivatedAt: row.deactivatedAt?.toISOString() ?? null,
       createdAt: row.createdAt.toISOString(),
       updatedAt: row.updatedAt.toISOString(),
     };
