@@ -18,7 +18,9 @@ const admin = {
   name: null,
   image: null,
   locale: 'en',
-  role: 'admin',
+  role: 'sysadmin' as const,
+  deactivatedAt: null,
+  memberships: [],
 };
 const civilian = {
   id: 'u-user',
@@ -27,7 +29,9 @@ const civilian = {
   name: null,
   image: null,
   locale: 'en',
-  role: 'user',
+  role: 'user' as const,
+  deactivatedAt: null,
+  memberships: [],
 };
 
 const IF_ROW = {

@@ -11,9 +11,10 @@ import { AuditLogService } from './audit-log.service.js';
 
 const admin = {
   id: 'u-admin', email: 'admin@example.com', emailVerified: true,
-  name: null, image: null, locale: 'en', role: 'admin',
+  name: null, image: null, locale: 'en', role: 'sysadmin' as const,
+  deactivatedAt: null, memberships: [],
 };
-const civilian = { ...admin, id: 'u-user', email: 'user@example.com', role: 'user' };
+const civilian = { ...admin, id: 'u-user', email: 'user@example.com', role: 'user' as const };
 
 function repoStub() {
   return {
