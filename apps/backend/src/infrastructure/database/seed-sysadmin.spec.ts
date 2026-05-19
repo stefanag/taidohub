@@ -18,7 +18,7 @@ function makeDeps(overrides: Partial<SeedDeps> = {}): SeedDeps {
 }
 
 describe('seedSysadmin', () => {
-  it('creates the user via signUpEmail and promotes to admin when missing', async () => {
+  it('creates the user via signUpEmail and promotes to sysadmin when missing', async () => {
     const deps = makeDeps();
     const result = await seedSysadmin(deps, config);
 
@@ -28,24 +28,24 @@ describe('seedSysadmin', () => {
       password: config.password,
       name: config.name,
     });
-    expect(deps.setRoleByEmail).toHaveBeenCalledWith(config.email, 'admin');
+    expect(deps.setRoleByEmail).toHaveBeenCalledWith(config.email, 'sysadmin');
     expect(result).toEqual({ created: true, promoted: true });
   });
 
-  it('skips signup and promotes when the user already exists with non-admin role', async () => {
+  it('skips signup and promotes when the user already exists with non-sysadmin role', async () => {
     const deps = makeDeps({
       findUserByEmail: vi.fn().mockResolvedValue({ id: 'u1', role: 'user' }),
     });
     const result = await seedSysadmin(deps, config);
 
     expect(deps.signUpEmail).not.toHaveBeenCalled();
-    expect(deps.setRoleByEmail).toHaveBeenCalledWith(config.email, 'admin');
+    expect(deps.setRoleByEmail).toHaveBeenCalledWith(config.email, 'sysadmin');
     expect(result).toEqual({ created: false, promoted: true });
   });
 
-  it('is a no-op when the user exists and is already admin', async () => {
+  it('is a no-op when the user exists and is already sysadmin', async () => {
     const deps = makeDeps({
-      findUserByEmail: vi.fn().mockResolvedValue({ id: 'u1', role: 'admin' }),
+      findUserByEmail: vi.fn().mockResolvedValue({ id: 'u1', role: 'sysadmin' }),
     });
     const result = await seedSysadmin(deps, config);
 

@@ -1,6 +1,6 @@
 /**
  * Pure seed logic — given concrete dependencies, ensures a sysadmin row
- * exists and has role='admin'. The CLI wrapper in `./seed.ts` injects real
+ * exists and has role='sysadmin'. The CLI wrapper in `./seed.ts` injects real
  * implementations against drizzle + better-auth; tests inject stubs.
  */
 
@@ -26,7 +26,7 @@ export interface SeedConfig {
 export interface SeedResult {
   /** `true` if a new user row was created; `false` if it already existed. */
   created: boolean;
-  /** `true` if the role had to be set to 'admin'; `false` if already admin. */
+  /** `true` if the role had to be set to 'sysadmin'; `false` if already sysadmin. */
   promoted: boolean;
 }
 
@@ -42,14 +42,14 @@ export async function seedSysadmin(
       password: config.password,
       name: config.name,
     });
-    await deps.setRoleByEmail(config.email, 'admin');
+    await deps.setRoleByEmail(config.email, 'sysadmin');
     return { created: true, promoted: true };
   }
 
-  if (existing.role === 'admin') {
+  if (existing.role === 'sysadmin') {
     return { created: false, promoted: false };
   }
 
-  await deps.setRoleByEmail(config.email, 'admin');
+  await deps.setRoleByEmail(config.email, 'sysadmin');
   return { created: false, promoted: true };
 }
