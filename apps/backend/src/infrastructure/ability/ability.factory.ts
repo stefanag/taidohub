@@ -1,11 +1,12 @@
 import { AbilityBuilder, createMongoAbility } from '@casl/ability';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Optional } from '@nestjs/common';
 
 import { type AuthenticatedUser } from '../auth/auth.types.js';
 
 import { AuditLogAbilityRules } from '../../modules/audit-log/audit-log.abilities.js';
 import { OrganisationsAbilityRules } from '../../modules/organisations/organisations.abilities.js';
 import { UsersAbilityRules } from '../../modules/users/users.abilities.js';
+import { MembershipsAbilityRules } from '../../modules/memberships/memberships.abilities.js';
 
 import {
   type AbilityRuleContributor,
@@ -27,8 +28,14 @@ export class AbilityFactory {
     usersRules: UsersAbilityRules,
     organisationsRules: OrganisationsAbilityRules,
     auditLogRules: AuditLogAbilityRules,
+    @Optional() membershipsRules?: MembershipsAbilityRules,
   ) {
-    this.contributors = [usersRules, organisationsRules, auditLogRules];
+    this.contributors = [
+      usersRules,
+      organisationsRules,
+      auditLogRules,
+      ...(membershipsRules ? [membershipsRules] : []),
+    ];
   }
 
   /**
