@@ -1,3 +1,4 @@
+import { type AbilityBuilder } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
 
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
@@ -5,18 +6,17 @@ import {
   type AbilityRuleContributor,
   type AppAbility,
 } from '../../infrastructure/ability/ability.types.js';
-import { type AbilityBuilder } from '@casl/ability';
 
 /**
- * - Authenticated users may read their own user row.
- * - Users with `role === 'admin'` may manage all users.
+ * - `sysadmin` can manage every user.
+ * - Anyone else can read their own row.
  */
 @Injectable()
 export class UsersAbilityRules implements AbilityRuleContributor {
   contributeTo(builder: AbilityBuilder<AppAbility>, user: AuthenticatedUser | null): void {
     if (!user) return;
 
-    if (user.role === 'admin') {
+    if (user.role === 'sysadmin') {
       builder.can('manage', 'User');
       return;
     }
