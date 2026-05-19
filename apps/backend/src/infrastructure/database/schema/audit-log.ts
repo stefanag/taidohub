@@ -15,7 +15,17 @@ export const auditLog = pgTable(
     id: uuid('id').defaultRandom().primaryKey(),
     entityType: text('entity_type').notNull(),
     entityId: text('entity_id').notNull(),
-    action: text('action', { enum: ['create', 'update', 'delete', 'move'] }).notNull(),
+    action: text('action', {
+      enum: [
+        'create',
+        'update',
+        'delete',
+        'move',
+        'deactivate',
+        'reactivate',
+        'password_reset_triggered',
+      ],
+    }).notNull(),
     userId: text('user_id').references(() => user.id, { onDelete: 'set null' }),
     before: jsonb('before'),
     after: jsonb('after'),
