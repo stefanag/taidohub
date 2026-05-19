@@ -98,6 +98,16 @@
         "types": "./dist/audit-log.d.cts",
         "default": "./dist/audit-log.cjs"
       }
+    },
+    "./memberships": {
+      "import": {
+        "types": "./dist/memberships.d.ts",
+        "default": "./dist/memberships.js"
+      },
+      "require": {
+        "types": "./dist/memberships.d.cts",
+        "default": "./dist/memberships.cjs"
+      }
     }
   },
   "files": [

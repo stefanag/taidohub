@@ -17,3 +17,4 @@ export * from './auth.js';
 export * from './openapi.js';
 export * from './organisations.js';
 export * from './audit-log.js';
+export * from './memberships.js';
