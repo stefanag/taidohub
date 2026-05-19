@@ -53,6 +53,8 @@ export type OrganisationSubjectShape = {
 export type AuditLogSubjectShape = {
   readonly __caslSubjectType__: 'AuditLog';
   id?: string;
+  entityType?: string;
+  entityId?: string;
 };
 
 export type OrganisationMembershipSubjectShape = {
