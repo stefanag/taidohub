@@ -73,8 +73,9 @@ export class UsersRepository {
   }
 
   /** Count users whose role is `sysadmin` and who are not deactivated. */
-  async countActiveSysadmins(): Promise<number> {
-    const rows = await this.db
+  async countActiveSysadmins(tx?: DrizzleExecutor): Promise<number> {
+    const conn = tx ?? this.db;
+    const rows = await conn
       .select({ value: count() })
       .from(user)
       .where(and(eq(user.role, 'sysadmin'), isNull(user.deactivatedAt)));
