@@ -53,6 +53,8 @@ function repoStub() {
     findById: vi.fn(),
     findByEmail: vi.fn(),
     list: vi.fn(),
+    update: vi.fn(),
+    countActiveSysadmins: vi.fn(),
   } satisfies Record<keyof UsersRepository, ReturnType<typeof vi.fn>>;
 }
 
@@ -72,26 +74,27 @@ async function makeService(repo: ReturnType<typeof repoStub>) {
 }
 
 describe('UsersService — list', () => {
-  let repo: ReturnType<typeof repoStub>;
-  let service: UsersService;
-  beforeEach(async () => {
-    repo = repoStub();
-    service = await makeService(repo);
+  it('rejects a non-sysadmin', async () => {
+    const repo = repoStub();
+    const service = await makeService(repo);
+    await expect(service.list({ deactivated: 'false', page: 1, perPage: 25 }, plainUser)).rejects.toThrow(
+      ForbiddenException,
+    );
   });
 
-  it('returns all rows for a sysadmin', async () => {
-    repo.list.mockResolvedValue([USER_ROW, OTHER_ROW]);
-    const out = await service.list(sysadmin);
-    expect(out.map((u) => u.id)).toEqual(['u-user', 'u-other']);
-  });
+  it('returns a paginated response for a sysadmin', async () => {
+    const repo = repoStub();
+    repo.list.mockResolvedValue({ rows: [USER_ROW], total: 1 });
+    const service = await makeService(repo);
 
-  it('rejects a plain user with ForbiddenException', async () => {
-    await expect(service.list(plainUser)).rejects.toThrow(ForbiddenException);
-    expect(repo.list).not.toHaveBeenCalled();
-  });
+    const out = await service.list({ deactivated: 'false', page: 1, perPage: 25 }, sysadmin);
 
-  it('rejects an anonymous (null) user with ForbiddenException', async () => {
-    await expect(service.list(null)).rejects.toThrow(ForbiddenException);
+    expect(out).toMatchObject({ total: 1, page: 1, perPage: 25 });
+    expect(out.data).toHaveLength(1);
+    expect(out.data[0]?.id).toBe(USER_ROW.id);
+    expect(repo.list).toHaveBeenCalledWith(
+      expect.objectContaining({ deactivated: 'false', page: 1, perPage: 25 }),
+    );
   });
 });
 

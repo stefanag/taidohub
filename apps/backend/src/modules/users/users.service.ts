@@ -1,6 +1,11 @@
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { ForbiddenError } from '@casl/ability';
-import { type Role, type User } from '@repo/contracts/users';
+import {
+  type ListUsersQuery,
+  type ListUsersResponse,
+  type Role,
+  type User,
+} from '@repo/contracts/users';
 
 import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
@@ -29,13 +34,27 @@ export class UsersService {
     return this.toApi(row);
   }
 
-  async list(user: AuthenticatedUser | null): Promise<User[]> {
+  async list(
+    query: ListUsersQuery,
+    user: AuthenticatedUser | null,
+  ): Promise<ListUsersResponse> {
     // Sysadmin-only gate: a sysadmin has `manage all` (covers `manage User`);
     // a plain user holds only a conditional `read User` rule, so the bare
     // `manage` check correctly fails for them.
     this.assertCan(user, 'manage');
-    const rows = await this.repo.list();
-    return rows.map((r) => this.toApi(r));
+    const { rows, total } = await this.repo.list({
+      ...(query.q !== undefined && { q: query.q }),
+      ...(query.role !== undefined && { role: query.role }),
+      deactivated: query.deactivated,
+      page: query.page,
+      perPage: query.perPage,
+    });
+    return {
+      data: rows.map((r) => this.toApi(r)),
+      total,
+      page: query.page,
+      perPage: query.perPage,
+    };
   }
 
   /**
