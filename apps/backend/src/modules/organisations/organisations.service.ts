@@ -35,14 +35,20 @@ export class OrganisationsService {
   ) {}
 
   async list(query: ListOrganisationsQuery, user: AuthenticatedUser | null): Promise<ListOrganisationsResponse> {
-    this.assertCan(user, 'read');
-    const { data, total } = await this.repo.list(query);
-    return { data: data.map((r) => this.toApi(r)), total };
+    const { data } = await this.repo.list(query);
+    // Filter to organisations the user can actually `read` as an instance.
+    // A sysadmin's unconditional `manage all` matches every row; an
+    // orgadmin/instructor only matches rows their memberships bind to.
+    const ability = this.abilities.createForUser(user);
+    const visible = data.filter((r) =>
+      ability.can('read', { __caslSubjectType__: 'Organisation', id: r.id }),
+    );
+    return { data: visible.map((r) => this.toApi(r)), total: visible.length };
   }
 
   async findOne(id: string, user: AuthenticatedUser | null): Promise<Organisation> {
-    this.assertCan(user, 'read');
     const row = await this.requireById(id);
+    this.assertCan(user, 'read', row.id);
     return this.toApi(row);
   }
 
@@ -66,8 +72,8 @@ export class OrganisationsService {
   }
 
   async update(id: string, input: UpdateOrganisationInput, user: AuthenticatedUser): Promise<Organisation> {
-    this.assertCan(user, 'update');
     const existing = await this.requireById(id);
+    this.assertCan(user, 'update', existing.id);
 
     if (input.parentId !== undefined) {
       await this.validateHierarchy(existing.type, input.parentId);
@@ -108,8 +114,8 @@ export class OrganisationsService {
   }
 
   async delete(id: string, user: AuthenticatedUser): Promise<void> {
-    this.assertCan(user, 'delete');
     const existing = await this.requireById(id);
+    this.assertCan(user, 'delete', existing.id);
     const childCount = await this.repo.countChildren(id);
     if (childCount > 0) {
       throw new ConflictException({
@@ -199,10 +205,28 @@ export class OrganisationsService {
     }
   }
 
-  private assertCan(user: AuthenticatedUser | null, action: 'create' | 'read' | 'update' | 'delete'): void {
+  /**
+   * Authorize `action` against the `Organisation` subject.
+   *
+   * When `organisationId` is supplied the check runs against an *instance*
+   * subject so CASL evaluates the per-org `{ id }` conditions in the rule set
+   * — a bare subject-type string would short-circuit to `true` for any user
+   * who holds any `Organisation` rule, defeating per-org scoping. Omitting
+   * `organisationId` (e.g. for `create`) means no `id` to match, so a
+   * conditional `{ id: X }` orgadmin rule cannot satisfy it — only a
+   * sysadmin's unconditional `manage all` passes.
+   */
+  private assertCan(
+    user: AuthenticatedUser | null,
+    action: 'create' | 'read' | 'update' | 'delete',
+    organisationId?: string,
+  ): void {
     const ability = this.abilities.createForUser(user);
+    const subject = organisationId
+      ? ({ __caslSubjectType__: 'Organisation', id: organisationId } as const)
+      : ({ __caslSubjectType__: 'Organisation' } as const);
     try {
-      ForbiddenError.from(ability).throwUnlessCan(action, 'Organisation');
+      ForbiddenError.from(ability).throwUnlessCan(action, subject);
     } catch (err) {
       if (err instanceof ForbiddenError) {
         throw new ForbiddenException({

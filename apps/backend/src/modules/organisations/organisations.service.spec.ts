@@ -224,6 +224,80 @@ describe('OrganisationsService — authorization', () => {
   });
 });
 
+describe('OrganisationsService — org-scoped authorization', () => {
+  const orgadminOfClub1 = {
+    ...civilian,
+    id: 'u-orgadmin',
+    memberships: [{ organisationId: 'club-1', role: 'orgadmin' as const }],
+  };
+
+  it('orgadmin can update their bound organisation', async () => {
+    const repo = repoStub();
+    repo.findById.mockResolvedValue(CLUB_ROW);
+    repo.update.mockResolvedValue({ ...CLUB_ROW, nameEn: 'X' });
+    const { service } = await makeService(repo);
+    const out = await service.update('club-1', { nameEn: 'X' }, orgadminOfClub1);
+    expect(out.nameEn).toBe('X');
+  });
+
+  it('orgadmin cannot update a different organisation', async () => {
+    const repo = repoStub();
+    repo.findById.mockResolvedValue(NF_ROW);
+    const { service } = await makeService(repo);
+    await expect(service.update('nf-1', { nameEn: 'X' }, orgadminOfClub1)).rejects.toThrow(
+      ForbiddenException,
+    );
+  });
+
+  it('orgadmin cannot delete a different organisation', async () => {
+    const repo = repoStub();
+    repo.findById.mockResolvedValue(NF_ROW);
+    const { service } = await makeService(repo);
+    await expect(service.delete('nf-1', orgadminOfClub1)).rejects.toThrow(ForbiddenException);
+  });
+
+  it('orgadmin cannot create an organisation', async () => {
+    const repo = repoStub();
+    const { service } = await makeService(repo);
+    await expect(
+      service.create({ ...CLUB_ROW, parentId: 'nf-1', type: 'club' } as any, orgadminOfClub1),
+    ).rejects.toThrow(ForbiddenException);
+  });
+
+  it('orgadmin can read their bound organisation', async () => {
+    const repo = repoStub();
+    repo.findById.mockResolvedValue(CLUB_ROW);
+    const { service } = await makeService(repo);
+    const out = await service.findOne('club-1', orgadminOfClub1);
+    expect(out.id).toBe('club-1');
+  });
+
+  it('orgadmin cannot read a different organisation', async () => {
+    const repo = repoStub();
+    repo.findById.mockResolvedValue(NF_ROW);
+    const { service } = await makeService(repo);
+    await expect(service.findOne('nf-1', orgadminOfClub1)).rejects.toThrow(ForbiddenException);
+  });
+
+  it('list filters to organisations the orgadmin can read', async () => {
+    const repo = repoStub();
+    repo.list.mockResolvedValue({ data: [CLUB_ROW, NF_ROW], total: 2 });
+    const { service } = await makeService(repo);
+    const out = await service.list({} as any, orgadminOfClub1);
+    expect(out.data.map((o) => o.id)).toEqual(['club-1']);
+    expect(out.total).toBe(1);
+  });
+
+  it('sysadmin list returns everything', async () => {
+    const repo = repoStub();
+    repo.list.mockResolvedValue({ data: [CLUB_ROW, NF_ROW], total: 2 });
+    const { service } = await makeService(repo);
+    const out = await service.list({} as any, admin);
+    expect(out.data.map((o) => o.id)).toEqual(['club-1', 'nf-1']);
+    expect(out.total).toBe(2);
+  });
+});
+
 describe('OrganisationsService — audit', () => {
   it('emits a create audit row inside the tx', async () => {
     const repo = repoStub();
