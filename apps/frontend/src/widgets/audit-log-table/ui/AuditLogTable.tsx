@@ -19,6 +19,9 @@ const ACTION_KEY = {
   update: 'updated',
   delete: 'deleted',
   move: 'moved',
+  deactivate: 'deactivated',
+  reactivate: 'reactivated',
+  password_reset_triggered: 'passwordResetTriggered',
 } as const;
 
 const ACTION_DEFAULTS: Record<(typeof ACTION_KEY)[keyof typeof ACTION_KEY], string> = {
@@ -26,6 +29,9 @@ const ACTION_DEFAULTS: Record<(typeof ACTION_KEY)[keyof typeof ACTION_KEY], stri
   updated: 'updated',
   deleted: 'deleted',
   moved: 'moved',
+  deactivated: 'deactivated',
+  reactivated: 'reactivated',
+  passwordResetTriggered: 'password reset triggered',
 };
 
 const COLUMN_DEFAULTS = {

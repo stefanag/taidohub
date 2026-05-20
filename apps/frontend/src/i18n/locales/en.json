@@ -86,7 +86,10 @@
         "created": "created",
         "updated": "updated",
         "deleted": "deleted",
-        "moved": "moved"
+        "moved": "moved",
+        "deactivated": "deactivated",
+        "reactivated": "reactivated",
+        "passwordResetTriggered": "password reset triggered"
       },
       "filters": {
         "entityType": "Entity type",
