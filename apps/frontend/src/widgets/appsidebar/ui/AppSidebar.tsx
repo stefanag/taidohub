@@ -1,5 +1,5 @@
 import { Link, useNavigate, useRouterState } from '@tanstack/react-router';
-import { Building2, History, LayoutDashboard, LogOut } from 'lucide-react';
+import { Building2, History, LayoutDashboard, LogOut, Users } from 'lucide-react';
 import * as React from 'react';
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -75,6 +75,19 @@ export function AppSidebar(): React.ReactElement {
             <SidebarGroupLabel>{t('admin.title')}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
+                {ability?.can('manage', 'User') ? (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={pathname.startsWith('/admin/users')}
+                    >
+                      <Link to="/admin/users">
+                        <Users />
+                        <span>{t('nav.adminUsers')}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ) : null}
                 <SidebarMenuItem>
                   <SidebarMenuButton
                     asChild
