@@ -1,5 +1,4 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { ForbiddenError } from '@casl/ability';
 import type {
   AuditLogAction,
   AuditLogEntry,
@@ -7,7 +6,6 @@ import type {
   ListAuditLogResponse,
 } from '@repo/contracts/audit-log';
 
-import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import { type DrizzleExecutor } from '../../infrastructure/database/client.js';
 import { type DbAuditLog } from '../../infrastructure/database/schema/index.js';
@@ -26,10 +24,7 @@ export interface RecordInput {
 
 @Injectable()
 export class AuditLogService {
-  constructor(
-    private readonly repo: AuditLogRepository,
-    private readonly abilities: AbilityFactory,
-  ) {}
+  constructor(private readonly repo: AuditLogRepository) {}
 
   async record(input: RecordInput): Promise<void> {
     await this.repo.insert(
@@ -48,22 +43,39 @@ export class AuditLogService {
     );
   }
 
+  /**
+   * List audit-log entries with a non-bypassable security scope:
+   * - `sysadmin` → unrestricted.
+   * - non-sysadmin with one or more `orgadmin` memberships → restricted to
+   *   `organisation` rows for the org-ids they administer (AND-ed on top of
+   *   any caller-supplied `query` filters).
+   * - everyone else (plain user, instructor-only, anonymous) → forbidden.
+   *
+   * Branching is explicit rather than CASL-based: `list` returns a collection
+   * and CASL conditional rules only evaluate against single instances.
+   */
   async list(query: ListAuditLogQuery, user: AuthenticatedUser | null): Promise<ListAuditLogResponse> {
-    this.assertCan(user, 'read');
-    const { data, total } = await this.repo.list(query);
-    return { data: data.map((r) => this.toApi(r)), total, page: query.page, perPage: query.perPage };
-  }
-
-  private assertCan(user: AuthenticatedUser | null, action: 'read'): void {
-    const ability = this.abilities.createForUser(user);
-    try {
-      ForbiddenError.from(ability).throwUnlessCan(action, 'AuditLog');
-    } catch (err) {
-      if (err instanceof ForbiddenError) {
-        throw new ForbiddenException({ error: { code: 'FORBIDDEN', message: err.message } });
-      }
-      throw err;
+    if (!user) {
+      throw new ForbiddenException({
+        error: { code: 'FORBIDDEN', message: 'Audit log access requires sysadmin or an orgadmin membership.' },
+      });
     }
+
+    let restrictToOrganisationIds: readonly string[] | undefined;
+    if (user.role !== 'sysadmin') {
+      const orgIds = user.memberships
+        .filter((m) => m.role === 'orgadmin')
+        .map((m) => m.organisationId);
+      if (orgIds.length === 0) {
+        throw new ForbiddenException({
+          error: { code: 'FORBIDDEN', message: 'Audit log access requires sysadmin or an orgadmin membership.' },
+        });
+      }
+      restrictToOrganisationIds = orgIds;
+    }
+
+    const { data, total } = await this.repo.list(query, restrictToOrganisationIds);
+    return { data: data.map((r) => this.toApi(r)), total, page: query.page, perPage: query.perPage };
   }
 
   private toApi(row: DbAuditLog): AuditLogEntry {

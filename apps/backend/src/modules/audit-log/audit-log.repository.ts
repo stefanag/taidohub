@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import type { ListAuditLogQuery } from '@repo/contracts/audit-log';
-import { and, count, desc, eq, gte, lte, type SQL } from 'drizzle-orm';
+import { and, count, desc, eq, gte, inArray, lte, type SQL } from 'drizzle-orm';
 
 import { DRIZZLE, type DrizzleDb, type DrizzleExecutor } from '../../infrastructure/database/client.js';
 import { auditLog, type DbAuditLog, type DbNewAuditLog } from '../../infrastructure/database/schema/index.js';
@@ -19,7 +19,16 @@ export class AuditLogRepository {
     await (tx ?? this.db).insert(auditLog).values(input);
   }
 
-  async list(filter: ListAuditLogQuery): Promise<{ data: DbAuditLog[]; total: number }> {
+  /**
+   * @param restrictToOrganisationIds When provided, a non-bypassable security
+   *   scope: results are AND-ed with `entity_type = 'organisation'` and
+   *   `entity_id IN (...)`. Used to confine an `orgadmin` to the organisations
+   *   they administer. Omit for unrestricted (sysadmin) reads.
+   */
+  async list(
+    filter: ListAuditLogQuery,
+    restrictToOrganisationIds?: readonly string[],
+  ): Promise<{ data: DbAuditLog[]; total: number }> {
     const filters: SQL[] = [];
     if (filter.entityType) filters.push(eq(auditLog.entityType, filter.entityType));
     if (filter.entityId) filters.push(eq(auditLog.entityId, filter.entityId));
@@ -27,6 +36,10 @@ export class AuditLogRepository {
     if (filter.action) filters.push(eq(auditLog.action, filter.action));
     if (filter.from) filters.push(gte(auditLog.createdAt, new Date(filter.from)));
     if (filter.to) filters.push(lte(auditLog.createdAt, new Date(filter.to)));
+    if (restrictToOrganisationIds && restrictToOrganisationIds.length > 0) {
+      filters.push(eq(auditLog.entityType, 'organisation'));
+      filters.push(inArray(auditLog.entityId, [...restrictToOrganisationIds]));
+    }
     const where = filters.length ? and(...filters) : undefined;
 
     const offset = (filter.page - 1) * filter.perPage;
