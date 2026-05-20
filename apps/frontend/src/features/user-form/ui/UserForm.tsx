@@ -1,0 +1,135 @@
+import * as React from 'react';
+import { useTranslation } from 'react-i18next';
+
+import type { Role, UpdateUserInput, User } from '@/entities/user';
+import {
+  Button,
+  FormField,
+  FormMessage,
+  Input,
+  Label,
+} from '@/shared/ui';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/shared/ui/select.js';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs.js';
+
+export interface UserFormProps {
+  /** The user being edited. */
+  user: User;
+  /** Id of the currently signed-in admin — used to disable self-role-change. */
+  currentUserId: string;
+  /** Submit the Details-tab patch (name / role). */
+  onSubmit: (input: UpdateUserInput) => Promise<void>;
+  submitting?: boolean;
+}
+
+/**
+ * Edit form for a user. Two tabs: Details (name + role) and Memberships.
+ * Email is read-only — better-auth owns it. The role select is disabled when
+ * an admin edits their own row (the backend also rejects self-demotion).
+ *
+ * The Memberships tab is filled in by a follow-up task; this shell renders
+ * its trigger and an empty panel.
+ */
+export function UserForm({
+  user,
+  currentUserId,
+  onSubmit,
+  submitting,
+}: UserFormProps): React.ReactElement {
+  const { t } = useTranslation();
+  const [name, setName] = React.useState<string>(user.name ?? '');
+  const [role, setRole] = React.useState<Role>(user.role);
+  const [submitError, setSubmitError] = React.useState<string | undefined>();
+
+  const isSelf = user.id === currentUserId;
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+    event.preventDefault();
+    setSubmitError(undefined);
+    const input: UpdateUserInput = {};
+    if (name.trim() && name.trim() !== (user.name ?? '')) input.name = name.trim();
+    if (role !== user.role) input.role = role;
+    try {
+      await onSubmit(input);
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : 'Submit failed');
+    }
+  };
+
+  return (
+    <Tabs defaultValue="details">
+      <TabsList>
+        <TabsTrigger value="details">
+          {t('admin.auditLog.tabs.details', { defaultValue: 'Details' })}
+        </TabsTrigger>
+        <TabsTrigger value="memberships">
+          {t('admin.users.memberships.title', { defaultValue: 'Memberships' })}
+        </TabsTrigger>
+      </TabsList>
+
+      <TabsContent value="details">
+        <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+          <FormField>
+            <Label htmlFor="user-email">
+              {t('admin.users.fields.email', { defaultValue: 'Email' })}
+            </Label>
+            <Input id="user-email" value={user.email} readOnly disabled />
+          </FormField>
+
+          <FormField>
+            <Label htmlFor="user-name">
+              {t('admin.users.fields.name', { defaultValue: 'Name' })}
+            </Label>
+            <Input
+              id="user-name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </FormField>
+
+          <FormField>
+            <Label htmlFor="user-role">
+              {t('admin.users.fields.role', { defaultValue: 'Role' })}
+            </Label>
+            <Select
+              value={role}
+              onValueChange={(v) => setRole(v as Role)}
+              disabled={isSelf}
+            >
+              <SelectTrigger id="user-role" aria-label={t('admin.users.fields.role', { defaultValue: 'Role' })}>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="sysadmin">
+                  {t('admin.users.roles.sysadmin', { defaultValue: 'System administrator' })}
+                </SelectItem>
+                <SelectItem value="user">
+                  {t('admin.users.roles.user', { defaultValue: 'User' })}
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </FormField>
+
+          <FormMessage message={submitError} />
+
+          <Button type="submit" disabled={submitting}>
+            {t('admin.users.actions.save', { defaultValue: 'Save' })}
+          </Button>
+        </form>
+      </TabsContent>
+
+      <TabsContent value="memberships">
+        {/* Filled in by the next task. */}
+        <p className="text-on-surface-variant">
+          {t('admin.users.memberships.empty', { defaultValue: 'No memberships yet.' })}
+        </p>
+      </TabsContent>
+    </Tabs>
+  );
+}
