@@ -26,7 +26,8 @@
   "nav": {
     "dashboard": "Dashboard",
     "adminOrganisations": "Organisations",
-    "adminAuditLog": "Audit log"
+    "adminAuditLog": "Audit log",
+    "adminUsers": "Users"
   },
   "dashboard": {
     "title": "Dashboard"
@@ -77,6 +78,56 @@
         "cycle": "Move would create a cycle.",
         "tabInvalid": "has errors",
         "validationSummary": "Please complete required fields: {{fields}}"
+      }
+    },
+    "users": {
+      "title": "Users",
+      "empty": "No users found.",
+      "searchPlaceholder": "Search by email or name",
+      "fields": {
+        "email": "Email",
+        "name": "Name",
+        "role": "Role",
+        "status": "Status"
+      },
+      "roles": {
+        "sysadmin": "System administrator",
+        "user": "User",
+        "orgadmin": "Organisation administrator",
+        "instructor": "Instructor"
+      },
+      "status": {
+        "active": "Active",
+        "deactivated": "Deactivated"
+      },
+      "filters": {
+        "role": "Role",
+        "allRoles": "All roles",
+        "showDeactivated": "Show deactivated"
+      },
+      "memberships": {
+        "title": "Memberships",
+        "add": "Add membership",
+        "organisation": "Organisation",
+        "role": "Role",
+        "empty": "No memberships yet.",
+        "remove": "Remove",
+        "instructorRequiresClub": "Instructor is only allowed on clubs."
+      },
+      "actions": {
+        "edit": "Edit",
+        "save": "Save"
+      },
+      "pager": {
+        "prev": "Previous",
+        "next": "Next",
+        "page": "Page {{page}}"
+      },
+      "errors": {
+        "selfDemote": "You cannot change your own role.",
+        "lastSysadmin": "Cannot demote the last active sysadmin.",
+        "membershipExists": "That membership already exists.",
+        "instructorRequiresClub": "Instructor memberships are only allowed on clubs."
       }
     },
     "auditLog": {
