@@ -48,7 +48,7 @@ async function main(): Promise<void> {
 
   // eslint-disable-next-line no-console
   console.info(
-    `[seed] sysadmin: ${env.SYSADMIN_EMAIL} (role=admin, created=${result.created}, promoted=${result.promoted})`,
+    `[seed] sysadmin: ${env.SYSADMIN_EMAIL} (role=sysadmin, created=${result.created}, promoted=${result.promoted})`,
   );
 }
 

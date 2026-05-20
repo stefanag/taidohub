@@ -6,3 +6,4 @@
 export * from './users.js';
 export * from './organisations.js';
 export * from './audit-log.js';
+export * from './memberships.js';

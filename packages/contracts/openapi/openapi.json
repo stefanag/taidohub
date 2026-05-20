@@ -942,6 +942,293 @@
         ]
       }
     },
+    "/api/memberships": {
+      "get": {
+        "operationId": "MembershipsController_list",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
+            "name": "organisationId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListMembershipsResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "List memberships. Non-sysadmins may only filter by their own userId.",
+        "tags": [
+          "memberships"
+        ]
+      },
+      "post": {
+        "operationId": "MembershipsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMembershipDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganisationMembershipDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Create a membership (sysadmin only).",
+        "tags": [
+          "memberships"
+        ]
+      }
+    },
+    "/api/memberships/{id}": {
+      "patch": {
+        "operationId": "MembershipsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Membership UUID.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMembershipDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganisationMembershipDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Change a membership’s role (sysadmin only).",
+        "tags": [
+          "memberships"
+        ]
+      },
+      "delete": {
+        "operationId": "MembershipsController_delete",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Membership UUID.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Membership deleted."
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Delete a membership (sysadmin only).",
+        "tags": [
+          "memberships"
+        ]
+      }
+    },
     "/api/admin/audit-log": {
       "get": {
         "operationId": "AuditLogController_list",
@@ -958,7 +1245,10 @@
                   "create",
                   "update",
                   "delete",
-                  "move"
+                  "move",
+                  "deactivate",
+                  "reactivate",
+                  "password_reset_triggered"
                 ]
               }
             },
@@ -978,7 +1268,10 @@
                   "create",
                   "update",
                   "delete",
-                  "move"
+                  "move",
+                  "deactivate",
+                  "reactivate",
+                  "password_reset_triggered"
                 ]
               }
             },
@@ -998,7 +1291,10 @@
                   "create",
                   "update",
                   "delete",
-                  "move"
+                  "move",
+                  "deactivate",
+                  "reactivate",
+                  "password_reset_triggered"
                 ]
               }
             },
@@ -1019,7 +1315,10 @@
                   "create",
                   "update",
                   "delete",
-                  "move"
+                  "move",
+                  "deactivate",
+                  "reactivate",
+                  "password_reset_triggered"
                 ]
               }
             },
@@ -1039,7 +1338,10 @@
                   "create",
                   "update",
                   "delete",
-                  "move"
+                  "move",
+                  "deactivate",
+                  "reactivate",
+                  "password_reset_triggered"
                 ]
               }
             },
@@ -1061,7 +1363,10 @@
                   "create",
                   "update",
                   "delete",
-                  "move"
+                  "move",
+                  "deactivate",
+                  "reactivate",
+                  "password_reset_triggered"
                 ]
               }
             },
@@ -1083,7 +1388,10 @@
                   "create",
                   "update",
                   "delete",
-                  "move"
+                  "move",
+                  "deactivate",
+                  "reactivate",
+                  "password_reset_triggered"
                 ]
               }
             },
@@ -1106,7 +1414,10 @@
                   "create",
                   "update",
                   "delete",
-                  "move"
+                  "move",
+                  "deactivate",
+                  "reactivate",
+                  "password_reset_triggered"
                 ]
               }
             },
@@ -1295,6 +1606,23 @@
                     ],
                     "description": "URL to the user’s avatar, if any."
                   },
+                  "role": {
+                    "description": "Global role; org-scoped roles live in `organisation_membership`.",
+                    "$ref": "#/$defs/Role"
+                  },
+                  "deactivatedAt": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "date-time",
+                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "When the account was deactivated. Null = active. Deactivated users cannot sign in."
+                  },
                   "createdAt": {
                     "type": "string",
                     "format": "date-time",
@@ -1314,6 +1642,8 @@
                   "name",
                   "emailVerified",
                   "image",
+                  "role",
+                  "deactivatedAt",
                   "createdAt",
                   "updatedAt"
                 ],
@@ -1324,9 +1654,20 @@
                   "name": "Ada Lovelace",
                   "emailVerified": true,
                   "image": "https://example.com/avatars/ada.png",
+                  "role": "user",
+                  "deactivatedAt": null,
                   "createdAt": "2025-01-15T12:34:56.000Z",
                   "updatedAt": "2025-04-02T08:00:00.000Z"
                 }
+              },
+              "Role": {
+                "type": "string",
+                "enum": [
+                  "sysadmin",
+                  "user"
+                ],
+                "description": "Global role on a user row.",
+                "example": "user"
               }
             },
             "x-nestjs_zod-parent-metadata": {
@@ -1411,6 +1752,23 @@
                     ],
                     "description": "URL to the user’s avatar, if any."
                   },
+                  "role": {
+                    "description": "Global role; org-scoped roles live in `organisation_membership`.",
+                    "$ref": "#/$defs/Role"
+                  },
+                  "deactivatedAt": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "date-time",
+                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "When the account was deactivated. Null = active. Deactivated users cannot sign in."
+                  },
                   "createdAt": {
                     "type": "string",
                     "format": "date-time",
@@ -1430,6 +1788,8 @@
                   "name",
                   "emailVerified",
                   "image",
+                  "role",
+                  "deactivatedAt",
                   "createdAt",
                   "updatedAt"
                 ],
@@ -1440,9 +1800,20 @@
                   "name": "Ada Lovelace",
                   "emailVerified": true,
                   "image": "https://example.com/avatars/ada.png",
+                  "role": "user",
+                  "deactivatedAt": null,
                   "createdAt": "2025-01-15T12:34:56.000Z",
                   "updatedAt": "2025-04-02T08:00:00.000Z"
                 }
+              },
+              "Role": {
+                "type": "string",
+                "enum": [
+                  "sysadmin",
+                  "user"
+                ],
+                "description": "Global role on a user row.",
+                "example": "user"
               }
             },
             "x-nestjs_zod-parent-metadata": {
@@ -1528,6 +1899,18 @@
             "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
             "description": "Unique identifier (UUID v4).",
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "Role": {
+                "type": "string",
+                "enum": [
+                  "sysadmin",
+                  "user"
+                ],
+                "description": "Global role on a user row.",
+                "example": "user"
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "A user account exposed to API clients.",
               "example": {
@@ -1536,6 +1919,8 @@
                 "name": "Ada Lovelace",
                 "emailVerified": true,
                 "image": "https://example.com/avatars/ada.png",
+                "role": "user",
+                "deactivatedAt": null,
                 "createdAt": "2025-01-15T12:34:56.000Z",
                 "updatedAt": "2025-04-02T08:00:00.000Z"
               }
@@ -1547,6 +1932,18 @@
             "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$",
             "description": "The user’s primary email address.",
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "Role": {
+                "type": "string",
+                "enum": [
+                  "sysadmin",
+                  "user"
+                ],
+                "description": "Global role on a user row.",
+                "example": "user"
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "A user account exposed to API clients.",
               "example": {
@@ -1555,6 +1952,8 @@
                 "name": "Ada Lovelace",
                 "emailVerified": true,
                 "image": "https://example.com/avatars/ada.png",
+                "role": "user",
+                "deactivatedAt": null,
                 "createdAt": "2025-01-15T12:34:56.000Z",
                 "updatedAt": "2025-04-02T08:00:00.000Z"
               }
@@ -1571,7 +1970,19 @@
             ],
             "description": "Display name; null until the user sets one.",
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "Role": {
+                "type": "string",
+                "enum": [
+                  "sysadmin",
+                  "user"
+                ],
+                "description": "Global role on a user row.",
+                "example": "user"
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "A user account exposed to API clients.",
               "example": {
@@ -1580,6 +1991,8 @@
                 "name": "Ada Lovelace",
                 "emailVerified": true,
                 "image": "https://example.com/avatars/ada.png",
+                "role": "user",
+                "deactivatedAt": null,
                 "createdAt": "2025-01-15T12:34:56.000Z",
                 "updatedAt": "2025-04-02T08:00:00.000Z"
               }
@@ -1589,6 +2002,18 @@
             "type": "boolean",
             "description": "Whether the email address has been verified.",
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "Role": {
+                "type": "string",
+                "enum": [
+                  "sysadmin",
+                  "user"
+                ],
+                "description": "Global role on a user row.",
+                "example": "user"
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "A user account exposed to API clients.",
               "example": {
@@ -1597,6 +2022,8 @@
                 "name": "Ada Lovelace",
                 "emailVerified": true,
                 "image": "https://example.com/avatars/ada.png",
+                "role": "user",
+                "deactivatedAt": null,
                 "createdAt": "2025-01-15T12:34:56.000Z",
                 "updatedAt": "2025-04-02T08:00:00.000Z"
               }
@@ -1614,7 +2041,19 @@
             ],
             "description": "URL to the user’s avatar, if any.",
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "Role": {
+                "type": "string",
+                "enum": [
+                  "sysadmin",
+                  "user"
+                ],
+                "description": "Global role on a user row.",
+                "example": "user"
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "A user account exposed to API clients.",
               "example": {
@@ -1623,6 +2062,82 @@
                 "name": "Ada Lovelace",
                 "emailVerified": true,
                 "image": "https://example.com/avatars/ada.png",
+                "role": "user",
+                "deactivatedAt": null,
+                "createdAt": "2025-01-15T12:34:56.000Z",
+                "updatedAt": "2025-04-02T08:00:00.000Z"
+              }
+            }
+          },
+          "role": {
+            "description": "Global role; org-scoped roles live in `organisation_membership`.",
+            "$ref": "#/$defs/Role",
+            "type": "",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "Role": {
+                "type": "string",
+                "enum": [
+                  "sysadmin",
+                  "user"
+                ],
+                "description": "Global role on a user row.",
+                "example": "user"
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A user account exposed to API clients.",
+              "example": {
+                "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "email": "ada@example.com",
+                "name": "Ada Lovelace",
+                "emailVerified": true,
+                "image": "https://example.com/avatars/ada.png",
+                "role": "user",
+                "deactivatedAt": null,
+                "createdAt": "2025-01-15T12:34:56.000Z",
+                "updatedAt": "2025-04-02T08:00:00.000Z"
+              }
+            }
+          },
+          "deactivatedAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "When the account was deactivated. Null = active. Deactivated users cannot sign in.",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "Role": {
+                "type": "string",
+                "enum": [
+                  "sysadmin",
+                  "user"
+                ],
+                "description": "Global role on a user row.",
+                "example": "user"
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A user account exposed to API clients.",
+              "example": {
+                "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "email": "ada@example.com",
+                "name": "Ada Lovelace",
+                "emailVerified": true,
+                "image": "https://example.com/avatars/ada.png",
+                "role": "user",
+                "deactivatedAt": null,
                 "createdAt": "2025-01-15T12:34:56.000Z",
                 "updatedAt": "2025-04-02T08:00:00.000Z"
               }
@@ -1634,6 +2149,18 @@
             "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
             "description": "ISO-8601 timestamp the account was created.",
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "Role": {
+                "type": "string",
+                "enum": [
+                  "sysadmin",
+                  "user"
+                ],
+                "description": "Global role on a user row.",
+                "example": "user"
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "A user account exposed to API clients.",
               "example": {
@@ -1642,6 +2169,8 @@
                 "name": "Ada Lovelace",
                 "emailVerified": true,
                 "image": "https://example.com/avatars/ada.png",
+                "role": "user",
+                "deactivatedAt": null,
                 "createdAt": "2025-01-15T12:34:56.000Z",
                 "updatedAt": "2025-04-02T08:00:00.000Z"
               }
@@ -1653,6 +2182,18 @@
             "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
             "description": "ISO-8601 timestamp the account was last modified.",
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "Role": {
+                "type": "string",
+                "enum": [
+                  "sysadmin",
+                  "user"
+                ],
+                "description": "Global role on a user row.",
+                "example": "user"
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "A user account exposed to API clients.",
               "example": {
@@ -1661,6 +2202,8 @@
                 "name": "Ada Lovelace",
                 "emailVerified": true,
                 "image": "https://example.com/avatars/ada.png",
+                "role": "user",
+                "deactivatedAt": null,
                 "createdAt": "2025-01-15T12:34:56.000Z",
                 "updatedAt": "2025-04-02T08:00:00.000Z"
               }
@@ -1673,6 +2216,8 @@
           "name",
           "emailVerified",
           "image",
+          "role",
+          "deactivatedAt",
           "createdAt",
           "updatedAt"
         ]
@@ -3259,6 +3804,413 @@
           }
         }
       },
+      "ListMembershipsResponseDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/OrganisationMembership"
+            },
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationMembership": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "userId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "organisationId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "role": {
+                    "$ref": "#/$defs/MembershipRole"
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                  },
+                  "updatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                  }
+                },
+                "required": [
+                  "id",
+                  "userId",
+                  "organisationId",
+                  "role",
+                  "createdAt",
+                  "updatedAt"
+                ],
+                "description": "A `(user, organisation, role)` binding.",
+                "example": {
+                  "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "userId": "u-admin",
+                  "organisationId": "0e2e8c4b-7a9a-46e1-9d1e-54b8f7d3a2e0",
+                  "role": "orgadmin",
+                  "createdAt": "2026-05-18T08:00:00.000Z",
+                  "updatedAt": "2026-05-18T08:00:00.000Z"
+                }
+              },
+              "MembershipRole": {
+                "type": "string",
+                "enum": [
+                  "orgadmin",
+                  "instructor"
+                ],
+                "description": "Org-scoped role on an `organisation_membership` row.",
+                "example": "orgadmin"
+              }
+            }
+          },
+          "total": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationMembership": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "userId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "organisationId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "role": {
+                    "$ref": "#/$defs/MembershipRole"
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                  },
+                  "updatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                  }
+                },
+                "required": [
+                  "id",
+                  "userId",
+                  "organisationId",
+                  "role",
+                  "createdAt",
+                  "updatedAt"
+                ],
+                "description": "A `(user, organisation, role)` binding.",
+                "example": {
+                  "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "userId": "u-admin",
+                  "organisationId": "0e2e8c4b-7a9a-46e1-9d1e-54b8f7d3a2e0",
+                  "role": "orgadmin",
+                  "createdAt": "2026-05-18T08:00:00.000Z",
+                  "updatedAt": "2026-05-18T08:00:00.000Z"
+                }
+              },
+              "MembershipRole": {
+                "type": "string",
+                "enum": [
+                  "orgadmin",
+                  "instructor"
+                ],
+                "description": "Org-scoped role on an `organisation_membership` row.",
+                "example": "orgadmin"
+              }
+            }
+          }
+        },
+        "required": [
+          "data",
+          "total"
+        ]
+      },
+      "CreateMembershipDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "minLength": 1,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "MembershipRole": {
+                "type": "string",
+                "enum": [
+                  "orgadmin",
+                  "instructor"
+                ],
+                "description": "Org-scoped role on an `organisation_membership` row.",
+                "example": "orgadmin"
+              }
+            }
+          },
+          "organisationId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "MembershipRole": {
+                "type": "string",
+                "enum": [
+                  "orgadmin",
+                  "instructor"
+                ],
+                "description": "Org-scoped role on an `organisation_membership` row.",
+                "example": "orgadmin"
+              }
+            }
+          },
+          "role": {
+            "$ref": "#/$defs/MembershipRole",
+            "type": "",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "MembershipRole": {
+                "type": "string",
+                "enum": [
+                  "orgadmin",
+                  "instructor"
+                ],
+                "description": "Org-scoped role on an `organisation_membership` row.",
+                "example": "orgadmin"
+              }
+            }
+          }
+        },
+        "required": [
+          "userId",
+          "organisationId",
+          "role"
+        ]
+      },
+      "OrganisationMembershipDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "MembershipRole": {
+                "type": "string",
+                "enum": [
+                  "orgadmin",
+                  "instructor"
+                ],
+                "description": "Org-scoped role on an `organisation_membership` row.",
+                "example": "orgadmin"
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A `(user, organisation, role)` binding.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "userId": "u-admin",
+                "organisationId": "0e2e8c4b-7a9a-46e1-9d1e-54b8f7d3a2e0",
+                "role": "orgadmin",
+                "createdAt": "2026-05-18T08:00:00.000Z",
+                "updatedAt": "2026-05-18T08:00:00.000Z"
+              }
+            }
+          },
+          "userId": {
+            "type": "string",
+            "minLength": 1,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "MembershipRole": {
+                "type": "string",
+                "enum": [
+                  "orgadmin",
+                  "instructor"
+                ],
+                "description": "Org-scoped role on an `organisation_membership` row.",
+                "example": "orgadmin"
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A `(user, organisation, role)` binding.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "userId": "u-admin",
+                "organisationId": "0e2e8c4b-7a9a-46e1-9d1e-54b8f7d3a2e0",
+                "role": "orgadmin",
+                "createdAt": "2026-05-18T08:00:00.000Z",
+                "updatedAt": "2026-05-18T08:00:00.000Z"
+              }
+            }
+          },
+          "organisationId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "MembershipRole": {
+                "type": "string",
+                "enum": [
+                  "orgadmin",
+                  "instructor"
+                ],
+                "description": "Org-scoped role on an `organisation_membership` row.",
+                "example": "orgadmin"
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A `(user, organisation, role)` binding.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "userId": "u-admin",
+                "organisationId": "0e2e8c4b-7a9a-46e1-9d1e-54b8f7d3a2e0",
+                "role": "orgadmin",
+                "createdAt": "2026-05-18T08:00:00.000Z",
+                "updatedAt": "2026-05-18T08:00:00.000Z"
+              }
+            }
+          },
+          "role": {
+            "$ref": "#/$defs/MembershipRole",
+            "type": "",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "MembershipRole": {
+                "type": "string",
+                "enum": [
+                  "orgadmin",
+                  "instructor"
+                ],
+                "description": "Org-scoped role on an `organisation_membership` row.",
+                "example": "orgadmin"
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A `(user, organisation, role)` binding.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "userId": "u-admin",
+                "organisationId": "0e2e8c4b-7a9a-46e1-9d1e-54b8f7d3a2e0",
+                "role": "orgadmin",
+                "createdAt": "2026-05-18T08:00:00.000Z",
+                "updatedAt": "2026-05-18T08:00:00.000Z"
+              }
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "MembershipRole": {
+                "type": "string",
+                "enum": [
+                  "orgadmin",
+                  "instructor"
+                ],
+                "description": "Org-scoped role on an `organisation_membership` row.",
+                "example": "orgadmin"
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A `(user, organisation, role)` binding.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "userId": "u-admin",
+                "organisationId": "0e2e8c4b-7a9a-46e1-9d1e-54b8f7d3a2e0",
+                "role": "orgadmin",
+                "createdAt": "2026-05-18T08:00:00.000Z",
+                "updatedAt": "2026-05-18T08:00:00.000Z"
+              }
+            }
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "MembershipRole": {
+                "type": "string",
+                "enum": [
+                  "orgadmin",
+                  "instructor"
+                ],
+                "description": "Org-scoped role on an `organisation_membership` row.",
+                "example": "orgadmin"
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A `(user, organisation, role)` binding.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "userId": "u-admin",
+                "organisationId": "0e2e8c4b-7a9a-46e1-9d1e-54b8f7d3a2e0",
+                "role": "orgadmin",
+                "createdAt": "2026-05-18T08:00:00.000Z",
+                "updatedAt": "2026-05-18T08:00:00.000Z"
+              }
+            }
+          }
+        },
+        "required": [
+          "id",
+          "userId",
+          "organisationId",
+          "role",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "UpdateMembershipDto": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "$ref": "#/$defs/MembershipRole",
+            "type": "",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "MembershipRole": {
+                "type": "string",
+                "enum": [
+                  "orgadmin",
+                  "instructor"
+                ],
+                "description": "Org-scoped role on an `organisation_membership` row.",
+                "example": "orgadmin"
+              }
+            }
+          }
+        },
+        "required": [
+          "role"
+        ]
+      },
       "ListAuditLogResponseDto": {
         "type": "object",
         "properties": {
@@ -3354,7 +4306,10 @@
                   "create",
                   "update",
                   "delete",
-                  "move"
+                  "move",
+                  "deactivate",
+                  "reactivate",
+                  "password_reset_triggered"
                 ]
               }
             }
@@ -3450,7 +4405,10 @@
                   "create",
                   "update",
                   "delete",
-                  "move"
+                  "move",
+                  "deactivate",
+                  "reactivate",
+                  "password_reset_triggered"
                 ]
               }
             }
@@ -3546,7 +4504,10 @@
                   "create",
                   "update",
                   "delete",
-                  "move"
+                  "move",
+                  "deactivate",
+                  "reactivate",
+                  "password_reset_triggered"
                 ]
               }
             }
@@ -3642,7 +4603,10 @@
                   "create",
                   "update",
                   "delete",
-                  "move"
+                  "move",
+                  "deactivate",
+                  "reactivate",
+                  "password_reset_triggered"
                 ]
               }
             }
@@ -3669,6 +4633,9 @@
       },
       "Session": {
         "$ref": "#/components/schemas/Session"
+      },
+      "Role": {
+        "$ref": "#/components/schemas/Role"
       },
       "User": {
         "$ref": "#/components/schemas/User"

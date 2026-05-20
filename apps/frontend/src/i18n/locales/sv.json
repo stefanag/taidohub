@@ -86,7 +86,10 @@
         "created": "skapad",
         "updated": "uppdaterad",
         "deleted": "borttagen",
-        "moved": "flyttad"
+        "moved": "flyttad",
+        "deactivated": "inaktiverad",
+        "reactivated": "återaktiverad",
+        "passwordResetTriggered": "lösenordsåterställning utlöst"
       },
       "filters": {
         "entityType": "Entitetstyp",

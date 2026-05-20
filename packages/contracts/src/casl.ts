@@ -13,12 +13,14 @@ export const ActionSchema = z.enum(['create', 'read', 'update', 'delete', 'manag
 });
 
 /** Zod enum for runtime validation of subject names. */
-export const SubjectSchema = z.enum(['User', 'Organisation', 'AuditLog', 'all']).meta({
-  id: 'Subject',
-  description:
-    'A CASL subject (noun) the user can act upon. `all` is the wildcard covering every subject.',
-  example: 'Organisation',
-});
+export const SubjectSchema = z
+  .enum(['User', 'Organisation', 'AuditLog', 'OrganisationMembership', 'all'])
+  .meta({
+    id: 'Subject',
+    description:
+      'A CASL subject (noun) the user can act upon. `all` is the wildcard covering every subject.',
+    example: 'Organisation',
+  });
 
 /** TypeScript string-literal unions inferred from the Zod enums. */
 export type AppAction = z.infer<typeof ActionSchema>;
@@ -51,6 +53,16 @@ export type OrganisationSubjectShape = {
 export type AuditLogSubjectShape = {
   readonly __caslSubjectType__: 'AuditLog';
   id?: string;
+  entityType?: string;
+  entityId?: string;
+};
+
+export type OrganisationMembershipSubjectShape = {
+  readonly __caslSubjectType__: 'OrganisationMembership';
+  id?: string;
+  userId?: string;
+  organisationId?: string;
+  role?: 'orgadmin' | 'instructor';
 };
 
 /**
@@ -63,7 +75,8 @@ export type AppSubject =
   | AppSubjectName
   | UserSubjectShape
   | OrganisationSubjectShape
-  | AuditLogSubjectShape;
+  | AuditLogSubjectShape
+  | OrganisationMembershipSubjectShape;
 
 /**
  * Tuple type compatible with `MongoAbility<[AppAction, AppSubject]>` from

@@ -11,9 +11,10 @@ import { AuditLogService } from './audit-log.service.js';
 
 const admin = {
   id: 'u-admin', email: 'admin@example.com', emailVerified: true,
-  name: null, image: null, locale: 'en', role: 'admin',
+  name: null, image: null, locale: 'en', role: 'sysadmin' as const,
+  deactivatedAt: null, memberships: [],
 };
-const civilian = { ...admin, id: 'u-user', email: 'user@example.com', role: 'user' };
+const civilian = { ...admin, id: 'u-user', email: 'user@example.com', role: 'user' as const };
 
 function repoStub() {
   return {
@@ -99,6 +100,8 @@ describe('AuditLogService.list', () => {
     expect(out.total).toBe(1);
     expect(out.page).toBe(1);
     expect(out.perPage).toBe(25);
+    // sysadmin reads are unrestricted: no security-scope arg.
+    expect(repo.list.mock.calls[0]?.[1]).toBeUndefined();
   });
 
   it('rejects non-admin readers', async () => {
@@ -107,5 +110,76 @@ describe('AuditLogService.list', () => {
 
   it('rejects anonymous readers', async () => {
     await expect(service.list({ page: 1, perPage: 25 }, null)).rejects.toThrow(ForbiddenException);
+  });
+});
+
+describe('AuditLogService — org-scoped list', () => {
+  let repo: ReturnType<typeof repoStub>;
+  let service: AuditLogService;
+  beforeEach(async () => {
+    repo = repoStub();
+    service = await makeService(repo);
+  });
+
+  const orgadmin = {
+    ...civilian,
+    id: 'u-orgadmin',
+    memberships: [{ organisationId: 'org-A', role: 'orgadmin' as const }],
+  };
+  const instructorOnly = {
+    ...civilian,
+    id: 'u-instr',
+    memberships: [{ organisationId: 'club-X', role: 'instructor' as const }],
+  };
+
+  it('sysadmin list is unrestricted', async () => {
+    repo.list.mockResolvedValue({ data: [], total: 0 });
+
+    await service.list({ page: 1, perPage: 25 }, admin);
+
+    expect(repo.list).toHaveBeenCalledTimes(1);
+    expect(repo.list.mock.calls[0]?.[1]).toBeUndefined();
+  });
+
+  it('orgadmin list is restricted to their org ids', async () => {
+    repo.list.mockResolvedValue({ data: [], total: 0 });
+
+    await service.list({ page: 1, perPage: 25 }, orgadmin);
+
+    expect(repo.list).toHaveBeenCalledTimes(1);
+    expect(repo.list.mock.calls[0]?.[1]).toEqual(['org-A']);
+  });
+
+  it('orgadmin with multiple memberships passes all org-admin ids', async () => {
+    repo.list.mockResolvedValue({ data: [], total: 0 });
+    const multiOrgAdmin = {
+      ...civilian,
+      id: 'u-multi',
+      memberships: [
+        { organisationId: 'org-A', role: 'orgadmin' as const },
+        { organisationId: 'org-B', role: 'orgadmin' as const },
+        { organisationId: 'club-X', role: 'instructor' as const },
+      ],
+    };
+
+    await service.list({ page: 1, perPage: 25 }, multiOrgAdmin);
+
+    expect(repo.list).toHaveBeenCalledTimes(1);
+    expect(repo.list.mock.calls[0]?.[1]).toEqual(['org-A', 'org-B']);
+  });
+
+  it('instructor-only user is forbidden', async () => {
+    await expect(service.list({ page: 1, perPage: 25 }, instructorOnly)).rejects.toThrow(ForbiddenException);
+    expect(repo.list).not.toHaveBeenCalled();
+  });
+
+  it('plain user with no memberships is forbidden', async () => {
+    await expect(service.list({ page: 1, perPage: 25 }, civilian)).rejects.toThrow(ForbiddenException);
+    expect(repo.list).not.toHaveBeenCalled();
+  });
+
+  it('anonymous (null) user is forbidden', async () => {
+    await expect(service.list({ page: 1, perPage: 25 }, null)).rejects.toThrow(ForbiddenException);
+    expect(repo.list).not.toHaveBeenCalled();
   });
 });

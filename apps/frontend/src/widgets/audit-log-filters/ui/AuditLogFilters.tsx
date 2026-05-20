@@ -23,6 +23,9 @@ const ACTION_KEY = {
   update: 'updated',
   delete: 'deleted',
   move: 'moved',
+  deactivate: 'deactivated',
+  reactivate: 'reactivated',
+  password_reset_triggered: 'passwordResetTriggered',
 } as const;
 
 const ALL = '__all';
@@ -33,6 +36,9 @@ const ACTIONS: ReadonlyArray<typeof ALL | AuditLogAction> = [
   'update',
   'delete',
   'move',
+  'deactivate',
+  'reactivate',
+  'password_reset_triggered',
 ];
 
 export function AuditLogFilters({ value, onChange }: AuditLogFiltersProps): React.ReactElement {

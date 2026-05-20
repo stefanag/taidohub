@@ -57,6 +57,13 @@
       "when": 1779085285447,
       "tag": "0007_hard_nekra",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1779182447323,
+      "tag": "0008_bizarre_trauma",
+      "breakpoints": true
     }
   ]
 }

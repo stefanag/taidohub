@@ -1,4 +1,11 @@
-import { boolean, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import {
+  boolean,
+  check,
+  pgTable,
+  text,
+  timestamp,
+} from 'drizzle-orm/pg-core';
+import { sql } from 'drizzle-orm';
 
 /**
  * better-auth's required tables. Names and columns match the official
@@ -8,22 +15,43 @@ import { boolean, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
  * Reference: https://www.better-auth.com/docs/adapters/drizzle
  */
 
-export const user = pgTable('user', {
-  id: text('id').primaryKey(),
-  email: text('email').notNull().unique(),
-  emailVerified: boolean('emailVerified').notNull().default(false),
-  name: text('name'),
-  image: text('image'),
-  role: text('role').notNull().default('user'),
-  locale: text('locale').notNull().default('en'),
-  createdAt: timestamp('createdAt', { withTimezone: true, mode: 'date' })
-    .notNull()
-    .defaultNow(),
-  updatedAt: timestamp('updatedAt', { withTimezone: true, mode: 'date' })
-    .notNull()
-    .defaultNow(),
-});
+/**
+ * The values the `role` column accepts. Kept here next to the table so the
+ * CHECK constraint and the contract enum (`RoleSchema` in `@repo/contracts`)
+ * are easy to read side-by-side. Adding a value requires updating both
+ * places + the migration; the alignment test in
+ * `apps/backend/src/modules/memberships/role-enum-alignment.spec.ts` guards
+ * the agreement.
+ */
+export const USER_ROLES = ['sysadmin', 'user'] as const;
 
+export const user = pgTable(
+  'user',
+  {
+    id: text('id').primaryKey(),
+    email: text('email').notNull().unique(),
+    emailVerified: boolean('emailVerified').notNull().default(false),
+    name: text('name'),
+    image: text('image'),
+    role: text('role').notNull().default('user'),
+    locale: text('locale').notNull().default('en'),
+    deactivatedAt: timestamp('deactivated_at', { withTimezone: true, mode: 'date' }),
+    createdAt: timestamp('createdAt', { withTimezone: true, mode: 'date' })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp('updatedAt', { withTimezone: true, mode: 'date' })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => ({
+    userRoleCheck: check(
+      'user_role_check',
+      sql`${table.role} IN ('sysadmin', 'user')`,
+    ),
+  }),
+);
+
+// session, account, verification — unchanged.
 export const session = pgTable('session', {
   id: text('id').primaryKey(),
   expiresAt: timestamp('expiresAt', { withTimezone: true, mode: 'date' }).notNull(),
@@ -82,11 +110,6 @@ export const verification = pgTable('verification', {
     .defaultNow(),
 });
 
-/**
- * Convenience alias used by app code that wants to talk about "users" rather
- * than "the better-auth user table". Keeping it as a re-export ensures both
- * names point at the exact same column metadata.
- */
 export const users = user;
 
 export type DbUser = typeof user.$inferSelect;

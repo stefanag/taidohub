@@ -7,8 +7,16 @@ import {
 } from '../audit-log.js';
 
 describe('AuditLogActionSchema', () => {
-  it('accepts the four allowed actions', () => {
-    for (const action of ['create', 'update', 'delete', 'move']) {
+  it('accepts the seven allowed actions', () => {
+    for (const action of [
+      'create',
+      'update',
+      'delete',
+      'move',
+      'deactivate',
+      'reactivate',
+      'password_reset_triggered',
+    ]) {
       expect(AuditLogActionSchema.safeParse(action).success).toBe(true);
     }
   });

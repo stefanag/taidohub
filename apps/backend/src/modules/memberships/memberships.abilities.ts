@@ -8,19 +8,15 @@ import {
 } from '../../infrastructure/ability/ability.types.js';
 
 /**
- * - `sysadmin` can manage every user.
- * - Anyone else can read their own row.
+ * Membership rules: only sysadmin can manage `OrganisationMembership`. Other
+ * users get read on their own memberships via the `User` subject already
+ * (their session carries the membership list).
  */
 @Injectable()
-export class UsersAbilityRules implements AbilityRuleContributor {
+export class MembershipsAbilityRules implements AbilityRuleContributor {
   contributeTo(builder: AbilityBuilder<AppAbility>, user: AuthenticatedUser | null): void {
-    if (!user) return;
-
-    if (user.role === 'sysadmin') {
-      builder.can('manage', 'User');
-      return;
+    if (user?.role === 'sysadmin') {
+      builder.can('manage', 'OrganisationMembership');
     }
-
-    builder.can('read', 'User', { id: user.id });
   }
 }

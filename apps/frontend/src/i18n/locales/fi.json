@@ -86,7 +86,10 @@
         "created": "luotu",
         "updated": "päivitetty",
         "deleted": "poistettu",
-        "moved": "siirretty"
+        "moved": "siirretty",
+        "deactivated": "poistettu käytöstä",
+        "reactivated": "otettu uudelleen käyttöön",
+        "passwordResetTriggered": "salasanan nollaus käynnistetty"
       },
       "filters": {
         "entityType": "Entiteettityyppi",

@@ -11,6 +11,7 @@ export default defineConfig({
     openapi: 'src/openapi.ts',
     organisations: 'src/organisations.ts',
     'audit-log': 'src/audit-log.ts',
+    memberships: 'src/memberships.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,

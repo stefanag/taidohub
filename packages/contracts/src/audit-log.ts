@@ -4,7 +4,15 @@ const UUID_EXAMPLE = '7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5';
 const ISO_DATETIME_EXAMPLE = '2026-05-17T08:00:00.000Z';
 
 export const AuditLogActionSchema = z
-  .enum(['create', 'update', 'delete', 'move'])
+  .enum([
+    'create',
+    'update',
+    'delete',
+    'move',
+    'deactivate',
+    'reactivate',
+    'password_reset_triggered',
+  ])
   .meta({ id: 'AuditLogAction' });
 
 export type AuditLogAction = z.infer<typeof AuditLogActionSchema>;
