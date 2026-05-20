@@ -48,7 +48,42 @@ export const UserSchema = z
 
 export type User = z.infer<typeof UserSchema>;
 
+export const ListUsersQuerySchema = z
+  .object({
+    q: z.string().optional(),
+    role: RoleSchema.optional(),
+    deactivated: z.enum(['true', 'false', 'all']).default('false'),
+    page: z.coerce.number().int().min(1).default(1),
+    perPage: z.coerce.number().int().min(1).max(100).default(25),
+  })
+  .meta({ id: 'ListUsersQuery' });
+
+export type ListUsersQuery = z.infer<typeof ListUsersQuerySchema>;
+
+export const ListUsersResponseSchema = z
+  .object({
+    data: UserSchema.array(),
+    total: z.number().int().nonnegative(),
+    page: z.number().int().min(1),
+    perPage: z.number().int().min(1),
+  })
+  .meta({ id: 'ListUsersResponse' });
+
+export type ListUsersResponse = z.infer<typeof ListUsersResponseSchema>;
+
+export const UpdateUserSchema = z
+  .object({
+    name: z.string().min(1).max(200).optional(),
+    role: RoleSchema.optional(),
+  })
+  .meta({ id: 'UpdateUserInput' });
+
+export type UpdateUserInput = z.infer<typeof UpdateUserSchema>;
+
 export const UsersOpenApiRegistry = {
   Role: RoleSchema,
   User: UserSchema,
+  ListUsersQuery: ListUsersQuerySchema,
+  ListUsersResponse: ListUsersResponseSchema,
+  UpdateUserInput: UpdateUserSchema,
 } as const;
