@@ -18,7 +18,7 @@ export const adminOrganisationsRoute = createRoute({
       const result = await authClient.getSession();
       // better-auth's default user type may not include `role`; cast safely.
       const role = (result.data?.user as { role?: string } | undefined)?.role;
-      if (role !== 'admin') {
+      if (role !== 'sysadmin') {
         throw redirect({ to: '/dashboard' });
       }
     } catch (err) {
