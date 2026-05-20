@@ -153,6 +153,12 @@ export class MembershipsService {
   private assertCan(user: AuthenticatedUser | null, action: 'create' | 'read' | 'update' | 'delete'): void {
     const ability = this.abilities.createForUser(user);
     try {
+      // Bare-string subject check is safe here: `OrganisationMembership` has
+      // exactly one rule — `manage`, granted unconditionally to sysadmin only
+      // (see MembershipsAbilityRules). There is no conditional rule for this
+      // subject, so a non-sysadmin holds zero rules and the check correctly
+      // fails. If a conditional OrganisationMembership rule is ever added,
+      // this MUST switch to an instance subject (see OrganisationsService).
       ForbiddenError.from(ability).throwUnlessCan(action, 'OrganisationMembership');
     } catch (err) {
       if (err instanceof ForbiddenError) {

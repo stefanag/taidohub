@@ -29,7 +29,6 @@ import { ErrorEnvelopeDto } from '../../common/dto/error-envelope.dto.js';
 import { ApiEndpoint } from '../../common/swagger/api-endpoint.decorator.js';
 import { CurrentUser } from '../../infrastructure/auth/current-user.decorator.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
-import { CheckAbility } from '../../infrastructure/ability/check-ability.decorator.js';
 
 import { CreateOrganisationDto } from './dto/create-organisation.dto.js';
 import { ListOrganisationsQueryDto } from './dto/list-organisations-query.dto.js';
@@ -45,7 +44,6 @@ export class OrganisationsController {
   constructor(private readonly orgs: OrganisationsService) {}
 
   @Get()
-  @CheckAbility('read', 'Organisation')
   @ApiEndpoint({
     summary: 'List organisations (flat).',
     operationId: 'OrganisationsController_list',
@@ -61,7 +59,6 @@ export class OrganisationsController {
   }
 
   @Get(':id')
-  @CheckAbility('read', 'Organisation')
   @ApiParam({ name: 'id', description: 'Organisation UUID.' })
   @ApiEndpoint({
     summary: 'Get an organisation by id.',
