@@ -1,6 +1,15 @@
+import { useQuery } from '@tanstack/react-query';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import {
+  listMembershipsQueryOptions,
+  useCreateMembership,
+  useDeleteMembership,
+  useUpdateMembership,
+  type MembershipRole,
+} from '@/entities/membership';
+import { listOrganisationsQueryOptions } from '@/entities/organisation';
 import type { Role, UpdateUserInput, User } from '@/entities/user';
 import {
   Button,
@@ -18,6 +27,8 @@ import {
 } from '@/shared/ui/select.js';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs.js';
 
+import { MembershipEditor } from './MembershipEditor.js';
+
 export interface UserFormProps {
   /** The user being edited. */
   user: User;
@@ -32,9 +43,6 @@ export interface UserFormProps {
  * Edit form for a user. Two tabs: Details (name + role) and Memberships.
  * Email is read-only — better-auth owns it. The role select is disabled when
  * an admin edits their own row (the backend also rejects self-demotion).
- *
- * The Memberships tab is filled in by a follow-up task; this shell renders
- * its trigger and an empty panel.
  */
 export function UserForm({
   user,
@@ -49,12 +57,30 @@ export function UserForm({
 
   const isSelf = user.id === currentUserId;
 
+  const orgsQuery = useQuery(listOrganisationsQueryOptions());
+  const orgById = React.useMemo(() => {
+    const m = new Map<string, { label: string; type: string }>();
+    for (const o of orgsQuery.data?.data ?? []) {
+      m.set(o.id, { label: `${o.nameEn} (${o.shortCode})`, type: o.type });
+    }
+    return m;
+  }, [orgsQuery.data]);
+
+  const membershipsQuery = useQuery(listMembershipsQueryOptions({ userId: user.id }));
+  const memberships = membershipsQuery.data?.data ?? [];
+
+  const [editorOpen, setEditorOpen] = React.useState(false);
+  const createMembership = useCreateMembership({ onSuccess: () => setEditorOpen(false) });
+  const updateMembership = useUpdateMembership();
+  const deleteMembership = useDeleteMembership();
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
     setSubmitError(undefined);
     const input: UpdateUserInput = {};
     if (name.trim() && name.trim() !== (user.name ?? '')) input.name = name.trim();
     if (role !== user.role) input.role = role;
+    if (Object.keys(input).length === 0) return;
     try {
       await onSubmit(input);
     } catch (err) {
@@ -124,11 +150,68 @@ export function UserForm({
         </form>
       </TabsContent>
 
-      <TabsContent value="memberships">
-        {/* Filled in by the next task. */}
-        <p className="text-on-surface-variant">
-          {t('admin.users.memberships.empty', { defaultValue: 'No memberships yet.' })}
-        </p>
+      <TabsContent value="memberships" className="space-y-3">
+        {memberships.length === 0 ? (
+          <p className="text-on-surface-variant">
+            {t('admin.users.memberships.empty', { defaultValue: 'No memberships yet.' })}
+          </p>
+        ) : (
+          <ul className="divide-y">
+            {memberships.map((m) => {
+              const org = orgById.get(m.organisationId);
+              const isClub = org?.type === 'club';
+              return (
+                <li key={m.id} className="flex items-center justify-between gap-3 py-2">
+                  <span className="flex-1 truncate text-sm">
+                    {org?.label ?? m.organisationId}
+                  </span>
+                  <Select
+                    value={m.role}
+                    onValueChange={(v) =>
+                      updateMembership.mutate({ id: m.id, role: v as MembershipRole })
+                    }
+                  >
+                    <SelectTrigger
+                      className="w-44"
+                      aria-label={t('admin.users.memberships.role', { defaultValue: 'Role' })}
+                    >
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="orgadmin">
+                        {t('admin.users.roles.orgadmin', { defaultValue: 'Organisation administrator' })}
+                      </SelectItem>
+                      <SelectItem value="instructor" disabled={!isClub}>
+                        {t('admin.users.roles.instructor', { defaultValue: 'Instructor' })}
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => deleteMembership.mutate(m.id)}
+                    disabled={deleteMembership.isPending}
+                  >
+                    {t('admin.users.memberships.remove', { defaultValue: 'Remove' })}
+                  </Button>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+
+        <Button variant="outline" size="sm" onClick={() => setEditorOpen(true)}>
+          {t('admin.users.memberships.add', { defaultValue: 'Add membership' })}
+        </Button>
+
+        <MembershipEditor
+          open={editorOpen}
+          onOpenChange={setEditorOpen}
+          submitting={createMembership.isPending}
+          onConfirm={async (organisationId, role) => {
+            await createMembership.mutateAsync({ userId: user.id, organisationId, role });
+          }}
+        />
       </TabsContent>
     </Tabs>
   );
