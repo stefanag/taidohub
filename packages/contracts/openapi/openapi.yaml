@@ -206,28 +206,76 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UserDto"
-      security: &a2
+      security: &a3
         - session: []
       summary: Get the currently authenticated user.
-      tags: &a3
+      tags: &a4
         - users
   /api/users:
     get:
       operationId: UsersController_list
-      parameters: []
+      parameters:
+        - name: q
+          required: false
+          in: query
+          x-nestjs_zod-parent-has-refs: true
+          x-nestjs_zod-$defs: &a2
+            Role:
+              type: string
+              enum:
+                - sysadmin
+                - user
+              description: Global role on a user row.
+              example: user
+          schema:
+            type: string
+        - name: role
+          required: false
+          in: query
+          x-nestjs_zod-parent-has-refs: true
+          x-nestjs_zod-empty-type: true
+          x-nestjs_zod-$defs: *a2
+          schema:
+            $ref: "#/$defs/Role"
+        - name: deactivated
+          required: false
+          in: query
+          x-nestjs_zod-parent-has-refs: true
+          x-nestjs_zod-$defs: *a2
+          schema:
+            default: "false"
+            type: string
+            enum:
+              - "true"
+              - "false"
+              - all
+        - name: page
+          required: false
+          in: query
+          x-nestjs_zod-parent-has-refs: true
+          x-nestjs_zod-$defs: *a2
+          schema:
+            minimum: 1
+            maximum: 9007199254740991
+            default: 1
+            type: integer
+        - name: perPage
+          required: false
+          in: query
+          x-nestjs_zod-parent-has-refs: true
+          x-nestjs_zod-$defs: *a2
+          schema:
+            minimum: 1
+            maximum: 100
+            default: 25
+            type: integer
       responses:
         "200":
           description: ""
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserDto"
-        "400":
-          description: ""
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorEnvelopeDto"
+                $ref: "#/components/schemas/ListUsersResponseDto"
         "401":
           description: ""
           content:
@@ -240,15 +288,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorEnvelopeDto"
-        "404":
-          description: ""
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorEnvelopeDto"
-      security: *a2
-      summary: List users (admin only).
-      tags: *a3
+      security: *a3
+      summary: List users — paginated and filterable (sysadmin only).
+      tags: *a4
   /api/users/{id}:
     get:
       operationId: UsersController_findOne
@@ -266,6 +308,49 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UserDto"
+        "401":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
+        "403":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
+      security: *a3
+      summary: Get a single user by id.
+      tags: *a4
+    patch:
+      operationId: UsersController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: User UUID.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserDto"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDto"
         "400":
           description: ""
           content:
@@ -290,9 +375,15 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorEnvelopeDto"
-      security: *a2
-      summary: Get a single user by id.
-      tags: *a3
+        "409":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
+      security: *a3
+      summary: Update a user's name or role (sysadmin only).
+      tags: *a4
   /api/admin/organisations:
     get:
       operationId: OrganisationsController_list
@@ -303,7 +394,7 @@ paths:
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: &a4
+          x-nestjs_zod-$defs: &a5
             OrganisationType:
               type: string
               enum:
@@ -318,7 +409,7 @@ paths:
           in: query
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a4
+          x-nestjs_zod-$defs: *a5
           schema:
             pattern: ^[A-Z]{3}$
             type: string
@@ -328,7 +419,7 @@ paths:
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a4
+          x-nestjs_zod-$defs: *a5
           schema:
             anyOf:
               - type: string
@@ -340,7 +431,7 @@ paths:
           in: query
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a4
+          x-nestjs_zod-$defs: *a5
           schema:
             type: string
       responses:
@@ -362,10 +453,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorEnvelopeDto"
-      security: &a5
+      security: &a6
         - session: []
       summary: List organisations (flat).
-      tags: &a6
+      tags: &a7
         - organisations
     post:
       operationId: OrganisationsController_create
@@ -401,9 +492,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorEnvelopeDto"
-      security: *a5
+      security: *a6
       summary: Create an organisation.
-      tags: *a6
+      tags: *a7
   /api/admin/organisations/{id}:
     get:
       operationId: OrganisationsController_findOne
@@ -445,9 +536,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorEnvelopeDto"
-      security: *a5
+      security: *a6
       summary: Get an organisation by id.
-      tags: *a6
+      tags: *a7
     patch:
       operationId: OrganisationsController_update
       parameters:
@@ -494,9 +585,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorEnvelopeDto"
-      security: *a5
+      security: *a6
       summary: Update or move an organisation.
-      tags: *a6
+      tags: *a7
     delete:
       operationId: OrganisationsController_delete
       parameters:
@@ -533,9 +624,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorEnvelopeDto"
-      security: *a5
+      security: *a6
       summary: Delete an organisation (must be childless).
-      tags: *a6
+      tags: *a7
   /api/memberships:
     get:
       operationId: MembershipsController_list
@@ -572,10 +663,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorEnvelopeDto"
-      security: &a7
+      security: &a8
         - session: []
       summary: List memberships. Non-sysadmins may only filter by their own userId.
-      tags: &a8
+      tags: &a9
         - memberships
     post:
       operationId: MembershipsController_create
@@ -617,9 +708,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorEnvelopeDto"
-      security: *a7
+      security: *a8
       summary: Create a membership (sysadmin only).
-      tags: *a8
+      tags: *a9
   /api/memberships/{id}:
     patch:
       operationId: MembershipsController_update
@@ -667,9 +758,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorEnvelopeDto"
-      security: *a7
+      security: *a8
       summary: Change a membership’s role (sysadmin only).
-      tags: *a8
+      tags: *a9
     delete:
       operationId: MembershipsController_delete
       parameters:
@@ -700,9 +791,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorEnvelopeDto"
-      security: *a7
+      security: *a8
       summary: Delete a membership (sysadmin only).
-      tags: *a8
+      tags: *a9
   /api/admin/audit-log:
     get:
       operationId: AuditLogController_list
@@ -711,7 +802,7 @@ paths:
           required: false
           in: query
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: &a9
+          x-nestjs_zod-$defs: &a10
             AuditLogAction:
               type: string
               enum:
@@ -728,14 +819,14 @@ paths:
           required: false
           in: query
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a9
+          x-nestjs_zod-$defs: *a10
           schema:
             type: string
         - name: userId
           required: false
           in: query
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a9
+          x-nestjs_zod-$defs: *a10
           schema:
             type: string
         - name: action
@@ -743,14 +834,14 @@ paths:
           in: query
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a9
+          x-nestjs_zod-$defs: *a10
           schema:
             $ref: "#/$defs/AuditLogAction"
         - name: from
           required: false
           in: query
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a9
+          x-nestjs_zod-$defs: *a10
           schema:
             format: date-time
             pattern: ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
@@ -759,7 +850,7 @@ paths:
           required: false
           in: query
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a9
+          x-nestjs_zod-$defs: *a10
           schema:
             format: date-time
             pattern: ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
@@ -768,7 +859,7 @@ paths:
           required: false
           in: query
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a9
+          x-nestjs_zod-$defs: *a10
           schema:
             maximum: 9007199254740991
             exclusiveMinimum: 0
@@ -778,7 +869,7 @@ paths:
           required: false
           in: query
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a9
+          x-nestjs_zod-$defs: *a10
           schema:
             maximum: 100
             exclusiveMinimum: 0
@@ -850,7 +941,7 @@ components:
           description: Registered email address.
           x-nestjs_zod-parent-metadata:
             description: Payload for `POST /api/auth/sign-in/email`.
-            example: &a10
+            example: &a11
               email: ada@example.com
               password: correct-horse-battery-staple
         password:
@@ -859,7 +950,7 @@ components:
           description: Account password (8+ chars).
           x-nestjs_zod-parent-metadata:
             description: Payload for `POST /api/auth/sign-in/email`.
-            example: *a10
+            example: *a11
       required:
         - email
         - password
@@ -871,7 +962,7 @@ components:
           type: ""
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: &a11
+          x-nestjs_zod-$defs: &a12
             User:
               type: object
               properties:
@@ -951,7 +1042,7 @@ components:
           x-nestjs_zod-parent-metadata:
             description: The session payload returned by `GET /api/auth/get-session` for an
               authenticated request.
-            example: &a12
+            example: &a13
               user:
                 id: 4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5
                 email: ada@example.com
@@ -979,11 +1070,11 @@ components:
             - expiresAt
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-self-required: true
-          x-nestjs_zod-$defs: *a11
+          x-nestjs_zod-$defs: *a12
           x-nestjs_zod-parent-metadata:
             description: The session payload returned by `GET /api/auth/get-session` for an
               authenticated request.
-            example: *a12
+            example: *a13
       required:
         - user
         - session
@@ -997,7 +1088,7 @@ components:
           description: Email address to register.
           x-nestjs_zod-parent-metadata:
             description: Payload for `POST /api/auth/sign-up/email`.
-            example: &a13
+            example: &a14
               email: ada@example.com
               password: correct-horse-battery-staple
               name: Ada Lovelace
@@ -1007,14 +1098,14 @@ components:
           description: New account password (8+ chars).
           x-nestjs_zod-parent-metadata:
             description: Payload for `POST /api/auth/sign-up/email`.
-            example: *a13
+            example: *a14
         name:
           description: Optional display name.
           type: string
           minLength: 1
           x-nestjs_zod-parent-metadata:
             description: Payload for `POST /api/auth/sign-up/email`.
-            example: *a13
+            example: *a14
       required:
         - email
         - password
@@ -1028,7 +1119,7 @@ components:
           description: Unique identifier (UUID v4).
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: &a14
+          x-nestjs_zod-$defs: &a15
             Role:
               type: string
               enum:
@@ -1038,7 +1129,7 @@ components:
               example: user
           x-nestjs_zod-parent-metadata:
             description: A user account exposed to API clients.
-            example: &a15
+            example: &a16
               id: 4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5
               email: ada@example.com
               name: Ada Lovelace
@@ -1055,10 +1146,10 @@ components:
           description: The user’s primary email address.
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a14
+          x-nestjs_zod-$defs: *a15
           x-nestjs_zod-parent-metadata:
             description: A user account exposed to API clients.
-            example: *a15
+            example: *a16
         name:
           anyOf:
             - type: string
@@ -1067,19 +1158,19 @@ components:
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a14
+          x-nestjs_zod-$defs: *a15
           x-nestjs_zod-parent-metadata:
             description: A user account exposed to API clients.
-            example: *a15
+            example: *a16
         emailVerified:
           type: boolean
           description: Whether the email address has been verified.
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a14
+          x-nestjs_zod-$defs: *a15
           x-nestjs_zod-parent-metadata:
             description: A user account exposed to API clients.
-            example: *a15
+            example: *a16
         image:
           anyOf:
             - type: string
@@ -1089,10 +1180,10 @@ components:
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a14
+          x-nestjs_zod-$defs: *a15
           x-nestjs_zod-parent-metadata:
             description: A user account exposed to API clients.
-            example: *a15
+            example: *a16
         role:
           description: Global role; org-scoped roles live in `organisation_membership`.
           $ref: "#/$defs/Role"
@@ -1100,10 +1191,10 @@ components:
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a14
+          x-nestjs_zod-$defs: *a15
           x-nestjs_zod-parent-metadata:
             description: A user account exposed to API clients.
-            example: *a15
+            example: *a16
         deactivatedAt:
           anyOf:
             - type: string
@@ -1115,10 +1206,10 @@ components:
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a14
+          x-nestjs_zod-$defs: *a15
           x-nestjs_zod-parent-metadata:
             description: A user account exposed to API clients.
-            example: *a15
+            example: *a16
         createdAt:
           type: string
           format: date-time
@@ -1126,10 +1217,10 @@ components:
           description: ISO-8601 timestamp the account was created.
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a14
+          x-nestjs_zod-$defs: *a15
           x-nestjs_zod-parent-metadata:
             description: A user account exposed to API clients.
-            example: *a15
+            example: *a16
         updatedAt:
           type: string
           format: date-time
@@ -1137,10 +1228,10 @@ components:
           description: ISO-8601 timestamp the account was last modified.
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a14
+          x-nestjs_zod-$defs: *a15
           x-nestjs_zod-parent-metadata:
             description: A user account exposed to API clients.
-            example: *a15
+            example: *a16
       required:
         - id
         - email
@@ -1151,6 +1242,114 @@ components:
         - deactivatedAt
         - createdAt
         - updatedAt
+    ListUsersResponseDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/$defs/User"
+          x-nestjs_zod-parent-has-refs: true
+          x-nestjs_zod-$defs: &a17
+            User:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                  description: Unique identifier (UUID v4).
+                email:
+                  type: string
+                  format: email
+                  pattern: ^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$
+                  description: The user’s primary email address.
+                name:
+                  anyOf:
+                    - type: string
+                    - type: "null"
+                  description: Display name; null until the user sets one.
+                emailVerified:
+                  type: boolean
+                  description: Whether the email address has been verified.
+                image:
+                  anyOf:
+                    - type: string
+                      format: uri
+                    - type: "null"
+                  description: URL to the user’s avatar, if any.
+                role:
+                  description: Global role; org-scoped roles live in `organisation_membership`.
+                  $ref: "#/$defs/Role"
+                deactivatedAt:
+                  anyOf:
+                    - type: string
+                      format: date-time
+                      pattern: ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+                    - type: "null"
+                  description: When the account was deactivated. Null = active. Deactivated users
+                    cannot sign in.
+                createdAt:
+                  type: string
+                  format: date-time
+                  pattern: ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+                  description: ISO-8601 timestamp the account was created.
+                updatedAt:
+                  type: string
+                  format: date-time
+                  pattern: ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+                  description: ISO-8601 timestamp the account was last modified.
+              required:
+                - id
+                - email
+                - name
+                - emailVerified
+                - image
+                - role
+                - deactivatedAt
+                - createdAt
+                - updatedAt
+              description: A user account exposed to API clients.
+              example:
+                id: 4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5
+                email: ada@example.com
+                name: Ada Lovelace
+                emailVerified: true
+                image: https://example.com/avatars/ada.png
+                role: user
+                deactivatedAt: null
+                createdAt: 2025-01-15T12:34:56.000Z
+                updatedAt: 2025-04-02T08:00:00.000Z
+            Role:
+              type: string
+              enum:
+                - sysadmin
+                - user
+              description: Global role on a user row.
+              example: user
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+          x-nestjs_zod-parent-has-refs: true
+          x-nestjs_zod-$defs: *a17
+        page:
+          type: integer
+          minimum: 1
+          maximum: 9007199254740991
+          x-nestjs_zod-parent-has-refs: true
+          x-nestjs_zod-$defs: *a17
+        perPage:
+          type: integer
+          minimum: 1
+          maximum: 9007199254740991
+          x-nestjs_zod-parent-has-refs: true
+          x-nestjs_zod-$defs: *a17
+      required:
+        - data
+        - total
+        - page
+        - perPage
     ErrorEnvelopeDto:
       type: object
       properties:
@@ -1187,6 +1386,28 @@ components:
                 message: The requested resource could not be found.
       required:
         - error
+    UpdateUserDto:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+          x-nestjs_zod-parent-has-refs: true
+          x-nestjs_zod-$defs: &a18
+            Role:
+              type: string
+              enum:
+                - sysadmin
+                - user
+              description: Global role on a user row.
+              example: user
+        role:
+          $ref: "#/$defs/Role"
+          type: ""
+          x-nestjs_zod-parent-has-refs: true
+          x-nestjs_zod-empty-type: true
+          x-nestjs_zod-$defs: *a18
     ListOrganisationsResponseDto:
       type: object
       properties:
@@ -1195,7 +1416,7 @@ components:
           items:
             $ref: "#/$defs/Organisation"
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: &a16
+          x-nestjs_zod-$defs: &a19
             Organisation:
               type: object
               properties:
@@ -1321,7 +1542,7 @@ components:
           minimum: 0
           maximum: 9007199254740991
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a16
+          x-nestjs_zod-$defs: *a19
       required:
         - data
         - total
@@ -1335,7 +1556,7 @@ components:
           description: Unique identifier.
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: &a17
+          x-nestjs_zod-$defs: &a20
             OrganisationType:
               type: string
               enum:
@@ -1344,7 +1565,7 @@ components:
                 - club
               description: Organisation type (immutable after create).
           x-nestjs_zod-parent-metadata:
-            example: &a18
+            example: &a21
               id: 7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5
               parentId: null
               type: international_federation
@@ -1371,18 +1592,18 @@ components:
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a17
+          x-nestjs_zod-$defs: *a20
           x-nestjs_zod-parent-metadata:
-            example: *a18
+            example: *a21
         type:
           $ref: "#/$defs/OrganisationType"
           type: ""
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a17
+          x-nestjs_zod-$defs: *a20
           x-nestjs_zod-parent-metadata:
-            example: *a18
+            example: *a21
         shortCode:
           type: string
           minLength: 1
@@ -1390,9 +1611,9 @@ components:
           description: Short display code, e.g. "WTF".
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a17
+          x-nestjs_zod-$defs: *a20
           x-nestjs_zod-parent-metadata:
-            example: *a18
+            example: *a21
         slug:
           anyOf:
             - type: string
@@ -1403,9 +1624,9 @@ components:
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a17
+          x-nestjs_zod-$defs: *a20
           x-nestjs_zod-parent-metadata:
-            example: *a18
+            example: *a21
         country:
           anyOf:
             - type: string
@@ -1415,36 +1636,36 @@ components:
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a17
+          x-nestjs_zod-$defs: *a20
           x-nestjs_zod-parent-metadata:
-            example: *a18
+            example: *a21
         nameEn:
           type: string
           minLength: 1
           maxLength: 200
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a17
+          x-nestjs_zod-$defs: *a20
           x-nestjs_zod-parent-metadata:
-            example: *a18
+            example: *a21
         nameSv:
           type: string
           minLength: 1
           maxLength: 200
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a17
+          x-nestjs_zod-$defs: *a20
           x-nestjs_zod-parent-metadata:
-            example: *a18
+            example: *a21
         nameFi:
           type: string
           minLength: 1
           maxLength: 200
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a17
+          x-nestjs_zod-$defs: *a20
           x-nestjs_zod-parent-metadata:
-            example: *a18
+            example: *a21
         nameJa:
           anyOf:
             - type: string
@@ -1453,9 +1674,9 @@ components:
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a17
+          x-nestjs_zod-$defs: *a20
           x-nestjs_zod-parent-metadata:
-            example: *a18
+            example: *a21
         logoUrl:
           anyOf:
             - type: string
@@ -1464,9 +1685,9 @@ components:
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a17
+          x-nestjs_zod-$defs: *a20
           x-nestjs_zod-parent-metadata:
-            example: *a18
+            example: *a21
         address:
           anyOf:
             - type: string
@@ -1474,9 +1695,9 @@ components:
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a17
+          x-nestjs_zod-$defs: *a20
           x-nestjs_zod-parent-metadata:
-            example: *a18
+            example: *a21
         contactEmail:
           anyOf:
             - type: string
@@ -1486,9 +1707,9 @@ components:
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a17
+          x-nestjs_zod-$defs: *a20
           x-nestjs_zod-parent-metadata:
-            example: *a18
+            example: *a21
         headInstructorId:
           anyOf:
             - type: string
@@ -1496,27 +1717,27 @@ components:
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a17
+          x-nestjs_zod-$defs: *a20
           x-nestjs_zod-parent-metadata:
-            example: *a18
+            example: *a21
         createdAt:
           type: string
           format: date-time
           pattern: ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a17
+          x-nestjs_zod-$defs: *a20
           x-nestjs_zod-parent-metadata:
-            example: *a18
+            example: *a21
         updatedAt:
           type: string
           format: date-time
           pattern: ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a17
+          x-nestjs_zod-$defs: *a20
           x-nestjs_zod-parent-metadata:
-            example: *a18
+            example: *a21
       required:
         - id
         - parentId
@@ -1546,7 +1767,7 @@ components:
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: &a19
+          x-nestjs_zod-$defs: &a22
             OrganisationType:
               type: string
               enum:
@@ -1560,7 +1781,7 @@ components:
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a19
+          x-nestjs_zod-$defs: *a22
         shortCode:
           type: string
           minLength: 1
@@ -1568,7 +1789,7 @@ components:
           description: Short display code, e.g. "WTF".
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a19
+          x-nestjs_zod-$defs: *a22
         slug:
           anyOf:
             - type: string
@@ -1579,7 +1800,7 @@ components:
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a19
+          x-nestjs_zod-$defs: *a22
         country:
           anyOf:
             - type: string
@@ -1589,28 +1810,28 @@ components:
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a19
+          x-nestjs_zod-$defs: *a22
         nameEn:
           type: string
           minLength: 1
           maxLength: 200
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a19
+          x-nestjs_zod-$defs: *a22
         nameSv:
           type: string
           minLength: 1
           maxLength: 200
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a19
+          x-nestjs_zod-$defs: *a22
         nameFi:
           type: string
           minLength: 1
           maxLength: 200
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a19
+          x-nestjs_zod-$defs: *a22
         nameJa:
           anyOf:
             - type: string
@@ -1619,7 +1840,7 @@ components:
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a19
+          x-nestjs_zod-$defs: *a22
         logoUrl:
           anyOf:
             - type: string
@@ -1628,7 +1849,7 @@ components:
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a19
+          x-nestjs_zod-$defs: *a22
         address:
           anyOf:
             - type: string
@@ -1636,7 +1857,7 @@ components:
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a19
+          x-nestjs_zod-$defs: *a22
         contactEmail:
           anyOf:
             - type: string
@@ -1646,7 +1867,7 @@ components:
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a19
+          x-nestjs_zod-$defs: *a22
         headInstructorId:
           anyOf:
             - type: string
@@ -1654,7 +1875,7 @@ components:
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a19
+          x-nestjs_zod-$defs: *a22
       required:
         - parentId
         - type
@@ -1760,7 +1981,7 @@ components:
           items:
             $ref: "#/$defs/OrganisationMembership"
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: &a20
+          x-nestjs_zod-$defs: &a23
             OrganisationMembership:
               type: object
               properties:
@@ -1812,7 +2033,7 @@ components:
           minimum: 0
           maximum: 9007199254740991
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a20
+          x-nestjs_zod-$defs: *a23
       required:
         - data
         - total
@@ -1823,7 +2044,7 @@ components:
           type: string
           minLength: 1
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: &a21
+          x-nestjs_zod-$defs: &a24
             MembershipRole:
               type: string
               enum:
@@ -1836,13 +2057,13 @@ components:
           format: uuid
           pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a21
+          x-nestjs_zod-$defs: *a24
         role:
           $ref: "#/$defs/MembershipRole"
           type: ""
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a21
+          x-nestjs_zod-$defs: *a24
       required:
         - userId
         - organisationId
@@ -1855,7 +2076,7 @@ components:
           format: uuid
           pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: &a22
+          x-nestjs_zod-$defs: &a25
             MembershipRole:
               type: string
               enum:
@@ -1865,7 +2086,7 @@ components:
               example: orgadmin
           x-nestjs_zod-parent-metadata:
             description: A `(user, organisation, role)` binding.
-            example: &a23
+            example: &a26
               id: 7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5
               userId: u-admin
               organisationId: 0e2e8c4b-7a9a-46e1-9d1e-54b8f7d3a2e0
@@ -1876,46 +2097,46 @@ components:
           type: string
           minLength: 1
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a22
+          x-nestjs_zod-$defs: *a25
           x-nestjs_zod-parent-metadata:
             description: A `(user, organisation, role)` binding.
-            example: *a23
+            example: *a26
         organisationId:
           type: string
           format: uuid
           pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a22
+          x-nestjs_zod-$defs: *a25
           x-nestjs_zod-parent-metadata:
             description: A `(user, organisation, role)` binding.
-            example: *a23
+            example: *a26
         role:
           $ref: "#/$defs/MembershipRole"
           type: ""
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a22
+          x-nestjs_zod-$defs: *a25
           x-nestjs_zod-parent-metadata:
             description: A `(user, organisation, role)` binding.
-            example: *a23
+            example: *a26
         createdAt:
           type: string
           format: date-time
           pattern: ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a22
+          x-nestjs_zod-$defs: *a25
           x-nestjs_zod-parent-metadata:
             description: A `(user, organisation, role)` binding.
-            example: *a23
+            example: *a26
         updatedAt:
           type: string
           format: date-time
           pattern: ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a22
+          x-nestjs_zod-$defs: *a25
           x-nestjs_zod-parent-metadata:
             description: A `(user, organisation, role)` binding.
-            example: *a23
+            example: *a26
       required:
         - id
         - userId
@@ -1949,7 +2170,7 @@ components:
           items:
             $ref: "#/$defs/AuditLogEntry"
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: &a24
+          x-nestjs_zod-$defs: &a27
             AuditLogEntry:
               type: object
               properties:
@@ -2020,19 +2241,19 @@ components:
           exclusiveMinimum: 0
           maximum: 9007199254740991
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a24
+          x-nestjs_zod-$defs: *a27
         perPage:
           type: integer
           exclusiveMinimum: 0
           maximum: 9007199254740991
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a24
+          x-nestjs_zod-$defs: *a27
         total:
           type: integer
           minimum: 0
           maximum: 9007199254740991
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a24
+          x-nestjs_zod-$defs: *a27
       required:
         - data
         - page
@@ -2052,6 +2273,12 @@ components:
       $ref: "#/components/schemas/Role"
     User:
       $ref: "#/components/schemas/User"
+    ListUsersQuery:
+      $ref: "#/components/schemas/ListUsersQuery"
+    ListUsersResponse:
+      $ref: "#/components/schemas/ListUsersResponse"
+    UpdateUserInput:
+      $ref: "#/components/schemas/UpdateUserInput"
     Organisation:
       $ref: "#/components/schemas/Organisation"
     OrganisationType:
