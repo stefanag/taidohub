@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { User } from '@/entities/user';
+
 import { Badge } from '@/shared/ui';
 
 export interface UsersTableProps {

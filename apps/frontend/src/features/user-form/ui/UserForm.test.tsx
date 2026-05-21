@@ -1,11 +1,14 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { I18nextProvider } from 'react-i18next';
 import * as React from 'react';
+import { I18nextProvider } from 'react-i18next';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { UserForm } from './UserForm.js';
+
 import type { User } from '@/entities/user';
+
 import i18n from '@/i18n';
 
 // Mock the underlying API modules so the query-options factories pick up the
@@ -19,7 +22,6 @@ vi.mock('@/entities/membership/api/membership.api.js', async (orig) => {
   return { ...actual, listMemberships: vi.fn().mockResolvedValue({ data: [], total: 0 }) };
 });
 
-import { UserForm } from './UserForm.js';
 
 const TARGET: User = {
   id: '11111111-1111-4111-8111-111111111111',

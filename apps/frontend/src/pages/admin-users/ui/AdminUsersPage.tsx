@@ -2,13 +2,13 @@ import { useQuery } from '@tanstack/react-query';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useSession } from '@/features/auth-by-email';
 import {
   listUsersQueryOptions,
   useUpdateUser,
   type ListUsersQuery,
   type User,
 } from '@/entities/user';
+import { useSession } from '@/features/auth-by-email';
 import { UserForm } from '@/features/user-form';
 import {
   Button,

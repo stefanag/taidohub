@@ -1,12 +1,13 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { I18nextProvider } from 'react-i18next';
+import { fireEvent, render, screen } from '@testing-library/react';
 import * as React from 'react';
+import { I18nextProvider } from 'react-i18next';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { MembershipEditor } from './MembershipEditor.js';
 
 import i18n from '@/i18n';
 
-import { MembershipEditor } from './MembershipEditor.js';
 
 // Mock the underlying API module so the query-options factory picks up the stub.
 // vi.mock is hoisted by Vitest to the top of the file, so fixture data must be
@@ -47,15 +48,12 @@ vi.mock('@/entities/organisation/api/organisation.api.js', async (orig) => {
  */
 function openRadixSelect(trigger: HTMLElement): void {
   // Radix Select checks hasPointerCapture / sets pointer capture on the content.
-  // @ts-expect-error — jsdom does not implement this
+  // jsdom leaves these unimplemented, so stub them when absent.
   window.HTMLElement.prototype.hasPointerCapture ??= vi.fn(() => false);
-  // @ts-expect-error — jsdom does not implement this
   window.HTMLElement.prototype.setPointerCapture ??= vi.fn();
-  // @ts-expect-error — jsdom does not implement this
   window.HTMLElement.prototype.releasePointerCapture ??= vi.fn();
   // Radix Select calls scrollIntoView on the highlighted item when the listbox
   // opens; jsdom does not implement it.
-  // @ts-expect-error — jsdom does not implement this
   window.HTMLElement.prototype.scrollIntoView ??= vi.fn();
 
   fireEvent.pointerDown(trigger, { button: 0, ctrlKey: false, pointerId: 1 });

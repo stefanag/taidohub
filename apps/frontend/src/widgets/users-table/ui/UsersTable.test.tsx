@@ -3,10 +3,12 @@ import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 
+import { UsersTable } from './UsersTable.js';
+
 import type { User } from '@/entities/user';
+
 import i18n from '@/i18n';
 
-import { UsersTable } from './UsersTable.js';
 
 const USER_A: User = {
   id: '11111111-1111-4111-8111-111111111111',

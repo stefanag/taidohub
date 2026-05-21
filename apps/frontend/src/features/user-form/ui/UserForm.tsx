@@ -2,6 +2,10 @@ import { useQuery } from '@tanstack/react-query';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { MembershipEditor } from './MembershipEditor.js';
+
+import type { Role, UpdateUserInput, User } from '@/entities/user';
+
 import {
   listMembershipsQueryOptions,
   useCreateMembership,
@@ -10,7 +14,6 @@ import {
   type MembershipRole,
 } from '@/entities/membership';
 import { listOrganisationsQueryOptions } from '@/entities/organisation';
-import type { Role, UpdateUserInput, User } from '@/entities/user';
 import {
   Button,
   FormField,
@@ -27,7 +30,6 @@ import {
 } from '@/shared/ui/select.js';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs.js';
 
-import { MembershipEditor } from './MembershipEditor.js';
 
 export interface UserFormProps {
   /** The user being edited. */

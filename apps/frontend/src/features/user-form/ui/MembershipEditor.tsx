@@ -2,8 +2,9 @@ import { useQuery } from '@tanstack/react-query';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { listOrganisationsQueryOptions } from '@/entities/organisation';
 import type { MembershipRole } from '@/entities/membership';
+
+import { listOrganisationsQueryOptions } from '@/entities/organisation';
 import {
   Button,
   Dialog,

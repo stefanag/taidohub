@@ -5,9 +5,10 @@ import {
   type UseMutationOptions,
 } from '@tanstack/react-query';
 
+import { listUsers, updateUser } from '../api/user.api.js';
+
 import type { ListUsersQuery, UpdateUserInput, User } from '@repo/contracts/users';
 
-import { listUsers, updateUser } from '../api/user.api.js';
 
 export const userKeys = {
   all: ['users'] as const,

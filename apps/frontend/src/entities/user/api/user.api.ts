@@ -1,3 +1,4 @@
+import { UsersRoutes } from '@repo/contracts/routes';
 import {
   ListUsersResponseSchema,
   UserSchema,
@@ -6,7 +7,6 @@ import {
   type UpdateUserInput,
   type User,
 } from '@repo/contracts/users';
-import { UsersRoutes } from '@repo/contracts/routes';
 
 import { httpClient } from '@/shared/api';
 

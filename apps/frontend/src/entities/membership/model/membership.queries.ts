@@ -5,18 +5,19 @@ import {
   type UseMutationOptions,
 } from '@tanstack/react-query';
 
-import type {
-  CreateMembershipInput,
-  ListMembershipsQuery,
-  OrganisationMembership,
-} from '@repo/contracts/memberships';
-
 import {
   createMembership,
   deleteMembership,
   listMemberships,
   updateMembership,
 } from '../api/membership.api.js';
+
+import type {
+  CreateMembershipInput,
+  ListMembershipsQuery,
+  OrganisationMembership,
+} from '@repo/contracts/memberships';
+
 
 export const membershipKeys = {
   all: ['memberships'] as const,
