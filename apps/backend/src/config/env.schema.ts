@@ -60,8 +60,8 @@ export const EnvSchema = z.object({
 
   /**
    * One-time admin-triggered password-reset token lifetime in hours.
-   * Shorter than the invite TTL because a reset is a higher-trust action.
-   * Default 1h.
+   * Shorter than the invite TTL: a reset link grants immediate access to an
+   * existing active account, so a stolen link must expire quickly. Default 1h.
    */
   RESET_TOKEN_TTL_HOURS: z.coerce.number().int().min(1).default(1),
 });
