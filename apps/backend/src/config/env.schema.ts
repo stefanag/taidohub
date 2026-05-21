@@ -51,6 +51,19 @@ export const EnvSchema = z.object({
    */
   SYSADMIN_EMAIL: z.string().email().default('sysadmin@example.com'),
   SYSADMIN_PASSWORD: z.string().min(8).default('sysadmin'),
+
+  /**
+   * One-time invite-token lifetime in hours. The set-password link in an
+   * invite email stays valid this long. Default 48h.
+   */
+  INVITE_TOKEN_TTL_HOURS: z.coerce.number().int().min(1).default(48),
+
+  /**
+   * One-time admin-triggered password-reset token lifetime in hours.
+   * Shorter than the invite TTL because a reset is a higher-trust action.
+   * Default 1h.
+   */
+  RESET_TOKEN_TTL_HOURS: z.coerce.number().int().min(1).default(1),
 });
 
 export type Env = z.infer<typeof EnvSchema>;
