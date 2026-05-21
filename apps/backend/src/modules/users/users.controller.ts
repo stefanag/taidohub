@@ -21,6 +21,7 @@ import { ErrorEnvelopeDto } from '../../common/dto/error-envelope.dto.js';
 import { ApiEndpoint } from '../../common/swagger/api-endpoint.decorator.js';
 import { CurrentUser } from '../../infrastructure/auth/current-user.decorator.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
+import { CheckAbility } from '../../infrastructure/ability/check-ability.decorator.js';
 
 import { ListUsersQueryDto } from './dto/list-users-query.dto.js';
 import { ListUsersResponseDto } from './dto/list-users-response.dto.js';
@@ -46,6 +47,7 @@ export class UsersController {
   }
 
   @Get()
+  @CheckAbility('manage', 'User')
   @ApiEndpoint({
     summary: 'List users — paginated and filterable (sysadmin only).',
     operationId: 'UsersController_list',
@@ -77,6 +79,7 @@ export class UsersController {
   }
 
   @Patch(':id')
+  @CheckAbility('manage', 'User')
   @ApiParam({ name: 'id', description: 'User UUID.' })
   @ApiBody({ type: UpdateUserDto })
   @ApiOkResponse({ type: UserDto })

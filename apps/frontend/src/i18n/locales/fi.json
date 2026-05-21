@@ -97,10 +97,10 @@
         "title": "Jäsenyydet",
         "add": "Lisää jäsenyys",
         "organisation": "Organisaatio",
+        "organisationRequired": "Valitse organisaatio.",
         "role": "Rooli",
         "empty": "Ei jäsenyyksiä vielä.",
-        "remove": "Poista",
-        "instructorRequiresClub": "Ohjaaja sallitaan vain seuroille."
+        "remove": "Poista"
       },
       "actions": { "edit": "Muokkaa", "save": "Tallenna" },
       "pager": { "prev": "Edellinen", "next": "Seuraava", "page": "Sivu {{page}}" },

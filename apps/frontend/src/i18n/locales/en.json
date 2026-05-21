@@ -109,10 +109,10 @@
         "title": "Memberships",
         "add": "Add membership",
         "organisation": "Organisation",
+        "organisationRequired": "Please select an organisation.",
         "role": "Role",
         "empty": "No memberships yet.",
-        "remove": "Remove",
-        "instructorRequiresClub": "Instructor is only allowed on clubs."
+        "remove": "Remove"
       },
       "actions": {
         "edit": "Edit",

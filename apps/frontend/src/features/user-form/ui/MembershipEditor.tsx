@@ -71,7 +71,7 @@ export function MembershipEditor({
   const handleConfirm = async (): Promise<void> => {
     setError(undefined);
     if (!organisationId) {
-      setError(t('admin.users.memberships.organisation', { defaultValue: 'Organisation' }));
+      setError(t('admin.users.memberships.organisationRequired', { defaultValue: 'Please select an organisation.' }));
       return;
     }
     try {
@@ -136,8 +136,8 @@ export function MembershipEditor({
             </Select>
             {!instructorAllowed && organisationId ? (
               <p className="text-xs text-on-surface-variant">
-                {t('admin.users.memberships.instructorRequiresClub', {
-                  defaultValue: 'Instructor is only allowed on clubs.',
+                {t('admin.users.errors.instructorRequiresClub', {
+                  defaultValue: 'Instructor memberships are only allowed on clubs.',
                 })}
               </p>
             ) : null}

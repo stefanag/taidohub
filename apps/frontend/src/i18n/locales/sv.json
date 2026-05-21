@@ -97,10 +97,10 @@
         "title": "Medlemskap",
         "add": "Lägg till medlemskap",
         "organisation": "Organisation",
+        "organisationRequired": "Välj en organisation.",
         "role": "Roll",
         "empty": "Inga medlemskap än.",
-        "remove": "Ta bort",
-        "instructorRequiresClub": "Instruktör är endast tillåtet för klubbar."
+        "remove": "Ta bort"
       },
       "actions": { "edit": "Redigera", "save": "Spara" },
       "pager": { "prev": "Föregående", "next": "Nästa", "page": "Sida {{page}}" },

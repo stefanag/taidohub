@@ -14,6 +14,7 @@ import {
   type MembershipRole,
 } from '@/entities/membership';
 import { listOrganisationsQueryOptions } from '@/entities/organisation';
+import { HttpError } from '@/shared/api';
 import {
   Button,
   FormField,
@@ -56,6 +57,21 @@ export function UserForm({
   const [name, setName] = React.useState<string>(user.name ?? '');
   const [role, setRole] = React.useState<Role>(user.role);
   const [submitError, setSubmitError] = React.useState<string | undefined>();
+  const [membershipError, setMembershipError] = React.useState<string | undefined>();
+
+  /** Map a caught mutation error to a localized string using the backend error code. */
+  const mapErrorCode = React.useCallback((err: unknown): string => {
+    if (err instanceof HttpError) {
+      switch (err.payload.code) {
+        case 'SELF_DEMOTE': return t('admin.users.errors.selfDemote', { defaultValue: 'You cannot change your own role.' });
+        case 'LAST_SYSADMIN': return t('admin.users.errors.lastSysadmin', { defaultValue: 'Cannot demote the last active sysadmin.' });
+        case 'MEMBERSHIP_EXISTS': return t('admin.users.errors.membershipExists', { defaultValue: 'That membership already exists.' });
+        case 'INSTRUCTOR_REQUIRES_CLUB': return t('admin.users.errors.instructorRequiresClub', { defaultValue: 'Instructor memberships are only allowed on clubs.' });
+        default: return err.message;
+      }
+    }
+    return err instanceof Error ? err.message : t('common.unknownError', { defaultValue: 'Unknown error' });
+  }, [t]);
 
   const isSelf = user.id === currentUserId;
 
@@ -73,8 +89,14 @@ export function UserForm({
 
   const [editorOpen, setEditorOpen] = React.useState(false);
   const createMembership = useCreateMembership({ onSuccess: () => setEditorOpen(false) });
-  const updateMembership = useUpdateMembership();
-  const deleteMembership = useDeleteMembership();
+  const updateMembership = useUpdateMembership({
+    onSuccess: () => setMembershipError(undefined),
+    onError: (err) => setMembershipError(mapErrorCode(err)),
+  });
+  const deleteMembership = useDeleteMembership({
+    onSuccess: () => setMembershipError(undefined),
+    onError: (err) => setMembershipError(mapErrorCode(err)),
+  });
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
@@ -86,7 +108,7 @@ export function UserForm({
     try {
       await onSubmit(input);
     } catch (err) {
-      setSubmitError(err instanceof Error ? err.message : 'Submit failed');
+      setSubmitError(mapErrorCode(err));
     }
   };
 
@@ -201,6 +223,8 @@ export function UserForm({
             })}
           </ul>
         )}
+
+        <FormMessage message={membershipError} />
 
         <Button variant="outline" size="sm" onClick={() => setEditorOpen(true)}>
           {t('admin.users.memberships.add', { defaultValue: 'Add membership' })}
