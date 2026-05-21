@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  InviteUserSchema,
   ListUsersQuerySchema,
   ListUsersResponseSchema,
   RoleSchema,
+  SetInitialPasswordSchema,
   UpdateUserSchema,
   UserSchema,
 } from '../users.js';
@@ -107,5 +109,51 @@ describe('ListUsersResponseSchema', () => {
     expect(
       ListUsersResponseSchema.safeParse({ data: [], total: 0, page: 1, perPage: 25 }).success,
     ).toBe(true);
+  });
+});
+
+describe('InviteUserSchema', () => {
+  it('accepts an email-only invite', () => {
+    expect(InviteUserSchema.safeParse({ email: 'new@example.com' }).success).toBe(true);
+  });
+
+  it('accepts an invite with a name', () => {
+    expect(
+      InviteUserSchema.safeParse({ email: 'new@example.com', name: 'New User' }).success,
+    ).toBe(true);
+  });
+
+  it('rejects a bad email', () => {
+    expect(InviteUserSchema.safeParse({ email: 'not-an-email' }).success).toBe(false);
+  });
+
+  it('rejects an empty name', () => {
+    expect(
+      InviteUserSchema.safeParse({ email: 'new@example.com', name: '' }).success,
+    ).toBe(false);
+  });
+});
+
+describe('SetInitialPasswordSchema', () => {
+  it('accepts a token + a sufficiently long password', () => {
+    expect(
+      SetInitialPasswordSchema.safeParse({ token: 'abc123', password: 'longenough' }).success,
+    ).toBe(true);
+  });
+
+  it('rejects a password shorter than 8 chars', () => {
+    expect(
+      SetInitialPasswordSchema.safeParse({ token: 'abc123', password: 'short' }).success,
+    ).toBe(false);
+  });
+
+  it('rejects a missing token', () => {
+    expect(SetInitialPasswordSchema.safeParse({ password: 'longenough' }).success).toBe(false);
+  });
+
+  it('rejects an empty token', () => {
+    expect(
+      SetInitialPasswordSchema.safeParse({ token: '', password: 'longenough' }).success,
+    ).toBe(false);
   });
 });
