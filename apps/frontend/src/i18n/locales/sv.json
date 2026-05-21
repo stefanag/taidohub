@@ -26,7 +26,8 @@
   "nav": {
     "dashboard": "Översikt",
     "adminOrganisations": "Organisationer",
-    "adminAuditLog": "Granskningslogg"
+    "adminAuditLog": "Granskningslogg",
+    "adminUsers": "Användare"
   },
   "dashboard": {
     "title": "Översikt"
@@ -77,6 +78,37 @@
         "cycle": "Flytten skulle skapa en cykel.",
         "tabInvalid": "har fel",
         "validationSummary": "Fyll i obligatoriska fält: {{fields}}"
+      }
+    },
+    "users": {
+      "title": "Användare",
+      "empty": "Inga användare hittades.",
+      "searchPlaceholder": "Sök på e-post eller namn",
+      "fields": { "email": "E-post", "name": "Namn", "role": "Roll", "status": "Status" },
+      "roles": {
+        "sysadmin": "Systemadministratör",
+        "user": "Användare",
+        "orgadmin": "Organisationsadministratör",
+        "instructor": "Instruktör"
+      },
+      "status": { "active": "Aktiv", "deactivated": "Inaktiverad" },
+      "filters": { "role": "Roll", "allRoles": "Alla roller", "showDeactivated": "Visa inaktiverade" },
+      "memberships": {
+        "title": "Medlemskap",
+        "add": "Lägg till medlemskap",
+        "organisation": "Organisation",
+        "organisationRequired": "Välj en organisation.",
+        "role": "Roll",
+        "empty": "Inga medlemskap än.",
+        "remove": "Ta bort"
+      },
+      "actions": { "edit": "Redigera", "save": "Spara" },
+      "pager": { "prev": "Föregående", "next": "Nästa", "page": "Sida {{page}}" },
+      "errors": {
+        "selfDemote": "Du kan inte ändra din egen roll.",
+        "lastSysadmin": "Kan inte degradera den sista aktiva systemadministratören.",
+        "membershipExists": "Det medlemskapet finns redan.",
+        "instructorRequiresClub": "Instruktörsmedlemskap är endast tillåtet för klubbar."
       }
     },
     "auditLog": {

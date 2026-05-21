@@ -65,4 +65,16 @@ export default defineConfig([
       'fsd/no-public-api-sidestep': 'off',
     },
   },
+  {
+    // The user-form tests mock the organisation and membership entity API
+    // modules by their deep paths because `organisation.queries.ts` and
+    // `membership.queries.ts` import their fetchers from there directly
+    // (not via the barrel). Mocking the barrel wouldn't reach those
+    // imports, so `vi.mock` MUST target the deep paths. Allow the
+    // public-API sidestep for these test files only.
+    files: ['src/features/user-form/**/*.test.{ts,tsx}'],
+    rules: {
+      'fsd/no-public-api-sidestep': 'off',
+    },
+  },
 ]);

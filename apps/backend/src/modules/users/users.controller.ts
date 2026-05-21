@@ -1,18 +1,31 @@
-import { Controller, Get, Param, ParseUUIDPipe } from '@nestjs/common';
 import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+  Query,
+} from '@nestjs/common';
+import {
+  ApiBody,
   ApiCookieAuth,
   ApiOkResponse,
   ApiOperation,
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { type User } from '@repo/contracts/users';
+import type { ListUsersResponse, User } from '@repo/contracts/users';
 
 import { ErrorEnvelopeDto } from '../../common/dto/error-envelope.dto.js';
 import { ApiEndpoint } from '../../common/swagger/api-endpoint.decorator.js';
 import { CurrentUser } from '../../infrastructure/auth/current-user.decorator.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
+import { CheckAbility } from '../../infrastructure/ability/check-ability.decorator.js';
 
+import { ListUsersQueryDto } from './dto/list-users-query.dto.js';
+import { ListUsersResponseDto } from './dto/list-users-response.dto.js';
+import { UpdateUserDto } from './dto/update-user.dto.js';
 import { UserDto } from './dto/user.dto.js';
 import { UsersService } from './users.service.js';
 
@@ -34,14 +47,19 @@ export class UsersController {
   }
 
   @Get()
+  @CheckAbility('manage', 'User')
   @ApiEndpoint({
-    summary: 'List users (admin only).',
+    summary: 'List users — paginated and filterable (sysadmin only).',
     operationId: 'UsersController_list',
-    ok: UserDto,
+    ok: ListUsersResponseDto,
     errorType: ErrorEnvelopeDto,
+    errors: ['401', '403'],
   })
-  list(@CurrentUser() user: AuthenticatedUser): Promise<User[]> {
-    return this.users.list(user);
+  list(
+    @Query() query: ListUsersQueryDto,
+    @CurrentUser() user: AuthenticatedUser,
+  ): Promise<ListUsersResponse> {
+    return this.users.list(query, user);
   }
 
   @Get(':id')
@@ -51,11 +69,32 @@ export class UsersController {
     operationId: 'UsersController_findOne',
     ok: UserDto,
     errorType: ErrorEnvelopeDto,
+    errors: ['401', '403', '404'],
   })
   findOne(
     @Param('id', new ParseUUIDPipe()) id: string,
     @CurrentUser() user: AuthenticatedUser,
   ): Promise<User> {
     return this.users.findOne(id, user);
+  }
+
+  @Patch(':id')
+  @CheckAbility('manage', 'User')
+  @ApiParam({ name: 'id', description: 'User UUID.' })
+  @ApiBody({ type: UpdateUserDto })
+  @ApiOkResponse({ type: UserDto })
+  @ApiEndpoint({
+    summary: "Update a user's name or role (sysadmin only).",
+    operationId: 'UsersController_update',
+    ok: UserDto,
+    errorType: ErrorEnvelopeDto,
+    errors: ['400', '401', '403', '404', '409'],
+  })
+  update(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body() body: UpdateUserDto,
+    @CurrentUser() user: AuthenticatedUser,
+  ): Promise<User> {
+    return this.users.update(id, body, user);
   }
 }

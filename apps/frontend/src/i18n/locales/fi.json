@@ -26,7 +26,8 @@
   "nav": {
     "dashboard": "Kojelauta",
     "adminOrganisations": "Organisaatiot",
-    "adminAuditLog": "Auditointiloki"
+    "adminAuditLog": "Auditointiloki",
+    "adminUsers": "Käyttäjät"
   },
   "dashboard": {
     "title": "Kojelauta"
@@ -77,6 +78,37 @@
         "cycle": "Siirto loisi syklin.",
         "tabInvalid": "sisältää virheitä",
         "validationSummary": "Täytä pakolliset kentät: {{fields}}"
+      }
+    },
+    "users": {
+      "title": "Käyttäjät",
+      "empty": "Käyttäjiä ei löytynyt.",
+      "searchPlaceholder": "Hae sähköpostilla tai nimellä",
+      "fields": { "email": "Sähköposti", "name": "Nimi", "role": "Rooli", "status": "Tila" },
+      "roles": {
+        "sysadmin": "Järjestelmänvalvoja",
+        "user": "Käyttäjä",
+        "orgadmin": "Organisaation ylläpitäjä",
+        "instructor": "Ohjaaja"
+      },
+      "status": { "active": "Aktiivinen", "deactivated": "Poistettu käytöstä" },
+      "filters": { "role": "Rooli", "allRoles": "Kaikki roolit", "showDeactivated": "Näytä käytöstä poistetut" },
+      "memberships": {
+        "title": "Jäsenyydet",
+        "add": "Lisää jäsenyys",
+        "organisation": "Organisaatio",
+        "organisationRequired": "Valitse organisaatio.",
+        "role": "Rooli",
+        "empty": "Ei jäsenyyksiä vielä.",
+        "remove": "Poista"
+      },
+      "actions": { "edit": "Muokkaa", "save": "Tallenna" },
+      "pager": { "prev": "Edellinen", "next": "Seuraava", "page": "Sivu {{page}}" },
+      "errors": {
+        "selfDemote": "Et voi muuttaa omaa rooliasi.",
+        "lastSysadmin": "Viimeistä aktiivista järjestelmänvalvojaa ei voi alentaa.",
+        "membershipExists": "Kyseinen jäsenyys on jo olemassa.",
+        "instructorRequiresClub": "Ohjaajajäsenyydet sallitaan vain seuroille."
       }
     },
     "auditLog": {

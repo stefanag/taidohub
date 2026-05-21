@@ -1,9 +1,17 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { ForbiddenError } from '@casl/ability';
-import { type Role, type User } from '@repo/contracts/users';
+import {
+  type ListUsersQuery,
+  type ListUsersResponse,
+  type Role,
+  type UpdateUserInput,
+  type User,
+} from '@repo/contracts/users';
 
 import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
+import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
+import { AuditLogService } from '../audit-log/audit-log.service.js';
 
 import { UsersRepository } from './users.repository.js';
 
@@ -12,6 +20,8 @@ export class UsersService {
   constructor(
     private readonly repo: UsersRepository,
     private readonly abilities: AbilityFactory,
+    private readonly audit: AuditLogService,
+    @Inject(DRIZZLE) private readonly db: DrizzleDb,
   ) {}
 
   async findOne(id: string, user: AuthenticatedUser | null): Promise<User> {
@@ -29,13 +39,95 @@ export class UsersService {
     return this.toApi(row);
   }
 
-  async list(user: AuthenticatedUser | null): Promise<User[]> {
+  async list(
+    query: ListUsersQuery,
+    user: AuthenticatedUser | null,
+  ): Promise<ListUsersResponse> {
     // Sysadmin-only gate: a sysadmin has `manage all` (covers `manage User`);
     // a plain user holds only a conditional `read User` rule, so the bare
     // `manage` check correctly fails for them.
     this.assertCan(user, 'manage');
-    const rows = await this.repo.list();
-    return rows.map((r) => this.toApi(r));
+    const { rows, total } = await this.repo.list({
+      ...(query.q !== undefined && { q: query.q }),
+      ...(query.role !== undefined && { role: query.role }),
+      deactivated: query.deactivated,
+      page: query.page,
+      perPage: query.perPage,
+    });
+    return {
+      data: rows.map((r) => this.toApi(r)),
+      total,
+      page: query.page,
+      perPage: query.perPage,
+    };
+  }
+
+  async update(
+    id: string,
+    input: UpdateUserInput,
+    user: AuthenticatedUser,
+  ): Promise<User> {
+    // Updating users is sysadmin-only. The bare `manage` check is correct:
+    // only a sysadmin holds a `manage` rule for `User`.
+    this.assertCan(user, 'manage');
+
+    const existing = await this.repo.findById(id);
+    if (!existing) {
+      throw new NotFoundException({
+        error: { code: 'NOT_FOUND', message: `User ${id} not found.` },
+      });
+    }
+
+    // Self-protection: a sysadmin cannot change their own role — a different
+    // sysadmin must do it. In practice the only self role-change reachable
+    // here is sysadmin -> user (a demotion).
+    if (input.role !== undefined && input.role !== existing.role && id === user.id) {
+      throw new ConflictException({
+        error: { code: 'SELF_DEMOTE', message: 'You cannot change your own role.' },
+      });
+    }
+
+    // Build a patch with only the fields explicitly provided, satisfying
+    // exactOptionalPropertyTypes (absent key !== key-with-undefined).
+    const patch: { name?: string; role?: string } = {};
+    if (input.name !== undefined) patch.name = input.name;
+    if (input.role !== undefined) patch.role = input.role;
+
+    return this.db.transaction(async (tx) => {
+      // Self-protection: never leave the system with zero active sysadmins.
+      // Counted inside the transaction so the read and the write commit
+      // together.
+      if (input.role === 'user' && existing.role === 'sysadmin') {
+        const remaining = await this.repo.countActiveSysadmins(tx);
+        if (remaining <= 1) {
+          throw new ConflictException({
+            error: {
+              code: 'LAST_SYSADMIN',
+              message: 'Cannot demote the last active sysadmin.',
+            },
+          });
+        }
+      }
+
+      const row = await this.repo.update(id, patch, tx);
+      if (!row) {
+        throw new NotFoundException({
+          error: { code: 'NOT_FOUND', message: `User ${id} not found.` },
+        });
+      }
+      const before = this.toApi(existing);
+      const after = this.toApi(row);
+      await this.audit.record({
+        tx,
+        entityType: 'user',
+        entityId: row.id,
+        action: 'update',
+        userId: user.id,
+        before,
+        after,
+      });
+      return after;
+    });
   }
 
   /**

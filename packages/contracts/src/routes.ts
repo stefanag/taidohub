@@ -28,3 +28,8 @@ export const OrganisationsRoutes = {
 export const AuditLogRoutes = {
   base: '/api/admin/audit-log',
 } as const;
+
+export const MembershipsRoutes = {
+  base: '/api/memberships',
+  byId: (id: string) => `/api/memberships/${id}` as const,
+} as const;
