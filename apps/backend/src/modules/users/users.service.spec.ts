@@ -57,6 +57,10 @@ function repoStub() {
     list: vi.fn(),
     update: vi.fn(),
     countActiveSysadmins: vi.fn(),
+    insert: vi.fn(),
+    deactivate: vi.fn(),
+    reactivate: vi.fn(),
+    delete: vi.fn(),
   } satisfies Record<keyof UsersRepository, ReturnType<typeof vi.fn>>;
 }
 

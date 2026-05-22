@@ -81,4 +81,69 @@ export class UsersRepository {
       .where(and(eq(user.role, 'sysadmin'), isNull(user.deactivatedAt)));
     return Number(rows[0]?.value ?? 0);
   }
+
+  /**
+   * Insert a new user row. Used by the invitation flow — the row has no
+   * credential `account` until the invitee sets a password. The `set` object
+   * omits absent optional keys to satisfy `exactOptionalPropertyTypes`.
+   */
+  async insert(
+    values: {
+      id: string;
+      email: string;
+      name?: string;
+      role: string;
+      emailVerified: boolean;
+    },
+    tx?: DrizzleExecutor,
+  ): Promise<DbUser> {
+    const conn = tx ?? this.db;
+    const now = new Date();
+    const rows = await conn
+      .insert(user)
+      .values({
+        id: values.id,
+        email: values.email,
+        role: values.role,
+        emailVerified: values.emailVerified,
+        createdAt: now,
+        updatedAt: now,
+        ...(values.name !== undefined ? { name: values.name } : {}),
+      })
+      .returning();
+    const row = rows[0];
+    if (!row) {
+      throw new Error('UsersRepository.insert returned no row.');
+    }
+    return row;
+  }
+
+  /** Soft-deactivate a user; returns the updated row or null if not found. */
+  async deactivate(id: string, tx?: DrizzleExecutor): Promise<DbUser | null> {
+    const conn = tx ?? this.db;
+    const now = new Date();
+    const rows = await conn
+      .update(user)
+      .set({ deactivatedAt: now, updatedAt: now })
+      .where(eq(user.id, id))
+      .returning();
+    return rows[0] ?? null;
+  }
+
+  /** Clear a user's deactivation; returns the updated row or null if missing. */
+  async reactivate(id: string, tx?: DrizzleExecutor): Promise<DbUser | null> {
+    const conn = tx ?? this.db;
+    const rows = await conn
+      .update(user)
+      .set({ deactivatedAt: null, updatedAt: new Date() })
+      .where(eq(user.id, id))
+      .returning();
+    return rows[0] ?? null;
+  }
+
+  /** Hard-delete a user row. FK cascades remove sessions/accounts/memberships. */
+  async delete(id: string, tx?: DrizzleExecutor): Promise<void> {
+    const conn = tx ?? this.db;
+    await conn.delete(user).where(eq(user.id, id));
+  }
 }
