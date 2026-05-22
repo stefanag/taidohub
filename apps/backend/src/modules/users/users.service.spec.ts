@@ -2,8 +2,13 @@ import { Test } from '@nestjs/testing';
 import { ConflictException, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { ConfigService } from '@nestjs/config';
+
 import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
 import { DRIZZLE } from '../../infrastructure/database/client.js';
+import { BETTER_AUTH } from '../../infrastructure/auth/better-auth.js';
+import { VerificationTokenService } from '../../infrastructure/auth/verification-token.service.js';
+import { EMAIL_SERVICE } from '../../infrastructure/email/email.types.js';
 import { AuditLogAbilityRules } from '../audit-log/audit-log.abilities.js';
 import { AuditLogService } from '../audit-log/audit-log.service.js';
 import { OrganisationsAbilityRules } from '../organisations/organisations.abilities.js';
@@ -68,6 +73,35 @@ function auditStub() {
   return { record: vi.fn().mockResolvedValue(undefined), list: vi.fn() };
 }
 
+function tokensStub() {
+  return {
+    issueToken: vi.fn().mockResolvedValue('tok-123'),
+    consumeToken: vi.fn(),
+    hasUnexpiredToken: vi.fn().mockResolvedValue(false),
+  };
+}
+
+function emailStub() {
+  return {
+    sendInvite: vi.fn().mockResolvedValue(undefined),
+    sendPasswordReset: vi.fn().mockResolvedValue(undefined),
+    sendAdminPasswordReset: vi.fn().mockResolvedValue(undefined),
+  };
+}
+
+function configStub() {
+  return {
+    get: vi.fn((key: string) => {
+      const map: Record<string, unknown> = {
+        INVITE_TOKEN_TTL_HOURS: 48,
+        RESET_TOKEN_TTL_HOURS: 1,
+        WEB_ORIGIN: 'http://localhost:5173',
+      };
+      return map[key];
+    }),
+  };
+}
+
 // Drizzle db.transaction(cb) calls cb(tx) and returns its result. Fake it.
 const FAKE_TX = { __tx: true } as any;
 const fakeDb = {
@@ -77,6 +111,9 @@ const fakeDb = {
 async function makeService(
   repo: ReturnType<typeof repoStub>,
   audit: ReturnType<typeof auditStub> = auditStub(),
+  tokens: ReturnType<typeof tokensStub> = tokensStub(),
+  email: ReturnType<typeof emailStub> = emailStub(),
+  config: ReturnType<typeof configStub> = configStub(),
 ) {
   const module = await Test.createTestingModule({
     providers: [
@@ -89,6 +126,10 @@ async function makeService(
       { provide: UsersRepository, useValue: repo },
       { provide: AuditLogService, useValue: audit },
       { provide: DRIZZLE, useValue: fakeDb },
+      { provide: VerificationTokenService, useValue: tokens },
+      { provide: EMAIL_SERVICE, useValue: email },
+      { provide: BETTER_AUTH, useValue: {} },
+      { provide: ConfigService, useValue: config },
     ],
   }).compile();
   return module.get(UsersService);
@@ -221,5 +262,96 @@ describe('UsersService — update', () => {
       action: 'update',
       userId: sysadmin.id,
     });
+  });
+});
+
+describe('UsersService — deactivate / reactivate', () => {
+  it('deactivates an active user and emits an audit event', async () => {
+    const repo = repoStub();
+    repo.findById.mockResolvedValue({ ...USER_ROW, id: 'u-target' });
+    repo.deactivate.mockResolvedValue({
+      ...USER_ROW,
+      id: 'u-target',
+      deactivatedAt: new Date('2026-05-21T00:00:00.000Z'),
+    });
+    const audit = auditStub();
+    const service = await makeService(repo, audit);
+
+    const out = await service.deactivate('u-target', sysadmin);
+
+    expect(out.deactivatedAt).toBe('2026-05-21T00:00:00.000Z');
+    expect(repo.deactivate).toHaveBeenCalledWith('u-target', FAKE_TX);
+    expect(audit.record.mock.calls[0]?.[0]).toMatchObject({
+      entityType: 'user',
+      entityId: 'u-target',
+      action: 'deactivate',
+      userId: sysadmin.id,
+    });
+  });
+
+  it('rejects deactivating yourself (SELF_DEACTIVATE)', async () => {
+    const repo = repoStub();
+    const service = await makeService(repo);
+    await expect(service.deactivate(sysadmin.id, sysadmin)).rejects.toThrow(ConflictException);
+  });
+
+  it('404s when the user does not exist', async () => {
+    const repo = repoStub();
+    repo.findById.mockResolvedValue(null);
+    const service = await makeService(repo);
+    await expect(service.deactivate('missing', sysadmin)).rejects.toThrow(NotFoundException);
+  });
+
+  it('rejects deactivating an already-deactivated user (ALREADY_DEACTIVATED)', async () => {
+    const repo = repoStub();
+    repo.findById.mockResolvedValue({
+      ...USER_ROW,
+      id: 'u-target',
+      deactivatedAt: new Date('2026-01-01T00:00:00.000Z'),
+    });
+    const service = await makeService(repo);
+    await expect(service.deactivate('u-target', sysadmin)).rejects.toThrow(ConflictException);
+  });
+
+  it('rejects deactivating the last active sysadmin (LAST_SYSADMIN)', async () => {
+    const repo = repoStub();
+    repo.findById.mockResolvedValue({
+      ...USER_ROW,
+      id: 'other-sysadmin',
+      role: 'sysadmin',
+    });
+    repo.countActiveSysadmins.mockResolvedValue(1);
+    const service = await makeService(repo);
+    await expect(service.deactivate('other-sysadmin', sysadmin)).rejects.toThrow(
+      ConflictException,
+    );
+  });
+
+  it('reactivates a deactivated user and emits an audit event', async () => {
+    const repo = repoStub();
+    repo.findById.mockResolvedValue({
+      ...USER_ROW,
+      id: 'u-target',
+      deactivatedAt: new Date('2026-01-01T00:00:00.000Z'),
+    });
+    repo.reactivate.mockResolvedValue({ ...USER_ROW, id: 'u-target', deactivatedAt: null });
+    const audit = auditStub();
+    const service = await makeService(repo, audit);
+
+    const out = await service.reactivate('u-target', sysadmin);
+
+    expect(out.deactivatedAt).toBeNull();
+    expect(audit.record.mock.calls[0]?.[0]).toMatchObject({
+      entityType: 'user',
+      entityId: 'u-target',
+      action: 'reactivate',
+    });
+  });
+
+  it('rejects reactivating an already-active user (ALREADY_ACTIVE)', async () => {
+    const repo = repoStub();
+    repo.findById.mockResolvedValue({ ...USER_ROW, id: 'u-target', deactivatedAt: null });
+    const service = await makeService(repo);
+    await expect(service.reactivate('u-target', sysadmin)).rejects.toThrow(ConflictException);
   });
 });

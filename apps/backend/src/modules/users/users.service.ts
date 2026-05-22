@@ -1,4 +1,7 @@
+import { randomUUID } from 'node:crypto';
+
 import { ConflictException, ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { ForbiddenError } from '@casl/ability';
 import {
   type ListUsersQuery,
@@ -10,7 +13,10 @@ import {
 
 import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
+import { VerificationTokenService } from '../../infrastructure/auth/verification-token.service.js';
 import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
+import { EMAIL_SERVICE, type EmailService } from '../../infrastructure/email/email.types.js';
+import { type Env } from '../../config/env.schema.js';
 import { AuditLogService } from '../audit-log/audit-log.service.js';
 
 import { UsersRepository } from './users.repository.js';
@@ -22,6 +28,9 @@ export class UsersService {
     private readonly abilities: AbilityFactory,
     private readonly audit: AuditLogService,
     @Inject(DRIZZLE) private readonly db: DrizzleDb,
+    private readonly config: ConfigService<Env, true>,
+    private readonly tokens: VerificationTokenService,
+    @Inject(EMAIL_SERVICE) private readonly email: EmailService,
   ) {}
 
   async findOne(id: string, user: AuthenticatedUser | null): Promise<User> {
@@ -124,6 +133,97 @@ export class UsersService {
         action: 'update',
         userId: user.id,
         before,
+        after,
+      });
+      return after;
+    });
+  }
+
+  /** Soft-deactivate a user. Self-deactivation and last-sysadmin are blocked. */
+  async deactivate(id: string, adminUser: AuthenticatedUser): Promise<User> {
+    this.assertCan(adminUser, 'manage');
+
+    if (id === adminUser.id) {
+      throw new ConflictException({
+        error: { code: 'SELF_DEACTIVATE', message: 'You cannot deactivate yourself.' },
+      });
+    }
+
+    const existing = await this.repo.findById(id);
+    if (!existing) {
+      throw new NotFoundException({
+        error: { code: 'NOT_FOUND', message: `User ${id} not found.` },
+      });
+    }
+    if (existing.deactivatedAt !== null) {
+      throw new ConflictException({
+        error: { code: 'ALREADY_DEACTIVATED', message: 'This user is already deactivated.' },
+      });
+    }
+
+    return this.db.transaction(async (tx) => {
+      if (existing.role === 'sysadmin') {
+        const remaining = await this.repo.countActiveSysadmins(tx);
+        if (remaining <= 1) {
+          throw new ConflictException({
+            error: {
+              code: 'LAST_SYSADMIN',
+              message: 'Cannot deactivate the last active sysadmin.',
+            },
+          });
+        }
+      }
+      const row = await this.repo.deactivate(id, tx);
+      if (!row) {
+        throw new NotFoundException({
+          error: { code: 'NOT_FOUND', message: `User ${id} not found.` },
+        });
+      }
+      const after = this.toApi(row);
+      await this.audit.record({
+        tx,
+        entityType: 'user',
+        entityId: id,
+        action: 'deactivate',
+        userId: adminUser.id,
+        before: this.toApi(existing),
+        after,
+      });
+      return after;
+    });
+  }
+
+  /** Clear a user's deactivation. */
+  async reactivate(id: string, adminUser: AuthenticatedUser): Promise<User> {
+    this.assertCan(adminUser, 'manage');
+
+    const existing = await this.repo.findById(id);
+    if (!existing) {
+      throw new NotFoundException({
+        error: { code: 'NOT_FOUND', message: `User ${id} not found.` },
+      });
+    }
+    if (existing.deactivatedAt === null) {
+      throw new ConflictException({
+        error: { code: 'ALREADY_ACTIVE', message: 'This user is already active.' },
+      });
+    }
+
+    return this.db.transaction(async (tx) => {
+      const row = await this.repo.reactivate(id, tx);
+      if (!row) {
+        throw new NotFoundException({
+          error: { code: 'NOT_FOUND', message: `User ${id} not found.` },
+        });
+      }
+      const after = this.toApi(row);
+      await this.audit.record({
+        tx,
+        entityType: 'user',
+        entityId: id,
+        action: 'reactivate',
+        userId: adminUser.id,
+        before: this.toApi(existing),
         after,
       });
       return after;
