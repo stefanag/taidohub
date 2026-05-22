@@ -9,7 +9,17 @@
       "submitting": "Signing in…",
       "failed": "Sign in failed."
     },
-    "motto": "Where the mind is concentrated, nothing is impossible."
+    "motto": "Where the mind is concentrated, nothing is impossible.",
+    "setPassword": {
+      "title": "Set your password",
+      "description": "Choose a password to finish setting up your account.",
+      "passwordLabel": "Password",
+      "confirmLabel": "Confirm password",
+      "submit": "Set password",
+      "success": "Password set. Signing you in…",
+      "invalidToken": "This link is invalid or has expired. Ask an administrator to send a new one.",
+      "mismatch": "The passwords do not match."
+    }
   },
   "common": {
     "loading": "Loading…",
@@ -116,7 +126,32 @@
       },
       "actions": {
         "edit": "Edit",
-        "save": "Save"
+        "save": "Save",
+        "invite": "Invite user",
+        "deactivate": "Deactivate",
+        "reactivate": "Reactivate",
+        "delete": "Delete",
+        "sendPasswordReset": "Send password reset"
+      },
+      "confirm": {
+        "delete": "Delete \"{{email}}\"? This cannot be undone."
+      },
+      "invite": {
+        "title": "Invite a new user",
+        "emailLabel": "Email",
+        "nameLabel": "Name (optional)",
+        "submit": "Send invite",
+        "success": "Invitation sent."
+      },
+      "delete": {
+        "title": "Delete user",
+        "description": "This permanently deletes \"{{email}}\" and all their data. To confirm, type their email address below.",
+        "confirmLabel": "Type the email to confirm",
+        "confirm": "Delete user"
+      },
+      "lifecycle": {
+        "sectionTitle": "Account lifecycle",
+        "passwordResetSent": "Password-reset email sent."
       },
       "pager": {
         "prev": "Previous",
@@ -127,7 +162,14 @@
         "selfDemote": "You cannot change your own role.",
         "lastSysadmin": "Cannot demote the last active sysadmin.",
         "membershipExists": "That membership already exists.",
-        "instructorRequiresClub": "Instructor memberships are only allowed on clubs."
+        "instructorRequiresClub": "Instructor memberships are only allowed on clubs.",
+        "emailInUse": "A user with this email already exists.",
+        "emailDeactivated": "A deactivated user already has this email. Reactivate them instead.",
+        "selfDeactivate": "You cannot deactivate yourself.",
+        "selfDelete": "You cannot delete yourself.",
+        "alreadyDeactivated": "This user is already deactivated.",
+        "alreadyActive": "This user is already active.",
+        "userNotFound": "That user no longer exists."
       }
     },
     "auditLog": {

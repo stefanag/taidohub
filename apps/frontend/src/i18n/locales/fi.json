@@ -9,7 +9,17 @@
       "submitting": "Kirjaudutaan…",
       "failed": "Kirjautuminen epäonnistui."
     },
-    "motto": "Kun mieli on keskittynyt, mikään ei ole mahdotonta."
+    "motto": "Kun mieli on keskittynyt, mikään ei ole mahdotonta.",
+    "setPassword": {
+      "title": "Aseta salasanasi",
+      "description": "Valitse salasana viimeistelläksesi tilisi käyttöönoton.",
+      "passwordLabel": "Salasana",
+      "confirmLabel": "Vahvista salasana",
+      "submit": "Aseta salasana",
+      "success": "Salasana asetettu. Kirjataan sinua sisään…",
+      "invalidToken": "Tämä linkki on virheellinen tai vanhentunut. Pyydä ylläpitäjää lähettämään uusi.",
+      "mismatch": "Salasanat eivät täsmää."
+    }
   },
   "common": {
     "loading": "Ladataan…",
@@ -102,13 +112,48 @@
         "empty": "Ei jäsenyyksiä vielä.",
         "remove": "Poista"
       },
-      "actions": { "edit": "Muokkaa", "save": "Tallenna" },
+      "actions": {
+        "edit": "Muokkaa",
+        "save": "Tallenna",
+        "invite": "Kutsu käyttäjä",
+        "deactivate": "Poista käytöstä",
+        "reactivate": "Ota uudelleen käyttöön",
+        "delete": "Poista",
+        "sendPasswordReset": "Lähetä salasanan palautus"
+      },
+      "confirm": {
+        "delete": "Poistetaanko \"{{email}}\"? Tätä ei voi kumota."
+      },
+      "invite": {
+        "title": "Kutsu uusi käyttäjä",
+        "emailLabel": "Sähköposti",
+        "nameLabel": "Nimi (valinnainen)",
+        "submit": "Lähetä kutsu",
+        "success": "Kutsu lähetetty."
+      },
+      "delete": {
+        "title": "Poista käyttäjä",
+        "description": "Tämä poistaa pysyvästi käyttäjän \"{{email}}\" ja kaikki hänen tietonsa. Vahvista kirjoittamalla sähköpostiosoite alle.",
+        "confirmLabel": "Vahvista kirjoittamalla sähköpostiosoite",
+        "confirm": "Poista käyttäjä"
+      },
+      "lifecycle": {
+        "sectionTitle": "Tilin elinkaari",
+        "passwordResetSent": "Salasanan palautusviesti lähetetty."
+      },
       "pager": { "prev": "Edellinen", "next": "Seuraava", "page": "Sivu {{page}}" },
       "errors": {
         "selfDemote": "Et voi muuttaa omaa rooliasi.",
-        "lastSysadmin": "Viimeistä aktiivista järjestelmänvalvojaa ei voi alentaa.",
+        "lastSysadmin": "Viimeistä aktiivista pääkäyttäjää ei voi alentaa.",
         "membershipExists": "Kyseinen jäsenyys on jo olemassa.",
-        "instructorRequiresClub": "Ohjaajajäsenyydet sallitaan vain seuroille."
+        "instructorRequiresClub": "Ohjaajajäsenyydet ovat sallittuja vain seuroille.",
+        "emailInUse": "Tällä sähköpostiosoitteella on jo käyttäjä.",
+        "emailDeactivated": "Käytöstä poistetulla käyttäjällä on jo tämä sähköpostiosoite. Ota hänet sen sijaan uudelleen käyttöön.",
+        "selfDeactivate": "Et voi poistaa itseäsi käytöstä.",
+        "selfDelete": "Et voi poistaa itseäsi.",
+        "alreadyDeactivated": "Tämä käyttäjä on jo poistettu käytöstä.",
+        "alreadyActive": "Tämä käyttäjä on jo aktiivinen.",
+        "userNotFound": "Kyseistä käyttäjää ei ole enää olemassa."
       }
     },
     "auditLog": {
