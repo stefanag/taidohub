@@ -1,4 +1,6 @@
 export type {
+  AddUserInput,
+  AddUserResponse,
   InviteUserInput,
   ListUsersQuery,
   ListUsersResponse,
@@ -9,6 +11,7 @@ export type {
 } from '@repo/contracts/users';
 
 export {
+  addUser,
   deactivateUser,
   deleteUser,
   inviteUser,
@@ -21,6 +24,7 @@ export {
 
 export {
   listUsersQueryOptions,
+  useAddUser,
   useDeactivateUser,
   useDeleteUser,
   useInviteUser,

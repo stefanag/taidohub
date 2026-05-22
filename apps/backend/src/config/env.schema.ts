@@ -21,6 +21,14 @@ export const EnvSchema = z.object({
    */
   WEB_ORIGIN: z.string().min(1),
 
+  /**
+   * Absolute base URL of the public web app. Used to build user-facing links
+   * (e.g. the set-password link in invite emails). Distinct from `WEB_ORIGIN`,
+   * which is a CORS allow-list and may contain several origins in no
+   * particular order.
+   */
+  WEB_APP_URL: z.string().url().default('http://localhost:5173'),
+
   /** Pooled Supabase connection string used at runtime (postgres-js). */
   DATABASE_URL: z.string().min(1),
 

@@ -26,6 +26,7 @@ export const UsersRoutes = {
   me: '/api/users/me',
   byId: (id: string) => `/api/users/${id}` as const,
   invite: '/api/users/invite',
+  add: '/api/users/add',
   deactivate: (id: string) => `/api/users/${id}/deactivate` as const,
   reactivate: (id: string) => `/api/users/${id}/reactivate` as const,
   sendPasswordReset: (id: string) => `/api/users/${id}/send-password-reset` as const,

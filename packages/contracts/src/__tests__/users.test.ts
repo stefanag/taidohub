@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  AddUserResponseSchema,
+  AddUserSchema,
   InviteUserSchema,
   ListUsersQuerySchema,
   ListUsersResponseSchema,
@@ -161,5 +163,52 @@ describe('SetInitialPasswordSchema', () => {
     expect(
       SetInitialPasswordSchema.safeParse({ token: '', password: 'longenough' }).success,
     ).toBe(false);
+  });
+});
+
+describe('AddUserSchema', () => {
+  it('accepts a minimal input with email and role', () => {
+    expect(AddUserSchema.safeParse({ email: 'new@example.com', role: 'user' }).success).toBe(true);
+  });
+
+  it('accepts input with a name', () => {
+    expect(
+      AddUserSchema.safeParse({ email: 'new@example.com', name: 'New User', role: 'user' }).success,
+    ).toBe(true);
+  });
+
+  it('accepts role sysadmin', () => {
+    expect(AddUserSchema.safeParse({ email: 'new@example.com', role: 'sysadmin' }).success).toBe(
+      true,
+    );
+  });
+
+  it('rejects a bad email', () => {
+    expect(AddUserSchema.safeParse({ email: 'not-an-email', role: 'user' }).success).toBe(false);
+  });
+
+  it('rejects a missing role', () => {
+    expect(AddUserSchema.safeParse({ email: 'new@example.com' }).success).toBe(false);
+  });
+
+  it('rejects role admin', () => {
+    expect(AddUserSchema.safeParse({ email: 'new@example.com', role: 'admin' }).success).toBe(
+      false,
+    );
+  });
+});
+
+describe('AddUserResponseSchema', () => {
+  it('accepts a valid response with user and setPasswordUrl', () => {
+    expect(
+      AddUserResponseSchema.safeParse({
+        user: VALID_USER,
+        setPasswordUrl: 'http://localhost:5173/set-password?token=abc',
+      }).success,
+    ).toBe(true);
+  });
+
+  it('rejects when setPasswordUrl is missing', () => {
+    expect(AddUserResponseSchema.safeParse({ user: VALID_USER }).success).toBe(false);
   });
 });

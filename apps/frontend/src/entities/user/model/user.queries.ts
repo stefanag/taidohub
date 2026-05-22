@@ -6,6 +6,7 @@ import {
 } from '@tanstack/react-query';
 
 import {
+  addUser,
   deactivateUser,
   deleteUser,
   inviteUser,
@@ -15,7 +16,7 @@ import {
   updateUser,
 } from '../api/user.api.js';
 
-import type { InviteUserInput, ListUsersQuery, UpdateUserInput, User } from '@repo/contracts/users';
+import type { AddUserInput, AddUserResponse, InviteUserInput, ListUsersQuery, UpdateUserInput, User } from '@repo/contracts/users';
 
 
 export const userKeys = {
@@ -57,6 +58,20 @@ export function useInviteUser(
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: inviteUser,
+    ...options,
+    onSuccess: (...args) => {
+      void queryClient.invalidateQueries({ queryKey: userKeys.lists() });
+      options?.onSuccess?.(...args);
+    },
+  });
+}
+
+export function useAddUser(
+  options?: Omit<UseMutationOptions<AddUserResponse, Error, AddUserInput>, 'mutationFn'>,
+) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: addUser,
     ...options,
     onSuccess: (...args) => {
       void queryClient.invalidateQueries({ queryKey: userKeys.lists() });

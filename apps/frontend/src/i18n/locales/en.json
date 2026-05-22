@@ -134,9 +134,19 @@
       },
       "invite": {
         "title": "Invite a new user",
+        "addTitle": "Add a new user",
         "emailLabel": "Email",
         "nameLabel": "Name (optional)",
-        "submit": "Send invite"
+        "submit": "Send invite",
+        "addSubmit": "Add user",
+        "modeInvite": "Email invite",
+        "modeAdd": "Add directly",
+        "roleLabel": "Role",
+        "linkTitle": "User added",
+        "linkHelp": "Share this link with the user so they can set their password. It is shown only once.",
+        "linkLabel": "Set-password link",
+        "copy": "Copy",
+        "done": "Done"
       },
       "delete": {
         "title": "Delete user",

@@ -7,7 +7,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { InviteUserDialog } from './InviteUserDialog.js';
 
-import { inviteUser } from '@/entities/user/api/user.api.js';
+import { addUser, inviteUser } from '@/entities/user/api/user.api.js';
 import i18n from '@/i18n';
 import { HttpError } from '@/shared/api';
 
@@ -15,11 +15,12 @@ import { HttpError } from '@/shared/api';
 // fetcher from there directly, so mocking the barrel would not reach it.
 vi.mock('@/entities/user/api/user.api.js', async (orig) => {
   const actual = await orig<typeof import('@/entities/user/api/user.api.js')>();
-  return { ...actual, inviteUser: vi.fn() };
+  return { ...actual, inviteUser: vi.fn(), addUser: vi.fn() };
 });
 
 
 const mockedInvite = vi.mocked(inviteUser);
+const mockedAdd = vi.mocked(addUser);
 
 function renderDialog(overrides: Partial<React.ComponentProps<typeof InviteUserDialog>> = {}) {
   const onOpenChange = vi.fn();
@@ -47,10 +48,16 @@ const INVITED_USER = {
   updatedAt: '2026-05-21T00:00:00.000Z',
 };
 
+const ADD_RESPONSE = {
+  user: INVITED_USER,
+  setPasswordUrl: 'http://localhost:5173/set-password?token=abc',
+};
+
 describe('<InviteUserDialog>', () => {
   beforeEach(async () => {
     await i18n.changeLanguage('en');
     mockedInvite.mockReset();
+    mockedAdd.mockReset();
   });
 
   it('renders an email and a name field', () => {
@@ -78,5 +85,40 @@ describe('<InviteUserDialog>', () => {
     await user.type(screen.getByLabelText(/email/i), 'taken@example.com');
     await user.click(screen.getByRole('button', { name: /send invite/i }));
     expect(await screen.findByRole('alert')).toHaveTextContent(/already exists/i);
+  });
+
+  it('clicking "Add directly" reveals the role select', async () => {
+    const { user } = renderDialog();
+    // Role field should not be visible in invite mode
+    expect(screen.queryByLabelText(/role/i)).not.toBeInTheDocument();
+    // Switch to add mode
+    await user.click(screen.getByRole('button', { name: /add directly/i }));
+    // Role field should now be visible
+    expect(screen.getByLabelText(/role/i)).toBeInTheDocument();
+  });
+
+  it('in add mode, submitting calls addUser with email and role', async () => {
+    mockedAdd.mockResolvedValueOnce(ADD_RESPONSE);
+    const { user } = renderDialog();
+    await user.click(screen.getByRole('button', { name: /add directly/i }));
+    await user.type(screen.getByLabelText(/email/i), 'direct@example.com');
+    await user.click(screen.getByRole('button', { name: /add user/i }));
+    await waitFor(() => {
+      expect(mockedAdd).toHaveBeenCalledWith(
+        expect.objectContaining({ email: 'direct@example.com', role: 'user' }),
+        expect.anything(),
+      );
+    });
+  });
+
+  it('after successful addUser the dialog shows the set-password link', async () => {
+    mockedAdd.mockResolvedValueOnce(ADD_RESPONSE);
+    const { user } = renderDialog();
+    await user.click(screen.getByRole('button', { name: /add directly/i }));
+    await user.type(screen.getByLabelText(/email/i), 'direct@example.com');
+    await user.click(screen.getByRole('button', { name: /add user/i }));
+    expect(
+      await screen.findByDisplayValue(/set-password\?token=abc/),
+    ).toBeInTheDocument();
   });
 });

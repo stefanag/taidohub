@@ -122,9 +122,19 @@
       },
       "invite": {
         "title": "Bjud in en ny användare",
+        "addTitle": "Lägg till en ny användare",
         "emailLabel": "E-post",
         "nameLabel": "Namn (valfritt)",
-        "submit": "Skicka inbjudan"
+        "submit": "Skicka inbjudan",
+        "addSubmit": "Lägg till användare",
+        "modeInvite": "E-postinbjudan",
+        "modeAdd": "Lägg till direkt",
+        "roleLabel": "Roll",
+        "linkTitle": "Användaren har lagts till",
+        "linkHelp": "Dela den här länken med användaren så att de kan ange sitt lösenord. Den visas bara en gång.",
+        "linkLabel": "Länk för att ange lösenord",
+        "copy": "Kopiera",
+        "done": "Klar"
       },
       "delete": {
         "title": "Ta bort användare",

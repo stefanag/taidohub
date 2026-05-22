@@ -19,7 +19,7 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import type { ListUsersResponse, User } from '@repo/contracts/users';
+import type { AddUserResponse, ListUsersResponse, User } from '@repo/contracts/users';
 
 import { ErrorEnvelopeDto } from '../../common/dto/error-envelope.dto.js';
 import { ApiEndpoint } from '../../common/swagger/api-endpoint.decorator.js';
@@ -27,6 +27,8 @@ import { CurrentUser } from '../../infrastructure/auth/current-user.decorator.js
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import { CheckAbility } from '../../infrastructure/ability/check-ability.decorator.js';
 
+import { AddUserDto } from './dto/add-user.dto.js';
+import { AddUserResponseDto } from './dto/add-user-response.dto.js';
 import { InviteUserDto } from './dto/invite-user.dto.js';
 import { ListUsersQueryDto } from './dto/list-users-query.dto.js';
 import { ListUsersResponseDto } from './dto/list-users-response.dto.js';
@@ -83,6 +85,24 @@ export class UsersController {
     @CurrentUser() user: AuthenticatedUser,
   ): Promise<User> {
     return this.users.invite(body, user);
+  }
+
+  @Post('add')
+  @CheckAbility('manage', 'User')
+  @HttpCode(201)
+  @ApiBody({ type: AddUserDto })
+  @ApiCreatedResponse({ type: AddUserResponseDto })
+  @ApiEndpoint({
+    summary: 'Add a new user directly, returning a set-password link (sysadmin only).',
+    operationId: 'UsersController_add',
+    errorType: ErrorEnvelopeDto,
+    errors: ['400', '401', '403', '409'],
+  })
+  add(
+    @Body() body: AddUserDto,
+    @CurrentUser() user: AuthenticatedUser,
+  ): Promise<AddUserResponse> {
+    return this.users.addUser(body, user);
   }
 
   @Get(':id')

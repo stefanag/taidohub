@@ -122,9 +122,19 @@
       },
       "invite": {
         "title": "Kutsu uusi käyttäjä",
+        "addTitle": "Lisää uusi käyttäjä",
         "emailLabel": "Sähköposti",
         "nameLabel": "Nimi (valinnainen)",
-        "submit": "Lähetä kutsu"
+        "submit": "Lähetä kutsu",
+        "addSubmit": "Lisää käyttäjä",
+        "modeInvite": "Sähköpostikutsu",
+        "modeAdd": "Lisää suoraan",
+        "roleLabel": "Rooli",
+        "linkTitle": "Käyttäjä lisätty",
+        "linkHelp": "Jaa tämä linkki käyttäjälle, jotta hän voi asettaa salasanansa. Se näytetään vain kerran.",
+        "linkLabel": "Salasanan asetuslinkki",
+        "copy": "Kopioi",
+        "done": "Valmis"
       },
       "delete": {
         "title": "Poista käyttäjä",

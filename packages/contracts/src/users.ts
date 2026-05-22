@@ -80,6 +80,25 @@ export const UpdateUserSchema = z
 
 export type UpdateUserInput = z.infer<typeof UpdateUserSchema>;
 
+export const AddUserSchema = z
+  .object({
+    email: z.string().email(),
+    name: z.string().min(1).max(200).optional(),
+    role: RoleSchema,
+  })
+  .meta({ id: 'AddUserInput' });
+
+export type AddUserInput = z.infer<typeof AddUserSchema>;
+
+export const AddUserResponseSchema = z
+  .object({
+    user: UserSchema,
+    setPasswordUrl: z.string(),
+  })
+  .meta({ id: 'AddUserResponse' });
+
+export type AddUserResponse = z.infer<typeof AddUserResponseSchema>;
+
 export const InviteUserSchema = z
   .object({
     email: z.string().email(),
@@ -104,6 +123,8 @@ export const UsersOpenApiRegistry = {
   ListUsersQuery: ListUsersQuerySchema,
   ListUsersResponse: ListUsersResponseSchema,
   UpdateUserInput: UpdateUserSchema,
+  AddUserInput: AddUserSchema,
+  AddUserResponse: AddUserResponseSchema,
   InviteUserInput: InviteUserSchema,
   SetInitialPasswordInput: SetInitialPasswordSchema,
 } as const;

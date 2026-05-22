@@ -96,6 +96,7 @@ function configStub() {
         INVITE_TOKEN_TTL_HOURS: 48,
         RESET_TOKEN_TTL_HOURS: 1,
         WEB_ORIGIN: 'http://localhost:5173',
+        WEB_APP_URL: 'http://localhost:5173',
       };
       return map[key];
     }),
@@ -534,6 +535,100 @@ describe('UsersService — invite', () => {
     await expect(service.invite({ email: 'x@example.com' }, plainUser)).rejects.toThrow(
       ForbiddenException,
     );
+  });
+});
+
+describe('UsersService — addUser', () => {
+  it('creates a sysadmin-role user, returns a setPasswordUrl, and audits create', async () => {
+    const repo = repoStub();
+    repo.findByEmail.mockResolvedValue(null);
+    repo.insert.mockResolvedValue({
+      ...USER_ROW,
+      id: 'u-new',
+      email: 'new@example.com',
+      name: 'New',
+      role: 'sysadmin',
+      emailVerified: false,
+    });
+    const audit = auditStub();
+    const tokens = tokensStub();
+    const service = await makeService(repo, audit, tokens);
+
+    const out = await service.addUser({ email: 'new@example.com', name: 'New', role: 'sysadmin' }, sysadmin);
+
+    expect(out.user.email).toBe('new@example.com');
+    expect(out.setPasswordUrl).toContain('/set-password?token=');
+    expect(repo.insert).toHaveBeenCalledWith(
+      expect.objectContaining({ role: 'sysadmin' }),
+      FAKE_TX,
+    );
+    expect(audit.record.mock.calls[0]?.[0]).toMatchObject({
+      entityType: 'user',
+      action: 'create',
+      userId: sysadmin.id,
+    });
+    expect(tokens.issueToken).toHaveBeenCalled();
+  });
+
+  it('rejects an email already in use by an active user (EMAIL_IN_USE)', async () => {
+    const repo = repoStub();
+    repo.findByEmail.mockResolvedValue({
+      ...USER_ROW,
+      id: 'u-active',
+      email: 'active@example.com',
+      deactivatedAt: null,
+    });
+    const tokens = tokensStub();
+    tokens.hasUnexpiredToken.mockResolvedValue(false);
+    const service = await makeService(repo, auditStub(), tokens);
+
+    await expect(
+      service.addUser({ email: 'active@example.com', role: 'user' }, sysadmin),
+    ).rejects.toThrow(ConflictException);
+  });
+
+  it('rejects an email belonging to a deactivated user (EMAIL_DEACTIVATED)', async () => {
+    const repo = repoStub();
+    repo.findByEmail.mockResolvedValue({
+      ...USER_ROW,
+      id: 'u-deact',
+      email: 'deact@example.com',
+      deactivatedAt: new Date('2026-01-01T00:00:00.000Z'),
+    });
+    const service = await makeService(repo);
+
+    await expect(
+      service.addUser({ email: 'deact@example.com', role: 'user' }, sysadmin),
+    ).rejects.toThrow(ConflictException);
+  });
+
+  it('re-issues a link for a still-pending user without creating a new row', async () => {
+    const repo = repoStub();
+    repo.findByEmail.mockResolvedValue({
+      ...USER_ROW,
+      id: 'u-pending',
+      email: 'pending@example.com',
+      emailVerified: false,
+      deactivatedAt: null,
+    });
+    const tokens = tokensStub();
+    tokens.hasUnexpiredToken.mockResolvedValue(true);
+    const service = await makeService(repo, auditStub(), tokens);
+
+    const out = await service.addUser({ email: 'pending@example.com', role: 'user' }, sysadmin);
+
+    expect(out.setPasswordUrl).toContain('/set-password?token=');
+    expect(repo.insert).not.toHaveBeenCalled();
+    expect(tokens.issueToken).toHaveBeenCalledWith('invite:u-pending', 48);
+  });
+
+  it('rejects a non-sysadmin caller', async () => {
+    const repo = repoStub();
+    const service = await makeService(repo);
+
+    await expect(
+      service.addUser({ email: 'x@example.com', role: 'user' }, plainUser),
+    ).rejects.toThrow(ForbiddenException);
   });
 });
 

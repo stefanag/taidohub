@@ -623,6 +623,83 @@
         ]
       }
     },
+    "/api/users/add": {
+      "post": {
+        "operationId": "UsersController_add",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddUserResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Add a new user directly, returning a set-password link (sysadmin only).",
+        "tags": [
+          "users"
+        ]
+      }
+    },
     "/api/users/{id}": {
       "get": {
         "operationId": "UsersController_findOne",
@@ -3322,6 +3399,295 @@
           "email"
         ]
       },
+      "AddUserDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "Role": {
+                "type": "string",
+                "enum": [
+                  "sysadmin",
+                  "user"
+                ],
+                "description": "Global role on a user row.",
+                "example": "user"
+              }
+            }
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "Role": {
+                "type": "string",
+                "enum": [
+                  "sysadmin",
+                  "user"
+                ],
+                "description": "Global role on a user row.",
+                "example": "user"
+              }
+            }
+          },
+          "role": {
+            "$ref": "#/$defs/Role",
+            "type": "",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "Role": {
+                "type": "string",
+                "enum": [
+                  "sysadmin",
+                  "user"
+                ],
+                "description": "Global role on a user row.",
+                "example": "user"
+              }
+            }
+          }
+        },
+        "required": [
+          "email",
+          "role"
+        ]
+      },
+      "AddUserResponseDto": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/$defs/User",
+            "type": "",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "User": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "Unique identifier — an opaque string assigned by the auth provider (not necessarily a UUID)."
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$",
+                    "description": "The user’s primary email address."
+                  },
+                  "name": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "Display name; null until the user sets one."
+                  },
+                  "emailVerified": {
+                    "type": "boolean",
+                    "description": "Whether the email address has been verified."
+                  },
+                  "image": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "URL to the user’s avatar, if any."
+                  },
+                  "role": {
+                    "description": "Global role; org-scoped roles live in `organisation_membership`.",
+                    "$ref": "#/$defs/Role"
+                  },
+                  "deactivatedAt": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "date-time",
+                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "When the account was deactivated. Null = active. Deactivated users cannot sign in."
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                    "description": "ISO-8601 timestamp the account was created."
+                  },
+                  "updatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                    "description": "ISO-8601 timestamp the account was last modified."
+                  }
+                },
+                "required": [
+                  "id",
+                  "email",
+                  "name",
+                  "emailVerified",
+                  "image",
+                  "role",
+                  "deactivatedAt",
+                  "createdAt",
+                  "updatedAt"
+                ],
+                "description": "A user account exposed to API clients.",
+                "example": {
+                  "id": "kZ8x2mN4pQ7rT1vW9yA3bC6dE5fG0hJ2",
+                  "email": "ada@example.com",
+                  "name": "Ada Lovelace",
+                  "emailVerified": true,
+                  "image": "https://example.com/avatars/ada.png",
+                  "role": "user",
+                  "deactivatedAt": null,
+                  "createdAt": "2025-01-15T12:34:56.000Z",
+                  "updatedAt": "2025-04-02T08:00:00.000Z"
+                }
+              },
+              "Role": {
+                "type": "string",
+                "enum": [
+                  "sysadmin",
+                  "user"
+                ],
+                "description": "Global role on a user row.",
+                "example": "user"
+              }
+            }
+          },
+          "setPasswordUrl": {
+            "type": "string",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "User": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "Unique identifier — an opaque string assigned by the auth provider (not necessarily a UUID)."
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$",
+                    "description": "The user’s primary email address."
+                  },
+                  "name": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "Display name; null until the user sets one."
+                  },
+                  "emailVerified": {
+                    "type": "boolean",
+                    "description": "Whether the email address has been verified."
+                  },
+                  "image": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "URL to the user’s avatar, if any."
+                  },
+                  "role": {
+                    "description": "Global role; org-scoped roles live in `organisation_membership`.",
+                    "$ref": "#/$defs/Role"
+                  },
+                  "deactivatedAt": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "date-time",
+                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "When the account was deactivated. Null = active. Deactivated users cannot sign in."
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                    "description": "ISO-8601 timestamp the account was created."
+                  },
+                  "updatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                    "description": "ISO-8601 timestamp the account was last modified."
+                  }
+                },
+                "required": [
+                  "id",
+                  "email",
+                  "name",
+                  "emailVerified",
+                  "image",
+                  "role",
+                  "deactivatedAt",
+                  "createdAt",
+                  "updatedAt"
+                ],
+                "description": "A user account exposed to API clients.",
+                "example": {
+                  "id": "kZ8x2mN4pQ7rT1vW9yA3bC6dE5fG0hJ2",
+                  "email": "ada@example.com",
+                  "name": "Ada Lovelace",
+                  "emailVerified": true,
+                  "image": "https://example.com/avatars/ada.png",
+                  "role": "user",
+                  "deactivatedAt": null,
+                  "createdAt": "2025-01-15T12:34:56.000Z",
+                  "updatedAt": "2025-04-02T08:00:00.000Z"
+                }
+              },
+              "Role": {
+                "type": "string",
+                "enum": [
+                  "sysadmin",
+                  "user"
+                ],
+                "description": "Global role on a user row.",
+                "example": "user"
+              }
+            }
+          }
+        },
+        "required": [
+          "user",
+          "setPasswordUrl"
+        ]
+      },
       "UpdateUserDto": {
         "type": "object",
         "properties": {
@@ -5737,6 +6103,12 @@
       },
       "UpdateUserInput": {
         "$ref": "#/components/schemas/UpdateUserInput"
+      },
+      "AddUserInput": {
+        "$ref": "#/components/schemas/AddUserInput"
+      },
+      "AddUserResponse": {
+        "$ref": "#/components/schemas/AddUserResponse"
       },
       "InviteUserInput": {
         "$ref": "#/components/schemas/InviteUserInput"

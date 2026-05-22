@@ -1,7 +1,10 @@
 import { AccountRoutes, UsersRoutes } from '@repo/contracts/routes';
 import {
+  AddUserResponseSchema,
   ListUsersResponseSchema,
   UserSchema,
+  type AddUserInput,
+  type AddUserResponse,
   type InviteUserInput,
   type ListUsersQuery,
   type ListUsersResponse,
@@ -35,6 +38,11 @@ export async function updateUser(id: string, input: UpdateUserInput): Promise<Us
 export async function inviteUser(input: InviteUserInput): Promise<User> {
   const raw = await httpClient(UsersRoutes.invite, { method: 'POST', body: input });
   return UserSchema.parse(raw);
+}
+
+export async function addUser(input: AddUserInput): Promise<AddUserResponse> {
+  const raw = await httpClient(UsersRoutes.add, { method: 'POST', body: input });
+  return AddUserResponseSchema.parse(raw);
 }
 
 export async function deactivateUser(id: string): Promise<User> {

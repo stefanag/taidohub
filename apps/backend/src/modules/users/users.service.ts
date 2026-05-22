@@ -4,6 +4,8 @@ import { ConflictException, ForbiddenException, Inject, Injectable, NotFoundExce
 import { ConfigService } from '@nestjs/config';
 import { ForbiddenError } from '@casl/ability';
 import {
+  type AddUserInput,
+  type AddUserResponse,
   type InviteUserInput,
   type ListUsersQuery,
   type ListUsersResponse,
@@ -284,19 +286,14 @@ export class UsersService {
    * - email belongs to a still-pending invitee (has an unexpired invite
    *   token) → re-issue the token and re-send the email, no new row
    * Otherwise inserts a fresh `role: 'user'` row, issues an invite token, and
-   * sends the invite email. The set-password URL points at the first
-   * configured WEB_ORIGIN.
+   * sends the invite email. The set-password URL is built from WEB_APP_URL.
    */
   async invite(input: InviteUserInput, adminUser: AuthenticatedUser): Promise<User> {
     this.assertCan(adminUser, 'manage');
 
-    const webOrigin = this.config
-      .get('WEB_ORIGIN', { infer: true })
-      .split(',')[0]
-      ?.trim();
-    if (!webOrigin) {
-      throw new Error('WEB_ORIGIN is not configured.');
-    }
+    const webAppUrl = this.config
+      .get('WEB_APP_URL', { infer: true })
+      .replace(/\/$/, '');
     const ttl = this.config.get('INVITE_TOKEN_TTL_HOURS', { infer: true });
 
     const existing = await this.repo.findByEmail(input.email);
@@ -315,7 +312,7 @@ export class UsersService {
         await this.email.sendInvite({
           to: existing.email,
           locale: existing.locale,
-          setPasswordUrl: `${webOrigin}/set-password?token=${token}`,
+          setPasswordUrl: `${webAppUrl}/set-password?token=${token}`,
           inviterName: adminUser.name,
         });
         return this.toApi(existing);
@@ -353,11 +350,78 @@ export class UsersService {
     await this.email.sendInvite({
       to: input.email,
       locale: row.locale,
-      setPasswordUrl: `${webOrigin}/set-password?token=${token}`,
+      setPasswordUrl: `${webAppUrl}/set-password?token=${token}`,
       inviterName: adminUser.name,
     });
 
     return this.toApi(row);
+  }
+
+  /**
+   * Add a new user directly: create the row with the chosen role, issue a
+   * one-time set-password token, and return the link for the admin to share.
+   * No email is sent. Existence handling mirrors `invite`.
+   */
+  async addUser(input: AddUserInput, adminUser: AuthenticatedUser): Promise<AddUserResponse> {
+    this.assertCan(adminUser, 'manage');
+
+    const webAppUrl = this.config
+      .get('WEB_APP_URL', { infer: true })
+      .replace(/\/$/, '');
+    const ttl = this.config.get('INVITE_TOKEN_TTL_HOURS', { infer: true });
+
+    const existing = await this.repo.findByEmail(input.email);
+    if (existing) {
+      if (existing.deactivatedAt !== null) {
+        throw new ConflictException({
+          error: {
+            code: 'EMAIL_DEACTIVATED',
+            message: 'A deactivated user already has this email. Reactivate them instead.',
+          },
+        });
+      }
+      const pending = await this.tokens.hasUnexpiredToken(`invite:${existing.id}`);
+      if (pending) {
+        const token = await this.tokens.issueToken(`invite:${existing.id}`, ttl);
+        return {
+          user: this.toApi(existing),
+          setPasswordUrl: `${webAppUrl}/set-password?token=${token}`,
+        };
+      }
+      throw new ConflictException({
+        error: { code: 'EMAIL_IN_USE', message: 'A user with this email already exists.' },
+      });
+    }
+
+    const id = randomUUID();
+    const row = await this.db.transaction(async (tx) => {
+      const created = await this.repo.insert(
+        {
+          id,
+          email: input.email,
+          ...(input.name !== undefined && { name: input.name }),
+          role: input.role,
+          emailVerified: false,
+        },
+        tx,
+      );
+      await this.audit.record({
+        tx,
+        entityType: 'user',
+        entityId: id,
+        action: 'create',
+        userId: adminUser.id,
+        before: null,
+        after: this.toApi(created),
+      });
+      return created;
+    });
+
+    const token = await this.tokens.issueToken(`invite:${id}`, ttl);
+    return {
+      user: this.toApi(row),
+      setPasswordUrl: `${webAppUrl}/set-password?token=${token}`,
+    };
   }
 
   /**
@@ -375,13 +439,9 @@ export class UsersService {
       });
     }
 
-    const webOrigin = this.config
-      .get('WEB_ORIGIN', { infer: true })
-      .split(',')[0]
-      ?.trim();
-    if (!webOrigin) {
-      throw new Error('WEB_ORIGIN is not configured.');
-    }
+    const webAppUrl = this.config
+      .get('WEB_APP_URL', { infer: true })
+      .replace(/\/$/, '');
     const ttl = this.config.get('RESET_TOKEN_TTL_HOURS', { infer: true });
 
     const token = await this.tokens.issueToken(`admin-reset:${userId}`, ttl);
@@ -401,7 +461,7 @@ export class UsersService {
     await this.email.sendAdminPasswordReset({
       to: target.email,
       locale: target.locale,
-      resetUrl: `${webOrigin}/set-password?token=${token}`,
+      resetUrl: `${webAppUrl}/set-password?token=${token}`,
       adminName: adminUser.name,
     });
   }

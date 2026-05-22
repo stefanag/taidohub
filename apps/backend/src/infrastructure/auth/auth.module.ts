@@ -19,6 +19,7 @@ const betterAuthProvider: Provider = {
       NODE_ENV: config.get('NODE_ENV', { infer: true }),
       PORT: config.get('PORT', { infer: true }),
       WEB_ORIGIN: config.get('WEB_ORIGIN', { infer: true }),
+      WEB_APP_URL: config.get('WEB_APP_URL', { infer: true }),
       DATABASE_URL: config.get('DATABASE_URL', { infer: true }),
       DIRECT_URL: config.get('DIRECT_URL', { infer: true }),
       BETTER_AUTH_SECRET: config.get('BETTER_AUTH_SECRET', { infer: true }),
