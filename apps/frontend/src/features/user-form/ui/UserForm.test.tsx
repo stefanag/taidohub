@@ -22,7 +22,6 @@ vi.mock('@/entities/membership/api/membership.api.js', async (orig) => {
   return { ...actual, listMemberships: vi.fn().mockResolvedValue({ data: [], total: 0 }) };
 });
 
-
 const TARGET: User = {
   id: '11111111-1111-4111-8111-111111111111',
   email: 'ada@example.com',
@@ -41,7 +40,12 @@ function renderForm(overrides: Partial<React.ComponentProps<typeof UserForm>> = 
   render(
     <QueryClientProvider client={client}>
       <I18nextProvider i18n={i18n}>
-        <UserForm user={TARGET} currentUserId="some-other-admin" onSubmit={onSubmit} {...overrides} />
+        <UserForm
+          user={TARGET}
+          currentUserId="some-other-admin"
+          onSubmit={onSubmit}
+          {...overrides}
+        />
       </I18nextProvider>
     </QueryClientProvider>,
   );
@@ -77,5 +81,62 @@ describe('<UserForm>', () => {
   it('enables the role select when editing someone else', () => {
     renderForm({ currentUserId: 'some-other-admin' });
     expect(screen.getByRole('combobox', { name: /role/i })).not.toBeDisabled();
+  });
+
+  it('hides the lifecycle section when editing yourself', () => {
+    renderForm({ currentUserId: TARGET.id });
+    expect(screen.queryByText(/account lifecycle/i)).not.toBeInTheDocument();
+  });
+
+  it('shows the lifecycle section when editing someone else', () => {
+    renderForm({ currentUserId: 'some-other-admin' });
+    expect(screen.getByText(/account lifecycle/i)).toBeInTheDocument();
+  });
+
+  it('shows Deactivate for an active user', () => {
+    renderForm({ currentUserId: 'some-other-admin' });
+    expect(screen.getByRole('button', { name: /^deactivate$/i })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /^reactivate$/i })).not.toBeInTheDocument();
+  });
+
+  it('shows Reactivate for a deactivated user', () => {
+    renderForm({
+      currentUserId: 'some-other-admin',
+      user: { ...TARGET, deactivatedAt: '2026-01-01T00:00:00.000Z' },
+    });
+    expect(screen.getByRole('button', { name: /^reactivate$/i })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /^deactivate$/i })).not.toBeInTheDocument();
+  });
+
+  it('clicking Deactivate calls onDeactivate', async () => {
+    const onDeactivate = vi.fn();
+    const { user } = renderForm({ currentUserId: 'some-other-admin', onDeactivate });
+    await user.click(screen.getByRole('button', { name: /^deactivate$/i }));
+    expect(onDeactivate).toHaveBeenCalledTimes(1);
+  });
+
+  it('clicking Reactivate calls onReactivate', async () => {
+    const onReactivate = vi.fn();
+    const { user } = renderForm({
+      currentUserId: 'some-other-admin',
+      user: { ...TARGET, deactivatedAt: '2026-01-01T00:00:00.000Z' },
+      onReactivate,
+    });
+    await user.click(screen.getByRole('button', { name: /^reactivate$/i }));
+    expect(onReactivate).toHaveBeenCalledTimes(1);
+  });
+
+  it('clicking Send password reset calls onSendPasswordReset', async () => {
+    const onSendPasswordReset = vi.fn();
+    const { user } = renderForm({ currentUserId: 'some-other-admin', onSendPasswordReset });
+    await user.click(screen.getByRole('button', { name: /send password reset/i }));
+    expect(onSendPasswordReset).toHaveBeenCalledTimes(1);
+  });
+
+  it('clicking Delete calls onDelete', async () => {
+    const onDelete = vi.fn();
+    const { user } = renderForm({ currentUserId: 'some-other-admin', onDelete });
+    await user.click(screen.getByRole('button', { name: /^delete$/i }));
+    expect(onDelete).toHaveBeenCalledTimes(1);
   });
 });
