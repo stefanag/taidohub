@@ -74,10 +74,10 @@ describe('user lifecycle api', () => {
     );
   });
 
-  it('setInitialPassword POSTs /api/auth/set-initial-password', async () => {
+  it('setInitialPassword POSTs /api/account/set-password', async () => {
     mockedHttp.mockResolvedValueOnce(undefined);
     await setInitialPassword({ token: 'tok', password: 'longenough' });
-    expect(mockedHttp).toHaveBeenCalledWith('/api/auth/set-initial-password', {
+    expect(mockedHttp).toHaveBeenCalledWith('/api/account/set-password', {
       method: 'POST',
       body: { token: 'tok', password: 'longenough' },
     });

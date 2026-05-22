@@ -1,4 +1,4 @@
-import { AuthRoutes, UsersRoutes } from '@repo/contracts/routes';
+import { AccountRoutes, UsersRoutes } from '@repo/contracts/routes';
 import {
   ListUsersResponseSchema,
   UserSchema,
@@ -56,5 +56,5 @@ export async function sendPasswordReset(id: string): Promise<void> {
 }
 
 export async function setInitialPassword(input: SetInitialPasswordInput): Promise<void> {
-  await httpClient(AuthRoutes.setInitialPassword, { method: 'POST', body: input });
+  await httpClient(AccountRoutes.setPassword, { method: 'POST', body: input });
 }

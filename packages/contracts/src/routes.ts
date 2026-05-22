@@ -10,7 +10,15 @@ export const AuthRoutes = {
   signUp: '/api/auth/sign-up/email',
   signOut: '/api/auth/sign-out',
   session: '/api/auth/get-session',
-  setInitialPassword: '/api/auth/set-initial-password',
+} as const;
+
+/**
+ * Self-service account actions handled by NestJS. Deliberately NOT under
+ * `/api/auth/*` — better-auth's handler owns that prefix as a catch-all and
+ * would 404 any path it does not recognise.
+ */
+export const AccountRoutes = {
+  setPassword: '/api/account/set-password',
 } as const;
 
 export const UsersRoutes = {

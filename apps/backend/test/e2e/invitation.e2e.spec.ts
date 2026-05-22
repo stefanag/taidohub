@@ -1,8 +1,9 @@
+import { type NestExpressApplication } from '@nestjs/platform-express';
+import request from 'supertest';
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { BETTER_AUTH, type Auth } from '../../src/infrastructure/auth/better-auth.js';
 import { type AuthenticatedUser } from '../../src/infrastructure/auth/auth.types.js';
-import { AuthService } from '../../src/modules/auth/auth.service.js';
 import { UsersService } from '../../src/modules/users/users.service.js';
 import { buildTestApp, hasDatabase } from '../helpers/app-factory.js';
 
@@ -20,16 +21,16 @@ const SYSADMIN: AuthenticatedUser = {
 };
 
 describe.skipIf(!hasDatabase())('Invitation flow (integration)', () => {
+  let app: NestExpressApplication;
   let close: () => Promise<void>;
   let users: UsersService;
-  let auth: AuthService;
   let betterAuth: Auth;
 
   beforeAll(async () => {
     const built = await buildTestApp();
+    app = built.app;
     close = built.close;
     users = built.app.get(UsersService);
-    auth = built.app.get(AuthService);
     betterAuth = built.app.get<Auth>(BETTER_AUTH);
   });
 
@@ -41,7 +42,7 @@ describe.skipIf(!hasDatabase())('Invitation flow (integration)', () => {
     vi.restoreAllMocks();
   });
 
-  it('invites a user, sets their password from the logged link, and signs them in', async () => {
+  it('invites a user, sets their password via POST /api/account/set-password, and signs them in', async () => {
     const email = `invitee-${Date.now()}@example.com`;
     const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
@@ -56,9 +57,18 @@ describe.skipIf(!hasDatabase())('Invitation flow (integration)', () => {
       expect(match).not.toBeNull();
       const token = match![1]!;
 
-      const headers = await auth.setInitialPassword({ token, password: 'test-password-123' });
-      expect(headers).toBeInstanceOf(Headers);
-      expect(headers.getSetCookie().length).toBeGreaterThan(0);
+      // Drive the REAL HTTP route. The endpoint MUST live outside `/api/auth/*`
+      // (better-auth's catch-all 404s anything it does not own) — a 404 here
+      // would mean that regression has returned. A service-only call (as the
+      // original test did) cannot catch it.
+      const res = await request(app.getHttpServer())
+        .post('/api/account/set-password')
+        .send({ token, password: 'test-password-123' });
+
+      expect(res.status).toBe(200);
+      const setCookie = res.headers['set-cookie'] as string[] | undefined;
+      expect(setCookie).toBeDefined();
+      expect(setCookie?.length ?? 0).toBeGreaterThan(0);
 
       // The new user can now sign in with the chosen password.
       await expect(

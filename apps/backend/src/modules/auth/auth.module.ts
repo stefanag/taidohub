@@ -1,15 +1,17 @@
 import { Module } from '@nestjs/common';
 
+import { AccountController } from './account.controller.js';
 import { AuthController } from './auth.controller.js';
 import { AuthService } from './auth.service.js';
 
 /**
- * Wraps the `AuthController`. Most `/api/auth/*` routing is handled at the
- * Express layer in `main.ts`; the one real Nest-handled route is
- * `POST /api/auth/set-initial-password`, backed by `AuthService`.
+ * `AuthController` is documentation-only — `/api/auth/*` is served by
+ * better-auth at the Express layer in `main.ts`. `AccountController` is the
+ * real Nest-handled `POST /api/account/set-password` route, backed by
+ * `AuthService`.
  */
 @Module({
-  controllers: [AuthController],
+  controllers: [AuthController, AccountController],
   providers: [AuthService],
 })
 export class AuthDocsModule {}

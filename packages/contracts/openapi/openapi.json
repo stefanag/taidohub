@@ -1,32 +1,6 @@
 {
   "openapi": "3.0.0",
   "paths": {
-    "/api/auth/set-initial-password": {
-      "post": {
-        "description": "Consumes the token, sets the password, marks the email verified, and signs the user in by appending the better-auth session cookie.",
-        "operationId": "AuthController_setInitialPassword",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SetInitialPasswordDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Password set; session cookie issued."
-          }
-        },
-        "summary": "Set a password from a one-time invite or reset token.",
-        "tags": [
-          "auth"
-        ]
-      }
-    },
     "/api/auth/sign-in/email": {
       "post": {
         "description": "Issues a `better-auth.session_token` HTTP-only cookie on success. The actual handler is provided by better-auth.",
@@ -311,6 +285,32 @@
         "summary": "Get the active session for the caller.",
         "tags": [
           "auth"
+        ]
+      }
+    },
+    "/api/account/set-password": {
+      "post": {
+        "description": "Consumes the token, sets the password, marks the email verified, and signs the user in by appending the better-auth session cookie.",
+        "operationId": "AccountController_setPassword",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetInitialPasswordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password set; session cookie issued."
+          }
+        },
+        "summary": "Set a password from a one-time invite or reset token.",
+        "tags": [
+          "account"
         ]
       }
     },
@@ -2085,24 +2085,6 @@
       }
     },
     "schemas": {
-      "SetInitialPasswordDto": {
-        "type": "object",
-        "properties": {
-          "token": {
-            "type": "string",
-            "minLength": 1
-          },
-          "password": {
-            "type": "string",
-            "minLength": 8,
-            "maxLength": 200
-          }
-        },
-        "required": [
-          "token",
-          "password"
-        ]
-      },
       "SignInWithEmailDto": {
         "type": "object",
         "properties": {
@@ -2465,6 +2447,24 @@
         },
         "required": [
           "email",
+          "password"
+        ]
+      },
+      "SetInitialPasswordDto": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "minLength": 1
+          },
+          "password": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 200
+          }
+        },
+        "required": [
+          "token",
           "password"
         ]
       },
