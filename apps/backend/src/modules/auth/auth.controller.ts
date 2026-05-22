@@ -1,4 +1,4 @@
-import { All, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { All, Body, Controller, HttpCode, HttpStatus, Post, Res } from '@nestjs/common';
 import {
   ApiBody,
   ApiCookieAuth,
@@ -7,27 +7,58 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import type { Response } from 'express';
 
 import { Public } from '../../infrastructure/auth/public.decorator.js';
 
+import { AuthService } from './auth.service.js';
+import { SetInitialPasswordDto } from './dto/set-initial-password.dto.js';
 import { SessionDto } from './dto/session.dto.js';
 import { SignInWithEmailDto } from './dto/sign-in.dto.js';
 import { SignUpWithEmailDto } from './dto/sign-up.dto.js';
 
 /**
- * **Documentation-only controller.**
+ * Auth controller.
  *
- * The real `/api/auth/*` routes are mounted as an Express sub-application in
- * `main.ts` via `app.use('/api/auth/*', toNodeHandler(auth))`. That `app.use`
- * intercepts incoming requests **before** Nest's router gets the chance to
- * dispatch them, so the methods declared here never execute.
+ * `set-initial-password` is a real Nest-handled endpoint implemented in
+ * {@link AuthService}.
  *
- * Their sole purpose is to make every better-auth endpoint show up in
- * Swagger with proper request/response shapes derived from `@repo/contracts`.
+ * All other routes (`sign-in/email`, `sign-up/email`, `sign-out`,
+ * `get-session`) are documentation-only stubs: the real handlers are mounted
+ * as an Express sub-application in `main.ts` via
+ * `app.use('/api/auth/*', toNodeHandler(auth))`, which intercepts requests
+ * before Nest's router, so those stub methods never execute. Their sole
+ * purpose is to expose the better-auth endpoints in Swagger with the correct
+ * request/response shapes from `@repo/contracts`.
  */
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
+  constructor(private readonly authService: AuthService) {}
+
+  @Public()
+  @Post('set-initial-password')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Set a password from a one-time invite or reset token.',
+    operationId: 'AuthController_setInitialPassword',
+    description:
+      'Consumes the token, sets the password, marks the email verified, and ' +
+      'signs the user in by appending the better-auth session cookie.',
+  })
+  @ApiBody({ type: SetInitialPasswordDto })
+  @ApiOkResponse({ description: 'Password set; session cookie issued.' })
+  async setInitialPassword(
+    @Body() body: SetInitialPasswordDto,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<{ ok: true }> {
+    const headers = await this.authService.setInitialPassword(body);
+    for (const cookie of headers.getSetCookie()) {
+      res.append('set-cookie', cookie);
+    }
+    return { ok: true };
+  }
+
   @Public()
   @Post('sign-in/email')
   @ApiOperation({

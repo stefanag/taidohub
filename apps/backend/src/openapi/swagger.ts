@@ -81,6 +81,8 @@ export function setupSwagger(
     BETTER_AUTH_URL: config.get('BETTER_AUTH_URL', { infer: true }),
     SYSADMIN_EMAIL: config.get('SYSADMIN_EMAIL', { infer: true }),
     SYSADMIN_PASSWORD: config.get('SYSADMIN_PASSWORD', { infer: true }),
+    INVITE_TOKEN_TTL_HOURS: config.get('INVITE_TOKEN_TTL_HOURS', { infer: true }),
+    RESET_TOKEN_TTL_HOURS: config.get('RESET_TOKEN_TTL_HOURS', { infer: true }),
     ...(backendUrl !== undefined ? { BACKEND_URL: backendUrl } : {}),
     ...(enableSwaggerFlag !== undefined ? { ENABLE_SWAGGER: enableSwaggerFlag } : {}),
   };

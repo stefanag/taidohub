@@ -1,9 +1,11 @@
-import { UsersRoutes } from '@repo/contracts/routes';
+import { AuthRoutes, UsersRoutes } from '@repo/contracts/routes';
 import {
   ListUsersResponseSchema,
   UserSchema,
+  type InviteUserInput,
   type ListUsersQuery,
   type ListUsersResponse,
+  type SetInitialPasswordInput,
   type UpdateUserInput,
   type User,
 } from '@repo/contracts/users';
@@ -28,4 +30,31 @@ export async function listUsers(query: ListUsersQuery): Promise<ListUsersRespons
 export async function updateUser(id: string, input: UpdateUserInput): Promise<User> {
   const raw = await httpClient(UsersRoutes.byId(id), { method: 'PATCH', body: input });
   return UserSchema.parse(raw);
+}
+
+export async function inviteUser(input: InviteUserInput): Promise<User> {
+  const raw = await httpClient(UsersRoutes.invite, { method: 'POST', body: input });
+  return UserSchema.parse(raw);
+}
+
+export async function deactivateUser(id: string): Promise<User> {
+  const raw = await httpClient(UsersRoutes.deactivate(id), { method: 'PATCH' });
+  return UserSchema.parse(raw);
+}
+
+export async function reactivateUser(id: string): Promise<User> {
+  const raw = await httpClient(UsersRoutes.reactivate(id), { method: 'PATCH' });
+  return UserSchema.parse(raw);
+}
+
+export async function deleteUser(id: string): Promise<void> {
+  await httpClient(UsersRoutes.byId(id), { method: 'DELETE' });
+}
+
+export async function sendPasswordReset(id: string): Promise<void> {
+  await httpClient(UsersRoutes.sendPasswordReset(id), { method: 'POST' });
+}
+
+export async function setInitialPassword(input: SetInitialPasswordInput): Promise<void> {
+  await httpClient(AuthRoutes.setInitialPassword, { method: 'POST', body: input });
 }

@@ -15,13 +15,7 @@ import {
 } from '@/entities/membership';
 import { listOrganisationsQueryOptions } from '@/entities/organisation';
 import { HttpError } from '@/shared/api';
-import {
-  Button,
-  FormField,
-  FormMessage,
-  Input,
-  Label,
-} from '@/shared/ui';
+import { Button, FormField, FormMessage, Input, Label } from '@/shared/ui';
 import {
   Select,
   SelectContent,
@@ -31,7 +25,6 @@ import {
 } from '@/shared/ui/select.js';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs.js';
 
-
 export interface UserFormProps {
   /** The user being edited. */
   user: User;
@@ -40,6 +33,11 @@ export interface UserFormProps {
   /** Submit the Details-tab patch (name / role). */
   onSubmit: (input: UpdateUserInput) => Promise<void>;
   submitting?: boolean;
+  /** Lifecycle actions — omitted callers simply hide the corresponding button. */
+  onDeactivate?: () => void | Promise<void>;
+  onReactivate?: () => void | Promise<void>;
+  onDelete?: () => void | Promise<void>;
+  onSendPasswordReset?: () => void | Promise<void>;
 }
 
 /**
@@ -52,26 +50,77 @@ export function UserForm({
   currentUserId,
   onSubmit,
   submitting,
+  onDeactivate,
+  onReactivate,
+  onDelete,
+  onSendPasswordReset,
 }: UserFormProps): React.ReactElement {
   const { t } = useTranslation();
   const [name, setName] = React.useState<string>(user.name ?? '');
   const [role, setRole] = React.useState<Role>(user.role);
   const [submitError, setSubmitError] = React.useState<string | undefined>();
+  const [lifecycleError, setLifecycleError] = React.useState<string | undefined>();
   const [membershipError, setMembershipError] = React.useState<string | undefined>();
 
   /** Map a caught mutation error to a localized string using the backend error code. */
-  const mapErrorCode = React.useCallback((err: unknown): string => {
-    if (err instanceof HttpError) {
-      switch (err.payload.code) {
-        case 'SELF_DEMOTE': return t('admin.users.errors.selfDemote', { defaultValue: 'You cannot change your own role.' });
-        case 'LAST_SYSADMIN': return t('admin.users.errors.lastSysadmin', { defaultValue: 'Cannot demote the last active sysadmin.' });
-        case 'MEMBERSHIP_EXISTS': return t('admin.users.errors.membershipExists', { defaultValue: 'That membership already exists.' });
-        case 'INSTRUCTOR_REQUIRES_CLUB': return t('admin.users.errors.instructorRequiresClub', { defaultValue: 'Instructor memberships are only allowed on clubs.' });
-        default: return err.message;
+  const mapErrorCode = React.useCallback(
+    (err: unknown): string => {
+      if (err instanceof HttpError) {
+        switch (err.payload.code) {
+          case 'SELF_DEMOTE':
+            return t('admin.users.errors.selfDemote', {
+              defaultValue: 'You cannot change your own role.',
+            });
+          case 'LAST_SYSADMIN':
+            return t('admin.users.errors.lastSysadmin', {
+              defaultValue: 'Cannot demote the last active sysadmin.',
+            });
+          case 'MEMBERSHIP_EXISTS':
+            return t('admin.users.errors.membershipExists', {
+              defaultValue: 'That membership already exists.',
+            });
+          case 'INSTRUCTOR_REQUIRES_CLUB':
+            return t('admin.users.errors.instructorRequiresClub', {
+              defaultValue: 'Instructor memberships are only allowed on clubs.',
+            });
+          case 'SELF_DEACTIVATE':
+            return t('admin.users.errors.selfDeactivate', {
+              defaultValue: 'You cannot deactivate yourself.',
+            });
+          case 'SELF_DELETE':
+            return t('admin.users.errors.selfDelete', {
+              defaultValue: 'You cannot delete yourself.',
+            });
+          case 'ALREADY_DEACTIVATED':
+            return t('admin.users.errors.alreadyDeactivated', {
+              defaultValue: 'This user is already deactivated.',
+            });
+          case 'ALREADY_ACTIVE':
+            return t('admin.users.errors.alreadyActive', {
+              defaultValue: 'This user is already active.',
+            });
+          case 'EMAIL_IN_USE':
+            return t('admin.users.errors.emailInUse', {
+              defaultValue: 'A user with this email already exists.',
+            });
+          case 'EMAIL_DEACTIVATED':
+            return t('admin.users.errors.emailDeactivated', {
+              defaultValue: 'A deactivated user already has this email. Reactivate them instead.',
+            });
+          case 'NOT_FOUND':
+            return t('admin.users.errors.userNotFound', {
+              defaultValue: 'That user no longer exists.',
+            });
+          default:
+            return err.message;
+        }
       }
-    }
-    return err instanceof Error ? err.message : t('common.unknownError', { defaultValue: 'Unknown error' });
-  }, [t]);
+      return err instanceof Error
+        ? err.message
+        : t('common.unknownError', { defaultValue: 'Unknown error' });
+    },
+    [t],
+  );
 
   const isSelf = user.id === currentUserId;
 
@@ -136,23 +185,18 @@ export function UserForm({
             <Label htmlFor="user-name">
               {t('admin.users.fields.name', { defaultValue: 'Name' })}
             </Label>
-            <Input
-              id="user-name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
+            <Input id="user-name" value={name} onChange={(e) => setName(e.target.value)} />
           </FormField>
 
           <FormField>
             <Label htmlFor="user-role">
               {t('admin.users.fields.role', { defaultValue: 'Role' })}
             </Label>
-            <Select
-              value={role}
-              onValueChange={(v) => setRole(v as Role)}
-              disabled={isSelf}
-            >
-              <SelectTrigger id="user-role" aria-label={t('admin.users.fields.role', { defaultValue: 'Role' })}>
+            <Select value={role} onValueChange={(v) => setRole(v as Role)} disabled={isSelf}>
+              <SelectTrigger
+                id="user-role"
+                aria-label={t('admin.users.fields.role', { defaultValue: 'Role' })}
+              >
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -172,6 +216,90 @@ export function UserForm({
             {t('admin.users.actions.save', { defaultValue: 'Save' })}
           </Button>
         </form>
+
+        {isSelf ? null : (
+          <section className="mt-6 space-y-3 border-t pt-6">
+            <h3 className="text-sm font-semibold text-on-surface">
+              {t('admin.users.lifecycle.sectionTitle', { defaultValue: 'Account lifecycle' })}
+            </h3>
+            <div className="flex flex-wrap gap-3">
+              {user.deactivatedAt !== null ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setLifecycleError(undefined);
+                    void (async () => {
+                      try {
+                        await onReactivate?.();
+                      } catch (err) {
+                        setLifecycleError(mapErrorCode(err));
+                      }
+                    })();
+                  }}
+                >
+                  {t('admin.users.actions.reactivate', { defaultValue: 'Reactivate' })}
+                </Button>
+              ) : (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setLifecycleError(undefined);
+                    void (async () => {
+                      try {
+                        await onDeactivate?.();
+                      } catch (err) {
+                        setLifecycleError(mapErrorCode(err));
+                      }
+                    })();
+                  }}
+                >
+                  {t('admin.users.actions.deactivate', { defaultValue: 'Deactivate' })}
+                </Button>
+              )}
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setLifecycleError(undefined);
+                  void (async () => {
+                    try {
+                      await onSendPasswordReset?.();
+                    } catch (err) {
+                      setLifecycleError(mapErrorCode(err));
+                    }
+                  })();
+                }}
+              >
+                {t('admin.users.actions.sendPasswordReset', {
+                  defaultValue: 'Send password reset',
+                })}
+              </Button>
+              <Button
+                type="button"
+                variant="destructive"
+                size="sm"
+                onClick={() => {
+                  setLifecycleError(undefined);
+                  void (async () => {
+                    try {
+                      await onDelete?.();
+                    } catch (err) {
+                      setLifecycleError(mapErrorCode(err));
+                    }
+                  })();
+                }}
+              >
+                {t('admin.users.actions.delete', { defaultValue: 'Delete' })}
+              </Button>
+            </div>
+            <FormMessage message={lifecycleError} />
+          </section>
+        )}
       </TabsContent>
 
       <TabsContent value="memberships" className="space-y-3">
@@ -186,9 +314,7 @@ export function UserForm({
               const isClub = org?.type === 'club';
               return (
                 <li key={m.id} className="flex items-center justify-between gap-3 py-2">
-                  <span className="flex-1 truncate text-sm">
-                    {org?.label ?? m.organisationId}
-                  </span>
+                  <span className="flex-1 truncate text-sm">{org?.label ?? m.organisationId}</span>
                   <Select
                     value={m.role}
                     onValueChange={(v) =>
@@ -203,7 +329,9 @@ export function UserForm({
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="orgadmin">
-                        {t('admin.users.roles.orgadmin', { defaultValue: 'Organisation administrator' })}
+                        {t('admin.users.roles.orgadmin', {
+                          defaultValue: 'Organisation administrator',
+                        })}
                       </SelectItem>
                       <SelectItem value="instructor" disabled={!isClub}>
                         {t('admin.users.roles.instructor', { defaultValue: 'Instructor' })}

@@ -4,13 +4,15 @@ import { APP_GUARD } from '@nestjs/core';
 
 import { type Env } from '../../config/env.schema.js';
 
+import { EMAIL_SERVICE, type EmailService } from '../email/email.types.js';
 import { AuthGuard } from './auth.guard.js';
 import { BETTER_AUTH, buildBetterAuth } from './better-auth.js';
+import { VerificationTokenService } from './verification-token.service.js';
 
 const betterAuthProvider: Provider = {
   provide: BETTER_AUTH,
-  inject: [ConfigService],
-  useFactory: (config: ConfigService<Env, true>) => {
+  inject: [ConfigService, EMAIL_SERVICE],
+  useFactory: (config: ConfigService<Env, true>, emailService: EmailService) => {
     const backendUrl = config.get('BACKEND_URL', { infer: true });
     const enableSwagger = config.get('ENABLE_SWAGGER', { infer: true });
     const env: Env = {
@@ -23,10 +25,12 @@ const betterAuthProvider: Provider = {
       BETTER_AUTH_URL: config.get('BETTER_AUTH_URL', { infer: true }),
       SYSADMIN_EMAIL: config.get('SYSADMIN_EMAIL', { infer: true }),
       SYSADMIN_PASSWORD: config.get('SYSADMIN_PASSWORD', { infer: true }),
+      INVITE_TOKEN_TTL_HOURS: config.get('INVITE_TOKEN_TTL_HOURS', { infer: true }),
+      RESET_TOKEN_TTL_HOURS: config.get('RESET_TOKEN_TTL_HOURS', { infer: true }),
       ...(backendUrl !== undefined ? { BACKEND_URL: backendUrl } : {}),
       ...(enableSwagger !== undefined ? { ENABLE_SWAGGER: enableSwagger } : {}),
     };
-    return buildBetterAuth(env);
+    return buildBetterAuth(env, emailService);
   },
 };
 
@@ -46,8 +50,9 @@ const betterAuthProvider: Provider = {
   providers: [
     betterAuthProvider,
     AuthGuard,
+    VerificationTokenService,
     { provide: APP_GUARD, useClass: AuthGuard },
   ],
-  exports: [betterAuthProvider, AuthGuard],
+  exports: [betterAuthProvider, AuthGuard, VerificationTokenService],
 })
 export class InfraAuthModule {}

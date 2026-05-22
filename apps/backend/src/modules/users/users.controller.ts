@@ -1,15 +1,20 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  HttpCode,
   Param,
   ParseUUIDPipe,
   Patch,
+  Post,
   Query,
 } from '@nestjs/common';
 import {
   ApiBody,
   ApiCookieAuth,
+  ApiCreatedResponse,
+  ApiNoContentResponse,
   ApiOkResponse,
   ApiOperation,
   ApiParam,
@@ -23,6 +28,7 @@ import { CurrentUser } from '../../infrastructure/auth/current-user.decorator.js
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import { CheckAbility } from '../../infrastructure/ability/check-ability.decorator.js';
 
+import { InviteUserDto } from './dto/invite-user.dto.js';
 import { ListUsersQueryDto } from './dto/list-users-query.dto.js';
 import { ListUsersResponseDto } from './dto/list-users-response.dto.js';
 import { UpdateUserDto } from './dto/update-user.dto.js';
@@ -62,6 +68,24 @@ export class UsersController {
     return this.users.list(query, user);
   }
 
+  @Post('invite')
+  @CheckAbility('manage', 'User')
+  @HttpCode(201)
+  @ApiBody({ type: InviteUserDto })
+  @ApiCreatedResponse({ type: UserDto })
+  @ApiEndpoint({
+    summary: 'Invite a new user by email (sysadmin only).',
+    operationId: 'UsersController_invite',
+    errorType: ErrorEnvelopeDto,
+    errors: ['400', '401', '403', '409'],
+  })
+  invite(
+    @Body() body: InviteUserDto,
+    @CurrentUser() user: AuthenticatedUser,
+  ): Promise<User> {
+    return this.users.invite(body, user);
+  }
+
   @Get(':id')
   @ApiParam({ name: 'id', description: 'User UUID.' })
   @ApiEndpoint({
@@ -96,5 +120,75 @@ export class UsersController {
     @CurrentUser() user: AuthenticatedUser,
   ): Promise<User> {
     return this.users.update(id, body, user);
+  }
+
+  @Patch(':id/deactivate')
+  @CheckAbility('manage', 'User')
+  @ApiParam({ name: 'id', description: 'User UUID.' })
+  @ApiEndpoint({
+    summary: 'Deactivate a user (sysadmin only).',
+    operationId: 'UsersController_deactivate',
+    ok: UserDto,
+    errorType: ErrorEnvelopeDto,
+    errors: ['401', '403', '404', '409'],
+  })
+  deactivate(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @CurrentUser() user: AuthenticatedUser,
+  ): Promise<User> {
+    return this.users.deactivate(id, user);
+  }
+
+  @Patch(':id/reactivate')
+  @CheckAbility('manage', 'User')
+  @ApiParam({ name: 'id', description: 'User UUID.' })
+  @ApiEndpoint({
+    summary: 'Reactivate a deactivated user (sysadmin only).',
+    operationId: 'UsersController_reactivate',
+    ok: UserDto,
+    errorType: ErrorEnvelopeDto,
+    errors: ['401', '403', '404', '409'],
+  })
+  reactivate(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @CurrentUser() user: AuthenticatedUser,
+  ): Promise<User> {
+    return this.users.reactivate(id, user);
+  }
+
+  @Delete(':id')
+  @CheckAbility('manage', 'User')
+  @HttpCode(204)
+  @ApiParam({ name: 'id', description: 'User UUID.' })
+  @ApiNoContentResponse({ description: 'User deleted.' })
+  @ApiEndpoint({
+    summary: 'Hard-delete a user (sysadmin only).',
+    operationId: 'UsersController_delete',
+    errorType: ErrorEnvelopeDto,
+    errors: ['401', '403', '404', '409'],
+  })
+  delete(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @CurrentUser() user: AuthenticatedUser,
+  ): Promise<void> {
+    return this.users.delete(id, user);
+  }
+
+  @Post(':id/send-password-reset')
+  @CheckAbility('manage', 'User')
+  @HttpCode(204)
+  @ApiParam({ name: 'id', description: 'User UUID.' })
+  @ApiNoContentResponse({ description: 'Password-reset email sent.' })
+  @ApiEndpoint({
+    summary: 'Trigger a password-reset email for a user (sysadmin only).',
+    operationId: 'UsersController_sendPasswordReset',
+    errorType: ErrorEnvelopeDto,
+    errors: ['401', '403', '404'],
+  })
+  sendPasswordReset(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @CurrentUser() user: AuthenticatedUser,
+  ): Promise<void> {
+    return this.users.sendPasswordReset(id, user);
   }
 }

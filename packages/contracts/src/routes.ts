@@ -10,12 +10,17 @@ export const AuthRoutes = {
   signUp: '/api/auth/sign-up/email',
   signOut: '/api/auth/sign-out',
   session: '/api/auth/get-session',
+  setInitialPassword: '/api/auth/set-initial-password',
 } as const;
 
 export const UsersRoutes = {
   base: '/api/users',
   me: '/api/users/me',
   byId: (id: string) => `/api/users/${id}` as const,
+  invite: '/api/users/invite',
+  deactivate: (id: string) => `/api/users/${id}/deactivate` as const,
+  reactivate: (id: string) => `/api/users/${id}/reactivate` as const,
+  sendPasswordReset: (id: string) => `/api/users/${id}/send-password-reset` as const,
 } as const;
 
 export const HealthRoute = '/api/health' as const;

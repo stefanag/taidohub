@@ -9,7 +9,16 @@
       "submitting": "Loggar in…",
       "failed": "Inloggning misslyckades."
     },
-    "motto": "Där sinnet är samlat är inget omöjligt."
+    "motto": "Där sinnet är samlat är inget omöjligt.",
+    "setPassword": {
+      "title": "Ange ditt lösenord",
+      "description": "Välj ett lösenord för att slutföra konfigurationen av ditt konto.",
+      "passwordLabel": "Lösenord",
+      "confirmLabel": "Bekräfta lösenord",
+      "submit": "Ange lösenord",
+      "invalidToken": "Den här länken är ogiltig eller har upphört att gälla. Be en administratör skicka en ny.",
+      "mismatch": "Lösenorden matchar inte."
+    }
   },
   "common": {
     "loading": "Laddar…",
@@ -102,13 +111,43 @@
         "empty": "Inga medlemskap än.",
         "remove": "Ta bort"
       },
-      "actions": { "edit": "Redigera", "save": "Spara" },
+      "actions": {
+        "edit": "Redigera",
+        "save": "Spara",
+        "invite": "Bjud in användare",
+        "deactivate": "Inaktivera",
+        "reactivate": "Återaktivera",
+        "delete": "Ta bort",
+        "sendPasswordReset": "Skicka lösenordsåterställning"
+      },
+      "invite": {
+        "title": "Bjud in en ny användare",
+        "emailLabel": "E-post",
+        "nameLabel": "Namn (valfritt)",
+        "submit": "Skicka inbjudan"
+      },
+      "delete": {
+        "title": "Ta bort användare",
+        "description": "Detta tar permanent bort \"{{email}}\" och all data. Skriv e-postadressen nedan för att bekräfta.",
+        "confirmLabel": "Skriv e-postadressen för att bekräfta",
+        "confirm": "Ta bort användare"
+      },
+      "lifecycle": {
+        "sectionTitle": "Kontots livscykel"
+      },
       "pager": { "prev": "Föregående", "next": "Nästa", "page": "Sida {{page}}" },
       "errors": {
         "selfDemote": "Du kan inte ändra din egen roll.",
         "lastSysadmin": "Kan inte degradera den sista aktiva systemadministratören.",
         "membershipExists": "Det medlemskapet finns redan.",
-        "instructorRequiresClub": "Instruktörsmedlemskap är endast tillåtet för klubbar."
+        "instructorRequiresClub": "Instruktörsmedlemskap tillåts endast för klubbar.",
+        "emailInUse": "En användare med denna e-postadress finns redan.",
+        "emailDeactivated": "En inaktiverad användare har redan denna e-postadress. Återaktivera den användaren istället.",
+        "selfDeactivate": "Du kan inte inaktivera dig själv.",
+        "selfDelete": "Du kan inte ta bort dig själv.",
+        "alreadyDeactivated": "Den här användaren är redan inaktiverad.",
+        "alreadyActive": "Den här användaren är redan aktiv.",
+        "userNotFound": "Den användaren finns inte längre."
       }
     },
     "auditLog": {

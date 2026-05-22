@@ -77,4 +77,36 @@ export default defineConfig([
       'fsd/no-public-api-sidestep': 'off',
     },
   },
+  {
+    // The invite-user-dialog test mocks the user entity API module by its
+    // deep path because `user.queries.ts` imports the fetcher from there
+    // directly (not via the barrel). Mocking the barrel wouldn't reach that
+    // import, so `vi.mock` MUST target the deep path. Allow the public-API
+    // sidestep for this test file only.
+    files: ['src/features/invite-user-dialog/**/*.test.{ts,tsx}'],
+    rules: {
+      'fsd/no-public-api-sidestep': 'off',
+    },
+  },
+  {
+    // The admin-users page test mocks user, organisation, and membership entity
+    // API modules by their deep paths because the query-options factories
+    // capture the fetchers directly from those modules (not via the barrel).
+    // Mocking the barrels wouldn't reach those imports, so `vi.mock` MUST
+    // target the deep paths. Allow the public-API sidestep for this test file
+    // only.
+    files: ['src/pages/admin-users/**/*.test.{ts,tsx}'],
+    rules: {
+      'fsd/no-public-api-sidestep': 'off',
+    },
+  },
+  {
+    // The set-password-form test mocks the user entity API module by its
+    // deep path; mocking the barrel wouldn't reach the captured fetcher
+    // reference. Allow the public-API sidestep for this test file only.
+    files: ['src/features/set-password-form/**/*.test.{ts,tsx}'],
+    rules: {
+      'fsd/no-public-api-sidestep': 'off',
+    },
+  },
 ]);

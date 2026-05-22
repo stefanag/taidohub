@@ -1,6 +1,10 @@
+import { randomUUID } from 'node:crypto';
+
 import { ConflictException, ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { ForbiddenError } from '@casl/ability';
 import {
+  type InviteUserInput,
   type ListUsersQuery,
   type ListUsersResponse,
   type Role,
@@ -10,7 +14,10 @@ import {
 
 import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
+import { VerificationTokenService } from '../../infrastructure/auth/verification-token.service.js';
 import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
+import { EMAIL_SERVICE, type EmailService } from '../../infrastructure/email/email.types.js';
+import { type Env } from '../../config/env.schema.js';
 import { AuditLogService } from '../audit-log/audit-log.service.js';
 
 import { UsersRepository } from './users.repository.js';
@@ -22,6 +29,9 @@ export class UsersService {
     private readonly abilities: AbilityFactory,
     private readonly audit: AuditLogService,
     @Inject(DRIZZLE) private readonly db: DrizzleDb,
+    private readonly config: ConfigService<Env, true>,
+    private readonly tokens: VerificationTokenService,
+    @Inject(EMAIL_SERVICE) private readonly email: EmailService,
   ) {}
 
   async findOne(id: string, user: AuthenticatedUser | null): Promise<User> {
@@ -127,6 +137,272 @@ export class UsersService {
         after,
       });
       return after;
+    });
+  }
+
+  /** Soft-deactivate a user. Self-deactivation and last-sysadmin are blocked. */
+  async deactivate(id: string, adminUser: AuthenticatedUser): Promise<User> {
+    this.assertCan(adminUser, 'manage');
+
+    if (id === adminUser.id) {
+      throw new ConflictException({
+        error: { code: 'SELF_DEACTIVATE', message: 'You cannot deactivate yourself.' },
+      });
+    }
+
+    const existing = await this.repo.findById(id);
+    if (!existing) {
+      throw new NotFoundException({
+        error: { code: 'NOT_FOUND', message: `User ${id} not found.` },
+      });
+    }
+    if (existing.deactivatedAt !== null) {
+      throw new ConflictException({
+        error: { code: 'ALREADY_DEACTIVATED', message: 'This user is already deactivated.' },
+      });
+    }
+
+    return this.db.transaction(async (tx) => {
+      if (existing.role === 'sysadmin') {
+        const remaining = await this.repo.countActiveSysadmins(tx);
+        if (remaining <= 1) {
+          throw new ConflictException({
+            error: {
+              code: 'LAST_SYSADMIN',
+              message: 'Cannot deactivate the last active sysadmin.',
+            },
+          });
+        }
+      }
+      const row = await this.repo.deactivate(id, tx);
+      if (!row) {
+        throw new NotFoundException({
+          error: { code: 'NOT_FOUND', message: `User ${id} not found.` },
+        });
+      }
+      const after = this.toApi(row);
+      await this.audit.record({
+        tx,
+        entityType: 'user',
+        entityId: id,
+        action: 'deactivate',
+        userId: adminUser.id,
+        before: this.toApi(existing),
+        after,
+      });
+      return after;
+    });
+  }
+
+  /** Clear a user's deactivation. */
+  async reactivate(id: string, adminUser: AuthenticatedUser): Promise<User> {
+    this.assertCan(adminUser, 'manage');
+
+    const existing = await this.repo.findById(id);
+    if (!existing) {
+      throw new NotFoundException({
+        error: { code: 'NOT_FOUND', message: `User ${id} not found.` },
+      });
+    }
+    if (existing.deactivatedAt === null) {
+      throw new ConflictException({
+        error: { code: 'ALREADY_ACTIVE', message: 'This user is already active.' },
+      });
+    }
+
+    return this.db.transaction(async (tx) => {
+      const row = await this.repo.reactivate(id, tx);
+      if (!row) {
+        throw new NotFoundException({
+          error: { code: 'NOT_FOUND', message: `User ${id} not found.` },
+        });
+      }
+      const after = this.toApi(row);
+      await this.audit.record({
+        tx,
+        entityType: 'user',
+        entityId: id,
+        action: 'reactivate',
+        userId: adminUser.id,
+        before: this.toApi(existing),
+        after,
+      });
+      return after;
+    });
+  }
+
+  /**
+   * Hard-delete a user. FK cascades remove their sessions, accounts, and
+   * memberships. Blocked for self and for the last active sysadmin. A
+   * deactivated sysadmin can be deleted as long as another active one exists.
+   */
+  async delete(id: string, adminUser: AuthenticatedUser): Promise<void> {
+    this.assertCan(adminUser, 'manage');
+
+    if (id === adminUser.id) {
+      throw new ConflictException({
+        error: { code: 'SELF_DELETE', message: 'You cannot delete yourself.' },
+      });
+    }
+
+    const existing = await this.repo.findById(id);
+    if (!existing) {
+      throw new NotFoundException({
+        error: { code: 'NOT_FOUND', message: `User ${id} not found.` },
+      });
+    }
+
+    await this.db.transaction(async (tx) => {
+      if (existing.role === 'sysadmin' && existing.deactivatedAt === null) {
+        const remaining = await this.repo.countActiveSysadmins(tx);
+        if (remaining <= 1) {
+          throw new ConflictException({
+            error: {
+              code: 'LAST_SYSADMIN',
+              message: 'Cannot delete the last active sysadmin.',
+            },
+          });
+        }
+      }
+      await this.audit.record({
+        tx,
+        entityType: 'user',
+        entityId: id,
+        action: 'delete',
+        userId: adminUser.id,
+        before: this.toApi(existing),
+        after: null,
+      });
+      await this.repo.delete(id, tx);
+    });
+  }
+
+  /**
+   * Invite a new user by email. Three branches:
+   * - email belongs to an active user → 409 EMAIL_IN_USE
+   * - email belongs to a deactivated user → 409 EMAIL_DEACTIVATED
+   * - email belongs to a still-pending invitee (has an unexpired invite
+   *   token) → re-issue the token and re-send the email, no new row
+   * Otherwise inserts a fresh `role: 'user'` row, issues an invite token, and
+   * sends the invite email. The set-password URL points at the first
+   * configured WEB_ORIGIN.
+   */
+  async invite(input: InviteUserInput, adminUser: AuthenticatedUser): Promise<User> {
+    this.assertCan(adminUser, 'manage');
+
+    const webOrigin = this.config
+      .get('WEB_ORIGIN', { infer: true })
+      .split(',')[0]
+      ?.trim();
+    if (!webOrigin) {
+      throw new Error('WEB_ORIGIN is not configured.');
+    }
+    const ttl = this.config.get('INVITE_TOKEN_TTL_HOURS', { infer: true });
+
+    const existing = await this.repo.findByEmail(input.email);
+    if (existing) {
+      if (existing.deactivatedAt !== null) {
+        throw new ConflictException({
+          error: {
+            code: 'EMAIL_DEACTIVATED',
+            message: 'A deactivated user already has this email. Reactivate them instead.',
+          },
+        });
+      }
+      const pending = await this.tokens.hasUnexpiredToken(`invite:${existing.id}`);
+      if (pending) {
+        const token = await this.tokens.issueToken(`invite:${existing.id}`, ttl);
+        await this.email.sendInvite({
+          to: existing.email,
+          locale: existing.locale,
+          setPasswordUrl: `${webOrigin}/set-password?token=${token}`,
+          inviterName: adminUser.name,
+        });
+        return this.toApi(existing);
+      }
+      throw new ConflictException({
+        error: { code: 'EMAIL_IN_USE', message: 'A user with this email already exists.' },
+      });
+    }
+
+    const id = randomUUID();
+    const row = await this.db.transaction(async (tx) => {
+      const created = await this.repo.insert(
+        {
+          id,
+          email: input.email,
+          ...(input.name !== undefined && { name: input.name }),
+          role: 'user',
+          emailVerified: false,
+        },
+        tx,
+      );
+      await this.audit.record({
+        tx,
+        entityType: 'user',
+        entityId: id,
+        action: 'create',
+        userId: adminUser.id,
+        before: null,
+        after: this.toApi(created),
+      });
+      return created;
+    });
+
+    const token = await this.tokens.issueToken(`invite:${row.id}`, ttl);
+    await this.email.sendInvite({
+      to: input.email,
+      locale: row.locale,
+      setPasswordUrl: `${webOrigin}/set-password?token=${token}`,
+      inviterName: adminUser.name,
+    });
+
+    return this.toApi(row);
+  }
+
+  /**
+   * Trigger an admin-initiated password reset. Issues an `admin-reset:<id>`
+   * token, emails the user a set-password link, and audits the action with
+   * the triggering admin recorded in the `after` payload.
+   */
+  async sendPasswordReset(userId: string, adminUser: AuthenticatedUser): Promise<void> {
+    this.assertCan(adminUser, 'manage');
+
+    const target = await this.repo.findById(userId);
+    if (!target) {
+      throw new NotFoundException({
+        error: { code: 'NOT_FOUND', message: `User ${userId} not found.` },
+      });
+    }
+
+    const webOrigin = this.config
+      .get('WEB_ORIGIN', { infer: true })
+      .split(',')[0]
+      ?.trim();
+    if (!webOrigin) {
+      throw new Error('WEB_ORIGIN is not configured.');
+    }
+    const ttl = this.config.get('RESET_TOKEN_TTL_HOURS', { infer: true });
+
+    const token = await this.tokens.issueToken(`admin-reset:${userId}`, ttl);
+
+    await this.db.transaction(async (tx) => {
+      await this.audit.record({
+        tx,
+        entityType: 'user',
+        entityId: userId,
+        action: 'password_reset_triggered',
+        userId: adminUser.id,
+        before: null,
+        after: { triggeredBy: adminUser.id },
+      });
+    });
+
+    await this.email.sendAdminPasswordReset({
+      to: target.email,
+      locale: target.locale,
+      resetUrl: `${webOrigin}/set-password?token=${token}`,
+      adminName: adminUser.name,
     });
   }
 
