@@ -16,11 +16,17 @@ describe('defineAbilityFor', () => {
     expect(ability.can('manage', 'Organisation')).toBe(false);
   });
 
-  it('admin: can manage all', () => {
-    const ability = defineAbilityFor({ id: 'u1', role: 'admin' });
+  it('sysadmin: can manage all', () => {
+    const ability = defineAbilityFor({ id: 'u1', role: 'sysadmin' });
     expect(ability.can('manage', 'all')).toBe(true);
     expect(ability.can('manage', 'Organisation')).toBe(true);
     expect(ability.can('manage', 'User')).toBe(true);
+  });
+
+  it('legacy "admin" role grants nothing (migrated to sysadmin)', () => {
+    // @ts-expect-error — 'admin' is no longer a valid Role; guards against regression.
+    const ability = defineAbilityFor({ id: 'u1', role: 'admin' });
+    expect(ability.can('manage', 'all')).toBe(false);
   });
 
   it('undefined user is treated as anonymous', () => {

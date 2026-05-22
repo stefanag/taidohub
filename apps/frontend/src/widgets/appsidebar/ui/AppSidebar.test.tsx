@@ -55,7 +55,7 @@ function renderInProvider(): ReturnType<typeof render> {
 }
 
 function renderInProviderWithAbility(
-  role: 'admin' | 'user',
+  role: 'sysadmin' | 'user',
 ): ReturnType<typeof render> {
   const ability = defineAbilityFor({ id: 'u1', role });
   return render(
@@ -125,7 +125,7 @@ describe('<AppSidebar>', () => {
     });
   });
 
-  it('renders the admin organisations link when the user is an admin', () => {
+  it('renders the admin organisations link when the user is a sysadmin', () => {
     vi.spyOn(authApi, 'useSession').mockReturnValue({
       data: { user: { id: 'u1', email: 'a@b' }, session: { id: 's1' } },
       isPending: false,
@@ -133,7 +133,7 @@ describe('<AppSidebar>', () => {
       refetch: () => Promise.resolve(),
     } as unknown as ReturnType<typeof authApi.useSession>);
 
-    renderInProviderWithAbility('admin');
+    renderInProviderWithAbility('sysadmin');
 
     const adminLink = screen.getByRole('link', { name: /^Organisations$/i });
     expect(adminLink).toBeInTheDocument();
