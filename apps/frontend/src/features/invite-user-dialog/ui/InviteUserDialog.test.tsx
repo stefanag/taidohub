@@ -7,6 +7,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { InviteUserDialog } from './InviteUserDialog.js';
 
+import { inviteUser } from '@/entities/user/api/user.api.js';
 import i18n from '@/i18n';
 import { HttpError } from '@/shared/api';
 
@@ -17,7 +18,6 @@ vi.mock('@/entities/user/api/user.api.js', async (orig) => {
   return { ...actual, inviteUser: vi.fn() };
 });
 
-import { inviteUser } from '@/entities/user/api/user.api.js';
 
 const mockedInvite = vi.mocked(inviteUser);
 

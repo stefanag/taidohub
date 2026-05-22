@@ -5,8 +5,6 @@ vi.mock('@/shared/api', async (orig) => {
   return { ...actual, httpClient: vi.fn() };
 });
 
-import { httpClient } from '@/shared/api';
-
 import {
   deactivateUser,
   deleteUser,
@@ -15,6 +13,9 @@ import {
   sendPasswordReset,
   setInitialPassword,
 } from './user.api.js';
+
+import { httpClient } from '@/shared/api';
+
 
 const USER_RESPONSE = {
   id: '11111111-1111-4111-8111-111111111111',

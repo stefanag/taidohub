@@ -1,9 +1,10 @@
 import { createRoute } from '@tanstack/react-router';
 import { z } from 'zod';
 
+import { publicLayoutRoute } from './_public.js';
+
 import { SetPasswordPage } from '@/pages/set-password';
 
-import { publicLayoutRoute } from './_public.js';
 
 /** `?token=` is required — an absent/empty token fails validation. */
 const SetPasswordSearchSchema = z.object({

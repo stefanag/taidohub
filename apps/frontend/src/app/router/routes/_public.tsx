@@ -1,9 +1,10 @@
 import { createRoute, Outlet, useRouterState } from '@tanstack/react-router';
 import * as React from 'react';
 
+import { rootRoute } from './__root.js';
+
 import { Header } from '@/widgets/header';
 
-import { rootRoute } from './__root.js';
 
 /**
  * Public-facing layout. Used for anonymous pages: `/`, `/login`, and any
