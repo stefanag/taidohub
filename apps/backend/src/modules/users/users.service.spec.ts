@@ -416,3 +416,123 @@ describe('UsersService — delete', () => {
     expect(repo.delete).toHaveBeenCalledWith('old-sysadmin', FAKE_TX);
   });
 });
+
+describe('UsersService — invite', () => {
+  it('creates a new user, emits a create audit event, and sends an invite email', async () => {
+    const repo = repoStub();
+    repo.findByEmail.mockResolvedValue(null);
+    repo.insert.mockResolvedValue({
+      ...USER_ROW,
+      id: 'u-new',
+      email: 'new@example.com',
+      name: 'New User',
+      emailVerified: false,
+    });
+    const audit = auditStub();
+    const tokens = tokensStub();
+    const email = emailStub();
+    const service = await makeService(repo, audit, tokens, email);
+
+    const out = await service.invite({ email: 'new@example.com', name: 'New User' }, sysadmin);
+
+    expect(out.email).toBe('new@example.com');
+    expect(repo.insert).toHaveBeenCalled();
+    expect(audit.record.mock.calls[0]?.[0]).toMatchObject({
+      entityType: 'user',
+      action: 'create',
+      userId: sysadmin.id,
+    });
+    expect(tokens.issueToken).toHaveBeenCalledWith('invite:u-new', 48);
+    expect(email.sendInvite).toHaveBeenCalledWith(
+      expect.objectContaining({
+        to: 'new@example.com',
+        setPasswordUrl: 'http://localhost:5173/set-password?token=tok-123',
+        inviterName: sysadmin.name,
+      }),
+    );
+  });
+
+  it('re-sends the invite for a pending user without creating a new row', async () => {
+    const repo = repoStub();
+    repo.findByEmail.mockResolvedValue({
+      ...USER_ROW,
+      id: 'u-pending',
+      email: 'pending@example.com',
+      emailVerified: false,
+      deactivatedAt: null,
+    });
+    const tokens = tokensStub();
+    tokens.hasUnexpiredToken.mockResolvedValue(true);
+    const email = emailStub();
+    const service = await makeService(repo, auditStub(), tokens, email);
+
+    const out = await service.invite({ email: 'pending@example.com' }, sysadmin);
+
+    expect(out.id).toBe('u-pending');
+    expect(repo.insert).not.toHaveBeenCalled();
+    expect(tokens.issueToken).toHaveBeenCalledWith('invite:u-pending', 48);
+    expect(email.sendInvite).toHaveBeenCalled();
+  });
+
+  it('rejects inviting an email already in use by an active user (EMAIL_IN_USE)', async () => {
+    const repo = repoStub();
+    repo.findByEmail.mockResolvedValue({
+      ...USER_ROW,
+      id: 'u-active',
+      email: 'active@example.com',
+      deactivatedAt: null,
+    });
+    const tokens = tokensStub();
+    tokens.hasUnexpiredToken.mockResolvedValue(false);
+    const service = await makeService(repo, auditStub(), tokens);
+
+    await expect(service.invite({ email: 'active@example.com' }, sysadmin)).rejects.toThrow(
+      ConflictException,
+    );
+  });
+
+  it('rejects inviting an email belonging to a deactivated user (EMAIL_DEACTIVATED)', async () => {
+    const repo = repoStub();
+    repo.findByEmail.mockResolvedValue({
+      ...USER_ROW,
+      id: 'u-deact',
+      email: 'deact@example.com',
+      deactivatedAt: new Date('2026-01-01T00:00:00.000Z'),
+    });
+    const tokens = tokensStub();
+    tokens.hasUnexpiredToken.mockResolvedValue(false);
+    const service = await makeService(repo, auditStub(), tokens);
+
+    await expect(service.invite({ email: 'deact@example.com' }, sysadmin)).rejects.toThrow(
+      ConflictException,
+    );
+  });
+
+  it('rejects a deactivated user even if they still have a live invite token', async () => {
+    const repo = repoStub();
+    repo.findByEmail.mockResolvedValue({
+      ...USER_ROW,
+      id: 'u-deact',
+      email: 'deact@example.com',
+      deactivatedAt: new Date('2026-01-01T00:00:00.000Z'),
+    });
+    const tokens = tokensStub();
+    tokens.hasUnexpiredToken.mockResolvedValue(true);
+    const email = emailStub();
+    const service = await makeService(repo, auditStub(), tokens, email);
+
+    await expect(service.invite({ email: 'deact@example.com' }, sysadmin)).rejects.toThrow(
+      ConflictException,
+    );
+    expect(tokens.issueToken).not.toHaveBeenCalled();
+    expect(email.sendInvite).not.toHaveBeenCalled();
+  });
+
+  it('rejects a non-sysadmin caller', async () => {
+    const repo = repoStub();
+    const service = await makeService(repo);
+    await expect(service.invite({ email: 'x@example.com' }, plainUser)).rejects.toThrow(
+      ForbiddenException,
+    );
+  });
+});

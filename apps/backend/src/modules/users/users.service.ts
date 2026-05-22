@@ -4,6 +4,7 @@ import { ConflictException, ForbiddenException, Inject, Injectable, NotFoundExce
 import { ConfigService } from '@nestjs/config';
 import { ForbiddenError } from '@casl/ability';
 import {
+  type InviteUserInput,
   type ListUsersQuery,
   type ListUsersResponse,
   type Role,
@@ -274,6 +275,89 @@ export class UsersService {
       });
       await this.repo.delete(id, tx);
     });
+  }
+
+  /**
+   * Invite a new user by email. Three branches:
+   * - email belongs to an active user → 409 EMAIL_IN_USE
+   * - email belongs to a deactivated user → 409 EMAIL_DEACTIVATED
+   * - email belongs to a still-pending invitee (has an unexpired invite
+   *   token) → re-issue the token and re-send the email, no new row
+   * Otherwise inserts a fresh `role: 'user'` row, issues an invite token, and
+   * sends the invite email. The set-password URL points at the first
+   * configured WEB_ORIGIN.
+   */
+  async invite(input: InviteUserInput, adminUser: AuthenticatedUser): Promise<User> {
+    this.assertCan(adminUser, 'manage');
+
+    const webOrigin = this.config
+      .get('WEB_ORIGIN', { infer: true })
+      .split(',')[0]
+      ?.trim();
+    if (!webOrigin) {
+      throw new Error('WEB_ORIGIN is not configured.');
+    }
+    const ttl = this.config.get('INVITE_TOKEN_TTL_HOURS', { infer: true });
+
+    const existing = await this.repo.findByEmail(input.email);
+    if (existing) {
+      if (existing.deactivatedAt !== null) {
+        throw new ConflictException({
+          error: {
+            code: 'EMAIL_DEACTIVATED',
+            message: 'A deactivated user already has this email. Reactivate them instead.',
+          },
+        });
+      }
+      const pending = await this.tokens.hasUnexpiredToken(`invite:${existing.id}`);
+      if (pending) {
+        const token = await this.tokens.issueToken(`invite:${existing.id}`, ttl);
+        await this.email.sendInvite({
+          to: existing.email,
+          locale: existing.locale,
+          setPasswordUrl: `${webOrigin}/set-password?token=${token}`,
+          inviterName: adminUser.name,
+        });
+        return this.toApi(existing);
+      }
+      throw new ConflictException({
+        error: { code: 'EMAIL_IN_USE', message: 'A user with this email already exists.' },
+      });
+    }
+
+    const id = randomUUID();
+    const row = await this.db.transaction(async (tx) => {
+      const created = await this.repo.insert(
+        {
+          id,
+          email: input.email,
+          ...(input.name !== undefined && { name: input.name }),
+          role: 'user',
+          emailVerified: false,
+        },
+        tx,
+      );
+      await this.audit.record({
+        tx,
+        entityType: 'user',
+        entityId: id,
+        action: 'create',
+        userId: adminUser.id,
+        before: null,
+        after: this.toApi(created),
+      });
+      return created;
+    });
+
+    const token = await this.tokens.issueToken(`invite:${row.id}`, ttl);
+    await this.email.sendInvite({
+      to: input.email,
+      locale: row.locale,
+      setPasswordUrl: `${webOrigin}/set-password?token=${token}`,
+      inviterName: adminUser.name,
+    });
+
+    return this.toApi(row);
   }
 
   /**
