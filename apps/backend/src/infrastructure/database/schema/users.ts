@@ -100,7 +100,9 @@ export const account = pgTable('account', {
 export const verification = pgTable('verification', {
   id: text('id').primaryKey(),
   identifier: text('identifier').notNull(),
-  value: text('value').notNull(),
+  // Unique: one-time tokens are looked up by `value`; the constraint both
+  // makes that lookup an index seek and guarantees a value maps to one row.
+  value: text('value').notNull().unique(),
   expiresAt: timestamp('expiresAt', { withTimezone: true, mode: 'date' }).notNull(),
   createdAt: timestamp('createdAt', { withTimezone: true, mode: 'date' })
     .notNull()

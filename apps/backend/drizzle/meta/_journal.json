@@ -64,6 +64,13 @@
       "when": 1779182447323,
       "tag": "0008_bizarre_trauma",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1779478207615,
+      "tag": "0009_flaky_blindfold",
+      "breakpoints": true
     }
   ]
 }
