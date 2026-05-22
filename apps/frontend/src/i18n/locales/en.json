@@ -16,7 +16,6 @@
       "passwordLabel": "Password",
       "confirmLabel": "Confirm password",
       "submit": "Set password",
-      "success": "Password set. Signing you in…",
       "invalidToken": "This link is invalid or has expired. Ask an administrator to send a new one.",
       "mismatch": "The passwords do not match."
     }
@@ -133,15 +132,11 @@
         "delete": "Delete",
         "sendPasswordReset": "Send password reset"
       },
-      "confirm": {
-        "delete": "Delete \"{{email}}\"? This cannot be undone."
-      },
       "invite": {
         "title": "Invite a new user",
         "emailLabel": "Email",
         "nameLabel": "Name (optional)",
-        "submit": "Send invite",
-        "success": "Invitation sent."
+        "submit": "Send invite"
       },
       "delete": {
         "title": "Delete user",
@@ -150,8 +145,7 @@
         "confirm": "Delete user"
       },
       "lifecycle": {
-        "sectionTitle": "Account lifecycle",
-        "passwordResetSent": "Password-reset email sent."
+        "sectionTitle": "Account lifecycle"
       },
       "pager": {
         "prev": "Previous",

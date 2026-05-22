@@ -16,7 +16,6 @@
       "passwordLabel": "Lösenord",
       "confirmLabel": "Bekräfta lösenord",
       "submit": "Ange lösenord",
-      "success": "Lösenordet är angett. Loggar in dig…",
       "invalidToken": "Den här länken är ogiltig eller har upphört att gälla. Be en administratör skicka en ny.",
       "mismatch": "Lösenorden matchar inte."
     }
@@ -121,15 +120,11 @@
         "delete": "Ta bort",
         "sendPasswordReset": "Skicka lösenordsåterställning"
       },
-      "confirm": {
-        "delete": "Ta bort \"{{email}}\"? Detta kan inte ångras."
-      },
       "invite": {
         "title": "Bjud in en ny användare",
         "emailLabel": "E-post",
         "nameLabel": "Namn (valfritt)",
-        "submit": "Skicka inbjudan",
-        "success": "Inbjudan skickad."
+        "submit": "Skicka inbjudan"
       },
       "delete": {
         "title": "Ta bort användare",
@@ -138,8 +133,7 @@
         "confirm": "Ta bort användare"
       },
       "lifecycle": {
-        "sectionTitle": "Kontots livscykel",
-        "passwordResetSent": "E-post för lösenordsåterställning skickad."
+        "sectionTitle": "Kontots livscykel"
       },
       "pager": { "prev": "Föregående", "next": "Nästa", "page": "Sida {{page}}" },
       "errors": {

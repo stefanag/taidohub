@@ -16,7 +16,6 @@
       "passwordLabel": "Salasana",
       "confirmLabel": "Vahvista salasana",
       "submit": "Aseta salasana",
-      "success": "Salasana asetettu. Kirjataan sinua sisään…",
       "invalidToken": "Tämä linkki on virheellinen tai vanhentunut. Pyydä ylläpitäjää lähettämään uusi.",
       "mismatch": "Salasanat eivät täsmää."
     }
@@ -121,15 +120,11 @@
         "delete": "Poista",
         "sendPasswordReset": "Lähetä salasanan palautus"
       },
-      "confirm": {
-        "delete": "Poistetaanko \"{{email}}\"? Tätä ei voi kumota."
-      },
       "invite": {
         "title": "Kutsu uusi käyttäjä",
         "emailLabel": "Sähköposti",
         "nameLabel": "Nimi (valinnainen)",
-        "submit": "Lähetä kutsu",
-        "success": "Kutsu lähetetty."
+        "submit": "Lähetä kutsu"
       },
       "delete": {
         "title": "Poista käyttäjä",
@@ -138,8 +133,7 @@
         "confirm": "Poista käyttäjä"
       },
       "lifecycle": {
-        "sectionTitle": "Tilin elinkaari",
-        "passwordResetSent": "Salasanan palautusviesti lähetetty."
+        "sectionTitle": "Tilin elinkaari"
       },
       "pager": { "prev": "Edellinen", "next": "Seuraava", "page": "Sivu {{page}}" },
       "errors": {
