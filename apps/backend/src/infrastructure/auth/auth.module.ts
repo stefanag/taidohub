@@ -6,6 +6,7 @@ import { type Env } from '../../config/env.schema.js';
 
 import { AuthGuard } from './auth.guard.js';
 import { BETTER_AUTH, buildBetterAuth } from './better-auth.js';
+import { VerificationTokenService } from './verification-token.service.js';
 
 const betterAuthProvider: Provider = {
   provide: BETTER_AUTH,
@@ -48,8 +49,9 @@ const betterAuthProvider: Provider = {
   providers: [
     betterAuthProvider,
     AuthGuard,
+    VerificationTokenService,
     { provide: APP_GUARD, useClass: AuthGuard },
   ],
-  exports: [betterAuthProvider, AuthGuard],
+  exports: [betterAuthProvider, AuthGuard, VerificationTokenService],
 })
 export class InfraAuthModule {}
