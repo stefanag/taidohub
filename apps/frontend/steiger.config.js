@@ -77,4 +77,15 @@ export default defineConfig([
       'fsd/no-public-api-sidestep': 'off',
     },
   },
+  {
+    // The invite-user-dialog test mocks the user entity API module by its
+    // deep path because `user.queries.ts` imports the fetcher from there
+    // directly (not via the barrel). Mocking the barrel wouldn't reach that
+    // import, so `vi.mock` MUST target the deep path. Allow the public-API
+    // sidestep for this test file only.
+    files: ['src/features/invite-user-dialog/**/*.test.{ts,tsx}'],
+    rules: {
+      'fsd/no-public-api-sidestep': 'off',
+    },
+  },
 ]);
