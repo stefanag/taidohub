@@ -100,4 +100,13 @@ export default defineConfig([
       'fsd/no-public-api-sidestep': 'off',
     },
   },
+  {
+    // The set-password-form test mocks the user entity API module by its
+    // deep path; mocking the barrel wouldn't reach the captured fetcher
+    // reference. Allow the public-API sidestep for this test file only.
+    files: ['src/features/set-password-form/**/*.test.{ts,tsx}'],
+    rules: {
+      'fsd/no-public-api-sidestep': 'off',
+    },
+  },
 ]);
