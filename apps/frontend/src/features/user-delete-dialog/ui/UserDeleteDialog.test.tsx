@@ -68,4 +68,13 @@ describe('<UserDeleteDialog>', () => {
     expect(onConfirm).toHaveBeenCalledTimes(1);
     await waitFor(() => expect(onOpenChange).toHaveBeenCalledWith(false));
   });
+
+  it('shows error and keeps dialog open when onConfirm rejects', async () => {
+    const onConfirm = vi.fn().mockRejectedValue(new Error('delete failed'));
+    const { user, onOpenChange } = renderDialog({ onConfirm });
+    await user.type(screen.getByLabelText(/type the email/i), TARGET.email);
+    await user.click(screen.getByRole('button', { name: /delete user/i }));
+    await screen.findByText(/delete failed/i);
+    expect(onOpenChange).not.toHaveBeenCalledWith(false);
+  });
 });

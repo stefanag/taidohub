@@ -59,6 +59,7 @@ export function UserForm({
   const [name, setName] = React.useState<string>(user.name ?? '');
   const [role, setRole] = React.useState<Role>(user.role);
   const [submitError, setSubmitError] = React.useState<string | undefined>();
+  const [lifecycleError, setLifecycleError] = React.useState<string | undefined>();
   const [membershipError, setMembershipError] = React.useState<string | undefined>();
 
   /** Map a caught mutation error to a localized string using the backend error code. */
@@ -227,7 +228,16 @@ export function UserForm({
                   type="button"
                   variant="outline"
                   size="sm"
-                  onClick={() => void onReactivate?.()}
+                  onClick={() => {
+                    setLifecycleError(undefined);
+                    void (async () => {
+                      try {
+                        await onReactivate?.();
+                      } catch (err) {
+                        setLifecycleError(mapErrorCode(err));
+                      }
+                    })();
+                  }}
                 >
                   {t('admin.users.actions.reactivate', { defaultValue: 'Reactivate' })}
                 </Button>
@@ -236,7 +246,16 @@ export function UserForm({
                   type="button"
                   variant="outline"
                   size="sm"
-                  onClick={() => void onDeactivate?.()}
+                  onClick={() => {
+                    setLifecycleError(undefined);
+                    void (async () => {
+                      try {
+                        await onDeactivate?.();
+                      } catch (err) {
+                        setLifecycleError(mapErrorCode(err));
+                      }
+                    })();
+                  }}
                 >
                   {t('admin.users.actions.deactivate', { defaultValue: 'Deactivate' })}
                 </Button>
@@ -245,7 +264,16 @@ export function UserForm({
                 type="button"
                 variant="outline"
                 size="sm"
-                onClick={() => void onSendPasswordReset?.()}
+                onClick={() => {
+                  setLifecycleError(undefined);
+                  void (async () => {
+                    try {
+                      await onSendPasswordReset?.();
+                    } catch (err) {
+                      setLifecycleError(mapErrorCode(err));
+                    }
+                  })();
+                }}
               >
                 {t('admin.users.actions.sendPasswordReset', {
                   defaultValue: 'Send password reset',
@@ -255,11 +283,21 @@ export function UserForm({
                 type="button"
                 variant="destructive"
                 size="sm"
-                onClick={() => void onDelete?.()}
+                onClick={() => {
+                  setLifecycleError(undefined);
+                  void (async () => {
+                    try {
+                      await onDelete?.();
+                    } catch (err) {
+                      setLifecycleError(mapErrorCode(err));
+                    }
+                  })();
+                }}
               >
                 {t('admin.users.actions.delete', { defaultValue: 'Delete' })}
               </Button>
             </div>
+            <FormMessage message={lifecycleError} />
           </section>
         )}
       </TabsContent>

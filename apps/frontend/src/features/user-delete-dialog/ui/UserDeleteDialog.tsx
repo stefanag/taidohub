@@ -12,6 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
   FormField,
+  FormMessage,
   Input,
   Label,
 } from '@/shared/ui';
@@ -39,9 +40,13 @@ export function UserDeleteDialog({
   const { t } = useTranslation();
   const [typed, setTyped] = React.useState('');
   const [submitting, setSubmitting] = React.useState(false);
+  const [submitError, setSubmitError] = React.useState<string | undefined>();
 
-  // Reset the typed value whenever the dialog closes or the target user changes.
+  // Reset the typed value and error whenever the dialog closes or the target user changes.
   React.useEffect(() => {
+    if (!open) {
+      setSubmitError(undefined);
+    }
     setTyped('');
   }, [open, user.email]);
 
@@ -50,9 +55,16 @@ export function UserDeleteDialog({
   const handleConfirm = async (): Promise<void> => {
     if (!confirmed) return;
     setSubmitting(true);
+    setSubmitError(undefined);
     try {
       await onConfirm();
       onOpenChange(false);
+    } catch (err) {
+      setSubmitError(
+        err instanceof Error
+          ? err.message
+          : t('common.unknownError', { defaultValue: 'Unknown error' }),
+      );
     } finally {
       setSubmitting(false);
     }
@@ -88,6 +100,8 @@ export function UserDeleteDialog({
             autoComplete="off"
           />
         </FormField>
+
+        <FormMessage message={submitError} />
 
         <DialogFooter>
           <Button

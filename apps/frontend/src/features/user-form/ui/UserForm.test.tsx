@@ -139,4 +139,12 @@ describe('<UserForm>', () => {
     await user.click(screen.getByRole('button', { name: /^delete$/i }));
     expect(onDelete).toHaveBeenCalledTimes(1);
   });
+
+  it('surfaces an error message when a lifecycle callback rejects', async () => {
+    const onDeactivate = vi.fn().mockRejectedValue(new Error('boom'));
+    const { user } = renderForm({ currentUserId: 'some-other-admin', onDeactivate });
+    await user.click(screen.getByRole('button', { name: /^deactivate$/i }));
+    const alert = await screen.findByRole('alert');
+    expect(alert).toHaveTextContent(/boom/i);
+  });
 });
