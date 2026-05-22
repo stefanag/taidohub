@@ -231,6 +231,52 @@ export class UsersService {
   }
 
   /**
+   * Hard-delete a user. FK cascades remove their sessions, accounts, and
+   * memberships. Blocked for self and for the last active sysadmin. A
+   * deactivated sysadmin can be deleted as long as another active one exists.
+   */
+  async delete(id: string, adminUser: AuthenticatedUser): Promise<void> {
+    this.assertCan(adminUser, 'manage');
+
+    if (id === adminUser.id) {
+      throw new ConflictException({
+        error: { code: 'SELF_DELETE', message: 'You cannot delete yourself.' },
+      });
+    }
+
+    const existing = await this.repo.findById(id);
+    if (!existing) {
+      throw new NotFoundException({
+        error: { code: 'NOT_FOUND', message: `User ${id} not found.` },
+      });
+    }
+
+    await this.db.transaction(async (tx) => {
+      if (existing.role === 'sysadmin' && existing.deactivatedAt === null) {
+        const remaining = await this.repo.countActiveSysadmins(tx);
+        if (remaining <= 1) {
+          throw new ConflictException({
+            error: {
+              code: 'LAST_SYSADMIN',
+              message: 'Cannot delete the last active sysadmin.',
+            },
+          });
+        }
+      }
+      await this.audit.record({
+        tx,
+        entityType: 'user',
+        entityId: id,
+        action: 'delete',
+        userId: adminUser.id,
+        before: this.toApi(existing),
+        after: null,
+      });
+      await this.repo.delete(id, tx);
+    });
+  }
+
+  /**
    * Authorize `action` against the `User` subject.
    *
    * When `userId` is supplied the check runs against an *instance* subject so

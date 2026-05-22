@@ -355,3 +355,64 @@ describe('UsersService — deactivate / reactivate', () => {
     await expect(service.reactivate('u-target', sysadmin)).rejects.toThrow(ConflictException);
   });
 });
+
+describe('UsersService — delete', () => {
+  it('hard-deletes a user and emits an audit event', async () => {
+    const repo = repoStub();
+    repo.findById.mockResolvedValue({ ...USER_ROW, id: 'u-target' });
+    repo.delete.mockResolvedValue(undefined);
+    const audit = auditStub();
+    const service = await makeService(repo, audit);
+
+    await service.delete('u-target', sysadmin);
+
+    expect(repo.delete).toHaveBeenCalledWith('u-target', FAKE_TX);
+    expect(audit.record.mock.calls[0]?.[0]).toMatchObject({
+      entityType: 'user',
+      entityId: 'u-target',
+      action: 'delete',
+      userId: sysadmin.id,
+    });
+    expect(audit.record.mock.calls[0]?.[0]?.after).toBeNull();
+  });
+
+  it('rejects deleting yourself (SELF_DELETE)', async () => {
+    const repo = repoStub();
+    const service = await makeService(repo);
+    await expect(service.delete(sysadmin.id, sysadmin)).rejects.toThrow(ConflictException);
+  });
+
+  it('404s when the user does not exist', async () => {
+    const repo = repoStub();
+    repo.findById.mockResolvedValue(null);
+    const service = await makeService(repo);
+    await expect(service.delete('missing', sysadmin)).rejects.toThrow(NotFoundException);
+  });
+
+  it('rejects deleting the last active sysadmin (LAST_SYSADMIN)', async () => {
+    const repo = repoStub();
+    repo.findById.mockResolvedValue({
+      ...USER_ROW,
+      id: 'other-sysadmin',
+      role: 'sysadmin',
+      deactivatedAt: null,
+    });
+    repo.countActiveSysadmins.mockResolvedValue(1);
+    const service = await makeService(repo);
+    await expect(service.delete('other-sysadmin', sysadmin)).rejects.toThrow(ConflictException);
+  });
+
+  it('allows deleting a deactivated sysadmin when another active one remains', async () => {
+    const repo = repoStub();
+    repo.findById.mockResolvedValue({
+      ...USER_ROW,
+      id: 'old-sysadmin',
+      role: 'sysadmin',
+      deactivatedAt: new Date('2026-01-01T00:00:00.000Z'),
+    });
+    repo.delete.mockResolvedValue(undefined);
+    const service = await makeService(repo);
+    await expect(service.delete('old-sysadmin', sysadmin)).resolves.toBeUndefined();
+    expect(repo.delete).toHaveBeenCalledWith('old-sysadmin', FAKE_TX);
+  });
+});
