@@ -19,7 +19,13 @@ async function main(): Promise<void> {
   const env: Env = EnvSchema.parse(process.env);
 
   const db = createDrizzleClient(env.DATABASE_URL);
-  const auth = buildBetterAuth(env);
+  // The seed script never triggers password-reset emails; pass a no-op service.
+  const noopEmail = {
+    sendInvite: async () => undefined,
+    sendPasswordReset: async () => undefined,
+    sendAdminPasswordReset: async () => undefined,
+  };
+  const auth = buildBetterAuth(env, noopEmail);
 
   const deps: SeedDeps = {
     findUserByEmail: async (email) => {

@@ -4,14 +4,15 @@ import { APP_GUARD } from '@nestjs/core';
 
 import { type Env } from '../../config/env.schema.js';
 
+import { EMAIL_SERVICE, type EmailService } from '../email/email.types.js';
 import { AuthGuard } from './auth.guard.js';
 import { BETTER_AUTH, buildBetterAuth } from './better-auth.js';
 import { VerificationTokenService } from './verification-token.service.js';
 
 const betterAuthProvider: Provider = {
   provide: BETTER_AUTH,
-  inject: [ConfigService],
-  useFactory: (config: ConfigService<Env, true>) => {
+  inject: [ConfigService, EMAIL_SERVICE],
+  useFactory: (config: ConfigService<Env, true>, emailService: EmailService) => {
     const backendUrl = config.get('BACKEND_URL', { infer: true });
     const enableSwagger = config.get('ENABLE_SWAGGER', { infer: true });
     const env: Env = {
@@ -29,7 +30,7 @@ const betterAuthProvider: Provider = {
       ...(backendUrl !== undefined ? { BACKEND_URL: backendUrl } : {}),
       ...(enableSwagger !== undefined ? { ENABLE_SWAGGER: enableSwagger } : {}),
     };
-    return buildBetterAuth(env);
+    return buildBetterAuth(env, emailService);
   },
 };
 
