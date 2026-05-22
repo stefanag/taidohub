@@ -631,7 +631,7 @@
             "name": "id",
             "required": true,
             "in": "path",
-            "description": "User UUID.",
+            "description": "User id.",
             "schema": {
               "type": "string"
             }
@@ -696,7 +696,7 @@
             "name": "id",
             "required": true,
             "in": "path",
-            "description": "User UUID.",
+            "description": "User id.",
             "schema": {
               "type": "string"
             }
@@ -791,7 +791,7 @@
             "name": "id",
             "required": true,
             "in": "path",
-            "description": "User UUID.",
+            "description": "User id.",
             "schema": {
               "type": "string"
             }
@@ -861,7 +861,7 @@
             "name": "id",
             "required": true,
             "in": "path",
-            "description": "User UUID.",
+            "description": "User id.",
             "schema": {
               "type": "string"
             }
@@ -938,7 +938,7 @@
             "name": "id",
             "required": true,
             "in": "path",
-            "description": "User UUID.",
+            "description": "User id.",
             "schema": {
               "type": "string"
             }
@@ -1015,7 +1015,7 @@
             "name": "id",
             "required": true,
             "in": "path",
-            "description": "User UUID.",
+            "description": "User id.",
             "schema": {
               "type": "string"
             }
@@ -2151,9 +2151,7 @@
                 "properties": {
                   "id": {
                     "type": "string",
-                    "format": "uuid",
-                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                    "description": "Unique identifier (UUID v4)."
+                    "description": "Unique identifier — an opaque string assigned by the auth provider (not necessarily a UUID)."
                   },
                   "email": {
                     "type": "string",
@@ -2231,7 +2229,7 @@
                 ],
                 "description": "A user account exposed to API clients.",
                 "example": {
-                  "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "id": "kZ8x2mN4pQ7rT1vW9yA3bC6dE5fG0hJ2",
                   "email": "ada@example.com",
                   "name": "Ada Lovelace",
                   "emailVerified": true,
@@ -2297,9 +2295,7 @@
                 "properties": {
                   "id": {
                     "type": "string",
-                    "format": "uuid",
-                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                    "description": "Unique identifier (UUID v4)."
+                    "description": "Unique identifier — an opaque string assigned by the auth provider (not necessarily a UUID)."
                   },
                   "email": {
                     "type": "string",
@@ -2377,7 +2373,7 @@
                 ],
                 "description": "A user account exposed to API clients.",
                 "example": {
-                  "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "id": "kZ8x2mN4pQ7rT1vW9yA3bC6dE5fG0hJ2",
                   "email": "ada@example.com",
                   "name": "Ada Lovelace",
                   "emailVerified": true,
@@ -2477,9 +2473,7 @@
         "properties": {
           "id": {
             "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "Unique identifier (UUID v4).",
+            "description": "Unique identifier — an opaque string assigned by the auth provider (not necessarily a UUID).",
             "x-nestjs_zod-has-null": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
@@ -2496,7 +2490,7 @@
             "x-nestjs_zod-parent-metadata": {
               "description": "A user account exposed to API clients.",
               "example": {
-                "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "id": "kZ8x2mN4pQ7rT1vW9yA3bC6dE5fG0hJ2",
                 "email": "ada@example.com",
                 "name": "Ada Lovelace",
                 "emailVerified": true,
@@ -2529,7 +2523,7 @@
             "x-nestjs_zod-parent-metadata": {
               "description": "A user account exposed to API clients.",
               "example": {
-                "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "id": "kZ8x2mN4pQ7rT1vW9yA3bC6dE5fG0hJ2",
                 "email": "ada@example.com",
                 "name": "Ada Lovelace",
                 "emailVerified": true,
@@ -2568,7 +2562,7 @@
             "x-nestjs_zod-parent-metadata": {
               "description": "A user account exposed to API clients.",
               "example": {
-                "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "id": "kZ8x2mN4pQ7rT1vW9yA3bC6dE5fG0hJ2",
                 "email": "ada@example.com",
                 "name": "Ada Lovelace",
                 "emailVerified": true,
@@ -2599,7 +2593,7 @@
             "x-nestjs_zod-parent-metadata": {
               "description": "A user account exposed to API clients.",
               "example": {
-                "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "id": "kZ8x2mN4pQ7rT1vW9yA3bC6dE5fG0hJ2",
                 "email": "ada@example.com",
                 "name": "Ada Lovelace",
                 "emailVerified": true,
@@ -2639,7 +2633,7 @@
             "x-nestjs_zod-parent-metadata": {
               "description": "A user account exposed to API clients.",
               "example": {
-                "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "id": "kZ8x2mN4pQ7rT1vW9yA3bC6dE5fG0hJ2",
                 "email": "ada@example.com",
                 "name": "Ada Lovelace",
                 "emailVerified": true,
@@ -2672,7 +2666,7 @@
             "x-nestjs_zod-parent-metadata": {
               "description": "A user account exposed to API clients.",
               "example": {
-                "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "id": "kZ8x2mN4pQ7rT1vW9yA3bC6dE5fG0hJ2",
                 "email": "ada@example.com",
                 "name": "Ada Lovelace",
                 "emailVerified": true,
@@ -2713,7 +2707,7 @@
             "x-nestjs_zod-parent-metadata": {
               "description": "A user account exposed to API clients.",
               "example": {
-                "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "id": "kZ8x2mN4pQ7rT1vW9yA3bC6dE5fG0hJ2",
                 "email": "ada@example.com",
                 "name": "Ada Lovelace",
                 "emailVerified": true,
@@ -2746,7 +2740,7 @@
             "x-nestjs_zod-parent-metadata": {
               "description": "A user account exposed to API clients.",
               "example": {
-                "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "id": "kZ8x2mN4pQ7rT1vW9yA3bC6dE5fG0hJ2",
                 "email": "ada@example.com",
                 "name": "Ada Lovelace",
                 "emailVerified": true,
@@ -2779,7 +2773,7 @@
             "x-nestjs_zod-parent-metadata": {
               "description": "A user account exposed to API clients.",
               "example": {
-                "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "id": "kZ8x2mN4pQ7rT1vW9yA3bC6dE5fG0hJ2",
                 "email": "ada@example.com",
                 "name": "Ada Lovelace",
                 "emailVerified": true,
@@ -2819,9 +2813,7 @@
                 "properties": {
                   "id": {
                     "type": "string",
-                    "format": "uuid",
-                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                    "description": "Unique identifier (UUID v4)."
+                    "description": "Unique identifier — an opaque string assigned by the auth provider (not necessarily a UUID)."
                   },
                   "email": {
                     "type": "string",
@@ -2899,7 +2891,7 @@
                 ],
                 "description": "A user account exposed to API clients.",
                 "example": {
-                  "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "id": "kZ8x2mN4pQ7rT1vW9yA3bC6dE5fG0hJ2",
                   "email": "ada@example.com",
                   "name": "Ada Lovelace",
                   "emailVerified": true,
@@ -2932,9 +2924,7 @@
                 "properties": {
                   "id": {
                     "type": "string",
-                    "format": "uuid",
-                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                    "description": "Unique identifier (UUID v4)."
+                    "description": "Unique identifier — an opaque string assigned by the auth provider (not necessarily a UUID)."
                   },
                   "email": {
                     "type": "string",
@@ -3012,7 +3002,7 @@
                 ],
                 "description": "A user account exposed to API clients.",
                 "example": {
-                  "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "id": "kZ8x2mN4pQ7rT1vW9yA3bC6dE5fG0hJ2",
                   "email": "ada@example.com",
                   "name": "Ada Lovelace",
                   "emailVerified": true,
@@ -3045,9 +3035,7 @@
                 "properties": {
                   "id": {
                     "type": "string",
-                    "format": "uuid",
-                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                    "description": "Unique identifier (UUID v4)."
+                    "description": "Unique identifier — an opaque string assigned by the auth provider (not necessarily a UUID)."
                   },
                   "email": {
                     "type": "string",
@@ -3125,7 +3113,7 @@
                 ],
                 "description": "A user account exposed to API clients.",
                 "example": {
-                  "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "id": "kZ8x2mN4pQ7rT1vW9yA3bC6dE5fG0hJ2",
                   "email": "ada@example.com",
                   "name": "Ada Lovelace",
                   "emailVerified": true,
@@ -3158,9 +3146,7 @@
                 "properties": {
                   "id": {
                     "type": "string",
-                    "format": "uuid",
-                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                    "description": "Unique identifier (UUID v4)."
+                    "description": "Unique identifier — an opaque string assigned by the auth provider (not necessarily a UUID)."
                   },
                   "email": {
                     "type": "string",
@@ -3238,7 +3224,7 @@
                 ],
                 "description": "A user account exposed to API clients.",
                 "example": {
-                  "id": "4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "id": "kZ8x2mN4pQ7rT1vW9yA3bC6dE5fG0hJ2",
                   "email": "ada@example.com",
                   "name": "Ada Lovelace",
                   "emailVerified": true,

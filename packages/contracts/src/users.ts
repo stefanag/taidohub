@@ -16,7 +16,7 @@ export type Role = z.infer<typeof RoleSchema>;
 
 export const UserSchema = z
   .object({
-    id: z.string().uuid().describe('Unique identifier (UUID v4).'),
+    id: z.string().describe('Unique identifier — an opaque string assigned by the auth provider (not necessarily a UUID).'),
     email: z.string().email().describe('The user’s primary email address.'),
     name: z.string().nullable().describe('Display name; null until the user sets one.'),
     emailVerified: z.boolean().describe('Whether the email address has been verified.'),
@@ -34,7 +34,7 @@ export const UserSchema = z
     id: 'User',
     description: 'A user account exposed to API clients.',
     example: {
-      id: '4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5',
+      id: 'kZ8x2mN4pQ7rT1vW9yA3bC6dE5fG0hJ2',
       email: 'ada@example.com',
       name: 'Ada Lovelace',
       emailVerified: true,

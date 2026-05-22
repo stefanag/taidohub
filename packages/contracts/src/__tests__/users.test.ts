@@ -40,6 +40,12 @@ describe('UserSchema (role + deactivatedAt)', () => {
     expect(UserSchema.safeParse(VALID_USER).success).toBe(true);
   });
 
+  it('accepts a non-UUID id (better-auth generates opaque string ids)', () => {
+    expect(
+      UserSchema.safeParse({ ...VALID_USER, id: 'kZ8x2mN4pQ7rT1vW9yA3bC6dE5fG0hJ2' }).success,
+    ).toBe(true);
+  });
+
   it('accepts deactivatedAt as ISO datetime', () => {
     const result = UserSchema.safeParse({ ...VALID_USER, deactivatedAt: '2026-05-18T09:00:00.000Z' });
     expect(result.success).toBe(true);

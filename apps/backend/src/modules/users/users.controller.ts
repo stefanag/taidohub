@@ -5,7 +5,6 @@ import {
   Get,
   HttpCode,
   Param,
-  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -87,7 +86,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  @ApiParam({ name: 'id', description: 'User UUID.' })
+  @ApiParam({ name: 'id', description: 'User id.' })
   @ApiEndpoint({
     summary: 'Get a single user by id.',
     operationId: 'UsersController_findOne',
@@ -96,7 +95,7 @@ export class UsersController {
     errors: ['401', '403', '404'],
   })
   findOne(
-    @Param('id', new ParseUUIDPipe()) id: string,
+    @Param('id') id: string,
     @CurrentUser() user: AuthenticatedUser,
   ): Promise<User> {
     return this.users.findOne(id, user);
@@ -104,7 +103,7 @@ export class UsersController {
 
   @Patch(':id')
   @CheckAbility('manage', 'User')
-  @ApiParam({ name: 'id', description: 'User UUID.' })
+  @ApiParam({ name: 'id', description: 'User id.' })
   @ApiBody({ type: UpdateUserDto })
   @ApiOkResponse({ type: UserDto })
   @ApiEndpoint({
@@ -115,7 +114,7 @@ export class UsersController {
     errors: ['400', '401', '403', '404', '409'],
   })
   update(
-    @Param('id', new ParseUUIDPipe()) id: string,
+    @Param('id') id: string,
     @Body() body: UpdateUserDto,
     @CurrentUser() user: AuthenticatedUser,
   ): Promise<User> {
@@ -124,7 +123,7 @@ export class UsersController {
 
   @Patch(':id/deactivate')
   @CheckAbility('manage', 'User')
-  @ApiParam({ name: 'id', description: 'User UUID.' })
+  @ApiParam({ name: 'id', description: 'User id.' })
   @ApiEndpoint({
     summary: 'Deactivate a user (sysadmin only).',
     operationId: 'UsersController_deactivate',
@@ -133,7 +132,7 @@ export class UsersController {
     errors: ['401', '403', '404', '409'],
   })
   deactivate(
-    @Param('id', new ParseUUIDPipe()) id: string,
+    @Param('id') id: string,
     @CurrentUser() user: AuthenticatedUser,
   ): Promise<User> {
     return this.users.deactivate(id, user);
@@ -141,7 +140,7 @@ export class UsersController {
 
   @Patch(':id/reactivate')
   @CheckAbility('manage', 'User')
-  @ApiParam({ name: 'id', description: 'User UUID.' })
+  @ApiParam({ name: 'id', description: 'User id.' })
   @ApiEndpoint({
     summary: 'Reactivate a deactivated user (sysadmin only).',
     operationId: 'UsersController_reactivate',
@@ -150,7 +149,7 @@ export class UsersController {
     errors: ['401', '403', '404', '409'],
   })
   reactivate(
-    @Param('id', new ParseUUIDPipe()) id: string,
+    @Param('id') id: string,
     @CurrentUser() user: AuthenticatedUser,
   ): Promise<User> {
     return this.users.reactivate(id, user);
@@ -159,7 +158,7 @@ export class UsersController {
   @Delete(':id')
   @CheckAbility('manage', 'User')
   @HttpCode(204)
-  @ApiParam({ name: 'id', description: 'User UUID.' })
+  @ApiParam({ name: 'id', description: 'User id.' })
   @ApiNoContentResponse({ description: 'User deleted.' })
   @ApiEndpoint({
     summary: 'Hard-delete a user (sysadmin only).',
@@ -168,7 +167,7 @@ export class UsersController {
     errors: ['401', '403', '404', '409'],
   })
   delete(
-    @Param('id', new ParseUUIDPipe()) id: string,
+    @Param('id') id: string,
     @CurrentUser() user: AuthenticatedUser,
   ): Promise<void> {
     return this.users.delete(id, user);
@@ -177,7 +176,7 @@ export class UsersController {
   @Post(':id/send-password-reset')
   @CheckAbility('manage', 'User')
   @HttpCode(204)
-  @ApiParam({ name: 'id', description: 'User UUID.' })
+  @ApiParam({ name: 'id', description: 'User id.' })
   @ApiNoContentResponse({ description: 'Password-reset email sent.' })
   @ApiEndpoint({
     summary: 'Trigger a password-reset email for a user (sysadmin only).',
@@ -186,7 +185,7 @@ export class UsersController {
     errors: ['401', '403', '404'],
   })
   sendPasswordReset(
-    @Param('id', new ParseUUIDPipe()) id: string,
+    @Param('id') id: string,
     @CurrentUser() user: AuthenticatedUser,
   ): Promise<void> {
     return this.users.sendPasswordReset(id, user);
