@@ -1,5 +1,23 @@
 openapi: 3.0.0
 paths:
+  /api/auth/set-initial-password:
+    post:
+      description: Consumes the token, sets the password, marks the email verified,
+        and signs the user in by appending the better-auth session cookie.
+      operationId: AuthController_setInitialPassword
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SetInitialPasswordDto"
+      responses:
+        "200":
+          description: Password set; session cookie issued.
+      summary: Set a password from a one-time invite or reset token.
+      tags: &a1
+        - auth
   /api/auth/sign-in/email:
     post:
       description: Issues a `better-auth.session_token` HTTP-only cookie on success.
@@ -20,8 +38,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/SessionDto"
       summary: Sign in with email + password.
-      tags: &a1
-        - auth
+      tags: *a1
   /api/auth/sign-up/email:
     post:
       operationId: AuthController_signUpEmail
@@ -291,6 +308,50 @@ paths:
       security: *a3
       summary: List users — paginated and filterable (sysadmin only).
       tags: *a4
+  /api/users/invite:
+    post:
+      operationId: UsersController_invite
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InviteUserDto"
+      responses:
+        "201":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDto"
+        "400":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
+        "401":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
+        "403":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
+        "409":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
+      security: *a3
+      summary: Invite a new user by email (sysadmin only).
+      tags: *a4
   /api/users/{id}:
     get:
       operationId: UsersController_findOne
@@ -383,6 +444,167 @@ paths:
                 $ref: "#/components/schemas/ErrorEnvelopeDto"
       security: *a3
       summary: Update a user's name or role (sysadmin only).
+      tags: *a4
+    delete:
+      operationId: UsersController_delete
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: User UUID.
+          schema:
+            type: string
+      responses:
+        "204":
+          description: User deleted.
+        "401":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
+        "403":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
+        "409":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
+      security: *a3
+      summary: Hard-delete a user (sysadmin only).
+      tags: *a4
+  /api/users/{id}/deactivate:
+    patch:
+      operationId: UsersController_deactivate
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: User UUID.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDto"
+        "401":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
+        "403":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
+        "409":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
+      security: *a3
+      summary: Deactivate a user (sysadmin only).
+      tags: *a4
+  /api/users/{id}/reactivate:
+    patch:
+      operationId: UsersController_reactivate
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: User UUID.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDto"
+        "401":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
+        "403":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
+        "409":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
+      security: *a3
+      summary: Reactivate a deactivated user (sysadmin only).
+      tags: *a4
+  /api/users/{id}/send-password-reset:
+    post:
+      operationId: UsersController_sendPasswordReset
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: User UUID.
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Password-reset email sent.
+        "401":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
+        "403":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
+      security: *a3
+      summary: Trigger a password-reset email for a user (sysadmin only).
       tags: *a4
   /api/admin/organisations:
     get:
@@ -931,6 +1153,19 @@ components:
       bearerFormat: session-token
       type: http
   schemas:
+    SetInitialPasswordDto:
+      type: object
+      properties:
+        token:
+          type: string
+          minLength: 1
+        password:
+          type: string
+          minLength: 8
+          maxLength: 200
+      required:
+        - token
+        - password
     SignInWithEmailDto:
       type: object
       properties:
@@ -1386,6 +1621,19 @@ components:
                 message: The requested resource could not be found.
       required:
         - error
+    InviteUserDto:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          pattern: ^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+      required:
+        - email
     UpdateUserDto:
       type: object
       properties:
@@ -2279,6 +2527,10 @@ components:
       $ref: "#/components/schemas/ListUsersResponse"
     UpdateUserInput:
       $ref: "#/components/schemas/UpdateUserInput"
+    InviteUserInput:
+      $ref: "#/components/schemas/InviteUserInput"
+    SetInitialPasswordInput:
+      $ref: "#/components/schemas/SetInitialPasswordInput"
     Organisation:
       $ref: "#/components/schemas/Organisation"
     OrganisationType:
