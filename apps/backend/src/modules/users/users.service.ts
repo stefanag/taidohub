@@ -361,6 +361,52 @@ export class UsersService {
   }
 
   /**
+   * Trigger an admin-initiated password reset. Issues an `admin-reset:<id>`
+   * token, emails the user a set-password link, and audits the action with
+   * the triggering admin recorded in the `after` payload.
+   */
+  async sendPasswordReset(userId: string, adminUser: AuthenticatedUser): Promise<void> {
+    this.assertCan(adminUser, 'manage');
+
+    const target = await this.repo.findById(userId);
+    if (!target) {
+      throw new NotFoundException({
+        error: { code: 'NOT_FOUND', message: `User ${userId} not found.` },
+      });
+    }
+
+    const webOrigin = this.config
+      .get('WEB_ORIGIN', { infer: true })
+      .split(',')[0]
+      ?.trim();
+    if (!webOrigin) {
+      throw new Error('WEB_ORIGIN is not configured.');
+    }
+    const ttl = this.config.get('RESET_TOKEN_TTL_HOURS', { infer: true });
+
+    const token = await this.tokens.issueToken(`admin-reset:${userId}`, ttl);
+
+    await this.db.transaction(async (tx) => {
+      await this.audit.record({
+        tx,
+        entityType: 'user',
+        entityId: userId,
+        action: 'password_reset_triggered',
+        userId: adminUser.id,
+        before: null,
+        after: { triggeredBy: adminUser.id },
+      });
+    });
+
+    await this.email.sendAdminPasswordReset({
+      to: target.email,
+      locale: target.locale,
+      resetUrl: `${webOrigin}/set-password?token=${token}`,
+      adminName: adminUser.name,
+    });
+  }
+
+  /**
    * Authorize `action` against the `User` subject.
    *
    * When `userId` is supplied the check runs against an *instance* subject so

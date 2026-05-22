@@ -536,3 +536,56 @@ describe('UsersService — invite', () => {
     );
   });
 });
+
+describe('UsersService — sendPasswordReset', () => {
+  it('issues an admin-reset token, sends an email, and emits an audit event', async () => {
+    const repo = repoStub();
+    repo.findById.mockResolvedValue({
+      ...USER_ROW,
+      id: 'u-target',
+      email: 'target@example.com',
+      locale: 'sv',
+    });
+    const audit = auditStub();
+    const tokens = tokensStub();
+    const email = emailStub();
+    const service = await makeService(repo, audit, tokens, email);
+
+    await service.sendPasswordReset('u-target', sysadmin);
+
+    expect(tokens.issueToken).toHaveBeenCalledWith('admin-reset:u-target', 1);
+    expect(email.sendAdminPasswordReset).toHaveBeenCalledWith(
+      expect.objectContaining({
+        to: 'target@example.com',
+        locale: 'sv',
+        resetUrl: 'http://localhost:5173/set-password?token=tok-123',
+        adminName: sysadmin.name,
+      }),
+    );
+    expect(audit.record.mock.calls[0]?.[0]).toMatchObject({
+      entityType: 'user',
+      entityId: 'u-target',
+      action: 'password_reset_triggered',
+      userId: sysadmin.id,
+      before: null,
+      after: { triggeredBy: sysadmin.id },
+    });
+  });
+
+  it('404s when the user does not exist', async () => {
+    const repo = repoStub();
+    repo.findById.mockResolvedValue(null);
+    const service = await makeService(repo);
+    await expect(service.sendPasswordReset('missing', sysadmin)).rejects.toThrow(
+      NotFoundException,
+    );
+  });
+
+  it('rejects a non-sysadmin caller', async () => {
+    const repo = repoStub();
+    const service = await makeService(repo);
+    await expect(service.sendPasswordReset('u-target', plainUser)).rejects.toThrow(
+      ForbiddenException,
+    );
+  });
+});
