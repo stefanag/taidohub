@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as PublicRouteImport } from './routes/_public'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as PublicIndexRouteImport } from './routes/_public.index'
+import { Route as PublicSetPasswordRouteImport } from './routes/_public.set-password'
 import { Route as PublicLoginRouteImport } from './routes/_public.login'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
 import { Route as AppAdminUsersRouteImport } from './routes/_app.admin.users'
@@ -29,6 +30,11 @@ const AppRoute = AppRouteImport.update({
 const PublicIndexRoute = PublicIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicSetPasswordRoute = PublicSetPasswordRouteImport.update({
+  id: '/set-password',
+  path: '/set-password',
   getParentRoute: () => PublicRoute,
 } as any)
 const PublicLoginRoute = PublicLoginRouteImport.update({
@@ -61,6 +67,7 @@ export interface FileRoutesByFullPath {
   '/': typeof PublicIndexRoute
   '/dashboard': typeof AppDashboardRoute
   '/login': typeof PublicLoginRoute
+  '/set-password': typeof PublicSetPasswordRoute
   '/admin/audit-log': typeof AppAdminAuditLogRoute
   '/admin/organisations': typeof AppAdminOrganisationsRoute
   '/admin/users': typeof AppAdminUsersRoute
@@ -69,6 +76,7 @@ export interface FileRoutesByTo {
   '/': typeof PublicIndexRoute
   '/dashboard': typeof AppDashboardRoute
   '/login': typeof PublicLoginRoute
+  '/set-password': typeof PublicSetPasswordRoute
   '/admin/audit-log': typeof AppAdminAuditLogRoute
   '/admin/organisations': typeof AppAdminOrganisationsRoute
   '/admin/users': typeof AppAdminUsersRoute
@@ -79,6 +87,7 @@ export interface FileRoutesById {
   '/_public': typeof PublicRouteWithChildren
   '/_app/dashboard': typeof AppDashboardRoute
   '/_public/login': typeof PublicLoginRoute
+  '/_public/set-password': typeof PublicSetPasswordRoute
   '/_public/': typeof PublicIndexRoute
   '/_app/admin/audit-log': typeof AppAdminAuditLogRoute
   '/_app/admin/organisations': typeof AppAdminOrganisationsRoute
@@ -90,6 +99,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/login'
+    | '/set-password'
     | '/admin/audit-log'
     | '/admin/organisations'
     | '/admin/users'
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/login'
+    | '/set-password'
     | '/admin/audit-log'
     | '/admin/organisations'
     | '/admin/users'
@@ -107,6 +118,7 @@ export interface FileRouteTypes {
     | '/_public'
     | '/_app/dashboard'
     | '/_public/login'
+    | '/_public/set-password'
     | '/_public/'
     | '/_app/admin/audit-log'
     | '/_app/admin/organisations'
@@ -139,6 +151,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof PublicIndexRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/set-password': {
+      id: '/_public/set-password'
+      path: '/set-password'
+      fullPath: '/set-password'
+      preLoaderRoute: typeof PublicSetPasswordRouteImport
       parentRoute: typeof PublicRoute
     }
     '/_public/login': {
@@ -197,11 +216,13 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 interface PublicRouteChildren {
   PublicLoginRoute: typeof PublicLoginRoute
+  PublicSetPasswordRoute: typeof PublicSetPasswordRoute
   PublicIndexRoute: typeof PublicIndexRoute
 }
 
 const PublicRouteChildren: PublicRouteChildren = {
   PublicLoginRoute: PublicLoginRoute,
+  PublicSetPasswordRoute: PublicSetPasswordRoute,
   PublicIndexRoute: PublicIndexRoute,
 }
 

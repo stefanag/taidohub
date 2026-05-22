@@ -8,11 +8,12 @@ import { rootRoute } from './__root.js';
 /**
  * Public-facing layout. Used for anonymous pages: `/`, `/login`, and any
  * future marketing route. Renders the global `Header` except on auth pages
- * (`/login`, `/signup`) — those carry their own hero chrome.
+ * (`/login`, `/signup`, `/set-password`) — those carry their own hero chrome.
  */
 function PublicLayout(): React.ReactElement {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const isAuthPage = pathname === '/login' || pathname === '/signup';
+  const isAuthPage =
+    pathname === '/login' || pathname === '/signup' || pathname === '/set-password';
   return (
     <>
       {isAuthPage ? null : <Header />}
