@@ -5,9 +5,17 @@ import {
   type UseMutationOptions,
 } from '@tanstack/react-query';
 
-import { listUsers, updateUser } from '../api/user.api.js';
+import {
+  deactivateUser,
+  deleteUser,
+  inviteUser,
+  listUsers,
+  reactivateUser,
+  sendPasswordReset,
+  updateUser,
+} from '../api/user.api.js';
 
-import type { ListUsersQuery, UpdateUserInput, User } from '@repo/contracts/users';
+import type { InviteUserInput, ListUsersQuery, UpdateUserInput, User } from '@repo/contracts/users';
 
 
 export const userKeys = {
@@ -40,5 +48,70 @@ export function useUpdateUser(
       void queryClient.invalidateQueries({ queryKey: userKeys.lists() });
       options?.onSuccess?.(...args);
     },
+  });
+}
+
+export function useInviteUser(
+  options?: Omit<UseMutationOptions<User, Error, InviteUserInput>, 'mutationFn'>,
+) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: inviteUser,
+    ...options,
+    onSuccess: (...args) => {
+      void queryClient.invalidateQueries({ queryKey: userKeys.lists() });
+      options?.onSuccess?.(...args);
+    },
+  });
+}
+
+export function useDeactivateUser(
+  options?: Omit<UseMutationOptions<User, Error, string>, 'mutationFn'>,
+) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deactivateUser,
+    ...options,
+    onSuccess: (...args) => {
+      void queryClient.invalidateQueries({ queryKey: userKeys.lists() });
+      options?.onSuccess?.(...args);
+    },
+  });
+}
+
+export function useReactivateUser(
+  options?: Omit<UseMutationOptions<User, Error, string>, 'mutationFn'>,
+) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: reactivateUser,
+    ...options,
+    onSuccess: (...args) => {
+      void queryClient.invalidateQueries({ queryKey: userKeys.lists() });
+      options?.onSuccess?.(...args);
+    },
+  });
+}
+
+export function useDeleteUser(
+  options?: Omit<UseMutationOptions<void, Error, string>, 'mutationFn'>,
+) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteUser,
+    ...options,
+    onSuccess: (...args) => {
+      void queryClient.invalidateQueries({ queryKey: userKeys.lists() });
+      options?.onSuccess?.(...args);
+    },
+  });
+}
+
+export function useSendPasswordReset(
+  options?: Omit<UseMutationOptions<void, Error, string>, 'mutationFn'>,
+) {
+  return useMutation({
+    mutationFn: sendPasswordReset,
+    ...options,
   });
 }
