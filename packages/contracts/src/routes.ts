@@ -30,6 +30,8 @@ export const UsersRoutes = {
   deactivate: (id: string) => `/api/users/${id}/deactivate` as const,
   reactivate: (id: string) => `/api/users/${id}/reactivate` as const,
   sendPasswordReset: (id: string) => `/api/users/${id}/send-password-reset` as const,
+  meProfile: '/api/users/me/profile',
+  profileById: (id: string) => `/api/users/${id}/profile` as const,
 } as const;
 
 export const HealthRoute = '/api/health' as const;

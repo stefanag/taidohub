@@ -12,6 +12,7 @@ import { AuditLogOpenApiRegistry } from './audit-log.js';
 import { AuthOpenApiRegistry } from './auth.js';
 import { ErrorEnvelopeOpenApiRegistry } from './errors.js';
 import { OrganisationsOpenApiRegistry } from './organisations.js';
+import { ProfileOpenApiRegistry } from './profile.js';
 import { UsersOpenApiRegistry } from './users.js';
 
 /**
@@ -38,6 +39,7 @@ export function registerContractSchemas(
     UsersOpenApiRegistry,
     OrganisationsOpenApiRegistry,
     AuditLogOpenApiRegistry,
+    ProfileOpenApiRegistry,
   ],
 ): OpenAPIObject {
   document.components ??= {};
@@ -68,4 +70,5 @@ export const ContractRegistries = {
   users: UsersOpenApiRegistry,
   organisations: OrganisationsOpenApiRegistry,
   auditLog: AuditLogOpenApiRegistry,
+  profile: ProfileOpenApiRegistry,
 } as const;
