@@ -123,7 +123,7 @@ export function AppSidebar(): React.ReactElement {
             className="truncate text-xs text-on-surface-variant"
             title={user.email}
           >
-            {user.email}
+            {user.name?.trim() ? user.name : user.email}
           </span>
         ) : null}
         <LocaleSwitcher />

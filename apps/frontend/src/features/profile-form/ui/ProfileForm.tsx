@@ -18,6 +18,12 @@ import {
 export interface ProfileFormProps {
   /** The profile to seed the form from (the empty shape when not yet filled). */
   profile: UserProfile;
+  /**
+   * Optional callback fired after a successful save. The page uses this to
+   * refresh the better-auth session so the sidebar picks up the synced
+   * `user.name` without a reload.
+   */
+  onSaved?: () => void;
 }
 
 /** A sentinel `Select` value for the "no country" option (Select needs a non-empty string). */
@@ -27,7 +33,7 @@ const NONE = '__none__';
  * Full-page form for editing the signed-in user's own profile. Empty-string
  * text/date inputs are submitted as `null` so a user can clear a field.
  */
-export function ProfileForm({ profile }: ProfileFormProps): React.ReactElement {
+export function ProfileForm({ profile, onSaved }: ProfileFormProps): React.ReactElement {
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
 
@@ -69,6 +75,7 @@ export function ProfileForm({ profile }: ProfileFormProps): React.ReactElement {
     onSuccess: () => {
       setSaved(true);
       setSubmitError(undefined);
+      onSaved?.();
     },
     onError: (err) => {
       setSaved(false);

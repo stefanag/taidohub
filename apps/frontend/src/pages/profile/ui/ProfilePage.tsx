@@ -3,6 +3,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { myProfileQueryOptions } from '@/entities/profile';
+import { authClient } from '@/features/auth-by-email';
 import { ProfileForm } from '@/features/profile-form';
 import {
   Card,
@@ -37,7 +38,14 @@ export function ProfilePage(): React.ReactElement {
                 : t('common.unknownError')}
             </p>
           ) : (
-            <ProfileForm profile={profileQuery.data} />
+            <ProfileForm
+              profile={profileQuery.data}
+              onSaved={() => {
+                // Refetch the better-auth session so the sidebar picks up the
+                // synced `user.name` without a reload.
+                void authClient.getSession();
+              }}
+            />
           )}
         </CardContent>
       </Card>
