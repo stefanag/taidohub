@@ -1144,6 +1144,175 @@
         ]
       }
     },
+    "/api/users/me/profile": {
+      "get": {
+        "operationId": "ProfileController_getOwn",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfileDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Get the current user's own profile.",
+        "tags": [
+          "profile"
+        ]
+      },
+      "patch": {
+        "operationId": "ProfileController_updateOwn",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserProfileDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfileDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Update the current user's own profile.",
+        "tags": [
+          "profile"
+        ]
+      }
+    },
+    "/api/users/{id}/profile": {
+      "get": {
+        "operationId": "ProfileController_getByUserId",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "User id.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfileDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Get any user's profile (sysadmin only).",
+        "tags": [
+          "profile"
+        ]
+      }
+    },
     "/api/admin/organisations": {
       "get": {
         "operationId": "OrganisationsController_list",
@@ -3727,6 +3896,530 @@
           }
         }
       },
+      "UserProfileDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A user's self-service profile — personal and taido-training details.",
+              "example": {
+                "userId": "u-1",
+                "firstName": "Ada",
+                "lastName": "Lovelace",
+                "dateOfBirth": "1990-12-10",
+                "taidoStartDate": "2015-09-01",
+                "addressStreet": "12 Analytical Way",
+                "addressPostalCode": "11122",
+                "addressCity": "Stockholm",
+                "addressCountry": "SWE",
+                "citizenships": [
+                  "SWE",
+                  "GBR"
+                ]
+              }
+            }
+          },
+          "firstName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A user's self-service profile — personal and taido-training details.",
+              "example": {
+                "userId": "u-1",
+                "firstName": "Ada",
+                "lastName": "Lovelace",
+                "dateOfBirth": "1990-12-10",
+                "taidoStartDate": "2015-09-01",
+                "addressStreet": "12 Analytical Way",
+                "addressPostalCode": "11122",
+                "addressCity": "Stockholm",
+                "addressCountry": "SWE",
+                "citizenships": [
+                  "SWE",
+                  "GBR"
+                ]
+              }
+            }
+          },
+          "lastName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A user's self-service profile — personal and taido-training details.",
+              "example": {
+                "userId": "u-1",
+                "firstName": "Ada",
+                "lastName": "Lovelace",
+                "dateOfBirth": "1990-12-10",
+                "taidoStartDate": "2015-09-01",
+                "addressStreet": "12 Analytical Way",
+                "addressPostalCode": "11122",
+                "addressCity": "Stockholm",
+                "addressCountry": "SWE",
+                "citizenships": [
+                  "SWE",
+                  "GBR"
+                ]
+              }
+            }
+          },
+          "dateOfBirth": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A user's self-service profile — personal and taido-training details.",
+              "example": {
+                "userId": "u-1",
+                "firstName": "Ada",
+                "lastName": "Lovelace",
+                "dateOfBirth": "1990-12-10",
+                "taidoStartDate": "2015-09-01",
+                "addressStreet": "12 Analytical Way",
+                "addressPostalCode": "11122",
+                "addressCity": "Stockholm",
+                "addressCountry": "SWE",
+                "citizenships": [
+                  "SWE",
+                  "GBR"
+                ]
+              }
+            }
+          },
+          "taidoStartDate": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A user's self-service profile — personal and taido-training details.",
+              "example": {
+                "userId": "u-1",
+                "firstName": "Ada",
+                "lastName": "Lovelace",
+                "dateOfBirth": "1990-12-10",
+                "taidoStartDate": "2015-09-01",
+                "addressStreet": "12 Analytical Way",
+                "addressPostalCode": "11122",
+                "addressCity": "Stockholm",
+                "addressCountry": "SWE",
+                "citizenships": [
+                  "SWE",
+                  "GBR"
+                ]
+              }
+            }
+          },
+          "addressStreet": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A user's self-service profile — personal and taido-training details.",
+              "example": {
+                "userId": "u-1",
+                "firstName": "Ada",
+                "lastName": "Lovelace",
+                "dateOfBirth": "1990-12-10",
+                "taidoStartDate": "2015-09-01",
+                "addressStreet": "12 Analytical Way",
+                "addressPostalCode": "11122",
+                "addressCity": "Stockholm",
+                "addressCountry": "SWE",
+                "citizenships": [
+                  "SWE",
+                  "GBR"
+                ]
+              }
+            }
+          },
+          "addressPostalCode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A user's self-service profile — personal and taido-training details.",
+              "example": {
+                "userId": "u-1",
+                "firstName": "Ada",
+                "lastName": "Lovelace",
+                "dateOfBirth": "1990-12-10",
+                "taidoStartDate": "2015-09-01",
+                "addressStreet": "12 Analytical Way",
+                "addressPostalCode": "11122",
+                "addressCity": "Stockholm",
+                "addressCountry": "SWE",
+                "citizenships": [
+                  "SWE",
+                  "GBR"
+                ]
+              }
+            }
+          },
+          "addressCity": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A user's self-service profile — personal and taido-training details.",
+              "example": {
+                "userId": "u-1",
+                "firstName": "Ada",
+                "lastName": "Lovelace",
+                "dateOfBirth": "1990-12-10",
+                "taidoStartDate": "2015-09-01",
+                "addressStreet": "12 Analytical Way",
+                "addressPostalCode": "11122",
+                "addressCity": "Stockholm",
+                "addressCountry": "SWE",
+                "citizenships": [
+                  "SWE",
+                  "GBR"
+                ]
+              }
+            }
+          },
+          "addressCountry": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A user's self-service profile — personal and taido-training details.",
+              "example": {
+                "userId": "u-1",
+                "firstName": "Ada",
+                "lastName": "Lovelace",
+                "dateOfBirth": "1990-12-10",
+                "taidoStartDate": "2015-09-01",
+                "addressStreet": "12 Analytical Way",
+                "addressPostalCode": "11122",
+                "addressCity": "Stockholm",
+                "addressCountry": "SWE",
+                "citizenships": [
+                  "SWE",
+                  "GBR"
+                ]
+              }
+            }
+          },
+          "citizenships": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A user's self-service profile — personal and taido-training details.",
+              "example": {
+                "userId": "u-1",
+                "firstName": "Ada",
+                "lastName": "Lovelace",
+                "dateOfBirth": "1990-12-10",
+                "taidoStartDate": "2015-09-01",
+                "addressStreet": "12 Analytical Way",
+                "addressPostalCode": "11122",
+                "addressCity": "Stockholm",
+                "addressCountry": "SWE",
+                "citizenships": [
+                  "SWE",
+                  "GBR"
+                ]
+              }
+            }
+          }
+        },
+        "required": [
+          "userId",
+          "firstName",
+          "lastName",
+          "dateOfBirth",
+          "taidoStartDate",
+          "addressStreet",
+          "addressPostalCode",
+          "addressCity",
+          "addressCountry",
+          "citizenships"
+        ]
+      },
+      "UpdateUserProfileDto": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A partial profile patch — omit a field to leave it unchanged.",
+              "example": {
+                "firstName": "Ada",
+                "lastName": "Lovelace",
+                "citizenships": [
+                  "SWE",
+                  "GBR"
+                ]
+              }
+            }
+          },
+          "lastName": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A partial profile patch — omit a field to leave it unchanged.",
+              "example": {
+                "firstName": "Ada",
+                "lastName": "Lovelace",
+                "citizenships": [
+                  "SWE",
+                  "GBR"
+                ]
+              }
+            }
+          },
+          "dateOfBirth": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A partial profile patch — omit a field to leave it unchanged.",
+              "example": {
+                "firstName": "Ada",
+                "lastName": "Lovelace",
+                "citizenships": [
+                  "SWE",
+                  "GBR"
+                ]
+              }
+            }
+          },
+          "taidoStartDate": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A partial profile patch — omit a field to leave it unchanged.",
+              "example": {
+                "firstName": "Ada",
+                "lastName": "Lovelace",
+                "citizenships": [
+                  "SWE",
+                  "GBR"
+                ]
+              }
+            }
+          },
+          "addressStreet": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 300
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A partial profile patch — omit a field to leave it unchanged.",
+              "example": {
+                "firstName": "Ada",
+                "lastName": "Lovelace",
+                "citizenships": [
+                  "SWE",
+                  "GBR"
+                ]
+              }
+            }
+          },
+          "addressPostalCode": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 20
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A partial profile patch — omit a field to leave it unchanged.",
+              "example": {
+                "firstName": "Ada",
+                "lastName": "Lovelace",
+                "citizenships": [
+                  "SWE",
+                  "GBR"
+                ]
+              }
+            }
+          },
+          "addressCity": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A partial profile patch — omit a field to leave it unchanged.",
+              "example": {
+                "firstName": "Ada",
+                "lastName": "Lovelace",
+                "citizenships": [
+                  "SWE",
+                  "GBR"
+                ]
+              }
+            }
+          },
+          "addressCountry": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A partial profile patch — omit a field to leave it unchanged.",
+              "example": {
+                "firstName": "Ada",
+                "lastName": "Lovelace",
+                "citizenships": [
+                  "SWE",
+                  "GBR"
+                ]
+              }
+            }
+          },
+          "citizenships": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A partial profile patch — omit a field to leave it unchanged.",
+              "example": {
+                "firstName": "Ada",
+                "lastName": "Lovelace",
+                "citizenships": [
+                  "SWE",
+                  "GBR"
+                ]
+              }
+            }
+          }
+        }
+      },
       "ListOrganisationsResponseDto": {
         "type": "object",
         "properties": {
@@ -6145,6 +6838,12 @@
       },
       "ListAuditLogResponse": {
         "$ref": "#/components/schemas/ListAuditLogResponse"
+      },
+      "UserProfile": {
+        "$ref": "#/components/schemas/UserProfile"
+      },
+      "UpdateUserProfileInput": {
+        "$ref": "#/components/schemas/UpdateUserProfileInput"
       }
     }
   }
