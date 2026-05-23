@@ -21,6 +21,24 @@ vi.mock('@/entities/membership/api/membership.api.js', async (orig) => {
   const actual = await orig<typeof import('@/entities/membership/api/membership.api.js')>();
   return { ...actual, listMemberships: vi.fn().mockResolvedValue({ data: [], total: 0 }) };
 });
+vi.mock('@/entities/profile/api/profile.api.js', async (orig) => {
+  const actual = await orig<typeof import('@/entities/profile/api/profile.api.js')>();
+  return {
+    ...actual,
+    getUserProfile: vi.fn().mockResolvedValue({
+      userId: '11111111-1111-4111-8111-111111111111',
+      firstName: 'Ada',
+      lastName: 'Lovelace',
+      dateOfBirth: '1990-12-10',
+      taidoStartDate: '2015-09-01',
+      addressStreet: '12 Analytical Way',
+      addressPostalCode: '11122',
+      addressCity: 'Stockholm',
+      addressCountry: 'SWE',
+      citizenships: ['SWE', 'GBR'],
+    }),
+  };
+});
 
 const TARGET: User = {
   id: '11111111-1111-4111-8111-111111111111',
@@ -146,5 +164,14 @@ describe('<UserForm>', () => {
     await user.click(screen.getByRole('button', { name: /^deactivate$/i }));
     const alert = await screen.findByRole('alert');
     expect(alert).toHaveTextContent(/boom/i);
+  });
+
+  it('renders the fetched profile read-only in the Profile tab', async () => {
+    const { user } = renderForm();
+    await user.click(screen.getByRole('tab', { name: /profile/i }));
+    expect(await screen.findByText('Ada')).toBeInTheDocument();
+    expect(screen.getByText('Lovelace')).toBeInTheDocument();
+    expect(screen.getByText('Stockholm')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /save profile/i })).not.toBeInTheDocument();
   });
 });

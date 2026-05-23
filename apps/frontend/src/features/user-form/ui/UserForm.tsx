@@ -13,7 +13,9 @@ import {
   useUpdateMembership,
   type MembershipRole,
 } from '@/entities/membership';
-import { listOrganisationsQueryOptions } from '@/entities/organisation';
+import { listOrganisationsQueryOptions, countryName } from '@/entities/organisation';
+import type { IsoAlpha3 } from '@repo/contracts/organisations';
+import { userProfileQueryOptions } from '@/entities/profile';
 import { HttpError } from '@/shared/api';
 import { Button, FormField, FormMessage, Input, Label } from '@/shared/ui';
 import {
@@ -55,7 +57,7 @@ export function UserForm({
   onDelete,
   onSendPasswordReset,
 }: UserFormProps): React.ReactElement {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [name, setName] = React.useState<string>(user.name ?? '');
   const [role, setRole] = React.useState<Role>(user.role);
   const [submitError, setSubmitError] = React.useState<string | undefined>();
@@ -136,6 +138,20 @@ export function UserForm({
   const membershipsQuery = useQuery(listMembershipsQueryOptions({ userId: user.id }));
   const memberships = membershipsQuery.data?.data ?? [];
 
+  const profileQuery = useQuery(userProfileQueryOptions(user.id));
+  const profile = profileQuery.data;
+  const profileIsEmpty =
+    profile !== undefined &&
+    profile.firstName === null &&
+    profile.lastName === null &&
+    profile.dateOfBirth === null &&
+    profile.taidoStartDate === null &&
+    profile.addressStreet === null &&
+    profile.addressPostalCode === null &&
+    profile.addressCity === null &&
+    profile.addressCountry === null &&
+    profile.citizenships.length === 0;
+
   const [editorOpen, setEditorOpen] = React.useState(false);
   const createMembership = useCreateMembership({ onSuccess: () => setEditorOpen(false) });
   const updateMembership = useUpdateMembership({
@@ -169,6 +185,9 @@ export function UserForm({
         </TabsTrigger>
         <TabsTrigger value="memberships">
           {t('admin.users.memberships.title', { defaultValue: 'Memberships' })}
+        </TabsTrigger>
+        <TabsTrigger value="profile">
+          {t('profile.title', { defaultValue: 'My profile' })}
         </TabsTrigger>
       </TabsList>
 
@@ -366,6 +385,51 @@ export function UserForm({
             await createMembership.mutateAsync({ userId: user.id, organisationId, role });
           }}
         />
+      </TabsContent>
+
+      <TabsContent value="profile" className="space-y-3">
+        {profileQuery.isPending ? (
+          <p className="text-on-surface-variant">{t('common.loading')}</p>
+        ) : profileQuery.isError ? (
+          <p role="alert" className="text-sm text-destructive">
+            {profileQuery.error instanceof Error
+              ? profileQuery.error.message
+              : t('common.unknownError', { defaultValue: 'Unknown error' })}
+          </p>
+        ) : profileIsEmpty ? (
+          <p className="text-on-surface-variant">{t('profile.empty')}</p>
+        ) : (
+          <dl className="grid grid-cols-[max-content_1fr] gap-x-6 gap-y-2 text-sm">
+            <dt className="text-on-surface-variant">{t('profile.fields.firstName')}</dt>
+            <dd>{profile?.firstName ?? '—'}</dd>
+            <dt className="text-on-surface-variant">{t('profile.fields.lastName')}</dt>
+            <dd>{profile?.lastName ?? '—'}</dd>
+            <dt className="text-on-surface-variant">{t('profile.fields.dateOfBirth')}</dt>
+            <dd>{profile?.dateOfBirth ?? '—'}</dd>
+            <dt className="text-on-surface-variant">{t('profile.fields.taidoStartDate')}</dt>
+            <dd>{profile?.taidoStartDate ?? '—'}</dd>
+            <dt className="text-on-surface-variant">{t('profile.fields.addressStreet')}</dt>
+            <dd>{profile?.addressStreet ?? '—'}</dd>
+            <dt className="text-on-surface-variant">{t('profile.fields.addressPostalCode')}</dt>
+            <dd>{profile?.addressPostalCode ?? '—'}</dd>
+            <dt className="text-on-surface-variant">{t('profile.fields.addressCity')}</dt>
+            <dd>{profile?.addressCity ?? '—'}</dd>
+            <dt className="text-on-surface-variant">{t('profile.fields.addressCountry')}</dt>
+            <dd>
+              {profile?.addressCountry
+                ? `${countryName(profile.addressCountry as IsoAlpha3, i18n.language)} (${profile.addressCountry})`
+                : '—'}
+            </dd>
+            <dt className="text-on-surface-variant">{t('profile.fields.citizenships')}</dt>
+            <dd>
+              {profile && profile.citizenships.length > 0
+                ? profile.citizenships
+                    .map((c) => `${countryName(c as IsoAlpha3, i18n.language)} (${c})`)
+                    .join(', ')
+                : '—'}
+            </dd>
+          </dl>
+        )}
       </TabsContent>
     </Tabs>
   );
