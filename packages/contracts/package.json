@@ -108,6 +108,16 @@
         "types": "./dist/memberships.d.cts",
         "default": "./dist/memberships.cjs"
       }
+    },
+    "./profile": {
+      "import": {
+        "types": "./dist/profile.d.ts",
+        "default": "./dist/profile.js"
+      },
+      "require": {
+        "types": "./dist/profile.d.cts",
+        "default": "./dist/profile.cjs"
+      }
     }
   },
   "files": [
