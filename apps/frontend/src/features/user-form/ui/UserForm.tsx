@@ -43,9 +43,10 @@ export interface UserFormProps {
 }
 
 /**
- * Edit form for a user. Two tabs: Details (name + role) and Memberships.
- * Email is read-only — better-auth owns it. The role select is disabled when
- * an admin edits their own row (the backend also rejects self-demotion).
+ * Edit form for a user. Three tabs: Details (name + role), Memberships, and
+ * Profile (read-only view of the user's self-service profile). Email is
+ * read-only — better-auth owns it. The role select is disabled when an admin
+ * edits their own row (the backend also rejects self-demotion).
  */
 export function UserForm({
   user,
