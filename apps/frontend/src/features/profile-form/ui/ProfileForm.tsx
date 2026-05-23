@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useUpdateMyProfile } from '@/entities/profile';
 import { countryName, ISO_3166_ALPHA3_CODES } from '@/entities/organisation';
+import type { IsoAlpha3 } from '@repo/contracts/organisations';
 import { HttpError } from '@/shared/api';
 import { Button, FormField, FormMessage, Input, Label } from '@/shared/ui';
 import {
@@ -204,7 +205,7 @@ export function ProfileForm({ profile }: ProfileFormProps): React.ReactElement {
             {citizenships.map((code) => (
               <li key={code} className="flex items-center justify-between gap-3 py-2">
                 <span className="flex-1 truncate text-sm">
-                  {countryName(code, locale)} ({code})
+                  {countryName(code as IsoAlpha3, locale)} ({code})
                 </span>
                 <Button
                   type="button"
