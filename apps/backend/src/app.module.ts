@@ -14,6 +14,7 @@ import { AuthDocsModule } from './modules/auth/auth.module.js';
 import { HealthModule } from './modules/health/health.module.js';
 import { MembershipsModule } from './modules/memberships/memberships.module.js';
 import { OrganisationsModule } from './modules/organisations/organisations.module.js';
+import { ProfileModule } from './modules/profile/profile.module.js';
 import { UsersModule } from './modules/users/users.module.js';
 
 @Module({
@@ -26,6 +27,7 @@ import { UsersModule } from './modules/users/users.module.js';
     AuthDocsModule,
     HealthModule,
     UsersModule,
+    ProfileModule,
     OrganisationsModule,
     MembershipsModule,
     AuditLogModule,
