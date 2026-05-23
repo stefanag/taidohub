@@ -109,4 +109,15 @@ export default defineConfig([
       'fsd/no-public-api-sidestep': 'off',
     },
   },
+  {
+    // The profile-form test mocks the profile entity API module by its deep
+    // path because `profile.queries.ts` imports the fetcher from there
+    // directly (not via the barrel). Mocking the barrel wouldn't reach that
+    // import, so `vi.mock` MUST target the deep path. Allow the public-API
+    // sidestep for this test file only.
+    files: ['src/features/profile-form/**/*.test.{ts,tsx}'],
+    rules: {
+      'fsd/no-public-api-sidestep': 'off',
+    },
+  },
 ]);
