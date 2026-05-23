@@ -36,10 +36,32 @@
     "dashboard": "Översikt",
     "adminOrganisations": "Organisationer",
     "adminAuditLog": "Granskningslogg",
-    "adminUsers": "Användare"
+    "adminUsers": "Användare",
+    "profile": "Min profil"
   },
   "dashboard": {
     "title": "Översikt"
+  },
+  "profile": {
+    "title": "Min profil",
+    "description": "Dina personliga uppgifter och uppgifter om taidoträning.",
+    "fields": {
+      "firstName": "Förnamn",
+      "lastName": "Efternamn",
+      "dateOfBirth": "Födelsedatum",
+      "taidoStartDate": "Startdatum för taidoträning",
+      "addressStreet": "Gatuadress",
+      "addressPostalCode": "Postnummer",
+      "addressCity": "Ort",
+      "addressCountry": "Land",
+      "citizenships": "Medborgarskap"
+    },
+    "addCitizenship": "Lägg till medborgarskap",
+    "removeCitizenship": "Ta bort",
+    "countryNone": "Inget",
+    "save": "Spara profil",
+    "saved": "Profilen sparad.",
+    "empty": "Den här användaren har inte fyllt i sin profil ännu."
   },
   "home": {
     "tagline": "En Feature-Sliced Design-mall för en Vite + React + TypeScript-app, kopplad till en NestJS-backend över ett typat `@repo/contracts`-HTTP-gränssnitt."

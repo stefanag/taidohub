@@ -36,10 +36,32 @@
     "dashboard": "Dashboard",
     "adminOrganisations": "Organisations",
     "adminAuditLog": "Audit log",
-    "adminUsers": "Users"
+    "adminUsers": "Users",
+    "profile": "My profile"
   },
   "dashboard": {
     "title": "Dashboard"
+  },
+  "profile": {
+    "title": "My profile",
+    "description": "Your personal and taido-training details.",
+    "fields": {
+      "firstName": "First name",
+      "lastName": "Last name",
+      "dateOfBirth": "Date of birth",
+      "taidoStartDate": "Taido training start date",
+      "addressStreet": "Street address",
+      "addressPostalCode": "Postal code",
+      "addressCity": "City",
+      "addressCountry": "Country",
+      "citizenships": "Citizenships"
+    },
+    "addCitizenship": "Add citizenship",
+    "removeCitizenship": "Remove",
+    "countryNone": "None",
+    "save": "Save profile",
+    "saved": "Profile saved.",
+    "empty": "This user has not filled in their profile yet."
   },
   "home": {
     "tagline": "A Feature-Sliced Design seed for a Vite + React + TypeScript app, wired to a NestJS backend over a typed `@repo/contracts` HTTP boundary."

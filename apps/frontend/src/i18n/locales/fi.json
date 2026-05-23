@@ -36,10 +36,32 @@
     "dashboard": "Kojelauta",
     "adminOrganisations": "Organisaatiot",
     "adminAuditLog": "Auditointiloki",
-    "adminUsers": "Käyttäjät"
+    "adminUsers": "Käyttäjät",
+    "profile": "Oma profiili"
   },
   "dashboard": {
     "title": "Kojelauta"
+  },
+  "profile": {
+    "title": "Oma profiili",
+    "description": "Henkilökohtaiset tietosi ja taidoharjoittelun tiedot.",
+    "fields": {
+      "firstName": "Etunimi",
+      "lastName": "Sukunimi",
+      "dateOfBirth": "Syntymäaika",
+      "taidoStartDate": "Taidoharjoittelun aloituspäivä",
+      "addressStreet": "Katuosoite",
+      "addressPostalCode": "Postinumero",
+      "addressCity": "Kaupunki",
+      "addressCountry": "Maa",
+      "citizenships": "Kansalaisuudet"
+    },
+    "addCitizenship": "Lisää kansalaisuus",
+    "removeCitizenship": "Poista",
+    "countryNone": "Ei mitään",
+    "save": "Tallenna profiili",
+    "saved": "Profiili tallennettu.",
+    "empty": "Tämä käyttäjä ei ole vielä täyttänyt profiiliaan."
   },
   "home": {
     "tagline": "Feature-Sliced Design -pohja Vite + React + TypeScript -sovellukselle, joka on kytketty NestJS-taustaan typitetyn `@repo/contracts`-HTTP-rajapinnan kautta."
