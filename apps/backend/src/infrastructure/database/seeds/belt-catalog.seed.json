@@ -1,0 +1,39 @@
+{
+  "beltSystems": [
+    { "code": "kyu", "nameEn": "Kyu", "nameSv": "Kyu", "nameFi": "Kyu", "sortOrder": 1 },
+    { "code": "dan", "nameEn": "Dan", "nameSv": "Dan", "nameFi": "Dan", "sortOrder": 2 },
+    { "code": "mon", "nameEn": "Mon", "nameSv": "Mon", "nameFi": "Mon", "sortOrder": 3 }
+  ],
+  "beltRanks": [
+    { "systemCode": "kyu", "level": 1,  "sortOrder": 10, "nameRomaji": "Jukyu",      "nameEn": "10th Kyu", "nameSv": "10 Kyu", "nameFi": "10. Kyu", "beltColor": "#FFFFFF", "publiclyVisible": false },
+    { "systemCode": "kyu", "level": 2,  "sortOrder": 11, "nameRomaji": "Kukyu",      "nameEn": "9th Kyu",  "nameSv": "9 Kyu",  "nameFi": "9. Kyu",  "beltColor": "#FFD580", "publiclyVisible": false },
+    { "systemCode": "kyu", "level": 3,  "sortOrder": 12, "nameRomaji": "Hachikyu",   "nameEn": "8th Kyu",  "nameSv": "8 Kyu",  "nameFi": "8. Kyu",  "beltColor": "#FFE066", "publiclyVisible": false },
+    { "systemCode": "kyu", "level": 4,  "sortOrder": 13, "nameRomaji": "Shichikyu",  "nameEn": "7th Kyu",  "nameSv": "7 Kyu",  "nameFi": "7. Kyu",  "beltColor": "#A8E063", "publiclyVisible": false },
+    { "systemCode": "kyu", "level": 5,  "sortOrder": 14, "nameRomaji": "Rokukyu",    "nameEn": "6th Kyu",  "nameSv": "6 Kyu",  "nameFi": "6. Kyu",  "beltColor": "#7AC74F", "publiclyVisible": false },
+    { "systemCode": "kyu", "level": 6,  "sortOrder": 15, "nameRomaji": "Gokyu",      "nameEn": "5th Kyu",  "nameSv": "5 Kyu",  "nameFi": "5. Kyu",  "beltColor": "#6EC1E4", "publiclyVisible": false },
+    { "systemCode": "kyu", "level": 7,  "sortOrder": 16, "nameRomaji": "Yonkyu",     "nameEn": "4th Kyu",  "nameSv": "4 Kyu",  "nameFi": "4. Kyu",  "beltColor": "#5085BB", "publiclyVisible": false },
+    { "systemCode": "kyu", "level": 8,  "sortOrder": 17, "nameRomaji": "Sankyu",     "nameEn": "3rd Kyu",  "nameSv": "3 Kyu",  "nameFi": "3. Kyu",  "beltColor": "#8C6BB1", "publiclyVisible": false },
+    { "systemCode": "kyu", "level": 9,  "sortOrder": 18, "nameRomaji": "Nikyu",      "nameEn": "2nd Kyu",  "nameSv": "2 Kyu",  "nameFi": "2. Kyu",  "beltColor": "#B85C00", "publiclyVisible": false },
+    { "systemCode": "kyu", "level": 10, "sortOrder": 19, "nameRomaji": "Ikkyu",      "nameEn": "1st Kyu",  "nameSv": "1 Kyu",  "nameFi": "1. Kyu",  "beltColor": "#7C4A03", "publiclyVisible": false },
+
+    { "systemCode": "dan", "level": 1,  "sortOrder": 20, "nameRomaji": "Shodan",   "nameEn": "1st Dan",  "nameSv": "1 Dan",  "nameFi": "1. Dan",  "beltColor": "#000000", "publiclyVisible": false },
+    { "systemCode": "dan", "level": 2,  "sortOrder": 21, "nameRomaji": "Nidan",    "nameEn": "2nd Dan",  "nameSv": "2 Dan",  "nameFi": "2. Dan",  "beltColor": "#000000", "publiclyVisible": false },
+    { "systemCode": "dan", "level": 3,  "sortOrder": 22, "nameRomaji": "Sandan",   "nameEn": "3rd Dan",  "nameSv": "3 Dan",  "nameFi": "3. Dan",  "beltColor": "#000000", "publiclyVisible": false },
+    { "systemCode": "dan", "level": 4,  "sortOrder": 23, "nameRomaji": "Yondan",   "nameEn": "4th Dan",  "nameSv": "4 Dan",  "nameFi": "4. Dan",  "beltColor": "#000000", "publiclyVisible": false },
+    { "systemCode": "dan", "level": 5,  "sortOrder": 24, "nameRomaji": "Godan",    "nameEn": "5th Dan",  "nameSv": "5 Dan",  "nameFi": "5. Dan",  "beltColor": "#000000", "publiclyVisible": false },
+    { "systemCode": "dan", "level": 6,  "sortOrder": 25, "nameRomaji": "Rokudan",  "nameEn": "6th Dan",  "nameSv": "6 Dan",  "nameFi": "6. Dan",  "beltColor": "#000000", "publiclyVisible": false },
+    { "systemCode": "dan", "level": 7,  "sortOrder": 26, "nameRomaji": "Nanadan",  "nameEn": "7th Dan",  "nameSv": "7 Dan",  "nameFi": "7. Dan",  "beltColor": "#000000", "publiclyVisible": false },
+    { "systemCode": "dan", "level": 8,  "sortOrder": 27, "nameRomaji": "Hachidan", "nameEn": "8th Dan",  "nameSv": "8 Dan",  "nameFi": "8. Dan",  "beltColor": "#000000", "publiclyVisible": false },
+    { "systemCode": "dan", "level": 9,  "sortOrder": 28, "nameRomaji": "Kudan",    "nameEn": "9th Dan",  "nameSv": "9 Dan",  "nameFi": "9. Dan",  "beltColor": "#000000", "publiclyVisible": false },
+    { "systemCode": "dan", "level": 10, "sortOrder": 29, "nameRomaji": "Judan",    "nameEn": "10th Dan", "nameSv": "10 Dan", "nameFi": "10. Dan", "beltColor": "#000000", "publiclyVisible": false },
+
+    { "systemCode": "mon", "level": 1, "sortOrder": 30, "nameRomaji": "Ichimon", "nameEn": "1 Mon", "nameSv": "1 Mon", "nameFi": "1 Mon", "beltColor": "#FFFFFF", "publiclyVisible": false },
+    { "systemCode": "mon", "level": 2, "sortOrder": 31, "nameRomaji": "Nimon",   "nameEn": "2 Mon", "nameSv": "2 Mon", "nameFi": "2 Mon", "beltColor": "#FFFFFF", "publiclyVisible": false },
+    { "systemCode": "mon", "level": 3, "sortOrder": 32, "nameRomaji": "Sanmon",  "nameEn": "3 Mon", "nameSv": "3 Mon", "nameFi": "3 Mon", "beltColor": "#FFFFFF", "publiclyVisible": false }
+  ],
+  "shogoTitles": [
+    { "code": "renshi", "nameEn": "Renshi", "nameSv": "Renshi", "nameFi": "Renshi", "nameJa": "錬士", "minRankRomaji": "Yondan",  "sortOrder": 1 },
+    { "code": "kyoshi", "nameEn": "Kyoshi", "nameSv": "Kyoshi", "nameFi": "Kyoshi", "nameJa": "教士", "minRankRomaji": "Rokudan", "sortOrder": 2 },
+    { "code": "hanshi", "nameEn": "Hanshi", "nameSv": "Hanshi", "nameFi": "Hanshi", "nameJa": "範士", "minRankRomaji": "Nanadan", "sortOrder": 3 }
+  ]
+}
