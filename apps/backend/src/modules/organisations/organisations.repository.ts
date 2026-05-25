@@ -94,4 +94,17 @@ export class OrganisationsRepository {
       .where(eq(organisations.parentId, id));
     return Number(rows[0]?.value ?? 0);
   }
+
+  /** Org ids where the given user is the head instructor. */
+  async findHeadInstructorOrgIds(
+    userId: string,
+    tx?: DrizzleExecutor,
+  ): Promise<string[]> {
+    const conn = tx ?? this.db;
+    const rows = await conn
+      .select({ id: organisations.id })
+      .from(organisations)
+      .where(eq(organisations.headInstructorId, userId));
+    return rows.map((r) => r.id);
+  }
 }
