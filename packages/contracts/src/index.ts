@@ -19,3 +19,6 @@ export * from './organisations.js';
 export * from './audit-log.js';
 export * from './memberships.js';
 export * from './profile.js';
+export * from './belt-systems.js';
+export * from './ranks.js';
+export * from './shogo-titles.js';

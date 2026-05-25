@@ -118,6 +118,36 @@
         "types": "./dist/profile.d.cts",
         "default": "./dist/profile.cjs"
       }
+    },
+    "./belt-systems": {
+      "import": {
+        "types": "./dist/belt-systems.d.ts",
+        "default": "./dist/belt-systems.js"
+      },
+      "require": {
+        "types": "./dist/belt-systems.d.cts",
+        "default": "./dist/belt-systems.cjs"
+      }
+    },
+    "./ranks": {
+      "import": {
+        "types": "./dist/ranks.d.ts",
+        "default": "./dist/ranks.js"
+      },
+      "require": {
+        "types": "./dist/ranks.d.cts",
+        "default": "./dist/ranks.cjs"
+      }
+    },
+    "./shogo-titles": {
+      "import": {
+        "types": "./dist/shogo-titles.d.ts",
+        "default": "./dist/shogo-titles.js"
+      },
+      "require": {
+        "types": "./dist/shogo-titles.d.cts",
+        "default": "./dist/shogo-titles.cjs"
+      }
     }
   },
   "files": [
