@@ -14,7 +14,17 @@ export const ActionSchema = z.enum(['create', 'read', 'update', 'delete', 'manag
 
 /** Zod enum for runtime validation of subject names. */
 export const SubjectSchema = z
-  .enum(['User', 'Organisation', 'AuditLog', 'OrganisationMembership', 'all'])
+  .enum([
+    'User',
+    'Organisation',
+    'AuditLog',
+    'OrganisationMembership',
+    'BeltSystem',
+    'BeltRank',
+    'RankHistory',
+    'ShogoTitle',
+    'all',
+  ])
   .meta({
     id: 'Subject',
     description:
@@ -65,6 +75,32 @@ export type OrganisationMembershipSubjectShape = {
   role?: 'orgadmin' | 'instructor';
 };
 
+export type BeltSystemSubjectShape = {
+  readonly __caslSubjectType__: 'BeltSystem';
+  id?: string;
+  organisationId?: string | null;
+};
+
+export type BeltRankSubjectShape = {
+  readonly __caslSubjectType__: 'BeltRank';
+  id?: string;
+  systemId?: string;
+  organisationId?: string | null;
+};
+
+export type RankHistorySubjectShape = {
+  readonly __caslSubjectType__: 'RankHistory';
+  id?: string;
+  userId?: string;
+  source?: 'event' | 'external';
+  recordedByUserId?: string;
+};
+
+export type ShogoTitleSubjectShape = {
+  readonly __caslSubjectType__: 'ShogoTitle';
+  code?: string;
+};
+
 /**
  * The full CASL subject union: either a bare subject name (for class-level
  * rules like `can('create', 'Organisation')`) or a tagged subject shape (for
@@ -76,7 +112,11 @@ export type AppSubject =
   | UserSubjectShape
   | OrganisationSubjectShape
   | AuditLogSubjectShape
-  | OrganisationMembershipSubjectShape;
+  | OrganisationMembershipSubjectShape
+  | BeltSystemSubjectShape
+  | BeltRankSubjectShape
+  | RankHistorySubjectShape
+  | ShogoTitleSubjectShape;
 
 /**
  * Tuple type compatible with `MongoAbility<[AppAction, AppSubject]>` from

@@ -49,3 +49,26 @@ export const MembershipsRoutes = {
   base: '/api/memberships',
   byId: (id: string) => `/api/memberships/${id}` as const,
 } as const;
+
+export const BeltSystemsRoutes = {
+  base: '/api/belt-systems',
+  byId: (id: string) => `/api/belt-systems/${id}` as const,
+} as const;
+
+export const BeltRanksRoutes = {
+  base: '/api/ranks',
+  byId: (id: string) => `/api/ranks/${id}` as const,
+} as const;
+
+export const ShogoTitlesRoutes = {
+  base: '/api/shogo-titles',
+  byCode: (code: string) => `/api/shogo-titles/${code}` as const,
+} as const;
+
+export const RankHistoryRoutes = {
+  byUser: (userId: string) => `/api/rank-history/${userId}` as const,
+  byId: (id: string) => `/api/rank-history/${id}` as const,
+  verify: (id: string) => `/api/rank-history/${id}/verify` as const,
+  unverify: (id: string) => `/api/rank-history/${id}/unverify` as const,
+  unifiedForUser: (userId: string) => `/api/grading-events/history/${userId}` as const,
+} as const;

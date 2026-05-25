@@ -10,9 +10,13 @@ import { createSchema } from 'zod-openapi';
 
 import { AuditLogOpenApiRegistry } from './audit-log.js';
 import { AuthOpenApiRegistry } from './auth.js';
+import { BeltRanksOpenApiRegistry } from './ranks.js';
+import { BeltSystemsOpenApiRegistry } from './belt-systems.js';
 import { ErrorEnvelopeOpenApiRegistry } from './errors.js';
 import { OrganisationsOpenApiRegistry } from './organisations.js';
 import { ProfileOpenApiRegistry } from './profile.js';
+import { RankHistoryOpenApiRegistry } from './rank-history.js';
+import { ShogoTitlesOpenApiRegistry } from './shogo-titles.js';
 import { UsersOpenApiRegistry } from './users.js';
 
 /**
@@ -40,6 +44,10 @@ export function registerContractSchemas(
     OrganisationsOpenApiRegistry,
     AuditLogOpenApiRegistry,
     ProfileOpenApiRegistry,
+    BeltSystemsOpenApiRegistry,
+    BeltRanksOpenApiRegistry,
+    ShogoTitlesOpenApiRegistry,
+    RankHistoryOpenApiRegistry,
   ],
 ): OpenAPIObject {
   document.components ??= {};
@@ -71,4 +79,8 @@ export const ContractRegistries = {
   organisations: OrganisationsOpenApiRegistry,
   auditLog: AuditLogOpenApiRegistry,
   profile: ProfileOpenApiRegistry,
+  beltSystems: BeltSystemsOpenApiRegistry,
+  beltRanks: BeltRanksOpenApiRegistry,
+  shogoTitles: ShogoTitlesOpenApiRegistry,
+  rankHistory: RankHistoryOpenApiRegistry,
 } as const;
