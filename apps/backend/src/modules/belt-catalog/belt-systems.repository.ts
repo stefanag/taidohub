@@ -75,13 +75,9 @@ export class BeltSystemsRepository {
     return rows[0] ?? null;
   }
 
-  async delete(id: string, tx?: DrizzleExecutor): Promise<boolean> {
+  async delete(id: string, tx?: DrizzleExecutor): Promise<void> {
     const conn = tx ?? this.db;
-    const rows = await conn
-      .delete(beltSystems)
-      .where(eq(beltSystems.id, id))
-      .returning({ id: beltSystems.id });
-    return rows.length > 0;
+    await conn.delete(beltSystems).where(eq(beltSystems.id, id));
   }
 
   /** Count ranks that reference this system — the system-delete guard. */
