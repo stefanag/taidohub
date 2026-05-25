@@ -16,6 +16,7 @@ export default defineConfig({
     'belt-systems': 'src/belt-systems.ts',
     ranks: 'src/ranks.ts',
     'shogo-titles': 'src/shogo-titles.ts',
+    'rank-history': 'src/rank-history.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,

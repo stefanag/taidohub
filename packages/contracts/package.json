@@ -148,6 +148,16 @@
         "types": "./dist/shogo-titles.d.cts",
         "default": "./dist/shogo-titles.cjs"
       }
+    },
+    "./rank-history": {
+      "import": {
+        "types": "./dist/rank-history.d.ts",
+        "default": "./dist/rank-history.js"
+      },
+      "require": {
+        "types": "./dist/rank-history.d.cts",
+        "default": "./dist/rank-history.cjs"
+      }
     }
   },
   "files": [
