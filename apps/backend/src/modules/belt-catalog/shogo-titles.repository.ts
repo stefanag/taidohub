@@ -54,13 +54,9 @@ export class ShogoTitlesRepository {
     return rows[0] ?? null;
   }
 
-  async delete(code: string, tx?: DrizzleExecutor): Promise<boolean> {
+  async delete(code: string, tx?: DrizzleExecutor): Promise<void> {
     const conn = tx ?? this.db;
-    const rows = await conn
-      .delete(shogoTitles)
-      .where(eq(shogoTitles.code, code))
-      .returning({ code: shogoTitles.code });
-    return rows.length > 0;
+    await conn.delete(shogoTitles).where(eq(shogoTitles.code, code));
   }
 
   /** Count history rows whose `shogo_title` matches this code. */
