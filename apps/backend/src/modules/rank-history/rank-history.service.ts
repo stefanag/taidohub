@@ -214,6 +214,9 @@ export class RankHistoryService {
       if (!row.verified) {
         throw new ConflictException({ error: { code: 'ALREADY_UNVERIFIED', message: 'Row is not currently verified.' } });
       }
+      if (row.recordedByUserId === actor.id) {
+        throw new ForbiddenException({ error: { code: 'FORBIDDEN', message: 'Recorder cannot unverify their own row.' } });
+      }
       const allowed = await this.auth.canVerify(actor, row, tx);
       if (!allowed) {
         throw new ForbiddenException({ error: { code: 'FORBIDDEN', message: 'Not permitted to unverify this row.' } });
