@@ -2,6 +2,7 @@ import { Test } from '@nestjs/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { DRIZZLE } from '../../infrastructure/database/client.js';
+import { type DbRankHistory } from '../../infrastructure/database/schema/index.js';
 import { MembershipsRepository } from '../memberships/memberships.repository.js';
 import { OrganisationsRepository } from '../organisations/organisations.repository.js';
 
@@ -23,7 +24,7 @@ function actor(role: 'sysadmin' | 'user', id = 'u-actor') {
   };
 }
 
-function eventRow(overrides: Partial<Record<string, unknown>> = {}) {
+function eventRow(overrides: Partial<DbRankHistory> = {}): DbRankHistory {
   return {
     id: 'r-1',
     userId: subjectUserId,
@@ -47,7 +48,7 @@ function eventRow(overrides: Partial<Record<string, unknown>> = {}) {
   };
 }
 
-function externalRow(overrides: Partial<Record<string, unknown>> = {}) {
+function externalRow(overrides: Partial<DbRankHistory> = {}): DbRankHistory {
   return eventRow({
     source: 'external',
     eventId: null,
