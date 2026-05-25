@@ -314,6 +314,1320 @@
         ]
       }
     },
+    "/api/belt-systems": {
+      "get": {
+        "operationId": "BeltSystemsController_list",
+        "parameters": [],
+        "responses": {
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "List belt systems.",
+        "tags": [
+          "belt-systems"
+        ]
+      },
+      "post": {
+        "operationId": "BeltSystemsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBeltSystemDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BeltSystemDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Create a belt system (sysadmin only).",
+        "tags": [
+          "belt-systems"
+        ]
+      }
+    },
+    "/api/belt-systems/{id}": {
+      "patch": {
+        "operationId": "BeltSystemsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Belt system UUID.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBeltSystemDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BeltSystemDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Update a belt system (sysadmin only).",
+        "tags": [
+          "belt-systems"
+        ]
+      },
+      "delete": {
+        "operationId": "BeltSystemsController_delete",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Belt system UUID.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Belt system deleted."
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Delete a belt system (sysadmin only).",
+        "tags": [
+          "belt-systems"
+        ]
+      }
+    },
+    "/api/ranks": {
+      "get": {
+        "operationId": "BeltRanksController_list",
+        "parameters": [],
+        "responses": {
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "List belt ranks.",
+        "tags": [
+          "belt-ranks"
+        ]
+      },
+      "post": {
+        "operationId": "BeltRanksController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBeltRankDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BeltRankDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Create a rank (sysadmin only).",
+        "tags": [
+          "belt-ranks"
+        ]
+      }
+    },
+    "/api/ranks/{id}": {
+      "get": {
+        "operationId": "BeltRanksController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Rank UUID.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BeltRankDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Get a single rank.",
+        "tags": [
+          "belt-ranks"
+        ]
+      },
+      "patch": {
+        "operationId": "BeltRanksController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Rank UUID.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBeltRankDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BeltRankDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Update a rank (sysadmin only).",
+        "tags": [
+          "belt-ranks"
+        ]
+      },
+      "delete": {
+        "operationId": "BeltRanksController_delete",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Rank UUID.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Rank deleted."
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Delete a rank (sysadmin only).",
+        "tags": [
+          "belt-ranks"
+        ]
+      }
+    },
+    "/api/shogo-titles": {
+      "get": {
+        "operationId": "ShogoTitlesController_list",
+        "parameters": [],
+        "responses": {
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "List shogo titles.",
+        "tags": [
+          "shogo-titles"
+        ]
+      },
+      "post": {
+        "operationId": "ShogoTitlesController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateShogoTitleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShogoTitleDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Create a shogo title (sysadmin only).",
+        "tags": [
+          "shogo-titles"
+        ]
+      }
+    },
+    "/api/shogo-titles/{code}": {
+      "patch": {
+        "operationId": "ShogoTitlesController_update",
+        "parameters": [
+          {
+            "name": "code",
+            "required": true,
+            "in": "path",
+            "description": "Shogo code.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateShogoTitleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShogoTitleDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Update a shogo title (sysadmin only).",
+        "tags": [
+          "shogo-titles"
+        ]
+      },
+      "delete": {
+        "operationId": "ShogoTitlesController_delete",
+        "parameters": [
+          {
+            "name": "code",
+            "required": true,
+            "in": "path",
+            "description": "Shogo code.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Shogo title deleted."
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Delete a shogo title (sysadmin only).",
+        "tags": [
+          "shogo-titles"
+        ]
+      }
+    },
+    "/api/rank-history/{userId}": {
+      "get": {
+        "operationId": "RankHistoryController_listForUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "description": "Subject user id.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "List a user's raw rank-history rows (admin/self-only).",
+        "tags": [
+          "rank-history"
+        ]
+      },
+      "post": {
+        "operationId": "RankHistoryController_create",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "description": "Subject user id.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRankHistoryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RankHistoryDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Create an external rank-history entry for a user.",
+        "tags": [
+          "rank-history"
+        ]
+      }
+    },
+    "/api/rank-history/{id}": {
+      "patch": {
+        "operationId": "RankHistoryController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Rank-history row UUID.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRankHistoryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RankHistoryDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Update an external rank-history entry.",
+        "tags": [
+          "rank-history"
+        ]
+      },
+      "delete": {
+        "operationId": "RankHistoryController_delete",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Rank-history row UUID.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Rank-history row deleted."
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Delete an external rank-history entry.",
+        "tags": [
+          "rank-history"
+        ]
+      }
+    },
+    "/api/rank-history/{id}/verify": {
+      "post": {
+        "operationId": "RankHistoryController_verify",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Rank-history row UUID.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RankHistoryDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Verify a rank-history row.",
+        "tags": [
+          "rank-history"
+        ]
+      }
+    },
+    "/api/rank-history/{id}/unverify": {
+      "post": {
+        "operationId": "RankHistoryController_unverify",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Rank-history row UUID.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RankHistoryDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Unverify a rank-history row.",
+        "tags": [
+          "rank-history"
+        ]
+      }
+    },
+    "/api/grading-events/history/{userId}": {
+      "get": {
+        "operationId": "GradingHistoryController_list",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "description": "Subject user id.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Unified grading-history projection for a user (event + external).",
+        "tags": [
+          "grading-history"
+        ]
+      }
+    },
     "/api/health": {
       "get": {
         "operationId": "HealthController_check",
@@ -2714,6 +4028,2988 @@
           "password"
         ]
       },
+      "ErrorEnvelopeDto": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "$ref": "#/$defs/ErrorPayload",
+            "type": "",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "ErrorPayload": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "Stable, machine-readable error code (e.g. `VALIDATION_FAILED`)."
+                  },
+                  "message": {
+                    "type": "string",
+                    "description": "Human-readable error message safe to surface to end users."
+                  },
+                  "details": {
+                    "description": "Optional structured context — e.g. per-field validation errors."
+                  }
+                },
+                "required": [
+                  "code",
+                  "message"
+                ],
+                "description": "The body of a uniform error envelope.",
+                "example": {
+                  "code": "NOT_FOUND",
+                  "message": "The requested resource could not be found."
+                }
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "The uniform error envelope returned for every non-2xx response from the API.",
+              "example": {
+                "error": {
+                  "code": "NOT_FOUND",
+                  "message": "The requested resource could not be found."
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "error"
+        ]
+      },
+      "CreateBeltSystemDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 3,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-belt-system payload."
+            }
+          },
+          "nameEn": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-belt-system payload."
+            }
+          },
+          "nameSv": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-belt-system payload."
+            }
+          },
+          "nameFi": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-belt-system payload."
+            }
+          },
+          "organisationId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-belt-system payload."
+            }
+          },
+          "sortOrder": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-belt-system payload."
+            }
+          }
+        },
+        "required": [
+          "code",
+          "nameEn",
+          "nameSv",
+          "nameFi"
+        ]
+      },
+      "BeltSystemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A family of belt ranks (Kyu, Dan, Mon).",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "code": "kyu",
+                "nameEn": "Kyu",
+                "nameSv": "Kyu",
+                "nameFi": "Kyu",
+                "organisationId": null,
+                "sortOrder": 1,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": "2026-05-24T08:00:00.000Z"
+              }
+            }
+          },
+          "code": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 3,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A family of belt ranks (Kyu, Dan, Mon).",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "code": "kyu",
+                "nameEn": "Kyu",
+                "nameSv": "Kyu",
+                "nameFi": "Kyu",
+                "organisationId": null,
+                "sortOrder": 1,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": "2026-05-24T08:00:00.000Z"
+              }
+            }
+          },
+          "nameEn": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A family of belt ranks (Kyu, Dan, Mon).",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "code": "kyu",
+                "nameEn": "Kyu",
+                "nameSv": "Kyu",
+                "nameFi": "Kyu",
+                "organisationId": null,
+                "sortOrder": 1,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": "2026-05-24T08:00:00.000Z"
+              }
+            }
+          },
+          "nameSv": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A family of belt ranks (Kyu, Dan, Mon).",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "code": "kyu",
+                "nameEn": "Kyu",
+                "nameSv": "Kyu",
+                "nameFi": "Kyu",
+                "organisationId": null,
+                "sortOrder": 1,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": "2026-05-24T08:00:00.000Z"
+              }
+            }
+          },
+          "nameFi": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A family of belt ranks (Kyu, Dan, Mon).",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "code": "kyu",
+                "nameEn": "Kyu",
+                "nameSv": "Kyu",
+                "nameFi": "Kyu",
+                "organisationId": null,
+                "sortOrder": 1,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": "2026-05-24T08:00:00.000Z"
+              }
+            }
+          },
+          "organisationId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A family of belt ranks (Kyu, Dan, Mon).",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "code": "kyu",
+                "nameEn": "Kyu",
+                "nameSv": "Kyu",
+                "nameFi": "Kyu",
+                "organisationId": null,
+                "sortOrder": 1,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": "2026-05-24T08:00:00.000Z"
+              }
+            }
+          },
+          "sortOrder": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A family of belt ranks (Kyu, Dan, Mon).",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "code": "kyu",
+                "nameEn": "Kyu",
+                "nameSv": "Kyu",
+                "nameFi": "Kyu",
+                "organisationId": null,
+                "sortOrder": 1,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": "2026-05-24T08:00:00.000Z"
+              }
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A family of belt ranks (Kyu, Dan, Mon).",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "code": "kyu",
+                "nameEn": "Kyu",
+                "nameSv": "Kyu",
+                "nameFi": "Kyu",
+                "organisationId": null,
+                "sortOrder": 1,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": "2026-05-24T08:00:00.000Z"
+              }
+            }
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A family of belt ranks (Kyu, Dan, Mon).",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "code": "kyu",
+                "nameEn": "Kyu",
+                "nameSv": "Kyu",
+                "nameFi": "Kyu",
+                "organisationId": null,
+                "sortOrder": 1,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": "2026-05-24T08:00:00.000Z"
+              }
+            }
+          }
+        },
+        "required": [
+          "id",
+          "code",
+          "nameEn",
+          "nameSv",
+          "nameFi",
+          "organisationId",
+          "sortOrder",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "UpdateBeltSystemDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 3,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-belt-system patch — omit a field to leave it unchanged."
+            }
+          },
+          "nameEn": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-belt-system patch — omit a field to leave it unchanged."
+            }
+          },
+          "nameSv": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-belt-system patch — omit a field to leave it unchanged."
+            }
+          },
+          "nameFi": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-belt-system patch — omit a field to leave it unchanged."
+            }
+          },
+          "organisationId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-belt-system patch — omit a field to leave it unchanged."
+            }
+          },
+          "sortOrder": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-belt-system patch — omit a field to leave it unchanged."
+            }
+          }
+        }
+      },
+      "BeltRankDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A specific rank inside a belt system.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "organisationId": null,
+                "systemId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "level": 1,
+                "sortOrder": 10,
+                "nameJa": null,
+                "nameRomaji": "Jukyu",
+                "nameEn": "10th Kyu",
+                "nameSv": "10 Kyu",
+                "nameFi": "10. Kyu",
+                "beltColor": "#FFFFFF",
+                "imageUrl": null,
+                "descriptionEn": null,
+                "descriptionSv": null,
+                "descriptionFi": null,
+                "publiclyVisible": false,
+                "slug": null,
+                "minAge": null,
+                "nextRankId": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": "2026-05-24T08:00:00.000Z"
+              }
+            }
+          },
+          "organisationId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A specific rank inside a belt system.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "organisationId": null,
+                "systemId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "level": 1,
+                "sortOrder": 10,
+                "nameJa": null,
+                "nameRomaji": "Jukyu",
+                "nameEn": "10th Kyu",
+                "nameSv": "10 Kyu",
+                "nameFi": "10. Kyu",
+                "beltColor": "#FFFFFF",
+                "imageUrl": null,
+                "descriptionEn": null,
+                "descriptionSv": null,
+                "descriptionFi": null,
+                "publiclyVisible": false,
+                "slug": null,
+                "minAge": null,
+                "nextRankId": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": "2026-05-24T08:00:00.000Z"
+              }
+            }
+          },
+          "systemId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A specific rank inside a belt system.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "organisationId": null,
+                "systemId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "level": 1,
+                "sortOrder": 10,
+                "nameJa": null,
+                "nameRomaji": "Jukyu",
+                "nameEn": "10th Kyu",
+                "nameSv": "10 Kyu",
+                "nameFi": "10. Kyu",
+                "beltColor": "#FFFFFF",
+                "imageUrl": null,
+                "descriptionEn": null,
+                "descriptionSv": null,
+                "descriptionFi": null,
+                "publiclyVisible": false,
+                "slug": null,
+                "minAge": null,
+                "nextRankId": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": "2026-05-24T08:00:00.000Z"
+              }
+            }
+          },
+          "level": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A specific rank inside a belt system.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "organisationId": null,
+                "systemId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "level": 1,
+                "sortOrder": 10,
+                "nameJa": null,
+                "nameRomaji": "Jukyu",
+                "nameEn": "10th Kyu",
+                "nameSv": "10 Kyu",
+                "nameFi": "10. Kyu",
+                "beltColor": "#FFFFFF",
+                "imageUrl": null,
+                "descriptionEn": null,
+                "descriptionSv": null,
+                "descriptionFi": null,
+                "publiclyVisible": false,
+                "slug": null,
+                "minAge": null,
+                "nextRankId": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": "2026-05-24T08:00:00.000Z"
+              }
+            }
+          },
+          "sortOrder": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A specific rank inside a belt system.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "organisationId": null,
+                "systemId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "level": 1,
+                "sortOrder": 10,
+                "nameJa": null,
+                "nameRomaji": "Jukyu",
+                "nameEn": "10th Kyu",
+                "nameSv": "10 Kyu",
+                "nameFi": "10. Kyu",
+                "beltColor": "#FFFFFF",
+                "imageUrl": null,
+                "descriptionEn": null,
+                "descriptionSv": null,
+                "descriptionFi": null,
+                "publiclyVisible": false,
+                "slug": null,
+                "minAge": null,
+                "nextRankId": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": "2026-05-24T08:00:00.000Z"
+              }
+            }
+          },
+          "nameJa": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A specific rank inside a belt system.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "organisationId": null,
+                "systemId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "level": 1,
+                "sortOrder": 10,
+                "nameJa": null,
+                "nameRomaji": "Jukyu",
+                "nameEn": "10th Kyu",
+                "nameSv": "10 Kyu",
+                "nameFi": "10. Kyu",
+                "beltColor": "#FFFFFF",
+                "imageUrl": null,
+                "descriptionEn": null,
+                "descriptionSv": null,
+                "descriptionFi": null,
+                "publiclyVisible": false,
+                "slug": null,
+                "minAge": null,
+                "nextRankId": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": "2026-05-24T08:00:00.000Z"
+              }
+            }
+          },
+          "nameRomaji": {
+            "type": "string",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A specific rank inside a belt system.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "organisationId": null,
+                "systemId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "level": 1,
+                "sortOrder": 10,
+                "nameJa": null,
+                "nameRomaji": "Jukyu",
+                "nameEn": "10th Kyu",
+                "nameSv": "10 Kyu",
+                "nameFi": "10. Kyu",
+                "beltColor": "#FFFFFF",
+                "imageUrl": null,
+                "descriptionEn": null,
+                "descriptionSv": null,
+                "descriptionFi": null,
+                "publiclyVisible": false,
+                "slug": null,
+                "minAge": null,
+                "nextRankId": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": "2026-05-24T08:00:00.000Z"
+              }
+            }
+          },
+          "nameEn": {
+            "type": "string",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A specific rank inside a belt system.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "organisationId": null,
+                "systemId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "level": 1,
+                "sortOrder": 10,
+                "nameJa": null,
+                "nameRomaji": "Jukyu",
+                "nameEn": "10th Kyu",
+                "nameSv": "10 Kyu",
+                "nameFi": "10. Kyu",
+                "beltColor": "#FFFFFF",
+                "imageUrl": null,
+                "descriptionEn": null,
+                "descriptionSv": null,
+                "descriptionFi": null,
+                "publiclyVisible": false,
+                "slug": null,
+                "minAge": null,
+                "nextRankId": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": "2026-05-24T08:00:00.000Z"
+              }
+            }
+          },
+          "nameSv": {
+            "type": "string",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A specific rank inside a belt system.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "organisationId": null,
+                "systemId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "level": 1,
+                "sortOrder": 10,
+                "nameJa": null,
+                "nameRomaji": "Jukyu",
+                "nameEn": "10th Kyu",
+                "nameSv": "10 Kyu",
+                "nameFi": "10. Kyu",
+                "beltColor": "#FFFFFF",
+                "imageUrl": null,
+                "descriptionEn": null,
+                "descriptionSv": null,
+                "descriptionFi": null,
+                "publiclyVisible": false,
+                "slug": null,
+                "minAge": null,
+                "nextRankId": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": "2026-05-24T08:00:00.000Z"
+              }
+            }
+          },
+          "nameFi": {
+            "type": "string",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A specific rank inside a belt system.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "organisationId": null,
+                "systemId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "level": 1,
+                "sortOrder": 10,
+                "nameJa": null,
+                "nameRomaji": "Jukyu",
+                "nameEn": "10th Kyu",
+                "nameSv": "10 Kyu",
+                "nameFi": "10. Kyu",
+                "beltColor": "#FFFFFF",
+                "imageUrl": null,
+                "descriptionEn": null,
+                "descriptionSv": null,
+                "descriptionFi": null,
+                "publiclyVisible": false,
+                "slug": null,
+                "minAge": null,
+                "nextRankId": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": "2026-05-24T08:00:00.000Z"
+              }
+            }
+          },
+          "beltColor": {
+            "type": "string",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A specific rank inside a belt system.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "organisationId": null,
+                "systemId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "level": 1,
+                "sortOrder": 10,
+                "nameJa": null,
+                "nameRomaji": "Jukyu",
+                "nameEn": "10th Kyu",
+                "nameSv": "10 Kyu",
+                "nameFi": "10. Kyu",
+                "beltColor": "#FFFFFF",
+                "imageUrl": null,
+                "descriptionEn": null,
+                "descriptionSv": null,
+                "descriptionFi": null,
+                "publiclyVisible": false,
+                "slug": null,
+                "minAge": null,
+                "nextRankId": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": "2026-05-24T08:00:00.000Z"
+              }
+            }
+          },
+          "imageUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A specific rank inside a belt system.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "organisationId": null,
+                "systemId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "level": 1,
+                "sortOrder": 10,
+                "nameJa": null,
+                "nameRomaji": "Jukyu",
+                "nameEn": "10th Kyu",
+                "nameSv": "10 Kyu",
+                "nameFi": "10. Kyu",
+                "beltColor": "#FFFFFF",
+                "imageUrl": null,
+                "descriptionEn": null,
+                "descriptionSv": null,
+                "descriptionFi": null,
+                "publiclyVisible": false,
+                "slug": null,
+                "minAge": null,
+                "nextRankId": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": "2026-05-24T08:00:00.000Z"
+              }
+            }
+          },
+          "descriptionEn": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A specific rank inside a belt system.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "organisationId": null,
+                "systemId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "level": 1,
+                "sortOrder": 10,
+                "nameJa": null,
+                "nameRomaji": "Jukyu",
+                "nameEn": "10th Kyu",
+                "nameSv": "10 Kyu",
+                "nameFi": "10. Kyu",
+                "beltColor": "#FFFFFF",
+                "imageUrl": null,
+                "descriptionEn": null,
+                "descriptionSv": null,
+                "descriptionFi": null,
+                "publiclyVisible": false,
+                "slug": null,
+                "minAge": null,
+                "nextRankId": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": "2026-05-24T08:00:00.000Z"
+              }
+            }
+          },
+          "descriptionSv": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A specific rank inside a belt system.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "organisationId": null,
+                "systemId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "level": 1,
+                "sortOrder": 10,
+                "nameJa": null,
+                "nameRomaji": "Jukyu",
+                "nameEn": "10th Kyu",
+                "nameSv": "10 Kyu",
+                "nameFi": "10. Kyu",
+                "beltColor": "#FFFFFF",
+                "imageUrl": null,
+                "descriptionEn": null,
+                "descriptionSv": null,
+                "descriptionFi": null,
+                "publiclyVisible": false,
+                "slug": null,
+                "minAge": null,
+                "nextRankId": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": "2026-05-24T08:00:00.000Z"
+              }
+            }
+          },
+          "descriptionFi": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A specific rank inside a belt system.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "organisationId": null,
+                "systemId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "level": 1,
+                "sortOrder": 10,
+                "nameJa": null,
+                "nameRomaji": "Jukyu",
+                "nameEn": "10th Kyu",
+                "nameSv": "10 Kyu",
+                "nameFi": "10. Kyu",
+                "beltColor": "#FFFFFF",
+                "imageUrl": null,
+                "descriptionEn": null,
+                "descriptionSv": null,
+                "descriptionFi": null,
+                "publiclyVisible": false,
+                "slug": null,
+                "minAge": null,
+                "nextRankId": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": "2026-05-24T08:00:00.000Z"
+              }
+            }
+          },
+          "publiclyVisible": {
+            "type": "boolean",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A specific rank inside a belt system.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "organisationId": null,
+                "systemId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "level": 1,
+                "sortOrder": 10,
+                "nameJa": null,
+                "nameRomaji": "Jukyu",
+                "nameEn": "10th Kyu",
+                "nameSv": "10 Kyu",
+                "nameFi": "10. Kyu",
+                "beltColor": "#FFFFFF",
+                "imageUrl": null,
+                "descriptionEn": null,
+                "descriptionSv": null,
+                "descriptionFi": null,
+                "publiclyVisible": false,
+                "slug": null,
+                "minAge": null,
+                "nextRankId": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": "2026-05-24T08:00:00.000Z"
+              }
+            }
+          },
+          "slug": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A specific rank inside a belt system.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "organisationId": null,
+                "systemId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "level": 1,
+                "sortOrder": 10,
+                "nameJa": null,
+                "nameRomaji": "Jukyu",
+                "nameEn": "10th Kyu",
+                "nameSv": "10 Kyu",
+                "nameFi": "10. Kyu",
+                "beltColor": "#FFFFFF",
+                "imageUrl": null,
+                "descriptionEn": null,
+                "descriptionSv": null,
+                "descriptionFi": null,
+                "publiclyVisible": false,
+                "slug": null,
+                "minAge": null,
+                "nextRankId": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": "2026-05-24T08:00:00.000Z"
+              }
+            }
+          },
+          "minAge": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A specific rank inside a belt system.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "organisationId": null,
+                "systemId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "level": 1,
+                "sortOrder": 10,
+                "nameJa": null,
+                "nameRomaji": "Jukyu",
+                "nameEn": "10th Kyu",
+                "nameSv": "10 Kyu",
+                "nameFi": "10. Kyu",
+                "beltColor": "#FFFFFF",
+                "imageUrl": null,
+                "descriptionEn": null,
+                "descriptionSv": null,
+                "descriptionFi": null,
+                "publiclyVisible": false,
+                "slug": null,
+                "minAge": null,
+                "nextRankId": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": "2026-05-24T08:00:00.000Z"
+              }
+            }
+          },
+          "nextRankId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A specific rank inside a belt system.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "organisationId": null,
+                "systemId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "level": 1,
+                "sortOrder": 10,
+                "nameJa": null,
+                "nameRomaji": "Jukyu",
+                "nameEn": "10th Kyu",
+                "nameSv": "10 Kyu",
+                "nameFi": "10. Kyu",
+                "beltColor": "#FFFFFF",
+                "imageUrl": null,
+                "descriptionEn": null,
+                "descriptionSv": null,
+                "descriptionFi": null,
+                "publiclyVisible": false,
+                "slug": null,
+                "minAge": null,
+                "nextRankId": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": "2026-05-24T08:00:00.000Z"
+              }
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A specific rank inside a belt system.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "organisationId": null,
+                "systemId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "level": 1,
+                "sortOrder": 10,
+                "nameJa": null,
+                "nameRomaji": "Jukyu",
+                "nameEn": "10th Kyu",
+                "nameSv": "10 Kyu",
+                "nameFi": "10. Kyu",
+                "beltColor": "#FFFFFF",
+                "imageUrl": null,
+                "descriptionEn": null,
+                "descriptionSv": null,
+                "descriptionFi": null,
+                "publiclyVisible": false,
+                "slug": null,
+                "minAge": null,
+                "nextRankId": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": "2026-05-24T08:00:00.000Z"
+              }
+            }
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A specific rank inside a belt system.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "organisationId": null,
+                "systemId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "level": 1,
+                "sortOrder": 10,
+                "nameJa": null,
+                "nameRomaji": "Jukyu",
+                "nameEn": "10th Kyu",
+                "nameSv": "10 Kyu",
+                "nameFi": "10. Kyu",
+                "beltColor": "#FFFFFF",
+                "imageUrl": null,
+                "descriptionEn": null,
+                "descriptionSv": null,
+                "descriptionFi": null,
+                "publiclyVisible": false,
+                "slug": null,
+                "minAge": null,
+                "nextRankId": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": "2026-05-24T08:00:00.000Z"
+              }
+            }
+          }
+        },
+        "required": [
+          "id",
+          "organisationId",
+          "systemId",
+          "level",
+          "sortOrder",
+          "nameJa",
+          "nameRomaji",
+          "nameEn",
+          "nameSv",
+          "nameFi",
+          "beltColor",
+          "imageUrl",
+          "descriptionEn",
+          "descriptionSv",
+          "descriptionFi",
+          "publiclyVisible",
+          "slug",
+          "minAge",
+          "nextRankId",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "CreateBeltRankDto": {
+        "type": "object",
+        "properties": {
+          "organisationId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-belt-rank payload."
+            }
+          },
+          "systemId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-belt-rank payload."
+            }
+          },
+          "level": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-belt-rank payload."
+            }
+          },
+          "sortOrder": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-belt-rank payload."
+            }
+          },
+          "nameJa": {
+            "default": null,
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-belt-rank payload."
+            }
+          },
+          "nameRomaji": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-belt-rank payload."
+            }
+          },
+          "nameEn": {
+            "default": "",
+            "type": "string",
+            "maxLength": 100,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-belt-rank payload."
+            }
+          },
+          "nameSv": {
+            "default": "",
+            "type": "string",
+            "maxLength": 100,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-belt-rank payload."
+            }
+          },
+          "nameFi": {
+            "default": "",
+            "type": "string",
+            "maxLength": 100,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-belt-rank payload."
+            }
+          },
+          "beltColor": {
+            "type": "string",
+            "pattern": "^#[0-9a-fA-F]{6}$",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-belt-rank payload."
+            }
+          },
+          "imageUrl": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-belt-rank payload."
+            }
+          },
+          "descriptionEn": {
+            "default": null,
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-belt-rank payload."
+            }
+          },
+          "descriptionSv": {
+            "default": null,
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-belt-rank payload."
+            }
+          },
+          "descriptionFi": {
+            "default": null,
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-belt-rank payload."
+            }
+          },
+          "publiclyVisible": {
+            "default": false,
+            "type": "boolean",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-belt-rank payload."
+            }
+          },
+          "slug": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-z0-9-]+$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-belt-rank payload."
+            }
+          },
+          "minAge": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-belt-rank payload."
+            }
+          },
+          "nextRankId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-belt-rank payload."
+            }
+          }
+        },
+        "required": [
+          "systemId",
+          "level",
+          "nameRomaji",
+          "beltColor"
+        ]
+      },
+      "UpdateBeltRankDto": {
+        "type": "object",
+        "properties": {
+          "organisationId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-belt-rank patch — omit a field to leave it unchanged."
+            }
+          },
+          "systemId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-belt-rank patch — omit a field to leave it unchanged."
+            }
+          },
+          "level": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-belt-rank patch — omit a field to leave it unchanged."
+            }
+          },
+          "sortOrder": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-belt-rank patch — omit a field to leave it unchanged."
+            }
+          },
+          "nameJa": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-belt-rank patch — omit a field to leave it unchanged."
+            }
+          },
+          "nameRomaji": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-belt-rank patch — omit a field to leave it unchanged."
+            }
+          },
+          "nameEn": {
+            "type": "string",
+            "maxLength": 100,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-belt-rank patch — omit a field to leave it unchanged."
+            }
+          },
+          "nameSv": {
+            "type": "string",
+            "maxLength": 100,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-belt-rank patch — omit a field to leave it unchanged."
+            }
+          },
+          "nameFi": {
+            "type": "string",
+            "maxLength": 100,
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-belt-rank patch — omit a field to leave it unchanged."
+            }
+          },
+          "beltColor": {
+            "type": "string",
+            "pattern": "^#[0-9a-fA-F]{6}$",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-belt-rank patch — omit a field to leave it unchanged."
+            }
+          },
+          "imageUrl": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-belt-rank patch — omit a field to leave it unchanged."
+            }
+          },
+          "descriptionEn": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-belt-rank patch — omit a field to leave it unchanged."
+            }
+          },
+          "descriptionSv": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-belt-rank patch — omit a field to leave it unchanged."
+            }
+          },
+          "descriptionFi": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-belt-rank patch — omit a field to leave it unchanged."
+            }
+          },
+          "publiclyVisible": {
+            "type": "boolean",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-belt-rank patch — omit a field to leave it unchanged."
+            }
+          },
+          "slug": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-z0-9-]+$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-belt-rank patch — omit a field to leave it unchanged."
+            }
+          },
+          "minAge": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-belt-rank patch — omit a field to leave it unchanged."
+            }
+          },
+          "nextRankId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-belt-rank patch — omit a field to leave it unchanged."
+            }
+          }
+        }
+      },
+      "CreateShogoTitleDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 30,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-shogo-title payload."
+            }
+          },
+          "nameEn": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-shogo-title payload."
+            }
+          },
+          "nameSv": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-shogo-title payload."
+            }
+          },
+          "nameFi": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-shogo-title payload."
+            }
+          },
+          "nameJa": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-shogo-title payload."
+            }
+          },
+          "minRankId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-shogo-title payload."
+            }
+          },
+          "sortOrder": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-shogo-title payload."
+            }
+          }
+        },
+        "required": [
+          "code",
+          "nameEn",
+          "nameSv",
+          "nameFi",
+          "nameJa",
+          "minRankId"
+        ]
+      },
+      "ShogoTitleDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 30,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Honorary title (Renshi / Kyoshi / Hanshi).",
+              "example": {
+                "code": "renshi",
+                "nameEn": "Renshi",
+                "nameSv": "Renshi",
+                "nameFi": "Renshi",
+                "nameJa": "錬士",
+                "minRankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "sortOrder": 1
+              }
+            }
+          },
+          "nameEn": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Honorary title (Renshi / Kyoshi / Hanshi).",
+              "example": {
+                "code": "renshi",
+                "nameEn": "Renshi",
+                "nameSv": "Renshi",
+                "nameFi": "Renshi",
+                "nameJa": "錬士",
+                "minRankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "sortOrder": 1
+              }
+            }
+          },
+          "nameSv": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Honorary title (Renshi / Kyoshi / Hanshi).",
+              "example": {
+                "code": "renshi",
+                "nameEn": "Renshi",
+                "nameSv": "Renshi",
+                "nameFi": "Renshi",
+                "nameJa": "錬士",
+                "minRankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "sortOrder": 1
+              }
+            }
+          },
+          "nameFi": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Honorary title (Renshi / Kyoshi / Hanshi).",
+              "example": {
+                "code": "renshi",
+                "nameEn": "Renshi",
+                "nameSv": "Renshi",
+                "nameFi": "Renshi",
+                "nameJa": "錬士",
+                "minRankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "sortOrder": 1
+              }
+            }
+          },
+          "nameJa": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Honorary title (Renshi / Kyoshi / Hanshi).",
+              "example": {
+                "code": "renshi",
+                "nameEn": "Renshi",
+                "nameSv": "Renshi",
+                "nameFi": "Renshi",
+                "nameJa": "錬士",
+                "minRankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "sortOrder": 1
+              }
+            }
+          },
+          "minRankId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Honorary title (Renshi / Kyoshi / Hanshi).",
+              "example": {
+                "code": "renshi",
+                "nameEn": "Renshi",
+                "nameSv": "Renshi",
+                "nameFi": "Renshi",
+                "nameJa": "錬士",
+                "minRankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "sortOrder": 1
+              }
+            }
+          },
+          "sortOrder": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Honorary title (Renshi / Kyoshi / Hanshi).",
+              "example": {
+                "code": "renshi",
+                "nameEn": "Renshi",
+                "nameSv": "Renshi",
+                "nameFi": "Renshi",
+                "nameJa": "錬士",
+                "minRankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "sortOrder": 1
+              }
+            }
+          }
+        },
+        "required": [
+          "code",
+          "nameEn",
+          "nameSv",
+          "nameFi",
+          "nameJa",
+          "minRankId",
+          "sortOrder"
+        ]
+      },
+      "UpdateShogoTitleDto": {
+        "type": "object",
+        "properties": {
+          "nameEn": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-shogo-title patch — omit a field to leave it unchanged."
+            }
+          },
+          "nameSv": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-shogo-title patch — omit a field to leave it unchanged."
+            }
+          },
+          "nameFi": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-shogo-title patch — omit a field to leave it unchanged."
+            }
+          },
+          "nameJa": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-shogo-title patch — omit a field to leave it unchanged."
+            }
+          },
+          "minRankId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-shogo-title patch — omit a field to leave it unchanged."
+            }
+          },
+          "sortOrder": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-shogo-title patch — omit a field to leave it unchanged."
+            }
+          }
+        }
+      },
+      "CreateRankHistoryDto": {
+        "type": "object",
+        "properties": {
+          "rankId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-external-rank-history payload."
+            }
+          },
+          "shogoTitle": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 50
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-external-rank-history payload."
+            }
+          },
+          "date": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-external-rank-history payload."
+            }
+          },
+          "examinerName": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-external-rank-history payload."
+            }
+          },
+          "organisationName": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-external-rank-history payload."
+            }
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 5000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-external-rank-history payload."
+            }
+          }
+        },
+        "required": [
+          "rankId",
+          "date"
+        ]
+      },
+      "RankHistoryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "RankHistoryResult": {
+                "type": "string",
+                "enum": [
+                  "pass",
+                  "fail"
+                ],
+                "description": "Outcome of a grading: pass or fail."
+              },
+              "RankHistorySource": {
+                "type": "string",
+                "enum": [
+                  "event",
+                  "external"
+                ],
+                "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A single grading record (external or event-sourced).",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "userId": "u-1",
+                "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "shogoTitle": null,
+                "date": "2024-09-01",
+                "result": "pass",
+                "source": "external",
+                "eventId": null,
+                "recordedByUserId": "u-1",
+                "examinerName": "Sensei Tanaka",
+                "organisationName": "Kobe Dojo",
+                "notes": null,
+                "verified": false,
+                "verifiedByUserId": null,
+                "verifiedAt": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": null,
+                "updatedByUserId": null
+              }
+            }
+          },
+          "userId": {
+            "type": "string",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "RankHistoryResult": {
+                "type": "string",
+                "enum": [
+                  "pass",
+                  "fail"
+                ],
+                "description": "Outcome of a grading: pass or fail."
+              },
+              "RankHistorySource": {
+                "type": "string",
+                "enum": [
+                  "event",
+                  "external"
+                ],
+                "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A single grading record (external or event-sourced).",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "userId": "u-1",
+                "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "shogoTitle": null,
+                "date": "2024-09-01",
+                "result": "pass",
+                "source": "external",
+                "eventId": null,
+                "recordedByUserId": "u-1",
+                "examinerName": "Sensei Tanaka",
+                "organisationName": "Kobe Dojo",
+                "notes": null,
+                "verified": false,
+                "verifiedByUserId": null,
+                "verifiedAt": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": null,
+                "updatedByUserId": null
+              }
+            }
+          },
+          "rankId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "RankHistoryResult": {
+                "type": "string",
+                "enum": [
+                  "pass",
+                  "fail"
+                ],
+                "description": "Outcome of a grading: pass or fail."
+              },
+              "RankHistorySource": {
+                "type": "string",
+                "enum": [
+                  "event",
+                  "external"
+                ],
+                "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A single grading record (external or event-sourced).",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "userId": "u-1",
+                "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "shogoTitle": null,
+                "date": "2024-09-01",
+                "result": "pass",
+                "source": "external",
+                "eventId": null,
+                "recordedByUserId": "u-1",
+                "examinerName": "Sensei Tanaka",
+                "organisationName": "Kobe Dojo",
+                "notes": null,
+                "verified": false,
+                "verifiedByUserId": null,
+                "verifiedAt": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": null,
+                "updatedByUserId": null
+              }
+            }
+          },
+          "shogoTitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "RankHistoryResult": {
+                "type": "string",
+                "enum": [
+                  "pass",
+                  "fail"
+                ],
+                "description": "Outcome of a grading: pass or fail."
+              },
+              "RankHistorySource": {
+                "type": "string",
+                "enum": [
+                  "event",
+                  "external"
+                ],
+                "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A single grading record (external or event-sourced).",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "userId": "u-1",
+                "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "shogoTitle": null,
+                "date": "2024-09-01",
+                "result": "pass",
+                "source": "external",
+                "eventId": null,
+                "recordedByUserId": "u-1",
+                "examinerName": "Sensei Tanaka",
+                "organisationName": "Kobe Dojo",
+                "notes": null,
+                "verified": false,
+                "verifiedByUserId": null,
+                "verifiedAt": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": null,
+                "updatedByUserId": null
+              }
+            }
+          },
+          "date": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "RankHistoryResult": {
+                "type": "string",
+                "enum": [
+                  "pass",
+                  "fail"
+                ],
+                "description": "Outcome of a grading: pass or fail."
+              },
+              "RankHistorySource": {
+                "type": "string",
+                "enum": [
+                  "event",
+                  "external"
+                ],
+                "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A single grading record (external or event-sourced).",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "userId": "u-1",
+                "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "shogoTitle": null,
+                "date": "2024-09-01",
+                "result": "pass",
+                "source": "external",
+                "eventId": null,
+                "recordedByUserId": "u-1",
+                "examinerName": "Sensei Tanaka",
+                "organisationName": "Kobe Dojo",
+                "notes": null,
+                "verified": false,
+                "verifiedByUserId": null,
+                "verifiedAt": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": null,
+                "updatedByUserId": null
+              }
+            }
+          },
+          "result": {
+            "$ref": "#/$defs/RankHistoryResult",
+            "type": "",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "RankHistoryResult": {
+                "type": "string",
+                "enum": [
+                  "pass",
+                  "fail"
+                ],
+                "description": "Outcome of a grading: pass or fail."
+              },
+              "RankHistorySource": {
+                "type": "string",
+                "enum": [
+                  "event",
+                  "external"
+                ],
+                "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A single grading record (external or event-sourced).",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "userId": "u-1",
+                "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "shogoTitle": null,
+                "date": "2024-09-01",
+                "result": "pass",
+                "source": "external",
+                "eventId": null,
+                "recordedByUserId": "u-1",
+                "examinerName": "Sensei Tanaka",
+                "organisationName": "Kobe Dojo",
+                "notes": null,
+                "verified": false,
+                "verifiedByUserId": null,
+                "verifiedAt": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": null,
+                "updatedByUserId": null
+              }
+            }
+          },
+          "source": {
+            "$ref": "#/$defs/RankHistorySource",
+            "type": "",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "RankHistoryResult": {
+                "type": "string",
+                "enum": [
+                  "pass",
+                  "fail"
+                ],
+                "description": "Outcome of a grading: pass or fail."
+              },
+              "RankHistorySource": {
+                "type": "string",
+                "enum": [
+                  "event",
+                  "external"
+                ],
+                "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A single grading record (external or event-sourced).",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "userId": "u-1",
+                "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "shogoTitle": null,
+                "date": "2024-09-01",
+                "result": "pass",
+                "source": "external",
+                "eventId": null,
+                "recordedByUserId": "u-1",
+                "examinerName": "Sensei Tanaka",
+                "organisationName": "Kobe Dojo",
+                "notes": null,
+                "verified": false,
+                "verifiedByUserId": null,
+                "verifiedAt": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": null,
+                "updatedByUserId": null
+              }
+            }
+          },
+          "eventId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "RankHistoryResult": {
+                "type": "string",
+                "enum": [
+                  "pass",
+                  "fail"
+                ],
+                "description": "Outcome of a grading: pass or fail."
+              },
+              "RankHistorySource": {
+                "type": "string",
+                "enum": [
+                  "event",
+                  "external"
+                ],
+                "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A single grading record (external or event-sourced).",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "userId": "u-1",
+                "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "shogoTitle": null,
+                "date": "2024-09-01",
+                "result": "pass",
+                "source": "external",
+                "eventId": null,
+                "recordedByUserId": "u-1",
+                "examinerName": "Sensei Tanaka",
+                "organisationName": "Kobe Dojo",
+                "notes": null,
+                "verified": false,
+                "verifiedByUserId": null,
+                "verifiedAt": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": null,
+                "updatedByUserId": null
+              }
+            }
+          },
+          "recordedByUserId": {
+            "type": "string",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "RankHistoryResult": {
+                "type": "string",
+                "enum": [
+                  "pass",
+                  "fail"
+                ],
+                "description": "Outcome of a grading: pass or fail."
+              },
+              "RankHistorySource": {
+                "type": "string",
+                "enum": [
+                  "event",
+                  "external"
+                ],
+                "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A single grading record (external or event-sourced).",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "userId": "u-1",
+                "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "shogoTitle": null,
+                "date": "2024-09-01",
+                "result": "pass",
+                "source": "external",
+                "eventId": null,
+                "recordedByUserId": "u-1",
+                "examinerName": "Sensei Tanaka",
+                "organisationName": "Kobe Dojo",
+                "notes": null,
+                "verified": false,
+                "verifiedByUserId": null,
+                "verifiedAt": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": null,
+                "updatedByUserId": null
+              }
+            }
+          },
+          "examinerName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "RankHistoryResult": {
+                "type": "string",
+                "enum": [
+                  "pass",
+                  "fail"
+                ],
+                "description": "Outcome of a grading: pass or fail."
+              },
+              "RankHistorySource": {
+                "type": "string",
+                "enum": [
+                  "event",
+                  "external"
+                ],
+                "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A single grading record (external or event-sourced).",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "userId": "u-1",
+                "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "shogoTitle": null,
+                "date": "2024-09-01",
+                "result": "pass",
+                "source": "external",
+                "eventId": null,
+                "recordedByUserId": "u-1",
+                "examinerName": "Sensei Tanaka",
+                "organisationName": "Kobe Dojo",
+                "notes": null,
+                "verified": false,
+                "verifiedByUserId": null,
+                "verifiedAt": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": null,
+                "updatedByUserId": null
+              }
+            }
+          },
+          "organisationName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "RankHistoryResult": {
+                "type": "string",
+                "enum": [
+                  "pass",
+                  "fail"
+                ],
+                "description": "Outcome of a grading: pass or fail."
+              },
+              "RankHistorySource": {
+                "type": "string",
+                "enum": [
+                  "event",
+                  "external"
+                ],
+                "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A single grading record (external or event-sourced).",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "userId": "u-1",
+                "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "shogoTitle": null,
+                "date": "2024-09-01",
+                "result": "pass",
+                "source": "external",
+                "eventId": null,
+                "recordedByUserId": "u-1",
+                "examinerName": "Sensei Tanaka",
+                "organisationName": "Kobe Dojo",
+                "notes": null,
+                "verified": false,
+                "verifiedByUserId": null,
+                "verifiedAt": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": null,
+                "updatedByUserId": null
+              }
+            }
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "RankHistoryResult": {
+                "type": "string",
+                "enum": [
+                  "pass",
+                  "fail"
+                ],
+                "description": "Outcome of a grading: pass or fail."
+              },
+              "RankHistorySource": {
+                "type": "string",
+                "enum": [
+                  "event",
+                  "external"
+                ],
+                "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A single grading record (external or event-sourced).",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "userId": "u-1",
+                "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "shogoTitle": null,
+                "date": "2024-09-01",
+                "result": "pass",
+                "source": "external",
+                "eventId": null,
+                "recordedByUserId": "u-1",
+                "examinerName": "Sensei Tanaka",
+                "organisationName": "Kobe Dojo",
+                "notes": null,
+                "verified": false,
+                "verifiedByUserId": null,
+                "verifiedAt": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": null,
+                "updatedByUserId": null
+              }
+            }
+          },
+          "verified": {
+            "type": "boolean",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "RankHistoryResult": {
+                "type": "string",
+                "enum": [
+                  "pass",
+                  "fail"
+                ],
+                "description": "Outcome of a grading: pass or fail."
+              },
+              "RankHistorySource": {
+                "type": "string",
+                "enum": [
+                  "event",
+                  "external"
+                ],
+                "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A single grading record (external or event-sourced).",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "userId": "u-1",
+                "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "shogoTitle": null,
+                "date": "2024-09-01",
+                "result": "pass",
+                "source": "external",
+                "eventId": null,
+                "recordedByUserId": "u-1",
+                "examinerName": "Sensei Tanaka",
+                "organisationName": "Kobe Dojo",
+                "notes": null,
+                "verified": false,
+                "verifiedByUserId": null,
+                "verifiedAt": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": null,
+                "updatedByUserId": null
+              }
+            }
+          },
+          "verifiedByUserId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "RankHistoryResult": {
+                "type": "string",
+                "enum": [
+                  "pass",
+                  "fail"
+                ],
+                "description": "Outcome of a grading: pass or fail."
+              },
+              "RankHistorySource": {
+                "type": "string",
+                "enum": [
+                  "event",
+                  "external"
+                ],
+                "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A single grading record (external or event-sourced).",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "userId": "u-1",
+                "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "shogoTitle": null,
+                "date": "2024-09-01",
+                "result": "pass",
+                "source": "external",
+                "eventId": null,
+                "recordedByUserId": "u-1",
+                "examinerName": "Sensei Tanaka",
+                "organisationName": "Kobe Dojo",
+                "notes": null,
+                "verified": false,
+                "verifiedByUserId": null,
+                "verifiedAt": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": null,
+                "updatedByUserId": null
+              }
+            }
+          },
+          "verifiedAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "RankHistoryResult": {
+                "type": "string",
+                "enum": [
+                  "pass",
+                  "fail"
+                ],
+                "description": "Outcome of a grading: pass or fail."
+              },
+              "RankHistorySource": {
+                "type": "string",
+                "enum": [
+                  "event",
+                  "external"
+                ],
+                "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A single grading record (external or event-sourced).",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "userId": "u-1",
+                "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "shogoTitle": null,
+                "date": "2024-09-01",
+                "result": "pass",
+                "source": "external",
+                "eventId": null,
+                "recordedByUserId": "u-1",
+                "examinerName": "Sensei Tanaka",
+                "organisationName": "Kobe Dojo",
+                "notes": null,
+                "verified": false,
+                "verifiedByUserId": null,
+                "verifiedAt": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": null,
+                "updatedByUserId": null
+              }
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "RankHistoryResult": {
+                "type": "string",
+                "enum": [
+                  "pass",
+                  "fail"
+                ],
+                "description": "Outcome of a grading: pass or fail."
+              },
+              "RankHistorySource": {
+                "type": "string",
+                "enum": [
+                  "event",
+                  "external"
+                ],
+                "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A single grading record (external or event-sourced).",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "userId": "u-1",
+                "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "shogoTitle": null,
+                "date": "2024-09-01",
+                "result": "pass",
+                "source": "external",
+                "eventId": null,
+                "recordedByUserId": "u-1",
+                "examinerName": "Sensei Tanaka",
+                "organisationName": "Kobe Dojo",
+                "notes": null,
+                "verified": false,
+                "verifiedByUserId": null,
+                "verifiedAt": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": null,
+                "updatedByUserId": null
+              }
+            }
+          },
+          "updatedAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "RankHistoryResult": {
+                "type": "string",
+                "enum": [
+                  "pass",
+                  "fail"
+                ],
+                "description": "Outcome of a grading: pass or fail."
+              },
+              "RankHistorySource": {
+                "type": "string",
+                "enum": [
+                  "event",
+                  "external"
+                ],
+                "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A single grading record (external or event-sourced).",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "userId": "u-1",
+                "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "shogoTitle": null,
+                "date": "2024-09-01",
+                "result": "pass",
+                "source": "external",
+                "eventId": null,
+                "recordedByUserId": "u-1",
+                "examinerName": "Sensei Tanaka",
+                "organisationName": "Kobe Dojo",
+                "notes": null,
+                "verified": false,
+                "verifiedByUserId": null,
+                "verifiedAt": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": null,
+                "updatedByUserId": null
+              }
+            }
+          },
+          "updatedByUserId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "RankHistoryResult": {
+                "type": "string",
+                "enum": [
+                  "pass",
+                  "fail"
+                ],
+                "description": "Outcome of a grading: pass or fail."
+              },
+              "RankHistorySource": {
+                "type": "string",
+                "enum": [
+                  "event",
+                  "external"
+                ],
+                "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A single grading record (external or event-sourced).",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "userId": "u-1",
+                "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "shogoTitle": null,
+                "date": "2024-09-01",
+                "result": "pass",
+                "source": "external",
+                "eventId": null,
+                "recordedByUserId": "u-1",
+                "examinerName": "Sensei Tanaka",
+                "organisationName": "Kobe Dojo",
+                "notes": null,
+                "verified": false,
+                "verifiedByUserId": null,
+                "verifiedAt": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": null,
+                "updatedByUserId": null
+              }
+            }
+          }
+        },
+        "required": [
+          "id",
+          "userId",
+          "rankId",
+          "shogoTitle",
+          "date",
+          "result",
+          "source",
+          "eventId",
+          "recordedByUserId",
+          "examinerName",
+          "organisationName",
+          "notes",
+          "verified",
+          "verifiedByUserId",
+          "verifiedAt",
+          "createdAt",
+          "updatedAt",
+          "updatedByUserId"
+        ]
+      },
+      "UpdateRankHistoryDto": {
+        "type": "object",
+        "properties": {
+          "rankId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-external-rank-history patch."
+            }
+          },
+          "shogoTitle": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 50
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-external-rank-history patch."
+            }
+          },
+          "date": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-external-rank-history patch."
+            }
+          },
+          "examinerName": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-external-rank-history patch."
+            }
+          },
+          "organisationName": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-external-rank-history patch."
+            }
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 5000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-external-rank-history patch."
+            }
+          }
+        }
+      },
       "UserDto": {
         "type": "object",
         "properties": {
@@ -3498,56 +7794,6 @@
           "total",
           "page",
           "perPage"
-        ]
-      },
-      "ErrorEnvelopeDto": {
-        "type": "object",
-        "properties": {
-          "error": {
-            "$ref": "#/$defs/ErrorPayload",
-            "type": "",
-            "x-nestjs_zod-parent-has-refs": true,
-            "x-nestjs_zod-empty-type": true,
-            "x-nestjs_zod-$defs": {
-              "ErrorPayload": {
-                "type": "object",
-                "properties": {
-                  "code": {
-                    "type": "string",
-                    "description": "Stable, machine-readable error code (e.g. `VALIDATION_FAILED`)."
-                  },
-                  "message": {
-                    "type": "string",
-                    "description": "Human-readable error message safe to surface to end users."
-                  },
-                  "details": {
-                    "description": "Optional structured context — e.g. per-field validation errors."
-                  }
-                },
-                "required": [
-                  "code",
-                  "message"
-                ],
-                "description": "The body of a uniform error envelope.",
-                "example": {
-                  "code": "NOT_FOUND",
-                  "message": "The requested resource could not be found."
-                }
-              }
-            },
-            "x-nestjs_zod-parent-metadata": {
-              "description": "The uniform error envelope returned for every non-2xx response from the API.",
-              "example": {
-                "error": {
-                  "code": "NOT_FOUND",
-                  "message": "The requested resource could not be found."
-                }
-              }
-            }
-          }
-        },
-        "required": [
-          "error"
         ]
       },
       "InviteUserDto": {
@@ -6844,6 +11090,54 @@
       },
       "UpdateUserProfileInput": {
         "$ref": "#/components/schemas/UpdateUserProfileInput"
+      },
+      "BeltSystem": {
+        "$ref": "#/components/schemas/BeltSystem"
+      },
+      "CreateBeltSystemInput": {
+        "$ref": "#/components/schemas/CreateBeltSystemInput"
+      },
+      "UpdateBeltSystemInput": {
+        "$ref": "#/components/schemas/UpdateBeltSystemInput"
+      },
+      "BeltRank": {
+        "$ref": "#/components/schemas/BeltRank"
+      },
+      "CreateBeltRankInput": {
+        "$ref": "#/components/schemas/CreateBeltRankInput"
+      },
+      "UpdateBeltRankInput": {
+        "$ref": "#/components/schemas/UpdateBeltRankInput"
+      },
+      "ShogoTitle": {
+        "$ref": "#/components/schemas/ShogoTitle"
+      },
+      "CreateShogoTitleInput": {
+        "$ref": "#/components/schemas/CreateShogoTitleInput"
+      },
+      "UpdateShogoTitleInput": {
+        "$ref": "#/components/schemas/UpdateShogoTitleInput"
+      },
+      "RankHistoryResult": {
+        "$ref": "#/components/schemas/RankHistoryResult"
+      },
+      "RankHistorySource": {
+        "$ref": "#/components/schemas/RankHistorySource"
+      },
+      "RankHistory": {
+        "$ref": "#/components/schemas/RankHistory"
+      },
+      "CreateRankHistoryInput": {
+        "$ref": "#/components/schemas/CreateRankHistoryInput"
+      },
+      "UpdateRankHistoryInput": {
+        "$ref": "#/components/schemas/UpdateRankHistoryInput"
+      },
+      "GradingHistoryRow": {
+        "$ref": "#/components/schemas/GradingHistoryRow"
+      },
+      "GradingHistoryResponse": {
+        "$ref": "#/components/schemas/GradingHistoryResponse"
       }
     }
   }
