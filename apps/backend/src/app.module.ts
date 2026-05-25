@@ -12,6 +12,7 @@ import { EmailModule } from './infrastructure/email/email.module.js';
 import { AuditLogModule } from './modules/audit-log/audit-log.module.js';
 import { AuthDocsModule } from './modules/auth/auth.module.js';
 import { BeltCatalogModule } from './modules/belt-catalog/belt-catalog.module.js';
+import { RankHistoryModule } from './modules/rank-history/rank-history.module.js';
 import { HealthModule } from './modules/health/health.module.js';
 import { MembershipsModule } from './modules/memberships/memberships.module.js';
 import { OrganisationsModule } from './modules/organisations/organisations.module.js';
@@ -27,6 +28,7 @@ import { UsersModule } from './modules/users/users.module.js';
     AbilityModule,
     AuthDocsModule,
     BeltCatalogModule,
+    RankHistoryModule,
     HealthModule,
     UsersModule,
     ProfileModule,

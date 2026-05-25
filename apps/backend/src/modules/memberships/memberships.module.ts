@@ -10,6 +10,6 @@ import { MembershipsService } from './memberships.service.js';
   imports: [OrganisationsModule], // for OrganisationsRepository
   controllers: [MembershipsController],
   providers: [MembershipsService, MembershipsRepository],
-  exports: [MembershipsService],
+  exports: [MembershipsService, MembershipsRepository],
 })
 export class MembershipsModule {}

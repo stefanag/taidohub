@@ -2,6 +2,7 @@ import { Global, Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 
 import { BeltCatalogAbilityRules } from '../../modules/belt-catalog/belt-catalog.abilities.js';
+import { RankHistoryAbilityRules } from '../../modules/rank-history/rank-history.abilities.js';
 import { AuditLogAbilityRules } from '../../modules/audit-log/audit-log.abilities.js';
 import { MembershipsAbilityRules } from '../../modules/memberships/memberships.abilities.js';
 import { OrganisationsAbilityRules } from '../../modules/organisations/organisations.abilities.js';
@@ -27,6 +28,7 @@ import { AbilityGuard } from './ability.guard.js';
 @Module({
   providers: [
     BeltCatalogAbilityRules,
+    RankHistoryAbilityRules,
     AuditLogAbilityRules,
     MembershipsAbilityRules,
     OrganisationsAbilityRules,
