@@ -212,4 +212,19 @@ export default defineConfig([
       'fsd/no-public-api-sidestep': 'off',
     },
   },
+  {
+    // The rank-history-form test mocks the belt-rank, shogo-title, and
+    // rank-history entity API modules by their deep paths because the
+    // query-options / mutation factories capture the fetchers directly from
+    // those modules (not via the barrel). Mocking the barrels wouldn't reach
+    // those imports, so `vi.mock` MUST target the deep paths. It also mocks
+    // `auth-by-email`'s API deep path to prevent `refreshSession()` from
+    // making real network requests during tests. Allow both public-API sidestep
+    // and cross-feature imports for this test file only.
+    files: ['src/features/rank-history-form/**/*.test.{ts,tsx}'],
+    rules: {
+      'fsd/no-public-api-sidestep': 'off',
+      'fsd/forbidden-imports': 'off',
+    },
+  },
 ]);
