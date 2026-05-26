@@ -144,4 +144,15 @@ export default defineConfig([
       'fsd/no-public-api-sidestep': 'off',
     },
   },
+  {
+    // The shogo-title-form test mocks the shogo-title and belt-rank entity API
+    // modules by their deep paths because the query-options factories capture
+    // the fetchers directly from those modules (not via the barrel). Mocking
+    // the barrels wouldn't reach those imports, so `vi.mock` MUST target the
+    // deep paths. Allow the public-API sidestep for this test file only.
+    files: ['src/features/shogo-title-form/**/*.test.{ts,tsx}'],
+    rules: {
+      'fsd/no-public-api-sidestep': 'off',
+    },
+  },
 ]);
