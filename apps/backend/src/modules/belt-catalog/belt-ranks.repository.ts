@@ -8,6 +8,8 @@ import {
 } from '../../infrastructure/database/client.js';
 import {
   beltRanks,
+  beltSystems,
+  organisations,
   rankHistory,
   shogoTitles,
   type DbBeltRank,
@@ -143,5 +145,49 @@ export class BeltRanksRepository {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async countUserProfilesUsingRank(_rankId: string, _tx?: DrizzleExecutor): Promise<number> {
     return 0;
+  }
+
+  async findPublicBySlug(slug: string) {
+    const rows = await this.db
+      .select({
+        // rank columns — flat, matching DbBeltRank field names
+        id: beltRanks.id,
+        organisationId: beltRanks.organisationId,
+        systemId: beltRanks.systemId,
+        level: beltRanks.level,
+        sortOrder: beltRanks.sortOrder,
+        nameJa: beltRanks.nameJa,
+        nameRomaji: beltRanks.nameRomaji,
+        nameEn: beltRanks.nameEn,
+        nameSv: beltRanks.nameSv,
+        nameFi: beltRanks.nameFi,
+        beltColor: beltRanks.beltColor,
+        imageUrl: beltRanks.imageUrl,
+        descriptionEn: beltRanks.descriptionEn,
+        descriptionSv: beltRanks.descriptionSv,
+        descriptionFi: beltRanks.descriptionFi,
+        publiclyVisible: beltRanks.publiclyVisible,
+        slug: beltRanks.slug,
+        minAge: beltRanks.minAge,
+        nextRankId: beltRanks.nextRankId,
+        createdAt: beltRanks.createdAt,
+        updatedAt: beltRanks.updatedAt,
+        // joined belt_system columns
+        systemCode: beltSystems.code,
+        systemNameEn: beltSystems.nameEn,
+        systemNameSv: beltSystems.nameSv,
+        systemNameFi: beltSystems.nameFi,
+        // joined organisations columns (left-joined — nullable when the rank is global)
+        orgShortCode: organisations.shortCode,
+        orgNameEn: organisations.nameEn,
+        orgNameSv: organisations.nameSv,
+        orgNameFi: organisations.nameFi,
+      })
+      .from(beltRanks)
+      .innerJoin(beltSystems, eq(beltSystems.id, beltRanks.systemId))
+      .leftJoin(organisations, eq(organisations.id, beltRanks.organisationId))
+      .where(and(eq(beltRanks.slug, slug), eq(beltRanks.publiclyVisible, true)))
+      .limit(1);
+    return rows[0] ?? null;
   }
 }

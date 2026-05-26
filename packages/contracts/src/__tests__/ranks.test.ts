@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   BeltRankSchema,
   CreateBeltRankSchema,
+  PublicRankResponseSchema,
   UpdateBeltRankSchema,
 } from '../ranks.js';
 
@@ -113,6 +114,40 @@ describe('BeltRankSchema', () => {
         id: UUID,
         createdAt: ISO,
         updatedAt: ISO,
+      }).success,
+    ).toBe(true);
+  });
+});
+
+describe('PublicRankResponseSchema', () => {
+  it('accepts a full payload with a non-null organisation', () => {
+    expect(
+      PublicRankResponseSchema.safeParse({
+        rank: {
+          id: UUID,
+          organisationId: null,
+          systemId: UUID,
+          level: 1,
+          sortOrder: 10,
+          nameJa: null,
+          nameRomaji: 'Jukyu',
+          nameEn: '10th Kyu',
+          nameSv: '10 Kyu',
+          nameFi: '10. Kyu',
+          beltColor: '#FFFFFF',
+          imageUrl: null,
+          descriptionEn: null,
+          descriptionSv: null,
+          descriptionFi: null,
+          publiclyVisible: true,
+          slug: 'jukyu',
+          minAge: null,
+          nextRankId: null,
+          createdAt: ISO,
+          updatedAt: ISO,
+        },
+        system: { id: UUID, code: 'kyu', nameEn: 'Kyu', nameSv: 'Kyu', nameFi: 'Kyu' },
+        organisation: null,
       }).success,
     ).toBe(true);
   });

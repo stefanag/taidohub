@@ -7,6 +7,7 @@ import {
 import type {
   BeltRank,
   CreateBeltRankInput,
+  PublicRankResponse,
   UpdateBeltRankInput,
 } from '@repo/contracts/ranks';
 
@@ -127,6 +128,35 @@ export class BeltRanksService {
       });
     }
     return this.toApi(row);
+  }
+
+  async findPublicBySlug(slug: string): Promise<PublicRankResponse> {
+    const row = await this.repo.findPublicBySlug(slug);
+    if (!row) {
+      throw new NotFoundException({
+        error: { code: 'NOT_FOUND', message: `Rank with slug "${slug}" not found.` },
+      });
+    }
+    const { systemCode, systemNameEn, systemNameSv, systemNameFi, orgShortCode, orgNameEn, orgNameSv, orgNameFi, ...rankRow } = row;
+    return {
+      rank: this.toApi(rankRow),
+      system: {
+        id: row.systemId,
+        code: systemCode,
+        nameEn: systemNameEn,
+        nameSv: systemNameSv,
+        nameFi: systemNameFi,
+      },
+      organisation: row.organisationId
+        ? {
+            id: row.organisationId,
+            shortCode: orgShortCode!,
+            nameEn: orgNameEn!,
+            nameSv: orgNameSv!,
+            nameFi: orgNameFi!,
+          }
+        : null,
+    };
   }
 
   /**

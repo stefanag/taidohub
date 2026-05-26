@@ -141,8 +141,42 @@ export const BeltRankSchema = z
 
 export type BeltRank = z.infer<typeof BeltRankSchema>;
 
+/**
+ * Public response for `GET /api/public/ranks/:slug`. Embeds the rank itself
+ * plus the system (so the page can compute BeltGraphic visuals) and a small
+ * organisation summary (for footer attribution). Returned only when
+ * `publiclyVisible=true`; the controller 404s otherwise.
+ */
+export const PublicRankResponseSchema = z
+  .object({
+    rank: BeltRankSchema,
+    system: z.object({
+      id: z.string().uuid(),
+      code: z.string(),
+      nameEn: z.string(),
+      nameSv: z.string(),
+      nameFi: z.string(),
+    }),
+    organisation: z
+      .object({
+        id: z.string().uuid(),
+        shortCode: z.string(),
+        nameEn: z.string(),
+        nameSv: z.string(),
+        nameFi: z.string(),
+      })
+      .nullable(),
+  })
+  .meta({
+    id: 'PublicRankResponse',
+    description: 'A publicly-visible rank plus its system and (optional) organisation summary.',
+  });
+
+export type PublicRankResponse = z.infer<typeof PublicRankResponseSchema>;
+
 export const BeltRanksOpenApiRegistry = {
   BeltRank: BeltRankSchema,
   CreateBeltRankInput: CreateBeltRankSchema,
   UpdateBeltRankInput: UpdateBeltRankSchema,
+  PublicRankResponse: PublicRankResponseSchema,
 } as const;

@@ -72,3 +72,7 @@ export const RankHistoryRoutes = {
   unverify: (id: string) => `/api/rank-history/${id}/unverify` as const,
   unifiedForUser: (userId: string) => `/api/grading-events/history/${userId}` as const,
 } as const;
+
+export const PublicRoutes = {
+  rankBySlug: (slug: string) => `/api/public/ranks/${slug}` as const,
+} as const;

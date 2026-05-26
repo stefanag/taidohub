@@ -49,6 +49,7 @@ function repoStub() {
     findById: vi.fn(),
     findAll: vi.fn(),
     findBySystemAndLevel: vi.fn().mockResolvedValue(null),
+    findPublicBySlug: vi.fn(),
     insert: vi.fn(),
     update: vi.fn(),
     delete: vi.fn(),
@@ -185,5 +186,40 @@ describe('BeltRanksService — delete guards (RANK_IN_USE)', () => {
   it('404s when the rank is missing', async () => {
     repo.findById.mockResolvedValue(null);
     await expect(service.delete('nope')).rejects.toThrow(NotFoundException);
+  });
+});
+
+describe('BeltRanksService.findPublicBySlug', () => {
+  let repo: ReturnType<typeof repoStub>;
+  let service: BeltRanksService;
+
+  beforeEach(async () => {
+    repo = repoStub();
+    service = await makeService(repo);
+  });
+
+  it('throws NotFoundException for an unknown slug', async () => {
+    repo.findPublicBySlug.mockResolvedValue(null);
+    await expect(service.findPublicBySlug('does-not-exist')).rejects.toThrow(NotFoundException);
+  });
+
+  it('returns the hydrated payload when the rank exists and is publicly visible', async () => {
+    repo.findPublicBySlug.mockResolvedValue({
+      ...ROW,
+      publiclyVisible: true,
+      slug: 'jukyu',
+      systemCode: 'kyu',
+      systemNameEn: 'Kyu',
+      systemNameSv: 'Kyu',
+      systemNameFi: 'Kyu',
+      orgShortCode: null,
+      orgNameEn: null,
+      orgNameSv: null,
+      orgNameFi: null,
+    });
+    const out = await service.findPublicBySlug('jukyu');
+    expect(out.rank.slug).toBe('jukyu');
+    expect(out.system.code).toBe('kyu');
+    expect(out.organisation).toBeNull();
   });
 });
