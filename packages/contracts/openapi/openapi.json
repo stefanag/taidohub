@@ -1130,6 +1130,48 @@
         ]
       }
     },
+    "/api/public/ranks/{slug}": {
+      "get": {
+        "operationId": "PublicBeltRanksController_findBySlug",
+        "parameters": [
+          {
+            "name": "slug",
+            "required": true,
+            "in": "path",
+            "description": "URL slug.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicRankResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Public rank lookup by slug. Returns 404 when not publicly visible.",
+        "tags": [
+          "public-ranks"
+        ]
+      }
+    },
     "/api/rank-history/{userId}": {
       "get": {
         "operationId": "RankHistoryController_listForUser",
@@ -5889,6 +5931,697 @@
             }
           }
         }
+      },
+      "PublicRankResponseDto": {
+        "type": "object",
+        "properties": {
+          "rank": {
+            "$ref": "#/$defs/BeltRank",
+            "type": "",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltRank": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "organisationId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "systemId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "level": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "sortOrder": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "nameJa": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "nameRomaji": {
+                    "type": "string"
+                  },
+                  "nameEn": {
+                    "type": "string"
+                  },
+                  "nameSv": {
+                    "type": "string"
+                  },
+                  "nameFi": {
+                    "type": "string"
+                  },
+                  "beltColor": {
+                    "type": "string"
+                  },
+                  "imageUrl": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "descriptionEn": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "descriptionSv": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "descriptionFi": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "publiclyVisible": {
+                    "type": "boolean"
+                  },
+                  "slug": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "minAge": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "nextRankId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                  },
+                  "updatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                  }
+                },
+                "required": [
+                  "id",
+                  "organisationId",
+                  "systemId",
+                  "level",
+                  "sortOrder",
+                  "nameJa",
+                  "nameRomaji",
+                  "nameEn",
+                  "nameSv",
+                  "nameFi",
+                  "beltColor",
+                  "imageUrl",
+                  "descriptionEn",
+                  "descriptionSv",
+                  "descriptionFi",
+                  "publiclyVisible",
+                  "slug",
+                  "minAge",
+                  "nextRankId",
+                  "createdAt",
+                  "updatedAt"
+                ],
+                "description": "A specific rank inside a belt system.",
+                "example": {
+                  "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "organisationId": null,
+                  "systemId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "level": 1,
+                  "sortOrder": 10,
+                  "nameJa": null,
+                  "nameRomaji": "Jukyu",
+                  "nameEn": "10th Kyu",
+                  "nameSv": "10 Kyu",
+                  "nameFi": "10. Kyu",
+                  "beltColor": "#FFFFFF",
+                  "imageUrl": null,
+                  "descriptionEn": null,
+                  "descriptionSv": null,
+                  "descriptionFi": null,
+                  "publiclyVisible": false,
+                  "slug": null,
+                  "minAge": null,
+                  "nextRankId": null,
+                  "createdAt": "2026-05-24T08:00:00.000Z",
+                  "updatedAt": "2026-05-24T08:00:00.000Z"
+                }
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A publicly-visible rank plus its system and (optional) organisation summary."
+            }
+          },
+          "system": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "code": {
+                "type": "string"
+              },
+              "nameEn": {
+                "type": "string"
+              },
+              "nameSv": {
+                "type": "string"
+              },
+              "nameFi": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "code",
+              "nameEn",
+              "nameSv",
+              "nameFi"
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-self-required": true,
+            "x-nestjs_zod-$defs": {
+              "BeltRank": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "organisationId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "systemId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "level": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "sortOrder": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "nameJa": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "nameRomaji": {
+                    "type": "string"
+                  },
+                  "nameEn": {
+                    "type": "string"
+                  },
+                  "nameSv": {
+                    "type": "string"
+                  },
+                  "nameFi": {
+                    "type": "string"
+                  },
+                  "beltColor": {
+                    "type": "string"
+                  },
+                  "imageUrl": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "descriptionEn": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "descriptionSv": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "descriptionFi": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "publiclyVisible": {
+                    "type": "boolean"
+                  },
+                  "slug": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "minAge": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "nextRankId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                  },
+                  "updatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                  }
+                },
+                "required": [
+                  "id",
+                  "organisationId",
+                  "systemId",
+                  "level",
+                  "sortOrder",
+                  "nameJa",
+                  "nameRomaji",
+                  "nameEn",
+                  "nameSv",
+                  "nameFi",
+                  "beltColor",
+                  "imageUrl",
+                  "descriptionEn",
+                  "descriptionSv",
+                  "descriptionFi",
+                  "publiclyVisible",
+                  "slug",
+                  "minAge",
+                  "nextRankId",
+                  "createdAt",
+                  "updatedAt"
+                ],
+                "description": "A specific rank inside a belt system.",
+                "example": {
+                  "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "organisationId": null,
+                  "systemId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "level": 1,
+                  "sortOrder": 10,
+                  "nameJa": null,
+                  "nameRomaji": "Jukyu",
+                  "nameEn": "10th Kyu",
+                  "nameSv": "10 Kyu",
+                  "nameFi": "10. Kyu",
+                  "beltColor": "#FFFFFF",
+                  "imageUrl": null,
+                  "descriptionEn": null,
+                  "descriptionSv": null,
+                  "descriptionFi": null,
+                  "publiclyVisible": false,
+                  "slug": null,
+                  "minAge": null,
+                  "nextRankId": null,
+                  "createdAt": "2026-05-24T08:00:00.000Z",
+                  "updatedAt": "2026-05-24T08:00:00.000Z"
+                }
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A publicly-visible rank plus its system and (optional) organisation summary."
+            }
+          },
+          "organisation": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "shortCode": {
+                    "type": "string"
+                  },
+                  "nameEn": {
+                    "type": "string"
+                  },
+                  "nameSv": {
+                    "type": "string"
+                  },
+                  "nameFi": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "shortCode",
+                  "nameEn",
+                  "nameSv",
+                  "nameFi"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltRank": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "organisationId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "systemId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "level": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "sortOrder": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "nameJa": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "nameRomaji": {
+                    "type": "string"
+                  },
+                  "nameEn": {
+                    "type": "string"
+                  },
+                  "nameSv": {
+                    "type": "string"
+                  },
+                  "nameFi": {
+                    "type": "string"
+                  },
+                  "beltColor": {
+                    "type": "string"
+                  },
+                  "imageUrl": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "descriptionEn": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "descriptionSv": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "descriptionFi": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "publiclyVisible": {
+                    "type": "boolean"
+                  },
+                  "slug": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "minAge": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "nextRankId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                  },
+                  "updatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                  }
+                },
+                "required": [
+                  "id",
+                  "organisationId",
+                  "systemId",
+                  "level",
+                  "sortOrder",
+                  "nameJa",
+                  "nameRomaji",
+                  "nameEn",
+                  "nameSv",
+                  "nameFi",
+                  "beltColor",
+                  "imageUrl",
+                  "descriptionEn",
+                  "descriptionSv",
+                  "descriptionFi",
+                  "publiclyVisible",
+                  "slug",
+                  "minAge",
+                  "nextRankId",
+                  "createdAt",
+                  "updatedAt"
+                ],
+                "description": "A specific rank inside a belt system.",
+                "example": {
+                  "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "organisationId": null,
+                  "systemId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "level": 1,
+                  "sortOrder": 10,
+                  "nameJa": null,
+                  "nameRomaji": "Jukyu",
+                  "nameEn": "10th Kyu",
+                  "nameSv": "10 Kyu",
+                  "nameFi": "10. Kyu",
+                  "beltColor": "#FFFFFF",
+                  "imageUrl": null,
+                  "descriptionEn": null,
+                  "descriptionSv": null,
+                  "descriptionFi": null,
+                  "publiclyVisible": false,
+                  "slug": null,
+                  "minAge": null,
+                  "nextRankId": null,
+                  "createdAt": "2026-05-24T08:00:00.000Z",
+                  "updatedAt": "2026-05-24T08:00:00.000Z"
+                }
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A publicly-visible rank plus its system and (optional) organisation summary."
+            }
+          }
+        },
+        "required": [
+          "rank",
+          "system",
+          "organisation"
+        ]
       },
       "CreateRankHistoryDto": {
         "type": "object",
@@ -11108,6 +11841,9 @@
       },
       "UpdateBeltRankInput": {
         "$ref": "#/components/schemas/UpdateBeltRankInput"
+      },
+      "PublicRankResponse": {
+        "$ref": "#/components/schemas/PublicRankResponse"
       },
       "ShogoTitle": {
         "$ref": "#/components/schemas/ShogoTitle"
