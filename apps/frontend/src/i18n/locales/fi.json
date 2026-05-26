@@ -182,6 +182,19 @@
         "userNotFound": "Kyseistä käyttäjää ei ole enää olemassa."
       }
     },
+    "beltCatalog": {
+      "title": "Vyökatalogi",
+      "newBeltSystem": "Uusi vyöjärjestelmä",
+      "organisationGlobal": "Globaali (kaikki organisaatiot)",
+      "fields": {
+        "code": "Koodi",
+        "nameEn": "Nimi (englanniksi)",
+        "nameSv": "Nimi (ruotsiksi)",
+        "nameFi": "Nimi (suomeksi)",
+        "organisation": "Organisaatio",
+        "sortOrder": "Järjestys"
+      }
+    },
     "auditLog": {
       "title": "Auditointiloki",
       "empty": "Ei vielä auditointimerkintöjä.",

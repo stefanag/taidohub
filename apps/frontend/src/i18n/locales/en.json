@@ -198,6 +198,19 @@
         "userNotFound": "That user no longer exists."
       }
     },
+    "beltCatalog": {
+      "title": "Belt Catalog",
+      "newBeltSystem": "New belt system",
+      "organisationGlobal": "Global (all organisations)",
+      "fields": {
+        "code": "Code",
+        "nameEn": "Name (English)",
+        "nameSv": "Name (Swedish)",
+        "nameFi": "Name (Finnish)",
+        "organisation": "Organisation",
+        "sortOrder": "Sort order"
+      }
+    },
     "auditLog": {
       "title": "Audit log",
       "empty": "No audit entries yet.",

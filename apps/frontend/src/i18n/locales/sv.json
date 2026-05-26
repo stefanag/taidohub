@@ -182,6 +182,19 @@
         "userNotFound": "Den användaren finns inte längre."
       }
     },
+    "beltCatalog": {
+      "title": "Bälteskatalog",
+      "newBeltSystem": "Nytt bältessystem",
+      "organisationGlobal": "Globalt (alla organisationer)",
+      "fields": {
+        "code": "Kod",
+        "nameEn": "Namn (engelska)",
+        "nameSv": "Namn (svenska)",
+        "nameFi": "Namn (finska)",
+        "organisation": "Organisation",
+        "sortOrder": "Sorteringsordning"
+      }
+    },
     "auditLog": {
       "title": "Granskningslogg",
       "empty": "Inga granskningsposter än.",
