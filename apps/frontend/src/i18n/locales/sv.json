@@ -184,11 +184,30 @@
     },
     "beltCatalog": {
       "title": "Bälteskatalog",
+      "description": "Hantera bältessystem, grader och shogo-titlar.",
       "newBeltSystem": "Nytt bältessystem",
       "newBeltRank": "Ny bältesgrad",
       "organisationGlobal": "Globalt (alla organisationer)",
       "noNextRank": "— ingen —",
       "preview": "Förhandsgranskning",
+      "tabs": {
+        "systems": "System",
+        "ranks": "Grader",
+        "shogos": "Shogo-titlar"
+      },
+      "addSystem": "Lägg till system",
+      "addRank": "Lägg till grad",
+      "addShogo": "Lägg till shogo-titel",
+      "actions": {
+        "edit": "Redigera",
+        "delete": "Ta bort"
+      },
+      "confirmDelete": {
+        "title": "Bekräfta borttagning",
+        "systemBody": "Ta bort bältessystem '{{code}}'? Detta kan inte ångras.",
+        "rankBody": "Ta bort bältesgrad '{{romaji}}'? Detta kan inte ångras.",
+        "shogoBody": "Ta bort shogo-titel '{{code}}'? Detta kan inte ångras."
+      },
       "fields": {
         "code": "Kod",
         "nameEn": "Namn (engelska)",

@@ -188,4 +188,16 @@ export default defineConfig([
       'fsd/no-public-api-sidestep': 'off',
     },
   },
+  {
+    // The admin-belt-catalog page test mocks the belt-system, belt-rank,
+    // shogo-title, and organisation entity API modules by their deep paths
+    // because the query-options factories capture the fetchers directly from
+    // those modules (not via the barrel). Mocking the barrels wouldn't reach
+    // those imports, so `vi.mock` MUST target the deep paths. Allow the
+    // public-API sidestep for this test file only.
+    files: ['src/pages/admin-belt-catalog/**/*.test.{ts,tsx}'],
+    rules: {
+      'fsd/no-public-api-sidestep': 'off',
+    },
+  },
 ]);

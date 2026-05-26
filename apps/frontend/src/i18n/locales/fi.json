@@ -184,11 +184,30 @@
     },
     "beltCatalog": {
       "title": "Vyökatalogi",
+      "description": "Hallitse vyöjärjestelmiä, asteita ja shogo-titteleitä.",
       "newBeltSystem": "Uusi vyöjärjestelmä",
       "newBeltRank": "Uusi vyöaste",
       "organisationGlobal": "Globaali (kaikki organisaatiot)",
       "noNextRank": "— ei mitään —",
       "preview": "Esikatselu",
+      "tabs": {
+        "systems": "Järjestelmät",
+        "ranks": "Asteet",
+        "shogos": "Shogo-tittelit"
+      },
+      "addSystem": "Lisää järjestelmä",
+      "addRank": "Lisää aste",
+      "addShogo": "Lisää shogo-titteli",
+      "actions": {
+        "edit": "Muokkaa",
+        "delete": "Poista"
+      },
+      "confirmDelete": {
+        "title": "Vahvista poisto",
+        "systemBody": "Poistetaanko vyöjärjestelmä '{{code}}'? Tätä ei voi kumota.",
+        "rankBody": "Poistetaanko vyöaste '{{romaji}}'? Tätä ei voi kumota.",
+        "shogoBody": "Poistetaanko shogo-titteli '{{code}}'? Tätä ei voi kumota."
+      },
       "fields": {
         "code": "Koodi",
         "nameEn": "Nimi (englanniksi)",
