@@ -111,7 +111,7 @@ describe('<BeltRankForm>', () => {
 
     await user.type(screen.getByLabelText(/romaji/i), 'Jukyu');
     await user.click(screen.getByLabelText(/publicly visible/i));
-    await user.type(screen.getByLabelText(/^slug/i), 'jukyu');
+    await user.type(screen.getByLabelText(/url slug/i), 'jukyu');
     await user.click(screen.getByRole('button', { name: /save/i }));
     await waitFor(() => {
       expect(mockedCreate).toHaveBeenCalled();
