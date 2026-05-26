@@ -104,4 +104,5 @@ export {
   useSidebar,
 } from './sidebar.js';
 export { BeltGraphic, type BeltGraphicProps } from './belt-graphic/index.js';
+export { BeltBadge, type BeltBadgeProps } from './belt-badge/index.js';
 
