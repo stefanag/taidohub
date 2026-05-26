@@ -103,4 +103,5 @@ export {
   SidebarTrigger,
   useSidebar,
 } from './sidebar.js';
+export { BeltGraphic, type BeltGraphicProps } from './belt-graphic/index.js';
 
