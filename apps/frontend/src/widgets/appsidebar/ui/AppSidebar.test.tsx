@@ -168,4 +168,34 @@ describe('<AppSidebar>', () => {
       links.find((l) => l.getAttribute('href') === '/admin/audit-log'),
     ).toBeUndefined();
   });
+
+  it('renders the belt catalog link for sysadmin users', () => {
+    vi.spyOn(authApi, 'useSession').mockReturnValue({
+      data: { user: { id: 'u1', email: 'a@b' }, session: { id: 's1' } },
+      isPending: false,
+      error: null,
+      refetch: () => Promise.resolve(),
+    } as unknown as ReturnType<typeof authApi.useSession>);
+
+    renderInProviderWithAbility('sysadmin');
+
+    const beltCatalogLink = screen.getByRole('link', { name: /^Belt catalog$/i });
+    expect(beltCatalogLink).toBeInTheDocument();
+    expect(beltCatalogLink).toHaveAttribute('href', '/admin/belt-catalog');
+  });
+
+  it('hides the belt catalog link for non-admin users', () => {
+    vi.spyOn(authApi, 'useSession').mockReturnValue({
+      data: { user: { id: 'u1', email: 'a@b' }, session: { id: 's1' } },
+      isPending: false,
+      error: null,
+      refetch: () => Promise.resolve(),
+    } as unknown as ReturnType<typeof authApi.useSession>);
+
+    renderInProviderWithAbility('user');
+
+    expect(
+      screen.queryByRole('link', { name: /^Belt catalog$/i }),
+    ).not.toBeInTheDocument();
+  });
 });

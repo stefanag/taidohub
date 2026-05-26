@@ -36,6 +36,7 @@
     "dashboard": "Dashboard",
     "adminOrganisations": "Organisations",
     "adminAuditLog": "Audit log",
+    "adminBeltCatalog": "Belt catalog",
     "adminUsers": "Users",
     "profile": "My profile"
   },
