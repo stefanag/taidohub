@@ -155,4 +155,37 @@ export default defineConfig([
       'fsd/no-public-api-sidestep': 'off',
     },
   },
+  {
+    // The belt-systems-table test mocks the belt-system entity API module by
+    // its deep path because `belt-system.queries.ts` imports the fetcher from
+    // there directly (not via the barrel). Mocking the barrel wouldn't reach
+    // that import, so `vi.mock` MUST target the deep path. Allow the public-API
+    // sidestep for this test file only.
+    files: ['src/features/belt-systems-table/**/*.test.{ts,tsx}'],
+    rules: {
+      'fsd/no-public-api-sidestep': 'off',
+    },
+  },
+  {
+    // The belt-ranks-table test mocks the belt-rank entity API module by its
+    // deep path because `belt-rank.queries.ts` imports the fetcher from there
+    // directly (not via the barrel). Mocking the barrel wouldn't reach that
+    // import, so `vi.mock` MUST target the deep path. Allow the public-API
+    // sidestep for this test file only.
+    files: ['src/features/belt-ranks-table/**/*.test.{ts,tsx}'],
+    rules: {
+      'fsd/no-public-api-sidestep': 'off',
+    },
+  },
+  {
+    // The shogo-titles-table test mocks the shogo-title entity API module by
+    // its deep path because `shogo-title.queries.ts` imports the fetcher from
+    // there directly (not via the barrel). Mocking the barrel wouldn't reach
+    // that import, so `vi.mock` MUST target the deep path. Allow the public-API
+    // sidestep for this test file only.
+    files: ['src/features/shogo-titles-table/**/*.test.{ts,tsx}'],
+    rules: {
+      'fsd/no-public-api-sidestep': 'off',
+    },
+  },
 ]);
