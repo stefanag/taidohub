@@ -200,4 +200,16 @@ export default defineConfig([
       'fsd/no-public-api-sidestep': 'off',
     },
   },
+  {
+    // The club-card widget test mocks the membership and organisation entity
+    // API modules by their deep paths because the query-options factories
+    // capture the fetchers directly from those modules (not via the barrel).
+    // Mocking the barrels wouldn't reach those imports, so `vi.mock` MUST
+    // target the deep paths. Allow the public-API sidestep for this test file
+    // only.
+    files: ['src/widgets/club-card/**/*.test.{ts,tsx}'],
+    rules: {
+      'fsd/no-public-api-sidestep': 'off',
+    },
+  },
 ]);
