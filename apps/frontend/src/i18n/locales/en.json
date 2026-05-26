@@ -293,6 +293,13 @@
       }
     }
   },
+  "publicRank": {
+    "notFoundTitle": "Rank not available",
+    "notFoundBody": "This rank is not public, or the link is invalid.",
+    "signIn": "Sign in",
+    "backHome": "Back to home",
+    "loading": "Loading…"
+  },
   "locale": {
     "switch": "Language"
   },

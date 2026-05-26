@@ -277,6 +277,13 @@
       }
     }
   },
+  "publicRank": {
+    "notFoundTitle": "Graden är inte tillgänglig",
+    "notFoundBody": "Den här graden är inte publik, eller länken är ogiltig.",
+    "signIn": "Logga in",
+    "backHome": "Tillbaka till startsidan",
+    "loading": "Laddar…"
+  },
   "locale": {
     "switch": "Språk"
   },

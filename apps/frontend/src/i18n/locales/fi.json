@@ -277,6 +277,13 @@
       }
     }
   },
+  "publicRank": {
+    "notFoundTitle": "Aste ei ole saatavilla",
+    "notFoundBody": "Tämä aste ei ole julkinen tai linkki on virheellinen.",
+    "signIn": "Kirjaudu sisään",
+    "backHome": "Takaisin etusivulle",
+    "loading": "Ladataan…"
+  },
   "locale": {
     "switch": "Kieli"
   },
