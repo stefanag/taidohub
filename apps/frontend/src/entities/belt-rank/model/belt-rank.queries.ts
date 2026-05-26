@@ -15,6 +15,7 @@ import {
   deleteBeltRank,
   getBeltRank,
   getBeltRanks,
+  getPublicRank,
   updateBeltRank,
 } from '../api/belt-rank.api.js';
 
@@ -22,6 +23,7 @@ export const beltRankKeys = {
   all: ['belt-ranks'] as const,
   list: () => [...beltRankKeys.all, 'list'] as const,
   byId: (id: string) => [...beltRankKeys.all, 'byId', id] as const,
+  publicBySlug: (slug: string) => [...beltRankKeys.all, 'public', slug] as const,
 };
 
 export function listBeltRanksQueryOptions() {
@@ -35,6 +37,13 @@ export function beltRankQueryOptions(id: string) {
   return queryOptions({
     queryKey: beltRankKeys.byId(id),
     queryFn: () => getBeltRank(id),
+  });
+}
+
+export function publicRankQueryOptions(slug: string) {
+  return queryOptions({
+    queryKey: beltRankKeys.publicBySlug(slug),
+    queryFn: () => getPublicRank(slug),
   });
 }
 

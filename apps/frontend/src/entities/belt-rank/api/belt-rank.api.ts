@@ -1,10 +1,12 @@
 import {
   BeltRankSchema,
+  PublicRankResponseSchema,
   type BeltRank,
   type CreateBeltRankInput,
+  type PublicRankResponse,
   type UpdateBeltRankInput,
 } from '@repo/contracts/ranks';
-import { BeltRanksRoutes } from '@repo/contracts/routes';
+import { BeltRanksRoutes, PublicRoutes } from '@repo/contracts/routes';
 
 import { httpClient } from '@/shared/api';
 
@@ -35,4 +37,9 @@ export async function updateBeltRank(
 
 export async function deleteBeltRank(id: string): Promise<void> {
   await httpClient(BeltRanksRoutes.byId(id), { method: 'DELETE' });
+}
+
+export async function getPublicRank(slug: string): Promise<PublicRankResponse> {
+  const raw = await httpClient(PublicRoutes.rankBySlug(slug));
+  return PublicRankResponseSchema.parse(raw);
 }

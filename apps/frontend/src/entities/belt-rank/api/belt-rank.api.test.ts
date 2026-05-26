@@ -10,6 +10,7 @@ import {
   deleteBeltRank,
   getBeltRank,
   getBeltRanks,
+  getPublicRank,
   updateBeltRank,
 } from './belt-rank.api.js';
 
@@ -92,5 +93,17 @@ describe('belt-rank api', () => {
     mockedHttp.mockResolvedValueOnce(undefined);
     await deleteBeltRank('7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5');
     expect(mockedHttp).toHaveBeenCalledWith('/api/ranks/7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5', { method: 'DELETE' });
+  });
+
+  it('getPublicRank GETs /api/public/ranks/:slug', async () => {
+    const PUBLIC_PAYLOAD = {
+      rank: ROW,
+      system: { id: '7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f4', code: 'kyu', nameEn: 'Kyu', nameSv: 'Kyu', nameFi: 'Kyu' },
+      organisation: null,
+    };
+    mockedHttp.mockResolvedValueOnce(PUBLIC_PAYLOAD);
+    const out = await getPublicRank('jukyu');
+    expect(mockedHttp).toHaveBeenCalledWith('/api/public/ranks/jukyu');
+    expect(out.rank.nameRomaji).toBe('Jukyu');
   });
 });
