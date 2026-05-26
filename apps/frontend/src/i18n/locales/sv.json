@@ -36,6 +36,7 @@
     "dashboard": "Översikt",
     "adminOrganisations": "Organisationer",
     "adminAuditLog": "Granskningslogg",
+    "adminBeltCatalog": "Beltkatalog",
     "adminUsers": "Användare",
     "profile": "Min profil"
   },
@@ -183,13 +184,8 @@
       }
     },
     "beltCatalog": {
-      "title": "Bälteskatalog",
-      "description": "Hantera bältessystem, grader och shogo-titlar.",
-      "newBeltSystem": "Nytt bältessystem",
-      "newBeltRank": "Ny bältesgrad",
-      "organisationGlobal": "Globalt (alla organisationer)",
-      "noNextRank": "— ingen —",
-      "preview": "Förhandsgranskning",
+      "title": "Beltkatalog",
+      "description": "Hantera beltsystem, grader och shogo-titlar.",
       "tabs": {
         "systems": "System",
         "ranks": "Grader",
@@ -198,16 +194,9 @@
       "addSystem": "Lägg till system",
       "addRank": "Lägg till grad",
       "addShogo": "Lägg till shogo-titel",
-      "actions": {
-        "edit": "Redigera",
-        "delete": "Ta bort"
-      },
-      "confirmDelete": {
-        "title": "Bekräfta borttagning",
-        "systemBody": "Ta bort bältessystem '{{code}}'? Detta kan inte ångras.",
-        "rankBody": "Ta bort bältesgrad '{{romaji}}'? Detta kan inte ångras.",
-        "shogoBody": "Ta bort shogo-titel '{{code}}'? Detta kan inte ångras."
-      },
+      "preview": "Förhandsgranskning",
+      "organisationGlobal": "Global (alla organisationer)",
+      "noNextRank": "Ingen nästa grad",
       "fields": {
         "code": "Kod",
         "nameEn": "Namn (engelska)",
@@ -215,24 +204,34 @@
         "nameFi": "Namn (finska)",
         "nameJa": "Namn (japanska)",
         "nameRomaji": "Namn (romaji)",
-        "organisation": "Organisation",
-        "sortOrder": "Sorteringsordning",
-        "system": "Bältessystem",
-        "level": "Nivå",
-        "beltColor": "Bältesfärg",
-        "beltColorHex": "Hex-färgkod",
-        "imageUrl": "Bild-URL",
         "descriptionEn": "Beskrivning (engelska)",
         "descriptionSv": "Beskrivning (svenska)",
         "descriptionFi": "Beskrivning (finska)",
-        "publiclyVisible": "Offentligt synlig",
-        "slug": "Slug",
+        "organisation": "Organisation",
+        "sortOrder": "Sorteringsordning",
+        "system": "System",
+        "level": "Nivå",
+        "beltColor": "Beltfärg",
+        "beltColorHex": "Beltfärg (hex)",
+        "imageUrl": "Bild-URL",
+        "publiclyVisible": "Publikt synlig",
+        "slug": "URL-slug",
         "minAge": "Minimiålder",
-        "nextRank": "Nästa grad",
-        "minRank": "Minimigrad"
+        "minRank": "Lägsta grad",
+        "nextRank": "Nästa grad"
+      },
+      "actions": {
+        "edit": "Redigera",
+        "delete": "Ta bort"
+      },
+      "confirmDelete": {
+        "title": "Bekräfta borttagning",
+        "systemBody": "Ta bort beltsystemet \"{{code}}\"? Detta kan inte ångras.",
+        "rankBody": "Ta bort graden \"{{romaji}}\"? Detta kan inte ångras.",
+        "shogoBody": "Ta bort shogo-titeln \"{{code}}\"? Detta kan inte ångras."
       },
       "errors": {
-        "nextRankSelf": "En grad kan inte vara sin egen nästa grad."
+        "nextRankSelf": "En grad kan inte referera till sig själv som nästa grad."
       }
     },
     "auditLog": {

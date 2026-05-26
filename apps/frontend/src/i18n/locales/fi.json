@@ -36,6 +36,7 @@
     "dashboard": "Kojelauta",
     "adminOrganisations": "Organisaatiot",
     "adminAuditLog": "Auditointiloki",
+    "adminBeltCatalog": "Vyökatalogi",
     "adminUsers": "Käyttäjät",
     "profile": "Oma profiili"
   },
@@ -184,30 +185,18 @@
     },
     "beltCatalog": {
       "title": "Vyökatalogi",
-      "description": "Hallitse vyöjärjestelmiä, asteita ja shogo-titteleitä.",
-      "newBeltSystem": "Uusi vyöjärjestelmä",
-      "newBeltRank": "Uusi vyöaste",
-      "organisationGlobal": "Globaali (kaikki organisaatiot)",
-      "noNextRank": "— ei mitään —",
-      "preview": "Esikatselu",
+      "description": "Hallinnoi vyöjärjestelmiä, asteita ja shogo-arvonimiä.",
       "tabs": {
         "systems": "Järjestelmät",
         "ranks": "Asteet",
-        "shogos": "Shogo-tittelit"
+        "shogos": "Shogo-arvonimet"
       },
       "addSystem": "Lisää järjestelmä",
       "addRank": "Lisää aste",
-      "addShogo": "Lisää shogo-titteli",
-      "actions": {
-        "edit": "Muokkaa",
-        "delete": "Poista"
-      },
-      "confirmDelete": {
-        "title": "Vahvista poisto",
-        "systemBody": "Poistetaanko vyöjärjestelmä '{{code}}'? Tätä ei voi kumota.",
-        "rankBody": "Poistetaanko vyöaste '{{romaji}}'? Tätä ei voi kumota.",
-        "shogoBody": "Poistetaanko shogo-titteli '{{code}}'? Tätä ei voi kumota."
-      },
+      "addShogo": "Lisää shogo-arvonimi",
+      "preview": "Esikatselu",
+      "organisationGlobal": "Yleinen (kaikki organisaatiot)",
+      "noNextRank": "Ei seuraavaa astetta",
       "fields": {
         "code": "Koodi",
         "nameEn": "Nimi (englanniksi)",
@@ -215,24 +204,34 @@
         "nameFi": "Nimi (suomeksi)",
         "nameJa": "Nimi (japaniksi)",
         "nameRomaji": "Nimi (romaji)",
-        "organisation": "Organisaatio",
-        "sortOrder": "Järjestys",
-        "system": "Vyöjärjestelmä",
-        "level": "Taso",
-        "beltColor": "Vyön väri",
-        "beltColorHex": "Hex-värikoodi",
-        "imageUrl": "Kuvan URL",
         "descriptionEn": "Kuvaus (englanniksi)",
         "descriptionSv": "Kuvaus (ruotsiksi)",
         "descriptionFi": "Kuvaus (suomeksi)",
-        "publiclyVisible": "Julkisesti näkyvissä",
-        "slug": "Slug",
+        "organisation": "Organisaatio",
+        "sortOrder": "Järjestysnumero",
+        "system": "Järjestelmä",
+        "level": "Taso",
+        "beltColor": "Vyön väri",
+        "beltColorHex": "Vyön väri (hex)",
+        "imageUrl": "Kuvan URL",
+        "publiclyVisible": "Julkisesti näkyvä",
+        "slug": "URL-slug",
         "minAge": "Vähimmäisikä",
-        "nextRank": "Seuraava aste",
-        "minRank": "Vähimmäisaste"
+        "minRank": "Vähimmäisaste",
+        "nextRank": "Seuraava aste"
+      },
+      "actions": {
+        "edit": "Muokkaa",
+        "delete": "Poista"
+      },
+      "confirmDelete": {
+        "title": "Vahvista poisto",
+        "systemBody": "Poistetaanko vyöjärjestelmä \"{{code}}\"? Tätä ei voi peruuttaa.",
+        "rankBody": "Poistetaanko aste \"{{romaji}}\"? Tätä ei voi peruuttaa.",
+        "shogoBody": "Poistetaanko shogo-arvonimi \"{{code}}\"? Tätä ei voi peruuttaa."
       },
       "errors": {
-        "nextRankSelf": "Aste ei voi olla oma seuraava asteensa."
+        "nextRankSelf": "Aste ei voi viitata itseensä seuraavana asteena."
       }
     },
     "auditLog": {
