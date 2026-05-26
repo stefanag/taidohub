@@ -16,8 +16,10 @@ import { Route as PublicSetPasswordRouteImport } from './routes/_public.set-pass
 import { Route as PublicLoginRouteImport } from './routes/_public.login'
 import { Route as AppProfileRouteImport } from './routes/_app.profile'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
+import { Route as PublicRanksSlugRouteImport } from './routes/_public.ranks.$slug'
 import { Route as AppAdminUsersRouteImport } from './routes/_app.admin.users'
 import { Route as AppAdminOrganisationsRouteImport } from './routes/_app.admin.organisations'
+import { Route as AppAdminBeltCatalogRouteImport } from './routes/_app.admin.belt-catalog'
 import { Route as AppAdminAuditLogRouteImport } from './routes/_app.admin.audit-log'
 
 const PublicRoute = PublicRouteImport.update({
@@ -53,6 +55,11 @@ const AppDashboardRoute = AppDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AppRoute,
 } as any)
+const PublicRanksSlugRoute = PublicRanksSlugRouteImport.update({
+  id: '/ranks/$slug',
+  path: '/ranks/$slug',
+  getParentRoute: () => PublicRoute,
+} as any)
 const AppAdminUsersRoute = AppAdminUsersRouteImport.update({
   id: '/admin/users',
   path: '/admin/users',
@@ -61,6 +68,11 @@ const AppAdminUsersRoute = AppAdminUsersRouteImport.update({
 const AppAdminOrganisationsRoute = AppAdminOrganisationsRouteImport.update({
   id: '/admin/organisations',
   path: '/admin/organisations',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAdminBeltCatalogRoute = AppAdminBeltCatalogRouteImport.update({
+  id: '/admin/belt-catalog',
+  path: '/admin/belt-catalog',
   getParentRoute: () => AppRoute,
 } as any)
 const AppAdminAuditLogRoute = AppAdminAuditLogRouteImport.update({
@@ -76,8 +88,10 @@ export interface FileRoutesByFullPath {
   '/login': typeof PublicLoginRoute
   '/set-password': typeof PublicSetPasswordRoute
   '/admin/audit-log': typeof AppAdminAuditLogRoute
+  '/admin/belt-catalog': typeof AppAdminBeltCatalogRoute
   '/admin/organisations': typeof AppAdminOrganisationsRoute
   '/admin/users': typeof AppAdminUsersRoute
+  '/ranks/$slug': typeof PublicRanksSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof PublicIndexRoute
@@ -86,8 +100,10 @@ export interface FileRoutesByTo {
   '/login': typeof PublicLoginRoute
   '/set-password': typeof PublicSetPasswordRoute
   '/admin/audit-log': typeof AppAdminAuditLogRoute
+  '/admin/belt-catalog': typeof AppAdminBeltCatalogRoute
   '/admin/organisations': typeof AppAdminOrganisationsRoute
   '/admin/users': typeof AppAdminUsersRoute
+  '/ranks/$slug': typeof PublicRanksSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -99,8 +115,10 @@ export interface FileRoutesById {
   '/_public/set-password': typeof PublicSetPasswordRoute
   '/_public/': typeof PublicIndexRoute
   '/_app/admin/audit-log': typeof AppAdminAuditLogRoute
+  '/_app/admin/belt-catalog': typeof AppAdminBeltCatalogRoute
   '/_app/admin/organisations': typeof AppAdminOrganisationsRoute
   '/_app/admin/users': typeof AppAdminUsersRoute
+  '/_public/ranks/$slug': typeof PublicRanksSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -111,8 +129,10 @@ export interface FileRouteTypes {
     | '/login'
     | '/set-password'
     | '/admin/audit-log'
+    | '/admin/belt-catalog'
     | '/admin/organisations'
     | '/admin/users'
+    | '/ranks/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -121,8 +141,10 @@ export interface FileRouteTypes {
     | '/login'
     | '/set-password'
     | '/admin/audit-log'
+    | '/admin/belt-catalog'
     | '/admin/organisations'
     | '/admin/users'
+    | '/ranks/$slug'
   id:
     | '__root__'
     | '/_app'
@@ -133,8 +155,10 @@ export interface FileRouteTypes {
     | '/_public/set-password'
     | '/_public/'
     | '/_app/admin/audit-log'
+    | '/_app/admin/belt-catalog'
     | '/_app/admin/organisations'
     | '/_app/admin/users'
+    | '/_public/ranks/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -193,6 +217,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDashboardRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_public/ranks/$slug': {
+      id: '/_public/ranks/$slug'
+      path: '/ranks/$slug'
+      fullPath: '/ranks/$slug'
+      preLoaderRoute: typeof PublicRanksSlugRouteImport
+      parentRoute: typeof PublicRoute
+    }
     '/_app/admin/users': {
       id: '/_app/admin/users'
       path: '/admin/users'
@@ -205,6 +236,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/organisations'
       fullPath: '/admin/organisations'
       preLoaderRoute: typeof AppAdminOrganisationsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/admin/belt-catalog': {
+      id: '/_app/admin/belt-catalog'
+      path: '/admin/belt-catalog'
+      fullPath: '/admin/belt-catalog'
+      preLoaderRoute: typeof AppAdminBeltCatalogRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/admin/audit-log': {
@@ -221,6 +259,7 @@ interface AppRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
   AppProfileRoute: typeof AppProfileRoute
   AppAdminAuditLogRoute: typeof AppAdminAuditLogRoute
+  AppAdminBeltCatalogRoute: typeof AppAdminBeltCatalogRoute
   AppAdminOrganisationsRoute: typeof AppAdminOrganisationsRoute
   AppAdminUsersRoute: typeof AppAdminUsersRoute
 }
@@ -229,6 +268,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
   AppProfileRoute: AppProfileRoute,
   AppAdminAuditLogRoute: AppAdminAuditLogRoute,
+  AppAdminBeltCatalogRoute: AppAdminBeltCatalogRoute,
   AppAdminOrganisationsRoute: AppAdminOrganisationsRoute,
   AppAdminUsersRoute: AppAdminUsersRoute,
 }
@@ -239,12 +279,14 @@ interface PublicRouteChildren {
   PublicLoginRoute: typeof PublicLoginRoute
   PublicSetPasswordRoute: typeof PublicSetPasswordRoute
   PublicIndexRoute: typeof PublicIndexRoute
+  PublicRanksSlugRoute: typeof PublicRanksSlugRoute
 }
 
 const PublicRouteChildren: PublicRouteChildren = {
   PublicLoginRoute: PublicLoginRoute,
   PublicSetPasswordRoute: PublicSetPasswordRoute,
   PublicIndexRoute: PublicIndexRoute,
+  PublicRanksSlugRoute: PublicRanksSlugRoute,
 }
 
 const PublicRouteWithChildren =
