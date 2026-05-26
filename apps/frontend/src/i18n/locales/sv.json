@@ -185,14 +185,35 @@
     "beltCatalog": {
       "title": "Bälteskatalog",
       "newBeltSystem": "Nytt bältessystem",
+      "newBeltRank": "Ny bältesgrad",
       "organisationGlobal": "Globalt (alla organisationer)",
+      "noNextRank": "— ingen —",
+      "preview": "Förhandsgranskning",
       "fields": {
         "code": "Kod",
         "nameEn": "Namn (engelska)",
         "nameSv": "Namn (svenska)",
         "nameFi": "Namn (finska)",
+        "nameJa": "Namn (japanska)",
+        "nameRomaji": "Namn (romaji)",
         "organisation": "Organisation",
-        "sortOrder": "Sorteringsordning"
+        "sortOrder": "Sorteringsordning",
+        "system": "Bältessystem",
+        "level": "Nivå",
+        "beltColor": "Bältesfärg",
+        "beltColorHex": "Hex-färgkod",
+        "imageUrl": "Bild-URL",
+        "descriptionEn": "Beskrivning (engelska)",
+        "descriptionSv": "Beskrivning (svenska)",
+        "descriptionFi": "Beskrivning (finska)",
+        "publiclyVisible": "Offentligt synlig",
+        "slug": "Slug",
+        "minAge": "Minimiålder",
+        "nextRank": "Nästa grad",
+        "minRank": "Minimigrad"
+      },
+      "errors": {
+        "nextRankSelf": "En grad kan inte vara sin egen nästa grad."
       }
     },
     "auditLog": {

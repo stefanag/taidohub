@@ -185,14 +185,35 @@
     "beltCatalog": {
       "title": "Vyökatalogi",
       "newBeltSystem": "Uusi vyöjärjestelmä",
+      "newBeltRank": "Uusi vyöaste",
       "organisationGlobal": "Globaali (kaikki organisaatiot)",
+      "noNextRank": "— ei mitään —",
+      "preview": "Esikatselu",
       "fields": {
         "code": "Koodi",
         "nameEn": "Nimi (englanniksi)",
         "nameSv": "Nimi (ruotsiksi)",
         "nameFi": "Nimi (suomeksi)",
+        "nameJa": "Nimi (japaniksi)",
+        "nameRomaji": "Nimi (romaji)",
         "organisation": "Organisaatio",
-        "sortOrder": "Järjestys"
+        "sortOrder": "Järjestys",
+        "system": "Vyöjärjestelmä",
+        "level": "Taso",
+        "beltColor": "Vyön väri",
+        "beltColorHex": "Hex-värikoodi",
+        "imageUrl": "Kuvan URL",
+        "descriptionEn": "Kuvaus (englanniksi)",
+        "descriptionSv": "Kuvaus (ruotsiksi)",
+        "descriptionFi": "Kuvaus (suomeksi)",
+        "publiclyVisible": "Julkisesti näkyvissä",
+        "slug": "Slug",
+        "minAge": "Vähimmäisikä",
+        "nextRank": "Seuraava aste",
+        "minRank": "Vähimmäisaste"
+      },
+      "errors": {
+        "nextRankSelf": "Aste ei voi olla oma seuraava asteensa."
       }
     },
     "auditLog": {

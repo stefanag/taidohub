@@ -201,14 +201,35 @@
     "beltCatalog": {
       "title": "Belt Catalog",
       "newBeltSystem": "New belt system",
+      "newBeltRank": "New belt rank",
       "organisationGlobal": "Global (all organisations)",
+      "noNextRank": "— none —",
+      "preview": "Preview",
       "fields": {
         "code": "Code",
         "nameEn": "Name (English)",
         "nameSv": "Name (Swedish)",
         "nameFi": "Name (Finnish)",
+        "nameJa": "Name (Japanese)",
+        "nameRomaji": "Name (Romaji)",
         "organisation": "Organisation",
-        "sortOrder": "Sort order"
+        "sortOrder": "Sort order",
+        "system": "Belt system",
+        "level": "Level",
+        "beltColor": "Belt colour",
+        "beltColorHex": "Hex colour code",
+        "imageUrl": "Image URL",
+        "descriptionEn": "Description (English)",
+        "descriptionSv": "Description (Swedish)",
+        "descriptionFi": "Description (Finnish)",
+        "publiclyVisible": "Publicly visible",
+        "slug": "Slug",
+        "minAge": "Minimum age",
+        "nextRank": "Next rank",
+        "minRank": "Minimum rank"
+      },
+      "errors": {
+        "nextRankSelf": "A rank cannot be its own next rank."
       }
     },
     "auditLog": {
