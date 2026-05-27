@@ -238,4 +238,28 @@ export default defineConfig([
       'fsd/forbidden-imports': 'off',
     },
   },
+  {
+    // The public-rank page test mocks the belt-rank entity API module by its
+    // deep path because `belt-rank.queries.ts` imports the fetcher from there
+    // directly (not via the barrel). Mocking the barrel wouldn't reach that
+    // import, so `vi.mock` MUST target the deep path. Allow the public-API
+    // sidestep for this test file only.
+    files: ['src/pages/public-rank/**/*.test.{ts,tsx}'],
+    rules: {
+      'fsd/no-public-api-sidestep': 'off',
+    },
+  },
+  {
+    // `useUpdateRankHistory` / `useVerifyRankHistory` / `useUnverifyRankHistory`
+    // call `authClient.getSession()` on success so the better-auth session
+    // store refreshes when a shogo-title verification mutates `user_profile`.
+    // Strict FSD forbids entities from importing features; lifting the side
+    // effect to every consumer would scatter the refresh logic across pages
+    // and tabs and risk silent drift. Allow the cross-layer import for the
+    // rank-history queries module only.
+    files: ['src/entities/rank-history/model/**'],
+    rules: {
+      'fsd/forbidden-imports': 'off',
+    },
+  },
 ]);
