@@ -2556,7 +2556,7 @@ components:
             example: *a26
         level:
           type: integer
-          exclusiveMinimum: 0
+          minimum: 0
           maximum: 9007199254740991
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-metadata:
@@ -2742,7 +2742,7 @@ components:
             description: Create-belt-rank payload.
         level:
           type: integer
-          exclusiveMinimum: 0
+          minimum: 0
           maximum: 9007199254740991
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-metadata:
@@ -2897,7 +2897,7 @@ components:
             description: Update-belt-rank patch — omit a field to leave it unchanged.
         level:
           type: integer
-          exclusiveMinimum: 0
+          minimum: 0
           maximum: 9007199254740991
           x-nestjs_zod-has-null: true
           x-nestjs_zod-parent-metadata:
@@ -3204,7 +3204,7 @@ components:
                   pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
                 level:
                   type: integer
-                  exclusiveMinimum: 0
+                  minimum: 0
                   maximum: 9007199254740991
                 sortOrder:
                   type: integer

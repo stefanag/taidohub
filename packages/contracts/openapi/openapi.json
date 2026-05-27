@@ -4574,7 +4574,7 @@
           },
           "level": {
             "type": "integer",
-            "exclusiveMinimum": 0,
+            "minimum": 0,
             "maximum": 9007199254740991,
             "x-nestjs_zod-has-null": true,
             "x-nestjs_zod-parent-metadata": {
@@ -5244,7 +5244,7 @@
           },
           "level": {
             "type": "integer",
-            "exclusiveMinimum": 0,
+            "minimum": 0,
             "maximum": 9007199254740991,
             "x-nestjs_zod-has-null": true,
             "x-nestjs_zod-parent-metadata": {
@@ -5483,7 +5483,7 @@
           },
           "level": {
             "type": "integer",
-            "exclusiveMinimum": 0,
+            "minimum": 0,
             "maximum": 9007199254740991,
             "x-nestjs_zod-has-null": true,
             "x-nestjs_zod-parent-metadata": {
@@ -5969,7 +5969,7 @@
                   },
                   "level": {
                     "type": "integer",
-                    "exclusiveMinimum": 0,
+                    "minimum": 0,
                     "maximum": 9007199254740991
                   },
                   "sortOrder": {
@@ -6202,7 +6202,7 @@
                   },
                   "level": {
                     "type": "integer",
-                    "exclusiveMinimum": 0,
+                    "minimum": 0,
                     "maximum": 9007199254740991
                   },
                   "sortOrder": {
@@ -6442,7 +6442,7 @@
                   },
                   "level": {
                     "type": "integer",
-                    "exclusiveMinimum": 0,
+                    "minimum": 0,
                     "maximum": 9007199254740991
                   },
                   "sortOrder": {
