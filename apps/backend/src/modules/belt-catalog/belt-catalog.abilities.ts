@@ -11,7 +11,9 @@ import {
  * Belt catalog ability rules.
  *
  * - Any authenticated user can read BeltSystem, BeltRank, and ShogoTitle.
- * - Sysadmin's `('manage', 'all')` rule already covers management of these subjects.
+ * - `sysadmin` can manage all three subjects. The backend ability factory
+ *   has no global `manage all` wildcard — each module grants its own
+ *   sysadmin rules (mirrors `OrganisationsAbilityRules`).
  */
 @Injectable()
 export class BeltCatalogAbilityRules implements AbilityRuleContributor {
@@ -21,5 +23,11 @@ export class BeltCatalogAbilityRules implements AbilityRuleContributor {
     builder.can('read', 'BeltSystem');
     builder.can('read', 'BeltRank');
     builder.can('read', 'ShogoTitle');
+
+    if (user.role === 'sysadmin') {
+      builder.can('manage', 'BeltSystem');
+      builder.can('manage', 'BeltRank');
+      builder.can('manage', 'ShogoTitle');
+    }
   }
 }
