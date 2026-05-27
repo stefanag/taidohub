@@ -47,9 +47,15 @@ describe('CreateBeltRankSchema', () => {
     expect(CreateBeltRankSchema.safeParse(VALID_CREATE).success).toBe(true);
   });
 
-  it('rejects a non-positive level', () => {
+  it('accepts level 0 (white belt / mukyu)', () => {
     expect(
       CreateBeltRankSchema.safeParse({ ...VALID_CREATE, level: 0 }).success,
+    ).toBe(true);
+  });
+
+  it('rejects a negative level', () => {
+    expect(
+      CreateBeltRankSchema.safeParse({ ...VALID_CREATE, level: -1 }).success,
     ).toBe(false);
   });
 

@@ -22,7 +22,7 @@ export const CreateBeltRankSchema = z
   .object({
     organisationId: z.string().uuid().nullable().optional(),
     systemId: z.string().uuid(),
-    level: z.number().int().positive(),
+    level: z.number().int().nonnegative(),
     sortOrder: z.number().int().min(0).default(0),
     nameJa: z.string().max(100).nullable().default(null),
     nameRomaji: z.string().min(1).max(100),
@@ -55,7 +55,7 @@ export const UpdateBeltRankSchema = z
   .object({
     organisationId: z.string().uuid().nullable().optional(),
     systemId: z.string().uuid().optional(),
-    level: z.number().int().positive().optional(),
+    level: z.number().int().nonnegative().optional(),
     sortOrder: z.number().int().min(0).optional(),
     nameJa: z.string().max(100).nullable().optional(),
     nameRomaji: z.string().min(1).max(100).optional(),
@@ -92,7 +92,7 @@ export const BeltRankSchema = z
     id: z.string().uuid(),
     organisationId: z.string().uuid().nullable(),
     systemId: z.string().uuid(),
-    level: z.number().int().positive(),
+    level: z.number().int().nonnegative(),
     sortOrder: z.number().int().min(0),
     nameJa: z.string().nullable(),
     nameRomaji: z.string(),
