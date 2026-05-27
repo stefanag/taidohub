@@ -199,7 +199,7 @@ describe('<RankHistoryFormDialog>', () => {
     await user.clear(date);
     await user.type(date, '2024-10-01');
     await waitFor(() =>
-      expect(screen.getByText(/clears the verification by admin/i)).toBeInTheDocument(),
+      expect(screen.getByText(/will clear the verification by admin/i)).toBeInTheDocument(),
     );
   });
 

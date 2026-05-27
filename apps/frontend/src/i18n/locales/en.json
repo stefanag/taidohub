@@ -38,6 +38,7 @@
     "adminAuditLog": "Audit log",
     "adminBeltCatalog": "Belt catalog",
     "adminUsers": "Users",
+    "gradingHistory": "Grading history",
     "profile": "My profile"
   },
   "dashboard": {
@@ -63,6 +64,39 @@
     "save": "Save profile",
     "saved": "Profile saved.",
     "empty": "This user has not filled in their profile yet."
+  },
+  "gradingHistory": {
+    "title": "Grading history",
+    "description": "Every grading you have recorded or that has been mirrored from an event. Add past gradings to keep the picture complete.",
+    "adminDescription": "Grading history recorded for this user.",
+    "addPastGrading": "Add past grading",
+    "clubCard": {
+      "heading": "Club"
+    },
+    "timeline": {
+      "noEntriesYet": "No entries yet.",
+      "failed": "Failed",
+      "external": "External",
+      "pendingVerification": "Pending verification",
+      "verifiedBy": "verified by {{name}} on {{date}}",
+      "verifiedFallback": "Verified",
+      "edit": "Edit",
+      "verify": "Verify",
+      "unverify": "Unverify"
+    },
+    "form": {
+      "createTitle": "Add past grading",
+      "editTitle": "Edit past grading",
+      "rank": "Rank",
+      "rankPlaceholder": "Select a rank…",
+      "shogoTitle": "Shogo title (optional)",
+      "shogoNone": "None",
+      "date": "Date",
+      "examinerName": "Examiner",
+      "organisationName": "Organisation",
+      "notes": "Notes",
+      "clearsVerification": "Saving will clear the verification by {{name}} on {{date}}."
+    }
   },
   "home": {
     "tagline": "A Feature-Sliced Design seed for a Vite + React + TypeScript app, wired to a NestJS backend over a typed `@repo/contracts` HTTP boundary."

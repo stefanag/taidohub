@@ -38,6 +38,7 @@
     "adminAuditLog": "Granskningslogg",
     "adminBeltCatalog": "Beltkatalog",
     "adminUsers": "Användare",
+    "gradingHistory": "Graderingshistorik",
     "profile": "Min profil"
   },
   "dashboard": {
@@ -63,6 +64,39 @@
     "save": "Spara profil",
     "saved": "Profilen sparad.",
     "empty": "Den här användaren har inte fyllt i sin profil ännu."
+  },
+  "gradingHistory": {
+    "title": "Graderingshistorik",
+    "description": "Alla graderingar du har registrerat eller som har speglats från en gradering. Lägg till tidigare graderingar för att hålla bilden komplett.",
+    "adminDescription": "Graderingshistorik registrerad för den här användaren.",
+    "addPastGrading": "Lägg till tidigare gradering",
+    "clubCard": {
+      "heading": "Klubb"
+    },
+    "timeline": {
+      "noEntriesYet": "Inga poster ännu.",
+      "failed": "Underkänd",
+      "external": "Extern",
+      "pendingVerification": "Väntar på verifiering",
+      "verifiedBy": "verifierad av {{name}} den {{date}}",
+      "verifiedFallback": "Verifierad",
+      "edit": "Redigera",
+      "verify": "Verifiera",
+      "unverify": "Avverifiera"
+    },
+    "form": {
+      "createTitle": "Lägg till tidigare gradering",
+      "editTitle": "Redigera tidigare gradering",
+      "rank": "Grad",
+      "rankPlaceholder": "Välj en grad…",
+      "shogoTitle": "Shogo-titel (valfritt)",
+      "shogoNone": "Ingen",
+      "date": "Datum",
+      "examinerName": "Examinator",
+      "organisationName": "Organisation",
+      "notes": "Anteckningar",
+      "clearsVerification": "Att spara tar bort verifieringen av {{name}} från {{date}}."
+    }
   },
   "home": {
     "tagline": "En Feature-Sliced Design-mall för en Vite + React + TypeScript-app, kopplad till en NestJS-backend över ett typat `@repo/contracts`-HTTP-gränssnitt."

@@ -38,6 +38,7 @@
     "adminAuditLog": "Auditointiloki",
     "adminBeltCatalog": "Vyökatalogi",
     "adminUsers": "Käyttäjät",
+    "gradingHistory": "Vyökoehistoria",
     "profile": "Oma profiili"
   },
   "dashboard": {
@@ -63,6 +64,39 @@
     "save": "Tallenna profiili",
     "saved": "Profiili tallennettu.",
     "empty": "Tämä käyttäjä ei ole vielä täyttänyt profiiliaan."
+  },
+  "gradingHistory": {
+    "title": "Vyökoehistoria",
+    "description": "Kaikki vyökokeesi: omat lisäykset ja tapahtumista peilatut. Lisää aikaisempia vyökokeita pitääksesi tiedot ajan tasalla.",
+    "adminDescription": "Tälle käyttäjälle kirjattu vyökoehistoria.",
+    "addPastGrading": "Lisää aikaisempi vyökoe",
+    "clubCard": {
+      "heading": "Seura"
+    },
+    "timeline": {
+      "noEntriesYet": "Ei merkintöjä vielä.",
+      "failed": "Hylätty",
+      "external": "Ulkoinen",
+      "pendingVerification": "Odottaa varmistusta",
+      "verifiedBy": "varmentanut {{name}} {{date}}",
+      "verifiedFallback": "Varmistettu",
+      "edit": "Muokkaa",
+      "verify": "Varmista",
+      "unverify": "Peruuta varmistus"
+    },
+    "form": {
+      "createTitle": "Lisää aikaisempi vyökoe",
+      "editTitle": "Muokkaa aikaisempaa vyökoetta",
+      "rank": "Aste",
+      "rankPlaceholder": "Valitse aste…",
+      "shogoTitle": "Shogo-arvonimi (valinnainen)",
+      "shogoNone": "Ei mitään",
+      "date": "Päivämäärä",
+      "examinerName": "Tutkija",
+      "organisationName": "Organisaatio",
+      "notes": "Muistiinpanot",
+      "clearsVerification": "Tallentaminen poistaa varmistuksen, jonka {{name}} teki {{date}}."
+    }
   },
   "home": {
     "tagline": "Feature-Sliced Design -pohja Vite + React + TypeScript -sovellukselle, joka on kytketty NestJS-taustaan typitetyn `@repo/contracts`-HTTP-rajapinnan kautta."
