@@ -15,6 +15,7 @@ import { Route as PublicIndexRouteImport } from './routes/_public.index'
 import { Route as PublicSetPasswordRouteImport } from './routes/_public.set-password'
 import { Route as PublicLoginRouteImport } from './routes/_public.login'
 import { Route as AppProfileRouteImport } from './routes/_app.profile'
+import { Route as AppGradingHistoryRouteImport } from './routes/_app.grading-history'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
 import { Route as PublicRanksSlugRouteImport } from './routes/_public.ranks.$slug'
 import { Route as AppAdminUsersRouteImport } from './routes/_app.admin.users'
@@ -48,6 +49,11 @@ const PublicLoginRoute = PublicLoginRouteImport.update({
 const AppProfileRoute = AppProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppGradingHistoryRoute = AppGradingHistoryRouteImport.update({
+  id: '/grading-history',
+  path: '/grading-history',
   getParentRoute: () => AppRoute,
 } as any)
 const AppDashboardRoute = AppDashboardRouteImport.update({
@@ -84,6 +90,7 @@ const AppAdminAuditLogRoute = AppAdminAuditLogRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof PublicIndexRoute
   '/dashboard': typeof AppDashboardRoute
+  '/grading-history': typeof AppGradingHistoryRoute
   '/profile': typeof AppProfileRoute
   '/login': typeof PublicLoginRoute
   '/set-password': typeof PublicSetPasswordRoute
@@ -96,6 +103,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof PublicIndexRoute
   '/dashboard': typeof AppDashboardRoute
+  '/grading-history': typeof AppGradingHistoryRoute
   '/profile': typeof AppProfileRoute
   '/login': typeof PublicLoginRoute
   '/set-password': typeof PublicSetPasswordRoute
@@ -110,6 +118,7 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteWithChildren
   '/_public': typeof PublicRouteWithChildren
   '/_app/dashboard': typeof AppDashboardRoute
+  '/_app/grading-history': typeof AppGradingHistoryRoute
   '/_app/profile': typeof AppProfileRoute
   '/_public/login': typeof PublicLoginRoute
   '/_public/set-password': typeof PublicSetPasswordRoute
@@ -125,6 +134,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/dashboard'
+    | '/grading-history'
     | '/profile'
     | '/login'
     | '/set-password'
@@ -137,6 +147,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/dashboard'
+    | '/grading-history'
     | '/profile'
     | '/login'
     | '/set-password'
@@ -150,6 +161,7 @@ export interface FileRouteTypes {
     | '/_app'
     | '/_public'
     | '/_app/dashboard'
+    | '/_app/grading-history'
     | '/_app/profile'
     | '/_public/login'
     | '/_public/set-password'
@@ -210,6 +222,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProfileRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/grading-history': {
+      id: '/_app/grading-history'
+      path: '/grading-history'
+      fullPath: '/grading-history'
+      preLoaderRoute: typeof AppGradingHistoryRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/dashboard': {
       id: '/_app/dashboard'
       path: '/dashboard'
@@ -257,6 +276,7 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
+  AppGradingHistoryRoute: typeof AppGradingHistoryRoute
   AppProfileRoute: typeof AppProfileRoute
   AppAdminAuditLogRoute: typeof AppAdminAuditLogRoute
   AppAdminBeltCatalogRoute: typeof AppAdminBeltCatalogRoute
@@ -266,6 +286,7 @@ interface AppRouteChildren {
 
 const AppRouteChildren: AppRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
+  AppGradingHistoryRoute: AppGradingHistoryRoute,
   AppProfileRoute: AppProfileRoute,
   AppAdminAuditLogRoute: AppAdminAuditLogRoute,
   AppAdminBeltCatalogRoute: AppAdminBeltCatalogRoute,
