@@ -40,6 +40,96 @@ vi.mock('@/entities/profile/api/profile.api.js', async (orig) => {
   };
 });
 
+vi.mock('@/entities/rank-history/api/rank-history.api.js', async (orig) => {
+  const actual = await orig<typeof import('@/entities/rank-history/api/rank-history.api.js')>();
+  return {
+    ...actual,
+    getGradingHistory: vi.fn().mockResolvedValue({
+      data: [
+        {
+          id: '99999999-9999-4999-8999-999999999999',
+          source: 'external',
+          userId: '11111111-1111-4111-8111-111111111111',
+          rankId: 'rank-shodan',
+          shogoTitle: null,
+          date: '2024-09-01',
+          result: 'pass',
+          notes: 'admin tab entry',
+          examiner: 'Sensei Tanaka',
+          organisationName: 'Kobe Dojo',
+          verified: false,
+          verifiedBy: null,
+          verifiedAt: null,
+          canVerify: true,
+          canEdit: true,
+          updatedAt: null,
+          updatedByUserId: null,
+        },
+      ],
+    }),
+  };
+});
+
+vi.mock('@/entities/belt-rank/api/belt-rank.api.js', async (orig) => {
+  const actual = await orig<typeof import('@/entities/belt-rank/api/belt-rank.api.js')>();
+  return {
+    ...actual,
+    getBeltRanks: vi.fn().mockResolvedValue([
+      {
+        id: 'rank-shodan',
+        organisationId: null,
+        systemId: 'sys-dan',
+        level: 1,
+        sortOrder: 100,
+        nameJa: '初段',
+        nameRomaji: 'Shodan',
+        nameEn: '1st Dan',
+        nameSv: '1 Dan',
+        nameFi: '1. Dan',
+        beltColor: '#000000',
+        imageUrl: null,
+        descriptionEn: null,
+        descriptionSv: null,
+        descriptionFi: null,
+        publiclyVisible: false,
+        slug: null,
+        minAge: null,
+        nextRankId: null,
+        createdAt: '2026-01-01T00:00:00.000Z',
+        updatedAt: '2026-01-01T00:00:00.000Z',
+      },
+    ]),
+  };
+});
+
+vi.mock('@/entities/belt-system/api/belt-system.api.js', async (orig) => {
+  const actual = await orig<typeof import('@/entities/belt-system/api/belt-system.api.js')>();
+  return {
+    ...actual,
+    getBeltSystems: vi.fn().mockResolvedValue([
+      {
+        id: 'sys-dan',
+        code: 'dan',
+        nameEn: 'Dan',
+        nameSv: 'Dan',
+        nameFi: 'Dan',
+        organisationId: null,
+        sortOrder: 2,
+        createdAt: '2026-01-01T00:00:00.000Z',
+        updatedAt: '2026-01-01T00:00:00.000Z',
+      },
+    ]),
+  };
+});
+
+vi.mock('@/entities/shogo-title/api/shogo-title.api.js', async (orig) => {
+  const actual = await orig<typeof import('@/entities/shogo-title/api/shogo-title.api.js')>();
+  return {
+    ...actual,
+    getShogoTitles: vi.fn().mockResolvedValue([]),
+  };
+});
+
 const TARGET: User = {
   id: '11111111-1111-4111-8111-111111111111',
   email: 'ada@example.com',
@@ -173,5 +263,11 @@ describe('<UserForm>', () => {
     expect(screen.getByText('Lovelace')).toBeInTheDocument();
     expect(screen.getByText('Stockholm')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /save profile/i })).not.toBeInTheDocument();
+  });
+
+  it('renders the Grading history tab with timeline entries', async () => {
+    const { user } = renderForm();
+    await user.click(screen.getByRole('tab', { name: /grading history/i }));
+    expect(await screen.findByText('admin tab entry')).toBeInTheDocument();
   });
 });

@@ -78,6 +78,17 @@ export default defineConfig([
     },
   },
   {
+    // UserForm composes the GradingTimeline and RankHistoryFormDialog
+    // features in the admin Grading history tab. Strict FSD forbids
+    // features from importing other features; lifting UserForm to a widget
+    // would force a large rearrangement of the admin-users page. Allow
+    // the cross-feature imports for this slice only.
+    files: ['src/features/user-form/**'],
+    rules: {
+      'fsd/forbidden-imports': 'off',
+    },
+  },
+  {
     // The invite-user-dialog test mocks the user entity API module by its
     // deep path because `user.queries.ts` imports the fetcher from there
     // directly (not via the barrel). Mocking the barrel wouldn't reach that

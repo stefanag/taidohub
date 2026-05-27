@@ -6,6 +6,8 @@ import { MembershipEditor } from './MembershipEditor.js';
 
 import type { Role, UpdateUserInput, User } from '@/entities/user';
 
+import { listBeltRanksQueryOptions, type BeltRank } from '@/entities/belt-rank';
+import { listBeltSystemsQueryOptions } from '@/entities/belt-system';
 import {
   listMembershipsQueryOptions,
   useCreateMembership,
@@ -14,9 +16,17 @@ import {
   type MembershipRole,
 } from '@/entities/membership';
 import { listOrganisationsQueryOptions, countryName } from '@/entities/organisation';
-import type { IsoAlpha3 } from '@repo/contracts/organisations';
 import { userProfileQueryOptions } from '@/entities/profile';
+import {
+  gradingHistoryQueryOptions,
+  useUnverifyRankHistory,
+  useVerifyRankHistory,
+  type GradingHistoryRow,
+} from '@/entities/rank-history';
+import { listShogoTitlesQueryOptions, type ShogoTitle } from '@/entities/shogo-title';
+import type { IsoAlpha3 } from '@repo/contracts/organisations';
 import { HttpError } from '@/shared/api';
+import { FeatureFlag, useFeatureFlag } from '@/shared/lib/feature-flags';
 import { Button, FormField, FormMessage, Input, Label } from '@/shared/ui';
 import {
   Select,
@@ -26,6 +36,9 @@ import {
   SelectValue,
 } from '@/shared/ui/select.js';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs.js';
+
+import { GradingTimeline } from '@/features/grading-timeline';
+import { RankHistoryFormDialog } from '@/features/rank-history-form';
 
 export interface UserFormProps {
   /** The user being edited. */
@@ -43,10 +56,16 @@ export interface UserFormProps {
 }
 
 /**
- * Edit form for a user. Three tabs: Details (name + role), Memberships, and
- * Profile (read-only view of the user's self-service profile). Email is
+ * Edit form for a user. Four tabs: Details (name + role), Memberships,
+ * Profile (read-only view of the user's self-service profile), and
+ * Grading history (timeline + admin-side Add/Edit/Verify/Unverify). Email is
  * read-only — better-auth owns it. The role select is disabled when an admin
  * edits their own row (the backend also rejects self-demotion).
+ *
+ * The Grading history tab reuses the `features/grading-timeline` and
+ * `features/rank-history-form` slices bound to `user.id` (not `currentUserId`);
+ * verify/unverify is gated server-side by the recorder ≠ verifier rule, so
+ * sysadmins cannot verify rows they recorded themselves.
  */
 export function UserForm({
   user,
@@ -141,6 +160,36 @@ export function UserForm({
 
   const profileQuery = useQuery(userProfileQueryOptions(user.id));
   const profile = profileQuery.data;
+
+  const historyQuery = useQuery(gradingHistoryQueryOptions(user.id));
+  const ranksQueryGH = useQuery(listBeltRanksQueryOptions());
+  const systemsQueryGH = useQuery(listBeltSystemsQueryOptions());
+  const shogoQueryGH = useQuery(listShogoTitlesQueryOptions());
+
+  const verifyMutation = useVerifyRankHistory();
+  const unverifyMutation = useUnverifyRankHistory();
+
+  const [historyDialog, setHistoryDialog] = React.useState<
+    { kind: 'closed' } | { kind: 'create' } | { kind: 'edit'; entry: GradingHistoryRow }
+  >({ kind: 'closed' });
+  const gradingHistoryEnabled = useFeatureFlag('grading-history');
+
+  const rankMap = React.useMemo(() => {
+    const m = new Map<string, BeltRank>();
+    for (const r of ranksQueryGH.data ?? []) m.set(r.id, r);
+    return m;
+  }, [ranksQueryGH.data]);
+  const systemCodeMap = React.useMemo(() => {
+    const m = new Map<string, string>();
+    for (const s of systemsQueryGH.data ?? []) m.set(s.id, s.code);
+    return m;
+  }, [systemsQueryGH.data]);
+  const shogoTitleMap = React.useMemo(() => {
+    const m = new Map<string, ShogoTitle>();
+    for (const s of shogoQueryGH.data ?? []) m.set(s.code, s);
+    return m;
+  }, [shogoQueryGH.data]);
+
   const profileIsEmpty =
     profile !== undefined &&
     profile.firstName === null &&
@@ -189,6 +238,9 @@ export function UserForm({
         </TabsTrigger>
         <TabsTrigger value="profile">
           {t('profile.title', { defaultValue: 'My profile' })}
+        </TabsTrigger>
+        <TabsTrigger value="grading-history">
+          {t('gradingHistory.title', { defaultValue: 'Grading history' })}
         </TabsTrigger>
       </TabsList>
 
@@ -431,6 +483,57 @@ export function UserForm({
             </dd>
           </dl>
         )}
+      </TabsContent>
+
+      <TabsContent value="grading-history" className="space-y-3">
+        <div className="flex items-end justify-between">
+          <p className="text-sm text-on-surface-variant">
+            {t('gradingHistory.adminDescription', {
+              defaultValue: 'Grading history recorded for this user.',
+            })}
+          </p>
+          <FeatureFlag code="grading-history">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setHistoryDialog({ kind: 'create' })}
+            >
+              {t('gradingHistory.addPastGrading', { defaultValue: 'Add past grading' })}
+            </Button>
+          </FeatureFlag>
+        </div>
+
+        {historyQuery.isPending ? (
+          <p className="text-on-surface-variant">{t('common.loading')}</p>
+        ) : historyQuery.isError ? (
+          <p role="alert" className="text-sm text-destructive">
+            {historyQuery.error instanceof Error
+              ? historyQuery.error.message
+              : t('common.unknownError')}
+          </p>
+        ) : (
+          <GradingTimeline
+            entries={historyQuery.data?.data ?? []}
+            rankMap={rankMap}
+            systemCodeMap={systemCodeMap}
+            shogoTitleMap={shogoTitleMap}
+            onEdit={(entry) => setHistoryDialog({ kind: 'edit', entry })}
+            onVerify={(id) => verifyMutation.mutate({ id, subjectUserId: user.id })}
+            onUnverify={(id) => unverifyMutation.mutate({ id, subjectUserId: user.id })}
+          />
+        )}
+
+        {gradingHistoryEnabled && historyDialog.kind !== 'closed' ? (
+          <RankHistoryFormDialog
+            mode={historyDialog.kind}
+            open
+            onOpenChange={(o) => {
+              if (!o) setHistoryDialog({ kind: 'closed' });
+            }}
+            subjectUserId={user.id}
+            {...(historyDialog.kind === 'edit' ? { entry: historyDialog.entry } : {})}
+          />
+        ) : null}
       </TabsContent>
     </Tabs>
   );
