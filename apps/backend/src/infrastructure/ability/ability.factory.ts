@@ -4,9 +4,11 @@ import { Injectable, Optional } from '@nestjs/common';
 import { type AuthenticatedUser } from '../auth/auth.types.js';
 
 import { AuditLogAbilityRules } from '../../modules/audit-log/audit-log.abilities.js';
+import { BeltCatalogAbilityRules } from '../../modules/belt-catalog/belt-catalog.abilities.js';
 import { OrganisationsAbilityRules } from '../../modules/organisations/organisations.abilities.js';
 import { UsersAbilityRules } from '../../modules/users/users.abilities.js';
 import { MembershipsAbilityRules } from '../../modules/memberships/memberships.abilities.js';
+import { RankHistoryAbilityRules } from '../../modules/rank-history/rank-history.abilities.js';
 
 import {
   type AbilityRuleContributor,
@@ -29,12 +31,16 @@ export class AbilityFactory {
     organisationsRules: OrganisationsAbilityRules,
     auditLogRules: AuditLogAbilityRules,
     @Optional() membershipsRules?: MembershipsAbilityRules,
+    @Optional() beltCatalogRules?: BeltCatalogAbilityRules,
+    @Optional() rankHistoryRules?: RankHistoryAbilityRules,
   ) {
     this.contributors = [
       usersRules,
       organisationsRules,
       auditLogRules,
       ...(membershipsRules ? [membershipsRules] : []),
+      ...(beltCatalogRules ? [beltCatalogRules] : []),
+      ...(rankHistoryRules ? [rankHistoryRules] : []),
     ];
   }
 
