@@ -321,6 +321,40 @@ describe('<UserForm>', () => {
     expect(viewer?.textContent).toContain('My bio');
   });
 
+  it('does not show the empty-profile placeholder when only aboutMe is set', async () => {
+    const profileOnlyBio = {
+      userId: '11111111-1111-4111-8111-111111111111',
+      firstName: null,
+      lastName: null,
+      dateOfBirth: null,
+      taidoStartDate: null,
+      addressStreet: null,
+      addressPostalCode: null,
+      addressCity: null,
+      addressCountry: null,
+      citizenships: [],
+      aboutMe: { ops: [{ insert: 'Just a bio\n' }] },
+    };
+    mockedGetProfile.mockResolvedValueOnce(profileOnlyBio);
+
+    const { user, container } = renderForm();
+    await user.click(screen.getByRole('tab', { name: /profile/i }));
+
+    // QuillViewer renders the bio.
+    const viewer = await waitFor(() => {
+      const el = container.querySelector('.ql-editor[contenteditable="false"]');
+      expect(el).not.toBeNull();
+      return el;
+    });
+    expect(viewer?.textContent).toContain('Just a bio');
+
+    // The empty-profile placeholder ('profile.empty' → "This user has not
+    // filled in their profile yet.") must NOT be rendered.
+    expect(
+      screen.queryByText(/This user has not filled in their profile yet\./i),
+    ).not.toBeInTheDocument();
+  });
+
   it('shows an em-dash placeholder when aboutMe is null', async () => {
     const profileWithoutBio = { ...PROFILE_FIXTURE, aboutMe: null };
     mockedGetProfile.mockResolvedValueOnce(profileWithoutBio);

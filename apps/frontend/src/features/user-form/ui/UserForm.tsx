@@ -200,7 +200,8 @@ export function UserForm({
     profile.addressPostalCode === null &&
     profile.addressCity === null &&
     profile.addressCountry === null &&
-    profile.citizenships.length === 0;
+    profile.citizenships.length === 0 &&
+    !(profile.aboutMe && !isEmpty(profile.aboutMe as Delta));
 
   const [editorOpen, setEditorOpen] = React.useState(false);
   const createMembership = useCreateMembership({ onSuccess: () => setEditorOpen(false) });
