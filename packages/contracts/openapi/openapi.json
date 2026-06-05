@@ -8896,7 +8896,14 @@
                 "citizenships": [
                   "SWE",
                   "GBR"
-                ]
+                ],
+                "aboutMe": {
+                  "ops": [
+                    {
+                      "insert": "Started taido in 2015 …\n"
+                    }
+                  ]
+                }
               }
             }
           },
@@ -8926,7 +8933,14 @@
                 "citizenships": [
                   "SWE",
                   "GBR"
-                ]
+                ],
+                "aboutMe": {
+                  "ops": [
+                    {
+                      "insert": "Started taido in 2015 …\n"
+                    }
+                  ]
+                }
               }
             }
           },
@@ -8956,7 +8970,14 @@
                 "citizenships": [
                   "SWE",
                   "GBR"
-                ]
+                ],
+                "aboutMe": {
+                  "ops": [
+                    {
+                      "insert": "Started taido in 2015 …\n"
+                    }
+                  ]
+                }
               }
             }
           },
@@ -8988,7 +9009,14 @@
                 "citizenships": [
                   "SWE",
                   "GBR"
-                ]
+                ],
+                "aboutMe": {
+                  "ops": [
+                    {
+                      "insert": "Started taido in 2015 …\n"
+                    }
+                  ]
+                }
               }
             }
           },
@@ -9020,7 +9048,14 @@
                 "citizenships": [
                   "SWE",
                   "GBR"
-                ]
+                ],
+                "aboutMe": {
+                  "ops": [
+                    {
+                      "insert": "Started taido in 2015 …\n"
+                    }
+                  ]
+                }
               }
             }
           },
@@ -9050,7 +9085,14 @@
                 "citizenships": [
                   "SWE",
                   "GBR"
-                ]
+                ],
+                "aboutMe": {
+                  "ops": [
+                    {
+                      "insert": "Started taido in 2015 …\n"
+                    }
+                  ]
+                }
               }
             }
           },
@@ -9080,7 +9122,14 @@
                 "citizenships": [
                   "SWE",
                   "GBR"
-                ]
+                ],
+                "aboutMe": {
+                  "ops": [
+                    {
+                      "insert": "Started taido in 2015 …\n"
+                    }
+                  ]
+                }
               }
             }
           },
@@ -9110,7 +9159,14 @@
                 "citizenships": [
                   "SWE",
                   "GBR"
-                ]
+                ],
+                "aboutMe": {
+                  "ops": [
+                    {
+                      "insert": "Started taido in 2015 …\n"
+                    }
+                  ]
+                }
               }
             }
           },
@@ -9140,7 +9196,14 @@
                 "citizenships": [
                   "SWE",
                   "GBR"
-                ]
+                ],
+                "aboutMe": {
+                  "ops": [
+                    {
+                      "insert": "Started taido in 2015 …\n"
+                    }
+                  ]
+                }
               }
             }
           },
@@ -9165,7 +9228,60 @@
                 "citizenships": [
                   "SWE",
                   "GBR"
+                ],
+                "aboutMe": {
+                  "ops": [
+                    {
+                      "insert": "Started taido in 2015 …\n"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "aboutMe": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "ops": {
+                    "type": "array",
+                    "items": {}
+                  }
+                },
+                "required": [
+                  "ops"
                 ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A user's self-service profile — personal and taido-training details.",
+              "example": {
+                "userId": "u-1",
+                "firstName": "Ada",
+                "lastName": "Lovelace",
+                "dateOfBirth": "1990-12-10",
+                "taidoStartDate": "2015-09-01",
+                "addressStreet": "12 Analytical Way",
+                "addressPostalCode": "11122",
+                "addressCity": "Stockholm",
+                "addressCountry": "SWE",
+                "citizenships": [
+                  "SWE",
+                  "GBR"
+                ],
+                "aboutMe": {
+                  "ops": [
+                    {
+                      "insert": "Started taido in 2015 …\n"
+                    }
+                  ]
+                }
               }
             }
           }
@@ -9180,7 +9296,8 @@
           "addressPostalCode",
           "addressCity",
           "addressCountry",
-          "citizenships"
+          "citizenships",
+          "aboutMe"
         ]
       },
       "UpdateUserProfileDto": {
@@ -9385,6 +9502,38 @@
               "type": "string"
             },
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A partial profile patch — omit a field to leave it unchanged.",
+              "example": {
+                "firstName": "Ada",
+                "lastName": "Lovelace",
+                "citizenships": [
+                  "SWE",
+                  "GBR"
+                ]
+              }
+            }
+          },
+          "aboutMe": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "ops": {
+                    "type": "array",
+                    "items": {}
+                  }
+                },
+                "required": [
+                  "ops"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "A partial profile patch — omit a field to leave it unchanged.",
               "example": {

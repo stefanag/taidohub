@@ -4144,6 +4144,10 @@ components:
               citizenships:
                 - SWE
                 - GBR
+              aboutMe:
+                ops:
+                  - insert: |
+                      Started taido in 2015 …
         firstName:
           anyOf:
             - type: string
@@ -4237,6 +4241,22 @@ components:
             description: A user's self-service profile — personal and taido-training
               details.
             example: *a37
+        aboutMe:
+          anyOf:
+            - type: object
+              properties:
+                ops:
+                  type: array
+                  items: {}
+              required:
+                - ops
+            - type: "null"
+          x-nestjs_zod-has-null: true
+          x-nestjs_zod-empty-type: true
+          x-nestjs_zod-parent-metadata:
+            description: A user's self-service profile — personal and taido-training
+              details.
+            example: *a37
       required:
         - userId
         - firstName
@@ -4248,6 +4268,7 @@ components:
         - addressCity
         - addressCountry
         - citizenships
+        - aboutMe
     UpdateUserProfileDto:
       type: object
       properties:
@@ -4342,6 +4363,21 @@ components:
           items:
             type: string
           x-nestjs_zod-has-null: true
+          x-nestjs_zod-parent-metadata:
+            description: A partial profile patch — omit a field to leave it unchanged.
+            example: *a38
+        aboutMe:
+          anyOf:
+            - type: object
+              properties:
+                ops:
+                  type: array
+                  items: {}
+              required:
+                - ops
+            - type: "null"
+          x-nestjs_zod-has-null: true
+          x-nestjs_zod-empty-type: true
           x-nestjs_zod-parent-metadata:
             description: A partial profile patch — omit a field to leave it unchanged.
             example: *a38
