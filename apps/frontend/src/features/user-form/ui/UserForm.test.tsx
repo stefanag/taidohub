@@ -1,15 +1,26 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import * as React from 'react';
 import { I18nextProvider } from 'react-i18next';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { UserForm } from './UserForm.js';
 
 import type { User } from '@/entities/user';
 
 import i18n from '@/i18n';
+
+// jsdom polyfills required by Quill's selection/range usage.
+beforeAll(() => {
+  if (!Range.prototype.getBoundingClientRect) {
+    Range.prototype.getBoundingClientRect = () =>
+      ({ x: 0, y: 0, width: 0, height: 0, top: 0, right: 0, bottom: 0, left: 0, toJSON: () => ({}) }) as DOMRect;
+  }
+  if (!Range.prototype.getClientRects) {
+    Range.prototype.getClientRects = () => ({ length: 0, item: () => null, [Symbol.iterator]: function* () {} }) as unknown as DOMRectList;
+  }
+});
 
 // Mock the underlying API modules so the query-options factories pick up the
 // stubs. Mocking the barrel alone wouldn't reach the captured references.
@@ -36,9 +47,28 @@ vi.mock('@/entities/profile/api/profile.api.js', async (orig) => {
       addressCity: 'Stockholm',
       addressCountry: 'SWE',
       citizenships: ['SWE', 'GBR'],
+      aboutMe: null,
     }),
   };
 });
+
+import { getUserProfile } from '@/entities/profile/api/profile.api.js';
+
+const PROFILE_FIXTURE = {
+  userId: '11111111-1111-4111-8111-111111111111',
+  firstName: 'Ada',
+  lastName: 'Lovelace',
+  dateOfBirth: '1990-12-10',
+  taidoStartDate: '2015-09-01',
+  addressStreet: '12 Analytical Way',
+  addressPostalCode: '11122',
+  addressCity: 'Stockholm',
+  addressCountry: 'SWE',
+  citizenships: ['SWE', 'GBR'],
+  aboutMe: null,
+};
+
+const mockedGetProfile = vi.mocked(getUserProfile);
 
 vi.mock('@/entities/rank-history/api/rank-history.api.js', async (orig) => {
   const actual = await orig<typeof import('@/entities/rank-history/api/rank-history.api.js')>();
@@ -145,7 +175,7 @@ const TARGET: User = {
 function renderForm(overrides: Partial<React.ComponentProps<typeof UserForm>> = {}) {
   const onSubmit = vi.fn().mockResolvedValue(undefined);
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
-  render(
+  const { container } = render(
     <QueryClientProvider client={client}>
       <I18nextProvider i18n={i18n}>
         <UserForm
@@ -157,7 +187,7 @@ function renderForm(overrides: Partial<React.ComponentProps<typeof UserForm>> = 
       </I18nextProvider>
     </QueryClientProvider>,
   );
-  return { onSubmit, user: userEvent.setup() };
+  return { onSubmit, user: userEvent.setup(), container };
 }
 
 describe('<UserForm>', () => {
@@ -269,5 +299,40 @@ describe('<UserForm>', () => {
     const { user } = renderForm();
     await user.click(screen.getByRole('tab', { name: /grading history/i }));
     expect(await screen.findByText('admin tab entry')).toBeInTheDocument();
+  });
+
+  it('renders the about-me QuillViewer when the profile carries aboutMe', async () => {
+    const profileWithBio = {
+      ...PROFILE_FIXTURE,
+      aboutMe: { ops: [{ insert: 'My bio\n' }] },
+    };
+    mockedGetProfile.mockResolvedValueOnce(profileWithBio);
+
+    const { user, container } = renderForm();
+    await user.click(screen.getByRole('tab', { name: /profile/i }));
+
+    // QuillViewer renders a Quill instance — its read-only editor body has
+    // contenteditable="false" and reflects the seeded text.
+    const viewer = await waitFor(() => {
+      const el = container.querySelector('.ql-editor[contenteditable="false"]');
+      expect(el).not.toBeNull();
+      return el;
+    });
+    expect(viewer?.textContent).toContain('My bio');
+  });
+
+  it('shows an em-dash placeholder when aboutMe is null', async () => {
+    const profileWithoutBio = { ...PROFILE_FIXTURE, aboutMe: null };
+    mockedGetProfile.mockResolvedValueOnce(profileWithoutBio);
+
+    const { user } = renderForm();
+    await user.click(screen.getByRole('tab', { name: /profile/i }));
+
+    // The label is the raw i18n key until Task 6 lands.
+    const label = await screen.findByText('profile.fields.aboutMe');
+    expect(label.tagName.toLowerCase()).toBe('dt');
+    const dd = label.nextElementSibling;
+    expect(dd?.tagName.toLowerCase()).toBe('dd');
+    expect(dd?.textContent).toContain('—');
   });
 });

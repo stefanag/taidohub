@@ -27,7 +27,7 @@ import { listShogoTitlesQueryOptions, type ShogoTitle } from '@/entities/shogo-t
 import type { IsoAlpha3 } from '@repo/contracts/organisations';
 import { HttpError } from '@/shared/api';
 import { FeatureFlag, useFeatureFlag } from '@/shared/lib/feature-flags';
-import { Button, FormField, FormMessage, Input, Label } from '@/shared/ui';
+import { Button, FormField, FormMessage, Input, Label, QuillViewer, isEmpty, type Delta } from '@/shared/ui';
 import {
   Select,
   SelectContent,
@@ -480,6 +480,14 @@ export function UserForm({
                     .map((c) => `${countryName(c as IsoAlpha3, i18n.language)} (${c})`)
                     .join(', ')
                 : '—'}
+            </dd>
+            <dt className="text-on-surface-variant">{t('profile.fields.aboutMe')}</dt>
+            <dd>
+              {profile?.aboutMe && !isEmpty(profile.aboutMe as Delta) ? (
+                <QuillViewer value={profile.aboutMe as Delta} />
+              ) : (
+                '—'
+              )}
             </dd>
           </dl>
         )}
