@@ -13,6 +13,17 @@ export const CountryCodeSchema = z
   });
 
 /**
+ * A minimal Quill Delta — `{ ops: unknown[] }`. The per-op shape isn't
+ * deeply validated here: Quill's `formats` allowlist on the editor side
+ * narrows what blots actually get produced, and the read path renders
+ * whatever was stored. Zod confirms the top-level shape (and, for PATCH
+ * payloads, the size cap).
+ */
+const DeltaSchema = z.object({
+  ops: z.array(z.unknown()),
+});
+
+/**
  * The full user profile as returned by the API. All personal fields are
  * nullable; `citizenships` is always an array (possibly empty). The
  * `created_at` / `updated_at` bookkeeping columns are deliberately not
@@ -30,6 +41,7 @@ export const UserProfileSchema = z
     addressCity: z.string().nullable(),
     addressCountry: CountryCodeSchema.nullable(),
     citizenships: CountryCodeSchema.array(),
+    aboutMe: DeltaSchema.nullable(),
   })
   .meta({
     id: 'UserProfile',
@@ -45,6 +57,7 @@ export const UserProfileSchema = z
       addressCity: 'Stockholm',
       addressCountry: 'SWE',
       citizenships: ['SWE', 'GBR'],
+      aboutMe: { ops: [{ insert: 'Started taido in 2015 …\n' }] },
     },
   });
 
@@ -66,6 +79,13 @@ export const UpdateUserProfileSchema = z
     addressCity: z.string().max(200).nullable().optional(),
     addressCountry: CountryCodeSchema.nullable().optional(),
     citizenships: CountryCodeSchema.array().optional(),
+    aboutMe: DeltaSchema
+      .nullable()
+      .refine(
+        (d) => d === null || JSON.stringify(d).length <= 50_000,
+        { message: 'aboutMe exceeds 50 KB.' },
+      )
+      .optional(),
   })
   .meta({
     id: 'UpdateUserProfileInput',

@@ -13,6 +13,7 @@ const FULL_PROFILE = {
   addressCity: 'Stockholm',
   addressCountry: 'SWE',
   citizenships: ['SWE', 'GBR'],
+  aboutMe: null,
 };
 
 const EMPTY_PROFILE = {
@@ -26,6 +27,7 @@ const EMPTY_PROFILE = {
   addressCity: null,
   addressCountry: null,
   citizenships: [],
+  aboutMe: null,
 };
 
 describe('UserProfileSchema', () => {
@@ -82,5 +84,64 @@ describe('UpdateUserProfileSchema', () => {
 
   it('rejects an over-long firstName', () => {
     expect(UpdateUserProfileSchema.safeParse({ firstName: 'a'.repeat(201) }).success).toBe(false);
+  });
+});
+
+describe('UserProfileSchema — aboutMe', () => {
+  const baseRow = {
+    userId: 'u-1',
+    firstName: 'Ada',
+    lastName: 'Lovelace',
+    dateOfBirth: '1990-12-10',
+    taidoStartDate: '2015-09-01',
+    addressStreet: '12 Analytical Way',
+    addressPostalCode: '11122',
+    addressCity: 'Stockholm',
+    addressCountry: 'SWE' as const,
+    citizenships: ['SWE', 'GBR'],
+  };
+
+  it('accepts aboutMe: null', () => {
+    expect(UserProfileSchema.safeParse({ ...baseRow, aboutMe: null }).success).toBe(true);
+  });
+
+  it('accepts a Delta-shaped aboutMe', () => {
+    expect(
+      UserProfileSchema.safeParse({
+        ...baseRow,
+        aboutMe: { ops: [{ insert: 'Sample bio\n' }] },
+      }).success,
+    ).toBe(true);
+  });
+
+  it('rejects aboutMe with a non-array ops field', () => {
+    expect(
+      UserProfileSchema.safeParse({ ...baseRow, aboutMe: { ops: 'nope' } }).success,
+    ).toBe(false);
+  });
+});
+
+describe('UpdateUserProfileSchema — aboutMe', () => {
+  it('accepts an empty patch (no aboutMe key)', () => {
+    expect(UpdateUserProfileSchema.safeParse({}).success).toBe(true);
+  });
+
+  it('accepts aboutMe: null', () => {
+    expect(UpdateUserProfileSchema.safeParse({ aboutMe: null }).success).toBe(true);
+  });
+
+  it('accepts a small Delta', () => {
+    expect(
+      UpdateUserProfileSchema.safeParse({
+        aboutMe: { ops: [{ insert: 'Short bio\n' }] },
+      }).success,
+    ).toBe(true);
+  });
+
+  it('rejects a Delta whose stringified size exceeds 50 KB', () => {
+    const big = 'x'.repeat(60_000);
+    expect(
+      UpdateUserProfileSchema.safeParse({ aboutMe: { ops: [{ insert: big }] } }).success,
+    ).toBe(false);
   });
 });
