@@ -20,6 +20,7 @@ const PROFILE_RESPONSE = {
   addressCity: 'Stockholm',
   addressCountry: 'SWE',
   citizenships: ['SWE', 'GBR'],
+  aboutMe: null,
 };
 
 const mockedHttp = vi.mocked(httpClient);
