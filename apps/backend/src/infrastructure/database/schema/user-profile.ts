@@ -1,4 +1,4 @@
-import { date, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { date, jsonb, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 
 import { shogoTitles } from './shogo-titles.js';
 import { user } from './users.js';
@@ -29,6 +29,7 @@ export const userProfile = pgTable('user_profile', {
   shogoTitle: text('shogo_title').references(() => shogoTitles.code, {
     onDelete: 'set null',
   }),
+  aboutMe: jsonb('about_me').$type<{ ops: unknown[] } | null>(),
   createdAt: timestamp('created_at', { withTimezone: true, mode: 'date' })
     .notNull()
     .defaultNow(),
