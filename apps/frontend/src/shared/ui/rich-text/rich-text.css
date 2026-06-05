@@ -1,0 +1,176 @@
+/*
+ * Rich text editor styles. Imports Quill's snow theme as the base, then
+ * remaps its hardcoded colours, borders, and typography to the app's MD3
+ * brand tokens. All overrides are namespaced under `.ql-snow` (the class
+ * snow theme puts on every Quill container) so they cannot leak outside
+ * a rich-text instance.
+ */
+
+@import 'react-quill-new/dist/quill.snow.css';
+
+/* ──────────────────────────────────────────────────────────────────────
+ * Container — editor body and toolbar
+ * ────────────────────────────────────────────────────────────────────── */
+
+.ql-snow.ql-toolbar,
+.ql-snow .ql-toolbar {
+  background-color: var(--surface-container-low);
+  border: 1px solid var(--border);
+  border-bottom: none;
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+}
+
+.ql-snow.ql-container,
+.ql-snow .ql-container {
+  border: 1px solid var(--border);
+  border-bottom-left-radius: var(--radius);
+  border-bottom-right-radius: var(--radius);
+  font-family: inherit;
+  background-color: var(--background);
+  color: var(--on-surface, var(--foreground));
+}
+
+/* Focus ring on the editor body. Snow has no focus state by default. */
+.ql-snow.ql-container:focus-within {
+  outline: 2px solid var(--ring);
+  outline-offset: -1px;
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+ * Toolbar buttons
+ * ────────────────────────────────────────────────────────────────────── */
+
+.ql-snow .ql-toolbar button,
+.ql-snow .ql-toolbar .ql-picker-label {
+  color: var(--on-surface-variant, var(--muted-foreground));
+}
+
+.ql-snow .ql-toolbar button:hover,
+.ql-snow .ql-toolbar button:focus,
+.ql-snow .ql-toolbar .ql-picker-label:hover {
+  color: var(--on-surface, var(--foreground));
+}
+
+.ql-snow .ql-toolbar button.ql-active,
+.ql-snow .ql-toolbar .ql-picker-label.ql-active,
+.ql-snow .ql-toolbar .ql-picker-item.ql-selected {
+  color: var(--on-secondary-container);
+  background-color: var(--secondary-container);
+  border-radius: calc(var(--radius) - 4px);
+}
+
+/* SVG icon strokes inherit the button text colour. */
+.ql-snow .ql-toolbar button .ql-stroke,
+.ql-snow .ql-toolbar .ql-picker-label .ql-stroke {
+  stroke: currentColor;
+}
+
+.ql-snow .ql-toolbar button .ql-fill,
+.ql-snow .ql-toolbar .ql-picker-label .ql-fill {
+  fill: currentColor;
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+ * Picker dropdown (heading select)
+ * ────────────────────────────────────────────────────────────────────── */
+
+.ql-snow .ql-picker-options {
+  background-color: var(--surface-container-high);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--on-surface, var(--foreground));
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+ * Link tooltip
+ * ────────────────────────────────────────────────────────────────────── */
+
+.ql-snow .ql-tooltip {
+  background-color: var(--surface-container-high);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--on-surface, var(--foreground));
+  box-shadow: 0 4px 12px rgb(0 0 0 / 12%);
+}
+
+.ql-snow .ql-tooltip input[type='text'] {
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) - 4px);
+  color: var(--on-surface, var(--foreground));
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+ * Editor content typography
+ * ────────────────────────────────────────────────────────────────────── */
+
+.ql-snow .ql-editor {
+  font-family: inherit;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  min-height: 8rem;
+}
+
+.ql-snow .ql-editor h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.ql-snow .ql-editor h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.ql-snow .ql-editor blockquote {
+  border-left: 4px solid var(--border);
+  padding-left: 1rem;
+  color: var(--on-surface-variant, var(--muted-foreground));
+  font-style: italic;
+}
+
+.ql-snow .ql-editor code {
+  background-color: var(--surface-container-high);
+  padding: 0.1em 0.35em;
+  border-radius: 0.25rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.9em;
+}
+
+.ql-snow .ql-editor a {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+/* Placeholder text colour. */
+.ql-snow .ql-editor.ql-blank::before {
+  color: var(--on-surface-variant, var(--muted-foreground));
+  font-style: italic;
+  opacity: 0.7;
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+ * Viewer mode — used by <QuillViewer>. The viewer renders a Quill
+ * instance with `toolbar: false` and `readOnly: true`. The wrapper
+ * container carries `.ql-viewer` so we can drop the editor's outer
+ * border + min-height padding for plain inline display.
+ * ────────────────────────────────────────────────────────────────────── */
+
+.ql-viewer .ql-snow.ql-container,
+.ql-viewer .ql-snow .ql-container {
+  border: none;
+  background-color: transparent;
+}
+
+.ql-viewer .ql-snow.ql-container:focus-within {
+  outline: none;
+}
+
+.ql-viewer .ql-snow .ql-editor {
+  padding: 0;
+  min-height: 0;
+}
