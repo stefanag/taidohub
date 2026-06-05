@@ -6,7 +6,17 @@ import { useUpdateMyProfile } from '@/entities/profile';
 import { countryName, ISO_3166_ALPHA3_CODES } from '@/entities/organisation';
 import type { IsoAlpha3 } from '@repo/contracts/organisations';
 import { HttpError } from '@/shared/api';
-import { Button, FormField, FormMessage, Input, Label } from '@/shared/ui';
+import {
+  Button,
+  FormField,
+  FormMessage,
+  Input,
+  Label,
+  RichTextEditor,
+  emptyDelta,
+  isEmpty,
+  type Delta,
+} from '@/shared/ui';
 import {
   Select,
   SelectContent,
@@ -53,6 +63,9 @@ export function ProfileForm({ profile, onSaved }: ProfileFormProps): React.React
   );
   const [citizenships, setCitizenships] = React.useState<string[]>(profile.citizenships);
   const [pendingCitizenship, setPendingCitizenship] = React.useState<string>('');
+  const [aboutMe, setAboutMe] = React.useState<Delta>(
+    (profile.aboutMe as Delta | null) ?? emptyDelta(),
+  );
   const [submitError, setSubmitError] = React.useState<string | undefined>();
   const [saved, setSaved] = React.useState(false);
 
@@ -117,6 +130,7 @@ export function ProfileForm({ profile, onSaved }: ProfileFormProps): React.React
       addressCity: orNull(addressCity),
       addressCountry: addressCountry === NONE ? null : addressCountry,
       citizenships,
+      aboutMe: isEmpty(aboutMe) ? null : aboutMe,
     };
     update.mutate(input);
   };
@@ -249,6 +263,17 @@ export function ProfileForm({ profile, onSaved }: ProfileFormProps): React.React
             {t('profile.addCitizenship')}
           </Button>
         </div>
+      </FormField>
+
+      <FormField>
+        <Label htmlFor="profile-about-me">{t('profile.fields.aboutMe')}</Label>
+        <RichTextEditor
+          id="profile-about-me"
+          value={aboutMe}
+          onChange={setAboutMe}
+          ariaLabel={t('profile.fields.aboutMe')}
+          placeholder={t('profile.aboutMePlaceholder')}
+        />
       </FormField>
 
       <FormMessage message={submitError} />
