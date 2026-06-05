@@ -84,6 +84,7 @@ export class ProfileService {
     if ('addressCity' in input) patch.addressCity = input.addressCity ?? null;
     if ('addressCountry' in input) patch.addressCountry = input.addressCountry ?? null;
     if ('citizenships' in input && input.citizenships) patch.citizenships = input.citizenships;
+    if ('aboutMe' in input) patch.aboutMe = input.aboutMe ?? null;
     return patch;
   }
 
@@ -99,6 +100,7 @@ export class ProfileService {
       addressCity: null,
       addressCountry: null,
       citizenships: [],
+      aboutMe: null,
     };
   }
 
@@ -114,6 +116,7 @@ export class ProfileService {
       addressCity: row.addressCity,
       addressCountry: row.addressCountry,
       citizenships: row.citizenships,
+      aboutMe: row.aboutMe ?? null,
     };
   }
 }

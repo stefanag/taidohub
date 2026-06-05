@@ -111,6 +111,7 @@ describe('ProfileService — getOwn', () => {
       addressCity: null,
       addressCountry: null,
       citizenships: [],
+      aboutMe: null,
     });
   });
 
@@ -203,5 +204,24 @@ describe('ProfileService — updateOwn', () => {
     await service.updateOwn(caller, { firstName: null, lastName: null });
 
     expect(repo.syncUserName).not.toHaveBeenCalled();
+  });
+
+  it('propagates aboutMe through buildPatch without triggering user.name sync', async () => {
+    const aboutMe = { ops: [{ insert: 'Started taido in 2015\n' }] };
+
+    repo.findByUserId.mockResolvedValue(PROFILE_ROW);
+    repo.upsert.mockResolvedValue({ ...PROFILE_ROW, aboutMe });
+
+    const result = await service.updateOwn(caller, { aboutMe });
+
+    // Patch arrived intact at the repository.
+    expect(repo.upsert).toHaveBeenCalledTimes(1);
+    expect(repo.upsert.mock.calls[0]?.[1]).toEqual({ aboutMe });
+
+    // No name sync (no first/last name in the patch).
+    expect(repo.syncUserName).not.toHaveBeenCalled();
+
+    // Returned API object exposes aboutMe.
+    expect(result.aboutMe).toEqual(aboutMe);
   });
 });

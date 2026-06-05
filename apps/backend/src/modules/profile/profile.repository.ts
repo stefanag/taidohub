@@ -29,6 +29,7 @@ export type ProfilePatch = Partial<
     | 'addressCity'
     | 'addressCountry'
     | 'citizenships'
+    | 'aboutMe'
   >
 >;
 
