@@ -56,14 +56,16 @@
       "addressPostalCode": "Postal code",
       "addressCity": "City",
       "addressCountry": "Country",
-      "citizenships": "Citizenships"
+      "citizenships": "Citizenships",
+      "aboutMe": "About me"
     },
     "addCitizenship": "Add citizenship",
     "removeCitizenship": "Remove",
     "countryNone": "None",
     "save": "Save profile",
     "saved": "Profile saved.",
-    "empty": "This user has not filled in their profile yet."
+    "empty": "This user has not filled in their profile yet.",
+    "aboutMePlaceholder": "Share a little about your taido journey, interests, or background."
   },
   "gradingHistory": {
     "title": "Grading history",

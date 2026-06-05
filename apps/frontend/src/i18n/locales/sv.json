@@ -56,14 +56,16 @@
       "addressPostalCode": "Postnummer",
       "addressCity": "Ort",
       "addressCountry": "Land",
-      "citizenships": "Medborgarskap"
+      "citizenships": "Medborgarskap",
+      "aboutMe": "Om mig"
     },
     "addCitizenship": "Lägg till medborgarskap",
     "removeCitizenship": "Ta bort",
     "countryNone": "Inget",
     "save": "Spara profil",
     "saved": "Profilen sparad.",
-    "empty": "Den här användaren har inte fyllt i sin profil ännu."
+    "empty": "Den här användaren har inte fyllt i sin profil ännu.",
+    "aboutMePlaceholder": "Skriv lite om din taidoresa, intressen eller bakgrund."
   },
   "gradingHistory": {
     "title": "Graderingshistorik",

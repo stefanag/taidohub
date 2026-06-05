@@ -56,14 +56,16 @@
       "addressPostalCode": "Postinumero",
       "addressCity": "Kaupunki",
       "addressCountry": "Maa",
-      "citizenships": "Kansalaisuudet"
+      "citizenships": "Kansalaisuudet",
+      "aboutMe": "Tietoa minusta"
     },
     "addCitizenship": "Lisää kansalaisuus",
     "removeCitizenship": "Poista",
     "countryNone": "Ei mitään",
     "save": "Tallenna profiili",
     "saved": "Profiili tallennettu.",
-    "empty": "Tämä käyttäjä ei ole vielä täyttänyt profiiliaan."
+    "empty": "Tämä käyttäjä ei ole vielä täyttänyt profiiliaan.",
+    "aboutMePlaceholder": "Kerro hieman taidopolustasi, kiinnostuksen kohteistasi tai taustastasi."
   },
   "gradingHistory": {
     "title": "Vyökoehistoria",

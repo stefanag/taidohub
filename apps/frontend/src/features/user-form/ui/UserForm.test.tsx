@@ -328,8 +328,7 @@ describe('<UserForm>', () => {
     const { user } = renderForm();
     await user.click(screen.getByRole('tab', { name: /profile/i }));
 
-    // The label is the raw i18n key until Task 6 lands.
-    const label = await screen.findByText('profile.fields.aboutMe');
+    const label = await screen.findByText(/^About me$/i);
     expect(label.tagName.toLowerCase()).toBe('dt');
     const dd = label.nextElementSibling;
     expect(dd?.tagName.toLowerCase()).toBe('dd');
