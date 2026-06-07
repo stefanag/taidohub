@@ -48,7 +48,33 @@
   },
   "settings": {
     "title": "Inställningar",
-    "placeholder": "Inställningar visas här."
+    "placeholder": "Inställningar visas här.",
+    "labels": {
+      "title": "Etiketter",
+      "tagsTab": "Taggar",
+      "categoriesTab": "Kategorier",
+      "addTag": "Lägg till tagg…",
+      "addCategory": "Lägg till kategori…",
+      "addSubcategory": "Lägg till underkategori…",
+      "global": "Global",
+      "orgScoped": "Din organisation",
+      "readOnly": "skrivskyddad",
+      "deleteConfirm": "Radera den här etiketten?",
+      "deleteWithAttachments": "Den är kopplad till {{count}} objekt.",
+      "deleteWithChildren": "Den har även {{count}} underkategori(er)."
+    }
+  },
+  "labels": {
+    "filter": {
+      "tag": "Filtrera på tagg",
+      "category": "Filtrera på kategori"
+    },
+    "attach": {
+      "tag": "Tagg",
+      "category": "Kategori",
+      "toggle": "Etiketter"
+    },
+    "detach": "Koppla bort"
   },
   "profile": {
     "title": "Min profil",

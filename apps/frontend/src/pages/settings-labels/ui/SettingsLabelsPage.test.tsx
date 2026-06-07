@@ -46,16 +46,15 @@ function renderPage(): void {
 describe('<SettingsLabelsPage>', () => {
   it('renders both tabs', () => {
     renderPage();
-    // i18n keys for settings.labels.* aren't seeded yet (Task 13), so the
-    // i18next test setup falls back to the raw key string. Match those
-    // directly and rely on `role: 'tab'` for shape correctness.
+    // i18n keys for settings.labels.* land in Task 13, so the tabs render the
+    // translated en strings ("Tags" / "Categories").
     const tabs = screen.getAllByRole('tab');
     expect(tabs).toHaveLength(2);
     expect(
-      screen.getByRole('tab', { name: /settings\.labels\.tagsTab/i }),
+      screen.getByRole('tab', { name: /^Tags$/i }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('tab', { name: /settings\.labels\.categoriesTab/i }),
+      screen.getByRole('tab', { name: /^Categories$/i }),
     ).toBeInTheDocument();
   });
 });

@@ -48,7 +48,33 @@
   },
   "settings": {
     "title": "Asetukset",
-    "placeholder": "Asetukset näkyvät tässä."
+    "placeholder": "Asetukset näkyvät tässä.",
+    "labels": {
+      "title": "Tunnisteet",
+      "tagsTab": "Tagit",
+      "categoriesTab": "Kategoriat",
+      "addTag": "Lisää tagi…",
+      "addCategory": "Lisää kategoria…",
+      "addSubcategory": "Lisää alikategoria…",
+      "global": "Globaali",
+      "orgScoped": "Oma organisaatio",
+      "readOnly": "vain luku",
+      "deleteConfirm": "Poistetaanko tämä tunniste?",
+      "deleteWithAttachments": "Liitetty {{count}} kohteeseen.",
+      "deleteWithChildren": "Sillä on myös {{count}} alikategoria(a)."
+    }
+  },
+  "labels": {
+    "filter": {
+      "tag": "Suodata tagilla",
+      "category": "Suodata kategorialla"
+    },
+    "attach": {
+      "tag": "Tagi",
+      "category": "Kategoria",
+      "toggle": "Tunnisteet"
+    },
+    "detach": "Irrota"
   },
   "profile": {
     "title": "Oma profiili",

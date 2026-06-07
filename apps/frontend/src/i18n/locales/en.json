@@ -48,7 +48,33 @@
   },
   "settings": {
     "title": "Settings",
-    "placeholder": "Settings options will appear here."
+    "placeholder": "Settings options will appear here.",
+    "labels": {
+      "title": "Labels",
+      "tagsTab": "Tags",
+      "categoriesTab": "Categories",
+      "addTag": "Add tag…",
+      "addCategory": "Add category…",
+      "addSubcategory": "Add subcategory…",
+      "global": "Global",
+      "orgScoped": "Your organisation",
+      "readOnly": "read-only",
+      "deleteConfirm": "Delete this label?",
+      "deleteWithAttachments": "It is attached to {{count}} object(s).",
+      "deleteWithChildren": "It also has {{count}} subcategor(y/ies)."
+    }
+  },
+  "labels": {
+    "filter": {
+      "tag": "Filter by tag",
+      "category": "Filter by category"
+    },
+    "attach": {
+      "tag": "Tag",
+      "category": "Category",
+      "toggle": "Labels"
+    },
+    "detach": "Detach"
   },
   "profile": {
     "title": "My profile",

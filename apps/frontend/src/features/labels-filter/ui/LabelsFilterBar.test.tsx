@@ -86,22 +86,22 @@ describe('<LabelsFilterBar>', () => {
     await i18n.changeLanguage('en');
   });
 
-  it('renders tag and category selects with the raw i18n keys (not seeded yet)', async () => {
+  it('renders tag and category selects with the translated labels', async () => {
     renderBar();
-    // i18n keys labels.filter.* land in Task 13; until then the i18next test
-    // setup falls back to the raw key, so we match those directly.
+    // i18n keys labels.filter.* are seeded in Task 13; the en translations are
+    // "Filter by tag" / "Filter by category".
     expect(
-      await screen.findByRole('combobox', { name: 'labels.filter.tag' }),
+      await screen.findByRole('combobox', { name: 'Filter by tag' }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('combobox', { name: 'labels.filter.category' }),
+      screen.getByRole('combobox', { name: 'Filter by category' }),
     ).toBeInTheDocument();
   });
 
   it('emits an onChange with the new tag id when a tag is picked', async () => {
     const { onChange, user } = renderBar();
     const select = await screen.findByRole('combobox', {
-      name: 'labels.filter.tag',
+      name: 'Filter by tag',
     });
     // Wait for the React Query fetch to populate the options.
     await screen.findByRole('option', { name: TAG_A.name });
@@ -117,7 +117,7 @@ describe('<LabelsFilterBar>', () => {
       searchKey: { category: [CAT_PARENT.id] },
     });
     const select = await screen.findByRole('combobox', {
-      name: 'labels.filter.tag',
+      name: 'Filter by tag',
     });
     await screen.findByRole('option', { name: TAG_A.name });
     await user.selectOptions(select, TAG_A.id);
