@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronRight, MoreHorizontal } from 'lucide-react';
+import { ChevronDown, ChevronRight, MoreHorizontal, Tag } from 'lucide-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -11,6 +11,7 @@ import {
   type Organisation,
   type OrganisationNode,
 } from '@/entities/organisation';
+import { LabelsAttacher } from '@/features/labels-attach';
 import {
   Badge,
   Button,
@@ -65,6 +66,7 @@ interface TreeRowProps {
 function TreeRow({ node, depth, onEdit, onMove, onDelete }: TreeRowProps): React.ReactElement {
   const { t, i18n } = useTranslation();
   const [expanded, setExpanded] = React.useState(true);
+  const [labelsOpen, setLabelsOpen] = React.useState(false);
   const hasChildren = node.children.length > 0;
   const indent = { paddingLeft: `${depth * 1.25}rem` };
 
@@ -118,6 +120,17 @@ function TreeRow({ node, depth, onEdit, onMove, onDelete }: TreeRowProps): React
           </Badge>
         ) : null}
 
+        <Button
+          variant="ghost"
+          size="icon"
+          className="size-7"
+          aria-label={t('labels.attach.toggle', { defaultValue: 'Labels' })}
+          aria-expanded={labelsOpen}
+          onClick={() => setLabelsOpen((v) => !v)}
+        >
+          <Tag className="size-4" />
+        </Button>
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="size-7" aria-label="Actions">
@@ -137,6 +150,15 @@ function TreeRow({ node, depth, onEdit, onMove, onDelete }: TreeRowProps): React
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
+      {labelsOpen ? (
+        <div
+          className="rounded-md border bg-surface-container-lowest/40 px-3 py-2"
+          style={indent}
+        >
+          <LabelsAttacher targetType="organisation" targetId={node.id} />
+        </div>
+      ) : null}
 
       {hasChildren && expanded ? (
         <ul role="group" className="space-y-1">
