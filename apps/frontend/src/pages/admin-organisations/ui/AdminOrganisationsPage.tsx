@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -11,6 +12,7 @@ import {
   useDeleteOrganisation,
   useUpdateOrganisation,
 } from '@/entities/organisation';
+import { LabelsFilterBar } from '@/features/labels-filter';
 import { OrganisationDeleteDialog } from '@/features/organisation-delete-dialog';
 import { OrganisationForm } from '@/features/organisation-form';
 import { OrganisationMoveDialog } from '@/features/organisation-move-dialog';
@@ -38,10 +40,32 @@ type PageMode =
  */
 export function AdminOrganisationsPage(): React.ReactElement {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const search = useSearch({ from: '/_app/admin/organisations' });
   const { data, isLoading, isError, error } = useQuery(
-    listOrganisationsQueryOptions(),
+    listOrganisationsQueryOptions({
+      ...(search.tag !== undefined && { tag: search.tag }),
+      ...(search.category !== undefined && { category: search.category }),
+    }),
   );
   const [mode, setMode] = React.useState<PageMode>({ kind: 'idle' });
+
+  const handleFilterChange = (next: {
+    tag?: string[];
+    category?: string[];
+  }): void => {
+    // Build the merged search-state explicitly. The route's `validateSearch`
+    // owns the only two keys we care about — anything else on `search` is
+    // either also-validated state we want to preserve or junk the validator
+    // will drop on the next read.
+    const merged: { tag?: string[]; category?: string[] } = {
+      ...(search.tag !== undefined && { tag: search.tag }),
+      ...(search.category !== undefined && { category: search.category }),
+      ...(next.tag !== undefined && { tag: next.tag }),
+      ...(next.category !== undefined && { category: next.category }),
+    };
+    void navigate({ to: '/admin/organisations', search: merged });
+  };
 
   const createMut = useCreateOrganisation({
     onSuccess: () => setMode({ kind: 'idle' }),
@@ -98,6 +122,16 @@ export function AdminOrganisationsPage(): React.ReactElement {
             defaultValue: 'New organisation',
           })}
         </Button>
+      </div>
+
+      <div className="mb-4">
+        <LabelsFilterBar
+          searchKey={{
+            ...(search.tag !== undefined && { tag: search.tag }),
+            ...(search.category !== undefined && { category: search.category }),
+          }}
+          onChange={handleFilterChange}
+        />
       </div>
 
       {isLoading ? (
