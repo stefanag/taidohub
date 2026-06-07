@@ -105,6 +105,39 @@ export type ShogoTitleSubjectShape = {
   code?: string;
 };
 
+export type TagSubjectShape = {
+  readonly __caslSubjectType__: 'Tag';
+  id?: string;
+  organisationId?: string | null;
+  createdByUserId?: string | null;
+};
+
+export type CategorySubjectShape = {
+  readonly __caslSubjectType__: 'Category';
+  id?: string;
+  organisationId?: string | null;
+  createdByUserId?: string | null;
+  parentId?: string | null;
+};
+
+export type TagAttachmentSubjectShape = {
+  readonly __caslSubjectType__: 'TagAttachment';
+  id?: string;
+  tagId?: string;
+  targetType?: string;
+  targetId?: string;
+  attachedByUserId?: string | null;
+};
+
+export type CategoryAttachmentSubjectShape = {
+  readonly __caslSubjectType__: 'CategoryAttachment';
+  id?: string;
+  categoryId?: string;
+  targetType?: string;
+  targetId?: string;
+  attachedByUserId?: string | null;
+};
+
 /**
  * The full CASL subject union: either a bare subject name (for class-level
  * rules like `can('create', 'Organisation')`) or a tagged subject shape (for
@@ -120,7 +153,11 @@ export type AppSubject =
   | BeltSystemSubjectShape
   | BeltRankSubjectShape
   | RankHistorySubjectShape
-  | ShogoTitleSubjectShape;
+  | ShogoTitleSubjectShape
+  | TagSubjectShape
+  | CategorySubjectShape
+  | TagAttachmentSubjectShape
+  | CategoryAttachmentSubjectShape;
 
 /**
  * Tuple type compatible with `MongoAbility<[AppAction, AppSubject]>` from
