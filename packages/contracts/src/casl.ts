@@ -23,11 +23,11 @@ export const SubjectSchema = z
     'BeltRank',
     'RankHistory',
     'ShogoTitle',
-    'all',
     'Tag',
     'Category',
     'TagAttachment',
     'CategoryAttachment',
+    'all',
   ])
   .meta({
     id: 'Subject',

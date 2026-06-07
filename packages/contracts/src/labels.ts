@@ -6,8 +6,8 @@ export type TaggableType = z.infer<typeof TaggableTypeSchema>;
 // ── Tag ──────────────────────────────────────────────────────────────────
 export const TagSchema = z
   .object({
-    id: z.guid(),
-    organisationId: z.guid().nullable(),
+    id: z.uuid(),
+    organisationId: z.uuid().nullable(),
     name: z.string().min(1).max(80),
     createdByUserId: z.string().nullable(),
     createdAt: z.iso.datetime(),
@@ -18,8 +18,8 @@ export const TagSchema = z
     description:
       'A flat label attachable to any taggable entity. organisationId=null means a sysadmin-owned global.',
     example: {
-      id: '11111111-1111-1111-1111-111111111111',
-      organisationId: '22222222-2222-2222-2222-222222222222',
+      id: '7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5',
+      organisationId: 'c5a1d6f0-9f3a-4b2c-8d4e-6f7a8b9c0d1e',
       name: 'competition-team',
       createdByUserId: 'u-1',
       createdAt: '2026-06-07T10:00:00.000Z',
@@ -44,9 +44,9 @@ export const UpdateTagSchema = z
 // ── Category ─────────────────────────────────────────────────────────────
 export const CategorySchema = z
   .object({
-    id: z.guid(),
-    organisationId: z.guid().nullable(),
-    parentId: z.guid().nullable(),
+    id: z.uuid(),
+    organisationId: z.uuid().nullable(),
+    parentId: z.uuid().nullable(),
     name: z.string().min(1).max(80),
     createdByUserId: z.string().nullable(),
     createdAt: z.iso.datetime(),
@@ -57,8 +57,8 @@ export const CategorySchema = z
     description:
       'A label with one-level parent/child hierarchy. organisationId=null means a sysadmin-owned global.',
     example: {
-      id: '11111111-1111-1111-1111-111111111111',
-      organisationId: '22222222-2222-2222-2222-222222222222',
+      id: '7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5',
+      organisationId: 'c5a1d6f0-9f3a-4b2c-8d4e-6f7a8b9c0d1e',
       parentId: null,
       name: 'Region',
       createdByUserId: 'u-1',
@@ -70,7 +70,7 @@ export const CategorySchema = z
 export const CreateCategorySchema = z
   .object({
     name: z.string().trim().min(1).max(80),
-    parentId: z.guid().nullable().default(null),
+    parentId: z.uuid().nullable().default(null),
     global: z.boolean().default(false),
   })
   .meta({ id: 'CreateCategoryInput' });
@@ -84,8 +84,8 @@ export const UpdateCategorySchema = z
 // ── Attachments ──────────────────────────────────────────────────────────
 export const TagAttachmentSchema = z
   .object({
-    id: z.guid(),
-    tagId: z.guid(),
+    id: z.uuid(),
+    tagId: z.uuid(),
     targetType: TaggableTypeSchema,
     targetId: z.string(),
     attachedByUserId: z.string(),
@@ -95,8 +95,8 @@ export const TagAttachmentSchema = z
 
 export const CategoryAttachmentSchema = z
   .object({
-    id: z.guid(),
-    categoryId: z.guid(),
+    id: z.uuid(),
+    categoryId: z.uuid(),
     targetType: TaggableTypeSchema,
     targetId: z.string(),
     attachedByUserId: z.string(),
@@ -106,7 +106,7 @@ export const CategoryAttachmentSchema = z
 
 export const CreateTagAttachmentSchema = z
   .object({
-    tagId: z.guid(),
+    tagId: z.uuid(),
     targetType: TaggableTypeSchema,
     targetId: z.string().min(1),
   })
@@ -114,7 +114,7 @@ export const CreateTagAttachmentSchema = z
 
 export const CreateCategoryAttachmentSchema = z
   .object({
-    categoryId: z.guid(),
+    categoryId: z.uuid(),
     targetType: TaggableTypeSchema,
     targetId: z.string().min(1),
   })
@@ -123,8 +123,8 @@ export const CreateCategoryAttachmentSchema = z
 // ── List-query mixin for integrating modules ─────────────────────────────
 export const LabelFilterSchema = z
   .object({
-    tag: z.array(z.guid()).optional(),
-    category: z.array(z.guid()).optional(),
+    tag: z.array(z.uuid()).optional(),
+    category: z.array(z.uuid()).optional(),
   })
   .meta({ id: 'LabelFilter' });
 
@@ -140,3 +140,17 @@ export type CategoryAttachment = z.infer<typeof CategoryAttachmentSchema>;
 export type CreateTagAttachmentInput = z.input<typeof CreateTagAttachmentSchema>;
 export type CreateCategoryAttachmentInput = z.input<typeof CreateCategoryAttachmentSchema>;
 export type LabelFilter = z.input<typeof LabelFilterSchema>;
+
+export const LabelsOpenApiRegistry = {
+  Tag: TagSchema,
+  Category: CategorySchema,
+  TagAttachment: TagAttachmentSchema,
+  CategoryAttachment: CategoryAttachmentSchema,
+  CreateTagInput: CreateTagSchema,
+  UpdateTagInput: UpdateTagSchema,
+  CreateCategoryInput: CreateCategorySchema,
+  UpdateCategoryInput: UpdateCategorySchema,
+  CreateTagAttachmentInput: CreateTagAttachmentSchema,
+  CreateCategoryAttachmentInput: CreateCategoryAttachmentSchema,
+  LabelFilter: LabelFilterSchema,
+} as const;

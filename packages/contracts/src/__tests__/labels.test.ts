@@ -14,8 +14,8 @@ import {
 } from '../labels.js';
 
 const BASE_TAG = {
-  id: '11111111-1111-1111-1111-111111111111',
-  organisationId: '22222222-2222-2222-2222-222222222222',
+  id: '7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5',
+  organisationId: 'c5a1d6f0-9f3a-4b2c-8d4e-6f7a8b9c0d1e',
   name: 'competition-team',
   createdByUserId: 'u-1',
   createdAt: '2026-06-07T10:00:00.000Z',
@@ -100,7 +100,7 @@ describe('CategorySchema', () => {
 
   it('accepts a child category', () => {
     expect(
-      CategorySchema.safeParse({ ...BASE_CATEGORY, parentId: '33333333-3333-3333-3333-333333333333' })
+      CategorySchema.safeParse({ ...BASE_CATEGORY, parentId: 'a0b1c2d3-4e5f-4a6b-9c8d-1e2f3a4b5c6d' })
         .success,
     ).toBe(true);
   });
@@ -117,7 +117,7 @@ describe('CreateCategorySchema', () => {
     expect(
       CreateCategorySchema.safeParse({
         name: 'Stockholm',
-        parentId: '33333333-3333-3333-3333-333333333333',
+        parentId: 'a0b1c2d3-4e5f-4a6b-9c8d-1e2f3a4b5c6d',
       }).success,
     ).toBe(true);
   });
@@ -131,7 +131,7 @@ describe('UpdateCategorySchema', () => {
   it('rejects parentId in the patch (no re-parenting)', () => {
     const r = UpdateCategorySchema.safeParse({
       name: 'x',
-      parentId: '33333333-3333-3333-3333-333333333333',
+      parentId: 'a0b1c2d3-4e5f-4a6b-9c8d-1e2f3a4b5c6d',
     });
     // Strict schema: parentId is not a known key. Either rejection or silent drop is acceptable;
     // we assert the data shape doesn't carry parentId through.
@@ -144,9 +144,9 @@ describe('Attachment schemas', () => {
   it('CreateTagAttachmentSchema accepts a valid attach payload', () => {
     expect(
       CreateTagAttachmentSchema.safeParse({
-        tagId: '11111111-1111-1111-1111-111111111111',
+        tagId: '7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5',
         targetType: 'organisation',
-        targetId: '22222222-2222-2222-2222-222222222222',
+        targetId: 'c5a1d6f0-9f3a-4b2c-8d4e-6f7a8b9c0d1e',
       }).success,
     ).toBe(true);
   });
@@ -154,9 +154,9 @@ describe('Attachment schemas', () => {
   it('CreateTagAttachmentSchema rejects an unknown targetType', () => {
     expect(
       CreateTagAttachmentSchema.safeParse({
-        tagId: '11111111-1111-1111-1111-111111111111',
+        tagId: '7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5',
         targetType: 'audit_log',
-        targetId: '22222222-2222-2222-2222-222222222222',
+        targetId: 'c5a1d6f0-9f3a-4b2c-8d4e-6f7a8b9c0d1e',
       }).success,
     ).toBe(false);
   });
@@ -164,7 +164,7 @@ describe('Attachment schemas', () => {
   it('CreateCategoryAttachmentSchema accepts a valid attach payload', () => {
     expect(
       CreateCategoryAttachmentSchema.safeParse({
-        categoryId: '11111111-1111-1111-1111-111111111111',
+        categoryId: '7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5',
         targetType: 'user',
         targetId: 'u-1',
       }).success,
@@ -180,8 +180,8 @@ describe('LabelFilterSchema', () => {
   it('accepts arrays of tag and category ids', () => {
     expect(
       LabelFilterSchema.safeParse({
-        tag: ['11111111-1111-1111-1111-111111111111'],
-        category: ['22222222-2222-2222-2222-222222222222'],
+        tag: ['7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5'],
+        category: ['c5a1d6f0-9f3a-4b2c-8d4e-6f7a8b9c0d1e'],
       }).success,
     ).toBe(true);
   });
