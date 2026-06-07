@@ -25,7 +25,8 @@ import {
 /**
  * Service — owns the label business rules:
  *   - Globals (`organisation_id IS NULL`) are sysadmin-only to create/edit/delete.
- *   - Org-scoped labels are editable only by their author, or by a sysadmin.
+ *   - Org-scoped labels are editable only by their author, or by a sysadmin,
+ *     AND only while the author still belongs to the owning organisation.
  *   - Categories are limited to one level of nesting (a parent must itself be a root).
  *   - Attaching a label requires the label to be visible to the caller — i.e.
  *     scoped to one of their organisations, or a global.
@@ -34,22 +35,30 @@ import {
  * HTTP authorization (who can call any of these methods at all) lives in CASL
  * abilities and is enforced by the controller (Task 6); this layer encodes
  * the per-row business rules.
+ *
+ * The active organisation for create/list calls is supplied explicitly by the
+ * controller (typically resolved from an `X-Active-Organisation` header or
+ * session). The service then asserts the caller actually belongs to it.
  */
 @Injectable()
 export class LabelsService {
   constructor(private readonly repo: LabelsRepository) {}
 
   // ── Tags ───────────────────────────────────────────────────────────────
-  async listTags(user: AuthenticatedUser): Promise<TagRow[]> {
-    return this.repo.listVisibleTags(this.scopeOrgFor(user));
+  async listTags(
+    user: AuthenticatedUser,
+    activeOrganisationId: string | null,
+  ): Promise<TagRow[]> {
+    void user;
+    return this.repo.listVisibleTags(activeOrganisationId);
   }
 
-  async createTag(user: AuthenticatedUser, input: CreateTagInput): Promise<TagRow> {
-    const wantsGlobal = input.global ?? false;
-    if (wantsGlobal && user.role !== 'sysadmin') {
-      throw new ForbiddenException('Only sysadmins can create global labels.');
-    }
-    const organisationId = wantsGlobal ? null : this.requireUserOrg(user);
+  async createTag(
+    user: AuthenticatedUser,
+    input: CreateTagInput,
+    activeOrganisationId: string | null,
+  ): Promise<TagRow> {
+    const organisationId = this.resolveOwningOrg(user, input.global ?? false, activeOrganisationId);
     return this.repo.insertTag({ organisationId, name: input.name, createdByUserId: user.id });
   }
 
@@ -68,26 +77,35 @@ export class LabelsService {
   }
 
   // ── Categories ─────────────────────────────────────────────────────────
-  async listCategories(user: AuthenticatedUser): Promise<CategoryRow[]> {
-    return this.repo.listVisibleCategories(this.scopeOrgFor(user));
+  async listCategories(
+    user: AuthenticatedUser,
+    activeOrganisationId: string | null,
+  ): Promise<CategoryRow[]> {
+    void user;
+    return this.repo.listVisibleCategories(activeOrganisationId);
   }
 
   async createCategory(
     user: AuthenticatedUser,
     input: CreateCategoryInput,
+    activeOrganisationId: string | null,
   ): Promise<CategoryRow> {
-    const wantsGlobal = input.global ?? false;
-    if (wantsGlobal && user.role !== 'sysadmin') {
-      throw new ForbiddenException('Only sysadmins can create global labels.');
-    }
+    const organisationId = this.resolveOwningOrg(user, input.global ?? false, activeOrganisationId);
     if (input.parentId) {
       const parent = await this.repo.findCategoryById(input.parentId);
       if (!parent) throw new BadRequestException('Parent category does not exist.');
       if (parent.parentId !== null) {
         throw new BadRequestException('Categories may not nest deeper than one level.');
       }
+      // Parent must be visible to the caller — either a sysadmin-owned global
+      // or scoped to one of the caller's organisations.
+      if (parent.organisationId !== null) {
+        const userOrgs = new Set(user.memberships.map((m) => m.organisationId));
+        if (!userOrgs.has(parent.organisationId)) {
+          throw new ForbiddenException('Parent category is not visible to your organisation.');
+        }
+      }
     }
-    const organisationId = wantsGlobal ? null : this.requireUserOrg(user);
     return this.repo.insertCategory({
       organisationId,
       parentId: input.parentId ?? null,
@@ -116,8 +134,11 @@ export class LabelsService {
 
   // ── Attachments ────────────────────────────────────────────────────────
   /**
-   * List the labels attached to a given target. Visibility of attachments
-   * piggybacks on the target-side ability check the controller performs.
+   * **CONTROLLER MUST AUTHORIZE THE TARGET BEFORE CALLING.** This method
+   * returns label attachments without verifying that the caller has read
+   * access to `(targetType, targetId)`. The CALLER is responsible for
+   * confirming the user can read the target row — typically via
+   * `ability.can('read', targetSubject)` — prior to invocation.
    */
   async listAttachmentsForTarget(
     user: AuthenticatedUser,
@@ -132,6 +153,13 @@ export class LabelsService {
     return { tags, categories };
   }
 
+  /**
+   * **CONTROLLER MUST AUTHORIZE THE TARGET BEFORE CALLING.** This method
+   * validates only label-side visibility (that the user can use the tag).
+   * The CALLER is responsible for verifying that the user has write/manage
+   * permission on the target row referenced by `(targetType, targetId)` —
+   * typically via `ability.can('update', targetSubject)`.
+   */
   async attachTag(
     user: AuthenticatedUser,
     input: { tagId: string; targetType: TaggableType; targetId: string },
@@ -147,6 +175,13 @@ export class LabelsService {
     });
   }
 
+  /**
+   * **CONTROLLER MUST AUTHORIZE THE TARGET BEFORE CALLING.** This method
+   * validates only label-side visibility (that the user can use the category).
+   * The CALLER is responsible for verifying that the user has write/manage
+   * permission on the target row referenced by `(targetType, targetId)` —
+   * typically via `ability.can('update', targetSubject)`.
+   */
   async attachCategory(
     user: AuthenticatedUser,
     input: { categoryId: string; targetType: TaggableType; targetId: string },
@@ -180,7 +215,12 @@ export class LabelsService {
     await this.repo.deleteCategoryAttachment(attachmentId);
   }
 
-  /** Hook called by other modules when their primary entity is deleted. */
+  /**
+   * Cascade hook called by other modules when their primary entity is deleted.
+   * The CALLING MODULE is responsible for authorising the target deletion
+   * before invoking this. **DO NOT expose this method directly via the
+   * controller** — it has no principal check.
+   */
   async detachAllForTarget(targetType: TaggableType, targetId: string): Promise<void> {
     await this.repo.detachAllForTarget(targetType, targetId);
   }
@@ -218,7 +258,9 @@ export class LabelsService {
    * Gate mutations on a tag/category row:
    *   - Sysadmins may modify anything.
    *   - Globals (no org) are otherwise read-only.
-   *   - Org-scoped labels may only be modified by their original author.
+   *   - Org-scoped labels may only be modified by their original author AND
+   *     only while the author is still a member of the owning organisation
+   *     (so leaving the org revokes the privilege).
    */
   private assertCanMutateLabel(
     user: AuthenticatedUser,
@@ -230,6 +272,10 @@ export class LabelsService {
     }
     if (row.createdByUserId !== user.id) {
       throw new ForbiddenException('You can only modify labels you authored.');
+    }
+    const userOrgs = new Set(user.memberships.map((m) => m.organisationId));
+    if (!userOrgs.has(row.organisationId)) {
+      throw new ForbiddenException('Label is not visible to your organisation.');
     }
   }
 
@@ -247,22 +293,32 @@ export class LabelsService {
     }
   }
 
-  /** Sysadmins see everything (null); everyone else is scoped to their org. */
-  private scopeOrgFor(user: AuthenticatedUser): string | null {
-    return user.role === 'sysadmin' ? null : this.requireUserOrg(user);
-  }
-
   /**
-   * Pick the user's "active" organisation for the purpose of owning a newly
-   * created org-scoped label. The codebase treats the first membership as
-   * the active org (the controller in Task 6 may narrow this further via an
-   * `X-Active-Organisation` header or similar mechanism).
+   * Resolve and authorise the owning organisation for a newly-created label.
+   *
+   * - `wantsGlobal` requires the caller be a sysadmin and resolves to `null`.
+   * - Otherwise the controller MUST supply the active organisation explicitly
+   *   (no implicit "first membership" fallback), and the caller MUST be a
+   *   member of it.
    */
-  private requireUserOrg(user: AuthenticatedUser): string {
-    const orgId = user.memberships[0]?.organisationId;
-    if (!orgId) {
-      throw new ForbiddenException('User has no active organisation.');
+  private resolveOwningOrg(
+    user: AuthenticatedUser,
+    wantsGlobal: boolean,
+    activeOrganisationId: string | null,
+  ): string | null {
+    if (wantsGlobal) {
+      if (user.role !== 'sysadmin') {
+        throw new ForbiddenException('Only sysadmins can create global labels.');
+      }
+      return null;
     }
-    return orgId;
+    if (!activeOrganisationId) {
+      throw new BadRequestException('Active organisation is required for org-scoped labels.');
+    }
+    const userOrgs = new Set(user.memberships.map((m) => m.organisationId));
+    if (!userOrgs.has(activeOrganisationId)) {
+      throw new ForbiddenException('You are not a member of that organisation.');
+    }
+    return activeOrganisationId;
   }
 }

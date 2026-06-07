@@ -81,7 +81,7 @@ describe('LabelsService', () => {
   describe('createTag', () => {
     it('creates an org-scoped tag for a regular user', async () => {
       repo.insertTag.mockResolvedValue(tagRow());
-      await service.createTag(userFixture(), { name: 'rookie', global: false });
+      await service.createTag(userFixture(), { name: 'rookie', global: false }, 'org-1');
       expect(repo.insertTag).toHaveBeenCalledWith({
         organisationId: 'org-1',
         name: 'rookie',
@@ -91,7 +91,7 @@ describe('LabelsService', () => {
 
     it('forbids a regular user from creating a global tag', async () => {
       await expect(
-        service.createTag(userFixture(), { name: 'rookie', global: true }),
+        service.createTag(userFixture(), { name: 'rookie', global: true }, null),
       ).rejects.toBeInstanceOf(ForbiddenException);
     });
 
@@ -100,6 +100,7 @@ describe('LabelsService', () => {
       await service.createTag(
         userFixture({ role: 'sysadmin', memberships: [] }),
         { name: 'honorary', global: true },
+        null,
       );
       expect(repo.insertTag).toHaveBeenCalledWith({
         organisationId: null,
@@ -108,9 +109,13 @@ describe('LabelsService', () => {
       });
     });
 
-    it('forbids creating an org-scoped tag when the user has no membership', async () => {
+    it('forbids creating an org-scoped tag when the user is not a member of the active org', async () => {
       await expect(
-        service.createTag(userFixture({ memberships: [] }), { name: 'rookie', global: false }),
+        service.createTag(
+          userFixture({ memberships: [{ organisationId: 'org-1', role: 'orgadmin' }] }),
+          { name: 'rookie', global: false },
+          'org-2',
+        ),
       ).rejects.toBeInstanceOf(ForbiddenException);
     });
   });
@@ -160,24 +165,45 @@ describe('LabelsService', () => {
         service.updateTag(userFixture(), 't-missing', { name: 'x' }),
       ).rejects.toBeInstanceOf(NotFoundException);
     });
+
+    it('forbids the original author from editing a tag they no longer have access to (left org)', async () => {
+      // Tag is scoped to org-2 and was authored by u-1.
+      repo.findTagById.mockResolvedValue(tagRow({ organisationId: 'org-2' }));
+      // u-1 is no longer a member of org-2.
+      await expect(
+        service.updateTag(
+          userFixture({ memberships: [{ organisationId: 'org-1', role: 'orgadmin' }] }),
+          't-1',
+          { name: 'x' },
+        ),
+      ).rejects.toBeInstanceOf(ForbiddenException);
+    });
   });
 
   describe('createCategory', () => {
     it('rejects creating a grandchild (parent already has a parent)', async () => {
       repo.findCategoryById.mockResolvedValue(categoryRow({ parentId: 'c-root' }));
       await expect(
-        service.createCategory(userFixture(), { name: 'x', parentId: 'c-1', global: false }),
+        service.createCategory(
+          userFixture(),
+          { name: 'x', parentId: 'c-1', global: false },
+          'org-1',
+        ),
       ).rejects.toBeInstanceOf(BadRequestException);
     });
 
     it('accepts a child of a top-level category', async () => {
       repo.findCategoryById.mockResolvedValue(categoryRow({ id: 'c-root', parentId: null }));
       repo.insertCategory.mockResolvedValue(categoryRow({ parentId: 'c-root' }));
-      await service.createCategory(userFixture(), {
-        name: 'Stockholm',
-        parentId: 'c-root',
-        global: false,
-      });
+      await service.createCategory(
+        userFixture(),
+        {
+          name: 'Stockholm',
+          parentId: 'c-root',
+          global: false,
+        },
+        'org-1',
+      );
       expect(repo.insertCategory).toHaveBeenCalledWith({
         organisationId: 'org-1',
         parentId: 'c-root',
@@ -189,17 +215,36 @@ describe('LabelsService', () => {
     it('400s when the named parent does not exist', async () => {
       repo.findCategoryById.mockResolvedValue(undefined);
       await expect(
-        service.createCategory(userFixture(), {
-          name: 'x',
-          parentId: 'c-missing',
-          global: false,
-        }),
+        service.createCategory(
+          userFixture(),
+          {
+            name: 'x',
+            parentId: 'c-missing',
+            global: false,
+          },
+          'org-1',
+        ),
       ).rejects.toBeInstanceOf(BadRequestException);
     });
 
     it('forbids a regular user from creating a global category', async () => {
       await expect(
-        service.createCategory(userFixture(), { name: 'x', parentId: null, global: true }),
+        service.createCategory(
+          userFixture(),
+          { name: 'x', parentId: null, global: true },
+          null,
+        ),
+      ).rejects.toBeInstanceOf(ForbiddenException);
+    });
+
+    it('rejects creating a child whose parent is in another organisation', async () => {
+      repo.findCategoryById.mockResolvedValue(categoryRow({ organisationId: 'org-2' }));
+      await expect(
+        service.createCategory(
+          userFixture({ memberships: [{ organisationId: 'org-1', role: 'orgadmin' }] }),
+          { name: 'Stockholm', parentId: 'c-1', global: false },
+          'org-1',
+        ),
       ).rejects.toBeInstanceOf(ForbiddenException);
     });
   });
