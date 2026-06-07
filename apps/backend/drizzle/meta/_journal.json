@@ -92,6 +92,13 @@
       "when": 1780650590125,
       "tag": "0012_jittery_vulture",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1780840298980,
+      "tag": "0013_broken_killmonger",
+      "breakpoints": true
     }
   ]
 }

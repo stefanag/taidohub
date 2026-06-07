@@ -12,3 +12,4 @@ export * from './belt-systems.js';
 export * from './belt-ranks.js';
 export * from './shogo-titles.js';
 export * from './rank-history.js';
+export * from './labels.js';
