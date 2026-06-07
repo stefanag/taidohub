@@ -24,6 +24,10 @@ export const SubjectSchema = z
     'RankHistory',
     'ShogoTitle',
     'all',
+    'Tag',
+    'Category',
+    'TagAttachment',
+    'CategoryAttachment',
   ])
   .meta({
     id: 'Subject',
