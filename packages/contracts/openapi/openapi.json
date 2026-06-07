@@ -2768,6 +2768,58 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "tag",
+            "required": false,
+            "in": "query",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            },
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              }
+            }
+          },
+          {
+            "name": "category",
+            "required": false,
+            "in": "query",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              }
+            },
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              }
+            }
           }
         ],
         "responses": {
@@ -3635,6 +3687,423 @@
         "summary": "List audit log entries (paginated, latest first).",
         "tags": [
           "audit-log"
+        ]
+      }
+    },
+    "/api/labels/tags": {
+      "get": {
+        "operationId": "LabelsController_listTags",
+        "parameters": [
+          {
+            "name": "x-active-organisation",
+            "in": "header",
+            "description": "Active organisation id. Required for org-scoped list/create requests; sysadmins may omit it to operate across all organisations.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "labels"
+        ]
+      },
+      "post": {
+        "operationId": "LabelsController_createTag",
+        "parameters": [
+          {
+            "name": "x-active-organisation",
+            "in": "header",
+            "description": "Active organisation id. Required for org-scoped list/create requests; sysadmins may omit it to operate across all organisations.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "labels"
+        ]
+      }
+    },
+    "/api/labels/tags/{id}": {
+      "patch": {
+        "operationId": "LabelsController_updateTag",
+        "parameters": [
+          {
+            "name": "x-active-organisation",
+            "in": "header",
+            "description": "Active organisation id. Required for org-scoped list/create requests; sysadmins may omit it to operate across all organisations.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "labels"
+        ]
+      },
+      "delete": {
+        "operationId": "LabelsController_deleteTag",
+        "parameters": [
+          {
+            "name": "x-active-organisation",
+            "in": "header",
+            "description": "Active organisation id. Required for org-scoped list/create requests; sysadmins may omit it to operate across all organisations.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "labels"
+        ]
+      }
+    },
+    "/api/labels/categories": {
+      "get": {
+        "operationId": "LabelsController_listCategories",
+        "parameters": [
+          {
+            "name": "x-active-organisation",
+            "in": "header",
+            "description": "Active organisation id. Required for org-scoped list/create requests; sysadmins may omit it to operate across all organisations.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "labels"
+        ]
+      },
+      "post": {
+        "operationId": "LabelsController_createCategory",
+        "parameters": [
+          {
+            "name": "x-active-organisation",
+            "in": "header",
+            "description": "Active organisation id. Required for org-scoped list/create requests; sysadmins may omit it to operate across all organisations.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "labels"
+        ]
+      }
+    },
+    "/api/labels/categories/{id}": {
+      "patch": {
+        "operationId": "LabelsController_updateCategory",
+        "parameters": [
+          {
+            "name": "x-active-organisation",
+            "in": "header",
+            "description": "Active organisation id. Required for org-scoped list/create requests; sysadmins may omit it to operate across all organisations.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "labels"
+        ]
+      },
+      "delete": {
+        "operationId": "LabelsController_deleteCategory",
+        "parameters": [
+          {
+            "name": "x-active-organisation",
+            "in": "header",
+            "description": "Active organisation id. Required for org-scoped list/create requests; sysadmins may omit it to operate across all organisations.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "labels"
+        ]
+      }
+    },
+    "/api/labels/attachments": {
+      "get": {
+        "operationId": "LabelsController_listAttachments",
+        "parameters": [
+          {
+            "name": "x-active-organisation",
+            "in": "header",
+            "description": "Active organisation id. Required for org-scoped list/create requests; sysadmins may omit it to operate across all organisations.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "labels"
+        ]
+      }
+    },
+    "/api/labels/tag-attachments": {
+      "post": {
+        "operationId": "LabelsController_attachTag",
+        "parameters": [
+          {
+            "name": "x-active-organisation",
+            "in": "header",
+            "description": "Active organisation id. Required for org-scoped list/create requests; sysadmins may omit it to operate across all organisations.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "labels"
+        ]
+      }
+    },
+    "/api/labels/category-attachments": {
+      "post": {
+        "operationId": "LabelsController_attachCategory",
+        "parameters": [
+          {
+            "name": "x-active-organisation",
+            "in": "header",
+            "description": "Active organisation id. Required for org-scoped list/create requests; sysadmins may omit it to operate across all organisations.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "labels"
+        ]
+      }
+    },
+    "/api/labels/tag-attachments/{id}": {
+      "delete": {
+        "operationId": "LabelsController_detachTag",
+        "parameters": [
+          {
+            "name": "x-active-organisation",
+            "in": "header",
+            "description": "Active organisation id. Required for org-scoped list/create requests; sysadmins may omit it to operate across all organisations.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "labels"
+        ]
+      }
+    },
+    "/api/labels/category-attachments/{id}": {
+      "delete": {
+        "operationId": "LabelsController_detachCategory",
+        "parameters": [
+          {
+            "name": "x-active-organisation",
+            "in": "header",
+            "description": "Active organisation id. Required for org-scoped list/create requests; sysadmins may omit it to operate across all organisations.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "labels"
         ]
       }
     }
@@ -12023,6 +12492,39 @@
       },
       "GradingHistoryResponse": {
         "$ref": "#/components/schemas/GradingHistoryResponse"
+      },
+      "Tag": {
+        "$ref": "#/components/schemas/Tag"
+      },
+      "Category": {
+        "$ref": "#/components/schemas/Category"
+      },
+      "TagAttachment": {
+        "$ref": "#/components/schemas/TagAttachment"
+      },
+      "CategoryAttachment": {
+        "$ref": "#/components/schemas/CategoryAttachment"
+      },
+      "CreateTagInput": {
+        "$ref": "#/components/schemas/CreateTagInput"
+      },
+      "UpdateTagInput": {
+        "$ref": "#/components/schemas/UpdateTagInput"
+      },
+      "CreateCategoryInput": {
+        "$ref": "#/components/schemas/CreateCategoryInput"
+      },
+      "UpdateCategoryInput": {
+        "$ref": "#/components/schemas/UpdateCategoryInput"
+      },
+      "CreateTagAttachmentInput": {
+        "$ref": "#/components/schemas/CreateTagAttachmentInput"
+      },
+      "CreateCategoryAttachmentInput": {
+        "$ref": "#/components/schemas/CreateCategoryAttachmentInput"
+      },
+      "LabelFilter": {
+        "$ref": "#/components/schemas/LabelFilter"
       }
     }
   }

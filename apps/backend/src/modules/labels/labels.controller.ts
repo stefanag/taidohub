@@ -76,7 +76,7 @@ const ACTIVE_ORG_HEADER = 'x-active-organisation';
   description:
     'Active organisation id. Required for org-scoped list/create requests; sysadmins may omit it to operate across all organisations.',
 })
-@Controller('api/labels')
+@Controller('labels')
 export class LabelsController {
   constructor(
     private readonly service: LabelsService,
