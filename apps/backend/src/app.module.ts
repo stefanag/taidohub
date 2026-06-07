@@ -15,6 +15,7 @@ import { BeltCatalogModule } from './modules/belt-catalog/belt-catalog.module.js
 import { GradingHistoryProjectionModule } from './modules/grading-history-projection/grading-history.module.js';
 import { RankHistoryModule } from './modules/rank-history/rank-history.module.js';
 import { HealthModule } from './modules/health/health.module.js';
+import { LabelsModule } from './modules/labels/labels.module.js';
 import { MembershipsModule } from './modules/memberships/memberships.module.js';
 import { OrganisationsModule } from './modules/organisations/organisations.module.js';
 import { ProfileModule } from './modules/profile/profile.module.js';
@@ -37,6 +38,7 @@ import { UsersModule } from './modules/users/users.module.js';
     OrganisationsModule,
     MembershipsModule,
     AuditLogModule,
+    LabelsModule,
   ],
   providers: [
     { provide: APP_PIPE, useClass: ZodValidationPipe },
