@@ -2,6 +2,7 @@
  * Public surface of `shared/ui` — re-exports the shadcn primitives so callers
  * import from `@/shared/ui` rather than reaching into individual files.
  */
+export { Avatar, AvatarImage, AvatarFallback } from './avatar.js';
 export { Button, buttonVariants, type ButtonProps } from './button.js';
 export { Input, type InputProps } from './input.js';
 export { Label, type LabelProps } from './label.js';

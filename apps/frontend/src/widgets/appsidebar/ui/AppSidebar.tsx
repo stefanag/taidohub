@@ -1,14 +1,11 @@
-import { Link, useNavigate, useRouterState } from '@tanstack/react-router';
-import { Award, Building2, History, LayoutDashboard, LogOut, ScrollText, UserRound, Users } from 'lucide-react';
+import { Link, useRouterState } from '@tanstack/react-router';
+import { Award, Building2, History, LayoutDashboard, ScrollText, UserRound, Users } from 'lucide-react';
 import * as React from 'react';
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { signOut, useSession } from '@/features/auth-by-email';
-import { LocaleSwitcher } from '@/features/locale-switcher';
 import { AbilityContext } from '@/shared/lib/casl';
 import {
-  Button,
   Sidebar,
   SidebarContent,
   SidebarFooter,
@@ -22,6 +19,8 @@ import {
   SidebarRail,
 } from '@/shared/ui';
 
+import { NavUser } from './NavUser.js';
+
 // Static nav config. Each entry is a route the authenticated user can reach
 // from the sidebar. When new sections land, add a row here.
 const NAV = [
@@ -32,16 +31,8 @@ const NAV = [
 
 export function AppSidebar(): React.ReactElement {
   const { t } = useTranslation();
-  const session = useSession();
-  const user = session.data?.user;
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const navigate = useNavigate();
   const ability = useContext(AbilityContext);
-
-  const handleSignOut = async () => {
-    await signOut();
-    void navigate({ to: '/' });
-  };
 
   return (
     <Sidebar collapsible="icon">
@@ -131,27 +122,8 @@ export function AppSidebar(): React.ReactElement {
         ) : null}
       </SidebarContent>
 
-      <SidebarFooter className="gap-3 p-3">
-        {user ? (
-          <span
-            className="truncate text-xs text-on-surface-variant"
-            title={user.email}
-          >
-            {user.name?.trim() ? user.name : user.email}
-          </span>
-        ) : null}
-        <LocaleSwitcher />
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => {
-            void handleSignOut();
-          }}
-          className="justify-start gap-2"
-        >
-          <LogOut className="size-4" />
-          {t('header.signOut')}
-        </Button>
+      <SidebarFooter>
+        <NavUser />
       </SidebarFooter>
 
       <SidebarRail />

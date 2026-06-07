@@ -39,10 +39,16 @@
     "adminBeltCatalog": "Belt catalog",
     "adminUsers": "Users",
     "gradingHistory": "Grading history",
-    "profile": "My profile"
+    "profile": "My profile",
+    "settings": "Settings",
+    "language": "Language"
   },
   "dashboard": {
     "title": "Dashboard"
+  },
+  "settings": {
+    "title": "Settings",
+    "placeholder": "Settings options will appear here."
   },
   "profile": {
     "title": "My profile",

@@ -39,10 +39,16 @@
     "adminBeltCatalog": "Vyökatalogi",
     "adminUsers": "Käyttäjät",
     "gradingHistory": "Vyökoehistoria",
-    "profile": "Oma profiili"
+    "profile": "Oma profiili",
+    "settings": "Asetukset",
+    "language": "Kieli"
   },
   "dashboard": {
     "title": "Kojelauta"
+  },
+  "settings": {
+    "title": "Asetukset",
+    "placeholder": "Asetukset näkyvät tässä."
   },
   "profile": {
     "title": "Oma profiili",

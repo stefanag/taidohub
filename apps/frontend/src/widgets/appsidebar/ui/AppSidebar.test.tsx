@@ -105,10 +105,10 @@ describe('<AppSidebar>', () => {
     expect(screen.getByText('ada@example.com')).toBeInTheDocument();
   });
 
-  it('signs the user out and navigates to / when sign-out is clicked', async () => {
+  it('signs the user out and navigates to / when sign-out is clicked from the user menu', async () => {
     const signOutSpy = vi.spyOn(authApi, 'signOut').mockResolvedValue();
     vi.spyOn(authApi, 'useSession').mockReturnValue({
-      data: { user: { id: 'u1', email: 'a@b' }, session: { id: 's1' } },
+      data: { user: { id: 'u1', email: 'ada@example.com' }, session: { id: 's1' } },
       isPending: false,
       error: null,
       refetch: () => Promise.resolve(),
@@ -117,7 +117,10 @@ describe('<AppSidebar>', () => {
     const user = userEvent.setup();
     renderInProvider();
 
-    await user.click(screen.getByRole('button', { name: /Sign out/i }));
+    // Open the user dropdown (trigger displays the user's email).
+    await user.click(screen.getByRole('button', { name: /ada@example\.com/i }));
+    // Then click the Log out item in the menu.
+    await user.click(await screen.findByRole('menuitem', { name: /Sign out/i }));
 
     expect(signOutSpy).toHaveBeenCalledTimes(1);
     await vi.waitFor(() => {

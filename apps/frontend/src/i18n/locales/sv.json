@@ -39,10 +39,16 @@
     "adminBeltCatalog": "Beltkatalog",
     "adminUsers": "Användare",
     "gradingHistory": "Graderingshistorik",
-    "profile": "Min profil"
+    "profile": "Min profil",
+    "settings": "Inställningar",
+    "language": "Språk"
   },
   "dashboard": {
     "title": "Översikt"
+  },
+  "settings": {
+    "title": "Inställningar",
+    "placeholder": "Inställningar visas här."
   },
   "profile": {
     "title": "Min profil",

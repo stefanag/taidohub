@@ -1,14 +1,9 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { authClient, useSession } from '@/features/auth-by-email';
 import { cn } from '@/shared/lib/utils';
 
-const OPTIONS = [
-  { code: 'en', label: 'English' },
-  { code: 'sv', label: 'Svenska' },
-  { code: 'fi', label: 'Suomi' },
-] as const;
+import { LOCALE_OPTIONS, type LocaleCode, useChangeLocale } from '../model/use-change-locale.js';
 
 export interface LocaleSwitcherProps {
   /** `default` reads on white surfaces; `onDark` reads on the navy hero. */
@@ -25,25 +20,11 @@ export function LocaleSwitcher({
   variant = 'default',
   className,
 }: LocaleSwitcherProps): React.ReactElement {
-  const { i18n, t } = useTranslation();
-  const session = useSession();
-  const isAuthed = Boolean(session.data?.user);
+  const { t } = useTranslation();
+  const { current, change } = useChangeLocale();
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const next = event.target.value;
-    void i18n.changeLanguage(next);
-    if (isAuthed) {
-      // better-auth registers `updateUser` dynamically when the server config
-      // declares `additionalFields.locale.input === true`. The installed TS
-      // surface may not expose it, so we narrow via a typed cast.
-      const client = authClient as unknown as {
-        updateUser: (input: { locale: string }) => Promise<unknown>;
-      };
-      client.updateUser({ locale: next }).catch((err) => {
-        // eslint-disable-next-line no-console
-        console.warn('[locale] failed to persist locale to user record', err);
-      });
-    }
+    change(event.target.value as LocaleCode);
   };
 
   const palette =
@@ -56,14 +37,14 @@ export function LocaleSwitcher({
       <span className="sr-only">{t('locale.switch')}</span>
       <select
         aria-label={t('locale.switch')}
-        value={i18n.resolvedLanguage ?? i18n.language}
+        value={current}
         onChange={handleChange}
         className={cn(
           'rounded-sm border px-2 py-1 outline-hidden focus-visible:ring-2',
           palette,
         )}
       >
-        {OPTIONS.map((opt) => (
+        {LOCALE_OPTIONS.map((opt) => (
           <option key={opt.code} value={opt.code}>
             {opt.label}
           </option>
