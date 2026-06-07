@@ -1,5 +1,5 @@
 {
-  "id": "305ace55-784c-4881-b2ce-461920749d82",
+  "id": "173834bc-fd9f-4cff-9805-a7fc0724c4dc",
   "prevId": "02465c02-4f47-479a-a12e-af35967c15da",
   "version": "7",
   "dialect": "postgresql",
@@ -1881,7 +1881,7 @@
           "name": "attached_by_user_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "attached_at": {
           "name": "attached_at",
@@ -1965,7 +1965,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "set null",
           "onUpdate": "no action"
         }
       },
@@ -2096,7 +2096,7 @@
           "name": "attached_by_user_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "attached_at": {
           "name": "attached_at",
@@ -2180,7 +2180,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "set null",
           "onUpdate": "no action"
         }
       },

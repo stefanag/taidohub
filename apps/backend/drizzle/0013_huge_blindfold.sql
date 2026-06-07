@@ -14,7 +14,7 @@ CREATE TABLE "category_attachment" (
 	"category_id" uuid NOT NULL,
 	"target_type" text NOT NULL,
 	"target_id" text NOT NULL,
-	"attached_by_user_id" text NOT NULL,
+	"attached_by_user_id" text,
 	"attached_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
@@ -33,7 +33,7 @@ CREATE TABLE "tag_attachment" (
 	"tag_id" uuid NOT NULL,
 	"target_type" text NOT NULL,
 	"target_id" text NOT NULL,
-	"attached_by_user_id" text NOT NULL,
+	"attached_by_user_id" text,
 	"attached_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
@@ -41,11 +41,11 @@ ALTER TABLE "category" ADD CONSTRAINT "category_organisation_id_organisations_id
 ALTER TABLE "category" ADD CONSTRAINT "category_parent_id_category_id_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."category"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "category" ADD CONSTRAINT "category_created_by_user_id_user_id_fk" FOREIGN KEY ("created_by_user_id") REFERENCES "public"."user"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "category_attachment" ADD CONSTRAINT "category_attachment_category_id_category_id_fk" FOREIGN KEY ("category_id") REFERENCES "public"."category"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "category_attachment" ADD CONSTRAINT "category_attachment_attached_by_user_id_user_id_fk" FOREIGN KEY ("attached_by_user_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "category_attachment" ADD CONSTRAINT "category_attachment_attached_by_user_id_user_id_fk" FOREIGN KEY ("attached_by_user_id") REFERENCES "public"."user"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "tag" ADD CONSTRAINT "tag_organisation_id_organisations_id_fk" FOREIGN KEY ("organisation_id") REFERENCES "public"."organisations"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "tag" ADD CONSTRAINT "tag_created_by_user_id_user_id_fk" FOREIGN KEY ("created_by_user_id") REFERENCES "public"."user"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "tag_attachment" ADD CONSTRAINT "tag_attachment_tag_id_tag_id_fk" FOREIGN KEY ("tag_id") REFERENCES "public"."tag"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "tag_attachment" ADD CONSTRAINT "tag_attachment_attached_by_user_id_user_id_fk" FOREIGN KEY ("attached_by_user_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "tag_attachment" ADD CONSTRAINT "tag_attachment_attached_by_user_id_user_id_fk" FOREIGN KEY ("attached_by_user_id") REFERENCES "public"."user"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 CREATE UNIQUE INDEX "category_attachment_unique" ON "category_attachment" USING btree ("category_id","target_type","target_id");--> statement-breakpoint
 CREATE INDEX "category_attachment_target_idx" ON "category_attachment" USING btree ("target_type","target_id");--> statement-breakpoint
 CREATE UNIQUE INDEX "tag_attachment_unique" ON "tag_attachment" USING btree ("tag_id","target_type","target_id");--> statement-breakpoint

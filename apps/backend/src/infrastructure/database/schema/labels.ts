@@ -94,9 +94,9 @@ export const tagAttachment = pgTable(
       .references(() => tag.id, { onDelete: 'cascade' }),
     targetType: text('target_type').notNull(),
     targetId: text('target_id').notNull(),
-    attachedByUserId: text('attached_by_user_id')
-      .notNull()
-      .references(() => user.id),
+    attachedByUserId: text('attached_by_user_id').references(() => user.id, {
+      onDelete: 'set null',
+    }),
     attachedAt: timestamp('attached_at', { withTimezone: true, mode: 'date' })
       .notNull()
       .defaultNow(),
@@ -124,9 +124,9 @@ export const categoryAttachment = pgTable(
       .references(() => category.id, { onDelete: 'cascade' }),
     targetType: text('target_type').notNull(),
     targetId: text('target_id').notNull(),
-    attachedByUserId: text('attached_by_user_id')
-      .notNull()
-      .references(() => user.id),
+    attachedByUserId: text('attached_by_user_id').references(() => user.id, {
+      onDelete: 'set null',
+    }),
     attachedAt: timestamp('attached_at', { withTimezone: true, mode: 'date' })
       .notNull()
       .defaultNow(),
