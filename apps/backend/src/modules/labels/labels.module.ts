@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 
 import { OrganisationsModule } from '../organisations/organisations.module.js';
 
@@ -21,7 +21,7 @@ import { LabelsService } from './labels.service.js';
  * `detachAllForTarget` cascade hook.
  */
 @Module({
-  imports: [OrganisationsModule],
+  imports: [forwardRef(() => OrganisationsModule)],
   controllers: [LabelsController],
   providers: [LabelsService, LabelsRepository],
   exports: [LabelsService],

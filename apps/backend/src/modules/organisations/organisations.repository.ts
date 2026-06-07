@@ -4,7 +4,7 @@ import type {
   ListOrganisationsQuery,
   UpdateOrganisationInput,
 } from '@repo/contracts/organisations';
-import { and, count, eq, ilike, isNull, or, type SQL } from 'drizzle-orm';
+import { and, count, eq, ilike, inArray, isNull, or, type SQL } from 'drizzle-orm';
 
 import { DRIZZLE, type DrizzleDb, type DrizzleExecutor } from '../../infrastructure/database/client.js';
 import { organisations, type DbOrganisation } from '../../infrastructure/database/schema/index.js';
@@ -18,7 +18,16 @@ export class OrganisationsRepository {
     return rows[0] ?? null;
   }
 
-  async list(filter: ListOrganisationsQuery): Promise<{ data: DbOrganisation[]; total: number }> {
+  async list(
+    filter: ListOrganisationsQuery,
+    idIn?: string[],
+  ): Promise<{ data: DbOrganisation[]; total: number }> {
+    // `idIn === undefined` → no labels filter was supplied, no extra WHERE.
+    // `idIn === []` → labels filter ran and matched nothing → short-circuit.
+    // `idIn` non-empty → narrow rows to that set.
+    if (idIn !== undefined && idIn.length === 0) {
+      return { data: [], total: 0 };
+    }
     const filters: SQL[] = [];
     if (filter.type) filters.push(eq(organisations.type, filter.type));
     if (filter.country) filters.push(eq(organisations.country, filter.country));
@@ -36,6 +45,9 @@ export class OrganisationsRepository {
         ilike(organisations.shortCode, needle),
       );
       if (search) filters.push(search);
+    }
+    if (idIn !== undefined) {
+      filters.push(inArray(organisations.id, idIn));
     }
     const where = filters.length ? and(...filters) : undefined;
 

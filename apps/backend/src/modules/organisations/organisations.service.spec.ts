@@ -6,6 +6,7 @@ import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js'
 import { DRIZZLE } from '../../infrastructure/database/client.js';
 import { AuditLogAbilityRules } from '../audit-log/audit-log.abilities.js';
 import { AuditLogService } from '../audit-log/audit-log.service.js';
+import { LabelsService } from '../labels/labels.service.js';
 import { UsersAbilityRules } from '../users/users.abilities.js';
 import { OrganisationsAbilityRules } from './organisations.abilities.js';
 import { OrganisationsRepository } from './organisations.repository.js';
@@ -60,6 +61,15 @@ function auditStub() {
   return { record: vi.fn().mockResolvedValue(undefined), list: vi.fn() };
 }
 
+function labelsStub() {
+  return {
+    filterTargetsByLabels: vi
+      .fn()
+      .mockResolvedValue({ targetIds: undefined as string[] | undefined }),
+    detachAllForTarget: vi.fn().mockResolvedValue(undefined),
+  };
+}
+
 // Drizzle db.transaction(cb) calls cb(tx) and returns its result. Fake it.
 const FAKE_TX = { __tx: true } as any;
 const fakeDb = {
@@ -69,6 +79,7 @@ const fakeDb = {
 async function makeService(
   repo: ReturnType<typeof repoStub>,
   audit: ReturnType<typeof auditStub> = auditStub(),
+  labels: ReturnType<typeof labelsStub> = labelsStub(),
 ) {
   const module = await Test.createTestingModule({
     providers: [
@@ -80,9 +91,10 @@ async function makeService(
       { provide: OrganisationsRepository, useValue: repo },
       { provide: AuditLogService, useValue: audit },
       { provide: DRIZZLE, useValue: fakeDb },
+      { provide: LabelsService, useValue: labels },
     ],
   }).compile();
-  return { service: module.get(OrganisationsService), audit };
+  return { service: module.get(OrganisationsService), audit, labels };
 }
 
 describe('OrganisationsService — hierarchy', () => {
@@ -367,5 +379,58 @@ describe('OrganisationsService — audit', () => {
       after: null,
     });
     expect(audit.record.mock.calls[0]?.[0].before).toBeTruthy();
+  });
+});
+
+describe('OrganisationsService — labels integration', () => {
+  it('list filters organisations by the tag/category sets returned by LabelsService', async () => {
+    const repo = repoStub();
+    const labels = labelsStub();
+    labels.filterTargetsByLabels.mockResolvedValue({ targetIds: ['club-1', 'nf-1'] });
+    repo.list.mockResolvedValue({ data: [CLUB_ROW, NF_ROW], total: 2 });
+    const { service } = await makeService(repo, auditStub(), labels);
+
+    await service.list(
+      { tag: ['t-1'], category: ['c-1'] } as any,
+      admin,
+    );
+
+    expect(labels.filterTargetsByLabels).toHaveBeenCalledWith('organisation', {
+      tagIds: ['t-1'],
+      categoryIds: ['c-1'],
+    });
+    expect(repo.list).toHaveBeenCalledWith(
+      expect.anything(),
+      ['club-1', 'nf-1'],
+    );
+  });
+
+  it('list passes no idIn filter when neither tag nor category is supplied', async () => {
+    const repo = repoStub();
+    const labels = labelsStub();
+    labels.filterTargetsByLabels.mockResolvedValue({ targetIds: undefined });
+    repo.list.mockResolvedValue({ data: [], total: 0 });
+    const { service } = await makeService(repo, auditStub(), labels);
+
+    await service.list({} as any, admin);
+
+    expect(repo.list).toHaveBeenCalledWith(expect.anything(), undefined);
+  });
+
+  it('delete triggers detachAllForTarget before removing the org row', async () => {
+    const repo = repoStub();
+    const labels = labelsStub();
+    repo.findById.mockResolvedValue(IF_ROW);
+    repo.countChildren.mockResolvedValue(0);
+    repo.delete.mockResolvedValue(true);
+    const { service } = await makeService(repo, auditStub(), labels);
+
+    await service.delete('if-1', admin);
+
+    expect(labels.detachAllForTarget).toHaveBeenCalledWith('organisation', 'if-1');
+    expect(repo.delete).toHaveBeenCalledWith('if-1', FAKE_TX);
+    const detachIdx = labels.detachAllForTarget.mock.invocationCallOrder[0]!;
+    const deleteIdx = repo.delete.mock.invocationCallOrder[0]!;
+    expect(detachIdx).toBeLessThan(deleteIdx);
   });
 });

@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   ForbiddenException,
+  forwardRef,
   Inject,
   Injectable,
   NotFoundException,
@@ -22,6 +23,7 @@ import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js'
 import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
 import { type DbOrganisation } from '../../infrastructure/database/schema/index.js';
 import { AuditLogService } from '../audit-log/audit-log.service.js';
+import { LabelsService } from '../labels/labels.service.js';
 
 import { OrganisationsRepository } from './organisations.repository.js';
 
@@ -32,10 +34,17 @@ export class OrganisationsService {
     private readonly abilities: AbilityFactory,
     private readonly audit: AuditLogService,
     @Inject(DRIZZLE) private readonly db: DrizzleDb,
+    @Inject(forwardRef(() => LabelsService))
+    private readonly labels: LabelsService,
   ) {}
 
   async list(query: ListOrganisationsQuery, user: AuthenticatedUser | null): Promise<ListOrganisationsResponse> {
-    const { data } = await this.repo.list(query);
+    const { tag, category, ...rest } = query;
+    const labelFilter: { tagIds?: string[]; categoryIds?: string[] } = {};
+    if (tag) labelFilter.tagIds = tag;
+    if (category) labelFilter.categoryIds = category;
+    const filter = await this.labels.filterTargetsByLabels('organisation', labelFilter);
+    const { data } = await this.repo.list(rest, filter.targetIds);
     // Filter to organisations the user can actually `read` as an instance.
     // A sysadmin's unconditional `manage all` matches every row; an
     // orgadmin/instructor only matches rows their memberships bind to.
@@ -122,6 +131,12 @@ export class OrganisationsService {
         error: { code: 'HAS_CHILDREN', message: `Organisation ${id} still has ${childCount} child(ren).` },
       });
     }
+    // Detach any tag/category attachments first. `detachAllForTarget` does
+    // not currently accept a transaction handle, so it runs outside the
+    // delete tx — acceptable for Phase A since the worst-case interleaving
+    // is orphaned attachment rows pointing at a still-extant org, which
+    // resolves on the next delete attempt.
+    await this.labels.detachAllForTarget('organisation', id);
     await this.db.transaction(async (tx) => {
       await this.repo.delete(id, tx);
       await this.audit.record({

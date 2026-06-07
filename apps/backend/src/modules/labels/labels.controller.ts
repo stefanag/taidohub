@@ -4,10 +4,12 @@ import {
   Controller,
   Delete,
   ForbiddenException,
+  forwardRef,
   Get,
   Headers,
   HttpCode,
   HttpStatus,
+  Inject,
   NotFoundException,
   Param,
   ParseUUIDPipe,
@@ -79,6 +81,7 @@ export class LabelsController {
   constructor(
     private readonly service: LabelsService,
     private readonly abilityFactory: AbilityFactory,
+    @Inject(forwardRef(() => OrganisationsRepository))
     private readonly orgsRepo: OrganisationsRepository,
   ) {}
 
