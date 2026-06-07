@@ -213,14 +213,16 @@
 }
 
 :root {
-  --sidebar: hsl(0 0% 98%);
-  --sidebar-foreground: hsl(240 5.3% 26.1%);
-  --sidebar-primary: hsl(240 5.9% 10%);
-  --sidebar-primary-foreground: hsl(0 0% 98%);
-  --sidebar-accent: hsl(240 4.8% 95.9%);
-  --sidebar-accent-foreground: hsl(240 5.9% 10%);
-  --sidebar-border: hsl(220 13% 91%);
-  --sidebar-ring: hsl(217.2 91.2% 59.8%);
+  /* Brand-themed sidebar: navy "Authority" background with white menu text;
+     active row darkens to primary-container with gold "Energy" text. */
+  --sidebar: var(--color-primary-container);
+  --sidebar-foreground: var(--color-on-primary);
+  --sidebar-primary: var(--color-secondary);
+  --sidebar-primary-foreground: var(--color-on-secondary);
+  --sidebar-accent: var(--color-primary);
+  --sidebar-accent-foreground: var(--color-secondary);
+  --sidebar-border: var(--color-primary-container);
+  --sidebar-ring: var(--color-secondary);
 }
 
 .dark {
