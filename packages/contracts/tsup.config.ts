@@ -17,6 +17,7 @@ export default defineConfig({
     ranks: 'src/ranks.ts',
     'shogo-titles': 'src/shogo-titles.ts',
     'rank-history': 'src/rank-history.ts',
+    labels: 'src/labels.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,

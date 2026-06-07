@@ -158,6 +158,16 @@
         "types": "./dist/rank-history.d.cts",
         "default": "./dist/rank-history.cjs"
       }
+    },
+    "./labels": {
+      "import": {
+        "types": "./dist/labels.d.ts",
+        "default": "./dist/labels.js"
+      },
+      "require": {
+        "types": "./dist/labels.d.cts",
+        "default": "./dist/labels.cjs"
+      }
     }
   },
   "files": [
