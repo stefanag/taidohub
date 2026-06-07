@@ -1,5 +1,6 @@
 import { z } from './zod-openapi.js';
 import { isIsoAlpha3, ISO_3166_ALPHA3_CODES } from './iso-3166-alpha3.js';
+import { LabelFilterSchema } from './labels.js';
 
 const UUID_EXAMPLE = '7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5';
 const ISO_DATETIME_EXAMPLE = '2025-04-02T08:00:00.000Z';
@@ -122,6 +123,7 @@ export const ListOrganisationsQuerySchema = z
     country: CountrySchema.optional(),
     parentId: z.string().uuid().nullable().optional(),
     q: z.string().optional(),
+    ...LabelFilterSchema.shape,
   })
   .meta({ id: 'ListOrganisationsQuery' });
 

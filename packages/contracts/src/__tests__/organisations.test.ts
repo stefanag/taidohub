@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   CreateOrganisationSchema,
+  ListOrganisationsQuerySchema,
   OrganisationSchema,
   UpdateOrganisationSchema,
   isIsoAlpha3,
@@ -133,5 +134,25 @@ describe('OrganisationSchema', () => {
   it('requires id, timestamps', () => {
     const result = OrganisationSchema.safeParse(VALID_BASE);
     expect(result.success).toBe(false);
+  });
+});
+
+describe('ListOrganisationsQuerySchema label filters', () => {
+  it('list-query accepts a tag filter', () => {
+    const r = ListOrganisationsQuerySchema.safeParse({
+      tag: ['7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5'],
+    });
+    expect(r.success).toBe(true);
+  });
+
+  it('list-query accepts a category filter', () => {
+    const r = ListOrganisationsQuerySchema.safeParse({
+      category: ['7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5'],
+    });
+    expect(r.success).toBe(true);
+  });
+
+  it('list-query rejects non-uuid filter ids', () => {
+    expect(ListOrganisationsQuerySchema.safeParse({ tag: ['nope'] }).success).toBe(false);
   });
 });
