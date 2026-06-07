@@ -49,7 +49,7 @@ export class LabelsService {
     user: AuthenticatedUser,
     activeOrganisationId: string | null,
   ): Promise<TagRow[]> {
-    void user;
+    this.assertCanListWithOrg(user, activeOrganisationId);
     return this.repo.listVisibleTags(activeOrganisationId);
   }
 
@@ -81,7 +81,7 @@ export class LabelsService {
     user: AuthenticatedUser,
     activeOrganisationId: string | null,
   ): Promise<CategoryRow[]> {
-    void user;
+    this.assertCanListWithOrg(user, activeOrganisationId);
     return this.repo.listVisibleCategories(activeOrganisationId);
   }
 
@@ -320,5 +320,27 @@ export class LabelsService {
       throw new ForbiddenException('You are not a member of that organisation.');
     }
     return activeOrganisationId;
+  }
+
+  /**
+   * Gate label list calls:
+   *   - `activeOrganisationId === null` means "across all organisations"
+   *     and is restricted to sysadmins.
+   *   - Otherwise the caller MUST be a member of the supplied organisation.
+   */
+  private assertCanListWithOrg(
+    user: AuthenticatedUser,
+    activeOrganisationId: string | null,
+  ): void {
+    if (activeOrganisationId === null) {
+      if (user.role !== 'sysadmin') {
+        throw new ForbiddenException('Only sysadmins may list labels across all organisations.');
+      }
+      return;
+    }
+    const userOrgs = new Set(user.memberships.map((m) => m.organisationId));
+    if (!userOrgs.has(activeOrganisationId)) {
+      throw new ForbiddenException('You are not a member of that organisation.');
+    }
   }
 }

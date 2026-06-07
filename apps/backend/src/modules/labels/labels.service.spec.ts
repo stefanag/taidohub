@@ -392,4 +392,42 @@ describe('LabelsService', () => {
       expect(repo.targetsWithAllTags).not.toHaveBeenCalled();
     });
   });
+
+  describe('listTags / listCategories visibility guard', () => {
+    it('forbids a regular user from listing with activeOrganisationId=null', async () => {
+      await expect(
+        service.listTags(userFixture(), null),
+      ).rejects.toBeInstanceOf(ForbiddenException);
+      await expect(
+        service.listCategories(userFixture(), null),
+      ).rejects.toBeInstanceOf(ForbiddenException);
+    });
+
+    it('allows sysadmin to list with activeOrganisationId=null', async () => {
+      repo.listVisibleTags.mockResolvedValue([]);
+      repo.listVisibleCategories.mockResolvedValue([]);
+      await service.listTags(userFixture({ role: 'sysadmin' }), null);
+      await service.listCategories(userFixture({ role: 'sysadmin' }), null);
+      expect(repo.listVisibleTags).toHaveBeenCalledWith(null);
+      expect(repo.listVisibleCategories).toHaveBeenCalledWith(null);
+    });
+
+    it('forbids listing with an organisation the user is not a member of', async () => {
+      await expect(
+        service.listTags(
+          userFixture({ memberships: [{ organisationId: 'org-1', role: 'orgadmin' }] }),
+          'org-2',
+        ),
+      ).rejects.toBeInstanceOf(ForbiddenException);
+    });
+
+    it('allows listing with one of the user’s own organisations', async () => {
+      repo.listVisibleTags.mockResolvedValue([]);
+      await service.listTags(
+        userFixture({ memberships: [{ organisationId: 'org-1', role: 'orgadmin' }] }),
+        'org-1',
+      );
+      expect(repo.listVisibleTags).toHaveBeenCalledWith('org-1');
+    });
+  });
 });
