@@ -3,24 +3,13 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import * as React from 'react';
 import { I18nextProvider } from 'react-i18next';
-import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ProfileForm } from './ProfileForm.js';
 
 import type { UserProfile } from '@/entities/profile';
 
 import i18n from '@/i18n';
-
-// jsdom polyfills required by Quill's selection/range usage.
-beforeAll(() => {
-  if (!Range.prototype.getBoundingClientRect) {
-    Range.prototype.getBoundingClientRect = () =>
-      ({ x: 0, y: 0, width: 0, height: 0, top: 0, right: 0, bottom: 0, left: 0, toJSON: () => ({}) }) as DOMRect;
-  }
-  if (!Range.prototype.getClientRects) {
-    Range.prototype.getClientRects = () => ({ length: 0, item: () => null, [Symbol.iterator]: function* () {} }) as unknown as DOMRectList;
-  }
-});
 
 // Mock the deep entity-api module so the mutation hook picks up the stub.
 vi.mock('@/entities/profile/api/profile.api.js', async (orig) => {
@@ -135,5 +124,14 @@ describe('<ProfileForm>', () => {
 
     expect(container.querySelector('.ql-toolbar')).not.toBeNull();
     expect(container.querySelector('.ql-editor')?.textContent).toContain('Seeded bio');
+  });
+
+  it('submits aboutMe as null when the editor is empty (isEmpty branch)', async () => {
+    const { user } = renderForm(SEEDED);
+    await user.click(screen.getByRole('button', { name: /save profile/i }));
+    expect(mockedUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({ aboutMe: null }),
+      expect.anything(),
+    );
   });
 });

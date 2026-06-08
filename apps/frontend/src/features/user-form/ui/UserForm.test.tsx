@@ -3,24 +3,13 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import * as React from 'react';
 import { I18nextProvider } from 'react-i18next';
-import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { UserForm } from './UserForm.js';
 
 import type { User } from '@/entities/user';
 
 import i18n from '@/i18n';
-
-// jsdom polyfills required by Quill's selection/range usage.
-beforeAll(() => {
-  if (!Range.prototype.getBoundingClientRect) {
-    Range.prototype.getBoundingClientRect = () =>
-      ({ x: 0, y: 0, width: 0, height: 0, top: 0, right: 0, bottom: 0, left: 0, toJSON: () => ({}) }) as DOMRect;
-  }
-  if (!Range.prototype.getClientRects) {
-    Range.prototype.getClientRects = () => ({ length: 0, item: () => null, [Symbol.iterator]: function* () {} }) as unknown as DOMRectList;
-  }
-});
 
 // Mock the underlying API modules so the query-options factories pick up the
 // stubs. Mocking the barrel alone wouldn't reach the captured references.

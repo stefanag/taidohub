@@ -1,19 +1,8 @@
 import { render } from '@testing-library/react';
-import { beforeAll, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { RichTextEditor } from './RichTextEditor.js';
 import { emptyDelta, type Delta } from './delta.js';
-
-// jsdom polyfills required by Quill's selection/range usage.
-beforeAll(() => {
-  if (!Range.prototype.getBoundingClientRect) {
-    Range.prototype.getBoundingClientRect = () =>
-      ({ x: 0, y: 0, width: 0, height: 0, top: 0, right: 0, bottom: 0, left: 0, toJSON: () => ({}) }) as DOMRect;
-  }
-  if (!Range.prototype.getClientRects) {
-    Range.prototype.getClientRects = () => ({ length: 0, item: () => null, [Symbol.iterator]: function* () {} }) as unknown as DOMRectList;
-  }
-});
 
 const HELLO_BOLD: Delta = {
   ops: [
