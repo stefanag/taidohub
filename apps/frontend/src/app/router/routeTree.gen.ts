@@ -15,11 +15,11 @@ import { Route as PublicIndexRouteImport } from './routes/_public.index'
 import { Route as PublicSetPasswordRouteImport } from './routes/_public.set-password'
 import { Route as PublicLoginRouteImport } from './routes/_public.login'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
-import { Route as AppSettingsLabelsRouteImport } from './routes/_app.settings.labels'
 import { Route as AppProfileRouteImport } from './routes/_app.profile'
 import { Route as AppGradingHistoryRouteImport } from './routes/_app.grading-history'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
 import { Route as PublicRanksSlugRouteImport } from './routes/_public.ranks.$slug'
+import { Route as AppSettingsLabelsRouteImport } from './routes/_app.settings.labels'
 import { Route as AppAdminUsersRouteImport } from './routes/_app.admin.users'
 import { Route as AppAdminOrganisationsRouteImport } from './routes/_app.admin.organisations'
 import { Route as AppAdminBeltCatalogRouteImport } from './routes/_app.admin.belt-catalog'
@@ -53,11 +53,6 @@ const AppSettingsRoute = AppSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AppRoute,
 } as any)
-const AppSettingsLabelsRoute = AppSettingsLabelsRouteImport.update({
-  id: '/settings/labels',
-  path: '/settings/labels',
-  getParentRoute: () => AppRoute,
-} as any)
 const AppProfileRoute = AppProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -77,6 +72,11 @@ const PublicRanksSlugRoute = PublicRanksSlugRouteImport.update({
   id: '/ranks/$slug',
   path: '/ranks/$slug',
   getParentRoute: () => PublicRoute,
+} as any)
+const AppSettingsLabelsRoute = AppSettingsLabelsRouteImport.update({
+  id: '/labels',
+  path: '/labels',
+  getParentRoute: () => AppSettingsRoute,
 } as any)
 const AppAdminUsersRoute = AppAdminUsersRouteImport.update({
   id: '/admin/users',
@@ -104,7 +104,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AppDashboardRoute
   '/grading-history': typeof AppGradingHistoryRoute
   '/profile': typeof AppProfileRoute
-  '/settings': typeof AppSettingsRoute
+  '/settings': typeof AppSettingsRouteWithChildren
   '/login': typeof PublicLoginRoute
   '/set-password': typeof PublicSetPasswordRoute
   '/admin/audit-log': typeof AppAdminAuditLogRoute
@@ -119,7 +119,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AppDashboardRoute
   '/grading-history': typeof AppGradingHistoryRoute
   '/profile': typeof AppProfileRoute
-  '/settings': typeof AppSettingsRoute
+  '/settings': typeof AppSettingsRouteWithChildren
   '/login': typeof PublicLoginRoute
   '/set-password': typeof PublicSetPasswordRoute
   '/admin/audit-log': typeof AppAdminAuditLogRoute
@@ -136,7 +136,7 @@ export interface FileRoutesById {
   '/_app/dashboard': typeof AppDashboardRoute
   '/_app/grading-history': typeof AppGradingHistoryRoute
   '/_app/profile': typeof AppProfileRoute
-  '/_app/settings': typeof AppSettingsRoute
+  '/_app/settings': typeof AppSettingsRouteWithChildren
   '/_public/login': typeof PublicLoginRoute
   '/_public/set-password': typeof PublicSetPasswordRoute
   '/_public/': typeof PublicIndexRoute
@@ -274,6 +274,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicRanksSlugRouteImport
       parentRoute: typeof PublicRoute
     }
+    '/_app/settings/labels': {
+      id: '/_app/settings/labels'
+      path: '/labels'
+      fullPath: '/settings/labels'
+      preLoaderRoute: typeof AppSettingsLabelsRouteImport
+      parentRoute: typeof AppSettingsRoute
+    }
     '/_app/admin/users': {
       id: '/_app/admin/users'
       path: '/admin/users'
@@ -302,38 +309,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdminAuditLogRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/settings/labels': {
-      id: '/_app/settings/labels'
-      path: '/settings/labels'
-      fullPath: '/settings/labels'
-      preLoaderRoute: typeof AppSettingsLabelsRouteImport
-      parentRoute: typeof AppRoute
-    }
   }
 }
+
+interface AppSettingsRouteChildren {
+  AppSettingsLabelsRoute: typeof AppSettingsLabelsRoute
+}
+
+const AppSettingsRouteChildren: AppSettingsRouteChildren = {
+  AppSettingsLabelsRoute: AppSettingsLabelsRoute,
+}
+
+const AppSettingsRouteWithChildren = AppSettingsRoute._addFileChildren(
+  AppSettingsRouteChildren,
+)
 
 interface AppRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
   AppGradingHistoryRoute: typeof AppGradingHistoryRoute
   AppProfileRoute: typeof AppProfileRoute
-  AppSettingsRoute: typeof AppSettingsRoute
+  AppSettingsRoute: typeof AppSettingsRouteWithChildren
   AppAdminAuditLogRoute: typeof AppAdminAuditLogRoute
   AppAdminBeltCatalogRoute: typeof AppAdminBeltCatalogRoute
   AppAdminOrganisationsRoute: typeof AppAdminOrganisationsRoute
   AppAdminUsersRoute: typeof AppAdminUsersRoute
-  AppSettingsLabelsRoute: typeof AppSettingsLabelsRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
   AppGradingHistoryRoute: AppGradingHistoryRoute,
   AppProfileRoute: AppProfileRoute,
-  AppSettingsRoute: AppSettingsRoute,
+  AppSettingsRoute: AppSettingsRouteWithChildren,
   AppAdminAuditLogRoute: AppAdminAuditLogRoute,
   AppAdminBeltCatalogRoute: AppAdminBeltCatalogRoute,
   AppAdminOrganisationsRoute: AppAdminOrganisationsRoute,
   AppAdminUsersRoute: AppAdminUsersRoute,
-  AppSettingsLabelsRoute: AppSettingsLabelsRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
