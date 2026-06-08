@@ -26,6 +26,7 @@ import { ApiEndpoint } from '../../common/swagger/api-endpoint.decorator.js';
 import { CheckAbility } from '../../infrastructure/ability/check-ability.decorator.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import { CurrentUser } from '../../infrastructure/auth/current-user.decorator.js';
+import { RequireFeatureFlag } from '../feature-flags/require-feature-flag.decorator.js';
 
 import { CreateRankHistoryDto } from './dto/create-rank-history.dto.js';
 import { RankHistoryDto } from './dto/rank-history.dto.js';
@@ -55,6 +56,7 @@ export class RankHistoryController {
   }
 
   @Post(':userId')
+  @RequireFeatureFlag('grading-history')
   @CheckAbility('create', 'RankHistory')
   @ApiParam({ name: 'userId', description: 'Subject user id.' })
   @ApiBody({ type: CreateRankHistoryDto })
@@ -74,6 +76,7 @@ export class RankHistoryController {
   }
 
   @Patch(':id')
+  @RequireFeatureFlag('grading-history')
   @CheckAbility('update', 'RankHistory')
   @ApiParam({ name: 'id', description: 'Rank-history row UUID.' })
   @ApiBody({ type: UpdateRankHistoryDto })
@@ -94,6 +97,7 @@ export class RankHistoryController {
   }
 
   @Delete(':id')
+  @RequireFeatureFlag('grading-history')
   @CheckAbility('delete', 'RankHistory')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiParam({ name: 'id', description: 'Rank-history row UUID.' })
@@ -112,6 +116,7 @@ export class RankHistoryController {
   }
 
   @Post(':id/verify')
+  @RequireFeatureFlag('grading-history-verification')
   @CheckAbility('update', 'RankHistory')
   @ApiParam({ name: 'id', description: 'Rank-history row UUID.' })
   @ApiOkResponse({ type: RankHistoryDto })
@@ -130,6 +135,7 @@ export class RankHistoryController {
   }
 
   @Post(':id/unverify')
+  @RequireFeatureFlag('grading-history-verification')
   @CheckAbility('update', 'RankHistory')
   @ApiParam({ name: 'id', description: 'Rank-history row UUID.' })
   @ApiOkResponse({ type: RankHistoryDto })
