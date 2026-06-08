@@ -40,6 +40,44 @@ Deferred from the v1 audit log (spec: `superpowers/specs/2026-05-17-audit-log-de
   highlighting. Replace with a proper structural diff (e.g.
   `jsondiffpatch`) — easier to scan large records.
 
+## Labels (tags + categories)
+
+Deferred from Phase A of the labels subsystem (spec: `superpowers/specs/2026-06-07-labels-design.md`, plan: `superpowers/plans/2026-06-07-labels.md`).
+
+- **Phase B onboarding** — add Users and Rank-history as taggable target types.
+  Each is its own small spec/plan that copies Task 7's Organisations-integration
+  template (list filter + `detachAllForTarget` hook + attach widget on the
+  detail page).
+- **Multi-org "active organisation" picker.** The backend resolves the
+  active org from the `X-Active-Organisation` header; the frontend doesn't
+  yet let a member of multiple orgs pick which one's labels they're
+  managing. Until then, the default is "first membership", which is
+  non-deterministic for multi-org users.
+- **Transaction around `LabelsService.detachAllForTarget`.** The two
+  DELETE statements (tag_attachment + category_attachment) currently run
+  outside a transaction. Wrap them when the calling cascade path (org
+  delete) is moved to `db.transaction`.
+- **Sysadmin browsing scope.** The service permits `activeOrganisationId =
+  null` for sysadmins, which surfaces *every* org's private labels in one
+  view. Useful for admin debugging; potentially noisy. Revisit if/when a
+  sysadmin labels UI lands — possibly default to "current active org",
+  add `?all=true` to opt into the everything-view.
+- **Sort by label name on entity lists.** Spec §7 calls this "useful for
+  grouping; nothing fancier". Phase A ships filter only — add
+  `?sort=tag.name` / `?sort=category.name` when the first concrete UI
+  need lands.
+- **Lazy-loaded attachment counts** in the admin UI. "Attached to N
+  objects" currently isn't shown. Acceptable for small N; lazy-load when
+  the labels list grows.
+- **Bulk attach / detach.** Single-attachment endpoints only. Add bulk
+  ops (e.g. "tag these 12 orgs at once") when a multi-select UI need
+  materialises.
+- **Org-change for a member.** Sanity-check that a user moving between
+  orgs leaves their authored labels in the *original* org and the
+  attachments they made on objects in the *new* org survive — both
+  desired behaviours per the spec, worth a small integration test once
+  Phase B lands.
+
 ## Hygiene
 
 - **Frontend `pnpm typecheck` hangs on Windows.** `pnpm --filter frontend
