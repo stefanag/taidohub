@@ -11,7 +11,7 @@ import {
   type Organisation,
   type OrganisationNode,
 } from '@/entities/organisation';
-import { LabelsAttacher } from '@/features/labels-attach';
+import { LabelsAttacher } from '@/features/labels';
 import {
   Badge,
   Button,

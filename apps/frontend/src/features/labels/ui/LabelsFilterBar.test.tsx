@@ -49,14 +49,28 @@ const { TAG_A, TAG_B, CAT_PARENT, CAT_CHILD } = vi.hoisted(() => ({
   },
 }));
 
-// Hook into the deep api path so React Query hooks resolve against fixtures
-// instead of hitting HTTP. Mirrors the SettingsLabelsPage test pattern.
-vi.mock('@/entities/labels/api/labels.api.js', async (orig) => {
-  const actual = await orig<typeof import('@/entities/labels/api/labels.api.js')>();
+// Stub the React Query hooks the bar consumes. We override the hooks at the
+// labels entity's public barrel (not the deep api path) so the FSD
+// `no-public-api-sidestep` rule stays satisfied. Mocking the deep `getTags`
+// / `getCategories` would not work because `hooks.ts` binds to those
+// functions via its own local `import * as api from '../api/...'`, which
+// vitest's public-barrel mock cannot reach.
+vi.mock('@/entities/label', async (orig) => {
+  const actual = await orig<typeof import('@/entities/label')>();
   return {
     ...actual,
-    getTags: vi.fn().mockResolvedValue([TAG_A, TAG_B]),
-    getCategories: vi.fn().mockResolvedValue([CAT_PARENT, CAT_CHILD]),
+    useTagsQuery: () => ({
+      data: [TAG_A, TAG_B],
+      isLoading: false,
+      isPending: false,
+      error: null,
+    }),
+    useCategoriesQuery: () => ({
+      data: [CAT_PARENT, CAT_CHILD],
+      isLoading: false,
+      isPending: false,
+      error: null,
+    }),
   };
 });
 

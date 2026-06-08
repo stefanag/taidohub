@@ -6,8 +6,7 @@ import {
   useCreateCategoryMutation,
   useDeleteCategoryMutation,
   useUpdateCategoryMutation,
-} from '@/entities/labels';
-import { useSession } from '@/features/auth-by-email';
+} from '@/entities/label';
 import { Button, Input } from '@/shared/ui';
 
 interface CategoryLike {
@@ -17,16 +16,24 @@ interface CategoryLike {
   organisationId: string | null;
 }
 
+interface CategoriesListProps {
+  /**
+   * Whether the viewer can edit global (organisationId === null) categories
+   * and create new globals. Lifted to the page so this feature does not have
+   * to import from a sibling feature (`@/features/auth-by-email`).
+   */
+  isSysadmin: boolean;
+}
+
 /**
  * Category admin surface. Mirrors `TagsList` but renders the one-level
  * parent/child hierarchy and exposes an "Add subcategory" affordance on root
  * rows that primes the create form's `parentId` state.
  */
-export function CategoriesList(): React.ReactElement {
+export function CategoriesList({
+  isSysadmin,
+}: CategoriesListProps): React.ReactElement {
   const { t } = useTranslation();
-  const session = useSession();
-  const role = (session.data?.user as { role?: string } | undefined)?.role;
-  const isSysadmin = role === 'sysadmin';
 
   const { data: cats = [], isLoading } = useCategoriesQuery();
   const createMut = useCreateCategoryMutation();

@@ -6,23 +6,28 @@ import {
   useDeleteTagMutation,
   useTagsQuery,
   useUpdateTagMutation,
-} from '@/entities/labels';
-import { useSession } from '@/features/auth-by-email';
+} from '@/entities/label';
 import { Button, Input } from '@/shared/ui';
+
+interface TagsListProps {
+  /**
+   * Whether the viewer can edit global (organisationId === null) tags and
+   * create new globals. Lifted to the page so this feature does not have to
+   * import from a sibling feature (`@/features/auth-by-email`).
+   */
+  isSysadmin: boolean;
+}
 
 /**
  * Tag admin surface. Splits the loaded tag list into two sections:
  *   1. Org-scoped (organisationId !== null) — editable for any signed-in user.
- *   2. Globals  (organisationId === null) — editable only when the current
- *      session's role === 'sysadmin'. The same "global" checkbox in the
- *      create form is also gated to sysadmins so non-sysadmins can't even
- *      attempt to create a global (the backend re-checks).
+ *   2. Globals  (organisationId === null) — editable only when the caller
+ *      passes `isSysadmin`. The same "global" checkbox in the create form is
+ *      also gated to sysadmins so non-sysadmins can't even attempt to create
+ *      a global (the backend re-checks).
  */
-export function TagsList(): React.ReactElement {
+export function TagsList({ isSysadmin }: TagsListProps): React.ReactElement {
   const { t } = useTranslation();
-  const session = useSession();
-  const role = (session.data?.user as { role?: string } | undefined)?.role;
-  const isSysadmin = role === 'sysadmin';
 
   const { data: tags = [], isLoading } = useTagsQuery();
   const createMut = useCreateTagMutation();

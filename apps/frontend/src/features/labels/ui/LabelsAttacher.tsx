@@ -11,7 +11,7 @@ import {
   useDetachCategoryMutation,
   useDetachTagMutation,
   useTagsQuery,
-} from '@/entities/labels';
+} from '@/entities/label';
 import { Button } from '@/shared/ui';
 
 interface LabelsAttacherProps {

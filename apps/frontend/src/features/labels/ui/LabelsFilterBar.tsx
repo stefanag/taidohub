@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useCategoriesQuery, useTagsQuery } from '@/entities/labels';
+import { useCategoriesQuery, useTagsQuery } from '@/entities/label';
 import { Button } from '@/shared/ui';
 
 interface LabelsFilterBarProps {

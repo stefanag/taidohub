@@ -12,7 +12,7 @@ import {
   useDeleteOrganisation,
   useUpdateOrganisation,
 } from '@/entities/organisation';
-import { LabelsFilterBar } from '@/features/labels-filter';
+import { LabelsFilterBar } from '@/features/labels';
 import { OrganisationDeleteDialog } from '@/features/organisation-delete-dialog';
 import { OrganisationForm } from '@/features/organisation-form';
 import { OrganisationMoveDialog } from '@/features/organisation-move-dialog';

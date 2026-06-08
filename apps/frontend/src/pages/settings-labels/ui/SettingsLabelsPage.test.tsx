@@ -5,20 +5,35 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { SettingsLabelsPage } from './SettingsLabelsPage.js';
 
-// Mock the labels API at its deep path so the React Query hooks resolve
-// against fixtures rather than real HTTP. The page itself just renders the
-// tabs/tab content; the lists handle their own loading state.
-vi.mock('@/entities/labels/api/labels.api.js', async (orig) => {
-  const actual = await orig<typeof import('@/entities/labels/api/labels.api.js')>();
+// Stub the React Query hooks the lists consume so they immediately fall out
+// of their loading state. We override the hooks at the labels entity's
+// public barrel (not the deep api path) so the FSD `no-public-api-sidestep`
+// rule stays satisfied. Mocking the deep `getTags` / `getCategories` would
+// not work because `hooks.ts` binds to those functions via its own local
+// `import * as api from '../api/...'`, which vitest's public-barrel mock
+// cannot reach.
+vi.mock('@/entities/label', async (orig) => {
+  const actual = await orig<typeof import('@/entities/label')>();
   return {
     ...actual,
-    getTags: vi.fn().mockResolvedValue([]),
-    getCategories: vi.fn().mockResolvedValue([]),
+    useTagsQuery: () => ({
+      data: [],
+      isLoading: false,
+      isPending: false,
+      error: null,
+    }),
+    useCategoriesQuery: () => ({
+      data: [],
+      isLoading: false,
+      isPending: false,
+      error: null,
+    }),
   };
 });
 
-// useSession is consumed inside TagsList / CategoriesList to gate global-label
-// editing. A non-sysadmin session is the safe default for the smoke test.
+// useSession is consumed inside SettingsLabelsPage to derive the `isSysadmin`
+// prop it threads down to <TagsList /> / <CategoriesList />. A non-sysadmin
+// session is the safe default for the smoke test.
 vi.mock('@/features/auth-by-email', async (orig) => {
   const actual = await orig<typeof import('@/features/auth-by-email')>();
   return {
