@@ -137,6 +137,14 @@
   },
   "admin": {
     "title": "Administration",
+    "featureFlags": {
+      "title": "Funktionsflaggor",
+      "code": "Kod",
+      "enabled": "Aktiverad",
+      "lastUpdated": "Senast uppdaterad",
+      "on": "På",
+      "off": "Av"
+    },
     "organisations": {
       "title": "Organisationer",
       "newOrganisation": "Ny organisation",

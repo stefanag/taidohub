@@ -137,6 +137,14 @@
   },
   "admin": {
     "title": "Admin",
+    "featureFlags": {
+      "title": "Feature flags",
+      "code": "Code",
+      "enabled": "Enabled",
+      "lastUpdated": "Last updated",
+      "on": "On",
+      "off": "Off"
+    },
     "organisations": {
       "title": "Organisations",
       "newOrganisation": "New organisation",

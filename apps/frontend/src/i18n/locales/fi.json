@@ -137,6 +137,14 @@
   },
   "admin": {
     "title": "Hallinta",
+    "featureFlags": {
+      "title": "Ominaisuusliput",
+      "code": "Koodi",
+      "enabled": "Käytössä",
+      "lastUpdated": "Viimeksi päivitetty",
+      "on": "Päällä",
+      "off": "Pois"
+    },
     "organisations": {
       "title": "Organisaatiot",
       "newOrganisation": "Uusi organisaatio",
