@@ -4106,6 +4106,67 @@
           "labels"
         ]
       }
+    },
+    "/api/feature-flags": {
+      "get": {
+        "operationId": "FeatureFlagsPublicController_resolveMap",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "feature-flags"
+        ]
+      }
+    },
+    "/api/admin/feature-flags": {
+      "get": {
+        "operationId": "FeatureFlagsAdminController_listRows",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "feature-flags"
+        ]
+      }
+    },
+    "/api/admin/feature-flags/{code}": {
+      "patch": {
+        "operationId": "FeatureFlagsAdminController_update",
+        "parameters": [
+          {
+            "name": "code",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "feature-flags"
+        ]
+      }
     }
   },
   "info": {
@@ -12525,6 +12586,15 @@
       },
       "LabelFilter": {
         "$ref": "#/components/schemas/LabelFilter"
+      },
+      "FeatureFlagMap": {
+        "$ref": "#/components/schemas/FeatureFlagMap"
+      },
+      "FeatureFlag": {
+        "$ref": "#/components/schemas/FeatureFlag"
+      },
+      "UpdateFeatureFlagInput": {
+        "$ref": "#/components/schemas/UpdateFeatureFlagInput"
       }
     }
   }
