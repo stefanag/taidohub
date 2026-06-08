@@ -1,11 +1,20 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, renderHook, screen } from '@testing-library/react';
 import * as React from 'react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
-import { DEFAULT_FLAGS, parseFlagsFromEnv, type FeatureFlagMap } from './flags.js';
+import { DEFAULT_FLAGS, type FeatureFlagMap } from './flags.js';
 import { FeatureFlag } from './FeatureFlag.js';
 import { FeatureFlagsProvider } from './provider.js';
 import { useFeatureFlag } from './useFeatureFlag.js';
+
+vi.mock('@/entities/feature-flag/api/feature-flags.api.js', () => ({
+  getFeatureFlags: vi.fn(),
+}));
+
+import { getFeatureFlags } from '@/entities/feature-flag/api/feature-flags.api.js';
+
+const mockedGetFeatureFlags = vi.mocked(getFeatureFlags);
 
 function wrapper(flags: FeatureFlagMap) {
   return ({ children }: { children: React.ReactNode }): React.ReactElement => (
@@ -13,37 +22,14 @@ function wrapper(flags: FeatureFlagMap) {
   );
 }
 
-describe('parseFlagsFromEnv', () => {
-  it('returns DEFAULT_FLAGS for undefined / empty / "{}" input', () => {
-    expect(parseFlagsFromEnv(undefined)).toEqual(DEFAULT_FLAGS);
-    expect(parseFlagsFromEnv('')).toEqual(DEFAULT_FLAGS);
-    expect(parseFlagsFromEnv('{}')).toEqual(DEFAULT_FLAGS);
-  });
-
-  it('honours `true` values for known codes', () => {
-    const out = parseFlagsFromEnv('{"grading-history":true}');
-    expect(out['grading-history']).toBe(true);
-    expect(out['grading-history-verification']).toBe(false);
-    expect(out['instructor-feedback']).toBe(false);
-  });
-
-  it('coerces non-true values to false', () => {
-    const out = parseFlagsFromEnv('{"grading-history":1,"instructor-feedback":"yes"}');
-    expect(out['grading-history']).toBe(false);
-    expect(out['instructor-feedback']).toBe(false);
-  });
-
-  it('drops unknown keys silently', () => {
-    const out = parseFlagsFromEnv('{"never-defined":true}');
-    expect(Object.keys(out).sort()).toEqual(
-      ['grading-history', 'grading-history-verification', 'instructor-feedback'].sort(),
-    );
-  });
-
-  it('falls back to DEFAULT_FLAGS on malformed JSON', () => {
-    expect(parseFlagsFromEnv('not json')).toEqual(DEFAULT_FLAGS);
-  });
-});
+function renderWithQuery(ui: React.ReactElement): void {
+  const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+  render(
+    <QueryClientProvider client={qc}>
+      <React.Suspense fallback={<span data-testid="fallback">…</span>}>{ui}</React.Suspense>
+    </QueryClientProvider>,
+  );
+}
 
 describe('useFeatureFlag', () => {
   it('returns false with no provider in the tree (defaults)', () => {
@@ -51,7 +37,7 @@ describe('useFeatureFlag', () => {
     expect(result.current).toBe(false);
   });
 
-  it('returns the provider-supplied value', () => {
+  it('returns the provider-supplied value (test override path)', () => {
     const flags = { ...DEFAULT_FLAGS, 'grading-history': true };
     const { result } = renderHook(() => useFeatureFlag('grading-history'), {
       wrapper: wrapper(flags),
@@ -85,3 +71,44 @@ describe('<FeatureFlag>', () => {
     expect(screen.getByText('fallback')).toBeInTheDocument();
   });
 });
+
+describe('FeatureFlagsProvider', () => {
+  it('uses the flags prop when provided (test override path, no fetch)', () => {
+    mockedGetFeatureFlags.mockClear();
+    render(
+      <FeatureFlagsProvider
+        flags={{
+          'grading-history': true,
+          'grading-history-verification': false,
+          'instructor-feedback': false,
+        }}
+      >
+        <Probe code="grading-history" />
+      </FeatureFlagsProvider>,
+    );
+    expect(screen.getByTestId('value')).toHaveTextContent('true');
+    expect(mockedGetFeatureFlags).not.toHaveBeenCalled();
+  });
+
+  it('fetches from /api/feature-flags when no override is supplied', async () => {
+    mockedGetFeatureFlags.mockResolvedValueOnce({
+      'grading-history': true,
+      'grading-history-verification': false,
+      'instructor-feedback': false,
+    });
+
+    renderWithQuery(
+      <FeatureFlagsProvider>
+        <Probe code="grading-history" />
+      </FeatureFlagsProvider>,
+    );
+
+    expect(await screen.findByTestId('value')).toHaveTextContent('true');
+    expect(mockedGetFeatureFlags).toHaveBeenCalledTimes(1);
+  });
+});
+
+function Probe({ code }: { code: 'grading-history' }): React.ReactElement {
+  const value = useFeatureFlag(code);
+  return <span data-testid="value">{String(value)}</span>;
+}

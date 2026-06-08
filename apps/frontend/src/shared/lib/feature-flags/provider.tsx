@@ -1,9 +1,12 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
 import * as React from 'react';
 
-import { DEFAULT_FLAGS, parseFlagsFromEnv, type FeatureFlagMap } from './flags.js';
+import { getFeatureFlags } from '@/entities/feature-flag/api/feature-flags.api.js';
+
+import { DEFAULT_FLAGS, type FeatureFlagMap } from './flags.js';
 
 /**
- * Context that exposes the parsed `FeatureFlagMap`. Defaults to the all-off
+ * Context that exposes the resolved `FeatureFlagMap`. Defaults to the all-off
  * map so a missing provider doesn't blow up the tree — every call to
  * `useFeatureFlag` returns `false` in that case, matching the "flag off"
  * semantics.
@@ -14,24 +17,38 @@ export interface FeatureFlagsProviderProps {
   children: React.ReactNode;
   /**
    * Optional override — primarily for tests / Storybook to inject a specific
-   * map without touching `import.meta.env`. Production callers omit this and
-   * the provider reads `VITE_FEATURE_FLAGS` itself.
+   * map without hitting the API. Production callers omit this and the
+   * provider fetches from `GET /api/feature-flags`.
    */
   flags?: FeatureFlagMap;
 }
 
 /**
- * Reads `VITE_FEATURE_FLAGS` at mount and freezes the result for the lifetime
- * of the SPA. Vite inlines env at build time, so this is a one-shot parse —
- * no resubscribe / no re-render churn.
+ * Production path: suspends at app boot while the SPA fetches the resolved
+ * flag map from `GET /api/feature-flags`. The Suspense boundary lives at the
+ * router root.
+ *
+ * Test / Storybook path: pass `flags={{...}}` to skip the fetch entirely and
+ * inject a known map synchronously.
  */
 export function FeatureFlagsProvider({
   children,
   flags,
 }: FeatureFlagsProviderProps): React.ReactElement {
-  const value = React.useMemo<FeatureFlagMap>(
-    () => flags ?? parseFlagsFromEnv(import.meta.env.VITE_FEATURE_FLAGS as string | undefined),
-    [flags],
-  );
-  return <FeatureFlagsContext.Provider value={value}>{children}</FeatureFlagsContext.Provider>;
+  if (flags) {
+    return <FeatureFlagsContext.Provider value={flags}>{children}</FeatureFlagsContext.Provider>;
+  }
+  return <FetchingProvider>{children}</FetchingProvider>;
+}
+
+function FetchingProvider({ children }: { children: React.ReactNode }): React.ReactElement {
+  // queryKey must match `featureFlagsKeys.all` from the entity hooks so the
+  // sysadmin toggle mutation's `invalidateQueries(['feature-flags'])` triggers
+  // a refetch of the public map exposed to the SPA.
+  const { data } = useSuspenseQuery({
+    queryKey: ['feature-flags'],
+    queryFn: () => getFeatureFlags(),
+    staleTime: Infinity,
+  });
+  return <FeatureFlagsContext.Provider value={data}>{children}</FeatureFlagsContext.Provider>;
 }

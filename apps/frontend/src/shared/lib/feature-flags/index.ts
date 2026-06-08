@@ -1,7 +1,6 @@
 export {
   DEFAULT_FLAGS,
   FEATURE_FLAG_CODES,
-  parseFlagsFromEnv,
   type FeatureFlagCode,
   type FeatureFlagMap,
 } from './flags.js';
