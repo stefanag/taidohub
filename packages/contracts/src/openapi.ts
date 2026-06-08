@@ -13,6 +13,7 @@ import { AuthOpenApiRegistry } from './auth.js';
 import { BeltRanksOpenApiRegistry } from './ranks.js';
 import { BeltSystemsOpenApiRegistry } from './belt-systems.js';
 import { ErrorEnvelopeOpenApiRegistry } from './errors.js';
+import { FeatureFlagsOpenApiRegistry } from './feature-flags.js';
 import { LabelsOpenApiRegistry } from './labels.js';
 import { OrganisationsOpenApiRegistry } from './organisations.js';
 import { ProfileOpenApiRegistry } from './profile.js';
@@ -50,6 +51,7 @@ export function registerContractSchemas(
     ShogoTitlesOpenApiRegistry,
     RankHistoryOpenApiRegistry,
     LabelsOpenApiRegistry,
+    FeatureFlagsOpenApiRegistry,
   ],
 ): OpenAPIObject {
   document.components ??= {};
@@ -86,4 +88,5 @@ export const ContractRegistries = {
   shogoTitles: ShogoTitlesOpenApiRegistry,
   rankHistory: RankHistoryOpenApiRegistry,
   labels: LabelsOpenApiRegistry,
+  featureFlags: FeatureFlagsOpenApiRegistry,
 } as const;

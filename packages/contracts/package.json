@@ -168,6 +168,16 @@
         "types": "./dist/labels.d.cts",
         "default": "./dist/labels.cjs"
       }
+    },
+    "./feature-flags": {
+      "import": {
+        "types": "./dist/feature-flags.d.ts",
+        "default": "./dist/feature-flags.js"
+      },
+      "require": {
+        "types": "./dist/feature-flags.d.cts",
+        "default": "./dist/feature-flags.cjs"
+      }
     }
   },
   "files": [
