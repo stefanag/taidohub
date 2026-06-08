@@ -13,3 +13,4 @@ export * from './belt-ranks.js';
 export * from './shogo-titles.js';
 export * from './rank-history.js';
 export * from './labels.js';
+export * from './feature-flag.js';
