@@ -59,4 +59,4 @@ export const FeatureFlagsOpenApiRegistry = {
   FeatureFlagMap: FeatureFlagMapSchema,
   FeatureFlag: FeatureFlagSchema,
   UpdateFeatureFlagInput: UpdateFeatureFlagSchema,
-};
+} as const;

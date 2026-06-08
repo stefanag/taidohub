@@ -139,10 +139,10 @@ export type CategoryAttachmentSubjectShape = {
   attachedByUserId?: string | null;
 };
 
-export interface FeatureFlagSubjectShape {
-  __caslSubjectType__: 'FeatureFlag';
-  code: string;
-}
+export type FeatureFlagSubjectShape = {
+  readonly __caslSubjectType__: 'FeatureFlag';
+  code?: string;
+};
 
 /**
  * The full CASL subject union: either a bare subject name (for class-level
