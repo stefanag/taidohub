@@ -24,6 +24,7 @@ import { Route as AppAdminUsersRouteImport } from './routes/_app.admin.users'
 import { Route as AppAdminOrganisationsRouteImport } from './routes/_app.admin.organisations'
 import { Route as AppAdminBeltCatalogRouteImport } from './routes/_app.admin.belt-catalog'
 import { Route as AppAdminAuditLogRouteImport } from './routes/_app.admin.audit-log'
+import { Route as AppAdminFeatureFlagsRouteImport } from './routes/_app.admin.feature-flags'
 
 const PublicRoute = PublicRouteImport.update({
   id: '/_public',
@@ -98,6 +99,11 @@ const AppAdminAuditLogRoute = AppAdminAuditLogRouteImport.update({
   path: '/admin/audit-log',
   getParentRoute: () => AppRoute,
 } as any)
+const AppAdminFeatureFlagsRoute = AppAdminFeatureFlagsRouteImport.update({
+  id: '/admin/feature-flags',
+  path: '/admin/feature-flags',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof PublicIndexRoute
@@ -109,6 +115,7 @@ export interface FileRoutesByFullPath {
   '/set-password': typeof PublicSetPasswordRoute
   '/admin/audit-log': typeof AppAdminAuditLogRoute
   '/admin/belt-catalog': typeof AppAdminBeltCatalogRoute
+  '/admin/feature-flags': typeof AppAdminFeatureFlagsRoute
   '/admin/organisations': typeof AppAdminOrganisationsRoute
   '/admin/users': typeof AppAdminUsersRoute
   '/settings/labels': typeof AppSettingsLabelsRoute
@@ -124,6 +131,7 @@ export interface FileRoutesByTo {
   '/set-password': typeof PublicSetPasswordRoute
   '/admin/audit-log': typeof AppAdminAuditLogRoute
   '/admin/belt-catalog': typeof AppAdminBeltCatalogRoute
+  '/admin/feature-flags': typeof AppAdminFeatureFlagsRoute
   '/admin/organisations': typeof AppAdminOrganisationsRoute
   '/admin/users': typeof AppAdminUsersRoute
   '/settings/labels': typeof AppSettingsLabelsRoute
@@ -142,6 +150,7 @@ export interface FileRoutesById {
   '/_public/': typeof PublicIndexRoute
   '/_app/admin/audit-log': typeof AppAdminAuditLogRoute
   '/_app/admin/belt-catalog': typeof AppAdminBeltCatalogRoute
+  '/_app/admin/feature-flags': typeof AppAdminFeatureFlagsRoute
   '/_app/admin/organisations': typeof AppAdminOrganisationsRoute
   '/_app/admin/users': typeof AppAdminUsersRoute
   '/_app/settings/labels': typeof AppSettingsLabelsRoute
@@ -159,6 +168,7 @@ export interface FileRouteTypes {
     | '/set-password'
     | '/admin/audit-log'
     | '/admin/belt-catalog'
+    | '/admin/feature-flags'
     | '/admin/organisations'
     | '/admin/users'
     | '/settings/labels'
@@ -174,6 +184,7 @@ export interface FileRouteTypes {
     | '/set-password'
     | '/admin/audit-log'
     | '/admin/belt-catalog'
+    | '/admin/feature-flags'
     | '/admin/organisations'
     | '/admin/users'
     | '/settings/labels'
@@ -191,6 +202,7 @@ export interface FileRouteTypes {
     | '/_public/'
     | '/_app/admin/audit-log'
     | '/_app/admin/belt-catalog'
+    | '/_app/admin/feature-flags'
     | '/_app/admin/organisations'
     | '/_app/admin/users'
     | '/_app/settings/labels'
@@ -309,6 +321,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdminAuditLogRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/admin/feature-flags': {
+      id: '/_app/admin/feature-flags'
+      path: '/admin/feature-flags'
+      fullPath: '/admin/feature-flags'
+      preLoaderRoute: typeof AppAdminFeatureFlagsRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
@@ -331,6 +350,7 @@ interface AppRouteChildren {
   AppSettingsRoute: typeof AppSettingsRouteWithChildren
   AppAdminAuditLogRoute: typeof AppAdminAuditLogRoute
   AppAdminBeltCatalogRoute: typeof AppAdminBeltCatalogRoute
+  AppAdminFeatureFlagsRoute: typeof AppAdminFeatureFlagsRoute
   AppAdminOrganisationsRoute: typeof AppAdminOrganisationsRoute
   AppAdminUsersRoute: typeof AppAdminUsersRoute
 }
@@ -342,6 +362,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppSettingsRoute: AppSettingsRouteWithChildren,
   AppAdminAuditLogRoute: AppAdminAuditLogRoute,
   AppAdminBeltCatalogRoute: AppAdminBeltCatalogRoute,
+  AppAdminFeatureFlagsRoute: AppAdminFeatureFlagsRoute,
   AppAdminOrganisationsRoute: AppAdminOrganisationsRoute,
   AppAdminUsersRoute: AppAdminUsersRoute,
 }
