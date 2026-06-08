@@ -5,6 +5,7 @@ import { type AuthenticatedUser } from '../auth/auth.types.js';
 
 import { AuditLogAbilityRules } from '../../modules/audit-log/audit-log.abilities.js';
 import { BeltCatalogAbilityRules } from '../../modules/belt-catalog/belt-catalog.abilities.js';
+import { FeatureFlagsAbilityRules } from '../../modules/feature-flags/feature-flags.ability-rules.js';
 import { LabelsAbilityRules } from '../../modules/labels/labels.ability-rules.js';
 import { OrganisationsAbilityRules } from '../../modules/organisations/organisations.abilities.js';
 import { UsersAbilityRules } from '../../modules/users/users.abilities.js';
@@ -35,6 +36,7 @@ export class AbilityFactory {
     @Optional() beltCatalogRules?: BeltCatalogAbilityRules,
     @Optional() rankHistoryRules?: RankHistoryAbilityRules,
     @Optional() labelsRules?: LabelsAbilityRules,
+    @Optional() featureFlagsRules?: FeatureFlagsAbilityRules,
   ) {
     this.contributors = [
       usersRules,
@@ -44,6 +46,7 @@ export class AbilityFactory {
       ...(beltCatalogRules ? [beltCatalogRules] : []),
       ...(rankHistoryRules ? [rankHistoryRules] : []),
       ...(labelsRules ? [labelsRules] : []),
+      ...(featureFlagsRules ? [featureFlagsRules] : []),
     ];
   }
 

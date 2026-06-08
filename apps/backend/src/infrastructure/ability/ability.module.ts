@@ -4,6 +4,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { BeltCatalogAbilityRules } from '../../modules/belt-catalog/belt-catalog.abilities.js';
 import { RankHistoryAbilityRules } from '../../modules/rank-history/rank-history.abilities.js';
 import { AuditLogAbilityRules } from '../../modules/audit-log/audit-log.abilities.js';
+import { FeatureFlagsAbilityRules } from '../../modules/feature-flags/feature-flags.ability-rules.js';
 import { LabelsAbilityRules } from '../../modules/labels/labels.ability-rules.js';
 import { MembershipsAbilityRules } from '../../modules/memberships/memberships.abilities.js';
 import { OrganisationsAbilityRules } from '../../modules/organisations/organisations.abilities.js';
@@ -31,6 +32,7 @@ import { AbilityGuard } from './ability.guard.js';
     BeltCatalogAbilityRules,
     RankHistoryAbilityRules,
     AuditLogAbilityRules,
+    FeatureFlagsAbilityRules,
     LabelsAbilityRules,
     MembershipsAbilityRules,
     OrganisationsAbilityRules,

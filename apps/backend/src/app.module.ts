@@ -12,6 +12,7 @@ import { EmailModule } from './infrastructure/email/email.module.js';
 import { AuditLogModule } from './modules/audit-log/audit-log.module.js';
 import { AuthDocsModule } from './modules/auth/auth.module.js';
 import { BeltCatalogModule } from './modules/belt-catalog/belt-catalog.module.js';
+import { FeatureFlagsModule } from './modules/feature-flags/feature-flags.module.js';
 import { GradingHistoryProjectionModule } from './modules/grading-history-projection/grading-history.module.js';
 import { RankHistoryModule } from './modules/rank-history/rank-history.module.js';
 import { HealthModule } from './modules/health/health.module.js';
@@ -39,6 +40,7 @@ import { UsersModule } from './modules/users/users.module.js';
     MembershipsModule,
     AuditLogModule,
     LabelsModule,
+    FeatureFlagsModule,
   ],
   providers: [
     { provide: APP_PIPE, useClass: ZodValidationPipe },

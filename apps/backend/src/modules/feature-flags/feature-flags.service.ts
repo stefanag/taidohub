@@ -1,10 +1,13 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import {
   DEFAULT_FLAGS,
   FEATURE_FLAG_CODES,
   type FeatureFlagCode,
   type FeatureFlagMap,
 } from '@repo/contracts/feature-flags';
+
+import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
+import { AuditLogService } from '../audit-log/audit-log.service.js';
 
 import { FeatureFlagsRepository, type FeatureFlagRow } from './feature-flags.repository.js';
 
@@ -19,10 +22,18 @@ import { FeatureFlagsRepository, type FeatureFlagRow } from './feature-flags.rep
  *
  * Phase A has no in-process cache — every call hits the DB. The spec notes
  * the cache lives in a later phase (§8 of the design doc).
+ *
+ * `setEnabled` runs the update and the audit-log insert in a single
+ * transaction so the two rows commit (or roll back) together. The acting
+ * user must be supplied by the controller — the service does not authorise.
  */
 @Injectable()
 export class FeatureFlagsService {
-  constructor(private readonly repo: FeatureFlagsRepository) {}
+  constructor(
+    private readonly repo: FeatureFlagsRepository,
+    private readonly audit: AuditLogService,
+    @Inject(DRIZZLE) private readonly db: DrizzleDb,
+  ) {}
 
   /** Returns the resolved map. Unknown rows in DB are dropped (forward-compat). */
   async resolveMap(): Promise<FeatureFlagMap> {
@@ -55,6 +66,18 @@ export class FeatureFlagsService {
   ): Promise<FeatureFlagRow> {
     const existing = await this.repo.findByCode(code);
     if (!existing) throw new NotFoundException(`Unknown feature flag: ${code}`);
-    return this.repo.updateEnabled(code, enabled, actingUserId);
+    return this.db.transaction(async (tx) => {
+      const next = await this.repo.updateEnabled(code, enabled, actingUserId, tx);
+      await this.audit.record({
+        tx,
+        entityType: 'feature_flag',
+        entityId: code,
+        action: 'update',
+        userId: actingUserId,
+        before: { enabled: existing.enabled },
+        after: { enabled: next.enabled },
+      });
+      return next;
+    });
   }
 }

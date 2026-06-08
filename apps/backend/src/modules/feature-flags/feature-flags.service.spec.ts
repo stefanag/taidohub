@@ -1,6 +1,8 @@
 import { NotFoundException } from '@nestjs/common';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { type AuditLogService } from '../audit-log/audit-log.service.js';
+
 import { FeatureFlagsRepository, type FeatureFlagRow } from './feature-flags.repository.js';
 import { FeatureFlagsService } from './feature-flags.service.js';
 
@@ -14,8 +16,13 @@ function row(overrides: Partial<FeatureFlagRow> = {}): FeatureFlagRow {
   } as FeatureFlagRow;
 }
 
+// Drizzle db.transaction(cb) calls cb(tx) and returns its result. Fake it.
+const FAKE_TX = { __tx: true } as unknown;
+
 describe('FeatureFlagsService', () => {
   let repo: { [K in keyof FeatureFlagsRepository]: ReturnType<typeof vi.fn> };
+  let audit: { record: ReturnType<typeof vi.fn>; list: ReturnType<typeof vi.fn> };
+  let fakeDb: { transaction: ReturnType<typeof vi.fn> };
   let service: FeatureFlagsService;
 
   beforeEach(() => {
@@ -24,7 +31,18 @@ describe('FeatureFlagsService', () => {
       findByCode: vi.fn(),
       updateEnabled: vi.fn(),
     };
-    service = new FeatureFlagsService(repo as unknown as FeatureFlagsRepository);
+    audit = {
+      record: vi.fn().mockResolvedValue(undefined),
+      list: vi.fn(),
+    };
+    fakeDb = {
+      transaction: vi.fn(async (cb: (tx: unknown) => Promise<unknown>) => cb(FAKE_TX)),
+    };
+    service = new FeatureFlagsService(
+      repo as unknown as FeatureFlagsRepository,
+      audit as unknown as AuditLogService,
+      fakeDb as never,
+    );
   });
 
   describe('resolveMap', () => {
@@ -78,19 +96,39 @@ describe('FeatureFlagsService', () => {
   });
 
   describe('setEnabled', () => {
-    it('updates an existing flag', async () => {
-      repo.findByCode.mockResolvedValue(row());
+    it('updates an existing flag and records an audit entry', async () => {
+      repo.findByCode.mockResolvedValue(row({ enabled: false }));
       repo.updateEnabled.mockResolvedValue(row({ enabled: true, updatedById: 'u-1' }));
+
       const out = await service.setEnabled('grading-history', true, 'u-1');
+
       expect(out.enabled).toBe(true);
-      expect(repo.updateEnabled).toHaveBeenCalledWith('grading-history', true, 'u-1');
+      expect(repo.updateEnabled).toHaveBeenCalledWith(
+        'grading-history',
+        true,
+        'u-1',
+        FAKE_TX,
+      );
+      expect(audit.record).toHaveBeenCalledTimes(1);
+      expect(audit.record).toHaveBeenCalledWith({
+        tx: FAKE_TX,
+        entityType: 'feature_flag',
+        entityId: 'grading-history',
+        action: 'update',
+        userId: 'u-1',
+        before: { enabled: false },
+        after: { enabled: true },
+      });
     });
 
-    it('throws NotFound when the code is not seeded', async () => {
+    it('throws NotFound when the code is not seeded and does not audit', async () => {
       repo.findByCode.mockResolvedValue(undefined);
       await expect(service.setEnabled('grading-history', true, 'u-1')).rejects.toBeInstanceOf(
         NotFoundException,
       );
+      expect(audit.record).not.toHaveBeenCalled();
+      expect(repo.updateEnabled).not.toHaveBeenCalled();
+      expect(fakeDb.transaction).not.toHaveBeenCalled();
     });
   });
 });
