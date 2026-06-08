@@ -18,7 +18,7 @@ import { user } from './users.js';
 export const featureFlag = pgTable('feature_flag', {
   code: text('code').primaryKey(),
   enabled: boolean('enabled').notNull().default(false),
-  updatedAt: timestamp('updated_at', { withTimezone: true })
+  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'date' })
     .notNull()
     .defaultNow(),
   updatedById: text('updated_by_id').references(() => user.id, {
