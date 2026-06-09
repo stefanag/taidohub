@@ -40,6 +40,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs.js';
 
 import { GradingTimeline } from '@/features/grading-timeline';
 import { RankHistoryFormDialog } from '@/features/rank-history-form';
+import { ImpersonateActionButton } from '@/features/user-impersonation';
 
 export interface UserFormProps {
   /** The user being edited. */
@@ -301,6 +302,7 @@ export function UserForm({
               {t('admin.users.lifecycle.sectionTitle', { defaultValue: 'Account lifecycle' })}
             </h3>
             <div className="flex flex-wrap gap-3">
+              <ImpersonateActionButton user={user} />
               {user.deactivatedAt !== null ? (
                 <Button
                   type="button"

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import type { User } from '@/entities/user';
 
+import { ImpersonateActionButton } from '@/features/user-impersonation';
 import { Badge } from '@/shared/ui';
 
 export interface UsersTableProps {
@@ -12,7 +13,10 @@ export interface UsersTableProps {
 
 /**
  * Flat user list. Each row is clickable and opens the edit form. Columns:
- * email, name, role badge, status badge. MD3 brand tokens throughout.
+ * email, name, role badge, status badge, actions. MD3 brand tokens throughout.
+ *
+ * The actions cell stops click propagation so the Impersonate button doesn't
+ * also trigger the row's onEdit handler.
  */
 export function UsersTable({ users, onEdit }: UsersTableProps): React.ReactElement {
   const { t } = useTranslation();
@@ -33,6 +37,9 @@ export function UsersTable({ users, onEdit }: UsersTableProps): React.ReactEleme
           <th className="px-2 py-2">{t('admin.users.fields.name', { defaultValue: 'Name' })}</th>
           <th className="px-2 py-2">{t('admin.users.fields.role', { defaultValue: 'Role' })}</th>
           <th className="px-2 py-2">{t('admin.users.fields.status', { defaultValue: 'Status' })}</th>
+          <th className="px-2 py-2 sr-only">
+            {t('admin.users.fields.actions', { defaultValue: 'Actions' })}
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -59,6 +66,12 @@ export function UsersTable({ users, onEdit }: UsersTableProps): React.ReactEleme
                   {t('admin.users.status.active', { defaultValue: 'Active' })}
                 </span>
               )}
+            </td>
+            <td
+              className="px-2 py-2 text-right"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <ImpersonateActionButton user={u} />
             </td>
           </tr>
         ))}
