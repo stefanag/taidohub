@@ -19,6 +19,9 @@ export interface AuthenticatedUser {
   deactivatedAt: string | null;
   /** Hydrated by `AuthGuard` from `organisation_membership`. Empty array if none. */
   memberships: ReadonlyArray<{ organisationId: string; role: MembershipRole }>;
+  /** Set when the session was created via the admin plugin's impersonation flow.
+   *  Carries the real sysadmin's user ID. Undefined for normal sessions. */
+  impersonatedBy?: string;
 }
 
 export interface AuthenticatedRequest {

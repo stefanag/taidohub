@@ -103,6 +103,13 @@ export class AuthGuard implements CanActivate {
       .from(organisationMembership)
       .where(eq(organisationMembership.userId, sessionUser.id));
 
+    const rawImpersonatedBy = (session.session as { impersonatedBy?: string | null })
+      .impersonatedBy;
+    const impersonatedBy =
+      typeof rawImpersonatedBy === 'string' && rawImpersonatedBy.length > 0
+        ? rawImpersonatedBy
+        : undefined;
+
     req.user = {
       id: sessionUser.id,
       email: sessionUser.email,
@@ -116,6 +123,7 @@ export class AuthGuard implements CanActivate {
         organisationId: m.organisationId,
         role: m.role as MembershipRole,
       })),
+      ...(impersonatedBy !== undefined ? { impersonatedBy } : {}),
     };
 
     return true;
