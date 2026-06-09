@@ -1,5 +1,6 @@
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
+import { admin } from 'better-auth/plugins';
 
 import { type Env } from '../../config/env.schema.js';
 import { createDrizzleClient } from '../database/client.js';
@@ -74,6 +75,13 @@ export function buildBetterAuth(env: Env, emailService: EmailService) {
         },
       },
     },
+    plugins: [
+      admin({
+        adminRoles: ['sysadmin'],
+        // 1-hour cap on each impersonation session.
+        impersonationSessionDuration: 60 * 60,
+      }),
+    ],
   });
 }
 
