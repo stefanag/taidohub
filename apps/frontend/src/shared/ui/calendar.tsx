@@ -25,13 +25,16 @@ function Calendar({
         // Selected day: brand primary.
         ['--rdp-accent-color' as string]: 'var(--color-primary)',
         ['--rdp-accent-background-color' as string]: 'var(--color-primary)',
-        // Day-button text + caption.
-        ['--rdp-today-color' as string]: 'var(--color-secondary)',
+        // Today: also brand primary (bold is applied via modifiersClassNames below).
+        ['--rdp-today-color' as string]: 'var(--color-primary)',
         // Surface tones.
         ['--rdp-background-color' as string]: 'transparent',
         ['--rdp-range_middle-background-color' as string]:
           'var(--color-surface-container)',
         ...style,
+      }}
+      modifiersClassNames={{
+        today: 'font-bold',
       }}
       {...props}
     />
