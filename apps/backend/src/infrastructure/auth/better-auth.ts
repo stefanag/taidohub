@@ -1,6 +1,7 @@
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { admin } from 'better-auth/plugins';
+import { adminAc, userAc } from 'better-auth/plugins/admin/access';
 
 import { type Env } from '../../config/env.schema.js';
 import { createDrizzleClient } from '../database/client.js';
@@ -77,6 +78,12 @@ export function buildBetterAuth(env: Env, emailService: EmailService) {
     },
     plugins: [
       admin({
+        // Alias the existing access-control roles (`admin` → all admin
+        // statements; `user` → none) under the names this app actually uses.
+        // The role-permission system is not consumed by our code — CASL owns
+        // ability checks. The admin plugin only requires entries here to
+        // validate `adminRoles`.
+        roles: { sysadmin: adminAc, user: userAc },
         adminRoles: ['sysadmin'],
         // 1-hour cap on each impersonation session.
         impersonationSessionDuration: 60 * 60,

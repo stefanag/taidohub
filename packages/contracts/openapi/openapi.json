@@ -4167,6 +4167,34 @@
           "feature-flags"
         ]
       }
+    },
+    "/api/admin/impersonate-user": {
+      "post": {
+        "operationId": "UserImpersonationController_start",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "UserImpersonation"
+        ]
+      }
+    },
+    "/api/admin/stop-impersonating": {
+      "post": {
+        "operationId": "UserImpersonationController_stop",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "UserImpersonation"
+        ]
+      }
     }
   },
   "info": {
