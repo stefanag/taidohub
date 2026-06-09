@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { Award, Layers, Trophy } from 'lucide-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -43,9 +44,18 @@ export function AdminBeltCatalogPage(): React.ReactElement {
 
       <Tabs defaultValue="systems" className="mt-6">
         <TabsList>
-          <TabsTrigger value="systems">{t('admin.beltCatalog.tabs.systems')}</TabsTrigger>
-          <TabsTrigger value="ranks">{t('admin.beltCatalog.tabs.ranks')}</TabsTrigger>
-          <TabsTrigger value="shogos">{t('admin.beltCatalog.tabs.shogos')}</TabsTrigger>
+          <TabsTrigger value="systems" className="gap-2">
+            <Layers className="size-4" aria-hidden />
+            {t('admin.beltCatalog.tabs.systems')}
+          </TabsTrigger>
+          <TabsTrigger value="ranks" className="gap-2">
+            <Award className="size-4" aria-hidden />
+            {t('admin.beltCatalog.tabs.ranks')}
+          </TabsTrigger>
+          <TabsTrigger value="shogos" className="gap-2">
+            <Trophy className="size-4" aria-hidden />
+            {t('admin.beltCatalog.tabs.shogos')}
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="systems" className="space-y-4">
