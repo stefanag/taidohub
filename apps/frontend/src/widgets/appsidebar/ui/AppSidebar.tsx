@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { AbilityContext } from '@/shared/lib/casl';
 import {
+  Logo,
   Sidebar,
   SidebarContent,
   SidebarFooter,
@@ -37,9 +38,7 @@ export function AppSidebar(): React.ReactElement {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="px-4 py-3">
-        <span className="font-headline text-xl font-extrabold tracking-tight">
-          taidohub
-        </span>
+        <Logo className="h-8 w-auto" />
       </SidebarHeader>
 
       <SidebarContent>

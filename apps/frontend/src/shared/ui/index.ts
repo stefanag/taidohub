@@ -3,6 +3,7 @@
  * import from `@/shared/ui` rather than reaching into individual files.
  */
 export { Avatar, AvatarImage, AvatarFallback } from './avatar.js';
+export { Logo, type LogoProps } from './brand/Logo.js';
 export { Calendar, type CalendarProps } from './calendar.js';
 export { DatePicker, type DatePickerProps } from './date-picker.js';
 export { Popover, PopoverTrigger, PopoverContent, PopoverAnchor } from './popover.js';
