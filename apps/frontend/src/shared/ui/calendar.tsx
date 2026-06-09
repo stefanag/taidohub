@@ -34,7 +34,7 @@ function Calendar({
         ...style,
       }}
       modifiersClassNames={{
-        today: 'font-bold',
+        today: 'font-bold text-lg',
       }}
       {...props}
     />
