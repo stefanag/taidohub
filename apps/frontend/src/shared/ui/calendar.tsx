@@ -9,15 +9,33 @@ import { cn } from '@/shared/lib/utils';
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
 /**
- * Thin wrapper around react-day-picker v10 with the library's default
- * stylesheet imported once. Theming is done via the project's CSS tokens
- * (see globals.css :where(.rdp-root) overrides if added later).
+ * Wrapper around react-day-picker v10. Sets the library's CSS variables so the
+ * calendar adopts the project's brand tokens (navy selected day, gold today
+ * accent, MD3-surface backgrounds) rather than its default palette.
  */
 function Calendar({
   className,
+  style,
   ...props
 }: CalendarProps): React.ReactElement {
-  return <DayPicker className={cn('p-3', className)} {...props} />;
+  return (
+    <DayPicker
+      className={cn('p-3', className)}
+      style={{
+        // Selected day: brand primary.
+        ['--rdp-accent-color' as string]: 'var(--color-primary)',
+        ['--rdp-accent-background-color' as string]: 'var(--color-primary)',
+        // Day-button text + caption.
+        ['--rdp-today-color' as string]: 'var(--color-secondary)',
+        // Surface tones.
+        ['--rdp-background-color' as string]: 'transparent',
+        ['--rdp-range_middle-background-color' as string]:
+          'var(--color-surface-container)',
+        ...style,
+      }}
+      {...props}
+    />
+  );
 }
 Calendar.displayName = 'Calendar';
 
