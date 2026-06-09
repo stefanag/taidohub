@@ -1,4 +1,4 @@
-import { ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 
 import { type Auth, BETTER_AUTH } from '../../infrastructure/auth/better-auth.js';
@@ -33,6 +33,8 @@ import { AuditLogService } from '../audit-log/audit-log.service.js';
  */
 @Injectable()
 export class UserImpersonationService {
+  private readonly logger = new Logger(UserImpersonationService.name);
+
   constructor(
     @Inject(BETTER_AUTH) private readonly auth: Auth,
     @Inject(DRIZZLE) private readonly db: DrizzleDb,
@@ -68,11 +70,27 @@ export class UserImpersonationService {
       });
     }
 
-    const response = await this.auth.api.impersonateUser({
-      body: { userId: targetUserId },
-      headers,
-      asResponse: true,
-    });
+    let response: Response;
+    try {
+      response = await this.auth.api.impersonateUser({
+        body: { userId: targetUserId },
+        headers,
+        asResponse: true,
+      });
+    } catch (err) {
+      this.logger.error(
+        `auth.api.impersonateUser threw for actingUser=${actingUser.id} target=${targetUserId}: ` +
+          (err instanceof Error ? err.message : String(err)),
+        err instanceof Error ? err.stack : undefined,
+      );
+      throw err;
+    }
+    if (!response.ok) {
+      const body = await response.clone().text().catch(() => '<unreadable>');
+      this.logger.error(
+        `auth.api.impersonateUser returned ${response.status} for actingUser=${actingUser.id} target=${targetUserId}: ${body}`,
+      );
+    }
 
     await this.db.transaction(async (tx) => {
       await this.audit.record({
@@ -98,10 +116,26 @@ export class UserImpersonationService {
     }
     const realSysadminId = actingUser.impersonatedBy;
 
-    const response = await this.auth.api.stopImpersonating({
-      headers,
-      asResponse: true,
-    });
+    let response: Response;
+    try {
+      response = await this.auth.api.stopImpersonating({
+        headers,
+        asResponse: true,
+      });
+    } catch (err) {
+      this.logger.error(
+        `auth.api.stopImpersonating threw for actingUser=${actingUser.id}: ` +
+          (err instanceof Error ? err.message : String(err)),
+        err instanceof Error ? err.stack : undefined,
+      );
+      throw err;
+    }
+    if (!response.ok) {
+      const body = await response.clone().text().catch(() => '<unreadable>');
+      this.logger.error(
+        `auth.api.stopImpersonating returned ${response.status} for actingUser=${actingUser.id}: ${body}`,
+      );
+    }
 
     await this.db.transaction(async (tx) => {
       await this.audit.record({
