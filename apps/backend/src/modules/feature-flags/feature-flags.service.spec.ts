@@ -1,10 +1,26 @@
 import { NotFoundException } from '@nestjs/common';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import { type AuditLogService } from '../audit-log/audit-log.service.js';
 
 import { FeatureFlagsRepository, type FeatureFlagRow } from './feature-flags.repository.js';
 import { FeatureFlagsService } from './feature-flags.service.js';
+
+function makeUser(overrides: Partial<AuthenticatedUser> = {}): AuthenticatedUser {
+  return {
+    id: 'u-1',
+    email: 'u1@example.com',
+    emailVerified: true,
+    name: null,
+    image: null,
+    role: 'sysadmin',
+    locale: 'en',
+    deactivatedAt: null,
+    memberships: [],
+    ...overrides,
+  };
+}
 
 function row(overrides: Partial<FeatureFlagRow> = {}): FeatureFlagRow {
   return {
@@ -100,7 +116,7 @@ describe('FeatureFlagsService', () => {
       repo.findByCode.mockResolvedValue(row({ enabled: false }));
       repo.updateEnabled.mockResolvedValue(row({ enabled: true, updatedById: 'u-1' }));
 
-      const out = await service.setEnabled('grading-history', true, 'u-1');
+      const out = await service.setEnabled('grading-history', true, makeUser());
 
       expect(out.enabled).toBe(true);
       expect(repo.updateEnabled).toHaveBeenCalledWith(
@@ -116,6 +132,7 @@ describe('FeatureFlagsService', () => {
         entityId: 'grading-history',
         action: 'update',
         userId: 'u-1',
+        impersonatedById: null,
         before: { enabled: false },
         after: { enabled: true },
       });
@@ -123,7 +140,7 @@ describe('FeatureFlagsService', () => {
 
     it('throws NotFound when the code is not seeded and does not audit', async () => {
       repo.findByCode.mockResolvedValue(undefined);
-      await expect(service.setEnabled('grading-history', true, 'u-1')).rejects.toBeInstanceOf(
+      await expect(service.setEnabled('grading-history', true, makeUser())).rejects.toBeInstanceOf(
         NotFoundException,
       );
       expect(audit.record).not.toHaveBeenCalled();

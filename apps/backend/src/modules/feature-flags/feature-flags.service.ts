@@ -6,6 +6,7 @@ import {
   type FeatureFlagMap,
 } from '@repo/contracts/feature-flags';
 
+import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
 import { AuditLogService } from '../audit-log/audit-log.service.js';
 
@@ -62,18 +63,19 @@ export class FeatureFlagsService {
   async setEnabled(
     code: FeatureFlagCode,
     enabled: boolean,
-    actingUserId: string,
+    actingUser: AuthenticatedUser,
   ): Promise<FeatureFlagRow> {
     const existing = await this.repo.findByCode(code);
     if (!existing) throw new NotFoundException(`Unknown feature flag: ${code}`);
     return this.db.transaction(async (tx) => {
-      const next = await this.repo.updateEnabled(code, enabled, actingUserId, tx);
+      const next = await this.repo.updateEnabled(code, enabled, actingUser.id, tx);
       await this.audit.record({
         tx,
         entityType: 'feature_flag',
         entityId: code,
         action: 'update',
-        userId: actingUserId,
+        userId: actingUser.id,
+        impersonatedById: actingUser.impersonatedBy ?? null,
         before: { enabled: existing.enabled },
         after: { enabled: next.enabled },
       });

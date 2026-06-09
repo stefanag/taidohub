@@ -64,6 +64,6 @@ export class FeatureFlagsAdminController {
     @Param('code', new ZodValidationPipe(FeatureFlagCodeSchema)) code: FeatureFlagCode,
     @Body(new ZodValidationPipe(UpdateFeatureFlagSchema)) body: UpdateFeatureFlagInput,
   ): Promise<FeatureFlagRow> {
-    return this.service.setEnabled(code, body.enabled, user.id);
+    return this.service.setEnabled(code, body.enabled, user);
   }
 }

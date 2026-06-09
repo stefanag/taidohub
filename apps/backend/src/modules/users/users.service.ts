@@ -135,6 +135,7 @@ export class UsersService {
         entityId: row.id,
         action: 'update',
         userId: user.id,
+        impersonatedById: user.impersonatedBy ?? null,
         before,
         after,
       });
@@ -189,6 +190,7 @@ export class UsersService {
         entityId: id,
         action: 'deactivate',
         userId: adminUser.id,
+        impersonatedById: adminUser.impersonatedBy ?? null,
         before: this.toApi(existing),
         after,
       });
@@ -226,6 +228,7 @@ export class UsersService {
         entityId: id,
         action: 'reactivate',
         userId: adminUser.id,
+        impersonatedById: adminUser.impersonatedBy ?? null,
         before: this.toApi(existing),
         after,
       });
@@ -272,6 +275,7 @@ export class UsersService {
         entityId: id,
         action: 'delete',
         userId: adminUser.id,
+        impersonatedById: adminUser.impersonatedBy ?? null,
         before: this.toApi(existing),
         after: null,
       });
@@ -340,6 +344,7 @@ export class UsersService {
         entityId: id,
         action: 'create',
         userId: adminUser.id,
+        impersonatedById: adminUser.impersonatedBy ?? null,
         before: null,
         after: this.toApi(created),
       });
@@ -411,6 +416,7 @@ export class UsersService {
         entityId: id,
         action: 'create',
         userId: adminUser.id,
+        impersonatedById: adminUser.impersonatedBy ?? null,
         before: null,
         after: this.toApi(created),
       });
@@ -453,6 +459,7 @@ export class UsersService {
         entityId: userId,
         action: 'password_reset_triggered',
         userId: adminUser.id,
+        impersonatedById: adminUser.impersonatedBy ?? null,
         before: null,
         after: { triggeredBy: adminUser.id },
       });

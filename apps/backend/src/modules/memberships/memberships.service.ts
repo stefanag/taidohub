@@ -81,6 +81,7 @@ export class MembershipsService {
         entityId: row.id,
         action: 'create',
         userId: user.id,
+        impersonatedById: user.impersonatedBy ?? null,
         before: null,
         after,
       });
@@ -115,6 +116,7 @@ export class MembershipsService {
         entityId: row.id,
         action: 'update',
         userId: user.id,
+        impersonatedById: user.impersonatedBy ?? null,
         before,
         after,
       });
@@ -133,6 +135,7 @@ export class MembershipsService {
         entityId: id,
         action: 'delete',
         userId: user.id,
+        impersonatedById: user.impersonatedBy ?? null,
         before: this.toApi(existing),
         after: null,
       });

@@ -73,6 +73,7 @@ export class OrganisationsService {
         entityId: row.id,
         action: 'create',
         userId: user.id,
+        impersonatedById: user.impersonatedBy ?? null,
         before: null,
         after,
       });
@@ -115,6 +116,7 @@ export class OrganisationsService {
         entityId: row.id,
         action: isOnlyParentChange ? 'move' : 'update',
         userId: user.id,
+        impersonatedById: user.impersonatedBy ?? null,
         before,
         after,
       });
@@ -145,6 +147,7 @@ export class OrganisationsService {
         entityId: id,
         action: 'delete',
         userId: user.id,
+        impersonatedById: user.impersonatedBy ?? null,
         before: this.toApi(existing),
         after: null,
       });
