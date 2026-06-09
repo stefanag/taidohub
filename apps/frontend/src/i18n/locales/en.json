@@ -28,7 +28,8 @@
     "cancel": "Cancel",
     "confirm": "Confirm",
     "edit": "Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "pickDate": "Pick a date"
   },
   "header": {
     "signIn": "Sign in",

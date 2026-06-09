@@ -28,7 +28,8 @@
     "cancel": "Avbryt",
     "confirm": "Bekräfta",
     "edit": "Redigera",
-    "delete": "Ta bort"
+    "delete": "Ta bort",
+    "pickDate": "Välj datum"
   },
   "header": {
     "signIn": "Logga in",

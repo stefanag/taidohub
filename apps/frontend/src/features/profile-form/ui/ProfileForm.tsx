@@ -8,6 +8,7 @@ import type { IsoAlpha3 } from '@repo/contracts/organisations';
 import { HttpError } from '@/shared/api';
 import {
   Button,
+  DatePicker,
   FormField,
   FormMessage,
   Input,
@@ -157,21 +158,21 @@ export function ProfileForm({ profile, onSaved }: ProfileFormProps): React.React
 
       <FormField>
         <Label htmlFor="profile-dob">{t('profile.fields.dateOfBirth')}</Label>
-        <Input
+        <DatePicker
           id="profile-dob"
-          type="date"
           value={dateOfBirth}
-          onChange={(e) => setDateOfBirth(e.target.value)}
+          onChange={setDateOfBirth}
+          aria-label={t('profile.fields.dateOfBirth')}
         />
       </FormField>
 
       <FormField>
         <Label htmlFor="profile-taido-start">{t('profile.fields.taidoStartDate')}</Label>
-        <Input
+        <DatePicker
           id="profile-taido-start"
-          type="date"
           value={taidoStartDate}
-          onChange={(e) => setTaidoStartDate(e.target.value)}
+          onChange={setTaidoStartDate}
+          aria-label={t('profile.fields.taidoStartDate')}
         />
       </FormField>
 

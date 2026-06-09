@@ -18,6 +18,35 @@ window.Element.prototype.setPointerCapture = vi.fn() as unknown as typeof window
 window.Element.prototype.releasePointerCapture = vi.fn() as unknown as typeof window.Element.prototype.releasePointerCapture;
 window.Element.prototype.scrollIntoView = vi.fn() as unknown as typeof window.Element.prototype.scrollIntoView;
 
+// Stub the rich DatePicker (calendar + popover) with a plain `<input type="date">`
+// so existing label-based tests keep working. Production renders the rich
+// shadcn calendar popover; this swap is jsdom-only.
+vi.mock('@/shared/ui', async (orig) => {
+  const actual = await orig<typeof import('@/shared/ui')>();
+  return {
+    ...actual,
+    DatePicker: ({
+      id,
+      value,
+      onChange,
+      'aria-label': ariaLabel,
+    }: {
+      id?: string;
+      value: string | undefined;
+      onChange: (next: string) => void;
+      'aria-label'?: string;
+    }) => (
+      <input
+        id={id}
+        aria-label={ariaLabel}
+        type="date"
+        value={value ?? ''}
+        onChange={(e) => onChange(e.target.value)}
+      />
+    ),
+  };
+});
+
 vi.mock('@/entities/belt-rank/api/belt-rank.api.js', async (orig) => {
   const actual = await orig<typeof import('@/entities/belt-rank/api/belt-rank.api.js')>();
   return {

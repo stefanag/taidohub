@@ -28,7 +28,8 @@
     "cancel": "Peruuta",
     "confirm": "Vahvista",
     "edit": "Muokkaa",
-    "delete": "Poista"
+    "delete": "Poista",
+    "pickDate": "Valitse päivä"
   },
   "header": {
     "signIn": "Kirjaudu sisään",

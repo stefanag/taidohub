@@ -19,6 +19,7 @@ import {
   Button,
   Dialog,
   DialogContent,
+  DatePicker,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -297,7 +298,12 @@ export function RankHistoryFormDialog({
             <Label htmlFor="rh-date">
               {t('gradingHistory.form.date', { defaultValue: 'Date' })}
             </Label>
-            <Input id="rh-date" type="date" {...form.register('date')} />
+            <DatePicker
+              id="rh-date"
+              value={form.watch('date')}
+              onChange={(next) => form.setValue('date', next, { shouldDirty: true, shouldValidate: true })}
+              aria-label={t('gradingHistory.form.date', { defaultValue: 'Date' })}
+            />
             <FormMessage message={form.formState.errors.date?.message} />
           </FormField>
 
