@@ -3,6 +3,7 @@ import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import * as React from 'react';
 
 import { FeatureFlagsProvider } from '@/app/providers/FeatureFlagsProvider';
+import { ImpersonationBanner } from '@/widgets/impersonation-banner';
 
 /**
  * Bare root layout. Chrome lives in the `_public` and `_app` layout routes;
@@ -22,6 +23,7 @@ function RootComponent(): React.ReactElement {
       }
     >
       <FeatureFlagsProvider>
+        <ImpersonationBanner />
         <Outlet />
         {import.meta.env.DEV ? (
           <React.Suspense fallback={null}>
