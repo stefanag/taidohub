@@ -61,6 +61,15 @@ export const session = pgTable('session', {
   userId: text('userId')
     .notNull()
     .references(() => user.id, { onDelete: 'cascade' }),
+  /**
+   * Set by better-auth's admin plugin when the session was created via
+   * impersonation. Carries the real sysadmin's user id. Null for normal
+   * sessions. Read downstream by `AuthGuard` to hydrate
+   * `AuthenticatedUser.impersonatedBy`.
+   */
+  impersonatedBy: text('impersonatedBy').references(() => user.id, {
+    onDelete: 'set null',
+  }),
   createdAt: timestamp('createdAt', { withTimezone: true, mode: 'date' })
     .notNull()
     .defaultNow(),
