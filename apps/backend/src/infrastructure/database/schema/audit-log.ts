@@ -27,6 +27,7 @@ export const auditLog = pgTable(
       ],
     }).notNull(),
     userId: text('user_id').references(() => user.id, { onDelete: 'set null' }),
+    impersonatedById: text('impersonated_by_id').references(() => user.id, { onDelete: 'set null' }),
     before: jsonb('before'),
     after: jsonb('after'),
     createdAt: timestamp('created_at', { withTimezone: true, mode: 'date' }).notNull().defaultNow(),
