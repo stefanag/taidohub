@@ -230,7 +230,7 @@ export function UserForm({
   };
 
   return (
-    <Tabs defaultValue="details">
+    <Tabs defaultValue="details" className="min-h-[44rem]">
       <TabsList>
         <TabsTrigger value="details" className="gap-2">
           <UserIcon className="size-4" aria-hidden />
