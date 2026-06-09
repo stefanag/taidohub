@@ -37,6 +37,7 @@
     "adminOrganisations": "Organisaatiot",
     "adminAuditLog": "Auditointiloki",
     "adminBeltCatalog": "Vyökatalogi",
+    "adminFeatureFlags": "Ominaisuusliput",
     "adminUsers": "Käyttäjät",
     "gradingHistory": "Vyökoehistoria",
     "profile": "Oma profiili",

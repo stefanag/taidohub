@@ -37,6 +37,7 @@
     "adminOrganisations": "Organisations",
     "adminAuditLog": "Audit log",
     "adminBeltCatalog": "Belt catalog",
+    "adminFeatureFlags": "Feature flags",
     "adminUsers": "Users",
     "gradingHistory": "Grading history",
     "profile": "My profile",

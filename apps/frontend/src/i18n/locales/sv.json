@@ -37,6 +37,7 @@
     "adminOrganisations": "Organisationer",
     "adminAuditLog": "Granskningslogg",
     "adminBeltCatalog": "Beltkatalog",
+    "adminFeatureFlags": "Funktionsflaggor",
     "adminUsers": "Användare",
     "gradingHistory": "Graderingshistorik",
     "profile": "Min profil",
