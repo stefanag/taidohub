@@ -8,13 +8,14 @@ import { FeatureFlag } from './FeatureFlag.js';
 import { FeatureFlagsProvider } from './provider.js';
 import { useFeatureFlag } from './useFeatureFlag.js';
 
-vi.mock('@/entities/feature-flag/api/feature-flags.api.js', () => ({
-  getFeatureFlags: vi.fn(),
-}));
+vi.mock('@/shared/api', async (orig) => {
+  const actual = await orig<typeof import('@/shared/api')>();
+  return { ...actual, httpClient: vi.fn() };
+});
 
-import { getFeatureFlags } from '@/entities/feature-flag/api/feature-flags.api.js';
+import { httpClient } from '@/shared/api';
 
-const mockedGetFeatureFlags = vi.mocked(getFeatureFlags);
+const mockedHttpClient = vi.mocked(httpClient);
 
 function wrapper(flags: FeatureFlagMap) {
   return ({ children }: { children: React.ReactNode }): React.ReactElement => (
@@ -74,7 +75,7 @@ describe('<FeatureFlag>', () => {
 
 describe('FeatureFlagsProvider', () => {
   it('uses the flags prop when provided (test override path, no fetch)', () => {
-    mockedGetFeatureFlags.mockClear();
+    mockedHttpClient.mockClear();
     render(
       <FeatureFlagsProvider
         flags={{
@@ -87,11 +88,11 @@ describe('FeatureFlagsProvider', () => {
       </FeatureFlagsProvider>,
     );
     expect(screen.getByTestId('value')).toHaveTextContent('true');
-    expect(mockedGetFeatureFlags).not.toHaveBeenCalled();
+    expect(mockedHttpClient).not.toHaveBeenCalled();
   });
 
   it('fetches from /api/feature-flags when no override is supplied', async () => {
-    mockedGetFeatureFlags.mockResolvedValueOnce({
+    mockedHttpClient.mockResolvedValueOnce({
       'grading-history': true,
       'grading-history-verification': false,
       'instructor-feedback': false,
@@ -104,7 +105,7 @@ describe('FeatureFlagsProvider', () => {
     );
 
     expect(await screen.findByTestId('value')).toHaveTextContent('true');
-    expect(mockedGetFeatureFlags).toHaveBeenCalledTimes(1);
+    expect(mockedHttpClient).toHaveBeenCalledWith('/api/feature-flags');
   });
 });
 

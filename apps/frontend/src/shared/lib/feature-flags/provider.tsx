@@ -1,7 +1,8 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { FeatureFlagMapSchema } from '@repo/contracts/feature-flags';
 import * as React from 'react';
 
-import { getFeatureFlags } from '@/entities/feature-flag/api/feature-flags.api.js';
+import { httpClient } from '@/shared/api';
 
 import { DEFAULT_FLAGS, type FeatureFlagMap } from './flags.js';
 
@@ -47,7 +48,10 @@ function FetchingProvider({ children }: { children: React.ReactNode }): React.Re
   // a refetch of the public map exposed to the SPA.
   const { data } = useSuspenseQuery({
     queryKey: ['feature-flags'],
-    queryFn: () => getFeatureFlags(),
+    queryFn: async () => {
+      const raw = await httpClient('/api/feature-flags');
+      return FeatureFlagMapSchema.parse(raw);
+    },
     staleTime: Infinity,
   });
   return <FeatureFlagsContext.Provider value={data}>{children}</FeatureFlagsContext.Provider>;
