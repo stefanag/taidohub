@@ -1,3 +1,4 @@
+import { Folders, Tag } from 'lucide-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -25,8 +26,12 @@ export function AdminLabelsPage(): React.ReactElement {
       </p>
       <Tabs defaultValue="tags" className="mt-6">
         <TabsList>
-          <TabsTrigger value="tags">{t('settings.labels.tagsTab')}</TabsTrigger>
-          <TabsTrigger value="categories">
+          <TabsTrigger value="tags" className="gap-2">
+            <Tag className="size-4" aria-hidden />
+            {t('settings.labels.tagsTab')}
+          </TabsTrigger>
+          <TabsTrigger value="categories" className="gap-2">
+            <Folders className="size-4" aria-hidden />
             {t('settings.labels.categoriesTab')}
           </TabsTrigger>
         </TabsList>
