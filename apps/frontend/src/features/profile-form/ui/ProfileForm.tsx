@@ -117,7 +117,7 @@ export function ProfileForm({ profile, onSaved }: ProfileFormProps): React.React
     return trimmed.length > 0 ? trimmed : null;
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = (event: React.SyntheticEvent<HTMLFormElement>): void => {
     event.preventDefault();
     setSaved(false);
     setSubmitError(undefined);

@@ -55,7 +55,7 @@ export function CategoriesList({
   const orgScoped = cats.filter((c) => c.organisationId !== null);
   const globals = cats.filter((c) => c.organisationId === null);
 
-  const submit = (event: React.FormEvent): void => {
+  const submit = (event: React.SyntheticEvent): void => {
     event.preventDefault();
     if (!name.trim()) return;
     createMut.mutate(

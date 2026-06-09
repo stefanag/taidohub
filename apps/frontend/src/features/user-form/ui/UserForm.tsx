@@ -216,7 +216,7 @@ export function UserForm({
     onError: (err) => setMembershipError(mapErrorCode(err)),
   });
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleSubmit = async (event: React.SyntheticEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
     setSubmitError(undefined);
     const input: UpdateUserInput = {};

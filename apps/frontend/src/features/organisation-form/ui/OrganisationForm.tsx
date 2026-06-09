@@ -175,7 +175,7 @@ export function OrganisationForm({
   const [invalidFieldKeys, setInvalidFieldKeys] = React.useState<string[]>([]);
 
   const handleSubmit = async (
-    event: React.FormEvent<HTMLFormElement>,
+    event: React.SyntheticEvent<HTMLFormElement>,
   ): Promise<void> => {
     event.preventDefault();
     setSubmitError(undefined);

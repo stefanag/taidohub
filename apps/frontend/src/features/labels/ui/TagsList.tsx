@@ -44,7 +44,7 @@ export function TagsList({ isSysadmin, globalsOnly = false }: TagsListProps): Re
   const orgScoped = tags.filter((tag) => tag.organisationId !== null);
   const globals = tags.filter((tag) => tag.organisationId === null);
 
-  const submit = (event: React.FormEvent): void => {
+  const submit = (event: React.SyntheticEvent): void => {
     event.preventDefault();
     if (!name.trim()) return;
     createMut.mutate(

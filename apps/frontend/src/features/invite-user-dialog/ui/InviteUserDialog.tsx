@@ -104,7 +104,7 @@ export function InviteUserDialog({
 
   const isPending = inviteMut.isPending || addMut.isPending;
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = (event: React.SyntheticEvent<HTMLFormElement>): void => {
     event.preventDefault();
     setError(undefined);
     const trimmedEmail = email.trim();
