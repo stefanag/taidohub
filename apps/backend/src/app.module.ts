@@ -20,6 +20,7 @@ import { LabelsModule } from './modules/labels/labels.module.js';
 import { MembershipsModule } from './modules/memberships/memberships.module.js';
 import { OrganisationsModule } from './modules/organisations/organisations.module.js';
 import { ProfileModule } from './modules/profile/profile.module.js';
+import { UserImpersonationModule } from './modules/user-impersonation/user-impersonation.module.js';
 import { UsersModule } from './modules/users/users.module.js';
 
 @Module({
@@ -41,6 +42,7 @@ import { UsersModule } from './modules/users/users.module.js';
     AuditLogModule,
     LabelsModule,
     FeatureFlagsModule,
+    UserImpersonationModule,
   ],
   providers: [
     { provide: APP_PIPE, useClass: ZodValidationPipe },
