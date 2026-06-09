@@ -22,9 +22,9 @@ import { Route as PublicRanksSlugRouteImport } from './routes/_public.ranks.$slu
 import { Route as AppSettingsLabelsRouteImport } from './routes/_app.settings.labels'
 import { Route as AppAdminUsersRouteImport } from './routes/_app.admin.users'
 import { Route as AppAdminOrganisationsRouteImport } from './routes/_app.admin.organisations'
+import { Route as AppAdminFeatureFlagsRouteImport } from './routes/_app.admin.feature-flags'
 import { Route as AppAdminBeltCatalogRouteImport } from './routes/_app.admin.belt-catalog'
 import { Route as AppAdminAuditLogRouteImport } from './routes/_app.admin.audit-log'
-import { Route as AppAdminFeatureFlagsRouteImport } from './routes/_app.admin.feature-flags'
 
 const PublicRoute = PublicRouteImport.update({
   id: '/_public',
@@ -89,6 +89,11 @@ const AppAdminOrganisationsRoute = AppAdminOrganisationsRouteImport.update({
   path: '/admin/organisations',
   getParentRoute: () => AppRoute,
 } as any)
+const AppAdminFeatureFlagsRoute = AppAdminFeatureFlagsRouteImport.update({
+  id: '/admin/feature-flags',
+  path: '/admin/feature-flags',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppAdminBeltCatalogRoute = AppAdminBeltCatalogRouteImport.update({
   id: '/admin/belt-catalog',
   path: '/admin/belt-catalog',
@@ -97,11 +102,6 @@ const AppAdminBeltCatalogRoute = AppAdminBeltCatalogRouteImport.update({
 const AppAdminAuditLogRoute = AppAdminAuditLogRouteImport.update({
   id: '/admin/audit-log',
   path: '/admin/audit-log',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppAdminFeatureFlagsRoute = AppAdminFeatureFlagsRouteImport.update({
-  id: '/admin/feature-flags',
-  path: '/admin/feature-flags',
   getParentRoute: () => AppRoute,
 } as any)
 
@@ -307,6 +307,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdminOrganisationsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/admin/feature-flags': {
+      id: '/_app/admin/feature-flags'
+      path: '/admin/feature-flags'
+      fullPath: '/admin/feature-flags'
+      preLoaderRoute: typeof AppAdminFeatureFlagsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/admin/belt-catalog': {
       id: '/_app/admin/belt-catalog'
       path: '/admin/belt-catalog'
@@ -319,13 +326,6 @@ declare module '@tanstack/react-router' {
       path: '/admin/audit-log'
       fullPath: '/admin/audit-log'
       preLoaderRoute: typeof AppAdminAuditLogRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/admin/feature-flags': {
-      id: '/_app/admin/feature-flags'
-      path: '/admin/feature-flags'
-      fullPath: '/admin/feature-flags'
-      preLoaderRoute: typeof AppAdminFeatureFlagsRouteImport
       parentRoute: typeof AppRoute
     }
   }
