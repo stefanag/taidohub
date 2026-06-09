@@ -1,3 +1,4 @@
+import { Building2, History } from 'lucide-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ZodTypeAny } from 'zod';
@@ -470,10 +471,12 @@ export function OrganisationForm({
     return (
       <Tabs defaultValue="details">
         <TabsList>
-          <TabsTrigger value="details">
+          <TabsTrigger value="details" className="gap-2">
+            <Building2 className="size-4" aria-hidden />
             {t('admin.auditLog.tabs.details', { defaultValue: 'Details' })}
           </TabsTrigger>
-          <TabsTrigger value="activity">
+          <TabsTrigger value="activity" className="gap-2">
+            <History className="size-4" aria-hidden />
             {t('admin.auditLog.tabs.activity', { defaultValue: 'Activity' })}
           </TabsTrigger>
         </TabsList>

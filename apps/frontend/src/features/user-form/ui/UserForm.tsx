@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { Building2, ScrollText, User as UserIcon, UserRound } from 'lucide-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -231,16 +232,20 @@ export function UserForm({
   return (
     <Tabs defaultValue="details">
       <TabsList>
-        <TabsTrigger value="details">
+        <TabsTrigger value="details" className="gap-2">
+          <UserIcon className="size-4" aria-hidden />
           {t('admin.auditLog.tabs.details', { defaultValue: 'Details' })}
         </TabsTrigger>
-        <TabsTrigger value="memberships">
+        <TabsTrigger value="memberships" className="gap-2">
+          <Building2 className="size-4" aria-hidden />
           {t('admin.users.memberships.title', { defaultValue: 'Memberships' })}
         </TabsTrigger>
-        <TabsTrigger value="profile">
+        <TabsTrigger value="profile" className="gap-2">
+          <UserRound className="size-4" aria-hidden />
           {t('profile.title', { defaultValue: 'My profile' })}
         </TabsTrigger>
-        <TabsTrigger value="grading-history">
+        <TabsTrigger value="grading-history" className="gap-2">
+          <ScrollText className="size-4" aria-hidden />
           {t('gradingHistory.title', { defaultValue: 'Grading history' })}
         </TabsTrigger>
       </TabsList>
