@@ -297,7 +297,7 @@ export function RankHistoryFormDialog({
             <Label htmlFor="rh-date">
               {t('gradingHistory.form.date', { defaultValue: 'Date' })}
             </Label>
-            <Input id="rh-date" type="text" placeholder="YYYY-MM-DD" {...form.register('date')} />
+            <Input id="rh-date" type="date" {...form.register('date')} />
             <FormMessage message={form.formState.errors.date?.message} />
           </FormField>
 
