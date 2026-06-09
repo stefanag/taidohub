@@ -228,6 +228,14 @@
         "delete": "Poista",
         "sendPasswordReset": "Lähetä salasanan palautus"
       },
+      "impersonate": {
+        "action": "Esiinny käyttäjänä",
+        "confirmTitle": "Aloitetaanko esiintyminen käyttäjänä {{name}}?",
+        "confirmBody": "Istuntosi muuttuu tämän käyttäjän istunnoksi. Jokainen toiminto kirjataan sekä sinun että hänen tunnuksellaan. Esiintyminen päättyy automaattisesti tunnin kuluttua.",
+        "confirm": "Aloita esiintyminen",
+        "banner": "Esiinnyt käyttäjänä {{name}} ({{email}}). Päättyy {{minutes}} min kuluttua.",
+        "stop": "Lopeta esiintyminen"
+      },
       "invite": {
         "title": "Kutsu uusi käyttäjä",
         "addTitle": "Lisää uusi käyttäjä",

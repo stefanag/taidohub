@@ -57,8 +57,8 @@ describe('<ConfirmImpersonateDialog>', () => {
     renderDialog();
     const user = userEvent.setup();
     // Pick the confirm button by accessible name. The dialog renders three
-    // buttons: the auto-generated close (X), Cancel, and Impersonate.
-    const confirmBtn = screen.getByRole('button', { name: /^impersonate$/i });
+    // buttons: the auto-generated close (X), Cancel, and "Start impersonating".
+    const confirmBtn = screen.getByRole('button', { name: /start impersonating/i });
     await user.click(confirmBtn);
     await waitFor(() => {
       expect(startSpy).toHaveBeenCalledWith('t-1');

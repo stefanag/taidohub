@@ -228,6 +228,14 @@
         "delete": "Ta bort",
         "sendPasswordReset": "Skicka lösenordsåterställning"
       },
+      "impersonate": {
+        "action": "Logga in som användare",
+        "confirmTitle": "Börja agera som {{name}}?",
+        "confirmBody": "Din session blir denna användares session. Varje åtgärd loggas med både ditt ID och deras. Agerandet avslutas automatiskt efter en timme.",
+        "confirm": "Börja agera",
+        "banner": "Agerar som {{name}} ({{email}}). Avslutas om {{minutes}} min.",
+        "stop": "Avsluta agerande"
+      },
       "invite": {
         "title": "Bjud in en ny användare",
         "addTitle": "Lägg till en ny användare",

@@ -240,6 +240,14 @@
         "delete": "Delete",
         "sendPasswordReset": "Send password reset"
       },
+      "impersonate": {
+        "action": "Impersonate",
+        "confirmTitle": "Start impersonating {{name}}?",
+        "confirmBody": "Your session will become this user's session. Every action is logged with both your ID and theirs. The impersonation auto-ends in 1 hour.",
+        "confirm": "Start impersonating",
+        "banner": "Impersonating {{name}} ({{email}}). Auto-ends in {{minutes}} min.",
+        "stop": "Stop impersonating"
+      },
       "invite": {
         "title": "Invite a new user",
         "addTitle": "Add a new user",
