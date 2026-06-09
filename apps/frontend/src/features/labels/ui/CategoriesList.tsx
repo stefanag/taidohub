@@ -23,15 +23,22 @@ interface CategoriesListProps {
    * to import from a sibling feature (`@/features/auth-by-email`).
    */
   isSysadmin: boolean;
+  /**
+   * When true, render the sysadmin-focused "globals only" variant: hides the
+   * org-scoped section, hides the Global checkbox (every create is global),
+   * and locks new categories to `global: true`. Used by `/admin/labels`.
+   */
+  globalsOnly?: boolean;
 }
 
 /**
- * Category admin surface. Mirrors `TagsList` but renders the one-level
- * parent/child hierarchy and exposes an "Add subcategory" affordance on root
- * rows that primes the create form's `parentId` state.
+ * Category admin surface. Default variant shows both org-scoped and global
+ * trees; pass `globalsOnly` for the sysadmin admin route which manages only
+ * the global registry.
  */
 export function CategoriesList({
   isSysadmin,
+  globalsOnly = false,
 }: CategoriesListProps): React.ReactElement {
   const { t } = useTranslation();
 
@@ -43,6 +50,7 @@ export function CategoriesList({
   const [name, setName] = React.useState('');
   const [global, setGlobal] = React.useState(false);
   const [parentId, setParentId] = React.useState<string | null>(null);
+  const effectiveGlobal = globalsOnly ? true : global;
 
   const orgScoped = cats.filter((c) => c.organisationId !== null);
   const globals = cats.filter((c) => c.organisationId === null);
@@ -51,7 +59,7 @@ export function CategoriesList({
     event.preventDefault();
     if (!name.trim()) return;
     createMut.mutate(
-      { name, global, parentId },
+      { name, global: effectiveGlobal, parentId },
       {
         onSuccess: () => {
           setName('');
@@ -132,7 +140,7 @@ export function CategoriesList({
             {t('common.cancel')}
           </Button>
         ) : null}
-        {isSysadmin ? (
+        {isSysadmin && !globalsOnly ? (
           <label className="inline-flex items-center gap-1 text-sm">
             <input
               type="checkbox"
@@ -147,12 +155,14 @@ export function CategoriesList({
         </Button>
       </form>
 
-      <section>
-        <h2 className="text-sm font-semibold text-on-surface-variant">
-          {t('settings.labels.orgScoped')}
-        </h2>
-        {renderSection(orgScoped, true)}
-      </section>
+      {globalsOnly ? null : (
+        <section>
+          <h2 className="text-sm font-semibold text-on-surface-variant">
+            {t('settings.labels.orgScoped')}
+          </h2>
+          {renderSection(orgScoped, true)}
+        </section>
+      )}
 
       <section>
         <h2 className="text-sm font-semibold text-on-surface-variant">

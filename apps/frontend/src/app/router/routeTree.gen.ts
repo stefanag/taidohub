@@ -22,6 +22,7 @@ import { Route as PublicRanksSlugRouteImport } from './routes/_public.ranks.$slu
 import { Route as AppSettingsLabelsRouteImport } from './routes/_app.settings.labels'
 import { Route as AppAdminUsersRouteImport } from './routes/_app.admin.users'
 import { Route as AppAdminOrganisationsRouteImport } from './routes/_app.admin.organisations'
+import { Route as AppAdminLabelsRouteImport } from './routes/_app.admin.labels'
 import { Route as AppAdminFeatureFlagsRouteImport } from './routes/_app.admin.feature-flags'
 import { Route as AppAdminBeltCatalogRouteImport } from './routes/_app.admin.belt-catalog'
 import { Route as AppAdminAuditLogRouteImport } from './routes/_app.admin.audit-log'
@@ -89,6 +90,11 @@ const AppAdminOrganisationsRoute = AppAdminOrganisationsRouteImport.update({
   path: '/admin/organisations',
   getParentRoute: () => AppRoute,
 } as any)
+const AppAdminLabelsRoute = AppAdminLabelsRouteImport.update({
+  id: '/admin/labels',
+  path: '/admin/labels',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppAdminFeatureFlagsRoute = AppAdminFeatureFlagsRouteImport.update({
   id: '/admin/feature-flags',
   path: '/admin/feature-flags',
@@ -116,6 +122,7 @@ export interface FileRoutesByFullPath {
   '/admin/audit-log': typeof AppAdminAuditLogRoute
   '/admin/belt-catalog': typeof AppAdminBeltCatalogRoute
   '/admin/feature-flags': typeof AppAdminFeatureFlagsRoute
+  '/admin/labels': typeof AppAdminLabelsRoute
   '/admin/organisations': typeof AppAdminOrganisationsRoute
   '/admin/users': typeof AppAdminUsersRoute
   '/settings/labels': typeof AppSettingsLabelsRoute
@@ -132,6 +139,7 @@ export interface FileRoutesByTo {
   '/admin/audit-log': typeof AppAdminAuditLogRoute
   '/admin/belt-catalog': typeof AppAdminBeltCatalogRoute
   '/admin/feature-flags': typeof AppAdminFeatureFlagsRoute
+  '/admin/labels': typeof AppAdminLabelsRoute
   '/admin/organisations': typeof AppAdminOrganisationsRoute
   '/admin/users': typeof AppAdminUsersRoute
   '/settings/labels': typeof AppSettingsLabelsRoute
@@ -151,6 +159,7 @@ export interface FileRoutesById {
   '/_app/admin/audit-log': typeof AppAdminAuditLogRoute
   '/_app/admin/belt-catalog': typeof AppAdminBeltCatalogRoute
   '/_app/admin/feature-flags': typeof AppAdminFeatureFlagsRoute
+  '/_app/admin/labels': typeof AppAdminLabelsRoute
   '/_app/admin/organisations': typeof AppAdminOrganisationsRoute
   '/_app/admin/users': typeof AppAdminUsersRoute
   '/_app/settings/labels': typeof AppSettingsLabelsRoute
@@ -169,6 +178,7 @@ export interface FileRouteTypes {
     | '/admin/audit-log'
     | '/admin/belt-catalog'
     | '/admin/feature-flags'
+    | '/admin/labels'
     | '/admin/organisations'
     | '/admin/users'
     | '/settings/labels'
@@ -185,6 +195,7 @@ export interface FileRouteTypes {
     | '/admin/audit-log'
     | '/admin/belt-catalog'
     | '/admin/feature-flags'
+    | '/admin/labels'
     | '/admin/organisations'
     | '/admin/users'
     | '/settings/labels'
@@ -203,6 +214,7 @@ export interface FileRouteTypes {
     | '/_app/admin/audit-log'
     | '/_app/admin/belt-catalog'
     | '/_app/admin/feature-flags'
+    | '/_app/admin/labels'
     | '/_app/admin/organisations'
     | '/_app/admin/users'
     | '/_app/settings/labels'
@@ -307,6 +319,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdminOrganisationsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/admin/labels': {
+      id: '/_app/admin/labels'
+      path: '/admin/labels'
+      fullPath: '/admin/labels'
+      preLoaderRoute: typeof AppAdminLabelsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/admin/feature-flags': {
       id: '/_app/admin/feature-flags'
       path: '/admin/feature-flags'
@@ -351,6 +370,7 @@ interface AppRouteChildren {
   AppAdminAuditLogRoute: typeof AppAdminAuditLogRoute
   AppAdminBeltCatalogRoute: typeof AppAdminBeltCatalogRoute
   AppAdminFeatureFlagsRoute: typeof AppAdminFeatureFlagsRoute
+  AppAdminLabelsRoute: typeof AppAdminLabelsRoute
   AppAdminOrganisationsRoute: typeof AppAdminOrganisationsRoute
   AppAdminUsersRoute: typeof AppAdminUsersRoute
 }
@@ -363,6 +383,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppAdminAuditLogRoute: AppAdminAuditLogRoute,
   AppAdminBeltCatalogRoute: AppAdminBeltCatalogRoute,
   AppAdminFeatureFlagsRoute: AppAdminFeatureFlagsRoute,
+  AppAdminLabelsRoute: AppAdminLabelsRoute,
   AppAdminOrganisationsRoute: AppAdminOrganisationsRoute,
   AppAdminUsersRoute: AppAdminUsersRoute,
 }

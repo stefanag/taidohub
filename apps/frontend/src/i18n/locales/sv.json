@@ -37,6 +37,7 @@
     "adminOrganisations": "Organisationer",
     "adminAuditLog": "Granskningslogg",
     "adminBeltCatalog": "Beltkatalog",
+    "adminLabels": "Etiketter",
     "adminFeatureFlags": "Funktionsflaggor",
     "adminUsers": "Användare",
     "gradingHistory": "Graderingshistorik",
@@ -138,6 +139,9 @@
   },
   "admin": {
     "title": "Administration",
+    "labels": {
+      "title": "Globala etiketter"
+    },
     "featureFlags": {
       "title": "Funktionsflaggor",
       "code": "Kod",

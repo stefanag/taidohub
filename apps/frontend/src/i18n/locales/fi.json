@@ -37,6 +37,7 @@
     "adminOrganisations": "Organisaatiot",
     "adminAuditLog": "Auditointiloki",
     "adminBeltCatalog": "Vyökatalogi",
+    "adminLabels": "Tunnisteet",
     "adminFeatureFlags": "Ominaisuusliput",
     "adminUsers": "Käyttäjät",
     "gradingHistory": "Vyökoehistoria",
@@ -138,6 +139,9 @@
   },
   "admin": {
     "title": "Hallinta",
+    "labels": {
+      "title": "Järjestelmänlaajuiset tunnisteet"
+    },
     "featureFlags": {
       "title": "Ominaisuusliput",
       "code": "Koodi",

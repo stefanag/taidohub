@@ -1,5 +1,5 @@
 import { Link, useRouterState } from '@tanstack/react-router';
-import { Award, Building2, Flag, History, LayoutDashboard, ScrollText, UserRound, Users } from 'lucide-react';
+import { Award, Building2, Flag, History, LayoutDashboard, ScrollText, Tag, UserRound, Users } from 'lucide-react';
 import * as React from 'react';
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -112,6 +112,19 @@ export function AppSidebar(): React.ReactElement {
                       <Link to="/admin/belt-catalog">
                         <Award />
                         <span>{t('nav.adminBeltCatalog')}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ) : null}
+                {ability?.can('manage', 'Tag') ? (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={pathname.startsWith('/admin/labels')}
+                    >
+                      <Link to="/admin/labels">
+                        <Tag />
+                        <span>{t('nav.adminLabels')}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

@@ -16,17 +16,20 @@ interface TagsListProps {
    * import from a sibling feature (`@/features/auth-by-email`).
    */
   isSysadmin: boolean;
+  /**
+   * When true, render the sysadmin-focused "globals only" variant: hides the
+   * org-scoped section, hides the Global checkbox (every create is global),
+   * and locks new tags to `global: true`. Used by `/admin/labels`.
+   */
+  globalsOnly?: boolean;
 }
 
 /**
- * Tag admin surface. Splits the loaded tag list into two sections:
- *   1. Org-scoped (organisationId !== null) — editable for any signed-in user.
- *   2. Globals  (organisationId === null) — editable only when the caller
- *      passes `isSysadmin`. The same "global" checkbox in the create form is
- *      also gated to sysadmins so non-sysadmins can't even attempt to create
- *      a global (the backend re-checks).
+ * Tag admin surface. Default variant shows both org-scoped and global rows;
+ * pass `globalsOnly` for the sysadmin admin route which manages only the
+ * global registry.
  */
-export function TagsList({ isSysadmin }: TagsListProps): React.ReactElement {
+export function TagsList({ isSysadmin, globalsOnly = false }: TagsListProps): React.ReactElement {
   const { t } = useTranslation();
 
   const { data: tags = [], isLoading } = useTagsQuery();
@@ -36,6 +39,7 @@ export function TagsList({ isSysadmin }: TagsListProps): React.ReactElement {
 
   const [name, setName] = React.useState('');
   const [global, setGlobal] = React.useState(false);
+  const effectiveGlobal = globalsOnly ? true : global;
 
   const orgScoped = tags.filter((tag) => tag.organisationId !== null);
   const globals = tags.filter((tag) => tag.organisationId === null);
@@ -44,7 +48,7 @@ export function TagsList({ isSysadmin }: TagsListProps): React.ReactElement {
     event.preventDefault();
     if (!name.trim()) return;
     createMut.mutate(
-      { name, global },
+      { name, global: effectiveGlobal },
       {
         onSuccess: () => {
           setName('');
@@ -65,7 +69,7 @@ export function TagsList({ isSysadmin }: TagsListProps): React.ReactElement {
           placeholder={t('settings.labels.addTag')}
           aria-label={t('settings.labels.addTag')}
         />
-        {isSysadmin ? (
+        {isSysadmin && !globalsOnly ? (
           <label className="inline-flex items-center gap-1 text-sm">
             <input
               type="checkbox"
@@ -80,24 +84,26 @@ export function TagsList({ isSysadmin }: TagsListProps): React.ReactElement {
         </Button>
       </form>
 
-      <section>
-        <h2 className="text-sm font-semibold text-on-surface-variant">
-          {t('settings.labels.orgScoped')} ({orgScoped.length})
-        </h2>
-        <ul className="mt-2 space-y-1">
-          {orgScoped.map((tag) => (
-            <TagRow
-              key={tag.id}
-              tag={tag}
-              canEdit
-              onRename={(next) =>
-                updateMut.mutate({ id: tag.id, input: { name: next } })
-              }
-              onDelete={() => deleteMut.mutate(tag.id)}
-            />
-          ))}
-        </ul>
-      </section>
+      {globalsOnly ? null : (
+        <section>
+          <h2 className="text-sm font-semibold text-on-surface-variant">
+            {t('settings.labels.orgScoped')} ({orgScoped.length})
+          </h2>
+          <ul className="mt-2 space-y-1">
+            {orgScoped.map((tag) => (
+              <TagRow
+                key={tag.id}
+                tag={tag}
+                canEdit
+                onRename={(next) =>
+                  updateMut.mutate({ id: tag.id, input: { name: next } })
+                }
+                onDelete={() => deleteMut.mutate(tag.id)}
+              />
+            ))}
+          </ul>
+        </section>
+      )}
 
       <section>
         <h2 className="text-sm font-semibold text-on-surface-variant">

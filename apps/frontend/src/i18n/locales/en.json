@@ -37,6 +37,7 @@
     "adminOrganisations": "Organisations",
     "adminAuditLog": "Audit log",
     "adminBeltCatalog": "Belt catalog",
+    "adminLabels": "Labels",
     "adminFeatureFlags": "Feature flags",
     "adminUsers": "Users",
     "gradingHistory": "Grading history",
@@ -138,6 +139,9 @@
   },
   "admin": {
     "title": "Admin",
+    "labels": {
+      "title": "System-wide labels"
+    },
     "featureFlags": {
       "title": "Feature flags",
       "code": "Code",
