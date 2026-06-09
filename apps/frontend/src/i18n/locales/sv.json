@@ -26,7 +26,9 @@
     "create": "Skapa",
     "save": "Spara",
     "cancel": "Avbryt",
-    "confirm": "Bekräfta"
+    "confirm": "Bekräfta",
+    "edit": "Redigera",
+    "delete": "Ta bort"
   },
   "header": {
     "signIn": "Logga in",
@@ -140,7 +142,8 @@
   "admin": {
     "title": "Administration",
     "labels": {
-      "title": "Globala etiketter"
+      "title": "Globala etiketter",
+      "description": "Skapa och hantera taggar och kategorier som är tillgängliga för alla organisationer. Organisationsspecifika etiketter hanteras från varje användares inställningssida."
     },
     "featureFlags": {
       "title": "Funktionsflaggor",

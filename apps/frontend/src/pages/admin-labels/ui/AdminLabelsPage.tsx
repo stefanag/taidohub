@@ -20,6 +20,9 @@ export function AdminLabelsPage(): React.ReactElement {
       <h1 className="text-2xl font-semibold tracking-tight">
         {t('admin.labels.title')}
       </h1>
+      <p className="mt-2 max-w-2xl text-on-surface-variant">
+        {t('admin.labels.description')}
+      </p>
       <Tabs defaultValue="tags" className="mt-6">
         <TabsList>
           <TabsTrigger value="tags">{t('settings.labels.tagsTab')}</TabsTrigger>

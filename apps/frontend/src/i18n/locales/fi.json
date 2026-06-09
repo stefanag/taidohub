@@ -26,7 +26,9 @@
     "create": "Luo",
     "save": "Tallenna",
     "cancel": "Peruuta",
-    "confirm": "Vahvista"
+    "confirm": "Vahvista",
+    "edit": "Muokkaa",
+    "delete": "Poista"
   },
   "header": {
     "signIn": "Kirjaudu sisään",
@@ -140,7 +142,8 @@
   "admin": {
     "title": "Hallinta",
     "labels": {
-      "title": "Järjestelmänlaajuiset tunnisteet"
+      "title": "Järjestelmänlaajuiset tunnisteet",
+      "description": "Luo ja hallitse tageja ja kategorioita, jotka ovat kaikkien organisaatioiden käytettävissä. Organisaatiokohtaisia tunnisteita hallitaan kunkin käyttäjän asetussivulla."
     },
     "featureFlags": {
       "title": "Ominaisuusliput",

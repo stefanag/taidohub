@@ -26,7 +26,9 @@
     "create": "Create",
     "save": "Save",
     "cancel": "Cancel",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "edit": "Edit",
+    "delete": "Delete"
   },
   "header": {
     "signIn": "Sign in",
@@ -140,7 +142,8 @@
   "admin": {
     "title": "Admin",
     "labels": {
-      "title": "System-wide labels"
+      "title": "System-wide labels",
+      "description": "Create and manage tags and categories available to every organisation. Per-organisation labels are managed from each user's Settings page."
     },
     "featureFlags": {
       "title": "Feature flags",
