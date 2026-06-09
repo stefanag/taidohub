@@ -4,6 +4,7 @@ import * as React from 'react';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/style.css';
 
+import { useDateFnsLocale } from '@/shared/lib/date-fns-locale.js';
 import { cn } from '@/shared/lib/utils';
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
@@ -16,10 +17,13 @@ export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 function Calendar({
   className,
   style,
+  locale: explicitLocale,
   ...props
 }: CalendarProps): React.ReactElement {
+  const i18nLocale = useDateFnsLocale();
   return (
     <DayPicker
+      locale={explicitLocale ?? i18nLocale}
       className={cn('p-3', className)}
       style={{
         // Selected day: brand primary.

@@ -5,6 +5,7 @@ import { CalendarIcon } from 'lucide-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useDateFnsLocale } from '@/shared/lib/date-fns-locale.js';
 import { Button } from '@/shared/ui/button';
 import { Calendar } from '@/shared/ui/calendar';
 import { cn } from '@/shared/lib/utils';
@@ -51,9 +52,12 @@ export function DatePicker({
   ...rest
 }: DatePickerProps): React.ReactElement {
   const { t } = useTranslation();
+  const dateFnsLocale = useDateFnsLocale();
   const [open, setOpen] = React.useState(false);
   const selected = parseIsoDate(value);
-  const displayText = selected ? format(selected, DISPLAY) : (placeholder ?? t('common.pickDate'));
+  const displayText = selected
+    ? format(selected, DISPLAY, { locale: dateFnsLocale })
+    : (placeholder ?? t('common.pickDate'));
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
