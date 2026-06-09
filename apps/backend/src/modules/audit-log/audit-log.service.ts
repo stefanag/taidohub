@@ -18,6 +18,9 @@ export interface RecordInput {
   entityId: string;
   action: AuditLogAction;
   userId: string | null;
+  /** Real sysadmin's user ID when the action was performed during impersonation.
+   *  Null otherwise. Required so every caller consciously threads it. */
+  impersonatedById: string | null;
   before: unknown | null;
   after: unknown | null;
 }
@@ -33,6 +36,7 @@ export class AuditLogService {
         entityId: input.entityId,
         action: input.action,
         userId: input.userId,
+        impersonatedById: input.impersonatedById,
         // jsonb columns accept any serializable value; we pass through whatever
         // the caller hands us — the rest of the contract is documented by the
         // entity-specific Zod schemas.
