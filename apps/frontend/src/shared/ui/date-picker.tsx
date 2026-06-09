@@ -65,8 +65,8 @@ export function DatePicker({
           disabled={disabled}
           aria-label={rest['aria-label']}
           className={cn(
-            'w-full justify-start text-left font-normal',
-            !selected && 'text-muted-foreground',
+            'w-full justify-start text-left',
+            selected ? 'font-semibold text-primary' : 'font-normal text-muted-foreground',
             className,
           )}
         >
