@@ -135,14 +135,14 @@ export function InviteUserDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="md:min-h-[30rem] content-start">
+      <DialogContent className="md:min-h-[30rem] md:grid-rows-[auto_1fr]">
         <DialogHeader>
           <DialogTitle>{dialogTitle}</DialogTitle>
         </DialogHeader>
 
         {createdLink ? (
           /* Success view (add mode) */
-          <div className="space-y-4">
+          <div className="flex flex-col gap-4">
             <p className="font-semibold">
               {t('admin.users.invite.linkTitle', { defaultValue: 'User added' })}
             </p>
@@ -165,7 +165,7 @@ export function InviteUserDialog({
             >
               {t('admin.users.invite.copy', { defaultValue: 'Copy' })}
             </Button>
-            <DialogFooter>
+            <DialogFooter className="mt-auto">
               <Button type="button" onClick={() => onOpenChange(false)}>
                 {t('admin.users.invite.done', { defaultValue: 'Done' })}
               </Button>
@@ -173,7 +173,7 @@ export function InviteUserDialog({
           </div>
         ) : (
           /* Form view */
-          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
             {/* Mode toggle */}
             <div className="flex gap-2">
               <Button
@@ -242,7 +242,7 @@ export function InviteUserDialog({
 
             <FormMessage message={error} />
 
-            <DialogFooter>
+            <DialogFooter className="mt-auto">
               <Button
                 type="button"
                 variant="outline"
