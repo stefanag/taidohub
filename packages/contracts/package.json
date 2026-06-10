@@ -188,6 +188,16 @@
         "types": "./dist/classification-category.d.cts",
         "default": "./dist/classification-category.cjs"
       }
+    },
+    "./techniques": {
+      "import": {
+        "types": "./dist/techniques.d.ts",
+        "default": "./dist/techniques.js"
+      },
+      "require": {
+        "types": "./dist/techniques.d.cts",
+        "default": "./dist/techniques.cjs"
+      }
     }
   },
   "files": [

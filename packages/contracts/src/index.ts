@@ -26,3 +26,4 @@ export * from './rank-history.js';
 export * from './labels.js';
 export * from './feature-flags.js';
 export * from './classification-category.js';
+export * from './techniques.js';

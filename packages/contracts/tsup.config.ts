@@ -20,6 +20,7 @@ export default defineConfig({
     labels: 'src/labels.ts',
     'feature-flags': 'src/feature-flags.ts',
     'classification-category': 'src/classification-category.ts',
+    techniques: 'src/techniques.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,
