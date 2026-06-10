@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { AbilityContext } from '@/shared/lib/casl';
 import {
   Logo,
+  LogoMark,
   Sidebar,
   SidebarContent,
   SidebarFooter,
@@ -38,7 +39,8 @@ export function AppSidebar(): React.ReactElement {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="px-4 py-3">
-        <Logo className="h-8 w-auto" />
+        <Logo className="h-8 w-auto group-data-[collapsible=icon]:hidden" />
+        <LogoMark className="hidden size-6 group-data-[collapsible=icon]:block" />
       </SidebarHeader>
 
       <SidebarContent>

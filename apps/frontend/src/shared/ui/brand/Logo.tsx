@@ -24,3 +24,20 @@ export function Logo({ className }: LogoProps): React.ReactElement {
     />
   );
 }
+
+/**
+ * Mark-only variant — the gold spiral + central figure without the wordmark.
+ * Used when there isn't room for the full lockup (e.g. the icon-collapsed
+ * sidebar header). ViewBox is roughly square (95x100), so `className` should
+ * size with `size-N` rather than `h-N w-auto`.
+ */
+export function LogoMark({ className }: LogoProps): React.ReactElement {
+  return (
+    <img
+      src="/logo-mark.svg"
+      alt="taidohub"
+      className={cn('size-8 select-none', className)}
+      draggable={false}
+    />
+  );
+}
