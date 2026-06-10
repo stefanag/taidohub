@@ -28,6 +28,7 @@ export const SubjectSchema = z
     'TagAttachment',
     'CategoryAttachment',
     'FeatureFlag',
+    'ClassificationCategory',
     'all',
   ])
   .meta({
@@ -144,6 +145,10 @@ export type FeatureFlagSubjectShape = {
   code?: string;
 };
 
+export type ClassificationCategorySubjectShape = {
+  readonly __caslSubjectType__: 'ClassificationCategory';
+};
+
 /**
  * The full CASL subject union: either a bare subject name (for class-level
  * rules like `can('create', 'Organisation')`) or a tagged subject shape (for
@@ -164,7 +169,8 @@ export type AppSubject =
   | CategorySubjectShape
   | TagAttachmentSubjectShape
   | CategoryAttachmentSubjectShape
-  | FeatureFlagSubjectShape;
+  | FeatureFlagSubjectShape
+  | ClassificationCategorySubjectShape;
 
 /**
  * Tuple type compatible with `MongoAbility<[AppAction, AppSubject]>` from

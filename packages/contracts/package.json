@@ -178,6 +178,16 @@
         "types": "./dist/feature-flags.d.cts",
         "default": "./dist/feature-flags.cjs"
       }
+    },
+    "./classification-category": {
+      "import": {
+        "types": "./dist/classification-category.d.ts",
+        "default": "./dist/classification-category.js"
+      },
+      "require": {
+        "types": "./dist/classification-category.d.cts",
+        "default": "./dist/classification-category.cjs"
+      }
     }
   },
   "files": [

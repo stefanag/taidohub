@@ -19,6 +19,7 @@ export default defineConfig({
     'rank-history': 'src/rank-history.ts',
     labels: 'src/labels.ts',
     'feature-flags': 'src/feature-flags.ts',
+    'classification-category': 'src/classification-category.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,
