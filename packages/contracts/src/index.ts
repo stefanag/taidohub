@@ -28,3 +28,4 @@ export * from './feature-flags.js';
 export * from './classification-category.js';
 export * from './techniques.js';
 export * from './patterns.js';
+export * from './progress.js';

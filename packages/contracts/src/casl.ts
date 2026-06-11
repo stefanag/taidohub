@@ -31,6 +31,7 @@ export const SubjectSchema = z
     'ClassificationCategory',
     'Technique',
     'Pattern',
+    'Progress',
     'all',
   ])
   .meta({
@@ -163,6 +164,12 @@ export type PatternSubjectShape = {
   createdByOrganisationId?: string | null;
 };
 
+export type ProgressSubjectShape = {
+  readonly __caslSubjectType__: 'Progress';
+  /** Scopes regular users to their own rows. */
+  userId?: string;
+};
+
 /**
  * The full CASL subject union: either a bare subject name (for class-level
  * rules like `can('create', 'Organisation')`) or a tagged subject shape (for
@@ -186,7 +193,8 @@ export type AppSubject =
   | FeatureFlagSubjectShape
   | ClassificationCategorySubjectShape
   | TechniqueSubjectShape
-  | PatternSubjectShape;
+  | PatternSubjectShape
+  | ProgressSubjectShape;
 
 /**
  * Tuple type compatible with `MongoAbility<[AppAction, AppSubject]>` from

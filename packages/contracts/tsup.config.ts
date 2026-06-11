@@ -22,6 +22,7 @@ export default defineConfig({
     'classification-category': 'src/classification-category.ts',
     techniques: 'src/techniques.ts',
     patterns: 'src/patterns.ts',
+    progress: 'src/progress.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,

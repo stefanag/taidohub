@@ -208,6 +208,16 @@
         "types": "./dist/patterns.d.cts",
         "default": "./dist/patterns.cjs"
       }
+    },
+    "./progress": {
+      "import": {
+        "types": "./dist/progress.d.ts",
+        "default": "./dist/progress.js"
+      },
+      "require": {
+        "types": "./dist/progress.d.cts",
+        "default": "./dist/progress.cjs"
+      }
     }
   },
   "files": [
