@@ -21,6 +21,7 @@ export default defineConfig({
     'feature-flags': 'src/feature-flags.ts',
     'classification-category': 'src/classification-category.ts',
     techniques: 'src/techniques.ts',
+    patterns: 'src/patterns.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,

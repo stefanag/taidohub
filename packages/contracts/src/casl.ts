@@ -30,6 +30,7 @@ export const SubjectSchema = z
     'FeatureFlag',
     'ClassificationCategory',
     'Technique',
+    'Pattern',
     'all',
   ])
   .meta({
@@ -156,6 +157,12 @@ export type TechniqueSubjectShape = {
   createdByOrganisationId?: string | null;
 };
 
+export type PatternSubjectShape = {
+  readonly __caslSubjectType__: 'Pattern';
+  /** Set on instance rows so orgadmin conditional rules can scope to their org. */
+  createdByOrganisationId?: string | null;
+};
+
 /**
  * The full CASL subject union: either a bare subject name (for class-level
  * rules like `can('create', 'Organisation')`) or a tagged subject shape (for
@@ -178,7 +185,8 @@ export type AppSubject =
   | CategoryAttachmentSubjectShape
   | FeatureFlagSubjectShape
   | ClassificationCategorySubjectShape
-  | TechniqueSubjectShape;
+  | TechniqueSubjectShape
+  | PatternSubjectShape;
 
 /**
  * Tuple type compatible with `MongoAbility<[AppAction, AppSubject]>` from

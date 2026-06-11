@@ -198,6 +198,16 @@
         "types": "./dist/techniques.d.cts",
         "default": "./dist/techniques.cjs"
       }
+    },
+    "./patterns": {
+      "import": {
+        "types": "./dist/patterns.d.ts",
+        "default": "./dist/patterns.js"
+      },
+      "require": {
+        "types": "./dist/patterns.d.cts",
+        "default": "./dist/patterns.cjs"
+      }
     }
   },
   "files": [
