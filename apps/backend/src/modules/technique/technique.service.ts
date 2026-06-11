@@ -412,6 +412,11 @@ export class TechniqueService {
           ? (cat.code as RootCode)
           : null;
       if (rootCode === null) continue;
+      // Defensive narrowing: with Phase 2, RootCode includes pattern roots.
+      // validateCategoryLinks rejects non-technique roots at the API
+      // boundary, but TS can't see that — only thread rows whose root is one
+      // of the three technique buckets.
+      if (!(rootCode in classificationsByRoot)) continue;
       const api: ClassificationCategory = {
         id: cat.id,
         parentId: cat.parentId,
@@ -424,7 +429,7 @@ export class TechniqueService {
         sortOrder: cat.sortOrder,
         isActive: cat.isActive,
       };
-      classificationsByRoot[rootCode].push(api);
+      classificationsByRoot[rootCode as keyof typeof classificationsByRoot].push(api);
       flat.push({ ...api, rootCode });
     }
 

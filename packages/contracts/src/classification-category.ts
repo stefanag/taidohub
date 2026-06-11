@@ -1,11 +1,18 @@
 import { z } from 'zod';
 
 /**
- * Stable handles for the three classification taxonomy roots used by the
- * techniques feature. (Pattern roots — `pattern_type`, `hokei_subtype` —
- * land with Phase 2.)
+ * Stable handles for every classification taxonomy root. The first three are
+ * the technique dimensions (Phase 1); the last two are the pattern dimensions
+ * (Phase 2). Per-kind ALLOWED/REQUIRED narrowing lives in `techniques.ts`
+ * and `patterns.ts`.
  */
-export const ROOT_CODES = ['technique_type', 'sotai_category', 'attack_type'] as const;
+export const ROOT_CODES = [
+  'technique_type',
+  'sotai_category',
+  'attack_type',
+  'pattern_type',
+  'hokei_subtype',
+] as const;
 export const RootCodeSchema = z.enum(ROOT_CODES);
 export type RootCode = z.infer<typeof RootCodeSchema>;
 
