@@ -4320,6 +4320,155 @@
         ]
       }
     },
+    "/api/patterns": {
+      "get": {
+        "operationId": "PatternController_list",
+        "parameters": [
+          {
+            "name": "classificationIds",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "includeInactive",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "organisationId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "strictClassificationIds",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "patterns"
+        ]
+      },
+      "post": {
+        "operationId": "PatternController_create",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "patterns"
+        ]
+      }
+    },
+    "/api/patterns/{id}": {
+      "get": {
+        "operationId": "PatternController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "patterns"
+        ]
+      },
+      "patch": {
+        "operationId": "PatternController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "patterns"
+        ]
+      },
+      "delete": {
+        "operationId": "PatternController_delete",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "patterns"
+        ]
+      }
+    },
     "/api/feature-flags": {
       "get": {
         "operationId": "FeatureFlagsPublicController_resolveMap",
@@ -12851,6 +13000,15 @@
       },
       "UpdateTechniqueInput": {
         "$ref": "#/components/schemas/UpdateTechniqueInput"
+      },
+      "Pattern": {
+        "$ref": "#/components/schemas/Pattern"
+      },
+      "CreatePatternInput": {
+        "$ref": "#/components/schemas/CreatePatternInput"
+      },
+      "UpdatePatternInput": {
+        "$ref": "#/components/schemas/UpdatePatternInput"
       }
     }
   }

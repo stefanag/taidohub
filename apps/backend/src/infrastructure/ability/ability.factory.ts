@@ -9,6 +9,7 @@ import { ClassificationCategoryAbilityRules } from '../../modules/classification
 import { FeatureFlagsAbilityRules } from '../../modules/feature-flags/feature-flags.ability-rules.js';
 import { LabelsAbilityRules } from '../../modules/labels/labels.ability-rules.js';
 import { OrganisationsAbilityRules } from '../../modules/organisations/organisations.abilities.js';
+import { PatternAbilityRules } from '../../modules/pattern/pattern.ability-rules.js';
 import { TechniqueAbilityRules } from '../../modules/technique/technique.ability-rules.js';
 import { UsersAbilityRules } from '../../modules/users/users.abilities.js';
 import { MembershipsAbilityRules } from '../../modules/memberships/memberships.abilities.js';
@@ -41,6 +42,7 @@ export class AbilityFactory {
     @Optional() featureFlagsRules?: FeatureFlagsAbilityRules,
     @Optional() classificationCategoryRules?: ClassificationCategoryAbilityRules,
     @Optional() techniqueRules?: TechniqueAbilityRules,
+    @Optional() private readonly patternRules?: PatternAbilityRules,
   ) {
     this.contributors = [
       usersRules,
@@ -53,6 +55,7 @@ export class AbilityFactory {
       ...(featureFlagsRules ? [featureFlagsRules] : []),
       ...(classificationCategoryRules ? [classificationCategoryRules] : []),
       ...(techniqueRules ? [techniqueRules] : []),
+      ...(this.patternRules ? [this.patternRules] : []),
     ];
   }
 
