@@ -22,6 +22,7 @@ import { MembershipsModule } from './modules/memberships/memberships.module.js';
 import { OrganisationsModule } from './modules/organisations/organisations.module.js';
 import { PatternModule } from './modules/pattern/pattern.module.js';
 import { ProfileModule } from './modules/profile/profile.module.js';
+import { ProgressModule } from './modules/progress/progress.module.js';
 import { TechniqueModule } from './modules/technique/technique.module.js';
 import { UserImpersonationModule } from './modules/user-impersonation/user-impersonation.module.js';
 import { UsersModule } from './modules/users/users.module.js';
@@ -47,6 +48,7 @@ import { UsersModule } from './modules/users/users.module.js';
     ClassificationCategoryModule,
     TechniqueModule,
     PatternModule,
+    ProgressModule,
     FeatureFlagsModule,
     UserImpersonationModule,
   ],

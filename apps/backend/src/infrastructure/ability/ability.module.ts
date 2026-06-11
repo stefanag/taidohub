@@ -10,6 +10,7 @@ import { LabelsAbilityRules } from '../../modules/labels/labels.ability-rules.js
 import { MembershipsAbilityRules } from '../../modules/memberships/memberships.abilities.js';
 import { OrganisationsAbilityRules } from '../../modules/organisations/organisations.abilities.js';
 import { PatternAbilityRules } from '../../modules/pattern/pattern.ability-rules.js';
+import { ProgressAbilityRules } from '../../modules/progress/progress.ability-rules.js';
 import { TechniqueAbilityRules } from '../../modules/technique/technique.ability-rules.js';
 import { UsersAbilityRules } from '../../modules/users/users.abilities.js';
 
@@ -41,6 +42,7 @@ import { AbilityGuard } from './ability.guard.js';
     MembershipsAbilityRules,
     OrganisationsAbilityRules,
     PatternAbilityRules,
+    ProgressAbilityRules,
     TechniqueAbilityRules,
     UsersAbilityRules,
     AbilityFactory,

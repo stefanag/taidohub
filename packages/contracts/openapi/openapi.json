@@ -4469,6 +4469,194 @@
         ]
       }
     },
+    "/api/progress": {
+      "get": {
+        "operationId": "ProgressController_list",
+        "parameters": [
+          {
+            "name": "contentType",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "progress"
+        ]
+      }
+    },
+    "/api/progress/techniques/{id}": {
+      "get": {
+        "operationId": "ProgressController_getTechnique",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "progress"
+        ]
+      },
+      "put": {
+        "operationId": "ProgressController_upsertTechnique",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "progress"
+        ]
+      },
+      "delete": {
+        "operationId": "ProgressController_deleteTechnique",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "progress"
+        ]
+      }
+    },
+    "/api/progress/patterns/{id}": {
+      "get": {
+        "operationId": "ProgressController_getPattern",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "progress"
+        ]
+      },
+      "put": {
+        "operationId": "ProgressController_upsertPattern",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "progress"
+        ]
+      },
+      "delete": {
+        "operationId": "ProgressController_deletePattern",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "progress"
+        ]
+      }
+    },
     "/api/feature-flags": {
       "get": {
         "operationId": "FeatureFlagsPublicController_resolveMap",
@@ -13009,6 +13197,12 @@
       },
       "UpdatePatternInput": {
         "$ref": "#/components/schemas/UpdatePatternInput"
+      },
+      "Progress": {
+        "$ref": "#/components/schemas/Progress"
+      },
+      "UpsertProgressInput": {
+        "$ref": "#/components/schemas/UpsertProgressInput"
       }
     }
   }
