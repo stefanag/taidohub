@@ -111,3 +111,7 @@ export {
 export { BeltGraphic, type BeltGraphicProps } from './belt-graphic/index.js';
 export { BeltBadge, type BeltBadgeProps } from './belt-badge/index.js';
 export * from './rich-text/index.js';
+export {
+  ClassificationMultiSelect,
+  type ClassificationMultiSelectProps,
+} from './classification-multi-select.js';
