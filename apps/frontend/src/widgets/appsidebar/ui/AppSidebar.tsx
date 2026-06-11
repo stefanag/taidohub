@@ -1,5 +1,5 @@
 import { Link, useRouterState } from '@tanstack/react-router';
-import { Award, Building2, Flag, History, LayoutDashboard, ScrollText, Swords, Tag, UserRound, Users, Wrench } from 'lucide-react';
+import { Award, BookOpen, Building2, Flag, History, LayoutDashboard, LibraryBig, ScrollText, Swords, Tag, UserRound, Users, Wrench } from 'lucide-react';
 import * as React from 'react';
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -31,6 +31,7 @@ const NAV = [
   { to: '/profile', icon: UserRound, labelKey: 'nav.profile' as const },
   { to: '/grading-history', icon: ScrollText, labelKey: 'nav.gradingHistory' as const },
   { to: '/techniques', icon: Swords, labelKey: 'nav.techniques' as const },
+  { to: '/patterns', icon: BookOpen, labelKey: 'nav.patterns' as const },
 ] as const;
 
 export function AppSidebar(): React.ReactElement {
@@ -141,6 +142,19 @@ export function AppSidebar(): React.ReactElement {
                       <Link to="/admin/techniques">
                         <Wrench />
                         <span>{t('nav.adminTechniques')}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ) : null}
+                {ability?.can('create', 'Pattern') ? (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={pathname.startsWith('/admin/patterns')}
+                    >
+                      <Link to="/admin/patterns">
+                        <LibraryBig />
+                        <span>{t('nav.adminPatterns')}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
