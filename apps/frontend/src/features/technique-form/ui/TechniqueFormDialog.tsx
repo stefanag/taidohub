@@ -159,7 +159,7 @@ export function TechniqueFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="md:min-h-[40rem] md:grid-rows-[auto_1fr] max-w-3xl">
+      <DialogContent className="max-h-[85vh] grid-rows-[auto_minmax(0,1fr)] max-w-3xl">
         <DialogHeader>
           <DialogTitle>
             {isEdit
@@ -170,7 +170,7 @@ export function TechniqueFormDialog({
           </DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
+        <form onSubmit={onSubmit} className="flex flex-col gap-4 overflow-y-auto pr-1" noValidate>
           <ClassificationMultiSelect
             options={typeOpts.data ?? []}
             isPending={typeOpts.isPending}
