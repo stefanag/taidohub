@@ -42,8 +42,10 @@
     "adminBeltCatalog": "Vyökatalogi",
     "adminLabels": "Tunnisteet",
     "adminFeatureFlags": "Ominaisuusliput",
+    "adminTechniques": "Tekniikat",
     "adminUsers": "Käyttäjät",
     "gradingHistory": "Vyökoehistoria",
+    "techniques": "Tekniikat",
     "profile": "Oma profiili",
     "settings": "Asetukset",
     "language": "Kieli"
@@ -137,6 +139,39 @@
       "clearsVerification": "Tallentaminen poistaa varmistuksen, jonka {{name}} teki {{date}}."
     }
   },
+  "techniques": {
+    "title": "Tekniikat",
+    "description": "Selaa tekniikkaluetteloa. Suodata tyypin, sotain tai hyökkäystyypin mukaan.",
+    "empty": "Mikään tekniikka ei vastaa valittuja suodattimia.",
+    "filters": {
+      "all": "Kaikki",
+      "techniqueType": "Tekniikkatyyppi",
+      "sotaiCategory": "Sotai",
+      "attackType": "Hyökkäystyyppi",
+      "clear": "Tyhjennä suodattimet"
+    },
+    "form": {
+      "title": "Muokkaa tekniikkaa",
+      "newTitle": "Uusi tekniikka",
+      "nameRomaji": "Nimi (romaji)",
+      "nameJa": "Nimi (ja)",
+      "nameSv": "Nimi (sv)",
+      "nameEn": "Nimi (en)",
+      "nameFi": "Nimi (fi)",
+      "descriptionSv": "Kuvaus (sv)",
+      "descriptionEn": "Kuvaus (en)",
+      "descriptionFi": "Kuvaus (fi)",
+      "isKihon": "Kihon",
+      "minRank": "Vähimmäisarvo",
+      "sortOrder": "Järjestys",
+      "isActive": "Aktiivinen"
+    },
+    "errors": {
+      "missingRequiredCategory": "Vähintään yksi tekniikkatyyppi vaaditaan.",
+      "invalidCategory": "Virheellinen kategoriavalinta.",
+      "requiresRomaji": "Nimi (romaji) vaaditaan."
+    }
+  },
   "home": {
     "tagline": "Feature-Sliced Design -pohja Vite + React + TypeScript -sovellukselle, joka on kytketty NestJS-taustaan typitetyn `@repo/contracts`-HTTP-rajapinnan kautta."
   },
@@ -153,6 +188,13 @@
       "lastUpdated": "Viimeksi päivitetty",
       "on": "Päällä",
       "off": "Pois"
+    },
+    "techniques": {
+      "title": "Hallitse tekniikoita",
+      "description": "Luo, muokkaa ja poista tekniikoita. Organisaation ylläpitäjät hallinnoivat oman organisaationsa kohteita; sysadminit hallinnoivat globaaleja.",
+      "newTechnique": "Uusi tekniikka",
+      "editTechnique": "Muokkaa tekniikkaa",
+      "deleteConfirm": "Poistetaanko tämä tekniikka? Tätä ei voi peruuttaa."
     },
     "organisations": {
       "title": "Organisaatiot",

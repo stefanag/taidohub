@@ -1,20 +1,18 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useClassificationCategoriesByRootQuery } from '@/entities/classification-category';
-import type {
-  ClassificationCategory,
-  RootCode,
-} from '@repo/contracts/classification-category';
+import type { ClassificationCategory } from '@repo/contracts/classification-category';
 
 import { Button } from './button.js';
 import { Label } from './label.js';
 
 /**
- * A flex-wrapped, chip-style multi-selector backed by the
- * classification-category taxonomy for a single root.
+ * A flex-wrapped, chip-style multi-selector backed by a list of taxonomy
+ * options. The caller fetches the options (typically via
+ * `useClassificationCategoriesByRootQuery(rootCode)`) and passes them in;
+ * this primitive stays pure-presentational so the `shared` layer keeps no
+ * dependency on the `entities` layer.
  *
- * - Reads `useClassificationCategoriesByRootQuery(rootCode)` internally.
  * - Active options are always visible. Inactive options are hidden by default
  *   but remain visible when present in `selectedIds` so an admin editing a
  *   historical row keeps the chip rather than silently dropping the link.
@@ -23,7 +21,10 @@ import { Label } from './label.js';
  * - `aria-pressed` reflects selection state for accessibility.
  */
 export interface ClassificationMultiSelectProps {
-  rootCode: RootCode;
+  /** Available options from the matching root. Caller fetches them. */
+  options: ClassificationCategory[];
+  /** Optional loading indicator — caller can pass it through from React Query. */
+  isPending?: boolean;
   selectedIds: string[];
   onChange: (next: string[]) => void;
   /** Visual label rendered above the chip row. */
@@ -48,7 +49,8 @@ function pickLocalisedName(
 }
 
 export function ClassificationMultiSelect({
-  rootCode,
+  options: rawOptions,
+  isPending = false,
   selectedIds,
   onChange,
   label,
@@ -60,13 +62,10 @@ export function ClassificationMultiSelect({
   const lang: SupportedLang =
     resolved === 'sv' || resolved === 'fi' ? resolved : 'en';
 
-  const { data, isPending } = useClassificationCategoriesByRootQuery(rootCode);
-
   const options = React.useMemo<ClassificationCategory[]>(() => {
-    const all = data ?? [];
     const selected = new Set(selectedIds);
-    return all.filter((opt) => opt.isActive || selected.has(opt.id));
-  }, [data, selectedIds]);
+    return rawOptions.filter((opt) => opt.isActive || selected.has(opt.id));
+  }, [rawOptions, selectedIds]);
 
   const toggle = React.useCallback(
     (id: string) => {

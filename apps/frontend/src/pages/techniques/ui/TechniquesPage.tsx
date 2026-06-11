@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import type { ClassificationCategory } from '@repo/contracts/classification-category';
 import type { Technique } from '@repo/contracts/techniques';
 
+import { useClassificationCategoriesByRootQuery } from '@/entities/classification-category';
 import { useTechniquesQuery } from '@/entities/technique';
 import { ClassificationMultiSelect } from '@/shared/ui';
 
@@ -64,6 +65,10 @@ export function TechniquesPage(): React.ReactElement {
   const lang: SupportedLang =
     resolved === 'sv' || resolved === 'fi' ? resolved : 'en';
 
+  const typeOpts = useClassificationCategoriesByRootQuery('technique_type');
+  const sotaiOpts = useClassificationCategoriesByRootQuery('sotai_category');
+  const attackOpts = useClassificationCategoriesByRootQuery('attack_type');
+
   return (
     <main className="container py-8">
       <h1 className="text-2xl font-semibold tracking-tight">
@@ -78,19 +83,22 @@ export function TechniquesPage(): React.ReactElement {
         className="mt-6 space-y-3"
       >
         <ClassificationMultiSelect
-          rootCode="technique_type"
+          options={typeOpts.data ?? []}
+          isPending={typeOpts.isPending}
           selectedIds={typeIds}
           onChange={setTypeIds}
           label={t('techniques.filters.techniqueType')}
         />
         <ClassificationMultiSelect
-          rootCode="sotai_category"
+          options={sotaiOpts.data ?? []}
+          isPending={sotaiOpts.isPending}
           selectedIds={sotaiIds}
           onChange={setSotaiIds}
           label={t('techniques.filters.sotaiCategory')}
         />
         <ClassificationMultiSelect
-          rootCode="attack_type"
+          options={attackOpts.data ?? []}
+          isPending={attackOpts.isPending}
           selectedIds={attackIds}
           onChange={setAttackIds}
           label={t('techniques.filters.attackType')}

@@ -116,7 +116,7 @@ describe('<AdminTechniquesPage>', () => {
     renderPage();
     // "New technique" key falls back to its raw path until Task 12 seeds it.
     expect(
-      screen.getByRole('button', { name: /admin\.techniques\.newTechnique/i }),
+      screen.getByRole('button', { name: /new technique|ny teknik|uusi tekniikka/i }),
     ).toBeInTheDocument();
     // Filter pickers — one chip per rootCode.
     expect(
@@ -136,7 +136,7 @@ describe('<AdminTechniquesPage>', () => {
     const user = userEvent.setup();
     renderPage();
     await user.click(
-      screen.getByRole('button', { name: /admin\.techniques\.newTechnique/i }),
+      screen.getByRole('button', { name: /new technique|ny teknik|uusi tekniikka/i }),
     );
     // The dialog's "Save" button only mounts when the dialog opens. Its label
     // resolves through i18n fallbacks (en/sv/fi) so accept any of them.

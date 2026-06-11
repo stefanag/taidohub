@@ -14,16 +14,16 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as PublicIndexRouteImport } from './routes/_public.index'
 import { Route as PublicSetPasswordRouteImport } from './routes/_public.set-password'
 import { Route as PublicLoginRouteImport } from './routes/_public.login'
-import { Route as AppSettingsRouteImport } from './routes/_app.settings'
 import { Route as AppTechniquesRouteImport } from './routes/_app.techniques'
+import { Route as AppSettingsRouteImport } from './routes/_app.settings'
 import { Route as AppProfileRouteImport } from './routes/_app.profile'
 import { Route as AppGradingHistoryRouteImport } from './routes/_app.grading-history'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
 import { Route as PublicRanksSlugRouteImport } from './routes/_public.ranks.$slug'
 import { Route as AppSettingsLabelsRouteImport } from './routes/_app.settings.labels'
 import { Route as AppAdminUsersRouteImport } from './routes/_app.admin.users'
-import { Route as AppAdminOrganisationsRouteImport } from './routes/_app.admin.organisations'
 import { Route as AppAdminTechniquesRouteImport } from './routes/_app.admin.techniques'
+import { Route as AppAdminOrganisationsRouteImport } from './routes/_app.admin.organisations'
 import { Route as AppAdminLabelsRouteImport } from './routes/_app.admin.labels'
 import { Route as AppAdminFeatureFlagsRouteImport } from './routes/_app.admin.feature-flags'
 import { Route as AppAdminBeltCatalogRouteImport } from './routes/_app.admin.belt-catalog'
@@ -52,6 +52,11 @@ const PublicLoginRoute = PublicLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => PublicRoute,
 } as any)
+const AppTechniquesRoute = AppTechniquesRouteImport.update({
+  id: '/techniques',
+  path: '/techniques',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppSettingsRoute = AppSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -72,11 +77,6 @@ const AppDashboardRoute = AppDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AppRoute,
 } as any)
-const AppTechniquesRoute = AppTechniquesRouteImport.update({
-  id: '/techniques',
-  path: '/techniques',
-  getParentRoute: () => AppRoute,
-} as any)
 const PublicRanksSlugRoute = PublicRanksSlugRouteImport.update({
   id: '/ranks/$slug',
   path: '/ranks/$slug',
@@ -92,6 +92,11 @@ const AppAdminUsersRoute = AppAdminUsersRouteImport.update({
   path: '/admin/users',
   getParentRoute: () => AppRoute,
 } as any)
+const AppAdminTechniquesRoute = AppAdminTechniquesRouteImport.update({
+  id: '/admin/techniques',
+  path: '/admin/techniques',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppAdminOrganisationsRoute = AppAdminOrganisationsRouteImport.update({
   id: '/admin/organisations',
   path: '/admin/organisations',
@@ -100,11 +105,6 @@ const AppAdminOrganisationsRoute = AppAdminOrganisationsRouteImport.update({
 const AppAdminLabelsRoute = AppAdminLabelsRouteImport.update({
   id: '/admin/labels',
   path: '/admin/labels',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppAdminTechniquesRoute = AppAdminTechniquesRouteImport.update({
-  id: '/admin/techniques',
-  path: '/admin/techniques',
   getParentRoute: () => AppRoute,
 } as any)
 const AppAdminFeatureFlagsRoute = AppAdminFeatureFlagsRouteImport.update({
@@ -287,6 +287,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicLoginRouteImport
       parentRoute: typeof PublicRoute
     }
+    '/_app/techniques': {
+      id: '/_app/techniques'
+      path: '/techniques'
+      fullPath: '/techniques'
+      preLoaderRoute: typeof AppTechniquesRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/settings': {
       id: '/_app/settings'
       path: '/settings'
@@ -315,13 +322,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDashboardRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/techniques': {
-      id: '/_app/techniques'
-      path: '/techniques'
-      fullPath: '/techniques'
-      preLoaderRoute: typeof AppTechniquesRouteImport
-      parentRoute: typeof AppRoute
-    }
     '/_public/ranks/$slug': {
       id: '/_public/ranks/$slug'
       path: '/ranks/$slug'
@@ -343,6 +343,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdminUsersRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/admin/techniques': {
+      id: '/_app/admin/techniques'
+      path: '/admin/techniques'
+      fullPath: '/admin/techniques'
+      preLoaderRoute: typeof AppAdminTechniquesRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/admin/organisations': {
       id: '/_app/admin/organisations'
       path: '/admin/organisations'
@@ -355,13 +362,6 @@ declare module '@tanstack/react-router' {
       path: '/admin/labels'
       fullPath: '/admin/labels'
       preLoaderRoute: typeof AppAdminLabelsRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/admin/techniques': {
-      id: '/_app/admin/techniques'
-      path: '/admin/techniques'
-      fullPath: '/admin/techniques'
-      preLoaderRoute: typeof AppAdminTechniquesRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/admin/feature-flags': {

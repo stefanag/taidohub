@@ -1,7 +1,8 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { fireEvent, render, screen } from '@testing-library/react';
 import * as React from 'react';
 import { describe, expect, it, vi } from 'vitest';
+
+import { ClassificationMultiSelect } from './classification-multi-select.js';
 
 const mockOptions = [
   {
@@ -30,33 +31,21 @@ const mockOptions = [
   },
 ];
 
-vi.mock('@/entities/classification-category', () => ({
-  useClassificationCategoriesByRootQuery: () => ({
-    data: mockOptions,
-    isPending: false,
-  }),
-}));
-
-import { ClassificationMultiSelect } from './classification-multi-select.js';
-
 function setup(selectedIds: string[] = []) {
   const onChange = vi.fn();
-  const qc = new QueryClient();
   render(
-    <QueryClientProvider client={qc}>
-      <ClassificationMultiSelect
-        rootCode="attack_type"
-        selectedIds={selectedIds}
-        onChange={onChange}
-        label="Attack type"
-      />
-    </QueryClientProvider>,
+    <ClassificationMultiSelect
+      options={mockOptions}
+      selectedIds={selectedIds}
+      onChange={onChange}
+      label="Attack type"
+    />,
   );
   return { onChange };
 }
 
 describe('<ClassificationMultiSelect>', () => {
-  it('renders chips from the hook (active options only by default)', () => {
+  it('renders chips from the supplied options (active only by default)', () => {
     setup([]);
     expect(screen.getByRole('button', { name: /^Kick$/i })).toBeInTheDocument();
     expect(

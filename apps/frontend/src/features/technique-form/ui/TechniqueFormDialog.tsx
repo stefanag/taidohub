@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useClassificationCategoriesByRootQuery } from '@/entities/classification-category';
 import {
   useCreateTechniqueMutation,
   useUpdateTechniqueMutation,
@@ -51,6 +52,10 @@ export function TechniqueFormDialog({
 }: TechniqueFormDialogProps): React.ReactElement {
   const { t } = useTranslation();
   const isEdit = !!technique;
+
+  const typeOpts = useClassificationCategoriesByRootQuery(ROOT_TECHNIQUE_TYPE);
+  const sotaiOpts = useClassificationCategoriesByRootQuery(ROOT_SOTAI);
+  const attackOpts = useClassificationCategoriesByRootQuery(ROOT_ATTACK);
 
   const initialByRoot = React.useCallback(
     (root: 'technique_type' | 'sotai_category' | 'attack_type'): string[] =>
@@ -167,7 +172,8 @@ export function TechniqueFormDialog({
 
         <form onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
           <ClassificationMultiSelect
-            rootCode={ROOT_TECHNIQUE_TYPE}
+            options={typeOpts.data ?? []}
+            isPending={typeOpts.isPending}
             selectedIds={typeIds}
             onChange={setTypeIds}
             label={t('techniques.filters.techniqueType', {
@@ -176,7 +182,8 @@ export function TechniqueFormDialog({
             required
           />
           <ClassificationMultiSelect
-            rootCode={ROOT_SOTAI}
+            options={sotaiOpts.data ?? []}
+            isPending={sotaiOpts.isPending}
             selectedIds={sotaiIds}
             onChange={setSotaiIds}
             label={t('techniques.filters.sotaiCategory', {
@@ -184,7 +191,8 @@ export function TechniqueFormDialog({
             })}
           />
           <ClassificationMultiSelect
-            rootCode={ROOT_ATTACK}
+            options={attackOpts.data ?? []}
+            isPending={attackOpts.isPending}
             selectedIds={attackIds}
             onChange={setAttackIds}
             label={t('techniques.filters.attackType', {

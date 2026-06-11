@@ -42,8 +42,10 @@
     "adminBeltCatalog": "Beltkatalog",
     "adminLabels": "Etiketter",
     "adminFeatureFlags": "Funktionsflaggor",
+    "adminTechniques": "Tekniker",
     "adminUsers": "Användare",
     "gradingHistory": "Graderingshistorik",
+    "techniques": "Tekniker",
     "profile": "Min profil",
     "settings": "Inställningar",
     "language": "Språk"
@@ -140,6 +142,39 @@
   "home": {
     "tagline": "En Feature-Sliced Design-mall för en Vite + React + TypeScript-app, kopplad till en NestJS-backend över ett typat `@repo/contracts`-HTTP-gränssnitt."
   },
+  "techniques": {
+    "title": "Tekniker",
+    "description": "Bläddra i teknikkatalogen. Filtrera på typ, sotai eller attacktyp.",
+    "empty": "Inga tekniker matchar de valda filtren.",
+    "filters": {
+      "all": "Alla",
+      "techniqueType": "Tekniktyp",
+      "sotaiCategory": "Sotai",
+      "attackType": "Attacktyp",
+      "clear": "Rensa filter"
+    },
+    "form": {
+      "title": "Redigera teknik",
+      "newTitle": "Ny teknik",
+      "nameRomaji": "Namn (romaji)",
+      "nameJa": "Namn (ja)",
+      "nameSv": "Namn (sv)",
+      "nameEn": "Namn (en)",
+      "nameFi": "Namn (fi)",
+      "descriptionSv": "Beskrivning (sv)",
+      "descriptionEn": "Beskrivning (en)",
+      "descriptionFi": "Beskrivning (fi)",
+      "isKihon": "Kihon",
+      "minRank": "Minsta grad",
+      "sortOrder": "Sorteringsordning",
+      "isActive": "Aktiv"
+    },
+    "errors": {
+      "missingRequiredCategory": "Minst en tekniktyp krävs.",
+      "invalidCategory": "Ogiltigt kategorival.",
+      "requiresRomaji": "Namn (romaji) krävs."
+    }
+  },
   "admin": {
     "title": "Administration",
     "labels": {
@@ -153,6 +188,13 @@
       "lastUpdated": "Senast uppdaterad",
       "on": "På",
       "off": "Av"
+    },
+    "techniques": {
+      "title": "Hantera tekniker",
+      "description": "Skapa, redigera och ta bort tekniker. Org-admins hanterar sin organisations poster; sysadmins hanterar globala.",
+      "newTechnique": "Ny teknik",
+      "editTechnique": "Redigera teknik",
+      "deleteConfirm": "Ta bort denna teknik? Detta kan inte ångras."
     },
     "organisations": {
       "title": "Organisationer",
