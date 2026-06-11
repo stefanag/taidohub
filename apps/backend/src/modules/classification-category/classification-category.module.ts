@@ -15,10 +15,13 @@ import { ClassificationCategoryService } from './classification-category.service
  *
  * `ClassificationCategoryService` is exported so `TechniqueModule` can inject
  * it to validate `classificationIds` against the allowed-roots rule.
+ * `ClassificationCategoryRepository` is exported alongside so the technique
+ * service can bulk-resolve linked rows during hydration without re-implementing
+ * the by-ids lookup.
  */
 @Module({
   controllers: [ClassificationCategoryController],
   providers: [ClassificationCategoryRepository, ClassificationCategoryService],
-  exports: [ClassificationCategoryService],
+  exports: [ClassificationCategoryService, ClassificationCategoryRepository],
 })
 export class ClassificationCategoryModule {}
