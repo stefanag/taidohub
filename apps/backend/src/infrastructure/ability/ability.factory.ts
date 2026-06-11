@@ -5,9 +5,11 @@ import { type AuthenticatedUser } from '../auth/auth.types.js';
 
 import { AuditLogAbilityRules } from '../../modules/audit-log/audit-log.abilities.js';
 import { BeltCatalogAbilityRules } from '../../modules/belt-catalog/belt-catalog.abilities.js';
+import { ClassificationCategoryAbilityRules } from '../../modules/classification-category/classification-category.ability-rules.js';
 import { FeatureFlagsAbilityRules } from '../../modules/feature-flags/feature-flags.ability-rules.js';
 import { LabelsAbilityRules } from '../../modules/labels/labels.ability-rules.js';
 import { OrganisationsAbilityRules } from '../../modules/organisations/organisations.abilities.js';
+import { TechniqueAbilityRules } from '../../modules/technique/technique.ability-rules.js';
 import { UsersAbilityRules } from '../../modules/users/users.abilities.js';
 import { MembershipsAbilityRules } from '../../modules/memberships/memberships.abilities.js';
 import { RankHistoryAbilityRules } from '../../modules/rank-history/rank-history.abilities.js';
@@ -37,6 +39,8 @@ export class AbilityFactory {
     @Optional() rankHistoryRules?: RankHistoryAbilityRules,
     @Optional() labelsRules?: LabelsAbilityRules,
     @Optional() featureFlagsRules?: FeatureFlagsAbilityRules,
+    @Optional() classificationCategoryRules?: ClassificationCategoryAbilityRules,
+    @Optional() techniqueRules?: TechniqueAbilityRules,
   ) {
     this.contributors = [
       usersRules,
@@ -47,6 +51,8 @@ export class AbilityFactory {
       ...(rankHistoryRules ? [rankHistoryRules] : []),
       ...(labelsRules ? [labelsRules] : []),
       ...(featureFlagsRules ? [featureFlagsRules] : []),
+      ...(classificationCategoryRules ? [classificationCategoryRules] : []),
+      ...(techniqueRules ? [techniqueRules] : []),
     ];
   }
 

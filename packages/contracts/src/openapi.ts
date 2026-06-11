@@ -12,6 +12,7 @@ import { AuditLogOpenApiRegistry } from './audit-log.js';
 import { AuthOpenApiRegistry } from './auth.js';
 import { BeltRanksOpenApiRegistry } from './ranks.js';
 import { BeltSystemsOpenApiRegistry } from './belt-systems.js';
+import { ClassificationCategoryOpenApiRegistry } from './classification-category.js';
 import { ErrorEnvelopeOpenApiRegistry } from './errors.js';
 import { FeatureFlagsOpenApiRegistry } from './feature-flags.js';
 import { LabelsOpenApiRegistry } from './labels.js';
@@ -19,6 +20,7 @@ import { OrganisationsOpenApiRegistry } from './organisations.js';
 import { ProfileOpenApiRegistry } from './profile.js';
 import { RankHistoryOpenApiRegistry } from './rank-history.js';
 import { ShogoTitlesOpenApiRegistry } from './shogo-titles.js';
+import { TechniqueOpenApiRegistry } from './techniques.js';
 import { UsersOpenApiRegistry } from './users.js';
 
 /**
@@ -52,6 +54,8 @@ export function registerContractSchemas(
     RankHistoryOpenApiRegistry,
     LabelsOpenApiRegistry,
     FeatureFlagsOpenApiRegistry,
+    ClassificationCategoryOpenApiRegistry,
+    TechniqueOpenApiRegistry,
   ],
 ): OpenAPIObject {
   document.components ??= {};
@@ -89,4 +93,6 @@ export const ContractRegistries = {
   rankHistory: RankHistoryOpenApiRegistry,
   labels: LabelsOpenApiRegistry,
   featureFlags: FeatureFlagsOpenApiRegistry,
+  classificationCategory: ClassificationCategoryOpenApiRegistry,
+  techniques: TechniqueOpenApiRegistry,
 } as const;

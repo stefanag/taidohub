@@ -4107,6 +4107,219 @@
         ]
       }
     },
+    "/api/classification-categories": {
+      "get": {
+        "operationId": "ClassificationCategoryController_list",
+        "parameters": [
+          {
+            "name": "root",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "includeInactive",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "classification-categories"
+        ]
+      }
+    },
+    "/api/classification-categories/{id}": {
+      "patch": {
+        "operationId": "ClassificationCategoryController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "classification-categories"
+        ]
+      }
+    },
+    "/api/techniques": {
+      "get": {
+        "operationId": "TechniqueController_list",
+        "parameters": [
+          {
+            "name": "classificationIds",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "includeInactive",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "organisationId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "strictClassificationIds",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "techniques"
+        ]
+      },
+      "post": {
+        "operationId": "TechniqueController_create",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "techniques"
+        ]
+      }
+    },
+    "/api/techniques/{id}": {
+      "get": {
+        "operationId": "TechniqueController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "techniques"
+        ]
+      },
+      "patch": {
+        "operationId": "TechniqueController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "techniques"
+        ]
+      },
+      "delete": {
+        "operationId": "TechniqueController_delete",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "techniques"
+        ]
+      }
+    },
     "/api/feature-flags": {
       "get": {
         "operationId": "FeatureFlagsPublicController_resolveMap",
@@ -12623,6 +12836,21 @@
       },
       "UpdateFeatureFlagInput": {
         "$ref": "#/components/schemas/UpdateFeatureFlagInput"
+      },
+      "ClassificationCategory": {
+        "$ref": "#/components/schemas/ClassificationCategory"
+      },
+      "UpdateClassificationCategoryInput": {
+        "$ref": "#/components/schemas/UpdateClassificationCategoryInput"
+      },
+      "Technique": {
+        "$ref": "#/components/schemas/Technique"
+      },
+      "CreateTechniqueInput": {
+        "$ref": "#/components/schemas/CreateTechniqueInput"
+      },
+      "UpdateTechniqueInput": {
+        "$ref": "#/components/schemas/UpdateTechniqueInput"
       }
     }
   }
