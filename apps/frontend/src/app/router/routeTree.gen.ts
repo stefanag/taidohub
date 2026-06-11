@@ -15,9 +15,9 @@ import { Route as PublicIndexRouteImport } from './routes/_public.index'
 import { Route as PublicSetPasswordRouteImport } from './routes/_public.set-password'
 import { Route as PublicLoginRouteImport } from './routes/_public.login'
 import { Route as AppTechniquesRouteImport } from './routes/_app.techniques'
-import { Route as AppPatternsRouteImport } from './routes/_app.patterns'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
 import { Route as AppProfileRouteImport } from './routes/_app.profile'
+import { Route as AppPatternsRouteImport } from './routes/_app.patterns'
 import { Route as AppGradingHistoryRouteImport } from './routes/_app.grading-history'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
 import { Route as PublicRanksSlugRouteImport } from './routes/_public.ranks.$slug'
@@ -59,11 +59,6 @@ const AppTechniquesRoute = AppTechniquesRouteImport.update({
   path: '/techniques',
   getParentRoute: () => AppRoute,
 } as any)
-const AppPatternsRoute = AppPatternsRouteImport.update({
-  id: '/patterns',
-  path: '/patterns',
-  getParentRoute: () => AppRoute,
-} as any)
 const AppSettingsRoute = AppSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -72,6 +67,11 @@ const AppSettingsRoute = AppSettingsRouteImport.update({
 const AppProfileRoute = AppProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPatternsRoute = AppPatternsRouteImport.update({
+  id: '/patterns',
+  path: '/patterns',
   getParentRoute: () => AppRoute,
 } as any)
 const AppGradingHistoryRoute = AppGradingHistoryRouteImport.update({
@@ -318,13 +318,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppTechniquesRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/patterns': {
-      id: '/_app/patterns'
-      path: '/patterns'
-      fullPath: '/patterns'
-      preLoaderRoute: typeof AppPatternsRouteImport
-      parentRoute: typeof AppRoute
-    }
     '/_app/settings': {
       id: '/_app/settings'
       path: '/settings'
@@ -337,6 +330,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof AppProfileRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/patterns': {
+      id: '/_app/patterns'
+      path: '/patterns'
+      fullPath: '/patterns'
+      preLoaderRoute: typeof AppPatternsRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/grading-history': {
