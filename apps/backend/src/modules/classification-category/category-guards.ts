@@ -1,25 +1,45 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import type { RootCode } from '@repo/contracts/classification-category';
 import {
+  PATTERN_ALLOWED_ROOTS,
+  PATTERN_REQUIRED_ROOT,
+} from '@repo/contracts/patterns';
+import {
   TECHNIQUE_ALLOWED_ROOTS,
   TECHNIQUE_REQUIRED_ROOT,
 } from '@repo/contracts/techniques';
 
-import type { ClassificationCategoryService } from '../classification-category/classification-category.service.js';
+import type { ClassificationCategoryService } from './classification-category.service.js';
+
+/**
+ * Polymorphic entity kinds that consume the classification-category taxonomy
+ * via a junction table. Each kind defines its own allowed-root whitelist and a
+ * single required root (see `ALLOWED` / `REQUIRED` below).
+ */
+export type GuardKind = 'technique' | 'pattern';
+
+const ALLOWED: Record<GuardKind, readonly RootCode[]> = {
+  technique: TECHNIQUE_ALLOWED_ROOTS,
+  pattern: PATTERN_ALLOWED_ROOTS,
+};
+
+const REQUIRED: Record<GuardKind, RootCode> = {
+  technique: TECHNIQUE_REQUIRED_ROOT,
+  pattern: PATTERN_REQUIRED_ROOT,
+};
 
 /**
  * Validates that a set of `classification_category` ids is acceptable for the
- * given polymorphic entity (currently only `'technique'`).
+ * given polymorphic entity (`technique` or `pattern`).
  *
- * Rules (technique):
+ * Rules (per `kind`):
  *  1. Duplicate ids are deduped before the round-trip.
  *  2. Every id must resolve to an existing row — unknown ids throw
  *     `NotFoundException` with envelope `INVALID_CATEGORY` + `reason: 'not_found'`.
- *  3. Every id's root code must be in {@link TECHNIQUE_ALLOWED_ROOTS} — otherwise
+ *  3. Every id's root code must be in `ALLOWED[kind]` — otherwise
  *     `BadRequestException` with envelope `INVALID_CATEGORY`.
- *  4. At least one id must resolve to {@link TECHNIQUE_REQUIRED_ROOT}
- *     (`technique_type`) — otherwise `BadRequestException` with envelope
- *     `MISSING_REQUIRED_CATEGORY`.
+ *  4. At least one id must resolve to `REQUIRED[kind]` — otherwise
+ *     `BadRequestException` with envelope `MISSING_REQUIRED_CATEGORY`.
  *
  * The envelope shape `{ error: { code, message, details } }` mirrors the rest
  * of the backend (see `feature-flags.service.ts`), and the details payload is
@@ -27,8 +47,10 @@ import type { ClassificationCategoryService } from '../classification-category/c
  */
 export async function validateCategoryLinks(
   classifications: ClassificationCategoryService,
-  args: { classificationIds: string[]; kind: 'technique' },
+  args: { classificationIds: string[]; kind: GuardKind },
 ): Promise<void> {
+  const allowed = ALLOWED[args.kind];
+  const required = REQUIRED[args.kind];
   const dedup = Array.from(new Set(args.classificationIds));
   const roots = await classifications.resolveRootCodes(dedup);
 
@@ -43,26 +65,24 @@ export async function validateCategoryLinks(
         },
       });
     }
-    if (!(TECHNIQUE_ALLOWED_ROOTS as readonly string[]).includes(r)) {
+    if (!(allowed as readonly string[]).includes(r)) {
       throw new BadRequestException({
         error: {
           code: 'INVALID_CATEGORY',
-          message: `Classification ${id} has root '${r}', which is not allowed for techniques.`,
-          details: { offendingId: id, expectedRoots: TECHNIQUE_ALLOWED_ROOTS },
+          message: `Classification ${id} has root '${r}', which is not allowed for ${args.kind}s.`,
+          details: { offendingId: id, expectedRoots: allowed },
         },
       });
     }
   }
 
-  const hasRequired = dedup.some(
-    (id) => roots.get(id) === (TECHNIQUE_REQUIRED_ROOT as RootCode),
-  );
+  const hasRequired = dedup.some((id) => roots.get(id) === required);
   if (!hasRequired) {
     throw new BadRequestException({
       error: {
         code: 'MISSING_REQUIRED_CATEGORY',
-        message: `At least one '${TECHNIQUE_REQUIRED_ROOT}' classification is required.`,
-        details: { requiredRoot: TECHNIQUE_REQUIRED_ROOT },
+        message: `At least one '${required}' classification is required.`,
+        details: { requiredRoot: required },
       },
     });
   }

@@ -1,9 +1,8 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { describe, expect, it, vi } from 'vitest';
 
-import type { ClassificationCategoryService } from '../classification-category/classification-category.service.js';
-
 import { validateCategoryLinks } from './category-guards.js';
+import type { ClassificationCategoryService } from './classification-category.service.js';
 
 function makeSvc(map: Record<string, string | null>): ClassificationCategoryService {
   return {
@@ -82,5 +81,34 @@ describe('validateCategoryLinks (technique)', () => {
         { classificationIds: ['a', 'b', 'c'], kind: 'technique' },
       ),
     ).resolves.toBeUndefined();
+  });
+});
+
+describe('validateCategoryLinks (pattern)', () => {
+  it('passes when ids include the required pattern_type root', async () => {
+    await expect(
+      validateCategoryLinks(makeSvc({ a: 'pattern_type', b: 'hokei_subtype' }), {
+        classificationIds: ['a', 'b'],
+        kind: 'pattern',
+      }),
+    ).resolves.toBeUndefined();
+  });
+
+  it('BadRequest INVALID_CATEGORY when a technique root is supplied to pattern', async () => {
+    await expect(
+      validateCategoryLinks(makeSvc({ a: 'pattern_type', b: 'technique_type' }), {
+        classificationIds: ['a', 'b'],
+        kind: 'pattern',
+      }),
+    ).rejects.toBeInstanceOf(BadRequestException);
+  });
+
+  it('BadRequest MISSING_REQUIRED_CATEGORY when no pattern_type id supplied', async () => {
+    await expect(
+      validateCategoryLinks(makeSvc({ a: 'hokei_subtype' }), {
+        classificationIds: ['a'],
+        kind: 'pattern',
+      }),
+    ).rejects.toBeInstanceOf(BadRequestException);
   });
 });

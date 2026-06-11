@@ -24,9 +24,9 @@ import {
   ClassificationCategoryRepository,
   type ClassificationCategoryRow,
 } from '../classification-category/classification-category.repository.js';
+import { validateCategoryLinks } from '../classification-category/category-guards.js';
 import { ClassificationCategoryService } from '../classification-category/classification-category.service.js';
 
-import { validateCategoryLinks } from './category-guards.js';
 import {
   TechniqueRepository,
   type TechniqueRow,
