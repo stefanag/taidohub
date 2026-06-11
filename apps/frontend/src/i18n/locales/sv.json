@@ -42,9 +42,11 @@
     "adminBeltCatalog": "Beltkatalog",
     "adminLabels": "Etiketter",
     "adminFeatureFlags": "Funktionsflaggor",
+    "adminPatterns": "Mönster",
     "adminTechniques": "Tekniker",
     "adminUsers": "Användare",
     "gradingHistory": "Graderingshistorik",
+    "patterns": "Mönster",
     "techniques": "Tekniker",
     "profile": "Min profil",
     "settings": "Inställningar",
@@ -142,6 +144,38 @@
   "home": {
     "tagline": "En Feature-Sliced Design-mall för en Vite + React + TypeScript-app, kopplad till en NestJS-backend över ett typat `@repo/contracts`-HTTP-gränssnitt."
   },
+  "patterns": {
+    "title": "Mönster",
+    "description": "Bläddra i mönsterkatalogen. Filtrera på mönstertyp och (för hokei) på undertyp.",
+    "empty": "Inga mönster matchar de valda filtren.",
+    "filters": {
+      "all": "Alla",
+      "patternType": "Mönstertyp",
+      "hokeiSubtype": "Hokei-undertyp",
+      "clear": "Rensa filter"
+    },
+    "form": {
+      "title": "Redigera mönster",
+      "newTitle": "Nytt mönster",
+      "nameRomaji": "Namn (romaji)",
+      "nameJa": "Namn (ja)",
+      "nameSv": "Namn (sv)",
+      "nameEn": "Namn (en)",
+      "nameFi": "Namn (fi)",
+      "descriptionSv": "Beskrivning (sv)",
+      "descriptionEn": "Beskrivning (en)",
+      "descriptionFi": "Beskrivning (fi)",
+      "officialBodyOrgId": "Officiell huvudorganisation (uuid)",
+      "minRank": "Minsta grad",
+      "sortOrder": "Sorteringsordning",
+      "isActive": "Aktiv"
+    },
+    "errors": {
+      "missingRequiredCategory": "Minst en mönstertyp krävs.",
+      "invalidCategory": "Ogiltigt kategorival.",
+      "requiresRomaji": "Namn (romaji) krävs."
+    }
+  },
   "techniques": {
     "title": "Tekniker",
     "description": "Bläddra i teknikkatalogen. Filtrera på typ, sotai eller attacktyp.",
@@ -188,6 +222,13 @@
       "lastUpdated": "Senast uppdaterad",
       "on": "På",
       "off": "Av"
+    },
+    "patterns": {
+      "title": "Hantera mönster",
+      "description": "Skapa, redigera och ta bort mönster. Org-admins hanterar sin organisations poster; sysadmins hanterar globala.",
+      "newPattern": "Nytt mönster",
+      "editPattern": "Redigera mönster",
+      "deleteConfirm": "Ta bort detta mönster? Detta kan inte ångras."
     },
     "techniques": {
       "title": "Hantera tekniker",

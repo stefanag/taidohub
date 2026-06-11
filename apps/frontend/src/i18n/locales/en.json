@@ -42,9 +42,11 @@
     "adminBeltCatalog": "Belt catalog",
     "adminLabels": "Labels",
     "adminFeatureFlags": "Feature flags",
+    "adminPatterns": "Patterns",
     "adminTechniques": "Techniques",
     "adminUsers": "Users",
     "gradingHistory": "Grading history",
+    "patterns": "Patterns",
     "techniques": "Techniques",
     "profile": "My profile",
     "settings": "Settings",
@@ -142,6 +144,38 @@
   "home": {
     "tagline": "A Feature-Sliced Design seed for a Vite + React + TypeScript app, wired to a NestJS backend over a typed `@repo/contracts` HTTP boundary."
   },
+  "patterns": {
+    "title": "Patterns",
+    "description": "Browse the pattern catalogue. Filter by pattern type and (for hokei) by subtype.",
+    "empty": "No patterns match the selected filters.",
+    "filters": {
+      "all": "All",
+      "patternType": "Pattern type",
+      "hokeiSubtype": "Hokei subtype",
+      "clear": "Clear filters"
+    },
+    "form": {
+      "title": "Edit pattern",
+      "newTitle": "New pattern",
+      "nameRomaji": "Name (romaji)",
+      "nameJa": "Name (ja)",
+      "nameSv": "Name (sv)",
+      "nameEn": "Name (en)",
+      "nameFi": "Name (fi)",
+      "descriptionSv": "Description (sv)",
+      "descriptionEn": "Description (en)",
+      "descriptionFi": "Description (fi)",
+      "officialBodyOrgId": "Official body organisation (uuid)",
+      "minRank": "Min rank",
+      "sortOrder": "Sort order",
+      "isActive": "Active"
+    },
+    "errors": {
+      "missingRequiredCategory": "At least one Pattern type is required.",
+      "invalidCategory": "Invalid category selection.",
+      "requiresRomaji": "Name (romaji) is required."
+    }
+  },
   "techniques": {
     "title": "Techniques",
     "description": "Browse the technique catalogue. Filter by type, sotai, or attack type.",
@@ -188,6 +222,13 @@
       "lastUpdated": "Last updated",
       "on": "On",
       "off": "Off"
+    },
+    "patterns": {
+      "title": "Manage patterns",
+      "description": "Create, edit and remove patterns. Org admins manage their own org's entries; sysadmins manage globals.",
+      "newPattern": "New pattern",
+      "editPattern": "Edit pattern",
+      "deleteConfirm": "Delete this pattern? This cannot be undone."
     },
     "techniques": {
       "title": "Manage techniques",

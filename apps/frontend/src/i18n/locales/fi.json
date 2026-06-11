@@ -42,9 +42,11 @@
     "adminBeltCatalog": "Vyökatalogi",
     "adminLabels": "Tunnisteet",
     "adminFeatureFlags": "Ominaisuusliput",
+    "adminPatterns": "Kuviot",
     "adminTechniques": "Tekniikat",
     "adminUsers": "Käyttäjät",
     "gradingHistory": "Vyökoehistoria",
+    "patterns": "Kuviot",
     "techniques": "Tekniikat",
     "profile": "Oma profiili",
     "settings": "Asetukset",
@@ -139,6 +141,38 @@
       "clearsVerification": "Tallentaminen poistaa varmistuksen, jonka {{name}} teki {{date}}."
     }
   },
+  "patterns": {
+    "title": "Kuviot",
+    "description": "Selaa kuvioluetteloa. Suodata kuviotyypin ja (hokein osalta) alatyypin mukaan.",
+    "empty": "Mikään kuvio ei vastaa valittuja suodattimia.",
+    "filters": {
+      "all": "Kaikki",
+      "patternType": "Kuviotyyppi",
+      "hokeiSubtype": "Hokei-alatyyppi",
+      "clear": "Tyhjennä suodattimet"
+    },
+    "form": {
+      "title": "Muokkaa kuviota",
+      "newTitle": "Uusi kuvio",
+      "nameRomaji": "Nimi (romaji)",
+      "nameJa": "Nimi (ja)",
+      "nameSv": "Nimi (sv)",
+      "nameEn": "Nimi (en)",
+      "nameFi": "Nimi (fi)",
+      "descriptionSv": "Kuvaus (sv)",
+      "descriptionEn": "Kuvaus (en)",
+      "descriptionFi": "Kuvaus (fi)",
+      "officialBodyOrgId": "Virallinen kattojärjestö (uuid)",
+      "minRank": "Vähimmäisarvo",
+      "sortOrder": "Järjestys",
+      "isActive": "Aktiivinen"
+    },
+    "errors": {
+      "missingRequiredCategory": "Vähintään yksi kuviotyyppi vaaditaan.",
+      "invalidCategory": "Virheellinen kategoriavalinta.",
+      "requiresRomaji": "Nimi (romaji) vaaditaan."
+    }
+  },
   "techniques": {
     "title": "Tekniikat",
     "description": "Selaa tekniikkaluetteloa. Suodata tyypin, sotain tai hyökkäystyypin mukaan.",
@@ -188,6 +222,13 @@
       "lastUpdated": "Viimeksi päivitetty",
       "on": "Päällä",
       "off": "Pois"
+    },
+    "patterns": {
+      "title": "Hallitse kuvioita",
+      "description": "Luo, muokkaa ja poista kuvioita. Organisaation ylläpitäjät hallinnoivat oman organisaationsa kohteita; sysadminit hallinnoivat globaaleja.",
+      "newPattern": "Uusi kuvio",
+      "editPattern": "Muokkaa kuviota",
+      "deleteConfirm": "Poistetaanko tämä kuvio? Tätä ei voi peruuttaa."
     },
     "techniques": {
       "title": "Hallitse tekniikoita",
