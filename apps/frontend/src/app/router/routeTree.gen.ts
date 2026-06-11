@@ -15,6 +15,7 @@ import { Route as PublicIndexRouteImport } from './routes/_public.index'
 import { Route as PublicSetPasswordRouteImport } from './routes/_public.set-password'
 import { Route as PublicLoginRouteImport } from './routes/_public.login'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
+import { Route as AppTechniquesRouteImport } from './routes/_app.techniques'
 import { Route as AppProfileRouteImport } from './routes/_app.profile'
 import { Route as AppGradingHistoryRouteImport } from './routes/_app.grading-history'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
@@ -22,6 +23,7 @@ import { Route as PublicRanksSlugRouteImport } from './routes/_public.ranks.$slu
 import { Route as AppSettingsLabelsRouteImport } from './routes/_app.settings.labels'
 import { Route as AppAdminUsersRouteImport } from './routes/_app.admin.users'
 import { Route as AppAdminOrganisationsRouteImport } from './routes/_app.admin.organisations'
+import { Route as AppAdminTechniquesRouteImport } from './routes/_app.admin.techniques'
 import { Route as AppAdminLabelsRouteImport } from './routes/_app.admin.labels'
 import { Route as AppAdminFeatureFlagsRouteImport } from './routes/_app.admin.feature-flags'
 import { Route as AppAdminBeltCatalogRouteImport } from './routes/_app.admin.belt-catalog'
@@ -70,6 +72,11 @@ const AppDashboardRoute = AppDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AppRoute,
 } as any)
+const AppTechniquesRoute = AppTechniquesRouteImport.update({
+  id: '/techniques',
+  path: '/techniques',
+  getParentRoute: () => AppRoute,
+} as any)
 const PublicRanksSlugRoute = PublicRanksSlugRouteImport.update({
   id: '/ranks/$slug',
   path: '/ranks/$slug',
@@ -95,6 +102,11 @@ const AppAdminLabelsRoute = AppAdminLabelsRouteImport.update({
   path: '/admin/labels',
   getParentRoute: () => AppRoute,
 } as any)
+const AppAdminTechniquesRoute = AppAdminTechniquesRouteImport.update({
+  id: '/admin/techniques',
+  path: '/admin/techniques',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppAdminFeatureFlagsRoute = AppAdminFeatureFlagsRouteImport.update({
   id: '/admin/feature-flags',
   path: '/admin/feature-flags',
@@ -117,6 +129,7 @@ export interface FileRoutesByFullPath {
   '/grading-history': typeof AppGradingHistoryRoute
   '/profile': typeof AppProfileRoute
   '/settings': typeof AppSettingsRouteWithChildren
+  '/techniques': typeof AppTechniquesRoute
   '/login': typeof PublicLoginRoute
   '/set-password': typeof PublicSetPasswordRoute
   '/admin/audit-log': typeof AppAdminAuditLogRoute
@@ -124,6 +137,7 @@ export interface FileRoutesByFullPath {
   '/admin/feature-flags': typeof AppAdminFeatureFlagsRoute
   '/admin/labels': typeof AppAdminLabelsRoute
   '/admin/organisations': typeof AppAdminOrganisationsRoute
+  '/admin/techniques': typeof AppAdminTechniquesRoute
   '/admin/users': typeof AppAdminUsersRoute
   '/settings/labels': typeof AppSettingsLabelsRoute
   '/ranks/$slug': typeof PublicRanksSlugRoute
@@ -134,6 +148,7 @@ export interface FileRoutesByTo {
   '/grading-history': typeof AppGradingHistoryRoute
   '/profile': typeof AppProfileRoute
   '/settings': typeof AppSettingsRouteWithChildren
+  '/techniques': typeof AppTechniquesRoute
   '/login': typeof PublicLoginRoute
   '/set-password': typeof PublicSetPasswordRoute
   '/admin/audit-log': typeof AppAdminAuditLogRoute
@@ -141,6 +156,7 @@ export interface FileRoutesByTo {
   '/admin/feature-flags': typeof AppAdminFeatureFlagsRoute
   '/admin/labels': typeof AppAdminLabelsRoute
   '/admin/organisations': typeof AppAdminOrganisationsRoute
+  '/admin/techniques': typeof AppAdminTechniquesRoute
   '/admin/users': typeof AppAdminUsersRoute
   '/settings/labels': typeof AppSettingsLabelsRoute
   '/ranks/$slug': typeof PublicRanksSlugRoute
@@ -153,6 +169,7 @@ export interface FileRoutesById {
   '/_app/grading-history': typeof AppGradingHistoryRoute
   '/_app/profile': typeof AppProfileRoute
   '/_app/settings': typeof AppSettingsRouteWithChildren
+  '/_app/techniques': typeof AppTechniquesRoute
   '/_public/login': typeof PublicLoginRoute
   '/_public/set-password': typeof PublicSetPasswordRoute
   '/_public/': typeof PublicIndexRoute
@@ -161,6 +178,7 @@ export interface FileRoutesById {
   '/_app/admin/feature-flags': typeof AppAdminFeatureFlagsRoute
   '/_app/admin/labels': typeof AppAdminLabelsRoute
   '/_app/admin/organisations': typeof AppAdminOrganisationsRoute
+  '/_app/admin/techniques': typeof AppAdminTechniquesRoute
   '/_app/admin/users': typeof AppAdminUsersRoute
   '/_app/settings/labels': typeof AppSettingsLabelsRoute
   '/_public/ranks/$slug': typeof PublicRanksSlugRoute
@@ -173,6 +191,7 @@ export interface FileRouteTypes {
     | '/grading-history'
     | '/profile'
     | '/settings'
+    | '/techniques'
     | '/login'
     | '/set-password'
     | '/admin/audit-log'
@@ -180,6 +199,7 @@ export interface FileRouteTypes {
     | '/admin/feature-flags'
     | '/admin/labels'
     | '/admin/organisations'
+    | '/admin/techniques'
     | '/admin/users'
     | '/settings/labels'
     | '/ranks/$slug'
@@ -190,6 +210,7 @@ export interface FileRouteTypes {
     | '/grading-history'
     | '/profile'
     | '/settings'
+    | '/techniques'
     | '/login'
     | '/set-password'
     | '/admin/audit-log'
@@ -197,6 +218,7 @@ export interface FileRouteTypes {
     | '/admin/feature-flags'
     | '/admin/labels'
     | '/admin/organisations'
+    | '/admin/techniques'
     | '/admin/users'
     | '/settings/labels'
     | '/ranks/$slug'
@@ -208,6 +230,7 @@ export interface FileRouteTypes {
     | '/_app/grading-history'
     | '/_app/profile'
     | '/_app/settings'
+    | '/_app/techniques'
     | '/_public/login'
     | '/_public/set-password'
     | '/_public/'
@@ -216,6 +239,7 @@ export interface FileRouteTypes {
     | '/_app/admin/feature-flags'
     | '/_app/admin/labels'
     | '/_app/admin/organisations'
+    | '/_app/admin/techniques'
     | '/_app/admin/users'
     | '/_app/settings/labels'
     | '/_public/ranks/$slug'
@@ -291,6 +315,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDashboardRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/techniques': {
+      id: '/_app/techniques'
+      path: '/techniques'
+      fullPath: '/techniques'
+      preLoaderRoute: typeof AppTechniquesRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_public/ranks/$slug': {
       id: '/_public/ranks/$slug'
       path: '/ranks/$slug'
@@ -324,6 +355,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/labels'
       fullPath: '/admin/labels'
       preLoaderRoute: typeof AppAdminLabelsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/admin/techniques': {
+      id: '/_app/admin/techniques'
+      path: '/admin/techniques'
+      fullPath: '/admin/techniques'
+      preLoaderRoute: typeof AppAdminTechniquesRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/admin/feature-flags': {
@@ -367,11 +405,13 @@ interface AppRouteChildren {
   AppGradingHistoryRoute: typeof AppGradingHistoryRoute
   AppProfileRoute: typeof AppProfileRoute
   AppSettingsRoute: typeof AppSettingsRouteWithChildren
+  AppTechniquesRoute: typeof AppTechniquesRoute
   AppAdminAuditLogRoute: typeof AppAdminAuditLogRoute
   AppAdminBeltCatalogRoute: typeof AppAdminBeltCatalogRoute
   AppAdminFeatureFlagsRoute: typeof AppAdminFeatureFlagsRoute
   AppAdminLabelsRoute: typeof AppAdminLabelsRoute
   AppAdminOrganisationsRoute: typeof AppAdminOrganisationsRoute
+  AppAdminTechniquesRoute: typeof AppAdminTechniquesRoute
   AppAdminUsersRoute: typeof AppAdminUsersRoute
 }
 
@@ -380,11 +420,13 @@ const AppRouteChildren: AppRouteChildren = {
   AppGradingHistoryRoute: AppGradingHistoryRoute,
   AppProfileRoute: AppProfileRoute,
   AppSettingsRoute: AppSettingsRouteWithChildren,
+  AppTechniquesRoute: AppTechniquesRoute,
   AppAdminAuditLogRoute: AppAdminAuditLogRoute,
   AppAdminBeltCatalogRoute: AppAdminBeltCatalogRoute,
   AppAdminFeatureFlagsRoute: AppAdminFeatureFlagsRoute,
   AppAdminLabelsRoute: AppAdminLabelsRoute,
   AppAdminOrganisationsRoute: AppAdminOrganisationsRoute,
+  AppAdminTechniquesRoute: AppAdminTechniquesRoute,
   AppAdminUsersRoute: AppAdminUsersRoute,
 }
 
