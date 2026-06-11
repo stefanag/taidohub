@@ -17,3 +17,4 @@ export * from './feature-flag.js';
 export * from './classification-category.js';
 export * from './technique.js';
 export * from './pattern.js';
+export * from './user-content-progress.js';
