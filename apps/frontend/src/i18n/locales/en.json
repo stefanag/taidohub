@@ -48,6 +48,7 @@
     "gradingHistory": "Grading history",
     "patterns": "Patterns",
     "techniques": "Techniques",
+    "students": "Students",
     "profile": "My profile",
     "settings": "Settings",
     "language": "Language"
@@ -149,13 +150,39 @@
       "competent": "Competent",
       "gradingReady": "Grading ready"
     },
-    "notes": "Notes",
+    "studentNotes": "My notes",
+    "instructorNotes": "Instructor notes",
     "lastPracticed": "Last practiced",
     "save": "Save",
     "reset": "Reset progress",
     "resetConfirm": "Reset progress for this item? Notes and last-practiced date will be lost.",
     "errors": {
       "invalidContent": "This content no longer exists."
+    }
+  },
+  "students": {
+    "title": "Students",
+    "description": "Browse and update progress for students in your organisations.",
+    "empty": "No students yet.",
+    "columns": {
+      "name": "Name",
+      "email": "Email",
+      "organisations": "Organisations",
+      "progress": "Progress"
+    },
+    "summary": {
+      "notStarted": "Not started",
+      "learning": "Learning",
+      "competent": "Competent",
+      "gradingReady": "Grading ready"
+    },
+    "detail": {
+      "title": "{{name}}",
+      "techniques": "Techniques",
+      "patterns": "Patterns"
+    },
+    "errors": {
+      "forbidden": "You don't have access to this student."
     }
   },
   "home": {

@@ -48,6 +48,7 @@
     "gradingHistory": "Graderingshistorik",
     "patterns": "Mönster",
     "techniques": "Tekniker",
+    "students": "Studenter",
     "profile": "Min profil",
     "settings": "Inställningar",
     "language": "Språk"
@@ -149,13 +150,39 @@
       "competent": "Behärskar",
       "gradingReady": "Redo för gradering"
     },
-    "notes": "Anteckningar",
+    "studentNotes": "Mina anteckningar",
+    "instructorNotes": "Instruktörsanteckningar",
     "lastPracticed": "Senast tränat",
     "save": "Spara",
     "reset": "Återställ framsteg",
     "resetConfirm": "Återställ framsteg för detta moment? Anteckningar och datum för senaste träning går förlorade.",
     "errors": {
       "invalidContent": "Detta innehåll finns inte längre."
+    }
+  },
+  "students": {
+    "title": "Studenter",
+    "description": "Bläddra och uppdatera framsteg för studenter i dina organisationer.",
+    "empty": "Inga studenter ännu.",
+    "columns": {
+      "name": "Namn",
+      "email": "E-post",
+      "organisations": "Organisationer",
+      "progress": "Framsteg"
+    },
+    "summary": {
+      "notStarted": "Ej påbörjat",
+      "learning": "Lär sig",
+      "competent": "Behärskar",
+      "gradingReady": "Redo för gradering"
+    },
+    "detail": {
+      "title": "{{name}}",
+      "techniques": "Tekniker",
+      "patterns": "Mönster"
+    },
+    "errors": {
+      "forbidden": "Du har inte åtkomst till denna student."
     }
   },
   "home": {

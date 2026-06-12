@@ -48,6 +48,7 @@
     "gradingHistory": "Vyökoehistoria",
     "patterns": "Kuviot",
     "techniques": "Tekniikat",
+    "students": "Opiskelijat",
     "profile": "Oma profiili",
     "settings": "Asetukset",
     "language": "Kieli"
@@ -214,13 +215,39 @@
       "competent": "Hallitsen",
       "gradingReady": "Valmis arviointiin"
     },
-    "notes": "Muistiinpanot",
+    "studentNotes": "Omat muistiinpanot",
+    "instructorNotes": "Ohjaajan muistiinpanot",
     "lastPracticed": "Viimeksi harjoiteltu",
     "save": "Tallenna",
     "reset": "Nollaa edistyminen",
     "resetConfirm": "Nollataanko edistyminen tälle kohteelle? Muistiinpanot ja viimeisin harjoittelupäivä menetetään.",
     "errors": {
       "invalidContent": "Tätä sisältöä ei enää ole."
+    }
+  },
+  "students": {
+    "title": "Opiskelijat",
+    "description": "Selaa ja päivitä organisaatioidesi opiskelijoiden edistymistä.",
+    "empty": "Ei opiskelijoita vielä.",
+    "columns": {
+      "name": "Nimi",
+      "email": "Sähköposti",
+      "organisations": "Organisaatiot",
+      "progress": "Edistyminen"
+    },
+    "summary": {
+      "notStarted": "Ei aloitettu",
+      "learning": "Opiskelee",
+      "competent": "Hallitsee",
+      "gradingReady": "Valmis arviointiin"
+    },
+    "detail": {
+      "title": "{{name}}",
+      "techniques": "Tekniikat",
+      "patterns": "Kuviot"
+    },
+    "errors": {
+      "forbidden": "Sinulla ei ole pääsyä tähän opiskelijaan."
     }
   },
   "home": {

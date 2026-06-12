@@ -103,10 +103,10 @@ describe('<StudentDetailPage>', () => {
     renderPage();
 
     expect(
-      screen.getByRole('heading', { name: 'students.detail.techniques' }),
+      screen.getByRole('heading', { name: 'Techniques' }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('heading', { name: 'students.detail.patterns' }),
+      screen.getByRole('heading', { name: 'Patterns' }),
     ).toBeInTheDocument();
     expect(screen.getByText('mae geri')).toBeInTheDocument();
     expect(screen.getByText('hokei sho')).toBeInTheDocument();
