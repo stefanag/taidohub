@@ -9,8 +9,10 @@ import {
   useDeletePatternMutation,
   usePatternsQuery,
 } from '@/entities/pattern';
+import { useProgressListQuery } from '@/entities/progress';
 import { PatternFormDialog } from '@/features/pattern-form';
-import { Button, ClassificationMultiSelect } from '@/shared/ui';
+import { ProgressEditorDialog } from '@/features/progress-editor-dialog';
+import { Button, ClassificationMultiSelect, ProgressPill } from '@/shared/ui';
 
 /**
  * Admin pattern catalogue page (sysadmin-only — the route guard layers a
@@ -53,6 +55,22 @@ export function AdminPatternsPage(): React.ReactElement {
   );
   const { data: patterns = [] } = usePatternsQuery(filterIds);
   const deleteMut = useDeletePatternMutation();
+
+  const { data: allProgress = [] } = useProgressListQuery();
+  const progressByPatternId = React.useMemo(
+    () =>
+      new Map(
+        allProgress
+          .filter((p) => p.patternId)
+          .map((p) => [p.patternId as string, p]),
+      ),
+    [allProgress],
+  );
+
+  const [progressEditing, setProgressEditing] = React.useState<{
+    id: string;
+    label: string;
+  } | null>(null);
 
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [editing, setEditing] = React.useState<Pattern | undefined>(undefined);
@@ -123,7 +141,16 @@ export function AdminPatternsPage(): React.ReactElement {
                   {row.classifications.map((c) => c.code).join(' · ')}
                 </div>
               </div>
-              <div className="flex gap-2">
+              <div className="flex items-center gap-2">
+                <ProgressPill
+                  status={progressByPatternId.get(row.id)?.status ?? null}
+                  onClick={() =>
+                    setProgressEditing({
+                      id: row.id,
+                      label: row.nameRomaji,
+                    })
+                  }
+                />
                 <Button
                   variant="outline"
                   size="sm"
@@ -150,6 +177,18 @@ export function AdminPatternsPage(): React.ReactElement {
         onOpenChange={setDialogOpen}
         {...(editing ? { pattern: editing } : {})}
       />
+
+      {progressEditing ? (
+        <ProgressEditorDialog
+          open
+          onOpenChange={(o) => {
+            if (!o) setProgressEditing(null);
+          }}
+          contentType="pattern"
+          contentId={progressEditing.id}
+          contentLabel={progressEditing.label}
+        />
+      ) : null}
     </main>
   );
 }

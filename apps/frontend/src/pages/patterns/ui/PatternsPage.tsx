@@ -6,7 +6,9 @@ import type { Pattern } from '@repo/contracts/patterns';
 
 import { useClassificationCategoriesByRootQuery } from '@/entities/classification-category';
 import { usePatternsQuery } from '@/entities/pattern';
-import { ClassificationMultiSelect } from '@/shared/ui';
+import { useProgressListQuery } from '@/entities/progress';
+import { ProgressEditorDialog } from '@/features/progress-editor-dialog';
+import { ClassificationMultiSelect, ProgressPill } from '@/shared/ui';
 
 /**
  * Read-only student-facing pattern catalogue page. A single required
@@ -74,6 +76,22 @@ export function PatternsPage(): React.ReactElement {
   );
   const { data: patterns = [], isPending } = usePatternsQuery(filterIds);
 
+  const { data: allProgress = [] } = useProgressListQuery();
+  const progressByPatternId = React.useMemo(
+    () =>
+      new Map(
+        allProgress
+          .filter((p) => p.patternId)
+          .map((p) => [p.patternId as string, p]),
+      ),
+    [allProgress],
+  );
+
+  const [editing, setEditing] = React.useState<{
+    id: string;
+    label: string;
+  } | null>(null);
+
   const resolved = (i18n.resolvedLanguage ?? i18n.language ?? 'en').slice(0, 2);
   const lang: SupportedLang =
     resolved === 'sv' || resolved === 'fi' ? resolved : 'en';
@@ -125,6 +143,16 @@ export function PatternsPage(): React.ReactElement {
                   <span className="font-medium">
                     {pickLocalisedPatternName(row, lang)}
                   </span>
+                  <ProgressPill
+                    className="ml-auto"
+                    status={progressByPatternId.get(row.id)?.status ?? null}
+                    onClick={() =>
+                      setEditing({
+                        id: row.id,
+                        label: row.nameRomaji,
+                      })
+                    }
+                  />
                 </div>
                 <div className="mt-2 flex flex-wrap gap-2 text-xs">
                   {row.classifications.map((c) => (
@@ -141,6 +169,18 @@ export function PatternsPage(): React.ReactElement {
           </ul>
         )}
       </section>
+
+      {editing ? (
+        <ProgressEditorDialog
+          open
+          onOpenChange={(o) => {
+            if (!o) setEditing(null);
+          }}
+          contentType="pattern"
+          contentId={editing.id}
+          contentLabel={editing.label}
+        />
+      ) : null}
     </main>
   );
 }

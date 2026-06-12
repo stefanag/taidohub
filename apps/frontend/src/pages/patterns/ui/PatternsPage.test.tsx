@@ -30,6 +30,20 @@ vi.mock('@/entities/classification-category', () => ({
   }),
 }));
 
+// Stub the progress list query — no rows means the pill renders as
+// "not_started" without any network traffic.
+vi.mock('@/entities/progress', () => ({
+  useProgressListQuery: () => ({ data: [], isLoading: false }),
+}));
+
+// Stub the progress editor dialog — the page test only confirms wiring, not
+// the dialog's internals (covered in its own test file). The real dialog
+// would otherwise pull in the Select/DatePicker primitives that need
+// pointer-capture stubs in jsdom.
+vi.mock('@/features/progress-editor-dialog', () => ({
+  ProgressEditorDialog: () => null,
+}));
+
 // Stub the pattern list query — one row with two classifications attached.
 vi.mock('@/entities/pattern', () => ({
   usePatternsQuery: () => ({
