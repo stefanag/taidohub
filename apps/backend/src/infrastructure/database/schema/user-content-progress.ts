@@ -43,7 +43,8 @@ export const userContentProgress = pgTable(
       onDelete: 'cascade',
     }),
     status: text('status').notNull(),
-    notes: text('notes').notNull().default(''),
+    studentNotes: text('student_notes').notNull().default(''),
+    instructorNotes: text('instructor_notes').notNull().default(''),
     lastPracticedAt: date('last_practiced_at', { mode: 'string' }),
     createdAt: timestamp('created_at', { withTimezone: true, mode: 'date' })
       .notNull()
