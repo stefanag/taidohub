@@ -141,6 +141,23 @@
       "clearsVerification": "Att spara tar bort verifieringen av {{name}} från {{date}}."
     }
   },
+  "progress": {
+    "title": "Framsteg",
+    "status": {
+      "notStarted": "Ej påbörjat",
+      "learning": "Lär mig",
+      "competent": "Behärskar",
+      "gradingReady": "Redo för gradering"
+    },
+    "notes": "Anteckningar",
+    "lastPracticed": "Senast tränat",
+    "save": "Spara",
+    "reset": "Återställ framsteg",
+    "resetConfirm": "Återställ framsteg för detta moment? Anteckningar och datum för senaste träning går förlorade.",
+    "errors": {
+      "invalidContent": "Detta innehåll finns inte längre."
+    }
+  },
   "home": {
     "tagline": "En Feature-Sliced Design-mall för en Vite + React + TypeScript-app, kopplad till en NestJS-backend över ett typat `@repo/contracts`-HTTP-gränssnitt."
   },

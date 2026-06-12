@@ -141,6 +141,23 @@
       "clearsVerification": "Saving will clear the verification by {{name}} on {{date}}."
     }
   },
+  "progress": {
+    "title": "Progress",
+    "status": {
+      "notStarted": "Not started",
+      "learning": "Learning",
+      "competent": "Competent",
+      "gradingReady": "Grading ready"
+    },
+    "notes": "Notes",
+    "lastPracticed": "Last practiced",
+    "save": "Save",
+    "reset": "Reset progress",
+    "resetConfirm": "Reset progress for this item? Notes and last-practiced date will be lost.",
+    "errors": {
+      "invalidContent": "This content no longer exists."
+    }
+  },
   "home": {
     "tagline": "A Feature-Sliced Design seed for a Vite + React + TypeScript app, wired to a NestJS backend over a typed `@repo/contracts` HTTP boundary."
   },

@@ -206,6 +206,23 @@
       "requiresRomaji": "Nimi (romaji) vaaditaan."
     }
   },
+  "progress": {
+    "title": "Edistyminen",
+    "status": {
+      "notStarted": "Ei aloitettu",
+      "learning": "Opiskelen",
+      "competent": "Hallitsen",
+      "gradingReady": "Valmis arviointiin"
+    },
+    "notes": "Muistiinpanot",
+    "lastPracticed": "Viimeksi harjoiteltu",
+    "save": "Tallenna",
+    "reset": "Nollaa edistyminen",
+    "resetConfirm": "Nollataanko edistyminen tälle kohteelle? Muistiinpanot ja viimeisin harjoittelupäivä menetetään.",
+    "errors": {
+      "invalidContent": "Tätä sisältöä ei enää ole."
+    }
+  },
   "home": {
     "tagline": "Feature-Sliced Design -pohja Vite + React + TypeScript -sovellukselle, joka on kytketty NestJS-taustaan typitetyn `@repo/contracts`-HTTP-rajapinnan kautta."
   },
