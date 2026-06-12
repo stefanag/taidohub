@@ -12,11 +12,14 @@ import { ProgressService } from './progress.service.js';
  * in `AbilityModule` — re-declaring it here would create a second instance.
  *
  * `ProgressService` is exported so future modules (study programs, dashboards)
- * can depend on it directly.
+ * can depend on it directly. `ProgressRepository` is also exported because
+ * `StudentsModule` (Phase 3.5 — instructor view) injects it directly to
+ * hydrate a student's progress list without round-tripping through
+ * `ProgressService` (which is self-scoped).
  */
 @Module({
   controllers: [ProgressController],
   providers: [ProgressRepository, ProgressService],
-  exports: [ProgressService],
+  exports: [ProgressService, ProgressRepository],
 })
 export class ProgressModule {}
