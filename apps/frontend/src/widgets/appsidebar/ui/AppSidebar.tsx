@@ -1,11 +1,12 @@
 import { Link, useRouterState } from '@tanstack/react-router';
-import { Award, BookOpen, Building2, Flag, History, LayoutDashboard, LibraryBig, ScrollText, Swords, Tag, UserRound, Users, Wrench } from 'lucide-react';
+import { Award, BookOpen, Building2, Flag, GraduationCap, History, LayoutDashboard, LibraryBig, ScrollText, Swords, Tag, UserRound, Users, Wrench } from 'lucide-react';
 import * as React from 'react';
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { NavUser } from './NavUser.js';
 
+import { useMyMembershipsQuery } from '@/entities/me';
 import { AbilityContext } from '@/shared/lib/casl';
 import {
   Logo,
@@ -39,6 +40,13 @@ export function AppSidebar(): React.ReactElement {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const ability = useContext(AbilityContext);
 
+  // Students entry is visible to instructors (org-scoped role from
+  // /api/me/memberships) and to sysadmins (CASL `manage all`). The
+  // membership query is cheap and cached for 5 min by the entity layer.
+  const { data: memberships = [] } = useMyMembershipsQuery();
+  const isInstructor = memberships.some((m) => m.role === 'instructor');
+  const showStudents = isInstructor || ability?.can('manage', 'all') === true;
+
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="px-4 py-3">
@@ -63,6 +71,19 @@ export function AppSidebar(): React.ReactElement {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              {showStudents ? (
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={pathname.startsWith('/students')}
+                  >
+                    <Link to="/students">
+                      <GraduationCap />
+                      <span>{t('nav.students')}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ) : null}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

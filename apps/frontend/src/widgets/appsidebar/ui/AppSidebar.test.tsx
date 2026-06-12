@@ -7,6 +7,13 @@ import i18n from '@/i18n';
 import { AbilityContext, defineAbilityFor } from '@/shared/lib/casl';
 import { SidebarProvider } from '@/shared/ui';
 
+// Stub the memberships query — the sidebar's Students entry reads it. Default
+// to empty so the Students link is hidden for non-instructor cases; tests
+// that need it visible can spy on this mock and override the return value.
+vi.mock('@/entities/me', () => ({
+  useMyMembershipsQuery: () => ({ data: [], isPending: false }),
+}));
+
 // jsdom doesn't implement matchMedia; shadcn's `useIsMobile` hook calls it.
 beforeAll(() => {
   Object.defineProperty(window, 'matchMedia', {

@@ -15,6 +15,8 @@ import { Route as PublicIndexRouteImport } from './routes/_public.index'
 import { Route as PublicSetPasswordRouteImport } from './routes/_public.set-password'
 import { Route as PublicLoginRouteImport } from './routes/_public.login'
 import { Route as AppTechniquesRouteImport } from './routes/_app.techniques'
+import { Route as AppStudentsRouteImport } from './routes/_app.students'
+import { Route as AppStudentsUserIdRouteImport } from './routes/_app.students.$userId'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
 import { Route as AppProfileRouteImport } from './routes/_app.profile'
 import { Route as AppPatternsRouteImport } from './routes/_app.patterns'
@@ -57,6 +59,16 @@ const PublicLoginRoute = PublicLoginRouteImport.update({
 const AppTechniquesRoute = AppTechniquesRouteImport.update({
   id: '/techniques',
   path: '/techniques',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppStudentsRoute = AppStudentsRouteImport.update({
+  id: '/students',
+  path: '/students',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppStudentsUserIdRoute = AppStudentsUserIdRouteImport.update({
+  id: '/students/$userId',
+  path: '/students/$userId',
   getParentRoute: () => AppRoute,
 } as any)
 const AppSettingsRoute = AppSettingsRouteImport.update({
@@ -142,6 +154,8 @@ export interface FileRoutesByFullPath {
   '/patterns': typeof AppPatternsRoute
   '/profile': typeof AppProfileRoute
   '/settings': typeof AppSettingsRouteWithChildren
+  '/students': typeof AppStudentsRoute
+  '/students/$userId': typeof AppStudentsUserIdRoute
   '/techniques': typeof AppTechniquesRoute
   '/login': typeof PublicLoginRoute
   '/set-password': typeof PublicSetPasswordRoute
@@ -163,6 +177,8 @@ export interface FileRoutesByTo {
   '/patterns': typeof AppPatternsRoute
   '/profile': typeof AppProfileRoute
   '/settings': typeof AppSettingsRouteWithChildren
+  '/students': typeof AppStudentsRoute
+  '/students/$userId': typeof AppStudentsUserIdRoute
   '/techniques': typeof AppTechniquesRoute
   '/login': typeof PublicLoginRoute
   '/set-password': typeof PublicSetPasswordRoute
@@ -186,6 +202,8 @@ export interface FileRoutesById {
   '/_app/patterns': typeof AppPatternsRoute
   '/_app/profile': typeof AppProfileRoute
   '/_app/settings': typeof AppSettingsRouteWithChildren
+  '/_app/students': typeof AppStudentsRoute
+  '/_app/students/$userId': typeof AppStudentsUserIdRoute
   '/_app/techniques': typeof AppTechniquesRoute
   '/_public/login': typeof PublicLoginRoute
   '/_public/set-password': typeof PublicSetPasswordRoute
@@ -210,6 +228,8 @@ export interface FileRouteTypes {
     | '/patterns'
     | '/profile'
     | '/settings'
+    | '/students'
+    | '/students/$userId'
     | '/techniques'
     | '/login'
     | '/set-password'
@@ -231,6 +251,8 @@ export interface FileRouteTypes {
     | '/patterns'
     | '/profile'
     | '/settings'
+    | '/students'
+    | '/students/$userId'
     | '/techniques'
     | '/login'
     | '/set-password'
@@ -253,6 +275,8 @@ export interface FileRouteTypes {
     | '/_app/patterns'
     | '/_app/profile'
     | '/_app/settings'
+    | '/_app/students'
+    | '/_app/students/$userId'
     | '/_app/techniques'
     | '/_public/login'
     | '/_public/set-password'
@@ -316,6 +340,20 @@ declare module '@tanstack/react-router' {
       path: '/techniques'
       fullPath: '/techniques'
       preLoaderRoute: typeof AppTechniquesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/students': {
+      id: '/_app/students'
+      path: '/students'
+      fullPath: '/students'
+      preLoaderRoute: typeof AppStudentsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/students/$userId': {
+      id: '/_app/students/$userId'
+      path: '/students/$userId'
+      fullPath: '/students/$userId'
+      preLoaderRoute: typeof AppStudentsUserIdRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/settings': {
@@ -444,6 +482,8 @@ interface AppRouteChildren {
   AppPatternsRoute: typeof AppPatternsRoute
   AppProfileRoute: typeof AppProfileRoute
   AppSettingsRoute: typeof AppSettingsRouteWithChildren
+  AppStudentsRoute: typeof AppStudentsRoute
+  AppStudentsUserIdRoute: typeof AppStudentsUserIdRoute
   AppTechniquesRoute: typeof AppTechniquesRoute
   AppAdminAuditLogRoute: typeof AppAdminAuditLogRoute
   AppAdminBeltCatalogRoute: typeof AppAdminBeltCatalogRoute
@@ -461,6 +501,8 @@ const AppRouteChildren: AppRouteChildren = {
   AppPatternsRoute: AppPatternsRoute,
   AppProfileRoute: AppProfileRoute,
   AppSettingsRoute: AppSettingsRouteWithChildren,
+  AppStudentsRoute: AppStudentsRoute,
+  AppStudentsUserIdRoute: AppStudentsUserIdRoute,
   AppTechniquesRoute: AppTechniquesRoute,
   AppAdminAuditLogRoute: AppAdminAuditLogRoute,
   AppAdminBeltCatalogRoute: AppAdminBeltCatalogRoute,
