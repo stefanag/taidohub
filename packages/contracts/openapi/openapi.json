@@ -4657,6 +4657,212 @@
         ]
       }
     },
+    "/api/me/memberships": {
+      "get": {
+        "operationId": "StudentsController_myMemberships",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "students"
+        ]
+      }
+    },
+    "/api/students": {
+      "get": {
+        "operationId": "StudentsController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "students"
+        ]
+      }
+    },
+    "/api/students/{userId}/progress": {
+      "get": {
+        "operationId": "StudentsController_getStudentProgress",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "students"
+        ]
+      }
+    },
+    "/api/students/{userId}/progress/techniques/{contentId}": {
+      "put": {
+        "operationId": "StudentsController_upsertTechnique",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "contentId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "students"
+        ]
+      },
+      "delete": {
+        "operationId": "StudentsController_deleteTechnique",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "contentId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "students"
+        ]
+      }
+    },
+    "/api/students/{userId}/progress/patterns/{contentId}": {
+      "put": {
+        "operationId": "StudentsController_upsertPattern",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "contentId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "students"
+        ]
+      },
+      "delete": {
+        "operationId": "StudentsController_deletePattern",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "contentId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "students"
+        ]
+      }
+    },
     "/api/feature-flags": {
       "get": {
         "operationId": "FeatureFlagsPublicController_resolveMap",
@@ -13203,6 +13409,12 @@
       },
       "UpsertProgressInput": {
         "$ref": "#/components/schemas/UpsertProgressInput"
+      },
+      "UpsertInstructorProgressInput": {
+        "$ref": "#/components/schemas/UpsertInstructorProgressInput"
+      },
+      "StudentRosterRow": {
+        "$ref": "#/components/schemas/StudentRosterRow"
       }
     }
   }

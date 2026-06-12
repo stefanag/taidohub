@@ -11,6 +11,7 @@ import { MembershipsAbilityRules } from '../../modules/memberships/memberships.a
 import { OrganisationsAbilityRules } from '../../modules/organisations/organisations.abilities.js';
 import { PatternAbilityRules } from '../../modules/pattern/pattern.ability-rules.js';
 import { ProgressAbilityRules } from '../../modules/progress/progress.ability-rules.js';
+import { StudentAbilityRules } from '../../modules/students/students.ability-rules.js';
 import { TechniqueAbilityRules } from '../../modules/technique/technique.ability-rules.js';
 import { UsersAbilityRules } from '../../modules/users/users.abilities.js';
 
@@ -43,6 +44,7 @@ import { AbilityGuard } from './ability.guard.js';
     OrganisationsAbilityRules,
     PatternAbilityRules,
     ProgressAbilityRules,
+    StudentAbilityRules,
     TechniqueAbilityRules,
     UsersAbilityRules,
     AbilityFactory,
