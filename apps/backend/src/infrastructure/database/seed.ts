@@ -16,7 +16,6 @@ import { user } from './schema/index.js';
 import { seedSysadmin, type SeedDeps } from './seed-sysadmin.js';
 import { seedBeltCatalog } from './seeds/belt-catalog.seed.js';
 import { seedOrganisations } from './seeds/organisations.seed.js';
-import { seedShogoTitles } from './seeds/shogo-titles.seed.js';
 
 async function main(): Promise<void> {
   const env: Env = EnvSchema.parse(process.env);
@@ -68,12 +67,9 @@ async function main(): Promise<void> {
   // eslint-disable-next-line no-console
   console.info(
     `[seed] belt catalog: systems(+${belts.systems.inserted}/~${belts.systems.updated}) ` +
-      `ranks(+${belts.ranks.inserted}/~${belts.ranks.updated})`,
+      `ranks(+${belts.ranks.inserted}/~${belts.ranks.updated}) ` +
+      `shogos(+${belts.shogos.inserted}/~${belts.shogos.updated})`,
   );
-
-  const shogos = await seedShogoTitles(db);
-  // eslint-disable-next-line no-console
-  console.info(`[seed] shogo titles: inserted=${shogos.inserted}, updated=${shogos.updated}`);
 }
 
 main().catch((err: unknown) => {
