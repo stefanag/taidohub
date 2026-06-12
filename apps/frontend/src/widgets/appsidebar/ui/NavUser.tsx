@@ -1,5 +1,5 @@
 import { Link, useNavigate } from '@tanstack/react-router';
-import { ChevronsUpDown, Languages, LogOut, Settings } from 'lucide-react';
+import { EllipsisVertical, Languages, LogOut, Settings } from 'lucide-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -82,7 +82,7 @@ export function NavUser(): React.ReactElement | null {
                   <span className="truncate font-medium">{user.email}</span>
                 )}
               </div>
-              <ChevronsUpDown className="ml-auto size-4" />
+              <EllipsisVertical className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
