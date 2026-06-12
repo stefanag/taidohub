@@ -2,9 +2,10 @@
  * Idempotent seeder for the belt catalog (systems + ranks + shogo titles).
  *
  * Resolves natural keys:
- * - `belt_systems` by (organisation_id, code).
+ * - `belt_systems` by (organisation_id, code) — `organisation_id` honored
+ *   from the fixture (null = global, uuid = org-scoped).
  * - `belt_ranks` by (organisation_id, system_id, level), with `system_id`
- *   looked up from the system's code.
+ *   looked up from the system's code scoped to the same organisation_id.
  * - `shogo_titles` by `code`. `min_rank_id` is honored verbatim from the
  *   fixture (nullable since migration 0024).
  *
@@ -15,7 +16,7 @@ import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { and, eq, isNull } from 'drizzle-orm';
+import { and, eq, isNull, type SQL } from 'drizzle-orm';
 
 import { type DrizzleDb } from '../client.js';
 import {
@@ -25,6 +26,8 @@ import {
 } from '../schema/index.js';
 
 interface SeedSystem {
+  id?: string;
+  organisationId?: string | null;
   code: string;
   nameEn: string;
   nameSv: string;
@@ -34,15 +37,22 @@ interface SeedSystem {
 
 interface SeedRank {
   id: string;
+  organisationId?: string | null;
   systemCode: string;
   level: number;
   sortOrder: number;
   nameRomaji: string;
+  nameJa?: string | null;
   nameEn: string;
   nameSv: string;
   nameFi: string;
   beltColor: string;
+  imageUrl?: string | null;
+  descriptionEn?: string | null;
+  descriptionSv?: string | null;
+  descriptionFi?: string | null;
   publiclyVisible: boolean;
+  slug?: string | null;
 }
 
 interface SeedShogo {
@@ -70,6 +80,14 @@ export interface BeltCatalogSeedResult {
   shogos: { inserted: number; updated: number };
 }
 
+function orgScopeOnSystem(orgId: string | null | undefined): SQL {
+  return orgId == null ? isNull(beltSystems.organisationId) : eq(beltSystems.organisationId, orgId);
+}
+
+function orgScopeOnRank(orgId: string | null | undefined): SQL {
+  return orgId == null ? isNull(beltRanks.organisationId) : eq(beltRanks.organisationId, orgId);
+}
+
 export async function seedBeltCatalog(db: DrizzleDb): Promise<BeltCatalogSeedResult> {
   const fixture = JSON.parse(readFileSync(FIXTURE_PATH, 'utf8')) as BeltCatalogSeedJson;
 
@@ -79,13 +97,14 @@ export async function seedBeltCatalog(db: DrizzleDb): Promise<BeltCatalogSeedRes
     shogos: { inserted: 0, updated: 0 },
   };
 
-  // ---- systems (all seeded as global → organisation_id is NULL) ----
+  // ---- systems (resolved by (organisation_id, code)) ----
   for (const sys of fixture.beltSystems) {
+    const orgId = sys.organisationId ?? null;
     const existing = (
       await db
-        .select()
+        .select({ id: beltSystems.id })
         .from(beltSystems)
-        .where(and(isNull(beltSystems.organisationId), eq(beltSystems.code, sys.code)))
+        .where(and(orgScopeOnSystem(orgId), eq(beltSystems.code, sys.code)))
         .limit(1)
     )[0];
     if (existing) {
@@ -102,36 +121,40 @@ export async function seedBeltCatalog(db: DrizzleDb): Promise<BeltCatalogSeedRes
       result.systems.updated += 1;
     } else {
       await db.insert(beltSystems).values({
+        id: sys.id,
         code: sys.code,
         nameEn: sys.nameEn,
         nameSv: sys.nameSv,
         nameFi: sys.nameFi,
-        organisationId: null,
+        organisationId: orgId,
         sortOrder: sys.sortOrder,
       });
       result.systems.inserted += 1;
     }
   }
 
-  // ---- ranks ----
+  // ---- ranks (system_id resolved within the same organisation scope) ----
   for (const rank of fixture.beltRanks) {
+    const orgId = rank.organisationId ?? null;
     const system = (
       await db
         .select({ id: beltSystems.id })
         .from(beltSystems)
-        .where(and(isNull(beltSystems.organisationId), eq(beltSystems.code, rank.systemCode)))
+        .where(and(orgScopeOnSystem(orgId), eq(beltSystems.code, rank.systemCode)))
         .limit(1)
     )[0];
     if (!system) {
-      throw new Error(`Seed error: belt system "${rank.systemCode}" not found for rank "${rank.nameRomaji}".`);
+      throw new Error(
+        `Seed error: belt system "${rank.systemCode}" not found in org ${orgId ?? 'GLOBAL'} for rank "${rank.nameRomaji}".`,
+      );
     }
     const existing = (
       await db
-        .select()
+        .select({ id: beltRanks.id })
         .from(beltRanks)
         .where(
           and(
-            isNull(beltRanks.organisationId),
+            orgScopeOnRank(orgId),
             eq(beltRanks.systemId, system.id),
             eq(beltRanks.level, rank.level),
           ),
@@ -144,11 +167,17 @@ export async function seedBeltCatalog(db: DrizzleDb): Promise<BeltCatalogSeedRes
         .set({
           sortOrder: rank.sortOrder,
           nameRomaji: rank.nameRomaji,
+          nameJa: rank.nameJa ?? null,
           nameEn: rank.nameEn,
           nameSv: rank.nameSv,
           nameFi: rank.nameFi,
           beltColor: rank.beltColor,
+          imageUrl: rank.imageUrl ?? null,
+          descriptionEn: rank.descriptionEn ?? null,
+          descriptionSv: rank.descriptionSv ?? null,
+          descriptionFi: rank.descriptionFi ?? null,
           publiclyVisible: rank.publiclyVisible,
+          slug: rank.slug ?? null,
           updatedAt: new Date(),
         })
         .where(eq(beltRanks.id, existing.id));
@@ -156,16 +185,22 @@ export async function seedBeltCatalog(db: DrizzleDb): Promise<BeltCatalogSeedRes
     } else {
       await db.insert(beltRanks).values({
         id: rank.id,
-        organisationId: null,
+        organisationId: orgId,
         systemId: system.id,
         level: rank.level,
         sortOrder: rank.sortOrder,
         nameRomaji: rank.nameRomaji,
+        nameJa: rank.nameJa ?? null,
         nameEn: rank.nameEn,
         nameSv: rank.nameSv,
         nameFi: rank.nameFi,
         beltColor: rank.beltColor,
+        imageUrl: rank.imageUrl ?? null,
+        descriptionEn: rank.descriptionEn ?? null,
+        descriptionSv: rank.descriptionSv ?? null,
+        descriptionFi: rank.descriptionFi ?? null,
         publiclyVisible: rank.publiclyVisible,
+        slug: rank.slug ?? null,
       });
       result.ranks.inserted += 1;
     }
