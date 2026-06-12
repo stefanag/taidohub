@@ -33,6 +33,7 @@ interface SeedSystem {
 }
 
 interface SeedRank {
+  id: string;
   systemCode: string;
   level: number;
   sortOrder: number;
@@ -154,6 +155,7 @@ export async function seedBeltCatalog(db: DrizzleDb): Promise<BeltCatalogSeedRes
       result.ranks.updated += 1;
     } else {
       await db.insert(beltRanks).values({
+        id: rank.id,
         organisationId: null,
         systemId: system.id,
         level: rank.level,
