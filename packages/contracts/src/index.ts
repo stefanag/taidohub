@@ -29,3 +29,4 @@ export * from './classification-category.js';
 export * from './techniques.js';
 export * from './patterns.js';
 export * from './progress.js';
+export * from './students.js';

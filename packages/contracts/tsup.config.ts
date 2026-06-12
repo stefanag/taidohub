@@ -23,6 +23,7 @@ export default defineConfig({
     techniques: 'src/techniques.ts',
     patterns: 'src/patterns.ts',
     progress: 'src/progress.ts',
+    students: 'src/students.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,

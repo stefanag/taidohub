@@ -22,6 +22,7 @@ import { RankHistoryOpenApiRegistry } from './rank-history.js';
 import { ShogoTitlesOpenApiRegistry } from './shogo-titles.js';
 import { PatternOpenApiRegistry } from './patterns.js';
 import { ProgressOpenApiRegistry } from './progress.js';
+import { StudentsOpenApiRegistry } from './students.js';
 import { TechniqueOpenApiRegistry } from './techniques.js';
 import { UsersOpenApiRegistry } from './users.js';
 
@@ -60,6 +61,7 @@ export function registerContractSchemas(
     TechniqueOpenApiRegistry,
     PatternOpenApiRegistry,
     ProgressOpenApiRegistry,
+    StudentsOpenApiRegistry,
   ],
 ): OpenAPIObject {
   document.components ??= {};
@@ -101,4 +103,5 @@ export const ContractRegistries = {
   techniques: TechniqueOpenApiRegistry,
   patterns: PatternOpenApiRegistry,
   progress: ProgressOpenApiRegistry,
+  students: StudentsOpenApiRegistry,
 } as const;

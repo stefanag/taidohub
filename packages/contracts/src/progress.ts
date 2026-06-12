@@ -17,7 +17,8 @@ export const ProgressSchema = z.object({
   techniqueId: z.string().uuid().nullable(),
   patternId: z.string().uuid().nullable(),
   status: ProgressStatusSchema,
-  notes: z.string(),
+  studentNotes: z.string(),
+  instructorNotes: z.string(),
   lastPracticedAt: IsoDate.nullable(),
   createdAt: z.iso.datetime(),
   updatedAt: z.iso.datetime(),
@@ -31,7 +32,8 @@ export const ProgressSchema = z.object({
     techniqueId: '550e8400-e29b-41d4-a716-446655440001',
     patternId: null,
     status: 'learning',
-    notes: '',
+    studentNotes: '',
+    instructorNotes: '',
     lastPracticedAt: '2026-06-11',
     createdAt: '2026-06-11T00:00:00.000Z',
     updatedAt: '2026-06-11T00:00:00.000Z',
@@ -40,17 +42,28 @@ export const ProgressSchema = z.object({
 
 export const UpsertProgressSchema = z.object({
   status: ProgressStatusSchema,
-  notes: z.string().max(2000).default(''),
+  studentNotes: z.string().max(2000).default(''),
   lastPracticedAt: IsoDate.nullable().optional(),
 }).meta({
   id: 'UpsertProgressInput',
-  description: 'Body for PUT /api/progress/{contentType}/:id. Notes default to empty string. lastPracticedAt is optional.',
+  description: 'Body for self-scoped PUT /api/progress/*. Touches student_notes only.',
+});
+
+export const UpsertInstructorProgressSchema = z.object({
+  status: ProgressStatusSchema,
+  instructorNotes: z.string().max(2000).default(''),
+  lastPracticedAt: IsoDate.nullable().optional(),
+}).meta({
+  id: 'UpsertInstructorProgressInput',
+  description: 'Body for PUT /api/students/:userId/progress/*. Touches instructor_notes only.',
 });
 
 export type Progress = z.infer<typeof ProgressSchema>;
 export type UpsertProgressInput = z.infer<typeof UpsertProgressSchema>;
+export type UpsertInstructorProgressInput = z.infer<typeof UpsertInstructorProgressSchema>;
 
 export const ProgressOpenApiRegistry = {
   Progress: ProgressSchema,
   UpsertProgressInput: UpsertProgressSchema,
+  UpsertInstructorProgressInput: UpsertInstructorProgressSchema,
 } as const;

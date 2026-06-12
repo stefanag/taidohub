@@ -218,6 +218,16 @@
         "types": "./dist/progress.d.cts",
         "default": "./dist/progress.cjs"
       }
+    },
+    "./students": {
+      "import": {
+        "types": "./dist/students.d.ts",
+        "default": "./dist/students.js"
+      },
+      "require": {
+        "types": "./dist/students.d.cts",
+        "default": "./dist/students.cjs"
+      }
     }
   },
   "files": [
