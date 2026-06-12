@@ -136,6 +136,7 @@ export class UsersService {
         action: 'update',
         userId: user.id,
         impersonatedById: user.impersonatedBy ?? null,
+        actingUserId: null,
         before,
         after,
       });
@@ -191,6 +192,7 @@ export class UsersService {
         action: 'deactivate',
         userId: adminUser.id,
         impersonatedById: adminUser.impersonatedBy ?? null,
+        actingUserId: null,
         before: this.toApi(existing),
         after,
       });
@@ -229,6 +231,7 @@ export class UsersService {
         action: 'reactivate',
         userId: adminUser.id,
         impersonatedById: adminUser.impersonatedBy ?? null,
+        actingUserId: null,
         before: this.toApi(existing),
         after,
       });
@@ -276,6 +279,7 @@ export class UsersService {
         action: 'delete',
         userId: adminUser.id,
         impersonatedById: adminUser.impersonatedBy ?? null,
+        actingUserId: null,
         before: this.toApi(existing),
         after: null,
       });
@@ -345,6 +349,7 @@ export class UsersService {
         action: 'create',
         userId: adminUser.id,
         impersonatedById: adminUser.impersonatedBy ?? null,
+        actingUserId: null,
         before: null,
         after: this.toApi(created),
       });
@@ -417,6 +422,7 @@ export class UsersService {
         action: 'create',
         userId: adminUser.id,
         impersonatedById: adminUser.impersonatedBy ?? null,
+        actingUserId: null,
         before: null,
         after: this.toApi(created),
       });
@@ -460,6 +466,7 @@ export class UsersService {
         action: 'password_reset_triggered',
         userId: adminUser.id,
         impersonatedById: adminUser.impersonatedBy ?? null,
+        actingUserId: null,
         before: null,
         after: { triggeredBy: adminUser.id },
       });

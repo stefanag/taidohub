@@ -133,6 +133,7 @@ describe('FeatureFlagsService', () => {
         action: 'update',
         userId: 'u-1',
         impersonatedById: null,
+        actingUserId: null,
         before: { enabled: false },
         after: { enabled: true },
       });

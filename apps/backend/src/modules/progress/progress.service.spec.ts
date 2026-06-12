@@ -22,7 +22,8 @@ function row(overrides: Partial<ProgressRow> = {}): ProgressRow {
     techniqueId: 't-1',
     patternId: null,
     status: 'learning',
-    notes: '',
+    studentNotes: '',
+    instructorNotes: '',
     lastPracticedAt: null,
     createdAt: new Date('2026-06-10T00:00:00Z'),
     updatedAt: new Date('2026-06-10T00:00:00Z'),
@@ -124,7 +125,7 @@ describe('ProgressService.upsert', () => {
 
     const out = await harness.service.upsert(makeUser(), 'technique', 't-1', {
       status: 'learning',
-      notes: '',
+      studentNotes: '',
     });
 
     expect(out.id).toBe('pr-new');
@@ -137,6 +138,9 @@ describe('ProgressService.upsert', () => {
         techniqueId: 't-1',
         patternId: null,
         status: 'learning',
+        studentNotes: '',
+        // Self-upsert never touches instructor notes — always seeded to ''.
+        instructorNotes: '',
       }),
       FAKE_TX,
     );
@@ -148,6 +152,7 @@ describe('ProgressService.upsert', () => {
         action: 'create',
         userId: 'u-1',
         impersonatedById: null,
+        actingUserId: null,
         before: null,
       }),
     );
@@ -169,7 +174,7 @@ describe('ProgressService.upsert', () => {
 
     const out = await harness.service.upsert(makeUser(), 'technique', 't-1', {
       status: 'competent',
-      notes: 'better',
+      studentNotes: 'better',
       lastPracticedAt: '2026-06-11',
     });
 
@@ -180,9 +185,11 @@ describe('ProgressService.upsert', () => {
     expect(updateId).toBe('pr-1');
     expect(updatePatch).toMatchObject({
       status: 'competent',
-      notes: 'better',
+      studentNotes: 'better',
       lastPracticedAt: '2026-06-11',
     });
+    // Self-upsert MUST NOT touch instructor notes.
+    expect(updatePatch).not.toHaveProperty('instructorNotes');
     expect(updatePatch.updatedAt).toBeInstanceOf(Date);
     expect(updateTx).toBe(FAKE_TX);
     expect(harness.audit.record).toHaveBeenCalledWith(
@@ -190,6 +197,7 @@ describe('ProgressService.upsert', () => {
         action: 'update',
         entityType: 'progress',
         entityId: 'pr-1',
+        actingUserId: null,
         before: expect.objectContaining({ status: 'learning' }),
         after: expect.objectContaining({ status: 'competent' }),
       }),
@@ -202,7 +210,7 @@ describe('ProgressService.upsert', () => {
     await expect(
       harness.service.upsert(makeUser(), 'technique', 't-missing', {
         status: 'learning',
-        notes: '',
+        studentNotes: '',
       }),
     ).rejects.toBeInstanceOf(NotFoundException);
 
@@ -231,6 +239,7 @@ describe('ProgressService.delete', () => {
         action: 'delete',
         entityType: 'progress',
         entityId: 'pr-1',
+        actingUserId: null,
         after: null,
       }),
     );
@@ -297,5 +306,155 @@ describe('ProgressService CASL boundary', () => {
     await expect(
       harness.service.findOne(makeUser({ id: 'u-1' }), 'technique', 't-1'),
     ).rejects.toBeInstanceOf(ForbiddenException);
+  });
+});
+
+// ── upsertOnBehalfOf / deleteOnBehalfOf ────────────────────────────────
+describe('ProgressService.upsertOnBehalfOf', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('creates a new row owned by the student with instructor_notes set and student_notes empty', async () => {
+    const actor = makeUser({ id: 'instr-1', role: 'user' });
+    const created = row({
+      id: 'pr-new',
+      userId: 'student-1',
+      studentNotes: '',
+      instructorNotes: 'work on stance',
+    });
+    const harness = build({ rowOnFind: null });
+    harness.repo.insert.mockResolvedValue(created);
+
+    const out = await harness.service.upsertOnBehalfOf(
+      actor,
+      'student-1',
+      'technique',
+      't-1',
+      { status: 'learning', instructorNotes: 'work on stance' },
+    );
+
+    expect(out.id).toBe('pr-new');
+    expect(harness.repo.insert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        userId: 'student-1',
+        contentType: 'technique',
+        techniqueId: 't-1',
+        patternId: null,
+        status: 'learning',
+        studentNotes: '',
+        instructorNotes: 'work on stance',
+      }),
+      FAKE_TX,
+    );
+  });
+
+  it('audit row carries actingUserId=actor.id and userId=subjectUserId', async () => {
+    const actor = makeUser({ id: 'instr-1', role: 'user' });
+    const created = row({ id: 'pr-new', userId: 'student-1' });
+    const harness = build({ rowOnFind: null });
+    harness.repo.insert.mockResolvedValue(created);
+
+    await harness.service.upsertOnBehalfOf(
+      actor,
+      'student-1',
+      'technique',
+      't-1',
+      { status: 'learning', instructorNotes: '' },
+    );
+
+    expect(harness.audit.record).toHaveBeenCalledWith(
+      expect.objectContaining({
+        entityType: 'progress',
+        entityId: 'pr-new',
+        action: 'create',
+        userId: 'student-1',
+        actingUserId: 'instr-1',
+        impersonatedById: null,
+      }),
+    );
+  });
+
+  it('update path does NOT touch student_notes (only status/instructorNotes/lastPracticedAt/updatedAt)', async () => {
+    const actor = makeUser({ id: 'instr-1', role: 'user' });
+    const existing = row({
+      id: 'pr-1',
+      userId: 'student-1',
+      studentNotes: 'student wrote this',
+      instructorNotes: 'old instructor note',
+    });
+    const updated = row({
+      id: 'pr-1',
+      userId: 'student-1',
+      studentNotes: 'student wrote this',
+      instructorNotes: 'new instructor note',
+      status: 'competent',
+    });
+    const harness = build({ rowOnFind: existing });
+    harness.repo.update.mockResolvedValue(updated);
+
+    await harness.service.upsertOnBehalfOf(
+      actor,
+      'student-1',
+      'technique',
+      't-1',
+      {
+        status: 'competent',
+        instructorNotes: 'new instructor note',
+        lastPracticedAt: '2026-06-12',
+      },
+    );
+
+    expect(harness.repo.update).toHaveBeenCalledTimes(1);
+    const [, updatePatch] = harness.repo.update.mock.calls[0]!;
+    expect(updatePatch).toMatchObject({
+      status: 'competent',
+      instructorNotes: 'new instructor note',
+      lastPracticedAt: '2026-06-12',
+    });
+    expect(updatePatch).not.toHaveProperty('studentNotes');
+  });
+});
+
+describe('ProgressService.deleteOnBehalfOf', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('removes the row + emits audit row with actingUserId=actor.id and userId=subjectUserId', async () => {
+    const actor = makeUser({ id: 'instr-1', role: 'user' });
+    const existing = row({ id: 'pr-1', userId: 'student-1' });
+    const harness = build({ rowOnFind: existing });
+
+    await harness.service.deleteOnBehalfOf(
+      actor,
+      'student-1',
+      'technique',
+      't-1',
+    );
+
+    expect(harness.repo.delete).toHaveBeenCalledWith('pr-1', FAKE_TX);
+    expect(harness.audit.record).toHaveBeenCalledWith(
+      expect.objectContaining({
+        action: 'delete',
+        entityType: 'progress',
+        entityId: 'pr-1',
+        userId: 'student-1',
+        actingUserId: 'instr-1',
+        after: null,
+      }),
+    );
+  });
+
+  it('404s when row absent', async () => {
+    const actor = makeUser({ id: 'instr-1', role: 'user' });
+    const harness = build({ rowOnFind: null });
+
+    await expect(
+      harness.service.deleteOnBehalfOf(actor, 'student-1', 'technique', 't-1'),
+    ).rejects.toBeInstanceOf(NotFoundException);
+
+    expect(harness.repo.delete).not.toHaveBeenCalled();
+    expect(harness.audit.record).not.toHaveBeenCalled();
   });
 });

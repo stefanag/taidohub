@@ -21,6 +21,13 @@ export interface RecordInput {
   /** Real sysadmin's user ID when the action was performed during impersonation.
    *  Null otherwise. Required so every caller consciously threads it. */
   impersonatedById: string | null;
+  /**
+   * The authenticated session that performed this action, when distinct
+   * from the row's subject (`userId`) AND not via session impersonation.
+   * Today: instructor writes on a student's progress row.
+   * Null in every other case (self-actions, sysadmin-direct, etc).
+   */
+  actingUserId: string | null;
   before: unknown | null;
   after: unknown | null;
 }
@@ -37,6 +44,7 @@ export class AuditLogService {
         action: input.action,
         userId: input.userId,
         impersonatedById: input.impersonatedById,
+        actingUserId: input.actingUserId,
         // jsonb columns accept any serializable value; we pass through whatever
         // the caller hands us — the rest of the contract is documented by the
         // entity-specific Zod schemas.

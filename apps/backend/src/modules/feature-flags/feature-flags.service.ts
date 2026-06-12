@@ -76,6 +76,7 @@ export class FeatureFlagsService {
         action: 'update',
         userId: actingUser.id,
         impersonatedById: actingUser.impersonatedBy ?? null,
+        actingUserId: null,
         before: { enabled: existing.enabled },
         after: { enabled: next.enabled },
       });

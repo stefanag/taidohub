@@ -158,6 +158,7 @@ export class PatternService {
         action: 'create',
         userId: actor.id,
         impersonatedById: actor.impersonatedBy ?? null,
+        actingUserId: null,
         before: null,
         after: this.snapshot(row, input.classificationIds),
       });
@@ -213,6 +214,7 @@ export class PatternService {
         action: 'update',
         userId: actor.id,
         impersonatedById: actor.impersonatedBy ?? null,
+        actingUserId: null,
         before: beforeSnapshot,
         after: this.snapshot(
           row,
@@ -249,6 +251,7 @@ export class PatternService {
         action: 'delete',
         userId: actor.id,
         impersonatedById: actor.impersonatedBy ?? null,
+        actingUserId: null,
         before,
         after: null,
       });

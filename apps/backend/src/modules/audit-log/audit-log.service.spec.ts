@@ -57,6 +57,7 @@ describe('AuditLogService.record', () => {
       action: 'create',
       userId: 'u-1',
       impersonatedById: null,
+      actingUserId: null,
       before: null,
       after: { id: 'org-1', name: 'X' },
     });
@@ -84,6 +85,7 @@ describe('AuditLogService.record', () => {
       action: 'create',
       userId: 'target',
       impersonatedById: 'sysadmin-1',
+      actingUserId: null,
       before: null,
       after: { foo: 1 },
     });
@@ -104,12 +106,38 @@ describe('AuditLogService.record', () => {
       action: 'create',
       userId: 'u',
       impersonatedById: null,
+      actingUserId: null,
       before: null,
       after: null,
     });
 
     expect(repo.insert).toHaveBeenCalledWith(
       expect.objectContaining({ impersonatedById: null }),
+      FAKE_TX,
+    );
+  });
+
+  it('writes actingUserId on the row when supplied (on-behalf-of action)', async () => {
+    repo.insert.mockResolvedValue(undefined);
+
+    await service.record({
+      tx: FAKE_TX,
+      entityType: 'progress',
+      entityId: 'pr-1',
+      action: 'update',
+      userId: 'student-1',
+      impersonatedById: null,
+      actingUserId: 'instructor-1',
+      before: { status: 'learning' },
+      after: { status: 'competent' },
+    });
+
+    expect(repo.insert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        userId: 'student-1',
+        impersonatedById: null,
+        actingUserId: 'instructor-1',
+      }),
       FAKE_TX,
     );
   });

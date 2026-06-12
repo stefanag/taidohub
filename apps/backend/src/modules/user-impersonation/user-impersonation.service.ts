@@ -100,6 +100,7 @@ export class UserImpersonationService {
         action: 'create',
         userId: actingUser.id,
         impersonatedById: null,
+        actingUserId: null,
         before: null,
         after: { startedAt: new Date().toISOString() },
       });
@@ -145,6 +146,7 @@ export class UserImpersonationService {
         action: 'delete',
         userId: realSysadminId,
         impersonatedById: null,
+        actingUserId: null,
         before: null,
         after: { stoppedAt: new Date().toISOString() },
       });

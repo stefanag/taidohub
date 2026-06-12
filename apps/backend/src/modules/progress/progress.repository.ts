@@ -80,7 +80,10 @@ export class ProgressRepository {
   async update(
     id: string,
     patch: Partial<
-      Pick<ProgressRow, 'status' | 'notes' | 'lastPracticedAt' | 'updatedAt'>
+      Pick<
+        ProgressRow,
+        'status' | 'studentNotes' | 'instructorNotes' | 'lastPracticedAt' | 'updatedAt'
+      >
     >,
     tx: DrizzleExecutor,
   ): Promise<ProgressRow> {

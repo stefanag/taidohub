@@ -7,6 +7,7 @@ import {
 import type {
   ContentType,
   Progress,
+  UpsertInstructorProgressInput,
   UpsertProgressInput,
 } from '@repo/contracts/progress';
 import { eq } from 'drizzle-orm';
@@ -114,7 +115,7 @@ export class ProgressService {
           existing.id,
           {
             status: input.status,
-            notes: input.notes ?? '',
+            studentNotes: input.studentNotes ?? '',
             lastPracticedAt: input.lastPracticedAt ?? null,
             updatedAt: now,
           },
@@ -129,7 +130,8 @@ export class ProgressService {
           techniqueId: contentType === 'technique' ? contentId : null,
           patternId: contentType === 'pattern' ? contentId : null,
           status: input.status,
-          notes: input.notes ?? '',
+          studentNotes: input.studentNotes ?? '',
+          instructorNotes: '',
           lastPracticedAt: input.lastPracticedAt ?? null,
         };
         row = await this.repo.insert(insertInput, tx);
@@ -144,6 +146,7 @@ export class ProgressService {
         action,
         userId: actor.id,
         impersonatedById: actor.impersonatedBy ?? null,
+        actingUserId: null,
         before: before ? this.snapshot(before) : null,
         after: this.snapshot(row),
       });
@@ -181,6 +184,123 @@ export class ProgressService {
         action: 'delete',
         userId: actor.id,
         impersonatedById: actor.impersonatedBy ?? null,
+        actingUserId: null,
+        before: this.snapshot(row),
+        after: null,
+      });
+    });
+  }
+
+  // ── On-behalf-of mutations ───────────────────────────────────────────
+  /**
+   * Upsert a progress row on behalf of a student. Used by the instructor
+   * view (Phase 3.5) — touches `instructor_notes` only and never
+   * `student_notes`. CASL row-level checks are NOT applied here: the caller
+   * (StudentsService) owns row-level authorisation via the `Student` subject
+   * before delegating to this method.
+   */
+  async upsertOnBehalfOf(
+    actor: AuthenticatedUser,
+    subjectUserId: string,
+    contentType: ContentType,
+    contentId: string,
+    input: UpsertInstructorProgressInput,
+  ): Promise<Progress> {
+    await this.assertContentExists(contentType, contentId);
+
+    return this.db.transaction(async (tx) => {
+      const existing = await this.repo.findByUserAndContent(
+        subjectUserId,
+        contentType,
+        contentId,
+        tx,
+      );
+      const now = new Date();
+
+      let row: ProgressRow;
+      let action: 'create' | 'update';
+      let before: ProgressRow | null;
+
+      if (existing) {
+        before = existing;
+        action = 'update';
+        row = await this.repo.update(
+          existing.id,
+          {
+            status: input.status,
+            instructorNotes: input.instructorNotes ?? '',
+            lastPracticedAt: input.lastPracticedAt ?? null,
+            updatedAt: now,
+          },
+          tx,
+        );
+      } else {
+        before = null;
+        action = 'create';
+        const insertInput: NewProgressRow = {
+          userId: subjectUserId,
+          contentType,
+          techniqueId: contentType === 'technique' ? contentId : null,
+          patternId: contentType === 'pattern' ? contentId : null,
+          status: input.status,
+          studentNotes: '',
+          instructorNotes: input.instructorNotes ?? '',
+          lastPracticedAt: input.lastPracticedAt ?? null,
+        };
+        row = await this.repo.insert(insertInput, tx);
+      }
+
+      await this.audit.record({
+        tx,
+        entityType: 'progress',
+        entityId: row.id,
+        action,
+        userId: subjectUserId,
+        impersonatedById: actor.impersonatedBy ?? null,
+        actingUserId: actor.id,
+        before: before ? this.snapshot(before) : null,
+        after: this.snapshot(row),
+      });
+
+      return this.toApi(row);
+    });
+  }
+
+  /**
+   * Delete a student's progress row on behalf of them. Mirrors
+   * {@link upsertOnBehalfOf} — CASL row-level checks are NOT applied here,
+   * because the caller (StudentsService) owns row-level authorisation.
+   */
+  async deleteOnBehalfOf(
+    actor: AuthenticatedUser,
+    subjectUserId: string,
+    contentType: ContentType,
+    contentId: string,
+  ): Promise<void> {
+    const row = await this.repo.findByUserAndContent(
+      subjectUserId,
+      contentType,
+      contentId,
+    );
+    if (!row) {
+      throw new NotFoundException({
+        error: {
+          code: 'NOT_FOUND',
+          message: `No progress recorded for ${contentType} ${contentId}.`,
+        },
+      });
+    }
+
+    await this.db.transaction(async (tx) => {
+      await this.repo.delete(row.id, tx);
+      await this.audit.record({
+        tx,
+        entityType: 'progress',
+        entityId: row.id,
+        action: 'delete',
+        userId: subjectUserId,
+        impersonatedById: actor.impersonatedBy ?? null,
+        actingUserId: actor.id,
         before: this.snapshot(row),
         after: null,
       });
@@ -255,8 +375,11 @@ export class ProgressService {
    * Drizzle returns `lastPracticedAt` as a `YYYY-MM-DD` string (the schema
    * declares the column with `mode: 'string'`), so the API mapping is a
    * pass-through. Timestamps are `Date` objects (`mode: 'date'`).
+   *
+   * Public so {@link ../students/students.service.ts StudentsService} can map
+   * `ProgressRow` → `Progress` without re-implementing the field shape.
    */
-  private toApi(row: ProgressRow): Progress {
+  public toApi(row: ProgressRow): Progress {
     return {
       id: row.id,
       userId: row.userId,
@@ -264,7 +387,8 @@ export class ProgressService {
       techniqueId: row.techniqueId,
       patternId: row.patternId,
       status: row.status as Progress['status'],
-      notes: row.notes,
+      studentNotes: row.studentNotes,
+      instructorNotes: row.instructorNotes,
       lastPracticedAt: row.lastPracticedAt,
       createdAt: row.createdAt.toISOString(),
       updatedAt: row.updatedAt.toISOString(),
@@ -274,7 +398,8 @@ export class ProgressService {
   private snapshot(row: ProgressRow): Record<string, unknown> {
     return {
       status: row.status,
-      notes: row.notes,
+      studentNotes: row.studentNotes,
+      instructorNotes: row.instructorNotes,
       lastPracticedAt: row.lastPracticedAt,
     };
   }
