@@ -14,7 +14,7 @@ export const ShogoTitleSchema = z
     nameSv: z.string().min(1).max(100),
     nameFi: z.string().min(1).max(100),
     nameJa: z.string().min(1).max(100),
-    minRankId: z.string().uuid(),
+    minRankId: z.string().uuid().nullable(),
     sortOrder: z.number().int().min(0),
   })
   .meta({
@@ -40,7 +40,7 @@ export const CreateShogoTitleSchema = z
     nameSv: z.string().min(1).max(100),
     nameFi: z.string().min(1).max(100),
     nameJa: z.string().min(1).max(100),
-    minRankId: z.string().uuid(),
+    minRankId: z.string().uuid().nullable().optional(),
     sortOrder: z.number().int().min(0).default(0),
   })
   .meta({
@@ -56,7 +56,7 @@ export const UpdateShogoTitleSchema = z
     nameSv: z.string().min(1).max(100).optional(),
     nameFi: z.string().min(1).max(100).optional(),
     nameJa: z.string().min(1).max(100).optional(),
-    minRankId: z.string().uuid().optional(),
+    minRankId: z.string().uuid().nullable().optional(),
     sortOrder: z.number().int().min(0).optional(),
   })
   .meta({

@@ -13,9 +13,7 @@ export const shogoTitles = pgTable('shogo_titles', {
   nameSv: text('name_sv').notNull(),
   nameFi: text('name_fi').notNull(),
   nameJa: text('name_ja').notNull(),
-  minRankId: uuid('min_rank_id')
-    .notNull()
-    .references(() => beltRanks.id, { onDelete: 'restrict' }),
+  minRankId: uuid('min_rank_id').references(() => beltRanks.id, { onDelete: 'restrict' }),
   sortOrder: integer('sort_order').notNull().default(0),
 });
 

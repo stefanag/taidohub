@@ -1,0 +1,31 @@
+{
+  "shogoTitles": [
+    {
+      "code": "renshi",
+      "nameEn": "Renshi",
+      "nameSv": "Renshi",
+      "nameFi": "Renshi",
+      "nameJa": "錬士",
+      "minRankId": null,
+      "sortOrder": 1
+    },
+    {
+      "code": "kyoshi",
+      "nameEn": "Kyoshi",
+      "nameSv": "Kyoshi",
+      "nameFi": "Kyoshi",
+      "nameJa": "教士",
+      "minRankId": null,
+      "sortOrder": 2
+    },
+    {
+      "code": "hanshi",
+      "nameEn": "Hanshi",
+      "nameSv": "Hanshi",
+      "nameFi": "Hanshi",
+      "nameJa": "範士",
+      "minRankId": null,
+      "sortOrder": 3
+    }
+  ]
+}

@@ -169,6 +169,13 @@
       "when": 1781249351766,
       "tag": "0023_acting_user_attribution",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1781250000000,
+      "tag": "0024_shogo_min_rank_nullable",
+      "breakpoints": true
     }
   ]
 }

@@ -1,10 +1,10 @@
 /**
- * Standalone sysadmin seed runner. Invoked via:
+ * Standalone seed runner. Invoked via:
  *
  *   pnpm --filter backend run db:seed
  *
- * Wires the pure `seedSysadmin` function against a real Drizzle client and
- * the real better-auth server API. Idempotent — safe to re-run.
+ * Composes the pure seeders (sysadmin, belt catalog, organisations) against a
+ * real Drizzle client + better-auth server API. Idempotent — safe to re-run.
  */
 import { eq } from 'drizzle-orm';
 
@@ -14,6 +14,9 @@ import { buildBetterAuth } from '../auth/better-auth.js';
 import { createDrizzleClient } from './client.js';
 import { user } from './schema/index.js';
 import { seedSysadmin, type SeedDeps } from './seed-sysadmin.js';
+import { seedBeltCatalog } from './seeds/belt-catalog.seed.js';
+import { seedOrganisations } from './seeds/organisations.seed.js';
+import { seedShogoTitles } from './seeds/shogo-titles.seed.js';
 
 async function main(): Promise<void> {
   const env: Env = EnvSchema.parse(process.env);
@@ -56,6 +59,21 @@ async function main(): Promise<void> {
   console.info(
     `[seed] sysadmin: ${env.SYSADMIN_EMAIL} (role=sysadmin, created=${result.created}, promoted=${result.promoted})`,
   );
+
+  const orgs = await seedOrganisations(db);
+  // eslint-disable-next-line no-console
+  console.info(`[seed] organisations: inserted=${orgs.inserted}, updated=${orgs.updated}`);
+
+  const belts = await seedBeltCatalog(db);
+  // eslint-disable-next-line no-console
+  console.info(
+    `[seed] belt catalog: systems(+${belts.systems.inserted}/~${belts.systems.updated}) ` +
+      `ranks(+${belts.ranks.inserted}/~${belts.ranks.updated})`,
+  );
+
+  const shogos = await seedShogoTitles(db);
+  // eslint-disable-next-line no-console
+  console.info(`[seed] shogo titles: inserted=${shogos.inserted}, updated=${shogos.updated}`);
 }
 
 main().catch((err: unknown) => {

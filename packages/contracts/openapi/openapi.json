@@ -6997,6 +6997,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 30,
+            "x-nestjs_zod-has-null": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Create-shogo-title payload."
             }
@@ -7005,6 +7006,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
+            "x-nestjs_zod-has-null": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Create-shogo-title payload."
             }
@@ -7013,6 +7015,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
+            "x-nestjs_zod-has-null": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Create-shogo-title payload."
             }
@@ -7021,6 +7024,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
+            "x-nestjs_zod-has-null": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Create-shogo-title payload."
             }
@@ -7029,14 +7033,24 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
+            "x-nestjs_zod-has-null": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Create-shogo-title payload."
             }
           },
           "minRankId": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Create-shogo-title payload."
             }
@@ -7046,6 +7060,7 @@
             "type": "integer",
             "minimum": 0,
             "maximum": 9007199254740991,
+            "x-nestjs_zod-has-null": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Create-shogo-title payload."
             }
@@ -7056,8 +7071,7 @@
           "nameEn",
           "nameSv",
           "nameFi",
-          "nameJa",
-          "minRankId"
+          "nameJa"
         ]
       },
       "ShogoTitleDto": {
@@ -7067,6 +7081,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 30,
+            "x-nestjs_zod-has-null": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Honorary title (Renshi / Kyoshi / Hanshi).",
               "example": {
@@ -7084,6 +7099,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
+            "x-nestjs_zod-has-null": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Honorary title (Renshi / Kyoshi / Hanshi).",
               "example": {
@@ -7101,6 +7117,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
+            "x-nestjs_zod-has-null": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Honorary title (Renshi / Kyoshi / Hanshi).",
               "example": {
@@ -7118,6 +7135,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
+            "x-nestjs_zod-has-null": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Honorary title (Renshi / Kyoshi / Hanshi).",
               "example": {
@@ -7135,6 +7153,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
+            "x-nestjs_zod-has-null": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Honorary title (Renshi / Kyoshi / Hanshi).",
               "example": {
@@ -7149,9 +7168,18 @@
             }
           },
           "minRankId": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Honorary title (Renshi / Kyoshi / Hanshi).",
               "example": {
@@ -7169,6 +7197,7 @@
             "type": "integer",
             "minimum": 0,
             "maximum": 9007199254740991,
+            "x-nestjs_zod-has-null": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Honorary title (Renshi / Kyoshi / Hanshi).",
               "example": {
@@ -7200,6 +7229,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
+            "x-nestjs_zod-has-null": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Update-shogo-title patch — omit a field to leave it unchanged."
             }
@@ -7208,6 +7238,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
+            "x-nestjs_zod-has-null": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Update-shogo-title patch — omit a field to leave it unchanged."
             }
@@ -7216,6 +7247,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
+            "x-nestjs_zod-has-null": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Update-shogo-title patch — omit a field to leave it unchanged."
             }
@@ -7224,14 +7256,24 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
+            "x-nestjs_zod-has-null": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Update-shogo-title patch — omit a field to leave it unchanged."
             }
           },
           "minRankId": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Update-shogo-title patch — omit a field to leave it unchanged."
             }
@@ -7240,6 +7282,7 @@
             "type": "integer",
             "minimum": 0,
             "maximum": 9007199254740991,
+            "x-nestjs_zod-has-null": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Update-shogo-title patch — omit a field to leave it unchanged."
             }

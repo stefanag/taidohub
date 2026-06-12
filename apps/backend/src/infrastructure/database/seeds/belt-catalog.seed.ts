@@ -1,20 +1,15 @@
 /**
- * Idempotent seeder for the belt catalog (systems, ranks, shogos).
+ * Idempotent seeder for the belt catalog (systems + ranks).
  *
  * Resolves natural keys:
  * - `belt_systems` by (organisation_id, code).
  * - `belt_ranks` by (organisation_id, system_id, level), with `system_id`
  *   looked up from the system's code.
- * - `shogo_titles` by `code`, with `min_rank_id` looked up from the rank's
- *   romaji name.
  *
  * Inserts when absent, updates the listed columns when present. Rows it did
  * not author are left untouched.
  *
- * TODO: the runner that invokes this seeder is a follow-up. There is no
- * `db:seed:belt-catalog` script wired into `apps/backend/package.json` at
- * the time this file lands — it is exposed as a pure function so a future
- * runner (alongside `seed-sysadmin.ts`) can call it.
+ * Shogo titles live in their own seeder (`shogo-titles.seed.ts`).
  */
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
@@ -26,7 +21,6 @@ import { type DrizzleDb } from '../client.js';
 import {
   beltRanks,
   beltSystems,
-  shogoTitles,
 } from '../schema/index.js';
 
 interface SeedSystem {
@@ -49,20 +43,9 @@ interface SeedRank {
   publiclyVisible: boolean;
 }
 
-interface SeedShogo {
-  code: string;
-  nameEn: string;
-  nameSv: string;
-  nameFi: string;
-  nameJa: string;
-  minRankRomaji: string;
-  sortOrder: number;
-}
-
 interface BeltCatalogSeedJson {
   beltSystems: SeedSystem[];
   beltRanks: SeedRank[];
-  shogoTitles: SeedShogo[];
 }
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -71,7 +54,6 @@ const FIXTURE_PATH = resolve(HERE, 'belt-catalog.seed.json');
 export interface BeltCatalogSeedResult {
   systems: { inserted: number; updated: number };
   ranks: { inserted: number; updated: number };
-  shogos: { inserted: number; updated: number };
 }
 
 export async function seedBeltCatalog(db: DrizzleDb): Promise<BeltCatalogSeedResult> {
@@ -80,7 +62,6 @@ export async function seedBeltCatalog(db: DrizzleDb): Promise<BeltCatalogSeedRes
   const result: BeltCatalogSeedResult = {
     systems: { inserted: 0, updated: 0 },
     ranks: { inserted: 0, updated: 0 },
-    shogos: { inserted: 0, updated: 0 },
   };
 
   // ---- systems (all seeded as global → organisation_id is NULL) ----
@@ -171,48 +152,6 @@ export async function seedBeltCatalog(db: DrizzleDb): Promise<BeltCatalogSeedRes
         publiclyVisible: rank.publiclyVisible,
       });
       result.ranks.inserted += 1;
-    }
-  }
-
-  // ---- shogos ----
-  for (const shogo of fixture.shogoTitles) {
-    const rank = (
-      await db
-        .select({ id: beltRanks.id })
-        .from(beltRanks)
-        .where(eq(beltRanks.nameRomaji, shogo.minRankRomaji))
-        .limit(1)
-    )[0];
-    if (!rank) {
-      throw new Error(`Seed error: belt rank "${shogo.minRankRomaji}" not found for shogo "${shogo.code}".`);
-    }
-    const existing = (
-      await db.select().from(shogoTitles).where(eq(shogoTitles.code, shogo.code)).limit(1)
-    )[0];
-    if (existing) {
-      await db
-        .update(shogoTitles)
-        .set({
-          nameEn: shogo.nameEn,
-          nameSv: shogo.nameSv,
-          nameFi: shogo.nameFi,
-          nameJa: shogo.nameJa,
-          minRankId: rank.id,
-          sortOrder: shogo.sortOrder,
-        })
-        .where(eq(shogoTitles.code, shogo.code));
-      result.shogos.updated += 1;
-    } else {
-      await db.insert(shogoTitles).values({
-        code: shogo.code,
-        nameEn: shogo.nameEn,
-        nameSv: shogo.nameSv,
-        nameFi: shogo.nameFi,
-        nameJa: shogo.nameJa,
-        minRankId: rank.id,
-        sortOrder: shogo.sortOrder,
-      });
-      result.shogos.inserted += 1;
     }
   }
 
