@@ -23,7 +23,6 @@ const ROW = {
   nameEn: 'Kyu',
   nameSv: 'Kyu',
   nameFi: 'Kyu',
-  organisationId: null,
   sortOrder: 1,
   createdAt: new Date(),
   updatedAt: new Date(),

@@ -2,10 +2,9 @@
  * Idempotent seeder for the belt catalog (systems + ranks + shogo titles).
  *
  * Resolves natural keys:
- * - `belt_systems` by (organisation_id, code) — `organisation_id` honored
- *   from the fixture (null = global, uuid = org-scoped).
+ * - `belt_systems` by `code` — systems are always global (migration 0025).
  * - `belt_ranks` by (organisation_id, system_id, level), with `system_id`
- *   looked up from the system's code scoped to the same organisation_id.
+ *   looked up from the rank's global system code.
  * - `shogo_titles` by `code`. `min_rank_id` is honored verbatim from the
  *   fixture (nullable since migration 0024).
  *
@@ -27,7 +26,6 @@ import {
 
 interface SeedSystem {
   id?: string;
-  organisationId?: string | null;
   code: string;
   nameEn: string;
   nameSv: string;
@@ -80,10 +78,6 @@ export interface BeltCatalogSeedResult {
   shogos: { inserted: number; updated: number };
 }
 
-function orgScopeOnSystem(orgId: string | null | undefined): SQL {
-  return orgId == null ? isNull(beltSystems.organisationId) : eq(beltSystems.organisationId, orgId);
-}
-
 function orgScopeOnRank(orgId: string | null | undefined): SQL {
   return orgId == null ? isNull(beltRanks.organisationId) : eq(beltRanks.organisationId, orgId);
 }
@@ -97,14 +91,13 @@ export async function seedBeltCatalog(db: DrizzleDb): Promise<BeltCatalogSeedRes
     shogos: { inserted: 0, updated: 0 },
   };
 
-  // ---- systems (resolved by (organisation_id, code)) ----
+  // ---- systems (always global; resolved by code) ----
   for (const sys of fixture.beltSystems) {
-    const orgId = sys.organisationId ?? null;
     const existing = (
       await db
         .select({ id: beltSystems.id })
         .from(beltSystems)
-        .where(and(orgScopeOnSystem(orgId), eq(beltSystems.code, sys.code)))
+        .where(eq(beltSystems.code, sys.code))
         .limit(1)
     )[0];
     if (existing) {
@@ -126,26 +119,25 @@ export async function seedBeltCatalog(db: DrizzleDb): Promise<BeltCatalogSeedRes
         nameEn: sys.nameEn,
         nameSv: sys.nameSv,
         nameFi: sys.nameFi,
-        organisationId: orgId,
         sortOrder: sys.sortOrder,
       });
       result.systems.inserted += 1;
     }
   }
 
-  // ---- ranks (system_id resolved within the same organisation scope) ----
+  // ---- ranks (system_id always resolved from the global catalog) ----
   for (const rank of fixture.beltRanks) {
     const orgId = rank.organisationId ?? null;
     const system = (
       await db
         .select({ id: beltSystems.id })
         .from(beltSystems)
-        .where(and(orgScopeOnSystem(orgId), eq(beltSystems.code, rank.systemCode)))
+        .where(eq(beltSystems.code, rank.systemCode))
         .limit(1)
     )[0];
     if (!system) {
       throw new Error(
-        `Seed error: belt system "${rank.systemCode}" not found in org ${orgId ?? 'GLOBAL'} for rank "${rank.nameRomaji}".`,
+        `Seed error: belt system "${rank.systemCode}" not found for rank "${rank.nameRomaji}".`,
       );
     }
     const existing = (

@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { and, count, eq, isNull } from 'drizzle-orm';
+import { count, eq } from 'drizzle-orm';
 
 import {
   DRIZZLE,
@@ -15,7 +15,7 @@ import {
 
 /** Writeable subset of `belt_systems` columns. `id`, `createdAt`, `updatedAt` are managed here. */
 export type BeltSystemPatch = Partial<
-  Pick<DbBeltSystem, 'code' | 'nameEn' | 'nameSv' | 'nameFi' | 'organisationId' | 'sortOrder'>
+  Pick<DbBeltSystem, 'code' | 'nameEn' | 'nameSv' | 'nameFi' | 'sortOrder'>
 >;
 
 @Injectable()
@@ -33,23 +33,13 @@ export class BeltSystemsRepository {
     return conn.select().from(beltSystems).orderBy(beltSystems.sortOrder, beltSystems.nameEn);
   }
 
-  /**
-   * Look up a system by `(organisation_id, code)`. `organisationId` may be
-   * `null` to find a global system; the eq/isNull split keeps the SQL valid.
-   */
-  async findByCode(
-    organisationId: string | null,
-    code: string,
-    tx?: DrizzleExecutor,
-  ): Promise<DbBeltSystem | null> {
+  /** Look up a system by its global natural key `code`. */
+  async findByCode(code: string, tx?: DrizzleExecutor): Promise<DbBeltSystem | null> {
     const conn = tx ?? this.db;
-    const orgFilter = organisationId === null
-      ? isNull(beltSystems.organisationId)
-      : eq(beltSystems.organisationId, organisationId);
     const rows = await conn
       .select()
       .from(beltSystems)
-      .where(and(orgFilter, eq(beltSystems.code, code)))
+      .where(eq(beltSystems.code, code))
       .limit(1);
     return rows[0] ?? null;
   }

@@ -176,6 +176,13 @@
       "when": 1781250000000,
       "tag": "0024_shogo_min_rank_nullable",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1781260000000,
+      "tag": "0025_belt_systems_global_only",
+      "breakpoints": true
     }
   ]
 }

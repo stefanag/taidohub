@@ -2,11 +2,7 @@
   "beltSystems": [
     { "code": "kyu", "nameEn": "Kyu", "nameSv": "Kyu", "nameFi": "Kyu", "sortOrder": 1 },
     { "code": "dan", "nameEn": "Dan", "nameSv": "Dan", "nameFi": "Dan", "sortOrder": 2 },
-    { "code": "mon", "nameEn": "Mon", "nameSv": "Mon", "nameFi": "Mon", "sortOrder": 3 },
-
-    { "id": "9e7b17df-c4d7-4040-a901-ab9bc63f404c", "organisationId": "6dd7bc6a-a015-4ee9-b8a7-237dec9a2bdb", "code": "kyu", "nameEn": "Kyu", "nameSv": "Kyu", "nameFi": "Kyu", "sortOrder": 1 },
-    { "id": "bd615447-2342-423c-8915-3939127d24c3", "organisationId": "6dd7bc6a-a015-4ee9-b8a7-237dec9a2bdb", "code": "dan", "nameEn": "Dan", "nameSv": "Dan", "nameFi": "Dan", "sortOrder": 2 },
-    { "id": "ea3b7021-46bc-4363-b027-e4e8c0922bb2", "organisationId": "6dd7bc6a-a015-4ee9-b8a7-237dec9a2bdb", "code": "mon", "nameEn": "Mon", "nameSv": "Mon", "nameFi": "Mon", "sortOrder": 3 }
+    { "code": "mon", "nameEn": "Mon", "nameSv": "Mon", "nameFi": "Mon", "sortOrder": 3 }
   ],
   "beltRanks": [
     { "id": "8135d804-c16f-47e8-b085-8883b90c6296", "systemCode": "kyu", "level": 3,  "sortOrder": 12, "nameRomaji": "Hachikyu",   "nameEn": "8th Kyu",  "nameSv": "8 Kyu",  "nameFi": "8. Kyu",  "beltColor": "#FFE066", "publiclyVisible": false },

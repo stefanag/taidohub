@@ -39,7 +39,6 @@ export class BeltSystemsService {
       nameEn: input.nameEn,
       nameSv: input.nameSv,
       nameFi: input.nameFi,
-      organisationId: input.organisationId ?? null,
       sortOrder: input.sortOrder ?? 0,
     });
     return this.toApi(row);
@@ -55,7 +54,6 @@ export class BeltSystemsService {
     if ('nameEn' in input) patch.nameEn = input.nameEn!;
     if ('nameSv' in input) patch.nameSv = input.nameSv!;
     if ('nameFi' in input) patch.nameFi = input.nameFi!;
-    if ('organisationId' in input) patch.organisationId = input.organisationId ?? null;
     if ('sortOrder' in input) patch.sortOrder = input.sortOrder!;
 
     const row = await this.repo.update(id, patch);
@@ -93,7 +91,6 @@ export class BeltSystemsService {
       nameEn: row.nameEn,
       nameSv: row.nameSv,
       nameFi: row.nameFi,
-      organisationId: row.organisationId,
       sortOrder: row.sortOrder,
       createdAt: row.createdAt.toISOString(),
       updatedAt: row.updatedAt.toISOString(),

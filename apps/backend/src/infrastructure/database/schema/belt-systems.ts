@@ -1,11 +1,9 @@
-import { index, integer, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
-
-import { organisations } from './organisations.js';
+import { integer, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 /**
- * A family of belt ranks (Kyu, Dan, Mon). `organisation_id` NULL means the
- * system is global; non-null means it is private to that organisation. The
- * unique index lets two organisations both define their own `kyu` system.
+ * A family of belt ranks (Kyu, Dan, Mon). Always global — every rank that
+ * needs an org-specific catalog points at one of these global systems and
+ * scopes itself via `belt_ranks.organisation_id`.
  */
 export const beltSystems = pgTable(
   'belt_systems',
@@ -15,9 +13,6 @@ export const beltSystems = pgTable(
     nameEn: text('name_en').notNull(),
     nameSv: text('name_sv').notNull(),
     nameFi: text('name_fi').notNull(),
-    organisationId: uuid('organisation_id').references(() => organisations.id, {
-      onDelete: 'cascade',
-    }),
     sortOrder: integer('sort_order').notNull().default(0),
     createdAt: timestamp('created_at', { withTimezone: true, mode: 'date' })
       .notNull()
@@ -27,11 +22,7 @@ export const beltSystems = pgTable(
       .defaultNow(),
   },
   (table) => ({
-    orgCodeUnique: uniqueIndex('belt_systems_organisation_id_code_unique').on(
-      table.organisationId,
-      table.code,
-    ),
-    orgIdx: index('belt_systems_organisation_id_idx').on(table.organisationId),
+    codeUnique: uniqueIndex('belt_systems_code_unique').on(table.code),
   }),
 );
 
