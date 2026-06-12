@@ -5,12 +5,14 @@ import { useTranslation } from 'react-i18next';
 import type { Technique } from '@repo/contracts/techniques';
 
 import { useClassificationCategoriesByRootQuery } from '@/entities/classification-category';
+import { useProgressListQuery } from '@/entities/progress';
 import {
   useDeleteTechniqueMutation,
   useTechniquesQuery,
 } from '@/entities/technique';
+import { ProgressEditorDialog } from '@/features/progress-editor-dialog';
 import { TechniqueFormDialog } from '@/features/technique-form';
-import { Button, ClassificationMultiSelect } from '@/shared/ui';
+import { Button, ClassificationMultiSelect, ProgressPill } from '@/shared/ui';
 
 /**
  * Admin technique catalogue page (sysadmin-only — the route guard layers
@@ -36,6 +38,22 @@ export function AdminTechniquesPage(): React.ReactElement {
   );
   const { data: techniques = [] } = useTechniquesQuery(filterIds);
   const deleteMut = useDeleteTechniqueMutation();
+
+  const { data: allProgress = [] } = useProgressListQuery();
+  const progressByTechniqueId = React.useMemo(
+    () =>
+      new Map(
+        allProgress
+          .filter((p) => p.techniqueId)
+          .map((p) => [p.techniqueId as string, p]),
+      ),
+    [allProgress],
+  );
+
+  const [progressEditing, setProgressEditing] = React.useState<{
+    id: string;
+    label: string;
+  } | null>(null);
 
   const typeOpts = useClassificationCategoriesByRootQuery('technique_type');
   const sotaiOpts = useClassificationCategoriesByRootQuery('sotai_category');
@@ -117,7 +135,16 @@ export function AdminTechniquesPage(): React.ReactElement {
                   {row.classifications.map((c) => c.code).join(' · ')}
                 </div>
               </div>
-              <div className="flex gap-2">
+              <div className="flex items-center gap-2">
+                <ProgressPill
+                  status={progressByTechniqueId.get(row.id)?.status ?? null}
+                  onClick={() =>
+                    setProgressEditing({
+                      id: row.id,
+                      label: row.nameRomaji,
+                    })
+                  }
+                />
                 <Button
                   variant="outline"
                   size="sm"
@@ -144,6 +171,18 @@ export function AdminTechniquesPage(): React.ReactElement {
         onOpenChange={setDialogOpen}
         {...(editing ? { technique: editing } : {})}
       />
+
+      {progressEditing ? (
+        <ProgressEditorDialog
+          open
+          onOpenChange={(o) => {
+            if (!o) setProgressEditing(null);
+          }}
+          contentType="technique"
+          contentId={progressEditing.id}
+          contentLabel={progressEditing.label}
+        />
+      ) : null}
     </main>
   );
 }

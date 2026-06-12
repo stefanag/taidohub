@@ -5,8 +5,10 @@ import type { ClassificationCategory } from '@repo/contracts/classification-cate
 import type { Technique } from '@repo/contracts/techniques';
 
 import { useClassificationCategoriesByRootQuery } from '@/entities/classification-category';
+import { useProgressListQuery } from '@/entities/progress';
 import { useTechniquesQuery } from '@/entities/technique';
-import { ClassificationMultiSelect } from '@/shared/ui';
+import { ProgressEditorDialog } from '@/features/progress-editor-dialog';
+import { ClassificationMultiSelect, ProgressPill } from '@/shared/ui';
 
 /**
  * Read-only student-facing technique catalogue page. Three chip-style
@@ -60,6 +62,22 @@ export function TechniquesPage(): React.ReactElement {
     [typeIds, sotaiIds, attackIds],
   );
   const { data: techniques = [], isPending } = useTechniquesQuery(filterIds);
+
+  const { data: allProgress = [] } = useProgressListQuery();
+  const progressByTechniqueId = React.useMemo(
+    () =>
+      new Map(
+        allProgress
+          .filter((p) => p.techniqueId)
+          .map((p) => [p.techniqueId as string, p]),
+      ),
+    [allProgress],
+  );
+
+  const [editing, setEditing] = React.useState<{
+    id: string;
+    label: string;
+  } | null>(null);
 
   const resolved = (i18n.resolvedLanguage ?? i18n.language ?? 'en').slice(0, 2);
   const lang: SupportedLang =
@@ -126,6 +144,18 @@ export function TechniquesPage(): React.ReactElement {
                       {t('techniques.form.isKihon')}
                     </span>
                   ) : null}
+                  <ProgressPill
+                    className="ml-auto"
+                    status={
+                      progressByTechniqueId.get(row.id)?.status ?? null
+                    }
+                    onClick={() =>
+                      setEditing({
+                        id: row.id,
+                        label: row.nameRomaji,
+                      })
+                    }
+                  />
                 </div>
                 <div className="mt-2 flex flex-wrap gap-2 text-xs">
                   {row.classifications.map((c) => (
@@ -142,6 +172,18 @@ export function TechniquesPage(): React.ReactElement {
           </ul>
         )}
       </section>
+
+      {editing ? (
+        <ProgressEditorDialog
+          open
+          onOpenChange={(o) => {
+            if (!o) setEditing(null);
+          }}
+          contentType="technique"
+          contentId={editing.id}
+          contentLabel={editing.label}
+        />
+      ) : null}
     </main>
   );
 }

@@ -29,6 +29,18 @@ vi.mock('@/entities/classification-category', () => ({
   }),
 }));
 
+// Stub the progress list query — no rows means the pill renders as
+// "not_started" without any network traffic.
+vi.mock('@/entities/progress', () => ({
+  useProgressListQuery: () => ({ data: [], isLoading: false }),
+}));
+
+// Stub the editor dialog — the page test only confirms wiring, not the
+// dialog's internals (covered in its own test file).
+vi.mock('@/features/progress-editor-dialog', () => ({
+  ProgressEditorDialog: () => null,
+}));
+
 // Stub the technique list query — one row with two classifications attached.
 vi.mock('@/entities/technique', () => ({
   useTechniquesQuery: () => ({
