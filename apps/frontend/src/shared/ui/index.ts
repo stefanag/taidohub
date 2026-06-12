@@ -115,3 +115,4 @@ export {
   ClassificationMultiSelect,
   type ClassificationMultiSelectProps,
 } from './classification-multi-select.js';
+export { ProgressPill, type ProgressPillProps } from './progress-pill.js';
