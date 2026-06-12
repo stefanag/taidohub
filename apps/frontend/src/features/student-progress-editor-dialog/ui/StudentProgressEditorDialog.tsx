@@ -3,18 +3,18 @@ import { useTranslation } from 'react-i18next';
 
 import type {
   ContentType,
+  Progress,
   ProgressStatus,
-  UpsertProgressInput,
+  UpsertInstructorProgressInput,
 } from '@repo/contracts/progress';
 
 import {
-  useDeletePatternProgressMutation,
-  useDeleteTechniqueProgressMutation,
-  usePatternProgressQuery,
-  useTechniqueProgressQuery,
-  useUpsertPatternProgressMutation,
-  useUpsertTechniqueProgressMutation,
-} from '@/entities/progress';
+  useDeleteStudentPatternProgressMutation,
+  useDeleteStudentTechniqueProgressMutation,
+  useStudentProgressQuery,
+  useUpsertStudentPatternProgressMutation,
+  useUpsertStudentTechniqueProgressMutation,
+} from '@/entities/student';
 
 import {
   Button,
@@ -50,9 +50,10 @@ const STATUS_KEY: Record<ProgressStatus, string> = {
 const textareaClass =
   'w-full rounded-sm border border-outline-variant/40 bg-surface px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-secondary';
 
-export interface ProgressEditorDialogProps {
+export interface StudentProgressEditorDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  studentUserId: string;
   contentType: ContentType;
   contentId: string;
   /** Optional display label for the dialog title (e.g. technique nameRomaji). */
@@ -60,63 +61,67 @@ export interface ProgressEditorDialogProps {
 }
 
 /**
- * Edit-per-user-progress modal for a single technique or pattern row.
+ * Instructor-side mirror of `ProgressEditorDialog`: lets an instructor edit a
+ * single student's progress row on a technique or pattern.
  *
- * One component handles both content types — branching on `contentType`
- * decides which query/mutation hook to consume. The dialog seeds its local
- * state from the matching `useTechniqueProgressQuery` / `usePatternProgressQuery`
- * row whenever it opens (or the underlying row id changes), and on submit
- * fires the matching upsert mutation and closes itself.
+ * Channel split is inverted vs. the student-facing dialog:
+ * - `instructorNotes` is editable (writes through `UpsertInstructorProgressInput`).
+ * - `studentNotes` is rendered read-only below, when present, so the instructor
+ *   can read what the student wrote without overwriting it.
  *
- * The Reset button is only rendered when an existing row is loaded — its
- * purpose is to delete the row entirely, which is conceptually distinct from
- * "set status back to not_started". `window.confirm` gates the destructive
- * call so a misclick on the chip overlay can't silently wipe progress.
+ * Data comes from the per-student progress list (`useStudentProgressQuery`),
+ * which already returns every row for the student; we filter locally for the
+ * row matching `contentType` + `contentId`. Missing row → treated as create.
  *
- * Sizing mirrors the Phase 2 fix on `TechniqueFormDialog`
- * (`max-h-[85vh] grid-rows-[auto_minmax(0,1fr)]` on `DialogContent` +
- * `overflow-y-auto pr-1` on the form) so long notes scroll inside the body
- * instead of pushing the footer off-viewport.
+ * Sizing/overflow mirrors `ProgressEditorDialog` so long notes scroll inside
+ * the body and the footer stays pinned.
  */
-export function ProgressEditorDialog({
+export function StudentProgressEditorDialog({
   open,
   onOpenChange,
+  studentUserId,
   contentType,
   contentId,
   contentLabel,
-}: ProgressEditorDialogProps): React.ReactElement {
+}: StudentProgressEditorDialogProps): React.ReactElement {
   const { t } = useTranslation();
 
-  const techniqueQ = useTechniqueProgressQuery(
-    contentType === 'technique' ? contentId : null,
-  );
-  const patternQ = usePatternProgressQuery(
-    contentType === 'pattern' ? contentId : null,
-  );
-  const existing = contentType === 'technique' ? techniqueQ.data : patternQ.data;
+  const progressQ = useStudentProgressQuery(open ? studentUserId : null);
+  const existing: Progress | undefined = React.useMemo(() => {
+    const rows = progressQ.data;
+    if (!rows) return undefined;
+    if (contentType === 'technique') {
+      return rows.find(
+        (r) => r.contentType === 'technique' && r.techniqueId === contentId,
+      );
+    }
+    return rows.find(
+      (r) => r.contentType === 'pattern' && r.patternId === contentId,
+    );
+  }, [progressQ.data, contentType, contentId]);
 
   const [status, setStatus] = React.useState<ProgressStatus>('not_started');
-  const [studentNotes, setStudentNotes] = React.useState('');
+  const [instructorNotes, setInstructorNotes] = React.useState('');
   const [lastPracticedAt, setLastPracticedAt] = React.useState<string>('');
 
   // Reseed when the dialog opens with a new content row.
   React.useEffect(() => {
     if (!open) return;
     setStatus(existing?.status ?? 'not_started');
-    setStudentNotes(existing?.studentNotes ?? '');
+    setInstructorNotes(existing?.instructorNotes ?? '');
     setLastPracticedAt(existing?.lastPracticedAt ?? '');
   }, [
     open,
     existing?.id,
     existing?.status,
-    existing?.studentNotes,
+    existing?.instructorNotes,
     existing?.lastPracticedAt,
   ]);
 
-  const upsertTech = useUpsertTechniqueProgressMutation();
-  const upsertPat = useUpsertPatternProgressMutation();
-  const deleteTech = useDeleteTechniqueProgressMutation();
-  const deletePat = useDeletePatternProgressMutation();
+  const upsertTech = useUpsertStudentTechniqueProgressMutation(studentUserId);
+  const upsertPat = useUpsertStudentPatternProgressMutation(studentUserId);
+  const deleteTech = useDeleteStudentTechniqueProgressMutation(studentUserId);
+  const deletePat = useDeleteStudentPatternProgressMutation(studentUserId);
   const pending =
     upsertTech.isPending ||
     upsertPat.isPending ||
@@ -125,19 +130,19 @@ export function ProgressEditorDialog({
 
   const onSubmit = (event: React.SyntheticEvent<HTMLFormElement>): void => {
     event.preventDefault();
-    const input: UpsertProgressInput = {
+    const input: UpsertInstructorProgressInput = {
       status,
-      studentNotes,
+      instructorNotes,
       lastPracticedAt: lastPracticedAt.trim() === '' ? null : lastPracticedAt,
     };
     if (contentType === 'technique') {
       upsertTech.mutate(
-        { id: contentId, input },
+        { techniqueId: contentId, input },
         { onSuccess: () => onOpenChange(false) },
       );
     } else {
       upsertPat.mutate(
-        { id: contentId, input },
+        { patternId: contentId, input },
         { onSuccess: () => onOpenChange(false) },
       );
     }
@@ -177,14 +182,14 @@ export function ProgressEditorDialog({
           noValidate
         >
           <FormField>
-            <Label htmlFor="progress-status">
+            <Label htmlFor="student-progress-status">
               {t('progress.status.label', { defaultValue: 'Status' })}
             </Label>
             <Select
               value={status}
               onValueChange={(v) => setStatus(v as ProgressStatus)}
             >
-              <SelectTrigger id="progress-status">
+              <SelectTrigger id="student-progress-status">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -198,39 +203,41 @@ export function ProgressEditorDialog({
           </FormField>
 
           <FormField>
-            <Label htmlFor="progress-student-notes">
-              {t('progress.studentNotes', { defaultValue: 'Notes' })}
+            <Label htmlFor="student-progress-instructor-notes">
+              {t('progress.instructorNotes', {
+                defaultValue: 'Instructor notes',
+              })}
             </Label>
             <textarea
-              id="progress-student-notes"
-              value={studentNotes}
-              onChange={(e) => setStudentNotes(e.target.value)}
+              id="student-progress-instructor-notes"
+              value={instructorNotes}
+              onChange={(e) => setInstructorNotes(e.target.value)}
               className={textareaClass}
               rows={4}
               maxLength={2000}
-              aria-label={t('progress.studentNotes', { defaultValue: 'Notes' })}
+              aria-label={t('progress.instructorNotes', {
+                defaultValue: 'Instructor notes',
+              })}
             />
           </FormField>
 
-          {existing?.instructorNotes ? (
+          {existing?.studentNotes ? (
             <FormField>
               <Label>
-                {t('progress.instructorNotes', {
-                  defaultValue: 'Instructor notes',
-                })}
+                {t('progress.studentNotes', { defaultValue: 'Student notes' })}
               </Label>
               <p className="rounded-sm border border-outline-variant/40 bg-surface-container px-3 py-2 text-sm whitespace-pre-wrap">
-                {existing.instructorNotes}
+                {existing.studentNotes}
               </p>
             </FormField>
           ) : null}
 
           <FormField>
-            <Label htmlFor="progress-last-practiced">
+            <Label htmlFor="student-progress-last-practiced">
               {t('progress.lastPracticed', { defaultValue: 'Last practiced' })}
             </Label>
             <DatePicker
-              id="progress-last-practiced"
+              id="student-progress-last-practiced"
               value={lastPracticedAt}
               onChange={(next) => setLastPracticedAt(next)}
               aria-label={t('progress.lastPracticed', {

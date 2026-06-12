@@ -24,7 +24,8 @@ const STUB_PROGRESS = {
   techniqueId: TECHNIQUE_ID,
   patternId: null,
   status: 'learning' as const,
-  notes: '',
+  studentNotes: '',
+  instructorNotes: '',
   lastPracticedAt: null,
   createdAt: '2026-06-11T00:00:00.000Z',
   updatedAt: '2026-06-11T00:00:00.000Z',
@@ -51,7 +52,7 @@ describe('progress api', () => {
     mockedHttp.mockResolvedValueOnce(STUB_PROGRESS);
     const input: UpsertProgressInput = {
       status: 'learning',
-      notes: '',
+      studentNotes: '',
       lastPracticedAt: null,
     };
     await upsertTechniqueProgress(TECHNIQUE_ID, input);

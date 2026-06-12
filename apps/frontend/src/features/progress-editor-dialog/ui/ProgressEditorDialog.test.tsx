@@ -76,14 +76,14 @@ describe('<ProgressEditorDialog>', () => {
     renderDialog();
     expect(
       screen.getByRole('textbox', {
-        name: /notes|muistiinpanot|anteckningar|progress\.notes/i,
+        name: /notes|muistiinpanot|anteckningar|progress\.studentNotes/i,
       }),
     ).toBeInTheDocument();
     // Radix Select trigger renders as a combobox.
     expect(screen.getByRole('combobox')).toBeInTheDocument();
   });
 
-  it('submitting calls upsert mutation with status, notes, lastPracticedAt', async () => {
+  it('submitting calls upsert mutation with status, studentNotes, lastPracticedAt', async () => {
     renderDialog();
     fireEvent.click(
       screen.getByRole('button', {
@@ -98,7 +98,7 @@ describe('<ProgressEditorDialog>', () => {
       id: '550e8400-e29b-41d4-a716-446655440000',
       input: expect.objectContaining({
         status: 'not_started',
-        notes: '',
+        studentNotes: '',
         lastPracticedAt: null,
       }),
     });
