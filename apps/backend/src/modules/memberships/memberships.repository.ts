@@ -106,4 +106,18 @@ export class MembershipsRepository {
       .returning({ id: organisationMembership.id });
     return rows.length > 0;
   }
+
+  async countOrgadminsForOrg(organisationId: string, tx?: DrizzleExecutor): Promise<number> {
+    const conn = tx ?? this.db;
+    const rows = await conn
+      .select({ value: count() })
+      .from(organisationMembership)
+      .where(
+        and(
+          eq(organisationMembership.organisationId, organisationId),
+          eq(organisationMembership.role, 'orgadmin'),
+        ),
+      );
+    return Number(rows[0]?.value ?? 0);
+  }
 }

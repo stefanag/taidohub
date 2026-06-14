@@ -57,6 +57,7 @@ function membershipsRepoStub() {
     create: vi.fn(),
     update: vi.fn(),
     delete: vi.fn(),
+    countOrgadminsForOrg: vi.fn().mockResolvedValue(2),
   } satisfies Record<keyof MembershipsRepository, ReturnType<typeof vi.fn>>;
 }
 
@@ -286,6 +287,81 @@ describe('MembershipsService — delete', () => {
       after: null,
     });
     expect(audit.record.mock.calls[0]?.[0].before).toMatchObject({ role: 'orgadmin' });
+  });
+});
+
+describe('MembershipsService — delete — guards', () => {
+  let repo: ReturnType<typeof membershipsRepoStub>;
+  let service: MembershipsService;
+
+  beforeEach(async () => {
+    repo = membershipsRepoStub();
+    const orgsRepo = orgsRepoStub();
+    ({ service } = await makeService(repo, orgsRepo));
+  });
+
+  it('orgadmin removing their own orgadmin row → SELF_DEMOTE_BLOCKED', async () => {
+    const actor = {
+      ...civilian,
+      id: 'me',
+      memberships: [{ organisationId: 'A', role: 'orgadmin' as const }],
+    };
+    repo.findById.mockResolvedValue({
+      id: 'm-1',
+      userId: 'me',
+      organisationId: 'A',
+      role: 'orgadmin' as const,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    await expect(service.delete('m-1', actor, {})).rejects.toMatchObject({
+      response: { error: { code: 'SELF_DEMOTE_BLOCKED' } },
+    });
+  });
+
+  it('sysadmin deleting last orgadmin without confirm → LAST_ORGADMIN', async () => {
+    repo.findById.mockResolvedValue({
+      id: 'm-1',
+      userId: 'someone',
+      organisationId: 'A',
+      role: 'orgadmin' as const,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    repo.countOrgadminsForOrg.mockResolvedValue(1);
+    await expect(service.delete('m-1', sysadmin, {})).rejects.toMatchObject({
+      response: { error: { code: 'LAST_ORGADMIN' } },
+    });
+  });
+
+  it('sysadmin deleting last orgadmin WITH confirm=true → succeeds', async () => {
+    repo.findById.mockResolvedValue({
+      id: 'm-1',
+      userId: 'someone',
+      organisationId: 'A',
+      role: 'orgadmin' as const,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    repo.countOrgadminsForOrg.mockResolvedValue(1);
+    repo.delete.mockResolvedValue(true);
+    await expect(service.delete('m-1', sysadmin, { confirm: true })).resolves.toBeUndefined();
+    expect(repo.delete).toHaveBeenCalledWith('m-1', FAKE_TX);
+  });
+
+  it('sysadmin deleting a non-last orgadmin → succeeds without confirm', async () => {
+    repo.findById.mockResolvedValue({
+      id: 'm-1',
+      userId: 'someone',
+      organisationId: 'A',
+      role: 'orgadmin' as const,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    repo.countOrgadminsForOrg.mockResolvedValue(3);
+    repo.delete.mockResolvedValue(true);
+    await expect(service.delete('m-1', sysadmin, {})).resolves.toBeUndefined();
+    expect(repo.delete).toHaveBeenCalledWith('m-1', FAKE_TX);
   });
 });
 

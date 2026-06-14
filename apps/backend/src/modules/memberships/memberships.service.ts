@@ -148,9 +148,42 @@ export class MembershipsService {
     });
   }
 
-  async delete(id: string, user: AuthenticatedUser): Promise<void> {
+  async delete(
+    id: string,
+    user: AuthenticatedUser,
+    opts: { confirm?: boolean } = {},
+  ): Promise<void> {
     this.assertCan(user, 'delete');
     const existing = await this.requireById(id);
+
+    // Self-demote: a non-sysadmin cannot remove their own orgadmin row.
+    if (
+      existing.role === 'orgadmin' &&
+      existing.userId === user.id &&
+      user.role !== 'sysadmin'
+    ) {
+      throw new ForbiddenException({
+        error: {
+          code: 'SELF_DEMOTE_BLOCKED',
+          message: 'Orgadmins cannot remove their own orgadmin role.',
+        },
+      });
+    }
+
+    // Last-orgadmin: sysadmin-only path (CASL already blocks orgadmins from
+    // touching orgadmin rows). Soft block — frontend re-issues with confirm.
+    if (existing.role === 'orgadmin' && user.role === 'sysadmin') {
+      const remaining = await this.repo.countOrgadminsForOrg(existing.organisationId);
+      if (remaining <= 1 && !opts.confirm) {
+        throw new ConflictException({
+          error: {
+            code: 'LAST_ORGADMIN',
+            message: 'This is the last orgadmin in the organisation.',
+          },
+        });
+      }
+    }
+
     await this.db.transaction(async (tx) => {
       await this.repo.delete(id, tx);
       await this.audit.record({
