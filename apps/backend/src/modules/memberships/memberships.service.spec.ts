@@ -319,3 +319,40 @@ describe('MembershipsService — list', () => {
     await expect(service.list({}, null)).rejects.toThrow(ForbiddenException);
   });
 });
+
+describe('MembershipsService — list — orgadmin scope', () => {
+  let repo: ReturnType<typeof membershipsRepoStub>;
+  let service: MembershipsService;
+
+  const orgadminA = {
+    ...civilian,
+    id: 'orgadmin-1',
+    memberships: [{ organisationId: 'A', role: 'orgadmin' as const }],
+  };
+
+  beforeEach(async () => {
+    repo = membershipsRepoStub();
+    const orgsRepo = orgsRepoStub();
+    ({ service } = await makeService(repo, orgsRepo));
+  });
+
+  it('orgadmin in org A can list memberships filtered by organisationId=A', async () => {
+    repo.list.mockResolvedValue({ data: [], total: 0 });
+    await expect(service.list({ organisationId: 'A' }, orgadminA)).resolves.toBeDefined();
+    expect(repo.list).toHaveBeenCalledWith({ organisationId: 'A' });
+  });
+
+  it('orgadmin in org A cannot list memberships of org B', async () => {
+    await expect(service.list({ organisationId: 'B' }, orgadminA)).rejects.toThrow(
+      ForbiddenException,
+    );
+  });
+
+  it('non-orgadmin can still filter by own userId only (existing behaviour)', async () => {
+    repo.list.mockResolvedValue({ data: [], total: 0 });
+    await expect(service.list({ userId: civilian.id }, civilian)).resolves.toBeDefined();
+    await expect(service.list({ userId: 'someone-else' }, civilian)).rejects.toThrow(
+      ForbiddenException,
+    );
+  });
+});

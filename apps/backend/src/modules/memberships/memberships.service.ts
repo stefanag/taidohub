@@ -38,12 +38,34 @@ export class MembershipsService {
     query: ListMembershipsQuery,
     user: AuthenticatedUser | null,
   ): Promise<ListMembershipsResponse> {
-    // Non-sysadmins may only filter by their own userId. Sysadmin sees all.
-    if (!user || (user.role !== 'sysadmin' && query.userId !== user.id)) {
+    // Sysadmin sees all. Other callers may either filter by their own userId
+    // (self-view) or filter by an organisationId of an org they're orgadmin of
+    // (orgadmin-scoped list).
+    if (!user) {
       throw new ForbiddenException({
         error: { code: 'FORBIDDEN', message: 'Can only list your own memberships.' },
       });
     }
+
+    if (user.role !== 'sysadmin') {
+      const orgAdminOrgs = user.memberships
+        .filter((m) => m.role === 'orgadmin')
+        .map((m) => m.organisationId);
+
+      const isOwnUserFilter = query.userId === user.id;
+      const isOrgAdminScopedFilter =
+        query.organisationId !== undefined && orgAdminOrgs.includes(query.organisationId);
+
+      if (!isOwnUserFilter && !isOrgAdminScopedFilter) {
+        throw new ForbiddenException({
+          error: {
+            code: 'FORBIDDEN',
+            message: 'Cannot list memberships outside your own scope.',
+          },
+        });
+      }
+    }
+
     const { data, total } = await this.repo.list(query);
     return { data: data.map((r) => this.toApi(r)), total };
   }
