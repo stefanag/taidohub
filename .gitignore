@@ -67,3 +67,5 @@ tmp/
 .claude/worktrees/
 
 # Note: packages/contracts/openapi/openapi.json IS committed (CI sync check).
+.superpowers/
+.gitignore
