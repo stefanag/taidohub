@@ -16,13 +16,14 @@ import { Route as PublicSetPasswordRouteImport } from './routes/_public.set-pass
 import { Route as PublicLoginRouteImport } from './routes/_public.login'
 import { Route as AppTechniquesRouteImport } from './routes/_app.techniques'
 import { Route as AppStudentsRouteImport } from './routes/_app.students'
-import { Route as AppStudentsUserIdRouteImport } from './routes/_app.students.$userId'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
 import { Route as AppProfileRouteImport } from './routes/_app.profile'
 import { Route as AppPatternsRouteImport } from './routes/_app.patterns'
+import { Route as AppMyOrganisationRouteImport } from './routes/_app.my-organisation'
 import { Route as AppGradingHistoryRouteImport } from './routes/_app.grading-history'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
 import { Route as PublicRanksSlugRouteImport } from './routes/_public.ranks.$slug'
+import { Route as AppStudentsUserIdRouteImport } from './routes/_app.students.$userId'
 import { Route as AppSettingsLabelsRouteImport } from './routes/_app.settings.labels'
 import { Route as AppAdminUsersRouteImport } from './routes/_app.admin.users'
 import { Route as AppAdminTechniquesRouteImport } from './routes/_app.admin.techniques'
@@ -66,11 +67,6 @@ const AppStudentsRoute = AppStudentsRouteImport.update({
   path: '/students',
   getParentRoute: () => AppRoute,
 } as any)
-const AppStudentsUserIdRoute = AppStudentsUserIdRouteImport.update({
-  id: '/students/$userId',
-  path: '/students/$userId',
-  getParentRoute: () => AppRoute,
-} as any)
 const AppSettingsRoute = AppSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -84,6 +80,11 @@ const AppProfileRoute = AppProfileRouteImport.update({
 const AppPatternsRoute = AppPatternsRouteImport.update({
   id: '/patterns',
   path: '/patterns',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMyOrganisationRoute = AppMyOrganisationRouteImport.update({
+  id: '/my-organisation',
+  path: '/my-organisation',
   getParentRoute: () => AppRoute,
 } as any)
 const AppGradingHistoryRoute = AppGradingHistoryRouteImport.update({
@@ -100,6 +101,11 @@ const PublicRanksSlugRoute = PublicRanksSlugRouteImport.update({
   id: '/ranks/$slug',
   path: '/ranks/$slug',
   getParentRoute: () => PublicRoute,
+} as any)
+const AppStudentsUserIdRoute = AppStudentsUserIdRouteImport.update({
+  id: '/$userId',
+  path: '/$userId',
+  getParentRoute: () => AppStudentsRoute,
 } as any)
 const AppSettingsLabelsRoute = AppSettingsLabelsRouteImport.update({
   id: '/labels',
@@ -151,11 +157,11 @@ export interface FileRoutesByFullPath {
   '/': typeof PublicIndexRoute
   '/dashboard': typeof AppDashboardRoute
   '/grading-history': typeof AppGradingHistoryRoute
+  '/my-organisation': typeof AppMyOrganisationRoute
   '/patterns': typeof AppPatternsRoute
   '/profile': typeof AppProfileRoute
   '/settings': typeof AppSettingsRouteWithChildren
-  '/students': typeof AppStudentsRoute
-  '/students/$userId': typeof AppStudentsUserIdRoute
+  '/students': typeof AppStudentsRouteWithChildren
   '/techniques': typeof AppTechniquesRoute
   '/login': typeof PublicLoginRoute
   '/set-password': typeof PublicSetPasswordRoute
@@ -168,17 +174,18 @@ export interface FileRoutesByFullPath {
   '/admin/techniques': typeof AppAdminTechniquesRoute
   '/admin/users': typeof AppAdminUsersRoute
   '/settings/labels': typeof AppSettingsLabelsRoute
+  '/students/$userId': typeof AppStudentsUserIdRoute
   '/ranks/$slug': typeof PublicRanksSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof PublicIndexRoute
   '/dashboard': typeof AppDashboardRoute
   '/grading-history': typeof AppGradingHistoryRoute
+  '/my-organisation': typeof AppMyOrganisationRoute
   '/patterns': typeof AppPatternsRoute
   '/profile': typeof AppProfileRoute
   '/settings': typeof AppSettingsRouteWithChildren
-  '/students': typeof AppStudentsRoute
-  '/students/$userId': typeof AppStudentsUserIdRoute
+  '/students': typeof AppStudentsRouteWithChildren
   '/techniques': typeof AppTechniquesRoute
   '/login': typeof PublicLoginRoute
   '/set-password': typeof PublicSetPasswordRoute
@@ -191,6 +198,7 @@ export interface FileRoutesByTo {
   '/admin/techniques': typeof AppAdminTechniquesRoute
   '/admin/users': typeof AppAdminUsersRoute
   '/settings/labels': typeof AppSettingsLabelsRoute
+  '/students/$userId': typeof AppStudentsUserIdRoute
   '/ranks/$slug': typeof PublicRanksSlugRoute
 }
 export interface FileRoutesById {
@@ -199,11 +207,11 @@ export interface FileRoutesById {
   '/_public': typeof PublicRouteWithChildren
   '/_app/dashboard': typeof AppDashboardRoute
   '/_app/grading-history': typeof AppGradingHistoryRoute
+  '/_app/my-organisation': typeof AppMyOrganisationRoute
   '/_app/patterns': typeof AppPatternsRoute
   '/_app/profile': typeof AppProfileRoute
   '/_app/settings': typeof AppSettingsRouteWithChildren
-  '/_app/students': typeof AppStudentsRoute
-  '/_app/students/$userId': typeof AppStudentsUserIdRoute
+  '/_app/students': typeof AppStudentsRouteWithChildren
   '/_app/techniques': typeof AppTechniquesRoute
   '/_public/login': typeof PublicLoginRoute
   '/_public/set-password': typeof PublicSetPasswordRoute
@@ -217,6 +225,7 @@ export interface FileRoutesById {
   '/_app/admin/techniques': typeof AppAdminTechniquesRoute
   '/_app/admin/users': typeof AppAdminUsersRoute
   '/_app/settings/labels': typeof AppSettingsLabelsRoute
+  '/_app/students/$userId': typeof AppStudentsUserIdRoute
   '/_public/ranks/$slug': typeof PublicRanksSlugRoute
 }
 export interface FileRouteTypes {
@@ -225,11 +234,11 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/grading-history'
+    | '/my-organisation'
     | '/patterns'
     | '/profile'
     | '/settings'
     | '/students'
-    | '/students/$userId'
     | '/techniques'
     | '/login'
     | '/set-password'
@@ -242,17 +251,18 @@ export interface FileRouteTypes {
     | '/admin/techniques'
     | '/admin/users'
     | '/settings/labels'
+    | '/students/$userId'
     | '/ranks/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/dashboard'
     | '/grading-history'
+    | '/my-organisation'
     | '/patterns'
     | '/profile'
     | '/settings'
     | '/students'
-    | '/students/$userId'
     | '/techniques'
     | '/login'
     | '/set-password'
@@ -265,6 +275,7 @@ export interface FileRouteTypes {
     | '/admin/techniques'
     | '/admin/users'
     | '/settings/labels'
+    | '/students/$userId'
     | '/ranks/$slug'
   id:
     | '__root__'
@@ -272,11 +283,11 @@ export interface FileRouteTypes {
     | '/_public'
     | '/_app/dashboard'
     | '/_app/grading-history'
+    | '/_app/my-organisation'
     | '/_app/patterns'
     | '/_app/profile'
     | '/_app/settings'
     | '/_app/students'
-    | '/_app/students/$userId'
     | '/_app/techniques'
     | '/_public/login'
     | '/_public/set-password'
@@ -290,6 +301,7 @@ export interface FileRouteTypes {
     | '/_app/admin/techniques'
     | '/_app/admin/users'
     | '/_app/settings/labels'
+    | '/_app/students/$userId'
     | '/_public/ranks/$slug'
   fileRoutesById: FileRoutesById
 }
@@ -349,13 +361,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppStudentsRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/students/$userId': {
-      id: '/_app/students/$userId'
-      path: '/students/$userId'
-      fullPath: '/students/$userId'
-      preLoaderRoute: typeof AppStudentsUserIdRouteImport
-      parentRoute: typeof AppRoute
-    }
     '/_app/settings': {
       id: '/_app/settings'
       path: '/settings'
@@ -375,6 +380,13 @@ declare module '@tanstack/react-router' {
       path: '/patterns'
       fullPath: '/patterns'
       preLoaderRoute: typeof AppPatternsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/my-organisation': {
+      id: '/_app/my-organisation'
+      path: '/my-organisation'
+      fullPath: '/my-organisation'
+      preLoaderRoute: typeof AppMyOrganisationRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/grading-history': {
@@ -397,6 +409,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/ranks/$slug'
       preLoaderRoute: typeof PublicRanksSlugRouteImport
       parentRoute: typeof PublicRoute
+    }
+    '/_app/students/$userId': {
+      id: '/_app/students/$userId'
+      path: '/$userId'
+      fullPath: '/students/$userId'
+      preLoaderRoute: typeof AppStudentsUserIdRouteImport
+      parentRoute: typeof AppStudentsRoute
     }
     '/_app/settings/labels': {
       id: '/_app/settings/labels'
@@ -476,14 +495,26 @@ const AppSettingsRouteWithChildren = AppSettingsRoute._addFileChildren(
   AppSettingsRouteChildren,
 )
 
+interface AppStudentsRouteChildren {
+  AppStudentsUserIdRoute: typeof AppStudentsUserIdRoute
+}
+
+const AppStudentsRouteChildren: AppStudentsRouteChildren = {
+  AppStudentsUserIdRoute: AppStudentsUserIdRoute,
+}
+
+const AppStudentsRouteWithChildren = AppStudentsRoute._addFileChildren(
+  AppStudentsRouteChildren,
+)
+
 interface AppRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
   AppGradingHistoryRoute: typeof AppGradingHistoryRoute
+  AppMyOrganisationRoute: typeof AppMyOrganisationRoute
   AppPatternsRoute: typeof AppPatternsRoute
   AppProfileRoute: typeof AppProfileRoute
   AppSettingsRoute: typeof AppSettingsRouteWithChildren
-  AppStudentsRoute: typeof AppStudentsRoute
-  AppStudentsUserIdRoute: typeof AppStudentsUserIdRoute
+  AppStudentsRoute: typeof AppStudentsRouteWithChildren
   AppTechniquesRoute: typeof AppTechniquesRoute
   AppAdminAuditLogRoute: typeof AppAdminAuditLogRoute
   AppAdminBeltCatalogRoute: typeof AppAdminBeltCatalogRoute
@@ -498,11 +529,11 @@ interface AppRouteChildren {
 const AppRouteChildren: AppRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
   AppGradingHistoryRoute: AppGradingHistoryRoute,
+  AppMyOrganisationRoute: AppMyOrganisationRoute,
   AppPatternsRoute: AppPatternsRoute,
   AppProfileRoute: AppProfileRoute,
   AppSettingsRoute: AppSettingsRouteWithChildren,
-  AppStudentsRoute: AppStudentsRoute,
-  AppStudentsUserIdRoute: AppStudentsUserIdRoute,
+  AppStudentsRoute: AppStudentsRouteWithChildren,
   AppTechniquesRoute: AppTechniquesRoute,
   AppAdminAuditLogRoute: AppAdminAuditLogRoute,
   AppAdminBeltCatalogRoute: AppAdminBeltCatalogRoute,
