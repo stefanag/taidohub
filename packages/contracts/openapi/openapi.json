@@ -3399,6 +3399,14 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "confirm",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
           }
         ],
         "responses": {
@@ -3434,6 +3442,16 @@
                 }
               }
             }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -3441,7 +3459,7 @@
             "session": []
           }
         ],
-        "summary": "Delete a membership (sysadmin only).",
+        "summary": "Delete a membership (sysadmin everywhere; orgadmin for instructor rows in own org).",
         "tags": [
           "memberships"
         ]

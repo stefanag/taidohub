@@ -1941,6 +1941,11 @@ paths:
           description: Membership UUID.
           schema:
             type: string
+        - name: confirm
+          required: false
+          in: query
+          schema:
+            type: boolean
       responses:
         "204":
           description: Membership deleted.
@@ -1962,8 +1967,15 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorEnvelopeDto"
+        "409":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
       security: *a18
-      summary: Delete a membership (sysadmin only).
+      summary: Delete a membership (sysadmin everywhere; orgadmin for instructor rows
+        in own org).
       tags: *a19
   /api/admin/audit-log:
     get:

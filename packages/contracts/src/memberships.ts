@@ -74,6 +74,18 @@ export const ListMembershipsResponseSchema = z
 
 export type ListMembershipsResponse = z.infer<typeof ListMembershipsResponseSchema>;
 
+export const DeleteMembershipQuerySchema = z
+  .object({
+    confirm: z.boolean().optional(),
+  })
+  .meta({
+    id: 'DeleteMembershipQuery',
+    description:
+      'Optional flag to bypass the LAST_ORGADMIN guard on DELETE /api/memberships/:id.',
+  });
+
+export type DeleteMembershipQuery = z.infer<typeof DeleteMembershipQuerySchema>;
+
 export const MembershipsOpenApiRegistry = {
   MembershipRole: MembershipRoleSchema,
   OrganisationMembership: OrganisationMembershipSchema,
@@ -81,4 +93,5 @@ export const MembershipsOpenApiRegistry = {
   UpdateMembershipInput: UpdateMembershipSchema,
   ListMembershipsQuery: ListMembershipsQuerySchema,
   ListMembershipsResponse: ListMembershipsResponseSchema,
+  DeleteMembershipQuery: DeleteMembershipQuerySchema,
 } as const;
