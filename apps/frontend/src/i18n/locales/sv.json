@@ -57,6 +57,11 @@
   "dashboard": {
     "title": "Översikt"
   },
+  "myOrganisation": {
+    "title": "Min organisation",
+    "description": "Hantera instruktörerna och administratörerna i din organisation.",
+    "empty": "Du administrerar för närvarande inga organisationer."
+  },
   "settings": {
     "title": "Inställningar",
     "placeholder": "Inställningar visas här.",
@@ -290,6 +295,22 @@
         "move": "Flytta…",
         "delete": "Ta bort"
       },
+      "memberships": {
+        "title": "Medlemmar i {{org}}",
+        "sheetTitle": "Medlemmar i {{org}}",
+        "add": "Lägg till medlem",
+        "empty": "Inga medlemmar ännu.",
+        "userColumn": "Användare",
+        "confirmRemove": "Ta bort den här medlemmen?",
+        "userRequired": "Välj en användare.",
+        "searchUser": "Sök användare",
+        "searchPlaceholder": "E-post eller namn",
+        "user": "Användare",
+        "userPlaceholder": "Välj en användare",
+        "lastOrgadminTitle": "Bekräfta borttagning av sista orgadminen",
+        "lastOrgadminWarning": "Detta är den enda organisationsadministratören. Att ta bort denne lämnar organisationen utan administratör. Fortsätta ändå?",
+        "lastOrgadminProceed": "Ta bort ändå"
+      },
       "types": {
         "internationalFederation": "Internationellt förbund",
         "nationalFederation": "Nationellt förbund",
@@ -329,7 +350,7 @@
       "title": "Användare",
       "empty": "Inga användare hittades.",
       "searchPlaceholder": "Sök på e-post eller namn",
-      "fields": { "email": "E-post", "name": "Namn", "role": "Roll", "status": "Status" },
+      "fields": { "email": "E-post", "name": "Namn", "role": "Roll", "status": "Status", "actions": "Åtgärder" },
       "roles": {
         "sysadmin": "Systemadministratör",
         "user": "Användare",

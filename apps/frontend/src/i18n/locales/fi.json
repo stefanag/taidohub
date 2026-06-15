@@ -57,6 +57,11 @@
   "dashboard": {
     "title": "Kojelauta"
   },
+  "myOrganisation": {
+    "title": "Oma organisaatio",
+    "description": "Hallinnoi organisaatiosi ohjaajia ja ylläpitäjiä.",
+    "empty": "Et tällä hetkellä hallinnoi mitään organisaatiota."
+  },
   "settings": {
     "title": "Asetukset",
     "placeholder": "Asetukset näkyvät tässä.",
@@ -290,6 +295,22 @@
         "move": "Siirrä…",
         "delete": "Poista"
       },
+      "memberships": {
+        "title": "Organisaation {{org}} jäsenet",
+        "sheetTitle": "Organisaation {{org}} jäsenet",
+        "add": "Lisää jäsen",
+        "empty": "Ei jäseniä vielä.",
+        "userColumn": "Käyttäjä",
+        "confirmRemove": "Poistetaanko tämä jäsen?",
+        "userRequired": "Valitse käyttäjä.",
+        "searchUser": "Hae käyttäjää",
+        "searchPlaceholder": "Sähköposti tai nimi",
+        "user": "Käyttäjä",
+        "userPlaceholder": "Valitse käyttäjä",
+        "lastOrgadminTitle": "Vahvista viimeisen orgadminin poisto",
+        "lastOrgadminWarning": "Tämä on organisaation ainoa ylläpitäjä. Hänen poistamisensa jättää organisaation ilman ylläpitäjää. Jatketaanko silti?",
+        "lastOrgadminProceed": "Poista silti"
+      },
       "types": {
         "internationalFederation": "Kansainvälinen liitto",
         "nationalFederation": "Kansallinen liitto",
@@ -329,7 +350,7 @@
       "title": "Käyttäjät",
       "empty": "Käyttäjiä ei löytynyt.",
       "searchPlaceholder": "Hae sähköpostilla tai nimellä",
-      "fields": { "email": "Sähköposti", "name": "Nimi", "role": "Rooli", "status": "Tila" },
+      "fields": { "email": "Sähköposti", "name": "Nimi", "role": "Rooli", "status": "Tila", "actions": "Toiminnot" },
       "roles": {
         "sysadmin": "Järjestelmänvalvoja",
         "user": "Käyttäjä",

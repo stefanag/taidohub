@@ -57,6 +57,11 @@
   "dashboard": {
     "title": "Dashboard"
   },
+  "myOrganisation": {
+    "title": "My organisation",
+    "description": "Manage the instructors and administrators of your organisation.",
+    "empty": "You do not currently administer any organisations."
+  },
   "settings": {
     "title": "Settings",
     "placeholder": "Settings options will appear here.",
@@ -290,6 +295,22 @@
         "move": "Move…",
         "delete": "Delete"
       },
+      "memberships": {
+        "title": "Members of {{org}}",
+        "sheetTitle": "Members of {{org}}",
+        "add": "Add member",
+        "empty": "No members yet.",
+        "userColumn": "User",
+        "confirmRemove": "Remove this member?",
+        "userRequired": "Please select a user.",
+        "searchUser": "Search user",
+        "searchPlaceholder": "Email or name",
+        "user": "User",
+        "userPlaceholder": "Select a user",
+        "lastOrgadminTitle": "Confirm last-orgadmin removal",
+        "lastOrgadminWarning": "This is the only org administrator. Removing them leaves the org without any admin. Proceed anyway?",
+        "lastOrgadminProceed": "Remove anyway"
+      },
       "types": {
         "internationalFederation": "International federation",
         "nationalFederation": "National federation",
@@ -333,7 +354,8 @@
         "email": "Email",
         "name": "Name",
         "role": "Role",
-        "status": "Status"
+        "status": "Status",
+        "actions": "Actions"
       },
       "roles": {
         "sysadmin": "System administrator",
