@@ -46,6 +46,7 @@ export function AppSidebar(): React.ReactElement {
   const { data: memberships = [] } = useMyMembershipsQuery();
   const isInstructor = memberships.some((m) => m.role === 'instructor');
   const showStudents = isInstructor || ability?.can('manage', 'all') === true;
+  const isOrgAdmin = memberships.some((m) => m.role === 'orgadmin');
 
   return (
     <Sidebar collapsible="icon">
@@ -80,6 +81,19 @@ export function AppSidebar(): React.ReactElement {
                     <Link to="/students">
                       <GraduationCap />
                       <span>{t('nav.students')}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ) : null}
+              {isOrgAdmin ? (
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={pathname.startsWith('/my-organisation')}
+                  >
+                    <Link to="/my-organisation">
+                      <Building2 />
+                      <span>{t('nav.myOrganisation')}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

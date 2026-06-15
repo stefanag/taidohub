@@ -7,11 +7,14 @@ import i18n from '@/i18n';
 import { AbilityContext, defineAbilityFor } from '@/shared/lib/casl';
 import { SidebarProvider } from '@/shared/ui';
 
-// Stub the memberships query — the sidebar's Students entry reads it. Default
-// to empty so the Students link is hidden for non-instructor cases; tests
-// that need it visible can spy on this mock and override the return value.
+// Stub the memberships query — the sidebar's Students and My organisation
+// entries read it. Default to empty so both links are hidden; tests that
+// need them visible override `useMyMembershipsQueryMock` per case.
+const useMyMembershipsQueryMock = vi.fn<() => { data: Array<{ organisationId: string; role: string }>; isPending: boolean }>(
+  () => ({ data: [], isPending: false }),
+);
 vi.mock('@/entities/me', () => ({
-  useMyMembershipsQuery: () => ({ data: [], isPending: false }),
+  useMyMembershipsQuery: () => useMyMembershipsQueryMock(),
 }));
 
 // jsdom doesn't implement matchMedia; shadcn's `useIsMobile` hook calls it.
@@ -78,12 +81,14 @@ describe('<AppSidebar>', () => {
   beforeEach(async () => {
     await i18n.changeLanguage('en');
     useRouterStateMock.mockReturnValue('/dashboard');
+    useMyMembershipsQueryMock.mockReturnValue({ data: [], isPending: false });
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
     navigateMock.mockReset();
     useRouterStateMock.mockReset();
+    useMyMembershipsQueryMock.mockReset();
   });
 
   it('renders the nav entries with translated English labels', () => {
@@ -207,5 +212,36 @@ describe('<AppSidebar>', () => {
     expect(
       screen.queryByRole('link', { name: /^Belt catalog$/i }),
     ).not.toBeInTheDocument();
+  });
+
+  it('shows "My organisation" only when user has an orgadmin membership', async () => {
+    vi.spyOn(authApi, 'useSession').mockReturnValue({
+      data: { user: { id: 'u1', email: 'a@b' }, session: { id: 's1' } },
+      isPending: false,
+      error: null,
+      refetch: () => Promise.resolve(),
+    } as unknown as ReturnType<typeof authApi.useSession>);
+    useMyMembershipsQueryMock.mockReturnValue({
+      data: [{ organisationId: 'A', role: 'orgadmin' }],
+      isPending: false,
+    });
+
+    renderInProvider();
+
+    expect(await screen.findByText(/my organisation/i)).toBeInTheDocument();
+  });
+
+  it('hides "My organisation" for plain users', () => {
+    vi.spyOn(authApi, 'useSession').mockReturnValue({
+      data: { user: { id: 'u1', email: 'a@b' }, session: { id: 's1' } },
+      isPending: false,
+      error: null,
+      refetch: () => Promise.resolve(),
+    } as unknown as ReturnType<typeof authApi.useSession>);
+    useMyMembershipsQueryMock.mockReturnValue({ data: [], isPending: false });
+
+    renderInProvider();
+
+    expect(screen.queryByText(/my organisation/i)).not.toBeInTheDocument();
   });
 });
