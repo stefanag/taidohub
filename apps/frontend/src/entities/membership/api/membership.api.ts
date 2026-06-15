@@ -37,6 +37,12 @@ export async function updateMembership(
   return OrganisationMembershipSchema.parse(raw);
 }
 
-export async function deleteMembership(id: string): Promise<void> {
-  await httpClient(MembershipsRoutes.byId(id), { method: 'DELETE' });
+export async function deleteMembership(
+  id: string,
+  options: { confirm?: boolean } = {},
+): Promise<void> {
+  await httpClient(MembershipsRoutes.byId(id), {
+    method: 'DELETE',
+    ...(options.confirm ? { query: { confirm: true } } : {}),
+  });
 }

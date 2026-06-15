@@ -20,5 +20,6 @@ export {
   useCreateMembership,
   useDeleteMembership,
   useUpdateMembership,
+  type DeleteMembershipVariables,
   type UpdateMembershipVariables,
 } from './model/membership.queries.js';

@@ -68,15 +68,22 @@ export function useUpdateMembership(
   });
 }
 
+export interface DeleteMembershipVariables {
+  id: string;
+  confirm?: boolean;
+}
+
 export function useDeleteMembership(
-  options?: Omit<UseMutationOptions<void, Error, string>, 'mutationFn'>,
+  options?: Omit<UseMutationOptions<void, Error, DeleteMembershipVariables>, 'mutationFn'>,
 ) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => deleteMembership(id),
+    mutationFn: ({ id, confirm }: DeleteMembershipVariables) =>
+      deleteMembership(id, confirm === undefined ? {} : { confirm }),
     ...options,
     onSuccess: (...args) => {
       void queryClient.invalidateQueries({ queryKey: membershipKeys.all });
+      void queryClient.invalidateQueries({ queryKey: ['me', 'memberships'] });
       options?.onSuccess?.(...args);
     },
   });

@@ -421,7 +421,7 @@ export function UserForm({
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => deleteMembership.mutate(m.id)}
+                    onClick={() => deleteMembership.mutate({ id: m.id })}
                     disabled={deleteMembership.isPending}
                   >
                     {t('admin.users.memberships.remove', { defaultValue: 'Remove' })}
