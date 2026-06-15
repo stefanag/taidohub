@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import {
   buildTree,
+  displayName,
   listOrganisationsQueryOptions,
   type Organisation,
   type OrganisationNode,
@@ -16,6 +17,7 @@ import { LabelsFilterBar } from '@/features/labels';
 import { OrganisationDeleteDialog } from '@/features/organisation-delete-dialog';
 import { OrganisationForm } from '@/features/organisation-form';
 import { OrganisationMoveDialog } from '@/features/organisation-move-dialog';
+import { OrgMembershipManager } from '@/features/org-membership-manager';
 import {
   Button,
   Dialog,
@@ -23,6 +25,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/shared/ui';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from '@/shared/ui/sheet.js';
 import { OrganisationTree } from '@/widgets/organisation-tree';
 
 type PageMode =
@@ -39,7 +47,7 @@ type PageMode =
  * goes through the entity's react-query hooks.
  */
 export function AdminOrganisationsPage(): React.ReactElement {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const search = useSearch({ from: '/_app/admin/organisations' });
   const { data, isLoading, isError, error } = useQuery(
@@ -49,6 +57,9 @@ export function AdminOrganisationsPage(): React.ReactElement {
     }),
   );
   const [mode, setMode] = React.useState<PageMode>({ kind: 'idle' });
+  const [membersFor, setMembersFor] = React.useState<
+    { id: string; label: string } | null
+  >(null);
 
   const handleFilterChange = (next: {
     tag?: string[];
@@ -150,6 +161,12 @@ export function AdminOrganisationsPage(): React.ReactElement {
           onEdit={(org) => setMode({ kind: 'edit', org })}
           onMove={(org) => setMode({ kind: 'move', org })}
           onDelete={(org) => setMode({ kind: 'delete', org })}
+          onManageMembers={(org) =>
+            setMembersFor({
+              id: org.id,
+              label: displayName(org, i18n.language),
+            })
+          }
         />
       )}
 
@@ -231,6 +248,35 @@ export function AdminOrganisationsPage(): React.ReactElement {
           }}
         />
       ) : null}
+
+      {/* Org-scope membership manager drawer */}
+      <Sheet
+        open={!!membersFor}
+        onOpenChange={(open) => {
+          if (!open) setMembersFor(null);
+        }}
+      >
+        <SheetContent side="right" className="w-[480px] sm:max-w-md">
+          {membersFor ? (
+            <>
+              <SheetHeader>
+                <SheetTitle>
+                  {t('admin.organisations.memberships.sheetTitle', {
+                    defaultValue: 'Members of {{org}}',
+                    org: membersFor.label,
+                  })}
+                </SheetTitle>
+              </SheetHeader>
+              <div className="mt-4">
+                <OrgMembershipManager
+                  organisationId={membersFor.id}
+                  orgLabel={membersFor.label}
+                />
+              </div>
+            </>
+          ) : null}
+        </SheetContent>
+      </Sheet>
     </main>
   );
 }

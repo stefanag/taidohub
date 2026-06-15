@@ -26,6 +26,8 @@ export interface OrganisationTreeProps {
   onEdit: (org: Organisation) => void;
   onMove: (org: Organisation) => void;
   onDelete: (org: Organisation) => void;
+  /** Optional: open the org-scope membership manager for the row. */
+  onManageMembers?: (org: Organisation) => void;
 }
 
 /**
@@ -38,6 +40,7 @@ export function OrganisationTree({
   onEdit,
   onMove,
   onDelete,
+  onManageMembers,
 }: OrganisationTreeProps): React.ReactElement {
   return (
     <ul className="space-y-1" role="tree">
@@ -49,6 +52,7 @@ export function OrganisationTree({
           onEdit={onEdit}
           onMove={onMove}
           onDelete={onDelete}
+          onManageMembers={onManageMembers}
         />
       ))}
     </ul>
@@ -61,9 +65,10 @@ interface TreeRowProps {
   onEdit: (org: Organisation) => void;
   onMove: (org: Organisation) => void;
   onDelete: (org: Organisation) => void;
+  onManageMembers?: ((org: Organisation) => void) | undefined;
 }
 
-function TreeRow({ node, depth, onEdit, onMove, onDelete }: TreeRowProps): React.ReactElement {
+function TreeRow({ node, depth, onEdit, onMove, onDelete, onManageMembers }: TreeRowProps): React.ReactElement {
   const { t, i18n } = useTranslation();
   const [expanded, setExpanded] = React.useState(true);
   const [labelsOpen, setLabelsOpen] = React.useState(false);
@@ -144,6 +149,13 @@ function TreeRow({ node, depth, onEdit, onMove, onDelete }: TreeRowProps): React
             <DropdownMenuItem onClick={() => onMove(node)}>
               {t('admin.organisations.actions.move', { defaultValue: 'Move…' })}
             </DropdownMenuItem>
+            {onManageMembers ? (
+              <DropdownMenuItem onClick={() => onManageMembers(node)}>
+                {t('admin.organisations.actions.members', {
+                  defaultValue: 'Members…',
+                })}
+              </DropdownMenuItem>
+            ) : null}
             <DropdownMenuItem onClick={() => onDelete(node)}>
               {t('admin.organisations.actions.delete', { defaultValue: 'Delete' })}
             </DropdownMenuItem>
