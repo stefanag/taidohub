@@ -183,6 +183,13 @@
       "when": 1781260000000,
       "tag": "0025_belt_systems_global_only",
       "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1781430000000,
+      "tag": "0026_belt_ranks_slug_per_org",
+      "breakpoints": true
     }
   ]
 }

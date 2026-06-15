@@ -65,9 +65,13 @@ export const beltRanks = pgTable(
     ),
     systemIdx: index('belt_ranks_system_id_idx').on(table.systemId),
     orgIdx: index('belt_ranks_organisation_id_idx').on(table.organisationId),
-    // Partial unique on slug — only enforced where slug is set.
-    slugUnique: uniqueIndex('belt_ranks_slug_unique')
-      .on(table.slug)
+    // Partial unique on (organisation_id, slug) — only enforced where slug is
+    // set. The migration SQL adds NULLS NOT DISTINCT so two global ranks with
+    // the same slug still collide (drizzle's uniqueIndex builder cannot
+    // express NULLS NOT DISTINCT yet, so the snapshot misses it but the DB
+    // constraint is correct).
+    slugUnique: uniqueIndex('belt_ranks_organisation_slug_unique')
+      .on(table.organisationId, table.slug)
       .where(sql`${table.slug} IS NOT NULL`),
     slugRequiredWhenPublic: check(
       'belt_ranks_slug_required_when_public',
