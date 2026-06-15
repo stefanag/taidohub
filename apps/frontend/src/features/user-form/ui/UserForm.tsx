@@ -216,6 +216,31 @@ export function UserForm({
     onError: (err) => setMembershipError(mapErrorCode(err)),
   });
 
+  const [lastOrgadminConfirm, setLastOrgadminConfirm] = React.useState<{
+    membershipId: string;
+  } | null>(null);
+
+  const handleRemoveMembership = React.useCallback(
+    async (membershipId: string, confirmFlag = false): Promise<void> => {
+      try {
+        await deleteMembership.mutateAsync(
+          confirmFlag ? { id: membershipId, confirm: true } : { id: membershipId },
+        );
+      } catch (err: unknown) {
+        if (
+          err instanceof HttpError &&
+          err.status === 409 &&
+          err.payload.code === 'LAST_ORGADMIN'
+        ) {
+          setLastOrgadminConfirm({ membershipId });
+          return;
+        }
+        // Other errors are surfaced via the hook's onError → membershipError.
+      }
+    },
+    [deleteMembership],
+  );
+
   const handleSubmit = async (event: React.SyntheticEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
     setSubmitError(undefined);
@@ -421,7 +446,7 @@ export function UserForm({
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => deleteMembership.mutate({ id: m.id })}
+                    onClick={() => void handleRemoveMembership(m.id)}
                     disabled={deleteMembership.isPending}
                   >
                     {t('admin.users.memberships.remove', { defaultValue: 'Remove' })}
@@ -551,6 +576,62 @@ export function UserForm({
           />
         ) : null}
       </TabsContent>
+
+      {lastOrgadminConfirm ? (
+        <ConfirmLastOrgadmin
+          onCancel={() => setLastOrgadminConfirm(null)}
+          onConfirm={async () => {
+            const id = lastOrgadminConfirm.membershipId;
+            setLastOrgadminConfirm(null);
+            await handleRemoveMembership(id, true);
+          }}
+        />
+      ) : null}
     </Tabs>
+  );
+}
+
+/**
+ * Soft-block dialog for the LAST_ORGADMIN 409. Mirrors the implementation in
+ * `features/org-membership-manager/ui/OrgMembershipManager.tsx` — inlined here
+ * per the design spec ("don't preemptively share"). Extract to a shared
+ * primitive only when a third call site appears.
+ */
+function ConfirmLastOrgadmin({
+  onCancel,
+  onConfirm,
+}: {
+  onCancel: () => void;
+  onConfirm: () => Promise<void>;
+}): React.ReactElement {
+  const { t } = useTranslation();
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={t('admin.organisations.memberships.lastOrgadminTitle', {
+        defaultValue: 'Confirm last-orgadmin removal',
+      })}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+    >
+      <div className="rounded bg-background p-4 shadow-lg max-w-md">
+        <p className="mb-3 text-sm">
+          {t('admin.organisations.memberships.lastOrgadminWarning', {
+            defaultValue:
+              'This is the only org administrator. Removing them leaves the org without any admin. Proceed anyway?',
+          })}
+        </p>
+        <div className="flex justify-end gap-2">
+          <Button variant="outline" onClick={onCancel}>
+            {t('common.cancel', { defaultValue: 'Cancel' })}
+          </Button>
+          <Button variant="destructive" onClick={() => void onConfirm()}>
+            {t('admin.organisations.memberships.lastOrgadminProceed', {
+              defaultValue: 'Remove anyway',
+            })}
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 }

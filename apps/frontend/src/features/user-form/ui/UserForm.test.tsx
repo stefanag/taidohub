@@ -9,6 +9,7 @@ import { UserForm } from './UserForm.js';
 
 import type { User } from '@/entities/user';
 
+import { HttpError } from '@/shared/api';
 import i18n from '@/i18n';
 
 // Mock the underlying API modules so the query-options factories pick up the
@@ -19,7 +20,11 @@ vi.mock('@/entities/organisation/api/organisation.api.js', async (orig) => {
 });
 vi.mock('@/entities/membership/api/membership.api.js', async (orig) => {
   const actual = await orig<typeof import('@/entities/membership/api/membership.api.js')>();
-  return { ...actual, listMemberships: vi.fn().mockResolvedValue({ data: [], total: 0 }) };
+  return {
+    ...actual,
+    listMemberships: vi.fn().mockResolvedValue({ data: [], total: 0 }),
+    deleteMembership: vi.fn().mockResolvedValue(undefined),
+  };
 });
 vi.mock('@/entities/profile/api/profile.api.js', async (orig) => {
   const actual = await orig<typeof import('@/entities/profile/api/profile.api.js')>();
@@ -42,6 +47,10 @@ vi.mock('@/entities/profile/api/profile.api.js', async (orig) => {
 });
 
 import { getUserProfile } from '@/entities/profile/api/profile.api.js';
+import {
+  deleteMembership as deleteMembershipApi,
+  listMemberships as listMembershipsApi,
+} from '@/entities/membership/api/membership.api.js';
 
 const PROFILE_FIXTURE = {
   userId: '11111111-1111-4111-8111-111111111111',
@@ -182,6 +191,8 @@ function renderForm(overrides: Partial<React.ComponentProps<typeof UserForm>> = 
 describe('<UserForm>', () => {
   beforeEach(async () => {
     await i18n.changeLanguage('en');
+    vi.mocked(deleteMembershipApi).mockClear();
+    vi.mocked(listMembershipsApi).mockClear();
   });
 
   it('renders the email read-only', () => {
@@ -342,6 +353,60 @@ describe('<UserForm>', () => {
     expect(
       screen.queryByText(/This user has not filled in their profile yet\./i),
     ).not.toBeInTheDocument();
+  });
+
+  it('catches LAST_ORGADMIN on membership delete and confirms before retrying', async () => {
+    const MEMBERSHIP_ID = '22222222-2222-4222-8222-222222222222';
+    const ORG_ID = '33333333-3333-4333-8333-333333333333';
+
+    vi.mocked(listMembershipsApi).mockResolvedValueOnce({
+      data: [
+        {
+          id: MEMBERSHIP_ID,
+          userId: TARGET.id,
+          organisationId: ORG_ID,
+          role: 'orgadmin',
+          createdAt: '2026-06-01T00:00:00.000Z',
+          updatedAt: '2026-06-01T00:00:00.000Z',
+        },
+      ],
+      total: 1,
+    });
+
+    // First DELETE: backend says LAST_ORGADMIN. After confirm, succeed.
+    vi.mocked(deleteMembershipApi)
+      .mockRejectedValueOnce(
+        new HttpError(409, { code: 'LAST_ORGADMIN', message: 'last orgadmin' }),
+      )
+      .mockResolvedValueOnce(undefined);
+
+    const { user } = renderForm();
+    await user.click(screen.getByRole('tab', { name: /memberships/i }));
+
+    const removeBtn = await screen.findByRole('button', { name: /^remove$/i });
+    await user.click(removeBtn);
+
+    // The confirm-last-orgadmin dialog should appear after the soft block.
+    const dialog = await screen.findByRole('dialog', { name: /last-orgadmin/i });
+    expect(dialog).toBeInTheDocument();
+    expect(screen.getByText(/only org administrator/i)).toBeInTheDocument();
+
+    // First call: no confirm flag.
+    expect(vi.mocked(deleteMembershipApi)).toHaveBeenNthCalledWith(1, MEMBERSHIP_ID, {});
+
+    // Click "Remove anyway" → retry with confirm:true.
+    await user.click(screen.getByRole('button', { name: /remove anyway/i }));
+
+    await waitFor(() => {
+      expect(vi.mocked(deleteMembershipApi)).toHaveBeenNthCalledWith(2, MEMBERSHIP_ID, {
+        confirm: true,
+      });
+    });
+
+    // Dialog dismissed after confirm.
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog', { name: /last-orgadmin/i })).not.toBeInTheDocument();
+    });
   });
 
   it('shows an em-dash placeholder when aboutMe is null', async () => {
