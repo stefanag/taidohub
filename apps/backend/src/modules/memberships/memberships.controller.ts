@@ -18,6 +18,7 @@ import {
   ApiNoContentResponse,
   ApiOkResponse,
   ApiParam,
+  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 import type {
@@ -32,6 +33,7 @@ import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js'
 import { CheckAbility } from '../../infrastructure/ability/check-ability.decorator.js';
 
 import { CreateMembershipDto } from './dto/create-membership.dto.js';
+import { DeleteMembershipQueryDto } from './dto/delete-membership-query.dto.js';
 import { ListMembershipsQueryDto } from './dto/list-memberships-query.dto.js';
 import { ListMembershipsResponseDto } from './dto/list-memberships-response.dto.js';
 import { OrganisationMembershipDto } from './dto/organisation-membership.dto.js';
@@ -100,17 +102,19 @@ export class MembershipsController {
   @CheckAbility('delete', 'OrganisationMembership')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiParam({ name: 'id', description: 'Membership UUID.' })
+  @ApiQuery({ name: 'confirm', required: false, type: Boolean })
   @ApiNoContentResponse({ description: 'Membership deleted.' })
   @ApiEndpoint({
-    summary: 'Delete a membership (sysadmin only).',
+    summary: 'Delete a membership (sysadmin everywhere; orgadmin for instructor rows in own org).',
     operationId: 'MembershipsController_delete',
     errorType: ErrorEnvelopeDto,
-    errors: ['401', '403', '404'],
+    errors: ['401', '403', '404', '409'],
   })
   async remove(
     @Param('id', new ParseUUIDPipe()) id: string,
+    @Query() query: DeleteMembershipQueryDto,
     @CurrentUser() user: AuthenticatedUser,
   ): Promise<void> {
-    await this.memberships.delete(id, user);
+    await this.memberships.delete(id, user, query.confirm === undefined ? {} : { confirm: query.confirm });
   }
 }
