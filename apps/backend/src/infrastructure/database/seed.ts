@@ -15,7 +15,9 @@ import { createDrizzleClient } from './client.js';
 import { user } from './schema/index.js';
 import { seedSysadmin, type SeedDeps } from './seed-sysadmin.js';
 import { seedBeltCatalog } from './seeds/belt-catalog.seed.js';
+import { seedClassifications } from './seeds/classifications.seed.js';
 import { seedOrganisations } from './seeds/organisations.seed.js';
+import { seedTechniques } from './seeds/techniques.seed.js';
 
 async function main(): Promise<void> {
   const env: Env = EnvSchema.parse(process.env);
@@ -69,6 +71,22 @@ async function main(): Promise<void> {
     `[seed] belt catalog: systems(+${belts.systems.inserted}/~${belts.systems.updated}) ` +
       `ranks(+${belts.ranks.inserted}/~${belts.ranks.updated}) ` +
       `shogos(+${belts.shogos.inserted}/~${belts.shogos.updated})`,
+  );
+
+  // Classifications must seed before techniques — the technique seeder
+  // resolves `(rootCode, code) → uuid` against the live taxonomy.
+  const classifications = await seedClassifications(db);
+  // eslint-disable-next-line no-console
+  console.info(
+    `[seed] classifications: roots(+${classifications.roots.inserted}/~${classifications.roots.updated}) ` +
+      `children(+${classifications.children.inserted}/~${classifications.children.updated})`,
+  );
+
+  const techniques = await seedTechniques(db);
+  // eslint-disable-next-line no-console
+  console.info(
+    `[seed] techniques: rows(+${techniques.techniques.inserted}/~${techniques.techniques.updated}) ` +
+      `edges(+${techniques.edges.inserted})`,
   );
 
   // Close the postgres-js pool so the script can exit. Without this the

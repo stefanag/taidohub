@@ -1,0 +1,203 @@
+{
+  "roots": [
+    {
+      "id": "00000000-0000-4000-8000-000000000001",
+      "code": "technique_type",
+      "nameEn": "Technique type",
+      "nameSv": "Tekniktyp",
+      "nameFi": "Tekniikkatyyppi",
+      "nameJa": "",
+      "sortOrder": 1
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000002",
+      "code": "sotai_category",
+      "nameEn": "Sotai category",
+      "nameSv": "Sotai-kategori",
+      "nameFi": "Sotai-luokka",
+      "nameJa": "操体",
+      "sortOrder": 2
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000003",
+      "code": "attack_type",
+      "nameEn": "Attack type",
+      "nameSv": "Anfallstyp",
+      "nameFi": "Hyökkäystyyppi",
+      "nameJa": "",
+      "sortOrder": 3
+    }
+  ],
+  "children": [
+    {
+      "id": "11111111-0001-4000-8000-000000000001",
+      "parentCode": "technique_type",
+      "code": "generaltechnique",
+      "nameEn": "General technique",
+      "nameSv": "Allmän teknik",
+      "nameFi": "Yleinen tekniikka",
+      "nameJa": "",
+      "sortOrder": 1
+    },
+    {
+      "id": "11111111-0001-4000-8000-000000000002",
+      "parentCode": "technique_type",
+      "code": "kamae",
+      "nameEn": "Kamae",
+      "nameSv": "Kamae",
+      "nameFi": "Kamae",
+      "nameJa": "構え",
+      "sortOrder": 2
+    },
+    {
+      "id": "11111111-0001-4000-8000-000000000003",
+      "parentCode": "technique_type",
+      "code": "tachi",
+      "nameEn": "Tachi (stance)",
+      "nameSv": "Tachi (ställning)",
+      "nameFi": "Tachi (asento)",
+      "nameJa": "立ち",
+      "sortOrder": 3
+    },
+    {
+      "id": "11111111-0001-4000-8000-000000000004",
+      "parentCode": "technique_type",
+      "code": "taidotechnique",
+      "nameEn": "Taido technique",
+      "nameSv": "Taido-teknik",
+      "nameFi": "Taido-tekniikka",
+      "nameJa": "",
+      "sortOrder": 4
+    },
+    {
+      "id": "11111111-0001-4000-8000-000000000005",
+      "parentCode": "technique_type",
+      "code": "unshin",
+      "nameEn": "Unshin (acrobatic)",
+      "nameSv": "Unshin (akrobatik)",
+      "nameFi": "Unshin (akrobatia)",
+      "nameJa": "運身",
+      "sortOrder": 5
+    },
+    {
+      "id": "11111111-0001-4000-8000-000000000006",
+      "parentCode": "technique_type",
+      "code": "unsoku",
+      "nameEn": "Unsoku (footwork)",
+      "nameSv": "Unsoku (förflyttning)",
+      "nameFi": "Unsoku (jalkatyö)",
+      "nameJa": "運足",
+      "sortOrder": 6
+    },
+    {
+      "id": "22222222-0002-4000-8000-000000000001",
+      "parentCode": "sotai_category",
+      "code": "sentai",
+      "nameEn": "Sentai (spinning)",
+      "nameSv": "Sentai (snurrande)",
+      "nameFi": "Sentai (pyörivä)",
+      "nameJa": "旋体",
+      "sortOrder": 1
+    },
+    {
+      "id": "22222222-0002-4000-8000-000000000002",
+      "parentCode": "sotai_category",
+      "code": "untai",
+      "nameEn": "Untai (waving)",
+      "nameSv": "Untai (vågande)",
+      "nameFi": "Untai (aaltoileva)",
+      "nameJa": "運体",
+      "sortOrder": 2
+    },
+    {
+      "id": "22222222-0002-4000-8000-000000000003",
+      "parentCode": "sotai_category",
+      "code": "hentai",
+      "nameEn": "Hentai (falling)",
+      "nameSv": "Hentai (fallande)",
+      "nameFi": "Hentai (kaatuva)",
+      "nameJa": "変体",
+      "sortOrder": 3
+    },
+    {
+      "id": "22222222-0002-4000-8000-000000000004",
+      "parentCode": "sotai_category",
+      "code": "nentai",
+      "nameEn": "Nentai (twisting)",
+      "nameSv": "Nentai (vridande)",
+      "nameFi": "Nentai (kierteinen)",
+      "nameJa": "捻体",
+      "sortOrder": 4
+    },
+    {
+      "id": "22222222-0002-4000-8000-000000000005",
+      "parentCode": "sotai_category",
+      "code": "tentai",
+      "nameEn": "Tentai (rolling)",
+      "nameSv": "Tentai (rullande)",
+      "nameFi": "Tentai (pyörivä)",
+      "nameJa": "転体",
+      "sortOrder": 5
+    },
+    {
+      "id": "33333333-0003-4000-8000-000000000001",
+      "parentCode": "attack_type",
+      "code": "kick",
+      "nameEn": "Kick",
+      "nameSv": "Spark",
+      "nameFi": "Potku",
+      "nameJa": "蹴り",
+      "sortOrder": 1
+    },
+    {
+      "id": "33333333-0003-4000-8000-000000000002",
+      "parentCode": "attack_type",
+      "code": "punch",
+      "nameEn": "Punch",
+      "nameSv": "Slag",
+      "nameFi": "Isku",
+      "nameJa": "突き",
+      "sortOrder": 2
+    },
+    {
+      "id": "33333333-0003-4000-8000-000000000003",
+      "parentCode": "attack_type",
+      "code": "block",
+      "nameEn": "Block",
+      "nameSv": "Block",
+      "nameFi": "Torjunta",
+      "nameJa": "受け",
+      "sortOrder": 3
+    },
+    {
+      "id": "33333333-0003-4000-8000-000000000004",
+      "parentCode": "attack_type",
+      "code": "grabbing",
+      "nameEn": "Grabbing",
+      "nameSv": "Grepp",
+      "nameFi": "Ote",
+      "nameJa": "捕り",
+      "sortOrder": 4
+    },
+    {
+      "id": "33333333-0003-4000-8000-000000000005",
+      "parentCode": "attack_type",
+      "code": "off_balancing",
+      "nameEn": "Off-balancing",
+      "nameSv": "Obalansering",
+      "nameFi": "Tasapainon järkyttäminen",
+      "nameJa": "崩し",
+      "sortOrder": 5
+    },
+    {
+      "id": "33333333-0003-4000-8000-000000000006",
+      "parentCode": "attack_type",
+      "code": "takedown",
+      "nameEn": "Takedown",
+      "nameSv": "Nedtag",
+      "nameFi": "Alasvienti",
+      "nameJa": "",
+      "sortOrder": 6
+    }
+  ]
+}
