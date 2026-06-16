@@ -491,6 +491,36 @@
       },
       "errors": {
         "nextRankSelf": "A rank cannot reference itself as its next rank."
+      },
+      "visuals": {
+        "title": "Visuals",
+        "useStandard": "Use standard for system + level",
+        "useStandardHint": "Recompute visuals from the procedural defaults for the currently picked system and level.",
+        "presetLabel": "Apply preset",
+        "presetPlaceholder": "Choose a preset…",
+        "presets": {
+          "plainDan": "Plain Dan (black)",
+          "shogoRenshi": "Shogo — Renshi (magenta overlay)",
+          "shogoKyoshi": "Shogo — Kyoshi (green overlay)",
+          "shogoHanshi": "Shogo — Hanshi (brown overlay)",
+          "monWhiteBase": "Mon — white base + colored midline",
+          "monColoredBase": "Mon — colored base + white midline"
+        },
+        "gradient": "Base gradient",
+        "badge": "Badge (right-end black square)",
+        "stripe": "Vertical stripe",
+        "midLine": "Mid-line color",
+        "midLineGradient": "Mid-line uses gradient",
+        "overlayTopHalf": "Top-half overlay (shogo)",
+        "none": "None",
+        "colors": {
+          "yellow": "Yellow",
+          "magenta": "Purple",
+          "green": "Green",
+          "brown": "Brown",
+          "black": "Black",
+          "white": "White"
+        }
       }
     },
     "auditLog": {

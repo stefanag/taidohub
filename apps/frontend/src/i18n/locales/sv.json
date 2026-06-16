@@ -474,6 +474,36 @@
       },
       "errors": {
         "nextRankSelf": "En grad kan inte referera till sig själv som nästa grad."
+      },
+      "visuals": {
+        "title": "Utseende",
+        "useStandard": "Använd standard för system + nivå",
+        "useStandardHint": "Räkna om utseendet från de proceduriella standardvärdena för valt system och nivå.",
+        "presetLabel": "Tillämpa förinställning",
+        "presetPlaceholder": "Välj en förinställning…",
+        "presets": {
+          "plainDan": "Vanlig Dan (svart)",
+          "shogoRenshi": "Shogo — Renshi (lila överlägg)",
+          "shogoKyoshi": "Shogo — Kyoshi (grönt överlägg)",
+          "shogoHanshi": "Shogo — Hanshi (brunt överlägg)",
+          "monWhiteBase": "Mon — vit bas + färgad mittlinje",
+          "monColoredBase": "Mon — färgad bas + vit mittlinje"
+        },
+        "gradient": "Bas­gradient",
+        "badge": "Märke (svart fyrkant vid högra änden)",
+        "stripe": "Vertikal rand",
+        "midLine": "Mittlinjens färg",
+        "midLineGradient": "Mittlinjen använder gradient",
+        "overlayTopHalf": "Övre halvans överlägg (shogo)",
+        "none": "Ingen",
+        "colors": {
+          "yellow": "Gul",
+          "magenta": "Lila",
+          "green": "Grön",
+          "brown": "Brun",
+          "black": "Svart",
+          "white": "Vit"
+        }
       }
     },
     "auditLog": {

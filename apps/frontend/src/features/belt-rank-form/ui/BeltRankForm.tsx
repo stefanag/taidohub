@@ -1,7 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
+  BELT_COLORS,
   CreateBeltRankSchema,
+  type BeltColor,
   type BeltRank,
+  type BeltVisuals,
 } from '@repo/contracts/ranks';
 import { useQuery } from '@tanstack/react-query';
 import * as React from 'react';
@@ -40,6 +43,26 @@ export interface BeltRankFormProps {
 
 const NONE = '__none__';
 
+/**
+ * Named visual presets surfaced in the form's preset dropdown. The first option
+ * (use-standard) is handled inline by calling `getBeltVisuals` against the
+ * form's current system + level — that's the canonical procedural default.
+ */
+const VISUAL_PRESETS: Array<{ key: string; labelKey: string; value: BeltVisuals }> = [
+  { key: 'plainDan', labelKey: 'admin.beltCatalog.visuals.presets.plainDan',
+    value: { gradient: 'black' } },
+  { key: 'shogoRenshi', labelKey: 'admin.beltCatalog.visuals.presets.shogoRenshi',
+    value: { gradient: 'black', overlayTopHalf: 'magenta' } },
+  { key: 'shogoKyoshi', labelKey: 'admin.beltCatalog.visuals.presets.shogoKyoshi',
+    value: { gradient: 'black', overlayTopHalf: 'green' } },
+  { key: 'shogoHanshi', labelKey: 'admin.beltCatalog.visuals.presets.shogoHanshi',
+    value: { gradient: 'black', overlayTopHalf: 'brown' } },
+  { key: 'monWhiteBase', labelKey: 'admin.beltCatalog.visuals.presets.monWhiteBase',
+    value: { gradient: 'white', midLine: 'magenta', midLineGradient: true, stripe: 'black' } },
+  { key: 'monColoredBase', labelKey: 'admin.beltCatalog.visuals.presets.monColoredBase',
+    value: { gradient: 'magenta', midLine: 'white', stripe: 'black' } },
+];
+
 export function BeltRankForm({
   rank,
   onSaved,
@@ -63,6 +86,7 @@ export function BeltRankForm({
       nameSv: rank?.nameSv ?? '',
       nameFi: rank?.nameFi ?? '',
       beltColor: rank?.beltColor ?? '#FFFFFF',
+      visuals: rank?.visuals ?? { gradient: 'white' },
       imageUrl: rank?.imageUrl ?? null,
       descriptionEn: rank?.descriptionEn ?? null,
       descriptionSv: rank?.descriptionSv ?? null,
@@ -83,19 +107,26 @@ export function BeltRankForm({
   const ranks = ranksQuery.data ?? [];
   const orgs = orgsQuery.data?.data ?? [];
 
-  // Live preview for the BeltGraphic. When editing, we preserve the rank's
-  // stored `visuals` (which may have been authored independently of the
-  // procedural system+level mapping). Only for a brand-new rank do we fall
-  // back to `getBeltVisuals` as a sensible default.
+  // Form-bound visuals — the user authors them via the visuals editor below,
+  // so preview + submit both read directly from form state.
   const watchedSystemId = form.watch('systemId');
   const watchedLevel = form.watch('level');
   const watchedColor = form.watch('beltColor');
   const watchedPublic = form.watch('publiclyVisible');
   const watchedSystem = systems.find((s) => s.id === watchedSystemId);
-  const visuals = rank?.visuals
-    ?? (watchedSystem
-      ? getBeltVisuals(watchedSystem.code, Number(watchedLevel ?? 0))
-      : { gradient: 'white' as const });
+  const visuals = (form.watch('visuals') as BeltVisuals | undefined) ?? { gradient: 'white' };
+
+  function applyStandardForLevel(): void {
+    if (!watchedSystem) return;
+    const next = getBeltVisuals(watchedSystem.code, Number(watchedLevel ?? 0));
+    form.setValue('visuals', next, { shouldDirty: true });
+  }
+
+  function applyPreset(presetKey: string): void {
+    const preset = VISUAL_PRESETS.find((p) => p.key === presetKey);
+    if (!preset) return;
+    form.setValue('visuals', preset.value, { shouldDirty: true });
+  }
 
   const onSubmit = form.handleSubmit(async (values) => {
     setSubmitError(undefined);
@@ -104,7 +135,7 @@ export function BeltRankForm({
       setSubmitError(t('admin.beltCatalog.errors.nextRankSelf'));
       return;
     }
-    const parsed = CreateBeltRankSchema.parse({ ...values, visuals });
+    const parsed = CreateBeltRankSchema.parse(values);
     try {
       if (rank) {
         await update.mutateAsync({ id: rank.id, input: parsed });
@@ -134,6 +165,158 @@ export function BeltRankForm({
           aria-label={t('admin.beltCatalog.fields.beltColor')}
         />
       </div>
+
+      <fieldset className="rounded border border-outline-variant p-3 space-y-3">
+        <legend className="px-1 text-xs uppercase text-on-surface-variant">
+          {t('admin.beltCatalog.visuals.title')}
+        </legend>
+
+        <div className="flex flex-wrap items-end gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={applyStandardForLevel}
+            disabled={!watchedSystem}
+            title={t('admin.beltCatalog.visuals.useStandardHint')}
+          >
+            {t('admin.beltCatalog.visuals.useStandard')}
+          </Button>
+          <div className="min-w-[12rem]">
+            <Label htmlFor="br-visuals-preset" className="text-xs">
+              {t('admin.beltCatalog.visuals.presetLabel')}
+            </Label>
+            <Select onValueChange={applyPreset}>
+              <SelectTrigger id="br-visuals-preset">
+                <SelectValue placeholder={t('admin.beltCatalog.visuals.presetPlaceholder')} />
+              </SelectTrigger>
+              <SelectContent>
+                {VISUAL_PRESETS.map((p) => (
+                  <SelectItem key={p.key} value={p.key}>
+                    {t(p.labelKey)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <FormField>
+            <Label htmlFor="br-vis-gradient">{t('admin.beltCatalog.visuals.gradient')}</Label>
+            <Select
+              value={visuals.gradient}
+              onValueChange={(v) =>
+                form.setValue('visuals', { ...visuals, gradient: v as BeltColor }, { shouldDirty: true })
+              }
+            >
+              <SelectTrigger id="br-vis-gradient"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                {BELT_COLORS.map((c) => (
+                  <SelectItem key={c} value={c}>{t(`admin.beltCatalog.visuals.colors.${c}`)}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </FormField>
+
+          <FormField>
+            <Label htmlFor="br-vis-stripe">{t('admin.beltCatalog.visuals.stripe')}</Label>
+            <Select
+              value={visuals.stripe ?? NONE}
+              onValueChange={(v) => {
+                const next = { ...visuals };
+                if (v === NONE) delete next.stripe;
+                else next.stripe = v as BeltColor;
+                form.setValue('visuals', next, { shouldDirty: true });
+              }}
+            >
+              <SelectTrigger id="br-vis-stripe"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value={NONE}>{t('admin.beltCatalog.visuals.none')}</SelectItem>
+                {BELT_COLORS.map((c) => (
+                  <SelectItem key={c} value={c}>{t(`admin.beltCatalog.visuals.colors.${c}`)}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </FormField>
+
+          <FormField>
+            <Label htmlFor="br-vis-midline">{t('admin.beltCatalog.visuals.midLine')}</Label>
+            <Select
+              value={visuals.midLine ?? NONE}
+              onValueChange={(v) => {
+                const next = { ...visuals };
+                if (v === NONE) {
+                  delete next.midLine;
+                  delete next.midLineGradient;
+                } else {
+                  next.midLine = v as BeltColor;
+                }
+                form.setValue('visuals', next, { shouldDirty: true });
+              }}
+            >
+              <SelectTrigger id="br-vis-midline"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value={NONE}>{t('admin.beltCatalog.visuals.none')}</SelectItem>
+                {BELT_COLORS.map((c) => (
+                  <SelectItem key={c} value={c}>{t(`admin.beltCatalog.visuals.colors.${c}`)}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </FormField>
+
+          <FormField>
+            <Label htmlFor="br-vis-overlay">{t('admin.beltCatalog.visuals.overlayTopHalf')}</Label>
+            <Select
+              value={visuals.overlayTopHalf ?? NONE}
+              onValueChange={(v) => {
+                const next = { ...visuals };
+                if (v === NONE) delete next.overlayTopHalf;
+                else next.overlayTopHalf = v as BeltColor;
+                form.setValue('visuals', next, { shouldDirty: true });
+              }}
+            >
+              <SelectTrigger id="br-vis-overlay"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value={NONE}>{t('admin.beltCatalog.visuals.none')}</SelectItem>
+                {BELT_COLORS.map((c) => (
+                  <SelectItem key={c} value={c}>{t(`admin.beltCatalog.visuals.colors.${c}`)}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </FormField>
+        </div>
+
+        <div className="flex flex-wrap gap-4">
+          <label className="flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={!!visuals.badge}
+              onChange={(e) => {
+                const next = { ...visuals };
+                if (e.target.checked) next.badge = true;
+                else delete next.badge;
+                form.setValue('visuals', next, { shouldDirty: true });
+              }}
+            />
+            {t('admin.beltCatalog.visuals.badge')}
+          </label>
+          <label className="flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={!!visuals.midLineGradient}
+              disabled={!visuals.midLine}
+              onChange={(e) => {
+                const next = { ...visuals };
+                if (e.target.checked) next.midLineGradient = true;
+                else delete next.midLineGradient;
+                form.setValue('visuals', next, { shouldDirty: true });
+              }}
+            />
+            {t('admin.beltCatalog.visuals.midLineGradient')}
+          </label>
+        </div>
+      </fieldset>
 
       <FormField>
         <Label htmlFor="br-system">{t('admin.beltCatalog.fields.system')}</Label>

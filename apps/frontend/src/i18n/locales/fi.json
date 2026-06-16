@@ -474,6 +474,36 @@
       },
       "errors": {
         "nextRankSelf": "Aste ei voi viitata itseensä seuraavana asteena."
+      },
+      "visuals": {
+        "title": "Ulkoasu",
+        "useStandard": "Käytä järjestelmän + tason oletusta",
+        "useStandardHint": "Lasketaan ulkoasu valitun järjestelmän ja tason proseduraalisista oletuksista.",
+        "presetLabel": "Käytä esiasetusta",
+        "presetPlaceholder": "Valitse esiasetus…",
+        "presets": {
+          "plainDan": "Tavallinen Dan (musta)",
+          "shogoRenshi": "Shogo — Renshi (violetti päällys)",
+          "shogoKyoshi": "Shogo — Kyoshi (vihreä päällys)",
+          "shogoHanshi": "Shogo — Hanshi (ruskea päällys)",
+          "monWhiteBase": "Mon — valkoinen pohja + värillinen keskiviiva",
+          "monColoredBase": "Mon — värillinen pohja + valkoinen keskiviiva"
+        },
+        "gradient": "Perusliuku",
+        "badge": "Merkki (musta neliö oikeassa päässä)",
+        "stripe": "Pystysuora raita",
+        "midLine": "Keskiviivan väri",
+        "midLineGradient": "Keskiviiva käyttää liukua",
+        "overlayTopHalf": "Yläpuolen päällys (shogo)",
+        "none": "Ei mitään",
+        "colors": {
+          "yellow": "Keltainen",
+          "magenta": "Violetti",
+          "green": "Vihreä",
+          "brown": "Ruskea",
+          "black": "Musta",
+          "white": "Valkoinen"
+        }
       }
     },
     "auditLog": {
