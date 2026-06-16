@@ -78,6 +78,23 @@ export function BeltRankForm({
   const update = useUpdateBeltRank();
   const [submitError, setSubmitError] = React.useState<string | undefined>();
 
+  const pending = create.isPending || update.isPending;
+  const systems = systemsQuery.data ?? [];
+  const ranks = ranksQuery.data ?? [];
+  const orgs = orgsQuery.data?.data ?? [];
+
+  // Live preview for the BeltGraphic. `getBeltVisuals` is used only here as a
+  // sensible default for new-rank authoring — runtime rendering elsewhere
+  // reads `rank.visuals` directly from the seeded fixture.
+  const watchedSystemId = form.watch('systemId');
+  const watchedLevel = form.watch('level');
+  const watchedColor = form.watch('beltColor');
+  const watchedPublic = form.watch('publiclyVisible');
+  const watchedSystem = systems.find((s) => s.id === watchedSystemId);
+  const visuals = watchedSystem
+    ? getBeltVisuals(watchedSystem.code, Number(watchedLevel ?? 0))
+    : { gradient: 'white' as const };
+
   const onSubmit = form.handleSubmit(async (values) => {
     setSubmitError(undefined);
     // Service-side guard against `nextRankId` self-reference for edit mode.
@@ -85,7 +102,7 @@ export function BeltRankForm({
       setSubmitError(t('admin.beltCatalog.errors.nextRankSelf'));
       return;
     }
-    const parsed = CreateBeltRankSchema.parse(values);
+    const parsed = CreateBeltRankSchema.parse({ ...values, visuals });
     try {
       if (rank) {
         await update.mutateAsync({ id: rank.id, input: parsed });
@@ -101,21 +118,6 @@ export function BeltRankForm({
       );
     }
   });
-
-  const pending = create.isPending || update.isPending;
-  const systems = systemsQuery.data ?? [];
-  const ranks = ranksQuery.data ?? [];
-  const orgs = orgsQuery.data?.data ?? [];
-
-  // Live preview for the BeltGraphic.
-  const watchedSystemId = form.watch('systemId');
-  const watchedLevel = form.watch('level');
-  const watchedColor = form.watch('beltColor');
-  const watchedPublic = form.watch('publiclyVisible');
-  const watchedSystem = systems.find((s) => s.id === watchedSystemId);
-  const visuals = watchedSystem
-    ? getBeltVisuals(watchedSystem.code, Number(watchedLevel ?? 0))
-    : { gradient: 'white' as const };
 
   return (
     <form onSubmit={onSubmit} className="space-y-4" noValidate>

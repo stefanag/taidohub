@@ -64,6 +64,7 @@ export class BeltRanksService {
       nameSv: input.nameSv ?? '',
       nameFi: input.nameFi ?? '',
       beltColor: input.beltColor,
+      visuals: input.visuals,
       imageUrl: input.imageUrl ?? null,
       descriptionEn: input.descriptionEn ?? null,
       descriptionSv: input.descriptionSv ?? null,
@@ -201,6 +202,7 @@ export class BeltRanksService {
     if ('nameSv' in input) patch.nameSv = input.nameSv!;
     if ('nameFi' in input) patch.nameFi = input.nameFi!;
     if ('beltColor' in input) patch.beltColor = input.beltColor!;
+    if ('visuals' in input) patch.visuals = input.visuals!;
     if ('imageUrl' in input) patch.imageUrl = input.imageUrl ?? null;
     if ('descriptionEn' in input) patch.descriptionEn = input.descriptionEn ?? null;
     if ('descriptionSv' in input) patch.descriptionSv = input.descriptionSv ?? null;
@@ -225,6 +227,7 @@ export class BeltRanksService {
       nameSv: row.nameSv,
       nameFi: row.nameFi,
       beltColor: row.beltColor,
+      visuals: row.visuals as BeltRank['visuals'],
       imageUrl: row.imageUrl,
       descriptionEn: row.descriptionEn,
       descriptionSv: row.descriptionSv,

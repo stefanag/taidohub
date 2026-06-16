@@ -6,7 +6,6 @@ import {
   type BeltRank,
 } from '@/entities/belt-rank';
 import { type BeltSystem } from '@/entities/belt-system';
-import { getBeltVisuals } from '@/shared/lib/belt-visuals';
 import { Button } from '@/shared/ui';
 import { BeltGraphic } from '@/shared/ui/belt-graphic';
 import {
@@ -55,13 +54,10 @@ export function BeltRanksTable({
         <tbody className="divide-y divide-outline-variant">
           {ranks.map((r) => {
             const sys = systemsById.get(r.systemId);
-            const visuals = sys
-              ? getBeltVisuals(sys.code, r.level)
-              : { gradient: 'white' as const };
             return (
               <tr key={r.id}>
                 <td className="w-32 py-2">
-                  <BeltGraphic {...visuals} className="w-24" />
+                  <BeltGraphic {...r.visuals} className="w-24" />
                 </td>
                 <td className="py-2">{r.nameRomaji}</td>
                 <td className="py-2">{r.level}</td>

@@ -45,6 +45,7 @@ const RANK_FIXTURE = {
   nameSv: '',
   nameFi: '',
   beltColor: '#FFFFFF',
+  visuals: { gradient: 'white' as const },
   imageUrl: null,
   descriptionEn: null,
   descriptionSv: null,

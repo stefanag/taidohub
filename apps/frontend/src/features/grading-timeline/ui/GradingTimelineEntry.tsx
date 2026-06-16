@@ -6,7 +6,7 @@ import type { BeltRank } from '@/entities/belt-rank';
 import type { GradingHistoryRow } from '@/entities/rank-history';
 import type { ShogoTitle } from '@/entities/shogo-title';
 
-import { getBeltVisuals, type BeltColor } from '@/shared/lib/belt-visuals';
+import { type BeltColor } from '@/shared/lib/belt-visuals';
 import { useFeatureFlag } from '@/shared/lib/feature-flags';
 import { rankLabel, type Lang } from '@/shared/lib/rank-label';
 import { Button } from '@/shared/ui';
@@ -85,7 +85,7 @@ export function GradingTimelineEntry({
   const rankTitle = rank?.nameJa ? `${localised} ${rank.nameJa}`.trim() : localised;
 
   const systemCode = rank ? systemCodeMap.get(rank.systemId) ?? '' : '';
-  const beltVisuals = rank && systemCode ? getBeltVisuals(systemCode, rank.level) : null;
+  const beltVisuals = rank?.visuals ?? null;
 
   let nodeClass: string;
   let NodeIcon: React.ComponentType<{ className?: string }>;

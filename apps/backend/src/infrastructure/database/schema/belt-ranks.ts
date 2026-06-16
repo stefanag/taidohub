@@ -5,6 +5,7 @@ import {
   check,
   index,
   integer,
+  jsonb,
   pgTable,
   text,
   timestamp,
@@ -40,6 +41,15 @@ export const beltRanks = pgTable(
     nameSv: text('name_sv').notNull().default(''),
     nameFi: text('name_fi').notNull().default(''),
     beltColor: text('belt_color').notNull(),
+    /**
+     * Per-rank visual spec consumed by `<BeltGraphic>`. Shape matches
+     * `BeltVisualsSchema` in @repo/contracts/ranks: {gradient, badge?, stripe?,
+     * midLine?, midLineGradient?, overlayTopHalf?}. JSON instead of dedicated
+     * columns so an org can author new visual styles without a schema change.
+     */
+    visuals: jsonb('visuals')
+      .notNull()
+      .default(sql`'{"gradient":"white"}'::jsonb`),
     imageUrl: text('image_url'),
     descriptionEn: text('description_en'),
     descriptionSv: text('description_sv'),

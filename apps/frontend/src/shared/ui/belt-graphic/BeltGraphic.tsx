@@ -1,18 +1,23 @@
 import { BeltColor } from '@/shared/lib/belt-visuals';
 
+/**
+ * Mirrors the `BeltVisuals` contract from `@repo/contracts/ranks` with all
+ * optional fields typed as `T | undefined` so a spread of `rank.visuals`
+ * (after Zod parsing) satisfies `exactOptionalPropertyTypes`.
+ */
 export interface BeltGraphicProps {
   /** Base belt gradient */
   gradient: BeltColor;
   /** Black rectangle near right end (kyu odd levels) */
-  badge?: boolean;
+  badge?: boolean | undefined;
   /** Vertical stripe near right end (mon odd levels) */
-  stripe?: BeltColor;
+  stripe?: BeltColor | undefined;
   /** Horizontal center line — plain color or gradient */
-  midLine?: BeltColor;
+  midLine?: BeltColor | undefined;
   /** Whether midLine uses a gradient or flat color */
-  midLineGradient?: boolean;
+  midLineGradient?: boolean | undefined;
   /** Colored top half overlay (shogo belts) */
-  overlayTopHalf?: BeltColor;
+  overlayTopHalf?: BeltColor | undefined;
   className?: string;
 }
 

@@ -45,6 +45,7 @@ interface SeedRank {
   nameSv: string;
   nameFi: string;
   beltColor: string;
+  visuals?: Record<string, unknown>;
   imageUrl?: string | null;
   descriptionEn?: string | null;
   descriptionSv?: string | null;
@@ -164,6 +165,7 @@ export async function seedBeltCatalog(db: DrizzleDb): Promise<BeltCatalogSeedRes
           nameSv: rank.nameSv,
           nameFi: rank.nameFi,
           beltColor: rank.beltColor,
+          visuals: rank.visuals ?? { gradient: 'white' },
           imageUrl: rank.imageUrl ?? null,
           descriptionEn: rank.descriptionEn ?? null,
           descriptionSv: rank.descriptionSv ?? null,
@@ -187,6 +189,7 @@ export async function seedBeltCatalog(db: DrizzleDb): Promise<BeltCatalogSeedRes
         nameSv: rank.nameSv,
         nameFi: rank.nameFi,
         beltColor: rank.beltColor,
+        visuals: rank.visuals ?? { gradient: 'white' },
         imageUrl: rank.imageUrl ?? null,
         descriptionEn: rank.descriptionEn ?? null,
         descriptionSv: rank.descriptionSv ?? null,

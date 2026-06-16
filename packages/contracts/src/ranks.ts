@@ -6,6 +6,33 @@ const UUID_EXAMPLE = '7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5';
 const SLUG_REGEX = /^[a-z0-9-]+$/;
 const HEX_COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
 
+/** Named colours the BeltGraphic component understands. */
+export const BELT_COLORS = ['yellow', 'magenta', 'green', 'brown', 'black', 'white'] as const;
+export const BeltColorSchema = z.enum(BELT_COLORS);
+export type BeltColor = z.infer<typeof BeltColorSchema>;
+
+/**
+ * Per-rank visual spec consumed by `<BeltGraphic>`. The `gradient` is the
+ * belt's base colour; the optional fields paint extras (kyu badges, mon
+ * stripes, shogo overlay).
+ */
+export const BeltVisualsSchema = z
+  .object({
+    gradient: BeltColorSchema,
+    badge: z.boolean().optional(),
+    stripe: BeltColorSchema.optional(),
+    midLine: BeltColorSchema.optional(),
+    midLineGradient: z.boolean().optional(),
+    overlayTopHalf: BeltColorSchema.optional(),
+  })
+  .meta({
+    id: 'BeltVisuals',
+    description: 'Visual specification for a belt rank graphic.',
+    example: { gradient: 'yellow', badge: true },
+  });
+
+export type BeltVisuals = z.infer<typeof BeltVisualsSchema>;
+
 const slugRequiredWhenPublic = (v: Record<string, unknown>): boolean => {
   if (v['publiclyVisible'] !== true) return true;
   return typeof v['slug'] === 'string' && v['slug'].length > 0;
@@ -30,6 +57,7 @@ export const CreateBeltRankSchema = z
     nameSv: z.string().max(100).default(''),
     nameFi: z.string().max(100).default(''),
     beltColor: z.string().regex(HEX_COLOR_REGEX, 'Must be a six-digit hex colour, e.g. #FFD700.'),
+    visuals: BeltVisualsSchema.default({ gradient: 'white' }),
     imageUrl: z.string().url().nullable().optional(),
     descriptionEn: z.string().nullable().default(null),
     descriptionSv: z.string().nullable().default(null),
@@ -66,6 +94,7 @@ export const UpdateBeltRankSchema = z
       .string()
       .regex(HEX_COLOR_REGEX, 'Must be a six-digit hex colour, e.g. #FFD700.')
       .optional(),
+    visuals: BeltVisualsSchema.optional(),
     imageUrl: z.string().url().nullable().optional(),
     descriptionEn: z.string().nullable().optional(),
     descriptionSv: z.string().nullable().optional(),
@@ -100,6 +129,7 @@ export const BeltRankSchema = z
     nameSv: z.string(),
     nameFi: z.string(),
     beltColor: z.string(),
+    visuals: BeltVisualsSchema,
     imageUrl: z.string().nullable(),
     descriptionEn: z.string().nullable(),
     descriptionSv: z.string().nullable(),
@@ -126,6 +156,7 @@ export const BeltRankSchema = z
       nameSv: '10 Kyu',
       nameFi: '10. Kyu',
       beltColor: '#FFFFFF',
+      visuals: { gradient: 'white' },
       imageUrl: null,
       descriptionEn: null,
       descriptionSv: null,
@@ -176,6 +207,7 @@ export type PublicRankResponse = z.infer<typeof PublicRankResponseSchema>;
 
 export const BeltRanksOpenApiRegistry = {
   BeltRank: BeltRankSchema,
+  BeltVisuals: BeltVisualsSchema,
   CreateBeltRankInput: CreateBeltRankSchema,
   UpdateBeltRankInput: UpdateBeltRankSchema,
   PublicRankResponse: PublicRankResponseSchema,

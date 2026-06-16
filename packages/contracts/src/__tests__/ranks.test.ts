@@ -117,6 +117,7 @@ describe('BeltRankSchema', () => {
     expect(
       BeltRankSchema.safeParse({
         ...VALID_CREATE,
+        visuals: { gradient: 'white' },
         id: UUID,
         createdAt: ISO,
         updatedAt: ISO,
@@ -141,6 +142,7 @@ describe('PublicRankResponseSchema', () => {
           nameSv: '10 Kyu',
           nameFi: '10. Kyu',
           beltColor: '#FFFFFF',
+          visuals: { gradient: 'white' },
           imageUrl: null,
           descriptionEn: null,
           descriptionSv: null,

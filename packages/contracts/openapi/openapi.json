@@ -5716,6 +5716,72 @@
             "format": "uuid",
             "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "A specific rank inside a belt system.",
               "example": {
@@ -5730,6 +5796,9 @@
                 "nameSv": "10 Kyu",
                 "nameFi": "10. Kyu",
                 "beltColor": "#FFFFFF",
+                "visuals": {
+                  "gradient": "white"
+                },
                 "imageUrl": null,
                 "descriptionEn": null,
                 "descriptionSv": null,
@@ -5755,7 +5824,73 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "A specific rank inside a belt system.",
               "example": {
@@ -5770,6 +5905,9 @@
                 "nameSv": "10 Kyu",
                 "nameFi": "10. Kyu",
                 "beltColor": "#FFFFFF",
+                "visuals": {
+                  "gradient": "white"
+                },
                 "imageUrl": null,
                 "descriptionEn": null,
                 "descriptionSv": null,
@@ -5788,6 +5926,72 @@
             "format": "uuid",
             "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "A specific rank inside a belt system.",
               "example": {
@@ -5802,6 +6006,9 @@
                 "nameSv": "10 Kyu",
                 "nameFi": "10. Kyu",
                 "beltColor": "#FFFFFF",
+                "visuals": {
+                  "gradient": "white"
+                },
                 "imageUrl": null,
                 "descriptionEn": null,
                 "descriptionSv": null,
@@ -5820,6 +6027,72 @@
             "minimum": 0,
             "maximum": 9007199254740991,
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "A specific rank inside a belt system.",
               "example": {
@@ -5834,6 +6107,9 @@
                 "nameSv": "10 Kyu",
                 "nameFi": "10. Kyu",
                 "beltColor": "#FFFFFF",
+                "visuals": {
+                  "gradient": "white"
+                },
                 "imageUrl": null,
                 "descriptionEn": null,
                 "descriptionSv": null,
@@ -5852,6 +6128,72 @@
             "minimum": 0,
             "maximum": 9007199254740991,
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "A specific rank inside a belt system.",
               "example": {
@@ -5866,6 +6208,9 @@
                 "nameSv": "10 Kyu",
                 "nameFi": "10. Kyu",
                 "beltColor": "#FFFFFF",
+                "visuals": {
+                  "gradient": "white"
+                },
                 "imageUrl": null,
                 "descriptionEn": null,
                 "descriptionSv": null,
@@ -5889,7 +6234,73 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "A specific rank inside a belt system.",
               "example": {
@@ -5904,6 +6315,9 @@
                 "nameSv": "10 Kyu",
                 "nameFi": "10. Kyu",
                 "beltColor": "#FFFFFF",
+                "visuals": {
+                  "gradient": "white"
+                },
                 "imageUrl": null,
                 "descriptionEn": null,
                 "descriptionSv": null,
@@ -5920,6 +6334,72 @@
           "nameRomaji": {
             "type": "string",
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "A specific rank inside a belt system.",
               "example": {
@@ -5934,6 +6414,9 @@
                 "nameSv": "10 Kyu",
                 "nameFi": "10. Kyu",
                 "beltColor": "#FFFFFF",
+                "visuals": {
+                  "gradient": "white"
+                },
                 "imageUrl": null,
                 "descriptionEn": null,
                 "descriptionSv": null,
@@ -5950,6 +6433,72 @@
           "nameEn": {
             "type": "string",
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "A specific rank inside a belt system.",
               "example": {
@@ -5964,6 +6513,9 @@
                 "nameSv": "10 Kyu",
                 "nameFi": "10. Kyu",
                 "beltColor": "#FFFFFF",
+                "visuals": {
+                  "gradient": "white"
+                },
                 "imageUrl": null,
                 "descriptionEn": null,
                 "descriptionSv": null,
@@ -5980,6 +6532,72 @@
           "nameSv": {
             "type": "string",
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "A specific rank inside a belt system.",
               "example": {
@@ -5994,6 +6612,9 @@
                 "nameSv": "10 Kyu",
                 "nameFi": "10. Kyu",
                 "beltColor": "#FFFFFF",
+                "visuals": {
+                  "gradient": "white"
+                },
                 "imageUrl": null,
                 "descriptionEn": null,
                 "descriptionSv": null,
@@ -6010,6 +6631,72 @@
           "nameFi": {
             "type": "string",
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "A specific rank inside a belt system.",
               "example": {
@@ -6024,6 +6711,9 @@
                 "nameSv": "10 Kyu",
                 "nameFi": "10. Kyu",
                 "beltColor": "#FFFFFF",
+                "visuals": {
+                  "gradient": "white"
+                },
                 "imageUrl": null,
                 "descriptionEn": null,
                 "descriptionSv": null,
@@ -6040,6 +6730,72 @@
           "beltColor": {
             "type": "string",
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "A specific rank inside a belt system.",
               "example": {
@@ -6054,6 +6810,110 @@
                 "nameSv": "10 Kyu",
                 "nameFi": "10. Kyu",
                 "beltColor": "#FFFFFF",
+                "visuals": {
+                  "gradient": "white"
+                },
+                "imageUrl": null,
+                "descriptionEn": null,
+                "descriptionSv": null,
+                "descriptionFi": null,
+                "publiclyVisible": false,
+                "slug": null,
+                "minAge": null,
+                "nextRankId": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": "2026-05-24T08:00:00.000Z"
+              }
+            }
+          },
+          "visuals": {
+            "$ref": "#/$defs/BeltVisuals",
+            "type": "",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A specific rank inside a belt system.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "organisationId": null,
+                "systemId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "level": 1,
+                "sortOrder": 10,
+                "nameJa": null,
+                "nameRomaji": "Jukyu",
+                "nameEn": "10th Kyu",
+                "nameSv": "10 Kyu",
+                "nameFi": "10. Kyu",
+                "beltColor": "#FFFFFF",
+                "visuals": {
+                  "gradient": "white"
+                },
                 "imageUrl": null,
                 "descriptionEn": null,
                 "descriptionSv": null,
@@ -6077,7 +6937,73 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "A specific rank inside a belt system.",
               "example": {
@@ -6092,6 +7018,9 @@
                 "nameSv": "10 Kyu",
                 "nameFi": "10. Kyu",
                 "beltColor": "#FFFFFF",
+                "visuals": {
+                  "gradient": "white"
+                },
                 "imageUrl": null,
                 "descriptionEn": null,
                 "descriptionSv": null,
@@ -6115,7 +7044,73 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "A specific rank inside a belt system.",
               "example": {
@@ -6130,6 +7125,9 @@
                 "nameSv": "10 Kyu",
                 "nameFi": "10. Kyu",
                 "beltColor": "#FFFFFF",
+                "visuals": {
+                  "gradient": "white"
+                },
                 "imageUrl": null,
                 "descriptionEn": null,
                 "descriptionSv": null,
@@ -6153,7 +7151,73 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "A specific rank inside a belt system.",
               "example": {
@@ -6168,6 +7232,9 @@
                 "nameSv": "10 Kyu",
                 "nameFi": "10. Kyu",
                 "beltColor": "#FFFFFF",
+                "visuals": {
+                  "gradient": "white"
+                },
                 "imageUrl": null,
                 "descriptionEn": null,
                 "descriptionSv": null,
@@ -6191,7 +7258,73 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "A specific rank inside a belt system.",
               "example": {
@@ -6206,6 +7339,9 @@
                 "nameSv": "10 Kyu",
                 "nameFi": "10. Kyu",
                 "beltColor": "#FFFFFF",
+                "visuals": {
+                  "gradient": "white"
+                },
                 "imageUrl": null,
                 "descriptionEn": null,
                 "descriptionSv": null,
@@ -6222,6 +7358,72 @@
           "publiclyVisible": {
             "type": "boolean",
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "A specific rank inside a belt system.",
               "example": {
@@ -6236,6 +7438,9 @@
                 "nameSv": "10 Kyu",
                 "nameFi": "10. Kyu",
                 "beltColor": "#FFFFFF",
+                "visuals": {
+                  "gradient": "white"
+                },
                 "imageUrl": null,
                 "descriptionEn": null,
                 "descriptionSv": null,
@@ -6259,7 +7464,73 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "A specific rank inside a belt system.",
               "example": {
@@ -6274,6 +7545,9 @@
                 "nameSv": "10 Kyu",
                 "nameFi": "10. Kyu",
                 "beltColor": "#FFFFFF",
+                "visuals": {
+                  "gradient": "white"
+                },
                 "imageUrl": null,
                 "descriptionEn": null,
                 "descriptionSv": null,
@@ -6299,7 +7573,73 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "A specific rank inside a belt system.",
               "example": {
@@ -6314,6 +7654,9 @@
                 "nameSv": "10 Kyu",
                 "nameFi": "10. Kyu",
                 "beltColor": "#FFFFFF",
+                "visuals": {
+                  "gradient": "white"
+                },
                 "imageUrl": null,
                 "descriptionEn": null,
                 "descriptionSv": null,
@@ -6339,7 +7682,73 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "A specific rank inside a belt system.",
               "example": {
@@ -6354,6 +7763,9 @@
                 "nameSv": "10 Kyu",
                 "nameFi": "10. Kyu",
                 "beltColor": "#FFFFFF",
+                "visuals": {
+                  "gradient": "white"
+                },
                 "imageUrl": null,
                 "descriptionEn": null,
                 "descriptionSv": null,
@@ -6372,6 +7784,72 @@
             "format": "date-time",
             "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "A specific rank inside a belt system.",
               "example": {
@@ -6386,6 +7864,9 @@
                 "nameSv": "10 Kyu",
                 "nameFi": "10. Kyu",
                 "beltColor": "#FFFFFF",
+                "visuals": {
+                  "gradient": "white"
+                },
                 "imageUrl": null,
                 "descriptionEn": null,
                 "descriptionSv": null,
@@ -6404,6 +7885,72 @@
             "format": "date-time",
             "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "A specific rank inside a belt system.",
               "example": {
@@ -6418,6 +7965,9 @@
                 "nameSv": "10 Kyu",
                 "nameFi": "10. Kyu",
                 "beltColor": "#FFFFFF",
+                "visuals": {
+                  "gradient": "white"
+                },
                 "imageUrl": null,
                 "descriptionEn": null,
                 "descriptionSv": null,
@@ -6444,6 +7994,7 @@
           "nameSv",
           "nameFi",
           "beltColor",
+          "visuals",
           "imageUrl",
           "descriptionEn",
           "descriptionSv",
@@ -6471,7 +8022,73 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Create-belt-rank payload."
             }
@@ -6481,6 +8098,72 @@
             "format": "uuid",
             "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Create-belt-rank payload."
             }
@@ -6490,6 +8173,72 @@
             "minimum": 0,
             "maximum": 9007199254740991,
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Create-belt-rank payload."
             }
@@ -6500,6 +8249,72 @@
             "minimum": 0,
             "maximum": 9007199254740991,
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Create-belt-rank payload."
             }
@@ -6516,7 +8331,73 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Create-belt-rank payload."
             }
@@ -6526,6 +8407,72 @@
             "minLength": 1,
             "maxLength": 100,
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Create-belt-rank payload."
             }
@@ -6535,6 +8482,72 @@
             "type": "string",
             "maxLength": 100,
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Create-belt-rank payload."
             }
@@ -6544,6 +8557,72 @@
             "type": "string",
             "maxLength": 100,
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Create-belt-rank payload."
             }
@@ -6553,6 +8632,72 @@
             "type": "string",
             "maxLength": 100,
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Create-belt-rank payload."
             }
@@ -6561,6 +8706,150 @@
             "type": "string",
             "pattern": "^#[0-9a-fA-F]{6}$",
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create-belt-rank payload."
+            }
+          },
+          "visuals": {
+            "default": {
+              "gradient": "white"
+            },
+            "$ref": "#/$defs/BeltVisuals",
+            "type": "",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Create-belt-rank payload."
             }
@@ -6576,7 +8865,73 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Create-belt-rank payload."
             }
@@ -6592,7 +8947,73 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Create-belt-rank payload."
             }
@@ -6608,7 +9029,73 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Create-belt-rank payload."
             }
@@ -6624,7 +9111,73 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Create-belt-rank payload."
             }
@@ -6633,6 +9186,72 @@
             "default": false,
             "type": "boolean",
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Create-belt-rank payload."
             }
@@ -6648,7 +9267,73 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Create-belt-rank payload."
             }
@@ -6665,7 +9350,73 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Create-belt-rank payload."
             }
@@ -6682,7 +9433,73 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Create-belt-rank payload."
             }
@@ -6710,7 +9527,73 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Update-belt-rank patch — omit a field to leave it unchanged."
             }
@@ -6720,6 +9603,72 @@
             "format": "uuid",
             "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Update-belt-rank patch — omit a field to leave it unchanged."
             }
@@ -6729,6 +9678,72 @@
             "minimum": 0,
             "maximum": 9007199254740991,
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Update-belt-rank patch — omit a field to leave it unchanged."
             }
@@ -6738,6 +9753,72 @@
             "minimum": 0,
             "maximum": 9007199254740991,
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Update-belt-rank patch — omit a field to leave it unchanged."
             }
@@ -6753,7 +9834,73 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Update-belt-rank patch — omit a field to leave it unchanged."
             }
@@ -6763,6 +9910,72 @@
             "minLength": 1,
             "maxLength": 100,
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Update-belt-rank patch — omit a field to leave it unchanged."
             }
@@ -6771,6 +9984,72 @@
             "type": "string",
             "maxLength": 100,
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Update-belt-rank patch — omit a field to leave it unchanged."
             }
@@ -6779,6 +10058,72 @@
             "type": "string",
             "maxLength": 100,
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Update-belt-rank patch — omit a field to leave it unchanged."
             }
@@ -6787,6 +10132,72 @@
             "type": "string",
             "maxLength": 100,
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Update-belt-rank patch — omit a field to leave it unchanged."
             }
@@ -6795,6 +10206,147 @@
             "type": "string",
             "pattern": "^#[0-9a-fA-F]{6}$",
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Update-belt-rank patch — omit a field to leave it unchanged."
+            }
+          },
+          "visuals": {
+            "$ref": "#/$defs/BeltVisuals",
+            "type": "",
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Update-belt-rank patch — omit a field to leave it unchanged."
             }
@@ -6810,7 +10362,73 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Update-belt-rank patch — omit a field to leave it unchanged."
             }
@@ -6825,7 +10443,73 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Update-belt-rank patch — omit a field to leave it unchanged."
             }
@@ -6840,7 +10524,73 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Update-belt-rank patch — omit a field to leave it unchanged."
             }
@@ -6855,7 +10605,73 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Update-belt-rank patch — omit a field to leave it unchanged."
             }
@@ -6863,6 +10679,72 @@
           "publiclyVisible": {
             "type": "boolean",
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Update-belt-rank patch — omit a field to leave it unchanged."
             }
@@ -6878,7 +10760,73 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Update-belt-rank patch — omit a field to leave it unchanged."
             }
@@ -6895,7 +10843,73 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Update-belt-rank patch — omit a field to leave it unchanged."
             }
@@ -6912,7 +10926,73 @@
               }
             ],
             "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              }
+            },
             "x-nestjs_zod-parent-metadata": {
               "description": "Update-belt-rank patch — omit a field to leave it unchanged."
             }
@@ -7288,6 +11368,9 @@
                   "beltColor": {
                     "type": "string"
                   },
+                  "visuals": {
+                    "$ref": "#/$defs/BeltVisuals"
+                  },
                   "imageUrl": {
                     "anyOf": [
                       {
@@ -7388,6 +11471,7 @@
                   "nameSv",
                   "nameFi",
                   "beltColor",
+                  "visuals",
                   "imageUrl",
                   "descriptionEn",
                   "descriptionSv",
@@ -7412,6 +11496,9 @@
                   "nameSv": "10 Kyu",
                   "nameFi": "10. Kyu",
                   "beltColor": "#FFFFFF",
+                  "visuals": {
+                    "gradient": "white"
+                  },
                   "imageUrl": null,
                   "descriptionEn": null,
                   "descriptionSv": null,
@@ -7422,6 +11509,69 @@
                   "nextRankId": null,
                   "createdAt": "2026-05-24T08:00:00.000Z",
                   "updatedAt": "2026-05-24T08:00:00.000Z"
+                }
+              },
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
                 }
               }
             },
@@ -7521,6 +11671,9 @@
                   "beltColor": {
                     "type": "string"
                   },
+                  "visuals": {
+                    "$ref": "#/$defs/BeltVisuals"
+                  },
                   "imageUrl": {
                     "anyOf": [
                       {
@@ -7621,6 +11774,7 @@
                   "nameSv",
                   "nameFi",
                   "beltColor",
+                  "visuals",
                   "imageUrl",
                   "descriptionEn",
                   "descriptionSv",
@@ -7645,6 +11799,9 @@
                   "nameSv": "10 Kyu",
                   "nameFi": "10. Kyu",
                   "beltColor": "#FFFFFF",
+                  "visuals": {
+                    "gradient": "white"
+                  },
                   "imageUrl": null,
                   "descriptionEn": null,
                   "descriptionSv": null,
@@ -7655,6 +11812,69 @@
                   "nextRankId": null,
                   "createdAt": "2026-05-24T08:00:00.000Z",
                   "updatedAt": "2026-05-24T08:00:00.000Z"
+                }
+              },
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
                 }
               }
             },
@@ -7761,6 +11981,9 @@
                   "beltColor": {
                     "type": "string"
                   },
+                  "visuals": {
+                    "$ref": "#/$defs/BeltVisuals"
+                  },
                   "imageUrl": {
                     "anyOf": [
                       {
@@ -7861,6 +12084,7 @@
                   "nameSv",
                   "nameFi",
                   "beltColor",
+                  "visuals",
                   "imageUrl",
                   "descriptionEn",
                   "descriptionSv",
@@ -7885,6 +12109,9 @@
                   "nameSv": "10 Kyu",
                   "nameFi": "10. Kyu",
                   "beltColor": "#FFFFFF",
+                  "visuals": {
+                    "gradient": "white"
+                  },
                   "imageUrl": null,
                   "descriptionEn": null,
                   "descriptionSv": null,
@@ -7895,6 +12122,69 @@
                   "nextRankId": null,
                   "createdAt": "2026-05-24T08:00:00.000Z",
                   "updatedAt": "2026-05-24T08:00:00.000Z"
+                }
+              },
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
                 }
               }
             },
@@ -13270,6 +17560,9 @@
       },
       "BeltRank": {
         "$ref": "#/components/schemas/BeltRank"
+      },
+      "BeltVisuals": {
+        "$ref": "#/components/schemas/BeltVisuals"
       },
       "CreateBeltRankInput": {
         "$ref": "#/components/schemas/CreateBeltRankInput"

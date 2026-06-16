@@ -4,7 +4,6 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { publicRankQueryOptions } from '@/entities/belt-rank';
-import { getBeltVisuals } from '@/shared/lib/belt-visuals';
 import { type Lang } from '@/shared/lib/rank-label';
 import { BeltGraphic } from '@/shared/ui/belt-graphic';
 
@@ -54,9 +53,8 @@ export function PublicRankPage(): React.ReactElement {
     );
   }
 
-  const { rank, system } = query.data;
+  const { rank } = query.data;
   const lang = i18n.language as Lang;
-  const visuals = getBeltVisuals(system.code, rank.level);
   const localised =
     lang === 'fi' ? rank.nameFi : lang === 'sv' ? rank.nameSv : rank.nameEn;
   const description = pickDescription(rank, lang);
@@ -77,7 +75,7 @@ export function PublicRankPage(): React.ReactElement {
         {rank.nameRomaji && rank.nameRomaji !== localised ? (
           <div className="mt-2 text-lg text-on-surface-variant">{rank.nameRomaji}</div>
         ) : null}
-        <BeltGraphic {...visuals} className="mt-6 w-full max-w-md" />
+        <BeltGraphic {...rank.visuals} className="mt-6 w-full max-w-md" />
       </header>
 
       {description ? (

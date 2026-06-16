@@ -190,6 +190,13 @@
       "when": 1781430000000,
       "tag": "0026_belt_ranks_slug_per_org",
       "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1781440000000,
+      "tag": "0027_belt_ranks_visuals_jsonb",
+      "breakpoints": true
     }
   ]
 }

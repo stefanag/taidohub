@@ -25,6 +25,7 @@ const RANK: BeltRank = {
   nameSv: '1 Dan',
   nameFi: '1. Dan',
   beltColor: '#000000',
+  visuals: { gradient: 'black' },
   imageUrl: null,
   descriptionEn: null,
   descriptionSv: null,

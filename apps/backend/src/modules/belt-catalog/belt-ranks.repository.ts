@@ -30,6 +30,7 @@ export type BeltRankPatch = Partial<
     | 'nameSv'
     | 'nameFi'
     | 'beltColor'
+    | 'visuals'
     | 'imageUrl'
     | 'descriptionEn'
     | 'descriptionSv'
@@ -162,6 +163,7 @@ export class BeltRanksRepository {
         nameSv: beltRanks.nameSv,
         nameFi: beltRanks.nameFi,
         beltColor: beltRanks.beltColor,
+        visuals: beltRanks.visuals,
         imageUrl: beltRanks.imageUrl,
         descriptionEn: beltRanks.descriptionEn,
         descriptionSv: beltRanks.descriptionSv,
