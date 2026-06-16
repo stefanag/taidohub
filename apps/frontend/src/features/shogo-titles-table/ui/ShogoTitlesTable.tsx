@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { type BeltRank } from '@/entities/belt-rank';
 import { useDeleteShogoTitle, type ShogoTitle } from '@/entities/shogo-title';
 import { Button } from '@/shared/ui';
+import { BeltGraphic } from '@/shared/ui/belt-graphic';
 import {
   Dialog,
   DialogContent,
@@ -39,6 +40,7 @@ export function ShogoTitlesTable({
       <table className="w-full text-sm">
         <thead className="text-left text-xs uppercase text-on-surface-variant">
           <tr>
+            <th className="py-2">{t('admin.beltCatalog.preview')}</th>
             <th className="py-2">{t('admin.beltCatalog.fields.code')}</th>
             <th className="py-2">{t('admin.beltCatalog.fields.nameEn')}</th>
             <th className="py-2">{t('admin.beltCatalog.fields.nameJa')}</th>
@@ -50,10 +52,13 @@ export function ShogoTitlesTable({
         <tbody className="divide-y divide-outline-variant">
           {shogos.map((s) => (
             <tr key={s.code}>
+              <td className="w-32 py-2">
+                <BeltGraphic {...s.visuals} className="w-24" />
+              </td>
               <td className="py-2 font-mono">{s.code}</td>
               <td className="py-2">{s.nameEn}</td>
               <td className="py-2">{s.nameJa}</td>
-              <td className="py-2">{ranksById.get(s.minRankId)?.nameRomaji ?? '—'}</td>
+              <td className="py-2">{ranksById.get(s.minRankId ?? '')?.nameRomaji ?? '—'}</td>
               <td className="py-2">{s.sortOrder}</td>
               <td className="py-2 text-right">
                 <Button variant="outline" size="sm" onClick={() => onEdit(s)}>

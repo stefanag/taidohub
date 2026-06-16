@@ -1,3 +1,4 @@
+import { BeltVisualsSchema } from './ranks.js';
 import { z } from './zod-openapi.js';
 
 const UUID_EXAMPLE = '7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5';
@@ -16,6 +17,7 @@ export const ShogoTitleSchema = z
     nameJa: z.string().min(1).max(100),
     minRankId: z.string().uuid().nullable(),
     sortOrder: z.number().int().min(0),
+    visuals: BeltVisualsSchema,
   })
   .meta({
     id: 'ShogoTitle',
@@ -28,6 +30,7 @@ export const ShogoTitleSchema = z
       nameJa: '錬士',
       minRankId: UUID_EXAMPLE,
       sortOrder: 1,
+      visuals: { gradient: 'black', overlayTopHalf: 'magenta' },
     },
   });
 
@@ -42,6 +45,7 @@ export const CreateShogoTitleSchema = z
     nameJa: z.string().min(1).max(100),
     minRankId: z.string().uuid().nullable().optional(),
     sortOrder: z.number().int().min(0).default(0),
+    visuals: BeltVisualsSchema.default({ gradient: 'black' }),
   })
   .meta({
     id: 'CreateShogoTitleInput',
@@ -58,6 +62,7 @@ export const UpdateShogoTitleSchema = z
     nameJa: z.string().min(1).max(100).optional(),
     minRankId: z.string().uuid().nullable().optional(),
     sortOrder: z.number().int().min(0).optional(),
+    visuals: BeltVisualsSchema.optional(),
   })
   .meta({
     id: 'UpdateShogoTitleInput',

@@ -33,6 +33,7 @@ const RANK_FIXTURE = {
   nameSv: '',
   nameFi: '',
   beltColor: '#FFFFFF',
+  visuals: { gradient: 'white' as const },
   imageUrl: null,
   descriptionEn: null,
   descriptionSv: null,
@@ -53,6 +54,7 @@ const SHOGO_FIXTURE = {
   nameJa: '錬士',
   minRankId: '7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5',
   sortOrder: 1,
+  visuals: { gradient: 'black' as const, overlayTopHalf: 'magenta' as const },
 };
 
 function renderTable(onEdit = vi.fn()) {

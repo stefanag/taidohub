@@ -59,8 +59,8 @@
     { "id": "6e57f89c-51fb-4f72-b07f-11503281c1e6", "nextRankId": "bc1e749d-d637-446c-a36b-cbabf13c37a5", "organisationId": "6dd7bc6a-a015-4ee9-b8a7-237dec9a2bdb", "systemCode": "mon", "level": 12,  "sortOrder": 20, "nameRomaji": "12 Mon", "nameJa": "十二門", "nameEn": "12th Mon", "nameSv": "12:e Mon", "nameFi": "12. Mon", "beltColor": "#FFFFFF", "imageUrl": "/images/belt/taido_12_mon.svg", "descriptionEn": "White belt with longitudinal purple stripe",                                          "descriptionSv": "Vitt bälte med längsgående lila rand",                                          "descriptionFi": "Valkoinen vyö, jossa pitkittäinen violetti raita",                                                "visuals": {"gradient":"brown","midLine":"white","midLineGradient":false,"stripe":"black"}, "publiclyVisible": true, "slug": "12-mon" }
   ],
   "shogoTitles": [
-    { "code": "renshi", "nameEn": "Renshi", "nameSv": "Renshi", "nameFi": "Renshi", "nameJa": "錬士", "minRankId": "7b9bd360-f37d-4933-9dfb-c692ea9d3b64", "sortOrder": 1 },
-    { "code": "kyoshi", "nameEn": "Kyoshi", "nameSv": "Kyoshi", "nameFi": "Kyoshi", "nameJa": "教士", "minRankId": "e9f43ffa-7286-4267-8257-7aef2d2fa28e", "sortOrder": 2 },
-    { "code": "hanshi", "nameEn": "Hanshi", "nameSv": "Hanshi", "nameFi": "Hanshi", "nameJa": "範士", "minRankId": "2d009906-3f66-49b1-ae80-9cddb7a5b911", "sortOrder": 3 }
+    { "code": "renshi", "nameEn": "Renshi", "nameSv": "Renshi", "nameFi": "Renshi", "nameJa": "錬士", "minRankId": "7b9bd360-f37d-4933-9dfb-c692ea9d3b64", "sortOrder": 1, "visuals": { "gradient": "black", "overlayTopHalf": "magenta" } },
+    { "code": "kyoshi", "nameEn": "Kyoshi", "nameSv": "Kyoshi", "nameFi": "Kyoshi", "nameJa": "教士", "minRankId": "e9f43ffa-7286-4267-8257-7aef2d2fa28e", "sortOrder": 2, "visuals": { "gradient": "black", "overlayTopHalf": "green" } },
+    { "code": "hanshi", "nameEn": "Hanshi", "nameSv": "Hanshi", "nameFi": "Hanshi", "nameJa": "範士", "minRankId": "2d009906-3f66-49b1-ae80-9cddb7a5b911", "sortOrder": 3, "visuals": { "gradient": "black", "overlayTopHalf": "brown" } }
   ]
 }

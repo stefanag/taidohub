@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { type BeltVisuals } from '@repo/contracts/ranks';
 import {
   CreateShogoTitleSchema,
   type ShogoTitle,
@@ -13,6 +14,7 @@ import { listBeltRanksQueryOptions } from '@/entities/belt-rank';
 import { useCreateShogoTitle, useUpdateShogoTitle } from '@/entities/shogo-title';
 import { HttpError } from '@/shared/api';
 import { Button, FormField, FormMessage, Input, Label } from '@/shared/ui';
+import { BeltGraphic } from '@/shared/ui/belt-graphic';
 import {
   Select,
   SelectContent,
@@ -20,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/shared/ui/select.js';
+import { VisualsEditor } from '@/shared/ui/visuals-editor';
 
 /** Use the schema's input type so RHF sees optional/defaulted fields correctly. */
 type ShogoTitleFormValues = z.input<typeof CreateShogoTitleSchema>;
@@ -48,8 +51,11 @@ export function ShogoTitleForm({
       nameJa: shogo?.nameJa ?? '',
       minRankId: shogo?.minRankId ?? '',
       sortOrder: shogo?.sortOrder ?? 0,
+      visuals: shogo?.visuals ?? { gradient: 'black' },
     },
   });
+
+  const visuals = (form.watch('visuals') as BeltVisuals | undefined) ?? { gradient: 'black' };
 
   const create = useCreateShogoTitle();
   const update = useUpdateShogoTitle();
@@ -80,6 +86,18 @@ export function ShogoTitleForm({
 
   return (
     <form onSubmit={onSubmit} className="space-y-4" noValidate>
+      <div className="rounded border border-outline-variant p-3">
+        <div className="mb-2 text-xs uppercase text-on-surface-variant">
+          {t('admin.beltCatalog.preview')}
+        </div>
+        <BeltGraphic {...visuals} className="w-full max-w-xs" />
+      </div>
+
+      <VisualsEditor
+        value={visuals}
+        onChange={(next) => form.setValue('visuals', next, { shouldDirty: true })}
+      />
+
       <FormField>
         <Label htmlFor="sh-code">{t('admin.beltCatalog.fields.code')}</Label>
         <Input id="sh-code" disabled={editing} {...form.register('code')} />

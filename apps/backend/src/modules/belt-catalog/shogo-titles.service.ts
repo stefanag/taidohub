@@ -42,6 +42,7 @@ export class ShogoTitlesService {
       nameJa: input.nameJa,
       minRankId: input.minRankId,
       sortOrder: input.sortOrder ?? 0,
+      visuals: input.visuals,
     });
     return this.toApi(row);
   }
@@ -58,6 +59,7 @@ export class ShogoTitlesService {
     if ('nameJa' in input) patch.nameJa = input.nameJa!;
     if ('minRankId' in input) patch.minRankId = input.minRankId!;
     if ('sortOrder' in input) patch.sortOrder = input.sortOrder!;
+    if ('visuals' in input) patch.visuals = input.visuals!;
 
     const row = await this.repo.update(code, patch);
     if (!row) {
@@ -99,6 +101,7 @@ export class ShogoTitlesService {
       nameJa: row.nameJa,
       minRankId: row.minRankId,
       sortOrder: row.sortOrder,
+      visuals: row.visuals as ShogoTitle['visuals'],
     };
   }
 }

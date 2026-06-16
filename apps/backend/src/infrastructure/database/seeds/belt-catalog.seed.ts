@@ -62,6 +62,7 @@ interface SeedShogo {
   nameJa: string;
   minRankId: string | null;
   sortOrder: number;
+  visuals?: Record<string, unknown>;
 }
 
 interface BeltCatalogSeedJson {
@@ -216,6 +217,7 @@ export async function seedBeltCatalog(db: DrizzleDb): Promise<BeltCatalogSeedRes
           nameJa: shogo.nameJa,
           minRankId: shogo.minRankId,
           sortOrder: shogo.sortOrder,
+          visuals: shogo.visuals ?? { gradient: 'black' },
         })
         .where(eq(shogoTitles.code, shogo.code));
       result.shogos.updated += 1;
@@ -228,6 +230,7 @@ export async function seedBeltCatalog(db: DrizzleDb): Promise<BeltCatalogSeedRes
         nameJa: shogo.nameJa,
         minRankId: shogo.minRankId,
         sortOrder: shogo.sortOrder,
+        visuals: shogo.visuals ?? { gradient: 'black' },
       });
       result.shogos.inserted += 1;
     }

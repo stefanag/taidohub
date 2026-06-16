@@ -15,7 +15,7 @@ import {
 } from '../../infrastructure/database/schema/index.js';
 
 export type ShogoTitlePatch = Partial<
-  Pick<DbShogoTitle, 'nameEn' | 'nameSv' | 'nameFi' | 'nameJa' | 'minRankId' | 'sortOrder'>
+  Pick<DbShogoTitle, 'nameEn' | 'nameSv' | 'nameFi' | 'nameJa' | 'minRankId' | 'sortOrder' | 'visuals'>
 >;
 
 @Injectable()

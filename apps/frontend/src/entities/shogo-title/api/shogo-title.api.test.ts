@@ -22,6 +22,7 @@ const ROW = {
   nameJa: '錬士',
   minRankId: '7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f4',
   sortOrder: 1,
+  visuals: { gradient: 'black', overlayTopHalf: 'magenta' },
 };
 
 const mockedHttp = vi.mocked(httpClient);
@@ -44,6 +45,7 @@ describe('shogo-title api', () => {
       nameJa: '錬士',
       minRankId: '7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f4',
       sortOrder: 1,
+      visuals: { gradient: 'black' as const, overlayTopHalf: 'magenta' as const },
     };
     await createShogoTitle(input);
     expect(mockedHttp).toHaveBeenCalledWith('/api/shogo-titles', {

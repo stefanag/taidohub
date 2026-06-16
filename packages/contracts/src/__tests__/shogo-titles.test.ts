@@ -16,6 +16,7 @@ const VALID = {
   nameJa: '錬士',
   minRankId: UUID,
   sortOrder: 1,
+  visuals: { gradient: 'black' as const, overlayTopHalf: 'magenta' as const },
 };
 
 describe('ShogoTitleSchema', () => {

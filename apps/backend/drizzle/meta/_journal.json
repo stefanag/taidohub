@@ -197,6 +197,13 @@
       "when": 1781440000000,
       "tag": "0027_belt_ranks_visuals_jsonb",
       "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1781560000000,
+      "tag": "0028_shogo_titles_visuals_jsonb",
+      "breakpoints": true
     }
   ]
 }
