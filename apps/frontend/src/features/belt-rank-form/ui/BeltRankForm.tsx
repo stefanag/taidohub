@@ -83,17 +83,19 @@ export function BeltRankForm({
   const ranks = ranksQuery.data ?? [];
   const orgs = orgsQuery.data?.data ?? [];
 
-  // Live preview for the BeltGraphic. `getBeltVisuals` is used only here as a
-  // sensible default for new-rank authoring — runtime rendering elsewhere
-  // reads `rank.visuals` directly from the seeded fixture.
+  // Live preview for the BeltGraphic. When editing, we preserve the rank's
+  // stored `visuals` (which may have been authored independently of the
+  // procedural system+level mapping). Only for a brand-new rank do we fall
+  // back to `getBeltVisuals` as a sensible default.
   const watchedSystemId = form.watch('systemId');
   const watchedLevel = form.watch('level');
   const watchedColor = form.watch('beltColor');
   const watchedPublic = form.watch('publiclyVisible');
   const watchedSystem = systems.find((s) => s.id === watchedSystemId);
-  const visuals = watchedSystem
-    ? getBeltVisuals(watchedSystem.code, Number(watchedLevel ?? 0))
-    : { gradient: 'white' as const };
+  const visuals = rank?.visuals
+    ?? (watchedSystem
+      ? getBeltVisuals(watchedSystem.code, Number(watchedLevel ?? 0))
+      : { gradient: 'white' as const });
 
   const onSubmit = form.handleSubmit(async (values) => {
     setSubmitError(undefined);
