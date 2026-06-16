@@ -15,7 +15,7 @@ import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { and, eq, isNull, type SQL } from 'drizzle-orm';
+import { and, eq, inArray, isNull, sql, type SQL } from 'drizzle-orm';
 
 import { type DrizzleDb } from '../client.js';
 import {
@@ -85,7 +85,11 @@ function orgScopeOnRank(orgId: string | null | undefined): SQL {
 }
 
 export async function seedBeltCatalog(db: DrizzleDb): Promise<BeltCatalogSeedResult> {
-  const fixture = JSON.parse(readFileSync(FIXTURE_PATH, 'utf8')) as BeltCatalogSeedJson;
+  // Strip a leading UTF-8 BOM if a Windows editor (notably PowerShell on
+  // older default encodings) re-saved the file. `JSON.parse` rejects the
+  // BOM as an unexpected token, which makes the failure mode opaque.
+  const raw = readFileSync(FIXTURE_PATH, 'utf8').replace(/^﻿/, '');
+  const fixture = JSON.parse(raw) as BeltCatalogSeedJson;
 
   const result: BeltCatalogSeedResult = {
     systems: { inserted: 0, updated: 0 },
@@ -128,6 +132,21 @@ export async function seedBeltCatalog(db: DrizzleDb): Promise<BeltCatalogSeedRes
   }
 
   // ---- ranks (system_id always resolved from the global catalog) ----
+  //
+  // Renumbering a rank's `level` between seeds can collide with another
+  // existing rank that's still at the new target level (the
+  // `(org_id, system_id, level)` unique index fires mid-loop). To avoid this
+  // we push every fixture rank's current level into a definitely-distinct
+  // negative range first; each subsequent UPDATE then pulls the row back to
+  // its correct positive level with no collision.
+  const fixtureIds = fixture.beltRanks.map((r) => r.id);
+  if (fixtureIds.length > 0) {
+    await db
+      .update(beltRanks)
+      .set({ level: sql`-belt_ranks.level - 10000` })
+      .where(inArray(beltRanks.id, fixtureIds));
+  }
+
   for (const rank of fixture.beltRanks) {
     const orgId = rank.organisationId ?? null;
     const system = (
@@ -142,23 +161,23 @@ export async function seedBeltCatalog(db: DrizzleDb): Promise<BeltCatalogSeedRes
         `Seed error: belt system "${rank.systemCode}" not found for rank "${rank.nameRomaji}".`,
       );
     }
+    // Look up by stable id (every fixture row carries one). Using the
+    // natural key `(org_id, system_id, level)` would miss the row if its
+    // level was renumbered between seeds and then collide on `id` at insert.
     const existing = (
       await db
         .select({ id: beltRanks.id })
         .from(beltRanks)
-        .where(
-          and(
-            orgScopeOnRank(orgId),
-            eq(beltRanks.systemId, system.id),
-            eq(beltRanks.level, rank.level),
-          ),
-        )
+        .where(eq(beltRanks.id, rank.id))
         .limit(1)
     )[0];
     if (existing) {
       await db
         .update(beltRanks)
         .set({
+          organisationId: orgId,
+          systemId: system.id,
+          level: rank.level,
           sortOrder: rank.sortOrder,
           nameRomaji: rank.nameRomaji,
           nameJa: rank.nameJa ?? null,
