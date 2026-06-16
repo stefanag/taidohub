@@ -70,10 +70,16 @@ async function main(): Promise<void> {
       `ranks(+${belts.ranks.inserted}/~${belts.ranks.updated}) ` +
       `shogos(+${belts.shogos.inserted}/~${belts.shogos.updated})`,
   );
+
+  // Close the postgres-js pool so the script can exit. Without this the
+  // connection pool keeps Node alive ~indefinitely and `pnpm db:seed` hangs.
+  await db.$client.end();
 }
 
-main().catch((err: unknown) => {
-  // eslint-disable-next-line no-console
-  console.error('[seed] failed:', err);
-  process.exit(1);
-});
+main()
+  .then(() => process.exit(0))
+  .catch((err: unknown) => {
+    // eslint-disable-next-line no-console
+    console.error('[seed] failed:', err);
+    process.exit(1);
+  });
