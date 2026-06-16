@@ -63,6 +63,13 @@ export function AdminBeltCatalogPage(): React.ReactElement {
   const allRanks = ranksQuery.data ?? [];
   const orgs = orgsQuery.data?.data ?? [];
 
+  /** Orgs that own at least one belt_rank — the only ones the org filter lists. */
+  const orgsWithRanks = React.useMemo(() => {
+    const ids = new Set<string>();
+    for (const r of allRanks) if (r.organisationId) ids.add(r.organisationId);
+    return orgs.filter((o) => ids.has(o.id));
+  }, [orgs, allRanks]);
+
   const systemsById = React.useMemo(() => {
     const map = new Map<string, BeltSystem>();
     for (const s of systems) map.set(s.id, s);
@@ -171,7 +178,7 @@ export function AdminBeltCatalogPage(): React.ReactElement {
                   <SelectItem value={ORG_GLOBAL}>
                     {t('admin.beltCatalog.organisationGlobal')}
                   </SelectItem>
-                  {orgs.map((o) => (
+                  {orgsWithRanks.map((o) => (
                     <SelectItem key={o.id} value={o.id}>
                       {o.nameEn} ({o.shortCode})
                     </SelectItem>
@@ -244,6 +251,7 @@ export function AdminBeltCatalogPage(): React.ReactElement {
           <BeltRanksTable
             groups={rankGroups}
             systems={systems}
+            orgs={orgs}
             onEdit={(row) => setRankMode({ kind: 'edit', row })}
           />
         </TabsContent>

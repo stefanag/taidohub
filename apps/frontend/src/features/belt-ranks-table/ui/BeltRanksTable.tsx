@@ -6,6 +6,7 @@ import {
   type BeltRank,
 } from '@/entities/belt-rank';
 import { type BeltSystem } from '@/entities/belt-system';
+import { type Organisation } from '@/entities/organisation';
 import { Button } from '@/shared/ui';
 import { BeltGraphic } from '@/shared/ui/belt-graphic';
 import {
@@ -28,12 +29,15 @@ export interface RankGroup {
 export interface BeltRanksTableProps {
   groups: RankGroup[];
   systems: BeltSystem[];
+  /** Orgs used to resolve organisation_id → display name in the table column. */
+  orgs?: Organisation[];
   onEdit: (rank: BeltRank) => void;
 }
 
 export function BeltRanksTable({
   groups,
   systems,
+  orgs = [],
   onEdit,
 }: BeltRanksTableProps): React.ReactElement {
   const { t } = useTranslation();
@@ -46,6 +50,12 @@ export function BeltRanksTable({
     return map;
   }, [systems]);
 
+  const orgNameById = React.useMemo(() => {
+    const map = new Map<string, string>();
+    for (const o of orgs) map.set(o.id, o.nameEn);
+    return map;
+  }, [orgs]);
+
   return (
     <>
       <div className="space-y-4">
@@ -55,6 +65,7 @@ export function BeltRanksTable({
             <RanksTableBody
               rows={group.rows}
               systemsById={systemsById}
+              orgNameById={orgNameById}
               onEdit={onEdit}
               onDelete={setPendingDelete}
               t={t}
@@ -110,12 +121,13 @@ export function BeltRanksTable({
 interface RanksTableBodyProps {
   rows: BeltRank[];
   systemsById: Map<string, BeltSystem>;
+  orgNameById: Map<string, string>;
   onEdit: (rank: BeltRank) => void;
   onDelete: (rank: BeltRank) => void;
   t: ReturnType<typeof useTranslation>['t'];
 }
 
-function RanksTableBody({ rows, systemsById, onEdit, onDelete, t }: RanksTableBodyProps): React.ReactElement {
+function RanksTableBody({ rows, systemsById, orgNameById, onEdit, onDelete, t }: RanksTableBodyProps): React.ReactElement {
   return (
     <table className="w-full text-sm">
       <thead className="text-left text-xs uppercase text-on-surface-variant">
@@ -140,7 +152,9 @@ function RanksTableBody({ rows, systemsById, onEdit, onDelete, t }: RanksTableBo
               <td className="py-2">{r.level}</td>
               <td className="py-2">{sys?.nameEn ?? '—'}</td>
               <td className="py-2">
-                {r.organisationId ?? t('admin.beltCatalog.organisationGlobal')}
+                {r.organisationId === null
+                  ? t('admin.beltCatalog.organisationGlobal')
+                  : (orgNameById.get(r.organisationId) ?? r.organisationId)}
               </td>
               <td className="py-2 text-right">
                 <Button variant="outline" size="sm" onClick={() => onEdit(r)}>
