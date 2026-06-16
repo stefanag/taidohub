@@ -51,13 +51,11 @@ export function TechniqueListItem({
   return (
     <li className="flex items-center justify-between rounded-lg border border-outline-variant p-3">
       <div className="min-w-0">
-        <div className="truncate font-medium">{localised}</div>
-        {showRomaji || showJa ? (
+        <div className="truncate font-medium">{technique.nameRomaji}</div>
           <div className="mt-0.5 flex items-baseline gap-2 text-xs text-on-surface-variant">
-            {showRomaji ? <span className="truncate">{technique.nameRomaji}</span> : null}
+            <span className="truncate">{localised}</span>
             {showJa ? <span lang="ja" className="truncate">{technique.nameJa}</span> : null}
           </div>
-        ) : null}
       </div>
       {onEdit || onDelete ? (
         <div className="ml-3 flex shrink-0 items-center gap-2">
