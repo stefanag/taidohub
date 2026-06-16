@@ -5,14 +5,13 @@ import { useTranslation } from 'react-i18next';
 import type { Technique } from '@repo/contracts/techniques';
 
 import { useClassificationCategoriesByRootQuery } from '@/entities/classification-category';
-import { useProgressListQuery } from '@/entities/progress';
 import {
   useDeleteTechniqueMutation,
   useTechniquesQuery,
 } from '@/entities/technique';
-import { ProgressEditorDialog } from '@/features/progress-editor-dialog';
 import { TechniqueFormDialog } from '@/features/technique-form';
-import { Button, ClassificationMultiSelect, ProgressPill } from '@/shared/ui';
+import { TechniqueListItem } from '@/features/technique-list-item';
+import { Button, ClassificationMultiSelect } from '@/shared/ui';
 
 /**
  * Admin technique catalogue page (sysadmin-only — the route guard layers
@@ -23,8 +22,9 @@ import { Button, ClassificationMultiSelect, ProgressPill } from '@/shared/ui';
  *   - Per-row Edit (opens the dialog with the row preloaded) + Delete
  *     (window.confirm + `useDeleteTechniqueMutation`).
  *
- * i18n keys land in Task 12 — until then the keys render as their raw
- * paths, which is acceptable for an admin-only surface.
+ * Rows render via the reusable `TechniqueListItem` — admin and read-only
+ * surfaces share the same row markup; this page passes the edit/delete
+ * callbacks, the public list omits them.
  */
 export function AdminTechniquesPage(): React.ReactElement {
   const { t } = useTranslation();
@@ -38,22 +38,6 @@ export function AdminTechniquesPage(): React.ReactElement {
   );
   const { data: techniques = [] } = useTechniquesQuery(filterIds);
   const deleteMut = useDeleteTechniqueMutation();
-
-  const { data: allProgress = [] } = useProgressListQuery();
-  const progressByTechniqueId = React.useMemo(
-    () =>
-      new Map(
-        allProgress
-          .filter((p) => p.techniqueId)
-          .map((p) => [p.techniqueId as string, p]),
-      ),
-    [allProgress],
-  );
-
-  const [progressEditing, setProgressEditing] = React.useState<{
-    id: string;
-    label: string;
-  } | null>(null);
 
   const typeOpts = useClassificationCategoriesByRootQuery('technique_type');
   const sotaiOpts = useClassificationCategoriesByRootQuery('sotai_category');
@@ -125,43 +109,13 @@ export function AdminTechniquesPage(): React.ReactElement {
       <section className="mt-8">
         <ul className="space-y-2">
           {techniques.map((row) => (
-            <li
+            <TechniqueListItem
               key={row.id}
-              className="flex items-center justify-between rounded-lg border border-outline-variant p-3"
-            >
-              <div>
-                <div className="font-medium">{row.nameRomaji}</div>
-                <div className="text-xs text-on-surface-variant">
-                  {row.classifications.map((c) => c.code).join(' · ')}
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <ProgressPill
-                  status={progressByTechniqueId.get(row.id)?.status ?? null}
-                  onClick={() =>
-                    setProgressEditing({
-                      id: row.id,
-                      label: row.nameRomaji,
-                    })
-                  }
-                />
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => onEdit(row)}
-                >
-                  {t('common.edit')}
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => onDelete(row)}
-                  disabled={deleteMut.isPending}
-                >
-                  {t('common.delete')}
-                </Button>
-              </div>
-            </li>
+              technique={row}
+              onEdit={onEdit}
+              onDelete={onDelete}
+              isDeleting={deleteMut.isPending}
+            />
           ))}
         </ul>
       </section>
@@ -171,18 +125,6 @@ export function AdminTechniquesPage(): React.ReactElement {
         onOpenChange={setDialogOpen}
         {...(editing ? { technique: editing } : {})}
       />
-
-      {progressEditing ? (
-        <ProgressEditorDialog
-          open
-          onOpenChange={(o) => {
-            if (!o) setProgressEditing(null);
-          }}
-          contentType="technique"
-          contentId={progressEditing.id}
-          contentLabel={progressEditing.label}
-        />
-      ) : null}
     </main>
   );
 }
