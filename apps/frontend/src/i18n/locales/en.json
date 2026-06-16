@@ -492,6 +492,21 @@
       "errors": {
         "nextRankSelf": "A rank cannot reference itself as its next rank."
       },
+      "toolbar": {
+        "filterOrg": "Filter by organisation",
+        "filterSystem": "Filter by system",
+        "allOrgs": "All organisations",
+        "allSystems": "All systems",
+        "groupBy": "Group by",
+        "groupNone": "No grouping",
+        "groupOrg": "Organisation",
+        "groupSystem": "System",
+        "sortBy": "Sort by",
+        "sortSortOrder": "Sort order (default)",
+        "sortLevelAsc": "Level ↑",
+        "sortLevelDesc": "Level ↓",
+        "sortRomaji": "Romaji (A→Z)"
+      },
       "visuals": {
         "title": "Visuals",
         "useStandard": "Use standard for system + level",

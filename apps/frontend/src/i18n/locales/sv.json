@@ -475,6 +475,21 @@
       "errors": {
         "nextRankSelf": "En grad kan inte referera till sig själv som nästa grad."
       },
+      "toolbar": {
+        "filterOrg": "Filtrera på organisation",
+        "filterSystem": "Filtrera på system",
+        "allOrgs": "Alla organisationer",
+        "allSystems": "Alla system",
+        "groupBy": "Gruppera efter",
+        "groupNone": "Ingen gruppering",
+        "groupOrg": "Organisation",
+        "groupSystem": "System",
+        "sortBy": "Sortera efter",
+        "sortSortOrder": "Sorteringsordning (standard)",
+        "sortLevelAsc": "Nivå ↑",
+        "sortLevelDesc": "Nivå ↓",
+        "sortRomaji": "Romaji (A→Z)"
+      },
       "visuals": {
         "title": "Utseende",
         "useStandard": "Använd standard för system + nivå",

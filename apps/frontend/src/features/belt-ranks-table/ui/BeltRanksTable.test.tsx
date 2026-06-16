@@ -63,7 +63,11 @@ function renderTable(onEdit = vi.fn()) {
   render(
     <QueryClientProvider client={client}>
       <I18nextProvider i18n={i18n}>
-        <BeltRanksTable ranks={[RANK_FIXTURE]} systems={[SYSTEM_FIXTURE]} onEdit={onEdit} />
+        <BeltRanksTable
+          groups={[{ key: 'all', rows: [RANK_FIXTURE] }]}
+          systems={[SYSTEM_FIXTURE]}
+          onEdit={onEdit}
+        />
       </I18nextProvider>
     </QueryClientProvider>,
   );

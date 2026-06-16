@@ -475,6 +475,21 @@
       "errors": {
         "nextRankSelf": "Aste ei voi viitata itseensä seuraavana asteena."
       },
+      "toolbar": {
+        "filterOrg": "Suodata organisaatiolla",
+        "filterSystem": "Suodata järjestelmällä",
+        "allOrgs": "Kaikki organisaatiot",
+        "allSystems": "Kaikki järjestelmät",
+        "groupBy": "Ryhmittele",
+        "groupNone": "Ei ryhmittelyä",
+        "groupOrg": "Organisaatio",
+        "groupSystem": "Järjestelmä",
+        "sortBy": "Lajittele",
+        "sortSortOrder": "Lajittelujärjestys (oletus)",
+        "sortLevelAsc": "Taso ↑",
+        "sortLevelDesc": "Taso ↓",
+        "sortRomaji": "Romaji (A→Z)"
+      },
       "visuals": {
         "title": "Ulkoasu",
         "useStandard": "Käytä järjestelmän + tason oletusta",

@@ -17,14 +17,22 @@ import {
   DialogTitle,
 } from '@/shared/ui/dialog.js';
 
+/** A pre-filtered, pre-sorted block of ranks rendered as one collapsible section. */
+export interface RankGroup {
+  key: string;
+  /** Section header text. When omitted, the section header is hidden. */
+  label?: string;
+  rows: BeltRank[];
+}
+
 export interface BeltRanksTableProps {
-  ranks: BeltRank[];
+  groups: RankGroup[];
   systems: BeltSystem[];
   onEdit: (rank: BeltRank) => void;
 }
 
 export function BeltRanksTable({
-  ranks,
+  groups,
   systems,
   onEdit,
 }: BeltRanksTableProps): React.ReactElement {
@@ -40,49 +48,33 @@ export function BeltRanksTable({
 
   return (
     <>
-      <table className="w-full text-sm">
-        <thead className="text-left text-xs uppercase text-on-surface-variant">
-          <tr>
-            <th className="py-2">{t('admin.beltCatalog.preview')}</th>
-            <th className="py-2">{t('admin.beltCatalog.fields.nameRomaji')}</th>
-            <th className="py-2">{t('admin.beltCatalog.fields.level')}</th>
-            <th className="py-2">{t('admin.beltCatalog.fields.system')}</th>
-            <th className="py-2">{t('admin.beltCatalog.fields.organisation')}</th>
-            <th />
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-outline-variant">
-          {ranks.map((r) => {
-            const sys = systemsById.get(r.systemId);
-            return (
-              <tr key={r.id}>
-                <td className="w-32 py-2">
-                  <BeltGraphic {...r.visuals} className="w-24" />
-                </td>
-                <td className="py-2">{r.nameRomaji}</td>
-                <td className="py-2">{r.level}</td>
-                <td className="py-2">{sys?.nameEn ?? '—'}</td>
-                <td className="py-2">
-                  {r.organisationId ?? t('admin.beltCatalog.organisationGlobal')}
-                </td>
-                <td className="py-2 text-right">
-                  <Button variant="outline" size="sm" onClick={() => onEdit(r)}>
-                    {t('admin.beltCatalog.actions.edit')}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="ml-2"
-                    onClick={() => setPendingDelete(r)}
-                  >
-                    {t('admin.beltCatalog.actions.delete')}
-                  </Button>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      <div className="space-y-4">
+        {groups.map((group) => {
+          const hasHeader = group.label !== undefined;
+          const body = (
+            <RanksTableBody
+              rows={group.rows}
+              systemsById={systemsById}
+              onEdit={onEdit}
+              onDelete={setPendingDelete}
+              t={t}
+            />
+          );
+
+          if (!hasHeader) {
+            return <div key={group.key}>{body}</div>;
+          }
+
+          return (
+            <details key={group.key} open className="rounded border border-outline-variant">
+              <summary className="cursor-pointer select-none px-3 py-2 text-sm font-medium hover:bg-surface-container">
+                {group.label} <span className="text-on-surface-variant">({group.rows.length})</span>
+              </summary>
+              <div className="px-3 pb-3">{body}</div>
+            </details>
+          );
+        })}
+      </div>
 
       <Dialog open={pendingDelete !== null} onOpenChange={(o) => !o && setPendingDelete(null)}>
         <DialogContent>
@@ -112,5 +104,61 @@ export function BeltRanksTable({
         </DialogContent>
       </Dialog>
     </>
+  );
+}
+
+interface RanksTableBodyProps {
+  rows: BeltRank[];
+  systemsById: Map<string, BeltSystem>;
+  onEdit: (rank: BeltRank) => void;
+  onDelete: (rank: BeltRank) => void;
+  t: ReturnType<typeof useTranslation>['t'];
+}
+
+function RanksTableBody({ rows, systemsById, onEdit, onDelete, t }: RanksTableBodyProps): React.ReactElement {
+  return (
+    <table className="w-full text-sm">
+      <thead className="text-left text-xs uppercase text-on-surface-variant">
+        <tr>
+          <th className="py-2">{t('admin.beltCatalog.preview')}</th>
+          <th className="py-2">{t('admin.beltCatalog.fields.nameRomaji')}</th>
+          <th className="py-2">{t('admin.beltCatalog.fields.level')}</th>
+          <th className="py-2">{t('admin.beltCatalog.fields.system')}</th>
+          <th className="py-2">{t('admin.beltCatalog.fields.organisation')}</th>
+          <th />
+        </tr>
+      </thead>
+      <tbody className="divide-y divide-outline-variant">
+        {rows.map((r) => {
+          const sys = systemsById.get(r.systemId);
+          return (
+            <tr key={r.id}>
+              <td className="w-32 py-2">
+                <BeltGraphic {...r.visuals} className="w-24" />
+              </td>
+              <td className="py-2">{r.nameRomaji}</td>
+              <td className="py-2">{r.level}</td>
+              <td className="py-2">{sys?.nameEn ?? '—'}</td>
+              <td className="py-2">
+                {r.organisationId ?? t('admin.beltCatalog.organisationGlobal')}
+              </td>
+              <td className="py-2 text-right">
+                <Button variant="outline" size="sm" onClick={() => onEdit(r)}>
+                  {t('admin.beltCatalog.actions.edit')}
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="ml-2"
+                  onClick={() => onDelete(r)}
+                >
+                  {t('admin.beltCatalog.actions.delete')}
+                </Button>
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
   );
 }
