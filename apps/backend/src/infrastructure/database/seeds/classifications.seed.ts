@@ -1,14 +1,15 @@
 /**
  * Idempotent seeder for the classification taxonomy (roots + one level of
- * children). Resolves by `id` — every fixture row carries a stable UUID, so
- * inserts become updates on re-run. Roots are seeded first so child rows
- * can FK against them.
+ * children). Resolves by the natural key `(parent_id, code)` — the same key
+ * the unique index enforces. Pre-existing rows (inserted by a prior seed or
+ * migration) keep their UUIDs; only genuinely new rows get the fixture UUID.
+ * Roots are seeded first so child rows can FK against them.
  */
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { eq } from 'drizzle-orm';
+import { and, eq, isNull } from 'drizzle-orm';
 
 import { type DrizzleDb } from '../client.js';
 import { classificationCategory } from '../schema/index.js';
@@ -49,23 +50,28 @@ export async function seedClassifications(db: DrizzleDb): Promise<Classification
     children: { inserted: 0, updated: 0 },
   };
 
-  // Roots first (children FK against root ids).
+  // Roots first (children FK against root ids). Look up by (parent_id IS NULL,
+  // code) — the natural key the unique index enforces — so pre-existing rows
+  // (from prior seeds or migrations) get updated in place under their own id.
   const rootIdByCode = new Map<string, string>();
   for (const root of fixture.roots) {
-    rootIdByCode.set(root.code, root.id);
     const existing = (
       await db
         .select({ id: classificationCategory.id })
         .from(classificationCategory)
-        .where(eq(classificationCategory.id, root.id))
+        .where(
+          and(
+            isNull(classificationCategory.parentId),
+            eq(classificationCategory.code, root.code),
+          ),
+        )
         .limit(1)
     )[0];
     if (existing) {
+      rootIdByCode.set(root.code, existing.id);
       await db
         .update(classificationCategory)
         .set({
-          parentId: null,
-          code: root.code,
           nameEn: root.nameEn,
           nameSv: root.nameSv,
           nameFi: root.nameFi,
@@ -73,9 +79,10 @@ export async function seedClassifications(db: DrizzleDb): Promise<Classification
           sortOrder: root.sortOrder,
           updatedAt: new Date(),
         })
-        .where(eq(classificationCategory.id, root.id));
+        .where(eq(classificationCategory.id, existing.id));
       result.roots.updated += 1;
     } else {
+      rootIdByCode.set(root.code, root.id);
       await db.insert(classificationCategory).values({
         id: root.id,
         parentId: null,
@@ -101,15 +108,18 @@ export async function seedClassifications(db: DrizzleDb): Promise<Classification
       await db
         .select({ id: classificationCategory.id })
         .from(classificationCategory)
-        .where(eq(classificationCategory.id, child.id))
+        .where(
+          and(
+            eq(classificationCategory.parentId, parentId),
+            eq(classificationCategory.code, child.code),
+          ),
+        )
         .limit(1)
     )[0];
     if (existing) {
       await db
         .update(classificationCategory)
         .set({
-          parentId,
-          code: child.code,
           nameEn: child.nameEn,
           nameSv: child.nameSv,
           nameFi: child.nameFi,
@@ -117,7 +127,7 @@ export async function seedClassifications(db: DrizzleDb): Promise<Classification
           sortOrder: child.sortOrder,
           updatedAt: new Date(),
         })
-        .where(eq(classificationCategory.id, child.id));
+        .where(eq(classificationCategory.id, existing.id));
       result.children.updated += 1;
     } else {
       await db.insert(classificationCategory).values({
