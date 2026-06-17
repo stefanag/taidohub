@@ -66,14 +66,19 @@ export function buildBetterAuth(env: Env, emailService: EmailService) {
     advanced: {
       // Default cookie name is `better-auth.session_token`; do not change it
       // unless `swagger.ts`'s `addCookieAuth(...)` name is updated to match.
-      cookies: {
-        sessionToken: {
-          attributes: {
-            httpOnly: true,
-            sameSite: isProd ? 'none' : 'lax',
-            secure: isProd,
-          },
-        },
+      //
+      // Use `defaultCookieAttributes` rather than `cookies.sessionToken.
+      // attributes`: the per-cookie lookup inside better-auth is keyed by the
+      // snake_case cookie name (`session_token`), so the camelCase
+      // `sessionToken` key silently never matches and the cookie falls back
+      // to its hard-coded `sameSite: 'lax'` default. That breaks cross-origin
+      // session login on Railway-style deploys (frontend on one *.up.railway.app
+      // subdomain, backend on another). `defaultCookieAttributes` applies to
+      // every cookie better-auth issues and isn't sensitive to that mismatch.
+      defaultCookieAttributes: {
+        httpOnly: true,
+        sameSite: isProd ? 'none' : 'lax',
+        secure: isProd,
       },
     },
     plugins: [
