@@ -6,7 +6,6 @@
 # pnpm can resolve the `@repo/contracts` workspace dependency.
 
 [build]
-builder = "NIXPACKS"
 # `pnpm --filter frontend build` chains `tsc --noEmit && vite build`, so
 # a type regression fails the deploy before any bundle is produced.
 buildCommand = "pnpm install --frozen-lockfile && pnpm --filter frontend build"
