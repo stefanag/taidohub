@@ -6,9 +6,14 @@
 # pnpm can resolve the `@repo/contracts` workspace dependency.
 
 [build]
-# `pnpm --filter frontend build` chains `tsc --noEmit && vite build`, so
-# a type regression fails the deploy before any bundle is produced.
-buildCommand = "pnpm install --frozen-lockfile && pnpm --filter frontend build"
+# Use turbo so the upstream `@repo/contracts#build` (tsup) runs first —
+# the frontend's `@repo/contracts/*` subpath imports resolve to dist/*.d.ts
+# files that don't exist until that build completes. `pnpm --filter frontend
+# build` alone skips the dep build and the frontend's `tsc --noEmit` then
+# fails to find the contracts modules. The chained `tsc && vite build` in
+# the frontend's own `build` script still runs, so a type regression still
+# fails the deploy before any bundle is produced.
+buildCommand = "pnpm install --frozen-lockfile && pnpm turbo run build --filter=frontend"
 watchPatterns = [
   "apps/frontend/**",
   "packages/contracts/**",
