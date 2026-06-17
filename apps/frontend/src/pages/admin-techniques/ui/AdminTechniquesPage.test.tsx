@@ -2,25 +2,14 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import * as React from 'react';
-import { beforeAll, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
-// jsdom doesn't implement matchMedia; shadcn's Dialog underpinnings may
-// reach for it.
-beforeAll(() => {
-  Object.defineProperty(window, 'matchMedia', {
-    writable: true,
-    value: (query: string) => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addListener: vi.fn(),
-      removeListener: vi.fn(),
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-      dispatchEvent: vi.fn(),
-    }),
-  });
-});
+// `useNavigate` is the only TanStack Router surface the page touches; stub
+// it so we can assert call shape without bringing up a router context.
+const navigateMock = vi.fn();
+vi.mock('@tanstack/react-router', () => ({
+  useNavigate: () => navigateMock,
+}));
 
 // Stub the classification hook so chips render synchronously.
 vi.mock('@/entities/classification-category', () => ({
@@ -48,22 +37,8 @@ vi.mock('@/entities/classification-category', () => ({
   }),
 }));
 
-// Stub the progress list query — no rows means the pill renders as
-// "not_started" without any network traffic.
-vi.mock('@/entities/progress', () => ({
-  useProgressListQuery: () => ({ data: [], isLoading: false }),
-}));
-
-// Stub the progress editor dialog — the page test only confirms wiring, not
-// the dialog's internals (covered in its own test file). The real dialog
-// would otherwise pull in the Select/DatePicker primitives that need
-// pointer-capture stubs in jsdom.
-vi.mock('@/features/progress-editor-dialog', () => ({
-  ProgressEditorDialog: () => null,
-}));
-
-// Stub the technique hooks. Both the page and the TechniqueFormDialog import
-// from `@/entities/technique`, so this single mock covers both.
+// Stub the technique hooks. The list query returns one row; the mutation
+// hooks just need a stable shape — the page only reads `isPending`.
 vi.mock('@/entities/technique', () => ({
   useTechniquesQuery: () => ({
     data: [
@@ -115,6 +90,7 @@ vi.mock('@/entities/technique', () => ({
 import { AdminTechniquesPage } from './AdminTechniquesPage.js';
 
 function renderPage(): void {
+  navigateMock.mockClear();
   const client = new QueryClient({
     defaultOptions: { queries: { retry: false } },
   });
@@ -128,11 +104,9 @@ function renderPage(): void {
 describe('<AdminTechniquesPage>', () => {
   it('renders the "New technique" button, filter pickers, and one row per technique', () => {
     renderPage();
-    // "New technique" key falls back to its raw path until Task 12 seeds it.
     expect(
       screen.getByRole('button', { name: /new technique|ny teknik|uusi tekniikka/i }),
     ).toBeInTheDocument();
-    // Filter pickers — one chip per rootCode.
     expect(
       screen.getByRole('button', { name: 'Option technique_type' }),
     ).toBeInTheDocument();
@@ -142,20 +116,28 @@ describe('<AdminTechniquesPage>', () => {
     expect(
       screen.getByRole('button', { name: 'Option attack_type' }),
     ).toBeInTheDocument();
-    // Row body uses nameRomaji.
+    // The localised name takes the primary slot (en="Front kick"); romaji
+    // falls to the secondary line in the reusable list item.
+    expect(screen.getByText('Front kick')).toBeInTheDocument();
     expect(screen.getByText('mae geri')).toBeInTheDocument();
   });
 
-  it('opens the technique form dialog when "New technique" is clicked', async () => {
+  it('navigates to /admin/techniques/new when "New technique" is clicked', async () => {
     const user = userEvent.setup();
     renderPage();
     await user.click(
       screen.getByRole('button', { name: /new technique|ny teknik|uusi tekniikka/i }),
     );
-    // The dialog's "Save" button only mounts when the dialog opens. Its label
-    // resolves through i18n fallbacks (en/sv/fi) so accept any of them.
-    expect(
-      await screen.findByRole('button', { name: /save|spara|tallenna/i }),
-    ).toBeInTheDocument();
+    expect(navigateMock).toHaveBeenCalledWith({ to: '/admin/techniques/new' });
+  });
+
+  it('navigates to the edit page when a row Edit button is clicked', async () => {
+    const user = userEvent.setup();
+    renderPage();
+    await user.click(screen.getAllByRole('button', { name: /edit|redigera|muokkaa/i })[0]!);
+    expect(navigateMock).toHaveBeenCalledWith({
+      to: '/admin/techniques/$techniqueId',
+      params: { techniqueId: '660e8400-e29b-41d4-a716-446655440010' },
+    });
   });
 });

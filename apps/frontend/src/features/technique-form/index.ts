@@ -1,4 +1,4 @@
 export {
-  TechniqueFormDialog,
-  type TechniqueFormDialogProps,
-} from './ui/TechniqueFormDialog.js';
+  TechniqueForm,
+  type TechniqueFormProps,
+} from './ui/TechniqueForm.js';

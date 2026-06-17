@@ -1,3 +1,4 @@
+import { useNavigate } from '@tanstack/react-router';
 import { Plus } from 'lucide-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -9,25 +10,22 @@ import {
   useDeleteTechniqueMutation,
   useTechniquesQuery,
 } from '@/entities/technique';
-import { TechniqueFormDialog } from '@/features/technique-form';
 import { TechniqueListItem } from '@/features/technique-list-item';
 import { Button, ClassificationMultiSelect } from '@/shared/ui';
 
 /**
  * Admin technique catalogue page (sysadmin-only — the route guard layers
- * a sysadmin check on top of the `_app` session check). Mirrors the
- * read-only `TechniquesPage` shape and adds:
+ * a sysadmin check on top of the `_app` session check). The "New technique"
+ * button navigates to `/admin/techniques/new`; the per-row Edit action
+ * navigates to `/admin/techniques/$techniqueId`. Delete is `window.confirm`
+ * + `useDeleteTechniqueMutation` — kept inline because it's destructive and
+ * cheaper to confirm than to route.
  *
- *   - "New technique" button → opens `TechniqueFormDialog` in create mode.
- *   - Per-row Edit (opens the dialog with the row preloaded) + Delete
- *     (window.confirm + `useDeleteTechniqueMutation`).
- *
- * Rows render via the reusable `TechniqueListItem` — admin and read-only
- * surfaces share the same row markup; this page passes the edit/delete
- * callbacks, the public list omits them.
+ * Rows render via the reusable `TechniqueListItem`.
  */
 export function AdminTechniquesPage(): React.ReactElement {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [typeIds, setTypeIds] = React.useState<string[]>([]);
   const [sotaiIds, setSotaiIds] = React.useState<string[]>([]);
   const [attackIds, setAttackIds] = React.useState<string[]>([]);
@@ -43,18 +41,14 @@ export function AdminTechniquesPage(): React.ReactElement {
   const sotaiOpts = useClassificationCategoriesByRootQuery('sotai_category');
   const attackOpts = useClassificationCategoriesByRootQuery('attack_type');
 
-  const [dialogOpen, setDialogOpen] = React.useState(false);
-  const [editing, setEditing] = React.useState<Technique | undefined>(
-    undefined,
-  );
-
   const onNew = (): void => {
-    setEditing(undefined);
-    setDialogOpen(true);
+    void navigate({ to: '/admin/techniques/new' });
   };
   const onEdit = (row: Technique): void => {
-    setEditing(row);
-    setDialogOpen(true);
+    void navigate({
+      to: '/admin/techniques/$techniqueId',
+      params: { techniqueId: row.id },
+    });
   };
   const onDelete = (row: Technique): void => {
     if (window.confirm(t('admin.techniques.deleteConfirm'))) {
@@ -119,12 +113,6 @@ export function AdminTechniquesPage(): React.ReactElement {
           ))}
         </ul>
       </section>
-
-      <TechniqueFormDialog
-        open={dialogOpen}
-        onOpenChange={setDialogOpen}
-        {...(editing ? { technique: editing } : {})}
-      />
     </main>
   );
 }
