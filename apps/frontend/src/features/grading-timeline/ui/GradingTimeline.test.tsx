@@ -46,6 +46,7 @@ const SHOGO: ShogoTitle = {
   nameJa: '錬士',
   minRankId: 'rank-yondan',
   sortOrder: 1,
+  visuals: { gradient: 'black' },
 };
 
 const rankMap = new Map<string, BeltRank>([[RANK.id, RANK]]);

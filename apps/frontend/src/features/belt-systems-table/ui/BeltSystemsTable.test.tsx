@@ -27,7 +27,6 @@ const SYSTEM_FIXTURE = {
   nameEn: 'Kyu System',
   nameSv: 'Kyu System',
   nameFi: 'Kyu System',
-  organisationId: null,
   sortOrder: 1,
   createdAt: '2026-05-24T08:00:00.000Z',
   updatedAt: '2026-05-24T08:00:00.000Z',

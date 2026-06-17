@@ -32,7 +32,6 @@ export function BeltSystemsTable({
           <tr>
             <th className="py-2">{t('admin.beltCatalog.fields.code')}</th>
             <th className="py-2">{t('admin.beltCatalog.fields.nameEn')}</th>
-            <th className="py-2">{t('admin.beltCatalog.fields.organisation')}</th>
             <th className="py-2">{t('admin.beltCatalog.fields.sortOrder')}</th>
             <th />
           </tr>
@@ -42,9 +41,6 @@ export function BeltSystemsTable({
             <tr key={s.id}>
               <td className="py-2 font-mono">{s.code}</td>
               <td className="py-2">{s.nameEn}</td>
-              <td className="py-2">
-                {s.organisationId ?? t('admin.beltCatalog.organisationGlobal')}
-              </td>
               <td className="py-2">{s.sortOrder}</td>
               <td className="py-2 text-right">
                 <Button variant="outline" size="sm" onClick={() => onEdit(s)}>

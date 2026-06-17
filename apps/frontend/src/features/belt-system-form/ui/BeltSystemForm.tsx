@@ -3,23 +3,14 @@ import {
   CreateBeltSystemSchema,
   type BeltSystem,
 } from '@repo/contracts/belt-systems';
-import { useQuery } from '@tanstack/react-query';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import type { z } from 'zod';
 
 import { useCreateBeltSystem, useUpdateBeltSystem } from '@/entities/belt-system';
-import { listOrganisationsQueryOptions } from '@/entities/organisation';
 import { HttpError } from '@/shared/api';
 import { Button, FormField, FormMessage, Input, Label } from '@/shared/ui';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/shared/ui/select.js';
 
 /** Use the schema's input type so RHF sees optional/defaulted fields correctly. */
 type BeltSystemFormValues = z.input<typeof CreateBeltSystemSchema>;
@@ -33,15 +24,12 @@ export interface BeltSystemFormProps {
   onCancel?: () => void;
 }
 
-const NONE_ORG = '__none__';
-
 export function BeltSystemForm({
   system,
   onSaved,
   onCancel,
 }: BeltSystemFormProps): React.ReactElement {
   const { t } = useTranslation();
-  const orgsQuery = useQuery(listOrganisationsQueryOptions());
 
   const form = useForm<BeltSystemFormValues>({
     resolver: zodResolver(CreateBeltSystemSchema),
@@ -50,7 +38,6 @@ export function BeltSystemForm({
       nameEn: system?.nameEn ?? '',
       nameSv: system?.nameSv ?? '',
       nameFi: system?.nameFi ?? '',
-      organisationId: system?.organisationId ?? null,
       sortOrder: system?.sortOrder ?? 0,
     },
   });
@@ -81,7 +68,6 @@ export function BeltSystemForm({
   });
 
   const pending = create.isPending || update.isPending;
-  const orgs = orgsQuery.data?.data ?? [];
 
   return (
     <form onSubmit={onSubmit} className="space-y-4" noValidate>
@@ -107,26 +93,6 @@ export function BeltSystemForm({
         <Label htmlFor="bs-name-fi">{t('admin.beltCatalog.fields.nameFi')}</Label>
         <Input id="bs-name-fi" {...form.register('nameFi')} />
         <FormMessage message={form.formState.errors.nameFi?.message} />
-      </FormField>
-
-      <FormField>
-        <Label htmlFor="bs-org">{t('admin.beltCatalog.fields.organisation')}</Label>
-        <Select
-          value={form.watch('organisationId') ?? NONE_ORG}
-          onValueChange={(v) => form.setValue('organisationId', v === NONE_ORG ? null : v)}
-        >
-          <SelectTrigger id="bs-org" aria-label={t('admin.beltCatalog.fields.organisation')}>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value={NONE_ORG}>{t('admin.beltCatalog.organisationGlobal')}</SelectItem>
-            {orgs.map((o) => (
-              <SelectItem key={o.id} value={o.id}>
-                {o.nameEn} ({o.shortCode})
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
       </FormField>
 
       <FormField>
