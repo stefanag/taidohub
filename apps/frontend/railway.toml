@@ -7,11 +7,9 @@
 
 [build]
 builder = "NIXPACKS"
-# Calls `vite build` directly instead of `pnpm --filter frontend build`
-# because the latter chains a `tsc --noEmit` that currently fails on
-# pre-existing errors unrelated to deploy (see README §19.5). Switch back
-# once those are fixed.
-buildCommand = "pnpm install --frozen-lockfile && pnpm --filter frontend exec vite build"
+# `pnpm --filter frontend build` chains `tsc --noEmit && vite build`, so
+# a type regression fails the deploy before any bundle is produced.
+buildCommand = "pnpm install --frozen-lockfile && pnpm --filter frontend build"
 watchPatterns = [
   "apps/frontend/**",
   "packages/contracts/**",

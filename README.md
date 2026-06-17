@@ -412,7 +412,7 @@ Production deploys the backend and frontend as **two services in one Railway pro
 | Service    | Root dir | Build (`railway.toml`)                                                     | Start                                                    |
 | ---------- | -------- | -------------------------------------------------------------------------- | -------------------------------------------------------- |
 | `backend`  | repo `/` | `pnpm install --frozen-lockfile && pnpm --filter backend build`            | `pnpm --filter backend start:prod`                       |
-| `frontend` | repo `/` | `pnpm install --frozen-lockfile && pnpm --filter frontend exec vite build` | `pnpm dlx serve -s apps/frontend/dist -l $PORT --single` |
+| `frontend` | repo `/` | `pnpm install --frozen-lockfile && pnpm --filter frontend build`           | `pnpm dlx serve -s apps/frontend/dist -l $PORT --single` |
 
 Both services build from the repo root so pnpm resolves the `@repo/contracts` workspace dependency. The backend service runs `pnpm --filter backend db:migrate` as a `preDeployCommand` — every deploy applies pending migrations against `DIRECT_URL` before the new instance takes traffic.
 
@@ -452,7 +452,6 @@ Set in the Railway dashboard for the `frontend` service. **Vite inlines these at
 
 ### 18.5 Known caveats
 
-- The frontend `railway.toml` calls `vite build` directly instead of `pnpm --filter frontend build` because the latter chains a `tsc --noEmit` that currently fails on pre-existing errors in `features/belt-system-form/`, `features/belt-systems-table/`, and `features/grading-timeline/`. Fix those and switch back.
 - Seeds are **not** auto-applied. Run them once via the Railway CLI against the backend service: `railway run pnpm --filter backend run db:seed` (or restore a Supabase dump).
 
 ---
