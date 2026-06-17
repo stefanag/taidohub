@@ -1,0 +1,30 @@
+# Railway service config for the NestJS backend.
+#
+# In the Railway dashboard, point this service at the repo root
+# (Root Directory = `/`) and set Config-File Path to
+# `apps/backend/railway.toml`. Building from the repo root is required so
+# pnpm can resolve the `@repo/contracts` workspace dependency.
+
+[build]
+builder = "NIXPACKS"
+buildCommand = "pnpm install --frozen-lockfile && pnpm --filter backend build"
+# Only redeploy when something the backend depends on changes.
+watchPatterns = [
+  "apps/backend/**",
+  "packages/contracts/**",
+  "package.json",
+  "pnpm-lock.yaml",
+  "turbo.json",
+]
+
+[deploy]
+startCommand = "pnpm --filter backend start:prod"
+# Runs after build and before the new instance takes traffic. Uses
+# `DIRECT_URL` (non-pooled) per `apps/backend/src/infrastructure/database/migrate.ts`.
+preDeployCommand = ["pnpm --filter backend db:migrate"]
+# Swagger UI is mounted at `/api/docs` whenever ENABLE_SWAGGER is unset
+# or 'true' — gives a cheap HTTP healthcheck without adding a route.
+healthcheckPath = "/api/docs"
+healthcheckTimeout = 60
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 5

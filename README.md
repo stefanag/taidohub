@@ -403,7 +403,61 @@ No other secrets needed for CI. Backend e2e provides its own ephemeral Postgres 
 
 ---
 
-## 18. References
+## 18. Deployment (Railway)
+
+Production deploys the backend and frontend as **two services in one Railway project**, with the Postgres database staying on **Supabase**. Per-service build/start lives in `apps/<name>/railway.toml`; the dashboard only needs the env vars and the config-file path.
+
+### 18.1 Architecture
+
+| Service    | Root dir | Build (`railway.toml`)                                                     | Start                                                    |
+| ---------- | -------- | -------------------------------------------------------------------------- | -------------------------------------------------------- |
+| `backend`  | repo `/` | `pnpm install --frozen-lockfile && pnpm --filter backend build`            | `pnpm --filter backend start:prod`                       |
+| `frontend` | repo `/` | `pnpm install --frozen-lockfile && pnpm --filter frontend exec vite build` | `pnpm dlx serve -s apps/frontend/dist -l $PORT --single` |
+
+Both services build from the repo root so pnpm resolves the `@repo/contracts` workspace dependency. The backend service runs `pnpm --filter backend db:migrate` as a `preDeployCommand` — every deploy applies pending migrations against `DIRECT_URL` before the new instance takes traffic.
+
+### 18.2 Backend env vars
+
+Set in the Railway dashboard for the `backend` service:
+
+| Variable                  | Value                                                                    |
+| ------------------------- | ------------------------------------------------------------------------ |
+| `DATABASE_URL`            | Supabase **pooled** connection (port `6543`, transaction mode)           |
+| `DIRECT_URL`              | Supabase **direct** connection (port `5432`) — used by `db:migrate`      |
+| `BETTER_AUTH_SECRET`      | A stable secret — rotate from local dev for prod                         |
+| `BETTER_AUTH_URL`         | The backend service's public URL (`https://<service>.up.railway.app`)    |
+| `WEB_ORIGIN`              | The frontend service's public URL (CORS allow-list)                      |
+| `WEB_APP_URL`             | Same as `WEB_ORIGIN` — used for invite-email links                       |
+| `NODE_ENV`                | `production`                                                             |
+
+`PORT` is supplied by Railway and coerced by `apps/backend/src/config/env.schema.ts`.
+
+### 18.3 Frontend env vars
+
+Set in the Railway dashboard for the `frontend` service. **Vite inlines these at build time** — changing them requires a redeploy.
+
+| Variable       | Value                                                                 |
+| -------------- | --------------------------------------------------------------------- |
+| `VITE_API_URL` | The backend service's public URL (`https://<service>.up.railway.app`) |
+
+### 18.4 Initial deploy
+
+1. New Railway project → connect this GitHub repo.
+2. Add two services from the same repo. For each, in the dashboard:
+   - **Root Directory**: `/` (repo root)
+   - **Config File Path**: `apps/backend/railway.toml` / `apps/frontend/railway.toml`
+3. Set the env vars above. Backend first — its public URL is a build-time input for the frontend.
+4. Railway auto-deploys. Backend's `preDeployCommand` runs migrations.
+5. Once the frontend URL is known, paste it into the backend's `WEB_ORIGIN` and `WEB_APP_URL` and redeploy backend.
+
+### 18.5 Known caveats
+
+- The frontend `railway.toml` calls `vite build` directly instead of `pnpm --filter frontend build` because the latter chains a `tsc --noEmit` that currently fails on pre-existing errors in `features/belt-system-form/`, `features/belt-systems-table/`, and `features/grading-timeline/`. Fix those and switch back.
+- Seeds are **not** auto-applied. Run them once via the Railway CLI against the backend service: `railway run pnpm --filter backend run db:seed` (or restore a Supabase dump).
+
+---
+
+## 19. References
 
 - FSD methodology — https://feature-sliced.design/docs/get-started/overview
 - NestJS — https://docs.nestjs.com

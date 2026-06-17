@@ -1,0 +1,29 @@
+# Railway service config for the Vite SPA.
+#
+# In the Railway dashboard, point this service at the repo root
+# (Root Directory = `/`) and set Config-File Path to
+# `apps/frontend/railway.toml`. Building from the repo root is required so
+# pnpm can resolve the `@repo/contracts` workspace dependency.
+
+[build]
+builder = "NIXPACKS"
+# Calls `vite build` directly instead of `pnpm --filter frontend build`
+# because the latter chains a `tsc --noEmit` that currently fails on
+# pre-existing errors unrelated to deploy (see README §19.5). Switch back
+# once those are fixed.
+buildCommand = "pnpm install --frozen-lockfile && pnpm --filter frontend exec vite build"
+watchPatterns = [
+  "apps/frontend/**",
+  "packages/contracts/**",
+  "package.json",
+  "pnpm-lock.yaml",
+  "turbo.json",
+]
+
+[deploy]
+# `pnpm dlx serve` fetches `serve` on demand — no extra package.json entry
+# required. `--single` falls SPA routes back to index.html so TanStack Router
+# can take over client-side.
+startCommand = "pnpm dlx serve -s apps/frontend/dist -l $PORT --single"
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 5
