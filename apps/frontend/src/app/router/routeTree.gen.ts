@@ -34,8 +34,12 @@ import { Route as AppAdminFeatureFlagsRouteImport } from './routes/_app.admin.fe
 import { Route as AppAdminBeltCatalogRouteImport } from './routes/_app.admin.belt-catalog'
 import { Route as AppAdminAuditLogRouteImport } from './routes/_app.admin.audit-log'
 import { Route as AppAdminTechniquesIndexRouteImport } from './routes/_app.admin.techniques.index'
+import { Route as AppAdminPatternsIndexRouteImport } from './routes/_app.admin.patterns.index'
 import { Route as AppAdminTechniquesNewRouteImport } from './routes/_app.admin.techniques.new'
 import { Route as AppAdminTechniquesTechniqueIdRouteImport } from './routes/_app.admin.techniques.$techniqueId'
+import { Route as AppAdminPatternsNewRouteImport } from './routes/_app.admin.patterns.new'
+import { Route as AppAdminPatternsPatternIdRouteImport } from './routes/_app.admin.patterns.$patternId'
+import { Route as AppAdminPatternsPatternIdEditRouteImport } from './routes/_app.admin.patterns.$patternId.edit'
 
 const PublicRoute = PublicRouteImport.update({
   id: '/_public',
@@ -160,6 +164,11 @@ const AppAdminTechniquesIndexRoute = AppAdminTechniquesIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppAdminTechniquesRoute,
 } as any)
+const AppAdminPatternsIndexRoute = AppAdminPatternsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppAdminPatternsRoute,
+} as any)
 const AppAdminTechniquesNewRoute = AppAdminTechniquesNewRouteImport.update({
   id: '/new',
   path: '/new',
@@ -170,6 +179,23 @@ const AppAdminTechniquesTechniqueIdRoute =
     id: '/$techniqueId',
     path: '/$techniqueId',
     getParentRoute: () => AppAdminTechniquesRoute,
+  } as any)
+const AppAdminPatternsNewRoute = AppAdminPatternsNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => AppAdminPatternsRoute,
+} as any)
+const AppAdminPatternsPatternIdRoute =
+  AppAdminPatternsPatternIdRouteImport.update({
+    id: '/$patternId',
+    path: '/$patternId',
+    getParentRoute: () => AppAdminPatternsRoute,
+  } as any)
+const AppAdminPatternsPatternIdEditRoute =
+  AppAdminPatternsPatternIdEditRouteImport.update({
+    id: '/edit',
+    path: '/edit',
+    getParentRoute: () => AppAdminPatternsPatternIdRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -189,15 +215,19 @@ export interface FileRoutesByFullPath {
   '/admin/feature-flags': typeof AppAdminFeatureFlagsRoute
   '/admin/labels': typeof AppAdminLabelsRoute
   '/admin/organisations': typeof AppAdminOrganisationsRoute
-  '/admin/patterns': typeof AppAdminPatternsRoute
+  '/admin/patterns': typeof AppAdminPatternsRouteWithChildren
   '/admin/techniques': typeof AppAdminTechniquesRouteWithChildren
   '/admin/users': typeof AppAdminUsersRoute
   '/settings/labels': typeof AppSettingsLabelsRoute
   '/students/$userId': typeof AppStudentsUserIdRoute
   '/ranks/$slug': typeof PublicRanksSlugRoute
+  '/admin/patterns/$patternId': typeof AppAdminPatternsPatternIdRouteWithChildren
+  '/admin/patterns/new': typeof AppAdminPatternsNewRoute
   '/admin/techniques/$techniqueId': typeof AppAdminTechniquesTechniqueIdRoute
   '/admin/techniques/new': typeof AppAdminTechniquesNewRoute
+  '/admin/patterns/': typeof AppAdminPatternsIndexRoute
   '/admin/techniques/': typeof AppAdminTechniquesIndexRoute
+  '/admin/patterns/$patternId/edit': typeof AppAdminPatternsPatternIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof PublicIndexRoute
@@ -216,14 +246,17 @@ export interface FileRoutesByTo {
   '/admin/feature-flags': typeof AppAdminFeatureFlagsRoute
   '/admin/labels': typeof AppAdminLabelsRoute
   '/admin/organisations': typeof AppAdminOrganisationsRoute
-  '/admin/patterns': typeof AppAdminPatternsRoute
   '/admin/users': typeof AppAdminUsersRoute
   '/settings/labels': typeof AppSettingsLabelsRoute
   '/students/$userId': typeof AppStudentsUserIdRoute
   '/ranks/$slug': typeof PublicRanksSlugRoute
+  '/admin/patterns/$patternId': typeof AppAdminPatternsPatternIdRouteWithChildren
+  '/admin/patterns/new': typeof AppAdminPatternsNewRoute
   '/admin/techniques/$techniqueId': typeof AppAdminTechniquesTechniqueIdRoute
   '/admin/techniques/new': typeof AppAdminTechniquesNewRoute
+  '/admin/patterns': typeof AppAdminPatternsIndexRoute
   '/admin/techniques': typeof AppAdminTechniquesIndexRoute
+  '/admin/patterns/$patternId/edit': typeof AppAdminPatternsPatternIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -245,15 +278,19 @@ export interface FileRoutesById {
   '/_app/admin/feature-flags': typeof AppAdminFeatureFlagsRoute
   '/_app/admin/labels': typeof AppAdminLabelsRoute
   '/_app/admin/organisations': typeof AppAdminOrganisationsRoute
-  '/_app/admin/patterns': typeof AppAdminPatternsRoute
+  '/_app/admin/patterns': typeof AppAdminPatternsRouteWithChildren
   '/_app/admin/techniques': typeof AppAdminTechniquesRouteWithChildren
   '/_app/admin/users': typeof AppAdminUsersRoute
   '/_app/settings/labels': typeof AppSettingsLabelsRoute
   '/_app/students/$userId': typeof AppStudentsUserIdRoute
   '/_public/ranks/$slug': typeof PublicRanksSlugRoute
+  '/_app/admin/patterns/$patternId': typeof AppAdminPatternsPatternIdRouteWithChildren
+  '/_app/admin/patterns/new': typeof AppAdminPatternsNewRoute
   '/_app/admin/techniques/$techniqueId': typeof AppAdminTechniquesTechniqueIdRoute
   '/_app/admin/techniques/new': typeof AppAdminTechniquesNewRoute
+  '/_app/admin/patterns/': typeof AppAdminPatternsIndexRoute
   '/_app/admin/techniques/': typeof AppAdminTechniquesIndexRoute
+  '/_app/admin/patterns/$patternId/edit': typeof AppAdminPatternsPatternIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -280,9 +317,13 @@ export interface FileRouteTypes {
     | '/settings/labels'
     | '/students/$userId'
     | '/ranks/$slug'
+    | '/admin/patterns/$patternId'
+    | '/admin/patterns/new'
     | '/admin/techniques/$techniqueId'
     | '/admin/techniques/new'
+    | '/admin/patterns/'
     | '/admin/techniques/'
+    | '/admin/patterns/$patternId/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -301,14 +342,17 @@ export interface FileRouteTypes {
     | '/admin/feature-flags'
     | '/admin/labels'
     | '/admin/organisations'
-    | '/admin/patterns'
     | '/admin/users'
     | '/settings/labels'
     | '/students/$userId'
     | '/ranks/$slug'
+    | '/admin/patterns/$patternId'
+    | '/admin/patterns/new'
     | '/admin/techniques/$techniqueId'
     | '/admin/techniques/new'
+    | '/admin/patterns'
     | '/admin/techniques'
+    | '/admin/patterns/$patternId/edit'
   id:
     | '__root__'
     | '/_app'
@@ -335,9 +379,13 @@ export interface FileRouteTypes {
     | '/_app/settings/labels'
     | '/_app/students/$userId'
     | '/_public/ranks/$slug'
+    | '/_app/admin/patterns/$patternId'
+    | '/_app/admin/patterns/new'
     | '/_app/admin/techniques/$techniqueId'
     | '/_app/admin/techniques/new'
+    | '/_app/admin/patterns/'
     | '/_app/admin/techniques/'
+    | '/_app/admin/patterns/$patternId/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -522,6 +570,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdminTechniquesIndexRouteImport
       parentRoute: typeof AppAdminTechniquesRoute
     }
+    '/_app/admin/patterns/': {
+      id: '/_app/admin/patterns/'
+      path: '/'
+      fullPath: '/admin/patterns/'
+      preLoaderRoute: typeof AppAdminPatternsIndexRouteImport
+      parentRoute: typeof AppAdminPatternsRoute
+    }
     '/_app/admin/techniques/new': {
       id: '/_app/admin/techniques/new'
       path: '/new'
@@ -535,6 +590,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/techniques/$techniqueId'
       preLoaderRoute: typeof AppAdminTechniquesTechniqueIdRouteImport
       parentRoute: typeof AppAdminTechniquesRoute
+    }
+    '/_app/admin/patterns/new': {
+      id: '/_app/admin/patterns/new'
+      path: '/new'
+      fullPath: '/admin/patterns/new'
+      preLoaderRoute: typeof AppAdminPatternsNewRouteImport
+      parentRoute: typeof AppAdminPatternsRoute
+    }
+    '/_app/admin/patterns/$patternId': {
+      id: '/_app/admin/patterns/$patternId'
+      path: '/$patternId'
+      fullPath: '/admin/patterns/$patternId'
+      preLoaderRoute: typeof AppAdminPatternsPatternIdRouteImport
+      parentRoute: typeof AppAdminPatternsRoute
+    }
+    '/_app/admin/patterns/$patternId/edit': {
+      id: '/_app/admin/patterns/$patternId/edit'
+      path: '/edit'
+      fullPath: '/admin/patterns/$patternId/edit'
+      preLoaderRoute: typeof AppAdminPatternsPatternIdEditRouteImport
+      parentRoute: typeof AppAdminPatternsPatternIdRoute
     }
   }
 }
@@ -562,6 +638,35 @@ const AppStudentsRouteChildren: AppStudentsRouteChildren = {
 const AppStudentsRouteWithChildren = AppStudentsRoute._addFileChildren(
   AppStudentsRouteChildren,
 )
+
+interface AppAdminPatternsPatternIdRouteChildren {
+  AppAdminPatternsPatternIdEditRoute: typeof AppAdminPatternsPatternIdEditRoute
+}
+
+const AppAdminPatternsPatternIdRouteChildren: AppAdminPatternsPatternIdRouteChildren =
+  {
+    AppAdminPatternsPatternIdEditRoute: AppAdminPatternsPatternIdEditRoute,
+  }
+
+const AppAdminPatternsPatternIdRouteWithChildren =
+  AppAdminPatternsPatternIdRoute._addFileChildren(
+    AppAdminPatternsPatternIdRouteChildren,
+  )
+
+interface AppAdminPatternsRouteChildren {
+  AppAdminPatternsPatternIdRoute: typeof AppAdminPatternsPatternIdRouteWithChildren
+  AppAdminPatternsNewRoute: typeof AppAdminPatternsNewRoute
+  AppAdminPatternsIndexRoute: typeof AppAdminPatternsIndexRoute
+}
+
+const AppAdminPatternsRouteChildren: AppAdminPatternsRouteChildren = {
+  AppAdminPatternsPatternIdRoute: AppAdminPatternsPatternIdRouteWithChildren,
+  AppAdminPatternsNewRoute: AppAdminPatternsNewRoute,
+  AppAdminPatternsIndexRoute: AppAdminPatternsIndexRoute,
+}
+
+const AppAdminPatternsRouteWithChildren =
+  AppAdminPatternsRoute._addFileChildren(AppAdminPatternsRouteChildren)
 
 interface AppAdminTechniquesRouteChildren {
   AppAdminTechniquesTechniqueIdRoute: typeof AppAdminTechniquesTechniqueIdRoute
@@ -592,7 +697,7 @@ interface AppRouteChildren {
   AppAdminFeatureFlagsRoute: typeof AppAdminFeatureFlagsRoute
   AppAdminLabelsRoute: typeof AppAdminLabelsRoute
   AppAdminOrganisationsRoute: typeof AppAdminOrganisationsRoute
-  AppAdminPatternsRoute: typeof AppAdminPatternsRoute
+  AppAdminPatternsRoute: typeof AppAdminPatternsRouteWithChildren
   AppAdminTechniquesRoute: typeof AppAdminTechniquesRouteWithChildren
   AppAdminUsersRoute: typeof AppAdminUsersRoute
 }
@@ -611,7 +716,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppAdminFeatureFlagsRoute: AppAdminFeatureFlagsRoute,
   AppAdminLabelsRoute: AppAdminLabelsRoute,
   AppAdminOrganisationsRoute: AppAdminOrganisationsRoute,
-  AppAdminPatternsRoute: AppAdminPatternsRoute,
+  AppAdminPatternsRoute: AppAdminPatternsRouteWithChildren,
   AppAdminTechniquesRoute: AppAdminTechniquesRouteWithChildren,
   AppAdminUsersRoute: AppAdminUsersRoute,
 }

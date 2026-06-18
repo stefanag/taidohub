@@ -1,4 +1,4 @@
 export {
-  PatternFormDialog,
-  type PatternFormDialogProps,
-} from './ui/PatternFormDialog.js';
+  PatternForm,
+  type PatternFormProps,
+} from './ui/PatternForm.js';
