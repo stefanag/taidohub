@@ -10,6 +10,7 @@ import {
   useDeletePatternMutation,
   usePatternsQuery,
 } from '@/entities/pattern';
+import { PatternListItem } from '@/features/pattern-list-item';
 import { Button, ClassificationMultiSelect } from '@/shared/ui';
 
 /**
@@ -133,11 +134,7 @@ export function AdminPatternsListPage(): React.ReactElement {
       params: { patternId: row.id },
     });
   };
-  const onDelete = (
-    event: React.MouseEvent<HTMLButtonElement>,
-    row: Pattern,
-  ): void => {
-    event.stopPropagation();
+  const onDelete = (row: Pattern): void => {
     if (window.confirm(t('admin.patterns.deleteConfirm'))) {
       deleteMut.mutate(row.id);
     }
@@ -185,28 +182,13 @@ export function AdminPatternsListPage(): React.ReactElement {
       <section className="mt-8">
         <ul className="space-y-2">
           {patterns.map((row) => (
-            <li
+            <PatternListItem
               key={row.id}
-              onClick={() => onRowClick(row)}
-              className="flex cursor-pointer items-center justify-between rounded-lg border border-outline-variant p-3 hover:bg-surface-container-low/50"
-            >
-              <div className="min-w-0">
-                <div className="truncate font-medium">{row.nameRomaji}</div>
-                <div className="truncate text-xs text-on-surface-variant">
-                  {row.classifications.map((c) => c.code).join(' · ')}
-                </div>
-              </div>
-              <div className="ml-3 flex shrink-0 items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={(e) => onDelete(e, row)}
-                  disabled={deleteMut.isPending}
-                >
-                  {t('common.delete')}
-                </Button>
-              </div>
-            </li>
+              pattern={row}
+              onClick={onRowClick}
+              onDelete={onDelete}
+              isDeleting={deleteMut.isPending}
+            />
           ))}
         </ul>
       </section>
