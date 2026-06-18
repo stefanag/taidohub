@@ -18,6 +18,8 @@ function pickLocalisedName(row: Technique, lang: SupportedLang): string {
 
 export interface TechniqueListItemProps {
   technique: Technique;
+  /** Omitted → the row is not clickable. Used by admin to navigate to view. */
+  onClick?: (technique: Technique) => void;
   /** Omitted → the Edit button is hidden. */
   onEdit?: (technique: Technique) => void;
   /** Omitted → the Delete button is hidden. */
@@ -34,6 +36,7 @@ export interface TechniqueListItemProps {
  */
 export function TechniqueListItem({
   technique,
+  onClick,
   onEdit,
   onDelete,
   isDeleting = false,
@@ -48,8 +51,12 @@ export function TechniqueListItem({
   const showRomaji = technique.nameRomaji && technique.nameRomaji !== localised;
   const showJa = Boolean(technique.nameJa);
 
+  const liClass = onClick
+    ? 'flex cursor-pointer items-center justify-between rounded-lg border border-outline-variant p-3 hover:bg-surface-container-low/50'
+    : 'flex items-center justify-between rounded-lg border border-outline-variant p-3';
+
   return (
-    <li className="flex items-center justify-between rounded-lg border border-outline-variant p-3">
+    <li className={liClass} onClick={onClick ? () => onClick(technique) : undefined}>
       <div className="min-w-0">
         <div className="truncate font-medium">{technique.nameRomaji}</div>
           <div className="mt-0.5 flex items-baseline gap-2 text-xs text-on-surface-variant">
@@ -60,7 +67,14 @@ export function TechniqueListItem({
       {onEdit || onDelete ? (
         <div className="ml-3 flex shrink-0 items-center gap-2">
           {onEdit ? (
-            <Button variant="outline" size="sm" onClick={() => onEdit(technique)}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation();
+                onEdit(technique);
+              }}
+            >
               {t('common.edit')}
             </Button>
           ) : null}
@@ -68,7 +82,10 @@ export function TechniqueListItem({
             <Button
               variant="outline"
               size="sm"
-              onClick={() => onDelete(technique)}
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete(technique);
+              }}
               disabled={isDeleting}
             >
               {t('common.delete')}

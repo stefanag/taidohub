@@ -6,20 +6,24 @@ import { useTechniqueQuery } from '@/entities/technique';
 import { TechniqueForm } from '@/features/technique-form';
 
 /**
- * Sysadmin-only "edit technique" page. Loads the row by id, then wraps
- * `TechniqueForm` with it preloaded. Save and cancel both navigate back to
- * the admin list. While the technique is loading the page shows a stub
- * line; if the id resolves to nothing the page surfaces an inline
- * not-found message rather than rendering an empty form.
+ * Sysadmin-only "edit technique" page. Loads the row by id and wraps
+ * `TechniqueForm` with it preloaded. On save → navigate to view; on
+ * cancel → navigate to view (the user came from the view page; sending
+ * them back there is the least-surprising outcome).
  */
 export function AdminTechniqueEditPage(): React.ReactElement {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { techniqueId } = useParams({ from: '/_app/admin/techniques/$techniqueId' });
+  const { techniqueId } = useParams({
+    from: '/_app/admin/techniques/$techniqueId/edit',
+  });
   const techniqueQuery = useTechniqueQuery(techniqueId);
 
-  const back = (): void => {
-    void navigate({ to: '/admin/techniques' });
+  const toView = (): void => {
+    void navigate({
+      to: '/admin/techniques/$techniqueId',
+      params: { techniqueId },
+    });
   };
 
   return (
@@ -35,8 +39,8 @@ export function AdminTechniqueEditPage(): React.ReactElement {
         ) : techniqueQuery.data ? (
           <TechniqueForm
             technique={techniqueQuery.data}
-            onSaved={back}
-            onCancel={back}
+            onSaved={toView}
+            onCancel={toView}
           />
         ) : (
           <p className="text-on-surface-variant">

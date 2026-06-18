@@ -3,17 +3,12 @@ import { createRoute, redirect } from '@tanstack/react-router';
 import { appLayoutRoute } from './_app.js';
 
 import { authClient } from '@/features/auth-by-email';
-import { AdminTechniqueViewPage } from '@/pages/admin/techniques/view';
+import { AdminTechniqueEditPage } from '@/pages/admin/techniques/edit';
 
-/**
- * Sysadmin-only route for the technique **view** page (read-only detail).
- * Edit lives at `/admin/techniques/$techniqueId/edit`. The sysadmin gate
- * is redundant with the parent (`_app.admin.techniques.tsx`) but kept
- * defensively.
- */
-export const adminTechniqueViewRoute = createRoute({
+/** Sysadmin-only route for the technique edit page. */
+export const adminTechniqueEditRoute = createRoute({
   getParentRoute: () => appLayoutRoute,
-  path: '/admin/techniques/$techniqueId',
+  path: '/admin/techniques/$techniqueId/edit',
   beforeLoad: async () => {
     try {
       const result = await authClient.getSession();
@@ -26,7 +21,7 @@ export const adminTechniqueViewRoute = createRoute({
       throw redirect({ to: '/login' });
     }
   },
-  component: AdminTechniqueViewPage,
+  component: AdminTechniqueEditPage,
 });
 
-export const Route = adminTechniqueViewRoute;
+export const Route = adminTechniqueEditRoute;

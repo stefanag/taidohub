@@ -39,6 +39,7 @@ import { Route as AppAdminTechniquesNewRouteImport } from './routes/_app.admin.t
 import { Route as AppAdminTechniquesTechniqueIdRouteImport } from './routes/_app.admin.techniques.$techniqueId'
 import { Route as AppAdminPatternsNewRouteImport } from './routes/_app.admin.patterns.new'
 import { Route as AppAdminPatternsPatternIdRouteImport } from './routes/_app.admin.patterns.$patternId'
+import { Route as AppAdminTechniquesTechniqueIdEditRouteImport } from './routes/_app.admin.techniques.$techniqueId.edit'
 import { Route as AppAdminPatternsPatternIdEditRouteImport } from './routes/_app.admin.patterns.$patternId.edit'
 
 const PublicRoute = PublicRouteImport.update({
@@ -191,6 +192,12 @@ const AppAdminPatternsPatternIdRoute =
     path: '/$patternId',
     getParentRoute: () => AppAdminPatternsRoute,
   } as any)
+const AppAdminTechniquesTechniqueIdEditRoute =
+  AppAdminTechniquesTechniqueIdEditRouteImport.update({
+    id: '/edit',
+    path: '/edit',
+    getParentRoute: () => AppAdminTechniquesTechniqueIdRoute,
+  } as any)
 const AppAdminPatternsPatternIdEditRoute =
   AppAdminPatternsPatternIdEditRouteImport.update({
     id: '/edit',
@@ -223,11 +230,12 @@ export interface FileRoutesByFullPath {
   '/ranks/$slug': typeof PublicRanksSlugRoute
   '/admin/patterns/$patternId': typeof AppAdminPatternsPatternIdRouteWithChildren
   '/admin/patterns/new': typeof AppAdminPatternsNewRoute
-  '/admin/techniques/$techniqueId': typeof AppAdminTechniquesTechniqueIdRoute
+  '/admin/techniques/$techniqueId': typeof AppAdminTechniquesTechniqueIdRouteWithChildren
   '/admin/techniques/new': typeof AppAdminTechniquesNewRoute
   '/admin/patterns/': typeof AppAdminPatternsIndexRoute
   '/admin/techniques/': typeof AppAdminTechniquesIndexRoute
   '/admin/patterns/$patternId/edit': typeof AppAdminPatternsPatternIdEditRoute
+  '/admin/techniques/$techniqueId/edit': typeof AppAdminTechniquesTechniqueIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof PublicIndexRoute
@@ -252,11 +260,12 @@ export interface FileRoutesByTo {
   '/ranks/$slug': typeof PublicRanksSlugRoute
   '/admin/patterns/$patternId': typeof AppAdminPatternsPatternIdRouteWithChildren
   '/admin/patterns/new': typeof AppAdminPatternsNewRoute
-  '/admin/techniques/$techniqueId': typeof AppAdminTechniquesTechniqueIdRoute
+  '/admin/techniques/$techniqueId': typeof AppAdminTechniquesTechniqueIdRouteWithChildren
   '/admin/techniques/new': typeof AppAdminTechniquesNewRoute
   '/admin/patterns': typeof AppAdminPatternsIndexRoute
   '/admin/techniques': typeof AppAdminTechniquesIndexRoute
   '/admin/patterns/$patternId/edit': typeof AppAdminPatternsPatternIdEditRoute
+  '/admin/techniques/$techniqueId/edit': typeof AppAdminTechniquesTechniqueIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -286,11 +295,12 @@ export interface FileRoutesById {
   '/_public/ranks/$slug': typeof PublicRanksSlugRoute
   '/_app/admin/patterns/$patternId': typeof AppAdminPatternsPatternIdRouteWithChildren
   '/_app/admin/patterns/new': typeof AppAdminPatternsNewRoute
-  '/_app/admin/techniques/$techniqueId': typeof AppAdminTechniquesTechniqueIdRoute
+  '/_app/admin/techniques/$techniqueId': typeof AppAdminTechniquesTechniqueIdRouteWithChildren
   '/_app/admin/techniques/new': typeof AppAdminTechniquesNewRoute
   '/_app/admin/patterns/': typeof AppAdminPatternsIndexRoute
   '/_app/admin/techniques/': typeof AppAdminTechniquesIndexRoute
   '/_app/admin/patterns/$patternId/edit': typeof AppAdminPatternsPatternIdEditRoute
+  '/_app/admin/techniques/$techniqueId/edit': typeof AppAdminTechniquesTechniqueIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -324,6 +334,7 @@ export interface FileRouteTypes {
     | '/admin/patterns/'
     | '/admin/techniques/'
     | '/admin/patterns/$patternId/edit'
+    | '/admin/techniques/$techniqueId/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -353,6 +364,7 @@ export interface FileRouteTypes {
     | '/admin/patterns'
     | '/admin/techniques'
     | '/admin/patterns/$patternId/edit'
+    | '/admin/techniques/$techniqueId/edit'
   id:
     | '__root__'
     | '/_app'
@@ -386,6 +398,7 @@ export interface FileRouteTypes {
     | '/_app/admin/patterns/'
     | '/_app/admin/techniques/'
     | '/_app/admin/patterns/$patternId/edit'
+    | '/_app/admin/techniques/$techniqueId/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -605,6 +618,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdminPatternsPatternIdRouteImport
       parentRoute: typeof AppAdminPatternsRoute
     }
+    '/_app/admin/techniques/$techniqueId/edit': {
+      id: '/_app/admin/techniques/$techniqueId/edit'
+      path: '/edit'
+      fullPath: '/admin/techniques/$techniqueId/edit'
+      preLoaderRoute: typeof AppAdminTechniquesTechniqueIdEditRouteImport
+      parentRoute: typeof AppAdminTechniquesTechniqueIdRoute
+    }
     '/_app/admin/patterns/$patternId/edit': {
       id: '/_app/admin/patterns/$patternId/edit'
       path: '/edit'
@@ -668,14 +688,30 @@ const AppAdminPatternsRouteChildren: AppAdminPatternsRouteChildren = {
 const AppAdminPatternsRouteWithChildren =
   AppAdminPatternsRoute._addFileChildren(AppAdminPatternsRouteChildren)
 
+interface AppAdminTechniquesTechniqueIdRouteChildren {
+  AppAdminTechniquesTechniqueIdEditRoute: typeof AppAdminTechniquesTechniqueIdEditRoute
+}
+
+const AppAdminTechniquesTechniqueIdRouteChildren: AppAdminTechniquesTechniqueIdRouteChildren =
+  {
+    AppAdminTechniquesTechniqueIdEditRoute:
+      AppAdminTechniquesTechniqueIdEditRoute,
+  }
+
+const AppAdminTechniquesTechniqueIdRouteWithChildren =
+  AppAdminTechniquesTechniqueIdRoute._addFileChildren(
+    AppAdminTechniquesTechniqueIdRouteChildren,
+  )
+
 interface AppAdminTechniquesRouteChildren {
-  AppAdminTechniquesTechniqueIdRoute: typeof AppAdminTechniquesTechniqueIdRoute
+  AppAdminTechniquesTechniqueIdRoute: typeof AppAdminTechniquesTechniqueIdRouteWithChildren
   AppAdminTechniquesNewRoute: typeof AppAdminTechniquesNewRoute
   AppAdminTechniquesIndexRoute: typeof AppAdminTechniquesIndexRoute
 }
 
 const AppAdminTechniquesRouteChildren: AppAdminTechniquesRouteChildren = {
-  AppAdminTechniquesTechniqueIdRoute: AppAdminTechniquesTechniqueIdRoute,
+  AppAdminTechniquesTechniqueIdRoute:
+    AppAdminTechniquesTechniqueIdRouteWithChildren,
   AppAdminTechniquesNewRoute: AppAdminTechniquesNewRoute,
   AppAdminTechniquesIndexRoute: AppAdminTechniquesIndexRoute,
 }

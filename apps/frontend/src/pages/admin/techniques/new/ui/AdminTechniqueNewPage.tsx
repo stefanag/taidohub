@@ -5,9 +5,9 @@ import { useTranslation } from 'react-i18next';
 import { TechniqueForm } from '@/features/technique-form';
 
 /**
- * Sysadmin-only "new technique" page. Wraps `TechniqueForm` in create mode;
- * save and cancel both navigate back to the admin list. The route guard
- * (sysadmin) is enforced on the route definition.
+ * Sysadmin-only "new technique" page. Wraps `TechniqueForm` in create
+ * mode; save and cancel both navigate back to the admin list. The
+ * sysadmin guard is inherited from `_app.admin.techniques.tsx`.
  */
 export function AdminTechniqueNewPage(): React.ReactElement {
   const { t } = useTranslation();
