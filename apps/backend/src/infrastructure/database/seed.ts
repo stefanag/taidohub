@@ -16,6 +16,7 @@ import { user } from './schema/index.js';
 import { seedSysadmin, type SeedDeps } from './seed-sysadmin.js';
 import { seedBeltCatalog } from './seeds/belt-catalog.seed.js';
 import { seedClassifications } from './seeds/classifications.seed.js';
+import { seedClubMembers } from './seeds/club-members.seed.js';
 import { seedOrganisations } from './seeds/organisations.seed.js';
 import { seedTechniques } from './seeds/techniques.seed.js';
 
@@ -87,6 +88,21 @@ async function main(): Promise<void> {
   console.info(
     `[seed] techniques: rows(+${techniques.techniques.inserted}/~${techniques.techniques.updated}) ` +
       `edges(+${techniques.edges.inserted})`,
+  );
+
+  // Club members (STAF roster). Reuses the same `signUpEmail` callback as
+  // the sysadmin seed for credential-account creation. Runs after orgs +
+  // belt-catalog because it FKs against both.
+  const clubMembers = await seedClubMembers(db, {
+    signUpEmail: deps.signUpEmail,
+    sysadminEmail: env.SYSADMIN_EMAIL,
+  });
+  // eslint-disable-next-line no-console
+  console.info(
+    `[seed] club members (STAF): users(+${clubMembers.users.inserted}/~${clubMembers.users.updated}) ` +
+      `profiles(+${clubMembers.profiles.inserted}/~${clubMembers.profiles.updated}) ` +
+      `memberships(+${clubMembers.memberships.inserted}/~${clubMembers.memberships.updated}) ` +
+      `rank_history(+${clubMembers.rankHistory.inserted}/~${clubMembers.rankHistory.updated})`,
   );
 
   // Close the postgres-js pool so the script can exit. Without this the

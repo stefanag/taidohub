@@ -1,0 +1,278 @@
+{
+  "organisationSlug": "stockholms-taidoforening",
+  "members": [
+    {
+      "email": "stefan@taidohub.dev",
+      "name": "Stefan Agnvall",
+      "birthDate": "1971-04-04",
+      "roles": ["instructor", "clubadmin"],
+      "password": "knkt:MAG26",
+      "joinDate": "2018-10-01",
+      "rankHistory": [
+        { "rank": "6-kyu", "date": "2018-12-10", "examiner": "Håkan Karlsson", "source": "event", "verified": true },
+        { "rank": "5-kyu", "date": "2019-05-20", "examiner": "Håkan Karlsson", "source": "event", "verified": true },
+        { "rank": "4-kyu", "date": "2020-09-03", "examiner": "Håkan Karlsson", "source": "event", "verified": true },
+        { "rank": "3-kyu", "date": "2020-09-03", "examiner": "Håkan Karlsson", "source": "event", "verified": true },
+        { "rank": "2-kyu", "date": "2021-06-18", "examiner": "Håkan Karlsson", "source": "event", "verified": true },
+        { "rank": "1-kyu", "date": "2022-06-07", "examiner": "Håkan Karlsson", "source": "event", "verified": true },
+        { "rank": "1-dan", "date": "2023-06-09", "examiner": "Mikael Jansson", "source": "event", "verified": true },
+        { "rank": "2-dan", "date": "2025-06-11", "examiner": "Mikael Jansson", "source": "event", "verified": true }
+      ]
+    },
+    {
+      "email": "mikael@taidohub.dev",
+      "name": "Mikael Jansson",
+      "birthDate": "1961-03-20",
+      "roles": ["instructor"],
+      "shogoTitle": "hanshi",
+      "joinDate": "1978-01-01",
+      "rankHistory": [
+        { "rank": "5-kyu", "date": "1978-05-15", "examiner": "Jim Carlzon" },
+        { "rank": "4-kyu", "date": "1978-12-04", "examiner": "Jim Carlzon" },
+        { "rank": "3-kyu", "date": "1979-03-12", "examiner": "Jim Carlzon" },
+        { "rank": "2-kyu", "date": "1980-03-12", "examiner": "Jim Carlzon" },
+        { "rank": "1-kyu", "date": "1982-03-12", "examiner": "Jim Carlzon" },
+        { "rank": "1-dan", "date": "1983-03-12", "examiner": "Seiken Shukumine" },
+        { "rank": "2-dan", "date": "1985-03-12", "examiner": "Seiken Shukumine" },
+        { "rank": "3-dan", "date": "1988-03-12", "examiner": "Seiken Shukumine", "shogoTitle": "renshi" },
+        { "rank": "4-dan", "date": "1992-03-12", "examiner": "Seiken Shukumine" },
+        { "rank": "5-dan", "date": "1997-01-01", "examiner": "Seiken Shukumine", "shogoTitle": "kyoshi" },
+        { "rank": "6-dan", "date": "2003-01-01", "examiner": "Seiken Shukumine" },
+        { "rank": "7-dan", "date": "2012-03-12", "examiner": "Seiken Shukumine" },
+        { "rank": "8-dan", "date": "2022-03-12", "examiner": "Seiken Shukumine", "shogoTitle": "hanshi" }
+      ]
+    },
+    {
+      "email": "hakan@taidohub.dev",
+      "name": "Håkan Karlsson",
+      "birthDate": "1974-12-15",
+      "roles": ["instructor"],
+      "joinDate": "2015-06-23",
+      "rankHistory": [
+        { "rank": "6-kyu", "date": "1996-03-10", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "5-kyu", "date": "1997-03-10", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "4-kyu", "date": "1997-12-21", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "3-kyu", "date": "1998-09-03", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "2-kyu", "date": "1999-06-18", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "1-kyu", "date": "2000-05-27", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "1-dan", "date": "2001-06-09", "examiner": "Mikael Jansson", "source": "external", "verified": true },
+        { "rank": "2-dan", "date": "2003-06-11", "examiner": "Mikael Jansson", "source": "external", "verified": true },
+        { "rank": "3-dan", "date": "2007-06-11", "examiner": "Taido Hon'in", "source": "external", "verified": true },
+        { "rank": "4-dan", "date": "2013-06-11", "examiner": "Mikael Jansson", "source": "external", "verified": true, "shogoTitle": "renshi" },
+        { "rank": "5-dan", "date": "2022-09-11", "examiner": "Mikael Jansson", "source": "external", "verified": true }
+      ]
+    },
+    {
+      "email": "eddie@taidohub.dev",
+      "name": "Eddie Herlin",
+      "birthDate": "1976-07-04",
+      "roles": ["instructor"],
+      "shogoTitle": "renshi",
+      "joinDate": "2015-06-23",
+      "rankHistory": [
+        { "rank": "6-kyu", "date": "2015-03-10", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "5-kyu", "date": "2015-03-10", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "4-kyu", "date": "2015-11-21", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "3-kyu", "date": "2016-09-03", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "2-kyu", "date": "2017-06-18", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "1-kyu", "date": "2006-05-27", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "1-dan", "date": "2006-06-09", "examiner": "Mikael Jansson", "source": "external", "verified": true },
+        { "rank": "2-dan", "date": "2008-06-11", "examiner": "Mikael Jansson", "source": "external", "verified": true },
+        { "rank": "3-dan", "date": "2011-06-11", "examiner": "Mikael Jansson", "source": "external", "verified": true },
+        { "rank": "4-dan", "date": "2015-06-11", "examiner": "Akihiko Kato", "source": "external", "verified": true, "shogoTitle": "renshi" },
+        { "rank": "5-dan", "date": "2022-09-11", "examiner": "Mikael Jansson", "source": "external", "verified": true }
+      ]
+    },
+    {
+      "email": "bea@taidohub.dev",
+      "name": "Beatrice Kantén",
+      "birthDate": "1988-10-11",
+      "roles": ["instructor"],
+      "shogoTitle": "renshi",
+      "joinDate": "2015-03-05",
+      "rankHistory": [
+        { "rank": "6-kyu", "date": "2001-03-10", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "5-kyu", "date": "2002-03-10", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "4-kyu", "date": "2003-11-21", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "3-kyu", "date": "2004-09-03", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "2-kyu", "date": "2005-06-18", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "1-kyu", "date": "2006-05-27", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "1-dan", "date": "2007-06-09", "examiner": "Mikael Jansson", "source": "external", "verified": true },
+        { "rank": "2-dan", "date": "2009-06-11", "examiner": "Mikael Jansson", "source": "external", "verified": true },
+        { "rank": "3-dan", "date": "2013-06-11", "examiner": "Mikael Jansson", "source": "external", "verified": true },
+        { "rank": "4-dan", "date": "2017-06-11", "examiner": "Yuetsu Tanaka", "source": "external", "verified": true, "shogoTitle": "renshi" }
+      ]
+    },
+    {
+      "email": "gabbe@taidohub.dev",
+      "name": "Gabriel Beck-Friis",
+      "birthDate": "1998-07-30",
+      "roles": ["instructor"],
+      "joinDate": "2016-09-06",
+      "rankHistory": [
+        { "rank": "6-kyu", "date": "2015-03-10", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "5-kyu", "date": "2015-03-10", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "4-kyu", "date": "2015-11-21", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "3-kyu", "date": "2016-09-03", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "2-kyu", "date": "2017-06-18", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "1-kyu", "date": "2018-05-27", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "1-dan", "date": "2023-06-09", "examiner": "Mikael Jansson", "source": "external", "verified": true },
+        { "rank": "2-dan", "date": "2025-06-11", "examiner": "Mikael Jansson", "source": "external", "verified": true }
+      ]
+    },
+    {
+      "email": "hannah@taidohub.dev",
+      "name": "Hannah Kanjah",
+      "birthDate": "1995-03-06",
+      "roles": ["instructor"],
+      "joinDate": "2015-03-05",
+      "rankHistory": [
+        { "rank": "6-kyu", "date": "2015-03-10", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "5-kyu", "date": "2015-03-10", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "4-kyu", "date": "2015-11-21", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "3-kyu", "date": "2016-09-03", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "2-kyu", "date": "2017-06-18", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "1-kyu", "date": "2018-05-27", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "1-dan", "date": "2016-06-09", "examiner": "Mikael Jansson", "source": "external", "verified": true },
+        { "rank": "2-dan", "date": "2020-06-11", "examiner": "Mikael Jansson", "source": "external", "verified": true },
+        { "rank": "3-dan", "date": "2024-09-11", "examiner": "Mikael Jansson", "source": "external", "verified": true }
+      ]
+    },
+    {
+      "email": "cacilia@taidohub.dev",
+      "name": "Cäcilia Li",
+      "birthDate": "2000-10-06",
+      "roles": ["instructor"],
+      "joinDate": "2023-01-09",
+      "rankHistory": [
+        { "rank": "6-kyu", "date": "2015-03-10", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "5-kyu", "date": "2015-03-10", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "4-kyu", "date": "2015-11-21", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "3-kyu", "date": "2016-09-03", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "2-kyu", "date": "2017-06-18", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "1-kyu", "date": "2018-05-27", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "1-dan", "date": "2025-06-09", "examiner": "Mikael Jansson", "source": "external", "verified": true }
+      ]
+    },
+    {
+      "email": "rickard@taidohub.dev",
+      "name": "Rickard Svanborg",
+      "birthDate": "1970-08-14",
+      "roles": ["instructor"],
+      "joinDate": "2019-11-28",
+      "rankHistory": [
+        { "rank": "6-kyu", "date": "2015-03-10", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "5-kyu", "date": "2015-03-10", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "4-kyu", "date": "2015-11-21", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "3-kyu", "date": "2016-09-03", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "2-kyu", "date": "2017-06-18", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "1-kyu", "date": "2018-05-27", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "1-dan", "date": "2025-06-09", "examiner": "Mikael Jansson", "source": "external", "verified": true }
+      ]
+    },
+    {
+      "email": "winter@taidohub.dev",
+      "name": "Vendela Winter",
+      "birthDate": "1989-06-14",
+      "roles": ["instructor"],
+      "joinDate": "2021-10-05",
+      "rankHistory": [
+        { "rank": "6-kyu", "date": "2012-03-10", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "5-kyu", "date": "2013-03-10", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "4-kyu", "date": "2014-11-21", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "3-kyu", "date": "2015-09-03", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "2-kyu", "date": "2016-06-18", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "1-kyu", "date": "2022-05-27", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "1-dan", "date": "2024-06-09", "examiner": "Mikael Jansson", "source": "external", "verified": true }
+      ]
+    },
+    {
+      "email": "fluck@taidohub.dev",
+      "name": "Vendela von Fluck",
+      "birthDate": "1995-10-19",
+      "roles": ["instructor"],
+      "joinDate": "2015-03-05",
+      "rankHistory": [
+        { "rank": "6-kyu", "date": "2011-03-10", "examiner": "Mikael Jansson", "source": "external", "verified": true },
+        { "rank": "5-kyu", "date": "2012-03-10", "examiner": "Mikael Jansson", "source": "external", "verified": true },
+        { "rank": "4-kyu", "date": "2013-11-21", "examiner": "Mikael Jansson", "source": "external", "verified": true },
+        { "rank": "3-kyu", "date": "2014-09-03", "examiner": "Mikael Jansson", "source": "external", "verified": true },
+        { "rank": "2-kyu", "date": "2015-06-18", "examiner": "Mikael Jansson", "source": "external", "verified": true },
+        { "rank": "1-kyu", "date": "2016-05-27", "examiner": "Mikael Jansson", "source": "external", "verified": true },
+        { "rank": "1-dan", "date": "2017-06-09", "examiner": "Mikael Jansson", "source": "external", "verified": true }
+      ]
+    },
+    {
+      "email": "ellen@taidohub.dev",
+      "name": "Ellen Danielsson",
+      "birthDate": "2005-10-19",
+      "roles": ["student"],
+      "joinDate": "2015-03-05",
+      "rankHistory": [
+        { "rank": "6-kyu", "date": "2011-03-10", "examiner": "Mikael Jansson", "source": "external", "verified": true },
+        { "rank": "5-kyu", "date": "2012-03-10", "examiner": "Mikael Jansson", "source": "external", "verified": true },
+        { "rank": "4-kyu", "date": "2013-11-21", "examiner": "Mikael Jansson", "source": "external", "verified": true },
+        { "rank": "3-kyu", "date": "2014-09-03", "examiner": "Mikael Jansson", "source": "external", "verified": true },
+        { "rank": "2-kyu", "date": "2015-06-18", "examiner": "Mikael Jansson", "source": "external", "verified": true },
+        { "rank": "1-kyu", "date": "2016-05-27", "examiner": "Mikael Jansson", "source": "external", "verified": true },
+        { "rank": "1-dan", "date": "2024-06-09", "examiner": "Mikael Jansson", "source": "external", "verified": true }
+      ]
+    },
+    {
+      "email": "kim@taidohub.dev",
+      "name": "Kim van Wijk",
+      "birthDate": "1982-09-10",
+      "roles": ["instructor"],
+      "joinDate": "2015-03-05",
+      "rankHistory": [
+        { "rank": "6-kyu", "date": "2015-03-10", "examiner": "Mikael Jansson", "source": "external", "verified": true },
+        { "rank": "5-kyu", "date": "2015-03-10", "examiner": "Mikael Jansson", "source": "external", "verified": true },
+        { "rank": "4-kyu", "date": "2015-11-21", "examiner": "Mikael Jansson", "source": "external", "verified": true },
+        { "rank": "3-kyu", "date": "2016-09-03", "examiner": "Mikael Jansson", "source": "external", "verified": true },
+        { "rank": "2-kyu", "date": "2017-06-18", "examiner": "Mikael Jansson", "source": "external", "verified": true },
+        { "rank": "1-kyu", "date": "2018-05-27", "examiner": "Håkan Karlsson", "source": "external", "verified": true }
+      ]
+    },
+    {
+      "email": "noel@taidohub.dev",
+      "name": "Noel Agnvall",
+      "birthDate": "2006-12-08",
+      "roles": ["student"],
+      "joinDate": "2018-09-05",
+      "rankHistory": [
+        { "rank": "6-kyu", "date": "2019-03-10", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "5-kyu", "date": "2020-03-10", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "4-kyu", "date": "2021-11-21", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "3-kyu", "date": "2022-09-03", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "2-kyu", "date": "2023-06-18", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "1-kyu", "date": "2024-05-27", "examiner": "Håkan Karlsson", "source": "external", "verified": true }
+      ]
+    },
+    {
+      "email": "sofie@taidohub.dev",
+      "name": "Sofie Agnvall",
+      "birthDate": "2006-12-08",
+      "roles": ["student"],
+      "joinDate": "2018-09-05",
+      "rankHistory": [
+        { "rank": "6-kyu", "date": "2019-03-10", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "5-kyu", "date": "2020-03-10", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "4-kyu", "date": "2021-11-21", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "3-kyu", "date": "2022-09-03", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "2-kyu", "date": "2025-12-08", "examiner": "Håkan Karlsson", "source": "external", "verified": true }
+      ]
+    },
+    {
+      "email": "anne@taidohub.dev",
+      "name": "Anne Agnvall",
+      "birthDate": "1968-12-26",
+      "roles": ["student"],
+      "joinDate": "2018-09-05",
+      "rankHistory": [
+        { "rank": "8-kyu", "date": "2025-03-10", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "7-kyu", "date": "2026-05-25", "examiner": "Håkan Karlsson", "source": "external", "verified": true },
+        { "rank": "6-kyu", "date": "2025-05-25", "examiner": "Håkan Karlsson", "source": "external", "verified": true }
+      ]
+    }
+  ]
+}
