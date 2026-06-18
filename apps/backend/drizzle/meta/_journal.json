@@ -204,6 +204,13 @@
       "when": 1781560000000,
       "tag": "0028_shogo_titles_visuals_jsonb",
       "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "7",
+      "when": 1781768633370,
+      "tag": "0029_open_scrambler",
+      "breakpoints": true
     }
   ]
 }

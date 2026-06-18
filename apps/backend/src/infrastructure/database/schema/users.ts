@@ -35,6 +35,17 @@ export const user = pgTable(
     image: text('image'),
     role: text('role').notNull().default('user'),
     locale: text('locale').notNull().default('en'),
+    /**
+     * Better-auth admin-plugin ban fields. Required by the plugin's user
+     * lookup hooks even though we don't expose admin/ban routes — without
+     * them, `signUpEmail` (and any other user-create path) errors with
+     * "The field 'banned' does not exist in the 'user' Drizzle schema".
+     * Column names are camelCase to match the existing better-auth
+     * convention on this table (`emailVerified`, `createdAt`, …).
+     */
+    banned: boolean('banned').notNull().default(false),
+    banReason: text('banReason'),
+    banExpires: timestamp('banExpires', { withTimezone: true, mode: 'date' }),
     deactivatedAt: timestamp('deactivated_at', { withTimezone: true, mode: 'date' }),
     createdAt: timestamp('createdAt', { withTimezone: true, mode: 'date' })
       .notNull()
