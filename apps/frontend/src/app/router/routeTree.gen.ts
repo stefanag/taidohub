@@ -42,6 +42,9 @@ import { Route as AppAdminPatternsNewRouteImport } from './routes/_app.admin.pat
 import { Route as AppAdminPatternsPatternIdRouteImport } from './routes/_app.admin.patterns.$patternId'
 import { Route as AppAdminOrganisationsNewRouteImport } from './routes/_app.admin.organisations.new'
 import { Route as AppAdminOrganisationsOrganisationIdRouteImport } from './routes/_app.admin.organisations.$organisationId'
+import { Route as AppAdminTechniquesTechniqueIdIndexRouteImport } from './routes/_app.admin.techniques.$techniqueId.index'
+import { Route as AppAdminPatternsPatternIdIndexRouteImport } from './routes/_app.admin.patterns.$patternId.index'
+import { Route as AppAdminOrganisationsOrganisationIdIndexRouteImport } from './routes/_app.admin.organisations.$organisationId.index'
 import { Route as AppAdminTechniquesTechniqueIdEditRouteImport } from './routes/_app.admin.techniques.$techniqueId.edit'
 import { Route as AppAdminPatternsPatternIdEditRouteImport } from './routes/_app.admin.patterns.$patternId.edit'
 import { Route as AppAdminOrganisationsOrganisationIdEditRouteImport } from './routes/_app.admin.organisations.$organisationId.edit'
@@ -214,6 +217,24 @@ const AppAdminOrganisationsOrganisationIdRoute =
     path: '/$organisationId',
     getParentRoute: () => AppAdminOrganisationsRoute,
   } as any)
+const AppAdminTechniquesTechniqueIdIndexRoute =
+  AppAdminTechniquesTechniqueIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AppAdminTechniquesTechniqueIdRoute,
+  } as any)
+const AppAdminPatternsPatternIdIndexRoute =
+  AppAdminPatternsPatternIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AppAdminPatternsPatternIdRoute,
+  } as any)
+const AppAdminOrganisationsOrganisationIdIndexRoute =
+  AppAdminOrganisationsOrganisationIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AppAdminOrganisationsOrganisationIdRoute,
+  } as any)
 const AppAdminTechniquesTechniqueIdEditRoute =
   AppAdminTechniquesTechniqueIdEditRouteImport.update({
     id: '/edit',
@@ -268,6 +289,9 @@ export interface FileRoutesByFullPath {
   '/admin/organisations/$organisationId/edit': typeof AppAdminOrganisationsOrganisationIdEditRoute
   '/admin/patterns/$patternId/edit': typeof AppAdminPatternsPatternIdEditRoute
   '/admin/techniques/$techniqueId/edit': typeof AppAdminTechniquesTechniqueIdEditRoute
+  '/admin/organisations/$organisationId/': typeof AppAdminOrganisationsOrganisationIdIndexRoute
+  '/admin/patterns/$patternId/': typeof AppAdminPatternsPatternIdIndexRoute
+  '/admin/techniques/$techniqueId/': typeof AppAdminTechniquesTechniqueIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof PublicIndexRoute
@@ -289,11 +313,8 @@ export interface FileRoutesByTo {
   '/settings/labels': typeof AppSettingsLabelsRoute
   '/students/$userId': typeof AppStudentsUserIdRoute
   '/ranks/$slug': typeof PublicRanksSlugRoute
-  '/admin/organisations/$organisationId': typeof AppAdminOrganisationsOrganisationIdRouteWithChildren
   '/admin/organisations/new': typeof AppAdminOrganisationsNewRoute
-  '/admin/patterns/$patternId': typeof AppAdminPatternsPatternIdRouteWithChildren
   '/admin/patterns/new': typeof AppAdminPatternsNewRoute
-  '/admin/techniques/$techniqueId': typeof AppAdminTechniquesTechniqueIdRouteWithChildren
   '/admin/techniques/new': typeof AppAdminTechniquesNewRoute
   '/admin/organisations': typeof AppAdminOrganisationsIndexRoute
   '/admin/patterns': typeof AppAdminPatternsIndexRoute
@@ -301,6 +322,9 @@ export interface FileRoutesByTo {
   '/admin/organisations/$organisationId/edit': typeof AppAdminOrganisationsOrganisationIdEditRoute
   '/admin/patterns/$patternId/edit': typeof AppAdminPatternsPatternIdEditRoute
   '/admin/techniques/$techniqueId/edit': typeof AppAdminTechniquesTechniqueIdEditRoute
+  '/admin/organisations/$organisationId': typeof AppAdminOrganisationsOrganisationIdIndexRoute
+  '/admin/patterns/$patternId': typeof AppAdminPatternsPatternIdIndexRoute
+  '/admin/techniques/$techniqueId': typeof AppAdminTechniquesTechniqueIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -340,6 +364,9 @@ export interface FileRoutesById {
   '/_app/admin/organisations/$organisationId/edit': typeof AppAdminOrganisationsOrganisationIdEditRoute
   '/_app/admin/patterns/$patternId/edit': typeof AppAdminPatternsPatternIdEditRoute
   '/_app/admin/techniques/$techniqueId/edit': typeof AppAdminTechniquesTechniqueIdEditRoute
+  '/_app/admin/organisations/$organisationId/': typeof AppAdminOrganisationsOrganisationIdIndexRoute
+  '/_app/admin/patterns/$patternId/': typeof AppAdminPatternsPatternIdIndexRoute
+  '/_app/admin/techniques/$techniqueId/': typeof AppAdminTechniquesTechniqueIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -378,6 +405,9 @@ export interface FileRouteTypes {
     | '/admin/organisations/$organisationId/edit'
     | '/admin/patterns/$patternId/edit'
     | '/admin/techniques/$techniqueId/edit'
+    | '/admin/organisations/$organisationId/'
+    | '/admin/patterns/$patternId/'
+    | '/admin/techniques/$techniqueId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -399,11 +429,8 @@ export interface FileRouteTypes {
     | '/settings/labels'
     | '/students/$userId'
     | '/ranks/$slug'
-    | '/admin/organisations/$organisationId'
     | '/admin/organisations/new'
-    | '/admin/patterns/$patternId'
     | '/admin/patterns/new'
-    | '/admin/techniques/$techniqueId'
     | '/admin/techniques/new'
     | '/admin/organisations'
     | '/admin/patterns'
@@ -411,6 +438,9 @@ export interface FileRouteTypes {
     | '/admin/organisations/$organisationId/edit'
     | '/admin/patterns/$patternId/edit'
     | '/admin/techniques/$techniqueId/edit'
+    | '/admin/organisations/$organisationId'
+    | '/admin/patterns/$patternId'
+    | '/admin/techniques/$techniqueId'
   id:
     | '__root__'
     | '/_app'
@@ -449,6 +479,9 @@ export interface FileRouteTypes {
     | '/_app/admin/organisations/$organisationId/edit'
     | '/_app/admin/patterns/$patternId/edit'
     | '/_app/admin/techniques/$techniqueId/edit'
+    | '/_app/admin/organisations/$organisationId/'
+    | '/_app/admin/patterns/$patternId/'
+    | '/_app/admin/techniques/$techniqueId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -689,6 +722,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdminOrganisationsOrganisationIdRouteImport
       parentRoute: typeof AppAdminOrganisationsRoute
     }
+    '/_app/admin/techniques/$techniqueId/': {
+      id: '/_app/admin/techniques/$techniqueId/'
+      path: '/'
+      fullPath: '/admin/techniques/$techniqueId/'
+      preLoaderRoute: typeof AppAdminTechniquesTechniqueIdIndexRouteImport
+      parentRoute: typeof AppAdminTechniquesTechniqueIdRoute
+    }
+    '/_app/admin/patterns/$patternId/': {
+      id: '/_app/admin/patterns/$patternId/'
+      path: '/'
+      fullPath: '/admin/patterns/$patternId/'
+      preLoaderRoute: typeof AppAdminPatternsPatternIdIndexRouteImport
+      parentRoute: typeof AppAdminPatternsPatternIdRoute
+    }
+    '/_app/admin/organisations/$organisationId/': {
+      id: '/_app/admin/organisations/$organisationId/'
+      path: '/'
+      fullPath: '/admin/organisations/$organisationId/'
+      preLoaderRoute: typeof AppAdminOrganisationsOrganisationIdIndexRouteImport
+      parentRoute: typeof AppAdminOrganisationsOrganisationIdRoute
+    }
     '/_app/admin/techniques/$techniqueId/edit': {
       id: '/_app/admin/techniques/$techniqueId/edit'
       path: '/edit'
@@ -739,12 +793,15 @@ const AppStudentsRouteWithChildren = AppStudentsRoute._addFileChildren(
 
 interface AppAdminOrganisationsOrganisationIdRouteChildren {
   AppAdminOrganisationsOrganisationIdEditRoute: typeof AppAdminOrganisationsOrganisationIdEditRoute
+  AppAdminOrganisationsOrganisationIdIndexRoute: typeof AppAdminOrganisationsOrganisationIdIndexRoute
 }
 
 const AppAdminOrganisationsOrganisationIdRouteChildren: AppAdminOrganisationsOrganisationIdRouteChildren =
   {
     AppAdminOrganisationsOrganisationIdEditRoute:
       AppAdminOrganisationsOrganisationIdEditRoute,
+    AppAdminOrganisationsOrganisationIdIndexRoute:
+      AppAdminOrganisationsOrganisationIdIndexRoute,
   }
 
 const AppAdminOrganisationsOrganisationIdRouteWithChildren =
@@ -772,11 +829,13 @@ const AppAdminOrganisationsRouteWithChildren =
 
 interface AppAdminPatternsPatternIdRouteChildren {
   AppAdminPatternsPatternIdEditRoute: typeof AppAdminPatternsPatternIdEditRoute
+  AppAdminPatternsPatternIdIndexRoute: typeof AppAdminPatternsPatternIdIndexRoute
 }
 
 const AppAdminPatternsPatternIdRouteChildren: AppAdminPatternsPatternIdRouteChildren =
   {
     AppAdminPatternsPatternIdEditRoute: AppAdminPatternsPatternIdEditRoute,
+    AppAdminPatternsPatternIdIndexRoute: AppAdminPatternsPatternIdIndexRoute,
   }
 
 const AppAdminPatternsPatternIdRouteWithChildren =
@@ -801,12 +860,15 @@ const AppAdminPatternsRouteWithChildren =
 
 interface AppAdminTechniquesTechniqueIdRouteChildren {
   AppAdminTechniquesTechniqueIdEditRoute: typeof AppAdminTechniquesTechniqueIdEditRoute
+  AppAdminTechniquesTechniqueIdIndexRoute: typeof AppAdminTechniquesTechniqueIdIndexRoute
 }
 
 const AppAdminTechniquesTechniqueIdRouteChildren: AppAdminTechniquesTechniqueIdRouteChildren =
   {
     AppAdminTechniquesTechniqueIdEditRoute:
       AppAdminTechniquesTechniqueIdEditRoute,
+    AppAdminTechniquesTechniqueIdIndexRoute:
+      AppAdminTechniquesTechniqueIdIndexRoute,
   }
 
 const AppAdminTechniquesTechniqueIdRouteWithChildren =
