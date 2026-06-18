@@ -18,6 +18,7 @@ import { seedBeltCatalog } from './seeds/belt-catalog.seed.js';
 import { seedClassifications } from './seeds/classifications.seed.js';
 import { seedClubMembers } from './seeds/club-members.seed.js';
 import { seedOrganisations } from './seeds/organisations.seed.js';
+import { seedPatterns } from './seeds/patterns.seed.js';
 import { seedTechniques } from './seeds/techniques.seed.js';
 
 async function main(): Promise<void> {
@@ -88,6 +89,13 @@ async function main(): Promise<void> {
   console.info(
     `[seed] techniques: rows(+${techniques.techniques.inserted}/~${techniques.techniques.updated}) ` +
       `edges(+${techniques.edges.inserted})`,
+  );
+
+  const patterns = await seedPatterns(db);
+  // eslint-disable-next-line no-console
+  console.info(
+    `[seed] patterns: rows(+${patterns.patterns.inserted}/~${patterns.patterns.updated}) ` +
+      `edges(+${patterns.edges.inserted})`,
   );
 
   // Club members (STAF roster). Reuses the same `signUpEmail` callback as

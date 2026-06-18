@@ -26,6 +26,24 @@
       "nameFi": "Hyökkäystyyppi",
       "nameJa": "",
       "sortOrder": 3
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000004",
+      "code": "pattern_type",
+      "nameEn": "Pattern type",
+      "nameSv": "Mönstertyp",
+      "nameFi": "Kuvion tyyppi",
+      "nameJa": "",
+      "sortOrder": 4
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000005",
+      "code": "hokei_subtype",
+      "nameEn": "Hokei subtype",
+      "nameSv": "Hokei-undertyp",
+      "nameFi": "Hokei-alatyyppi",
+      "nameJa": "法形",
+      "sortOrder": 5
     }
   ],
   "children": [
@@ -196,6 +214,116 @@
       "nameEn": "Takedown",
       "nameSv": "Nedtag",
       "nameFi": "Alasvienti",
+      "nameJa": "",
+      "sortOrder": 6
+    },
+    {
+      "id": "44444444-0004-4000-8000-000000000001",
+      "parentCode": "pattern_type",
+      "code": "hokei",
+      "nameEn": "Hokei (kata)",
+      "nameSv": "Hokei (kata)",
+      "nameFi": "Hokei (kata)",
+      "nameJa": "法形",
+      "sortOrder": 1
+    },
+    {
+      "id": "44444444-0004-4000-8000-000000000002",
+      "parentCode": "pattern_type",
+      "code": "kobo",
+      "nameEn": "Kobo (attack/defense)",
+      "nameSv": "Kobo (anfall/försvar)",
+      "nameFi": "Kobo (hyökkäys/puolustus)",
+      "nameJa": "攻防",
+      "sortOrder": 2
+    },
+    {
+      "id": "44444444-0004-4000-8000-000000000003",
+      "parentCode": "pattern_type",
+      "code": "unsoku_pattern",
+      "nameEn": "Unsoku pattern",
+      "nameSv": "Unsoku-mönster",
+      "nameFi": "Unsoku-kuvio",
+      "nameJa": "運足",
+      "sortOrder": 3
+    },
+    {
+      "id": "44444444-0004-4000-8000-000000000004",
+      "parentCode": "pattern_type",
+      "code": "unshin_pattern",
+      "nameEn": "Unshin pattern",
+      "nameSv": "Unshin-mönster",
+      "nameFi": "Unshin-kuvio",
+      "nameJa": "運身",
+      "sortOrder": 4
+    },
+    {
+      "id": "44444444-0004-4000-8000-000000000005",
+      "parentCode": "pattern_type",
+      "code": "other",
+      "nameEn": "Other",
+      "nameSv": "Övrigt",
+      "nameFi": "Muu",
+      "nameJa": "",
+      "sortOrder": 5
+    },
+    {
+      "id": "55555555-0005-4000-8000-000000000001",
+      "parentCode": "hokei_subtype",
+      "code": "yo",
+      "nameEn": "Yo (yang)",
+      "nameSv": "Yo (yang)",
+      "nameFi": "Yo (yang)",
+      "nameJa": "陽",
+      "sortOrder": 1
+    },
+    {
+      "id": "55555555-0005-4000-8000-000000000002",
+      "parentCode": "hokei_subtype",
+      "code": "in",
+      "nameEn": "In (yin)",
+      "nameSv": "In (yin)",
+      "nameFi": "In (yin)",
+      "nameJa": "陰",
+      "sortOrder": 2
+    },
+    {
+      "id": "55555555-0005-4000-8000-000000000003",
+      "parentCode": "hokei_subtype",
+      "code": "sei",
+      "nameEn": "Sei (control)",
+      "nameSv": "Sei (kontroll)",
+      "nameFi": "Sei (hallinta)",
+      "nameJa": "制",
+      "sortOrder": 3
+    },
+    {
+      "id": "55555555-0005-4000-8000-000000000004",
+      "parentCode": "hokei_subtype",
+      "code": "mei",
+      "nameEn": "Mei (life)",
+      "nameSv": "Mei (liv)",
+      "nameFi": "Mei (elämä)",
+      "nameJa": "命",
+      "sortOrder": 4
+    },
+    {
+      "id": "55555555-0005-4000-8000-000000000005",
+      "parentCode": "hokei_subtype",
+      "code": "gen",
+      "nameEn": "Gen (mystery)",
+      "nameSv": "Gen (mystik)",
+      "nameFi": "Gen (mysteeri)",
+      "nameJa": "玄",
+      "sortOrder": 5
+    },
+    {
+      "id": "55555555-0005-4000-8000-000000000006",
+      "parentCode": "hokei_subtype",
+      "code": "other",
+      "nameEn": "Other",
+      "nameSv": "Övrigt",
+      "nameFi": "Muu",
       "nameJa": "",
       "sortOrder": 6
     }
