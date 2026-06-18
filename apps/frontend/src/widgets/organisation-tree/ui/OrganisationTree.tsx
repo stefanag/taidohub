@@ -28,6 +28,8 @@ export interface OrganisationTreeProps {
   onDelete: (org: Organisation) => void;
   /** Optional: open the org-scope membership manager for the row. */
   onManageMembers?: (org: Organisation) => void;
+  /** Optional: clicking the row's name span fires this (admin uses it to navigate to the view page). */
+  onSelect?: (org: Organisation) => void;
 }
 
 /**
@@ -41,6 +43,7 @@ export function OrganisationTree({
   onMove,
   onDelete,
   onManageMembers,
+  onSelect,
 }: OrganisationTreeProps): React.ReactElement {
   return (
     <ul className="space-y-1" role="tree">
@@ -53,6 +56,7 @@ export function OrganisationTree({
           onMove={onMove}
           onDelete={onDelete}
           onManageMembers={onManageMembers}
+          onSelect={onSelect}
         />
       ))}
     </ul>
@@ -66,9 +70,10 @@ interface TreeRowProps {
   onMove: (org: Organisation) => void;
   onDelete: (org: Organisation) => void;
   onManageMembers?: ((org: Organisation) => void) | undefined;
+  onSelect?: ((org: Organisation) => void) | undefined;
 }
 
-function TreeRow({ node, depth, onEdit, onMove, onDelete, onManageMembers }: TreeRowProps): React.ReactElement {
+function TreeRow({ node, depth, onEdit, onMove, onDelete, onManageMembers, onSelect }: TreeRowProps): React.ReactElement {
   const { t, i18n } = useTranslation();
   const [expanded, setExpanded] = React.useState(true);
   const [labelsOpen, setLabelsOpen] = React.useState(false);
@@ -105,7 +110,17 @@ function TreeRow({ node, depth, onEdit, onMove, onDelete, onManageMembers }: Tre
           <span className="size-5" aria-hidden />
         )}
 
-        <span className="flex-1 truncate text-sm">{displayName(node, i18n.language)}</span>
+        {onSelect ? (
+          <button
+            type="button"
+            onClick={() => onSelect(node)}
+            className="flex-1 truncate text-left text-sm hover:underline"
+          >
+            {displayName(node, i18n.language)}
+          </button>
+        ) : (
+          <span className="flex-1 truncate text-sm">{displayName(node, i18n.language)}</span>
+        )}
 
         <Badge variant="outline" className="font-mono text-xs">
           {t(`admin.organisations.types.${typeKey}`, { defaultValue: node.type })}
@@ -182,6 +197,8 @@ function TreeRow({ node, depth, onEdit, onMove, onDelete, onManageMembers }: Tre
               onEdit={onEdit}
               onMove={onMove}
               onDelete={onDelete}
+              onManageMembers={onManageMembers}
+              onSelect={onSelect}
             />
           ))}
         </ul>
