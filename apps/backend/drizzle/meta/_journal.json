@@ -211,6 +211,13 @@
       "when": 1781768633370,
       "tag": "0029_open_scrambler",
       "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1782220116143,
+      "tag": "0030_flowery_luckman",
+      "breakpoints": true
     }
   ]
 }

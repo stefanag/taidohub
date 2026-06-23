@@ -32,7 +32,7 @@ export class MembershipsRepository {
   async findExact(
     userId: string,
     organisationId: string,
-    role: 'orgadmin' | 'instructor',
+    role: 'orgadmin' | 'instructor' | 'student',
   ): Promise<DbOrganisationMembership | null> {
     const rows = await this.db
       .select()

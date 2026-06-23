@@ -289,13 +289,15 @@ export async function seedClubMembers(
       result.profiles.inserted += 1;
     }
 
-    // 5) Upsert memberships. "clubadmin" → "orgadmin"; "instructor" → as-is;
-    //    "student" → no row (the membership_role enum doesn't have it).
-    const membershipRoles = new Set<'orgadmin' | 'instructor'>();
+    // 5) Upsert memberships. "clubadmin" → "orgadmin"; "instructor" and
+    //    "student" → as-is. 'student' was added to the membership_role
+    //    enum so the feedback feature (and the students roster query) can
+    //    resolve "linked instructor of student".
+    const membershipRoles = new Set<'orgadmin' | 'instructor' | 'student'>();
     for (const r of m.roles) {
       if (r === 'instructor') membershipRoles.add('instructor');
       else if (r === 'clubadmin') membershipRoles.add('orgadmin');
-      // r === 'student': intentionally no membership.
+      else if (r === 'student') membershipRoles.add('student');
     }
     for (const role of membershipRoles) {
       const existingMembership = (

@@ -200,12 +200,23 @@ export class MembershipsService {
     });
   }
 
-  private validateRoleAgainstOrgType(role: 'orgadmin' | 'instructor', orgType: string): void {
+  private validateRoleAgainstOrgType(
+    role: 'orgadmin' | 'instructor' | 'student',
+    orgType: string,
+  ): void {
     if (role === 'instructor' && orgType !== 'club') {
       throw new BadRequestException({
         error: {
           code: 'INSTRUCTOR_REQUIRES_CLUB',
           message: 'Instructor memberships are only allowed on clubs.',
+        },
+      });
+    }
+    if (role === 'student' && orgType !== 'club') {
+      throw new BadRequestException({
+        error: {
+          code: 'STUDENT_REQUIRES_CLUB',
+          message: 'Student memberships are only allowed on clubs.',
         },
       });
     }
@@ -244,7 +255,7 @@ export class MembershipsService {
       id: row.id,
       userId: row.userId,
       organisationId: row.organisationId,
-      role: row.role as 'orgadmin' | 'instructor',
+      role: row.role as 'orgadmin' | 'instructor' | 'student',
       createdAt: row.createdAt.toISOString(),
       updatedAt: row.updatedAt.toISOString(),
     };

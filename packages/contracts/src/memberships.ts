@@ -5,7 +5,7 @@ const ORGANISATION_UUID_EXAMPLE = '0e2e8c4b-7a9a-46e1-9d1e-54b8f7d3a2e0';
 const ISO_DATETIME_EXAMPLE = '2026-05-18T08:00:00.000Z';
 
 export const MembershipRoleSchema = z
-  .enum(['orgadmin', 'instructor'])
+  .enum(['orgadmin', 'instructor', 'student'])
   .meta({
     id: 'MembershipRole',
     description: 'Org-scoped role on an `organisation_membership` row.',
