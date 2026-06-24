@@ -598,5 +598,46 @@
     "invalidEmail": "Please enter a valid email address.",
     "invalidString": "Invalid value.",
     "fallback": "Invalid value."
+  },
+  "feedback": {
+    "title": "Feedback",
+    "newThread": "Start conversation",
+    "reply": "Reply",
+    "replyingTo": "Replying to",
+    "edit": "Edit",
+    "delete": "Delete",
+    "edited": "edited",
+    "deleted": "[deleted]",
+    "instructorOnly": "Instructor note",
+    "instructorOnlyToggle": "Visible to instructors only",
+    "placeholder": "Write a comment…",
+    "replyPlaceholder": "Write a reply…",
+    "noComments": "No feedback yet",
+    "unreadCount_one": "{{count}} unread",
+    "unreadCount_other": "{{count}} unread",
+    "editWindow": "Editable for 24 hours",
+    "confirmDelete": "Delete this comment?",
+    "cancel": "Cancel",
+    "post": "Post",
+    "save": "Save",
+    "react": "React",
+    "loading": "Loading feedback…",
+    "reactions": {
+      "thumbs_up": "👍",
+      "heart": "❤️",
+      "pray": "🙏",
+      "strong": "💪",
+      "fire": "🔥",
+      "noted": "Noted",
+      "thank_you": "Thank you",
+      "will_work_on_it": "Will work on it"
+    },
+    "threadType": {
+      "grading": "Grading feedback",
+      "session": "Session feedback",
+      "technique": "Technique feedback",
+      "pattern": "Pattern feedback",
+      "general": "General feedback"
+    }
   }
 }

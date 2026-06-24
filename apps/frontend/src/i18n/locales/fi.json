@@ -581,5 +581,46 @@
     "invalidEmail": "Anna kelvollinen sähköpostiosoite.",
     "invalidString": "Virheellinen arvo.",
     "fallback": "Virheellinen arvo."
+  },
+  "feedback": {
+    "title": "Palaute",
+    "newThread": "Aloita keskustelu",
+    "reply": "Vastaa",
+    "replyingTo": "Vastaus käyttäjälle",
+    "edit": "Muokkaa",
+    "delete": "Poista",
+    "edited": "muokattu",
+    "deleted": "[poistettu]",
+    "instructorOnly": "Ohjaajan muistiinpano",
+    "instructorOnlyToggle": "Näkyy vain ohjaajille",
+    "placeholder": "Kirjoita kommentti…",
+    "replyPlaceholder": "Kirjoita vastaus…",
+    "noComments": "Ei vielä palautetta",
+    "unreadCount_one": "{{count}} lukematon",
+    "unreadCount_other": "{{count}} lukematonta",
+    "editWindow": "Muokattavissa 24 tuntia",
+    "confirmDelete": "Poistetaanko kommentti?",
+    "cancel": "Peruuta",
+    "post": "Lähetä",
+    "save": "Tallenna",
+    "react": "Reagoi",
+    "loading": "Ladataan palautetta…",
+    "reactions": {
+      "thumbs_up": "👍",
+      "heart": "❤️",
+      "pray": "🙏",
+      "strong": "💪",
+      "fire": "🔥",
+      "noted": "Huomioitu",
+      "thank_you": "Kiitos",
+      "will_work_on_it": "Otan kopin"
+    },
+    "threadType": {
+      "grading": "Arviointi",
+      "session": "Treeni",
+      "technique": "Tekniikka",
+      "pattern": "Kuvio",
+      "general": "Yleinen"
+    }
   }
 }

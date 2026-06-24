@@ -581,5 +581,46 @@
     "invalidEmail": "Ange en giltig e-postadress.",
     "invalidString": "Ogiltigt värde.",
     "fallback": "Ogiltigt värde."
+  },
+  "feedback": {
+    "title": "Återkoppling",
+    "newThread": "Starta konversation",
+    "reply": "Svara",
+    "replyingTo": "Svarar på",
+    "edit": "Redigera",
+    "delete": "Ta bort",
+    "edited": "redigerad",
+    "deleted": "[borttagen]",
+    "instructorOnly": "Instruktörsanteckning",
+    "instructorOnlyToggle": "Endast synlig för instruktörer",
+    "placeholder": "Skriv en kommentar…",
+    "replyPlaceholder": "Skriv ett svar…",
+    "noComments": "Ingen återkoppling ännu",
+    "unreadCount_one": "{{count}} oläst",
+    "unreadCount_other": "{{count}} olästa",
+    "editWindow": "Redigerbar i 24 timmar",
+    "confirmDelete": "Ta bort den här kommentaren?",
+    "cancel": "Avbryt",
+    "post": "Skicka",
+    "save": "Spara",
+    "react": "Reagera",
+    "loading": "Hämtar återkoppling…",
+    "reactions": {
+      "thumbs_up": "👍",
+      "heart": "❤️",
+      "pray": "🙏",
+      "strong": "💪",
+      "fire": "🔥",
+      "noted": "Noterat",
+      "thank_you": "Tack",
+      "will_work_on_it": "Ska jobba på det"
+    },
+    "threadType": {
+      "grading": "Gradering",
+      "session": "Pass",
+      "technique": "Teknik",
+      "pattern": "Mönster",
+      "general": "Allmänt"
+    }
   }
 }
