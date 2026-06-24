@@ -218,6 +218,13 @@
       "when": 1782220116143,
       "tag": "0030_flowery_luckman",
       "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1782221262765,
+      "tag": "0031_yellow_korvac",
+      "breakpoints": true
     }
   ]
 }

@@ -24,6 +24,7 @@ export default defineConfig({
     patterns: 'src/patterns.ts',
     progress: 'src/progress.ts',
     students: 'src/students.ts',
+    feedback: 'src/feedback.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,

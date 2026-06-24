@@ -82,7 +82,7 @@ export type OrganisationMembershipSubjectShape = {
   id?: string;
   userId?: string;
   organisationId?: string;
-  role?: 'orgadmin' | 'instructor';
+  role?: 'orgadmin' | 'instructor' | 'student';
 };
 
 export type BeltSystemSubjectShape = {

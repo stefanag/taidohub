@@ -21,7 +21,7 @@ export interface OrgMembershipManagerProps {
   orgLabel: string;
 }
 
-const CANDIDATE_ROLES: readonly MembershipRole[] = ['orgadmin', 'instructor'];
+const CANDIDATE_ROLES: readonly MembershipRole[] = ['orgadmin', 'instructor', 'student'];
 
 /**
  * Org-scope members table for an organisation: lists all current memberships

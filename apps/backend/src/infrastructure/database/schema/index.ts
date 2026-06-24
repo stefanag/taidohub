@@ -18,3 +18,4 @@ export * from './classification-category.js';
 export * from './technique.js';
 export * from './pattern.js';
 export * from './user-content-progress.js';
+export * from './feedback.js';

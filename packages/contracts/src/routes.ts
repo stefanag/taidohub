@@ -76,3 +76,25 @@ export const RankHistoryRoutes = {
 export const PublicRoutes = {
   rankBySlug: (slug: string) => `/api/public/ranks/${slug}` as const,
 } as const;
+
+export const FeedbackRoutes = {
+  /** GET ?entityType=&entityId=&studentId= → thread | null. */
+  threads: '/api/feedback/threads',
+  /** GET → threads[] for a single student. */
+  threadsByStudent: (studentId: string) =>
+    `/api/feedback/threads/student/${studentId}` as const,
+  /** GET → comments[] for one thread. POST → create comment. */
+  threadComments: (threadId: string) =>
+    `/api/feedback/threads/${threadId}/comments` as const,
+  /** POST → upsert per-(thread, user) last-read timestamp. */
+  threadRead: (threadId: string) =>
+    `/api/feedback/threads/${threadId}/read` as const,
+  /** PATCH / DELETE on a single comment (author + 24h window). */
+  commentById: (commentId: string) =>
+    `/api/feedback/comments/${commentId}` as const,
+  /** PUT (upsert-replace) / DELETE the actor's reaction on a comment. */
+  commentReactions: (commentId: string) =>
+    `/api/feedback/comments/${commentId}/reactions` as const,
+  /** GET → { count } of threads with unread visible comments for the actor. */
+  unreadCount: '/api/feedback/unread-count',
+} as const;
