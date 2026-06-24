@@ -6,6 +6,7 @@ import { RankHistoryAbilityRules } from '../../modules/rank-history/rank-history
 import { AuditLogAbilityRules } from '../../modules/audit-log/audit-log.abilities.js';
 import { ClassificationCategoryAbilityRules } from '../../modules/classification-category/classification-category.ability-rules.js';
 import { FeatureFlagsAbilityRules } from '../../modules/feature-flags/feature-flags.ability-rules.js';
+import { FeedbackAbilityRules } from '../../modules/feedback/feedback.abilities.js';
 import { LabelsAbilityRules } from '../../modules/labels/labels.ability-rules.js';
 import { MembershipsAbilityRules } from '../../modules/memberships/memberships.abilities.js';
 import { OrganisationsAbilityRules } from '../../modules/organisations/organisations.abilities.js';
@@ -39,6 +40,7 @@ import { AbilityGuard } from './ability.guard.js';
     AuditLogAbilityRules,
     ClassificationCategoryAbilityRules,
     FeatureFlagsAbilityRules,
+    FeedbackAbilityRules,
     LabelsAbilityRules,
     MembershipsAbilityRules,
     OrganisationsAbilityRules,

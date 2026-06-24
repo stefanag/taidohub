@@ -14,6 +14,7 @@ import { AuthDocsModule } from './modules/auth/auth.module.js';
 import { BeltCatalogModule } from './modules/belt-catalog/belt-catalog.module.js';
 import { ClassificationCategoryModule } from './modules/classification-category/classification-category.module.js';
 import { FeatureFlagsModule } from './modules/feature-flags/feature-flags.module.js';
+import { FeedbackModule } from './modules/feedback/feedback.module.js';
 import { GradingHistoryProjectionModule } from './modules/grading-history-projection/grading-history.module.js';
 import { RankHistoryModule } from './modules/rank-history/rank-history.module.js';
 import { HealthModule } from './modules/health/health.module.js';
@@ -52,6 +53,7 @@ import { UsersModule } from './modules/users/users.module.js';
     ProgressModule,
     StudentsModule,
     FeatureFlagsModule,
+    FeedbackModule,
     UserImpersonationModule,
   ],
   providers: [

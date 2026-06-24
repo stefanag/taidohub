@@ -33,6 +33,7 @@ export const SubjectSchema = z
     'Pattern',
     'Progress',
     'Student',
+    'FeedbackThread',
     'all',
   ])
   .meta({
@@ -178,6 +179,22 @@ export type StudentSubjectShape = {
 };
 
 /**
+ * Shape used to gate access to a feedback thread. The fine-grained
+ * access logic (subject / sysadmin / club admin / linked instructor /
+ * grading examiner) is too cross-table for CASL conditions to express
+ * cleanly, so the backend's `FeedbackService.canAccessThread()` does the
+ * full check procedurally. CASL here only models the broad "this user
+ * may interact with the feedback feature at all" gate.
+ */
+export type FeedbackThreadSubjectShape = {
+  readonly __caslSubjectType__: 'FeedbackThread';
+  id?: string;
+  studentId?: string;
+  entityType?: string;
+  entityId?: string;
+};
+
+/**
  * The full CASL subject union: either a bare subject name (for class-level
  * rules like `can('create', 'Organisation')`) or a tagged subject shape (for
  * instance-level rules and for dispatching on a real row passed to
@@ -202,7 +219,8 @@ export type AppSubject =
   | TechniqueSubjectShape
   | PatternSubjectShape
   | ProgressSubjectShape
-  | StudentSubjectShape;
+  | StudentSubjectShape
+  | FeedbackThreadSubjectShape;
 
 /**
  * Tuple type compatible with `MongoAbility<[AppAction, AppSubject]>` from

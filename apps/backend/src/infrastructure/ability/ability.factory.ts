@@ -7,6 +7,7 @@ import { AuditLogAbilityRules } from '../../modules/audit-log/audit-log.abilitie
 import { BeltCatalogAbilityRules } from '../../modules/belt-catalog/belt-catalog.abilities.js';
 import { ClassificationCategoryAbilityRules } from '../../modules/classification-category/classification-category.ability-rules.js';
 import { FeatureFlagsAbilityRules } from '../../modules/feature-flags/feature-flags.ability-rules.js';
+import { FeedbackAbilityRules } from '../../modules/feedback/feedback.abilities.js';
 import { LabelsAbilityRules } from '../../modules/labels/labels.ability-rules.js';
 import { OrganisationsAbilityRules } from '../../modules/organisations/organisations.abilities.js';
 import { PatternAbilityRules } from '../../modules/pattern/pattern.ability-rules.js';
@@ -47,6 +48,7 @@ export class AbilityFactory {
     @Optional() private readonly patternRules?: PatternAbilityRules,
     @Optional() private readonly progressRules?: ProgressAbilityRules,
     @Optional() private readonly studentRules?: StudentAbilityRules,
+    @Optional() private readonly feedbackRules?: FeedbackAbilityRules,
   ) {
     this.contributors = [
       usersRules,
@@ -62,6 +64,7 @@ export class AbilityFactory {
       ...(this.patternRules ? [this.patternRules] : []),
       ...(this.progressRules ? [this.progressRules] : []),
       ...(this.studentRules ? [this.studentRules] : []),
+      ...(this.feedbackRules ? [this.feedbackRules] : []),
     ];
   }
 
