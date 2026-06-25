@@ -6,6 +6,7 @@ import type { BeltRank } from '@/entities/belt-rank';
 import type { GradingHistoryRow } from '@/entities/rank-history';
 import type { ShogoTitle } from '@/entities/shogo-title';
 
+import { FeedbackThreadSheet } from '@/features/feedback-thread';
 import { type BeltColor } from '@/shared/lib/belt-visuals';
 import { useFeatureFlag } from '@/shared/lib/feature-flags';
 import { rankLabel, type Lang } from '@/shared/lib/rank-label';
@@ -35,6 +36,8 @@ export interface GradingTimelineEntryProps {
   shogoTitleMap: Map<string, ShogoTitle>;
   /** True when this row is the most recent passing grading; styled at full opacity. */
   isLatest: boolean;
+  /** Subject of the grading row — passed to the per-row feedback Sheet. */
+  subjectUserId?: string;
   onEdit?: (entry: GradingHistoryRow) => void;
   onVerify?: (id: string) => void;
   onUnverify?: (id: string) => void;
@@ -49,8 +52,9 @@ export interface GradingTimelineEntryProps {
  *   `Shield01` → `Shield`
  *   `ShieldTick` → `ShieldCheck`
  *   `Edit01` → `Pencil`
- *   `MessageChatCircle` is intentionally omitted — no feedback thread on
- *   taidohub v1 (instructor-feedback flag is out of scope for Plan C).
+ *   The grading thread trigger (`<FeedbackThreadSheet>`) appears in the
+ *   action row when both `subjectUserId` is set and the
+ *   `instructor-feedback` flag is on.
  */
 export function GradingTimelineEntry({
   entry,
@@ -58,6 +62,7 @@ export function GradingTimelineEntry({
   systemCodeMap,
   shogoTitleMap,
   isLatest,
+  subjectUserId,
   onEdit,
   onVerify,
   onUnverify,
@@ -122,7 +127,8 @@ export function GradingTimelineEntry({
 
   const showEdit = gradingHistoryEnabled && entry.canEdit && isExternal;
   const showVerifyOrUnverify = verificationEnabled && entry.canVerify;
-  const showActionRow = showEdit || showVerifyOrUnverify;
+  const showFeedback = subjectUserId !== undefined;
+  const showActionRow = showEdit || showVerifyOrUnverify || showFeedback;
 
   return (
     <div className="relative flex items-start gap-10 pb-14 last:pb-0">
@@ -200,6 +206,14 @@ export function GradingTimelineEntry({
                   {t('gradingHistory.timeline.verify', { defaultValue: 'Verify' })}
                 </Button>
               )
+            ) : null}
+            {showFeedback ? (
+              <FeedbackThreadSheet
+                entityType="grading"
+                entityId={entry.id}
+                studentId={subjectUserId!}
+                contextLabel={`${rankTitle} · ${entry.date}`}
+              />
             ) : null}
           </div>
         ) : null}

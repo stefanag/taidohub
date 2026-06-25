@@ -111,6 +111,7 @@ export function GradingHistoryPage(): React.ReactElement {
               rankMap={rankMap}
               systemCodeMap={systemCodeMap}
               shogoTitleMap={shogoTitleMap}
+              {...(userId ? { subjectUserId: userId } : {})}
               onEdit={(entry) => setDialogState({ kind: 'edit', entry })}
               onVerify={(id) => verifyMutation.mutate({ id, subjectUserId: userId })}
               onUnverify={(id) => unverifyMutation.mutate({ id, subjectUserId: userId })}

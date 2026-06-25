@@ -13,6 +13,12 @@ export interface GradingTimelineProps {
   rankMap: Map<string, BeltRank>;
   systemCodeMap: Map<string, string>;
   shogoTitleMap: Map<string, ShogoTitle>;
+  /**
+   * User whose grading history this is — required for the per-row
+   * `<FeedbackThreadSheet>`. When undefined the feedback trigger is
+   * hidden (e.g. tests, future read-only embeds).
+   */
+  subjectUserId?: string;
   onEdit?: (entry: GradingHistoryRow) => void;
   onVerify?: (id: string) => void;
   onUnverify?: (id: string) => void;
@@ -28,6 +34,7 @@ export function GradingTimeline({
   rankMap,
   systemCodeMap,
   shogoTitleMap,
+  subjectUserId,
   onEdit,
   onVerify,
   onUnverify,
@@ -60,6 +67,7 @@ export function GradingTimeline({
             systemCodeMap={systemCodeMap}
             shogoTitleMap={shogoTitleMap}
             isLatest={i === latestPassIdx}
+            {...(subjectUserId !== undefined ? { subjectUserId } : {})}
             {...(onEdit !== undefined ? { onEdit } : {})}
             {...(onVerify !== undefined ? { onVerify } : {})}
             {...(onUnverify !== undefined ? { onUnverify } : {})}
