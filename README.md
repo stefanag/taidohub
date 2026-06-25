@@ -28,9 +28,7 @@ taidohub/
 │   ├── tsconfig/                  # base + react-vite/nest/node-lib presets
 │   └── eslint-config/             # flat config: ./base ./react ./node
 ├── .github/workflows/
-│   ├── ci.yml                     # lint • typecheck • arch • build • test • e2e • openapi-sync
-│   └── docker.yml                 # builds + pushes images to GHCR
-├── docker-compose.yml             # dev convenience for the full stack
+│   └── ci.yml                     # lint • typecheck • arch • build • test • e2e • openapi-sync
 ├── turbo.json                     # task graph
 ├── pnpm-workspace.yaml
 └── .env.example
@@ -44,7 +42,6 @@ taidohub/
 |---|---|---|
 | Node.js | `>=20` | Tested on Node 24. |
 | pnpm | `11.1.1` | `corepack enable && corepack prepare pnpm@11.1.1 --activate` |
-| Docker Desktop | recent | Only required for `docker compose up`. |
 | Supabase project | free tier ok | Used as Postgres only — no Auth/Storage/Realtime. |
 
 Required environment values (copy `.env.example` → `.env`):
@@ -61,7 +58,7 @@ Required environment values (copy `.env.example` → `.env`):
 
 ---
 
-## 4. Quick start (local dev, no Docker)
+## 4. Quick start (local dev)
 
 ```bash
 cp .env.example .env
@@ -324,44 +321,7 @@ Frontend mirrors the same `Subjects` / `Actions` unions (re-exported from `@repo
 
 ---
 
-## 15. Docker
-
-The Dockerfiles use BuildKit cache mounts for the pnpm store and rely on a checked-in `pnpm-lock.yaml`.
-
-> **First-time requirement.** Run `pnpm install` locally **before** the first `docker build` so that `pnpm-lock.yaml` exists at the repo root. The Dockerfiles use `--frozen-lockfile` and will refuse to build without it.
-
-```bash
-cp .env.example .env
-# Fill DATABASE_URL, DIRECT_URL, BETTER_AUTH_SECRET, etc.
-pnpm install                 # produces pnpm-lock.yaml
-docker compose up --build
-```
-
-Compose services:
-
-| Service | Port | Notes |
-|---|---|---|
-| `backend` | `3001` | `env_file: .env`. Healthcheck hits `/api/health`. |
-| `frontend` | `8080` | Built with `VITE_API_URL=${VITE_API_URL:-http://localhost:3001}`. nginx serves the SPA with `try_files` fallback. `depends_on: backend (service_healthy)`. |
-
-URLs that come up:
-
-| Service | URL |
-|---|---|
-| Frontend (nginx) | http://localhost:8080 |
-| Backend | http://localhost:3001 |
-| Swagger UI | http://localhost:3001/api/docs (only if `ENABLE_SWAGGER=true` in `.env`) |
-
-Build args worth knowing:
-
-- `apps/frontend/Dockerfile` — `ARG VITE_API_URL`. Vite bakes this into the bundle at build time. Compose passes it; in `docker.yml` it comes from the GitHub repo variable `VITE_API_URL`.
-- `apps/backend/Dockerfile` — no build args; runtime env is supplied at `docker run` / `docker compose` time.
-
-The backend image runs `pnpm --filter backend openapi:generate` during the build stage so `/api/docs/openapi.json` works in production. It also `mkdir -p apps/backend/drizzle` defensively in case migrations haven't been generated yet.
-
----
-
-## 16. GitHub Actions
+## 15. GitHub Actions
 
 ### `ci.yml` — on PR and pushes to `main`
 
@@ -373,37 +333,24 @@ Three jobs:
 
 Concurrency keys on `workflow + ref` cancel in-progress runs when you push again.
 
-### `docker.yml` — on pushes to `main` and `v*` tags
-
-Two parallel jobs (`frontend-image`, `backend-image`), each: Buildx → GHCR login → `docker/metadata-action@v5` (branch / tag / short SHA / `latest` on default branch) → `docker/build-push-action@v6` with GHA cache (`type=gha,scope=<image>`). Frontend job passes `VITE_API_URL=${{ vars.VITE_API_URL }}` as a build arg.
-
-**Required repo configuration:**
-
-| Kind | Name | Used by | Notes |
-|---|---|---|---|
-| Variable | `VITE_API_URL` | `docker.yml` (frontend build) | Public URL of the backend the frontend image should point at. Settings → Secrets and variables → Actions → Variables. |
-| Token | `GITHUB_TOKEN` | both workflows | Provided automatically by Actions. Used for GHCR push (requires `permissions: packages: write`, already declared). |
-
-No other secrets needed for CI. Backend e2e provides its own ephemeral Postgres and a throwaway `BETTER_AUTH_SECRET` inline in the job env.
+No external secrets needed for CI. Backend e2e provides its own ephemeral Postgres and a throwaway `BETTER_AUTH_SECRET` inline in the job env.
 
 ---
 
-## 17. Troubleshooting
+## 16. Troubleshooting
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| `docker build` fails with `ERR_PNPM_NO_LOCKFILE` | `pnpm-lock.yaml` doesn't exist yet. | Run `pnpm install` locally once, commit the lockfile, retry. |
 | `db:migrate` hangs or errors with `prepared statement does not exist` | You pointed it at the pooler URL. | Migrations must use `DIRECT_URL` (port 5432), not `DATABASE_URL` (port 6543). |
 | Login appears to succeed but next request is 401 | CORS preflight is fine but cookie was dropped. | Backend must have `credentials: true` and `origin` must be the literal frontend URL (no wildcard). Frontend `fetch` must set `credentials: 'include'`. |
 | Cookie missing in production | Browser refuses `sameSite: 'none'` over HTTP. | Frontend **must** be served over HTTPS in production. Both `secure: true` and `sameSite: 'none'` are required for cross-site cookies. |
 | Swagger UI shows no endpoints in prod | `NODE_ENV=production` and `ENABLE_SWAGGER` unset. | Either set `ENABLE_SWAGGER=true` (and add basic-auth) or leave it disabled — that's the secure default. |
 | CI fails on `openapi-sync` | The committed spec doesn't match what the code generates. | Run `pnpm --filter backend openapi:generate` locally and commit `packages/contracts/openapi/`. |
 | `pnpm arch` complains about an import | You crossed an FSD layer or imported a slice's internals. | Import only from a slice's `index.ts`, and only from a layer below you. |
-| Frontend can't reach backend in Docker | `VITE_API_URL` was wrong at **build** time (Vite bakes it in). | Rebuild the frontend image with the right `VITE_API_URL` build arg. Runtime env changes have no effect. |
 
 ---
 
-## 18. Deployment (Railway)
+## 17. Deployment (Railway)
 
 Production deploys the backend and frontend as **two services in one Railway project**, with the Postgres database staying on **Supabase**. Per-service build/start lives in `apps/<name>/railway.toml`; the dashboard only needs the env vars and the config-file path.
 
