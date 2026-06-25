@@ -97,4 +97,6 @@ export const FeedbackRoutes = {
     `/api/feedback/comments/${commentId}/reactions` as const,
   /** GET → { count } of threads with unread visible comments for the actor. */
   unreadCount: '/api/feedback/unread-count',
+  /** GET → inbox: threads with unread activity, with student name + context label prejoined. */
+  inbox: '/api/feedback/inbox',
 } as const;

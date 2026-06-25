@@ -152,6 +152,49 @@ export const FeedbackUnreadCountSchema = z
 
 export type FeedbackUnreadCount = z.infer<typeof FeedbackUnreadCountSchema>;
 
+/**
+ * One row in the bell-icon inbox — a thread the actor has unread
+ * activity on. The backend joins the student's name and a
+ * human-readable label of the related entity (technique romaji,
+ * pattern romaji, rank label, or `'General'`) so the UI doesn't
+ * need a second round-trip per item.
+ */
+export const FeedbackInboxItemSchema = z
+  .object({
+    threadId: z.string().uuid(),
+    entityType: FeedbackEntityTypeSchema,
+    entityId: z.string().min(1),
+    studentId: z.string().min(1),
+    studentName: z.string().nullable(),
+    contextLabel: z.string(),
+    unreadCount: z.number().int().positive(),
+    lastActivityAt: z.string().datetime(),
+  })
+  .meta({
+    id: 'FeedbackInboxItem',
+    description:
+      "One thread the actor has unread visible comments on, with the student's name and a human label of the related entity prejoined for the inbox UI.",
+    example: {
+      threadId: FEEDBACK_UUID_EXAMPLE,
+      entityType: 'technique',
+      entityId: FEEDBACK_UUID_EXAMPLE,
+      studentId: 'u-student',
+      studentName: 'Anne Doe',
+      contextLabel: 'Tsuki',
+      unreadCount: 2,
+      lastActivityAt: ISO_DATETIME_EXAMPLE,
+    },
+  });
+
+export type FeedbackInboxItem = z.infer<typeof FeedbackInboxItemSchema>;
+
+export const FeedbackInboxResponseSchema = z
+  .object({ data: FeedbackInboxItemSchema.array() })
+  .meta({
+    id: 'FeedbackInboxResponse',
+    description: 'GET /api/feedback/inbox — unread threads for the actor, ordered by `lastActivityAt` DESC.',
+  });
+
 // ─── Input bodies ───────────────────────────────────────────────────────────
 
 export const CreateFeedbackThreadSchema = z
@@ -252,4 +295,6 @@ export const FeedbackOpenApiRegistry = {
   FeedbackThreadOrNullResponse: FeedbackThreadOrNullResponseSchema,
   ListFeedbackThreadsResponse: ListFeedbackThreadsResponseSchema,
   ListFeedbackCommentsResponse: ListFeedbackCommentsResponseSchema,
+  FeedbackInboxItem: FeedbackInboxItemSchema,
+  FeedbackInboxResponse: FeedbackInboxResponseSchema,
 } as const;

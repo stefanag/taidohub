@@ -2,6 +2,7 @@ import {
   CreateFeedbackCommentSchema,
   CreateFeedbackThreadSchema,
   FeedbackCommentSchema,
+  FeedbackInboxResponseSchema,
   FeedbackReactionRecordSchema,
   FeedbackThreadOrNullResponseSchema,
   FeedbackThreadSchema,
@@ -12,6 +13,7 @@ import {
   type CreateFeedbackThreadInput,
   type FeedbackComment,
   type FeedbackEntityType,
+  type FeedbackInboxItem,
   type FeedbackReaction,
   type FeedbackReactionRecord,
   type FeedbackThread,
@@ -124,4 +126,9 @@ export async function markThreadRead(threadId: string): Promise<void> {
 export async function getUnreadCount(): Promise<FeedbackUnreadCount> {
   const raw = await httpClient(FeedbackRoutes.unreadCount);
   return FeedbackUnreadCountSchema.parse(raw);
+}
+
+export async function getInbox(): Promise<FeedbackInboxItem[]> {
+  const raw = await httpClient(FeedbackRoutes.inbox);
+  return FeedbackInboxResponseSchema.parse(raw).data;
 }

@@ -10,6 +10,7 @@ import type {
   CreateFeedbackThreadInput,
   FeedbackComment,
   FeedbackEntityType,
+  FeedbackInboxItem,
   FeedbackReaction,
   FeedbackReactionRecord,
   FeedbackThread,
@@ -37,6 +38,7 @@ export const feedbackKeys = {
   comments: (threadId: string) =>
     ['feedback', 'comments', threadId] as const,
   unread: ['feedback', 'unread'] as const,
+  inbox: ['feedback', 'inbox'] as const,
 };
 
 export function useFeedbackThreadQuery(
@@ -87,6 +89,21 @@ export function useFeedbackUnreadCountQuery(): UseQueryResult<FeedbackUnreadCoun
     queryKey: feedbackKeys.unread,
     queryFn: () => api.getUnreadCount(),
     refetchInterval: 60_000,
+  });
+}
+
+/**
+ * Lazy inbox query — fed by the bell-icon Sheet. Disabled until the
+ * sheet opens so we don't fan out the join-heavy SELECT on every
+ * authenticated request.
+ */
+export function useFeedbackInboxQuery(
+  enabled: boolean,
+): UseQueryResult<FeedbackInboxItem[]> {
+  return useQuery({
+    queryKey: feedbackKeys.inbox,
+    queryFn: () => api.getInbox(),
+    enabled,
   });
 }
 

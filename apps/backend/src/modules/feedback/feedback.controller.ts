@@ -24,6 +24,7 @@ import {
   type CreateFeedbackCommentInput,
   type CreateFeedbackThreadInput,
   type FeedbackComment,
+  type FeedbackInboxItem,
   type FeedbackReactionRecord,
   type FeedbackThread,
   type FeedbackUnreadCount,
@@ -170,5 +171,13 @@ export class FeedbackController {
   ): Promise<FeedbackUnreadCount> {
     const count = await this.service.unreadCount(user);
     return { count };
+  }
+
+  @Get('inbox')
+  async inbox(
+    @CurrentUser() user: AuthenticatedUser,
+  ): Promise<{ data: FeedbackInboxItem[] }> {
+    const data = await this.service.getInbox(user);
+    return { data };
   }
 }

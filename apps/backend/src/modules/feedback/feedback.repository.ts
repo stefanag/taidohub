@@ -24,6 +24,18 @@ export interface FeedbackCommentWithAuthor extends DbFeedbackComment {
   authorName: string | null;
 }
 
+/** Raw row shape returned by the inbox SELECTs — snake_case from `db.execute`. */
+export type InboxItemRow = {
+  thread_id: string;
+  entity_type: string;
+  entity_id: string;
+  student_id: string;
+  student_name: string | null;
+  context_label: string;
+  unread_count: number;
+  last_activity_at: Date;
+} & Record<string, unknown>;
+
 /**
  * Plain Drizzle access for the feedback feature. No business rules — the
  * service does access control + invariant enforcement.
@@ -366,6 +378,100 @@ export class FeedbackRepository {
       WHERE rs.last_read_at IS NULL OR c.created_at > rs.last_read_at
     `);
     return Number(rows[0]?.count ?? 0);
+  }
+
+  // ── Inbox (unread-threads list) ───────────────────────────────────────
+
+  /**
+   * One row per thread the actor has unread visible comments on, with
+   * the student's name and a human label of the related entity
+   * prejoined so the UI doesn't need a second round-trip per row.
+   *
+   * `entity_type` discriminator picks the join: 'general' → just the
+   * literal label; 'technique' / 'pattern' / 'grading' join their
+   * respective table (and `grading` jumps through `rank_history` →
+   * `belt_rank`).
+   *
+   * The three branches mirror the matching `count*Unread` queries
+   * (own, instructor-linked, sysadmin) — same WHERE shape, just
+   * extended with the contextLabel CASE and a GROUP BY for aggregation.
+   * Capped at 50 rows because the bell list is meant to be scannable,
+   * not encyclopedic.
+   */
+  private inboxSelectFragment(actorId: string) {
+    return sql`
+      SELECT
+        t.id                                                   AS thread_id,
+        t.entity_type                                          AS entity_type,
+        t.entity_id                                            AS entity_id,
+        t.student_id                                           AS student_id,
+        student.name                                           AS student_name,
+        CASE
+          WHEN t.entity_type = 'general'   THEN 'General'
+          WHEN t.entity_type = 'technique' THEN COALESCE(tech.name_romaji, tech.name_en, t.entity_id)
+          WHEN t.entity_type = 'pattern'   THEN COALESCE(pat.name_romaji,  pat.name_en,  t.entity_id)
+          WHEN t.entity_type = 'grading'   THEN COALESCE(rh_rank.name_romaji, rh_rank.name_en, t.entity_id)
+          ELSE t.entity_type::text
+        END                                                    AS context_label,
+        COUNT(c.id)::int                                       AS unread_count,
+        MAX(c.created_at)                                      AS last_activity_at
+      FROM feedback_thread t
+      INNER JOIN feedback_comment c ON c.thread_id = t.id
+      LEFT JOIN feedback_read_status rs
+        ON rs.thread_id = t.id AND rs.user_id = ${actorId}
+      LEFT JOIN "user" student ON student.id = t.student_id
+      LEFT JOIN technique tech ON tech.id::text = t.entity_id AND t.entity_type = 'technique'
+      LEFT JOIN pattern   pat  ON pat.id::text  = t.entity_id AND t.entity_type = 'pattern'
+      LEFT JOIN rank_history rh ON rh.id::text  = t.entity_id AND t.entity_type = 'grading'
+      LEFT JOIN belt_rank rh_rank ON rh_rank.id = rh.rank_id
+    `;
+  }
+
+  async listOwnInboxItems(actorId: string): Promise<InboxItemRow[]> {
+    const rows = await this.db.execute<InboxItemRow>(sql`
+      ${this.inboxSelectFragment(actorId)}
+      WHERE t.student_id = ${actorId}
+        AND c.instructor_only = false
+        AND (rs.last_read_at IS NULL OR c.created_at > rs.last_read_at)
+      GROUP BY t.id, t.entity_type, t.entity_id, t.student_id, student.name,
+               tech.name_romaji, tech.name_en, pat.name_romaji, pat.name_en,
+               rh_rank.name_romaji, rh_rank.name_en
+      ORDER BY MAX(c.created_at) DESC
+      LIMIT 50
+    `);
+    return Array.from(rows);
+  }
+
+  async listInstructorInboxItems(actorId: string): Promise<InboxItemRow[]> {
+    const rows = await this.db.execute<InboxItemRow>(sql`
+      ${this.inboxSelectFragment(actorId)}
+      INNER JOIN organisation_membership instructor_m
+        ON instructor_m.user_id = ${actorId} AND instructor_m.role = 'instructor'
+      INNER JOIN organisation_membership student_m
+        ON student_m.user_id = t.student_id
+       AND student_m.organisation_id = instructor_m.organisation_id
+      WHERE t.student_id != ${actorId}
+        AND (rs.last_read_at IS NULL OR c.created_at > rs.last_read_at)
+      GROUP BY t.id, t.entity_type, t.entity_id, t.student_id, student.name,
+               tech.name_romaji, tech.name_en, pat.name_romaji, pat.name_en,
+               rh_rank.name_romaji, rh_rank.name_en
+      ORDER BY MAX(c.created_at) DESC
+      LIMIT 50
+    `);
+    return Array.from(rows);
+  }
+
+  async listAllInboxItems(actorId: string): Promise<InboxItemRow[]> {
+    const rows = await this.db.execute<InboxItemRow>(sql`
+      ${this.inboxSelectFragment(actorId)}
+      WHERE rs.last_read_at IS NULL OR c.created_at > rs.last_read_at
+      GROUP BY t.id, t.entity_type, t.entity_id, t.student_id, student.name,
+               tech.name_romaji, tech.name_en, pat.name_romaji, pat.name_en,
+               rh_rank.name_romaji, rh_rank.name_en
+      ORDER BY MAX(c.created_at) DESC
+      LIMIT 50
+    `);
+    return Array.from(rows);
   }
 
   // Silence unused-import warnings for utilities reserved for future tweaks

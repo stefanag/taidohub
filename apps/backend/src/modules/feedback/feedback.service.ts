@@ -11,6 +11,7 @@ import type {
   CreateFeedbackThreadInput,
   FeedbackComment,
   FeedbackEntityType,
+  FeedbackInboxItem,
   FeedbackReaction as FeedbackReactionKey,
   FeedbackReactionRecord,
   FeedbackThread,
@@ -244,6 +245,48 @@ export class FeedbackService {
     const own = await this.repo.countOwnUnread(actor.id);
     const instructor = await this.repo.countInstructorUnread(actor.id);
     return own + instructor;
+  }
+
+  /**
+   * Bell-icon inbox. Branches mirror {@link unreadCount} — sysadmin sees
+   * every unread thread; non-sysadmin sees own + instructor-linked. The
+   * two non-sysadmin lists are merged, deduplicated by `threadId` (a
+   * sysadmin who is also a student wouldn't hit this branch, but a
+   * student who is also an instructor in a separate org could
+   * conceivably surface the same thread twice in the linked-instructor
+   * branch — we keep the higher unread count just in case), and sorted
+   * by `lastActivityAt` DESC.
+   */
+  async getInbox(actor: AuthenticatedUser): Promise<FeedbackInboxItem[]> {
+    const rows =
+      actor.role === 'sysadmin'
+        ? await this.repo.listAllInboxItems(actor.id)
+        : [
+            ...(await this.repo.listOwnInboxItems(actor.id)),
+            ...(await this.repo.listInstructorInboxItems(actor.id)),
+          ];
+
+    const byThread = new Map<string, FeedbackInboxItem>();
+    for (const r of rows) {
+      const existing = byThread.get(r.thread_id);
+      const item: FeedbackInboxItem = {
+        threadId: r.thread_id,
+        entityType: r.entity_type as FeedbackEntityType,
+        entityId: r.entity_id,
+        studentId: r.student_id,
+        studentName: r.student_name,
+        contextLabel: r.context_label,
+        unreadCount: Number(r.unread_count),
+        lastActivityAt: r.last_activity_at.toISOString(),
+      };
+      if (!existing || existing.unreadCount < item.unreadCount) {
+        byThread.set(r.thread_id, item);
+      }
+    }
+
+    return Array.from(byThread.values()).sort((a, b) =>
+      a.lastActivityAt < b.lastActivityAt ? 1 : -1,
+    );
   }
 
   // ── Access control ────────────────────────────────────────────────────
