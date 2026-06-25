@@ -197,7 +197,11 @@ export function useMarkFeedbackThreadReadMutation() {
   return useMutation({
     mutationFn: (threadId: string) => api.markThreadRead(threadId),
     onSuccess: () => {
+      // Both the badge count AND the bell's inbox list need to refresh —
+      // otherwise a thread the user just finished reading stays in the
+      // bell's open Sheet until the next 60-second poll.
       void qc.invalidateQueries({ queryKey: feedbackKeys.unread });
+      void qc.invalidateQueries({ queryKey: feedbackKeys.inbox });
     },
   });
 }
