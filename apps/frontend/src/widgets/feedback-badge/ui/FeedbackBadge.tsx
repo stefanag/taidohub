@@ -102,6 +102,12 @@ export function FeedbackBadge(): React.ReactElement | null {
           <div className="mt-4">
             {inboxQ.isPending ? (
               <p className="text-sm text-on-surface-variant">{t('feedback.loading')}</p>
+            ) : inboxQ.isError ? (
+              <p role="alert" className="text-sm text-destructive">
+                {inboxQ.error instanceof Error
+                  ? inboxQ.error.message
+                  : t('common.unknownError')}
+              </p>
             ) : items.length === 0 ? (
               <div className="flex flex-col items-center gap-2 py-6 text-on-surface-variant">
                 <Inbox className="size-8" aria-hidden />

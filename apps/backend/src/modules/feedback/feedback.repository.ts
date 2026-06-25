@@ -423,7 +423,7 @@ export class FeedbackRepository {
       LEFT JOIN technique tech ON tech.id::text = t.entity_id AND t.entity_type = 'technique'
       LEFT JOIN pattern   pat  ON pat.id::text  = t.entity_id AND t.entity_type = 'pattern'
       LEFT JOIN rank_history rh ON rh.id::text  = t.entity_id AND t.entity_type = 'grading'
-      LEFT JOIN belt_rank rh_rank ON rh_rank.id = rh.rank_id
+      LEFT JOIN belt_ranks rh_rank ON rh_rank.id = rh.rank_id
     `;
   }
 
