@@ -8,10 +8,18 @@ import * as schema from './schema/index.js';
  *
  * `prepare: false` keeps us compatible with Supabase's transaction-mode pooler
  * (PgBouncer) which doesn't support server-side prepared statements.
+ *
+ * `fetch_types: false` skips postgres-js's startup `SELECT FROM pg_type`
+ * introspection. Under PgBouncer transaction mode that introspection runs in
+ * a separate pooler-assigned backend than the first application query and
+ * has been observed to wedge the pool under concurrent SELECTs immediately
+ * after a fresh client init. We don't use any custom Postgres types so the
+ * built-in type map is sufficient.
  */
 export function createDrizzleClient(databaseUrl: string) {
   const queryClient = postgres(databaseUrl, {
     prepare: false,
+    fetch_types: false,
     max: 10,
   });
   return drizzle(queryClient, { schema });
