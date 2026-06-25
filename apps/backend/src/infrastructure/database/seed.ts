@@ -31,7 +31,7 @@ async function main(): Promise<void> {
     sendPasswordReset: async () => undefined,
     sendAdminPasswordReset: async () => undefined,
   };
-  const auth = buildBetterAuth(env, noopEmail);
+  const auth = buildBetterAuth(db, env, noopEmail);
 
   const deps: SeedDeps = {
     findUserByEmail: async (email) => {

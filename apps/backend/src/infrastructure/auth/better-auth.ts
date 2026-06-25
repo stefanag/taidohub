@@ -4,20 +4,24 @@ import { admin } from 'better-auth/plugins';
 import { adminAc, userAc } from 'better-auth/plugins/admin/access';
 
 import { type Env } from '../../config/env.schema.js';
-import { createDrizzleClient } from '../database/client.js';
+import { type DrizzleDb } from '../database/client.js';
 import * as schema from '../database/schema/index.js';
 import { type EmailService } from '../email/email.types.js';
 
 /**
  * Build the better-auth server instance for a given environment.
  *
+ * The Drizzle client is injected from the outside (`DatabaseModule`'s
+ * `DRIZZLE` provider) rather than constructed here. That keeps the
+ * postgres-js connection pool single-source — every authenticated request
+ * uses the same pool the rest of the app does, and we don't double up
+ * against Supabase's session-mode pooler cap.
+ *
  * Kept as a factory (rather than a top-level singleton) so the auth module
  * can wire it against the same `ConfigService`-validated env that the rest of
  * the app uses, and so test setups can rebuild it against a fresh database.
  */
-export function buildBetterAuth(env: Env, emailService: EmailService) {
-  const db = createDrizzleClient(env.DATABASE_URL);
-
+export function buildBetterAuth(db: DrizzleDb, env: Env, emailService: EmailService) {
   const isProd = env.NODE_ENV === 'production';
   const trustedOrigins = env.WEB_ORIGIN.split(',').map((s) => s.trim()).filter(Boolean);
 
