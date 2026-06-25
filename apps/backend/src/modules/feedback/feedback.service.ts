@@ -277,7 +277,11 @@ export class FeedbackService {
         studentName: r.student_name,
         contextLabel: r.context_label,
         unreadCount: Number(r.unread_count),
-        lastActivityAt: r.last_activity_at.toISOString(),
+        // `db.execute` returns timestamps as ISO strings, not Date — the
+        // postgres-js → Drizzle row mapper only does the Date coercion for
+        // query-builder reads. Wrap in `new Date(...)` so the input is
+        // either accepted and re-stringified.
+        lastActivityAt: new Date(r.last_activity_at).toISOString(),
       };
       if (!existing || existing.unreadCount < item.unreadCount) {
         byThread.set(r.thread_id, item);

@@ -24,7 +24,12 @@ export interface FeedbackCommentWithAuthor extends DbFeedbackComment {
   authorName: string | null;
 }
 
-/** Raw row shape returned by the inbox SELECTs — snake_case from `db.execute`. */
+/**
+ * Raw row shape returned by the inbox SELECTs — snake_case from `db.execute`.
+ * `last_activity_at` is a string here (not Date) because `db.execute` bypasses
+ * Drizzle's column-driven type coercion; the service wraps it in `new Date()`
+ * before re-serialising.
+ */
 export type InboxItemRow = {
   thread_id: string;
   entity_type: string;
@@ -33,7 +38,7 @@ export type InboxItemRow = {
   student_name: string | null;
   context_label: string;
   unread_count: number;
-  last_activity_at: Date;
+  last_activity_at: string;
 } & Record<string, unknown>;
 
 /**
