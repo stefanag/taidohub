@@ -131,7 +131,10 @@ export function GradingTimelineEntry({
   const showActionRow = showEdit || showVerifyOrUnverify || showFeedback;
 
   return (
-    <div className="relative flex items-start gap-10 pb-14 last:pb-0">
+    <div
+      id={`grading-${entry.id}`}
+      className="relative flex scroll-mt-24 items-start gap-10 pb-14 last:pb-0"
+    >
       <div
         className={`z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-lg ${nodeClass}`}
       >

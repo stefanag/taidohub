@@ -1,13 +1,23 @@
 import { useParams } from '@tanstack/react-router';
+import { useQuery } from '@tanstack/react-query';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { ContentType, Progress } from '@repo/contracts/progress';
 
+import { listBeltRanksQueryOptions, type BeltRank } from '@/entities/belt-rank';
+import { listBeltSystemsQueryOptions } from '@/entities/belt-system';
 import { usePatternsQuery } from '@/entities/pattern';
+import {
+  gradingHistoryQueryOptions,
+  useUnverifyRankHistory,
+  useVerifyRankHistory,
+} from '@/entities/rank-history';
+import { listShogoTitlesQueryOptions, type ShogoTitle } from '@/entities/shogo-title';
 import { useStudentProgressQuery, useStudentsQuery } from '@/entities/student';
 import { useTechniquesQuery } from '@/entities/technique';
 import { FeedbackThread, FeedbackThreadSheet } from '@/features/feedback-thread';
+import { GradingTimeline } from '@/features/grading-timeline';
 import { StudentProgressEditorDialog } from '@/features/student-progress-editor-dialog';
 import { HttpError } from '@/shared/api';
 import { useFeatureFlag } from '@/shared/lib/feature-flags';
@@ -31,6 +41,46 @@ export function StudentDetailPage(): React.ReactElement {
   const patternsQ = usePatternsQuery([]);
   const progressQ = useStudentProgressQuery(userId);
   const studentsQ = useStudentsQuery();
+  const gradingHistoryQ = useQuery(gradingHistoryQueryOptions(userId));
+  const ranksQ = useQuery(listBeltRanksQueryOptions());
+  const systemsQ = useQuery(listBeltSystemsQueryOptions());
+  const shogoQ = useQuery(listShogoTitlesQueryOptions());
+  const verifyMut = useVerifyRankHistory();
+  const unverifyMut = useUnverifyRankHistory();
+
+  const rankMap = React.useMemo(() => {
+    const m = new Map<string, BeltRank>();
+    for (const r of ranksQ.data ?? []) m.set(r.id, r);
+    return m;
+  }, [ranksQ.data]);
+  const systemCodeMap = React.useMemo(() => {
+    const m = new Map<string, string>();
+    for (const s of systemsQ.data ?? []) m.set(s.id, s.code);
+    return m;
+  }, [systemsQ.data]);
+  const shogoTitleMap = React.useMemo(() => {
+    const m = new Map<string, ShogoTitle>();
+    for (const s of shogoQ.data ?? []) m.set(s.code, s);
+    return m;
+  }, [shogoQ.data]);
+
+  const gradingEntries = gradingHistoryQ.data?.data ?? [];
+
+  /**
+   * When the URL hash points at a grading row (#grading-<id>), scroll
+   * to it once the timeline has rendered. The bell-icon inbox uses
+   * this hash so an instructor can jump from "unread grading
+   * feedback" straight to the right row.
+   */
+  React.useEffect(() => {
+    if (gradingHistoryQ.isPending) return;
+    const hash = window.location.hash.replace(/^#/, '');
+    if (!hash.startsWith('grading-')) return;
+    const el = document.getElementById(hash);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [gradingHistoryQ.isPending, gradingHistoryQ.data]);
 
   const student = React.useMemo(
     () => studentsQ.data?.find((s) => s.userId === userId),
@@ -180,6 +230,33 @@ export function StudentDetailPage(): React.ReactElement {
               </li>
             ))}
           </ul>
+        )}
+      </section>
+
+      <section className="mt-8">
+        <h2 className="text-lg font-semibold">
+          {t('gradingHistory.title', { defaultValue: 'Grading history' })}
+        </h2>
+        {gradingHistoryQ.isPending ? (
+          <p className="mt-2">{t('common.loading')}</p>
+        ) : gradingHistoryQ.isError ? (
+          <p role="alert" className="mt-2 text-sm text-destructive">
+            {gradingHistoryQ.error instanceof Error
+              ? gradingHistoryQ.error.message
+              : t('common.unknownError')}
+          </p>
+        ) : (
+          <div className="mt-4">
+            <GradingTimeline
+              entries={gradingEntries}
+              rankMap={rankMap}
+              systemCodeMap={systemCodeMap}
+              shogoTitleMap={shogoTitleMap}
+              subjectUserId={userId}
+              onVerify={(id) => verifyMut.mutate({ id, subjectUserId: userId })}
+              onUnverify={(id) => unverifyMut.mutate({ id, subjectUserId: userId })}
+            />
+          </div>
         )}
       </section>
 

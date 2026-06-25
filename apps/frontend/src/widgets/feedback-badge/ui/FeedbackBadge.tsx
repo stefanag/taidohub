@@ -50,9 +50,17 @@ export function FeedbackBadge(): React.ReactElement | null {
 
   const navigateTo = (item: FeedbackInboxItem): void => {
     setOpen(false);
+    // Grading items deep-link to the row anchor on the student detail
+    // page so the timeline scrolls to the right entry. Other types
+    // just land on the student page; their per-row triggers live
+    // inside the techniques/patterns lists rather than at a stable
+    // anchor.
     void navigate({
       to: '/students/$userId',
       params: { userId: item.studentId },
+      ...(item.entityType === 'grading'
+        ? { hash: `grading-${item.entityId}` }
+        : {}),
     });
   };
 
