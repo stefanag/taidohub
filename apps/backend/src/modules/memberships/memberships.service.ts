@@ -250,8 +250,10 @@ export class MembershipsService {
     return { error: { code: 'NOT_FOUND', message: `Membership ${id} not found.` } };
   }
 
-  private toApi(row: DbOrganisationMembership): OrganisationMembership {
-    return {
+  private toApi(
+    row: DbOrganisationMembership | (DbOrganisationMembership & { userName?: string | null; userEmail?: string | null }),
+  ): OrganisationMembership {
+    const base: OrganisationMembership = {
       id: row.id,
       userId: row.userId,
       organisationId: row.organisationId,
@@ -259,5 +261,15 @@ export class MembershipsService {
       createdAt: row.createdAt.toISOString(),
       updatedAt: row.updatedAt.toISOString(),
     };
+    // Only the list query joins user; surface the joined fields when
+    // present so the orgadmin UI can render real names instead of
+    // raw user ids.
+    if ('userName' in row && row.userName !== undefined) {
+      base.userName = row.userName;
+    }
+    if ('userEmail' in row && row.userEmail !== undefined) {
+      base.userEmail = row.userEmail;
+    }
+    return base;
   }
 }

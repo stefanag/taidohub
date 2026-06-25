@@ -22,6 +22,14 @@ export const OrganisationMembershipSchema = z
     role: MembershipRoleSchema,
     createdAt: z.string().datetime(),
     updatedAt: z.string().datetime(),
+    /**
+     * Joined display name of the linked user, set by the list endpoint
+     * so the orgadmin UI can render the member roster without a second
+     * lookup. Mutation responses (create / update / delete) omit it.
+     */
+    userName: z.string().nullable().optional(),
+    /** Joined email of the linked user; same population rule as `userName`. */
+    userEmail: z.string().nullable().optional(),
   })
   .meta({
     id: 'OrganisationMembership',
@@ -33,6 +41,8 @@ export const OrganisationMembershipSchema = z
       role: 'orgadmin',
       createdAt: ISO_DATETIME_EXAMPLE,
       updatedAt: ISO_DATETIME_EXAMPLE,
+      userName: 'Alex Adminson',
+      userEmail: 'alex@example.com',
     },
   });
 

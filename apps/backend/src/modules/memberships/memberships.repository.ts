@@ -13,8 +13,20 @@ import {
 } from '../../infrastructure/database/client.js';
 import {
   organisationMembership,
+  user,
   type DbOrganisationMembership,
 } from '../../infrastructure/database/schema/index.js';
+
+/**
+ * A membership row joined with the user's `name` and `email` for the
+ * roster view in `OrgMembershipManager`. Mutation paths still return
+ * the bare `DbOrganisationMembership` — names are only joined where
+ * the UI needs them, to avoid extra DB work on writes.
+ */
+export interface MembershipWithUser extends DbOrganisationMembership {
+  userName: string | null;
+  userEmail: string | null;
+}
 
 @Injectable()
 export class MembershipsRepository {
@@ -48,23 +60,49 @@ export class MembershipsRepository {
     return rows[0] ?? null;
   }
 
-  async list(filter: ListMembershipsQuery): Promise<{ data: DbOrganisationMembership[]; total: number }> {
+  async list(filter: ListMembershipsQuery): Promise<{ data: MembershipWithUser[]; total: number }> {
     const filters: SQL[] = [];
     if (filter.userId) filters.push(eq(organisationMembership.userId, filter.userId));
     if (filter.organisationId)
       filters.push(eq(organisationMembership.organisationId, filter.organisationId));
     const where = filters.length ? and(...filters) : undefined;
 
-    const data = await this.db
-      .select()
+    const rows = await this.db
+      .select({
+        // organisation_membership columns
+        id: organisationMembership.id,
+        userId: organisationMembership.userId,
+        organisationId: organisationMembership.organisationId,
+        role: organisationMembership.role,
+        createdAt: organisationMembership.createdAt,
+        updatedAt: organisationMembership.updatedAt,
+        // user columns (left join — both nullable so a stale userId
+        // (account deleted) still renders something usable on the
+        // frontend rather than 500ing).
+        userName: user.name,
+        userEmail: user.email,
+      })
       .from(organisationMembership)
+      .leftJoin(user, eq(user.id, organisationMembership.userId))
       .where(where)
       .orderBy(organisationMembership.createdAt);
     const totalRows = await this.db
       .select({ value: count() })
       .from(organisationMembership)
       .where(where);
-    return { data, total: Number(totalRows[0]?.value ?? 0) };
+    return {
+      data: rows.map<MembershipWithUser>((r) => ({
+        id: r.id,
+        userId: r.userId,
+        organisationId: r.organisationId,
+        role: r.role,
+        createdAt: r.createdAt,
+        updatedAt: r.updatedAt,
+        userName: r.userName ?? null,
+        userEmail: r.userEmail ?? null,
+      })),
+      total: Number(totalRows[0]?.value ?? 0),
+    };
   }
 
   async create(

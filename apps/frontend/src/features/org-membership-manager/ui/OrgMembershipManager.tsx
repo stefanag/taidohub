@@ -155,9 +155,15 @@ export function OrgMembershipManager({
                   organisationId: m.organisationId,
                   role: m.role,
                 });
+              const displayLabel = m.userName ?? m.userEmail ?? m.userId;
               return (
                 <tr key={m.id} className="border-b">
-                  <td className="py-2">{m.userId}</td>
+                  <td className="py-2">
+                    <div className="font-medium">{displayLabel}</div>
+                    {m.userName && m.userEmail ? (
+                      <div className="text-xs text-on-surface-variant">{m.userEmail}</div>
+                    ) : null}
+                  </td>
                   <td className="py-2">
                     <span className="rounded-full bg-muted px-2 py-0.5 text-xs">
                       {t(`admin.users.roles.${m.role}`, { defaultValue: m.role })}
