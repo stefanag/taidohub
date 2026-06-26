@@ -105,7 +105,45 @@ export class PatternService {
       includeInactive: query.includeInactive,
       organisationId: query.organisationId,
     });
-    return Promise.all(rows.map((r) => this.hydrate(r)));
+    if (rows.length === 0) return [];
+
+    // Batched hydration. Old shape called `repo.listClassifications(row.id)`
+    // per row inside a `Promise.all` — classic 1+N. New shape pulls every
+    // junction row for the page in a single SELECT, then every referenced
+    // category in a single batch, then builds the API objects in pure JS.
+    // For a 50-row response this is 3 DB round-trips total (patterns +
+    // junctions + categories) vs. ~102 under the old shape.
+    const allLinks = await this.repo.listClassificationsByPatternIds(
+      rows.map((r) => r.id),
+    );
+    const linksByPattern = new Map<
+      string,
+      Array<{ classificationCategoryId: string; sortOrder: number }>
+    >();
+    for (const link of allLinks) {
+      const bucket = linksByPattern.get(link.patternId) ?? [];
+      bucket.push({
+        classificationCategoryId: link.classificationCategoryId,
+        sortOrder: link.sortOrder,
+      });
+      linksByPattern.set(link.patternId, bucket);
+    }
+
+    const uniqueCategoryIds = [
+      ...new Set(allLinks.map((l) => l.classificationCategoryId)),
+    ];
+    const [categoryRows, rootMap] = await Promise.all([
+      this.classificationRepo.findManyByIds(uniqueCategoryIds),
+      this.classifications.getRootMap(),
+    ]);
+    const byId = new Map<string, ClassificationCategoryRow>();
+    for (const r of categoryRows) byId.set(r.id, r);
+    const rootRowToCode = new Map<string, RootCode>();
+    for (const [code, rootRow] of rootMap.entries()) rootRowToCode.set(rootRow.id, code);
+
+    return rows.map((row) =>
+      this.buildApi(row, linksByPattern.get(row.id) ?? [], byId, rootRowToCode),
+    );
   }
 
   async findOne(actor: AuthenticatedUser, id: string): Promise<Pattern> {
@@ -383,15 +421,18 @@ export class PatternService {
   }
 
   /**
-   * Hydrate a DB row into the API contract — joins the junction rows, resolves
-   * each classification's root code, and groups by root.
+   * Hydrate a single DB row into the API contract. Used by the
+   * single-row paths (`findOne`, post-mutation responses on
+   * `create`/`update`). The list path uses `buildApi` directly with
+   * pre-fetched data to avoid the 1+N round-trip pattern this method
+   * has by itself.
    */
   private async hydrate(row: PatternRow): Promise<Pattern> {
     const links = await this.repo.listClassifications(row.id);
-    const ids = links.map((l) => l.classificationCategoryId);
-
     const [categoryRows, rootMap] = await Promise.all([
-      this.classificationRepo.findManyByIds(ids),
+      this.classificationRepo.findManyByIds(
+        links.map((l) => l.classificationCategoryId),
+      ),
       this.classifications.getRootMap(),
     ]);
 
@@ -400,6 +441,21 @@ export class PatternService {
     const rootRowToCode = new Map<string, RootCode>();
     for (const [code, rootRow] of rootMap.entries()) rootRowToCode.set(rootRow.id, code);
 
+    return this.buildApi(row, links, byId, rootRowToCode);
+  }
+
+  /**
+   * Pure synchronous DB-row → API-shape transform. Same logic that
+   * used to live inline in `hydrate`; extracted so the list path can
+   * apply it across pre-fetched data without paying per-row round
+   * trips.
+   */
+  private buildApi(
+    row: PatternRow,
+    links: ReadonlyArray<{ classificationCategoryId: string; sortOrder: number }>,
+    byId: ReadonlyMap<string, ClassificationCategoryRow>,
+    rootRowToCode: ReadonlyMap<string, RootCode>,
+  ): Pattern {
     const classificationsByRoot: Pattern['classificationsByRoot'] = {
       pattern_type: [],
       hokei_subtype: [],
