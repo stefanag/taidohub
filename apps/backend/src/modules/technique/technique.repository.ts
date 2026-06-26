@@ -175,6 +175,42 @@ export class TechniqueRepository {
   }
 
   /**
+   * Batched junction lookup for a page of techniques: ONE SELECT
+   * returning every junction row for the given technique ids, ordered
+   * so each technique's links land in `sortOrder` once the caller
+   * groups by `techniqueId`.
+   *
+   * Replaces the 1+N pattern in `TechniqueService.list` where each
+   * row triggered its own `listClassifications(rowId)`. With a page
+   * of 50 techniques averaging 3 classifications each, this drops
+   * the hydration round-trip count from 50 to 1.
+   *
+   * Returns an empty array immediately when there are no ids — never
+   * issues a `WHERE id IN ()` query, which Postgres would treat as
+   * a syntax error in older versions and Drizzle handles
+   * inconsistently across executor types.
+   */
+  async listClassificationsByTechniqueIds(
+    techniqueIds: string[],
+    tx?: DrizzleExecutor,
+  ): Promise<Array<{ techniqueId: string; classificationCategoryId: string; sortOrder: number }>> {
+    if (techniqueIds.length === 0) return [];
+    const executor = tx ?? this.db;
+    return executor
+      .select({
+        techniqueId: techniqueClassification.techniqueId,
+        classificationCategoryId: techniqueClassification.classificationCategoryId,
+        sortOrder: techniqueClassification.sortOrder,
+      })
+      .from(techniqueClassification)
+      .where(inArray(techniqueClassification.techniqueId, techniqueIds))
+      .orderBy(
+        asc(techniqueClassification.techniqueId),
+        asc(techniqueClassification.sortOrder),
+      );
+  }
+
+  /**
    * Multi-dimension filter: one `EXISTS (…)` clause per root in
    * `classificationIdsByRoot` (OR within a group, AND across groups).
    *
