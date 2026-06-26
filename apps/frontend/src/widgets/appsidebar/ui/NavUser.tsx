@@ -3,7 +3,7 @@ import { EllipsisVertical, Languages, LogOut, Settings } from 'lucide-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { signOut, useSession } from '@/features/auth-by-email';
+import { useSession, useSignOut } from '@/features/auth-by-email';
 import { LOCALE_OPTIONS, type LocaleCode, useChangeLocale } from '@/features/locale-switcher';
 import {
   Avatar,
@@ -45,6 +45,7 @@ export function NavUser(): React.ReactElement | null {
   const session = useSession();
   const user = session.data?.user;
   const navigate = useNavigate();
+  const signOut = useSignOut();
   const { current: currentLocale, change: changeLocale } = useChangeLocale();
 
   if (!user) return null;
