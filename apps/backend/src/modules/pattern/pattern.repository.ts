@@ -168,6 +168,40 @@ export class PatternRepository {
   }
 
   /**
+   * Batched junction lookup for a page of patterns: ONE SELECT
+   * returning every junction row for the given pattern ids, ordered
+   * so each pattern's links land in `sortOrder` once the caller
+   * groups by `patternId`.
+   *
+   * Mirrors `TechniqueRepository.listClassificationsByTechniqueIds`
+   * — see that method's docstring for the round-trip math and the
+   * 1+N regression this guards against on the patterns list path.
+   *
+   * Returns an empty array immediately when there are no ids — never
+   * issues a `WHERE id IN ()` query, which Postgres rejects pre-12
+   * and Drizzle handles inconsistently across executor types.
+   */
+  async listClassificationsByPatternIds(
+    patternIds: string[],
+    tx?: DrizzleExecutor,
+  ): Promise<Array<{ patternId: string; classificationCategoryId: string; sortOrder: number }>> {
+    if (patternIds.length === 0) return [];
+    const executor = tx ?? this.db;
+    return executor
+      .select({
+        patternId: patternClassification.patternId,
+        classificationCategoryId: patternClassification.classificationCategoryId,
+        sortOrder: patternClassification.sortOrder,
+      })
+      .from(patternClassification)
+      .where(inArray(patternClassification.patternId, patternIds))
+      .orderBy(
+        asc(patternClassification.patternId),
+        asc(patternClassification.sortOrder),
+      );
+  }
+
+  /**
    * Multi-dimension filter: one `EXISTS (…)` clause per root in
    * `classificationIdsByRoot` (OR within a group, AND across groups).
    *

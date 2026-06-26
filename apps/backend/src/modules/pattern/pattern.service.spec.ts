@@ -81,6 +81,7 @@ function build(
     replaceClassifications: vi.fn().mockResolvedValue(undefined),
     findById: vi.fn().mockResolvedValue(initial.rowOnFind ?? null),
     listClassifications: vi.fn().mockResolvedValue([]),
+    listClassificationsByPatternIds: vi.fn().mockResolvedValue([]),
     list: vi.fn().mockResolvedValue([]),
     delete: vi.fn().mockResolvedValue(undefined),
   };
@@ -311,5 +312,92 @@ describe('PatternService', () => {
     await expect(
       harness.service.findOne(makeUser({ role: 'sysadmin' }), 'missing'),
     ).rejects.toBeInstanceOf(NotFoundException);
+  });
+
+  // ── Batched-hydration contract (Chunk 1.6) ──────────────────────────
+  //
+  // Mirror of the technique service contract. The list path used to
+  // hydrate per-row inside a `Promise.all`, calling
+  // `repo.listClassifications(rowId)` N times. The new shape pulls
+  // every junction in a single `listClassificationsByPatternIds`
+  // call. These tests pin that contract so a regression that
+  // re-introduces the 1+N pattern fails the build.
+
+  it('list hydrates a multi-row response with a single batched junction call', async () => {
+    const harness = build();
+    const rows = [
+      row({ id: 'p-1' }),
+      row({ id: 'p-2' }),
+      row({ id: 'p-3' }),
+    ];
+    harness.repo.list.mockResolvedValue(rows);
+    harness.repo.listClassificationsByPatternIds.mockResolvedValue([
+      { patternId: 'p-1', classificationCategoryId: 'a', sortOrder: 0 },
+      { patternId: 'p-2', classificationCategoryId: 'b', sortOrder: 0 },
+      { patternId: 'p-3', classificationCategoryId: 'a', sortOrder: 0 },
+    ]);
+
+    await harness.service.list(makeUser({ role: 'sysadmin' }), {
+      classificationIds: [],
+      includeInactive: false,
+      organisationId: null,
+      strict: false,
+    });
+
+    expect(harness.repo.listClassificationsByPatternIds).toHaveBeenCalledTimes(1);
+    expect(harness.repo.listClassificationsByPatternIds).toHaveBeenCalledWith(
+      ['p-1', 'p-2', 'p-3'],
+    );
+    // Per-row method MUST NOT be called from the list path — that's the
+    // 1+N regression we're guarding against.
+    expect(harness.repo.listClassifications).not.toHaveBeenCalled();
+  });
+
+  it('list calls findManyByIds with the de-duplicated category set', async () => {
+    const harness = build();
+    harness.repo.list.mockResolvedValue([row({ id: 'p-1' }), row({ id: 'p-2' })]);
+    harness.repo.listClassificationsByPatternIds.mockResolvedValue([
+      { patternId: 'p-1', classificationCategoryId: 'a', sortOrder: 0 },
+      { patternId: 'p-1', classificationCategoryId: 'b', sortOrder: 1 },
+      { patternId: 'p-2', classificationCategoryId: 'a', sortOrder: 0 },
+    ]);
+
+    await harness.service.list(makeUser({ role: 'sysadmin' }), {
+      classificationIds: [],
+      includeInactive: false,
+      organisationId: null,
+      strict: false,
+    });
+
+    expect(harness.classificationRepo.findManyByIds).toHaveBeenCalledTimes(1);
+    const calledWith = harness.classificationRepo.findManyByIds.mock.calls[0]![0] as string[];
+    expect([...calledWith].sort()).toEqual(['a', 'b']);
+  });
+
+  it('list returns [] without firing any junction lookup when the page is empty', async () => {
+    const harness = build();
+    harness.repo.list.mockResolvedValue([]);
+
+    const out = await harness.service.list(makeUser({ role: 'sysadmin' }), {
+      classificationIds: [],
+      includeInactive: false,
+      organisationId: null,
+      strict: false,
+    });
+
+    expect(out).toEqual([]);
+    expect(harness.repo.listClassificationsByPatternIds).not.toHaveBeenCalled();
+    expect(harness.classificationRepo.findManyByIds).not.toHaveBeenCalled();
+  });
+
+  it('findOne still uses the per-row hydration path (single-row reads stay simple)', async () => {
+    const existing = row({ id: 'p-find' });
+    const harness = build({ rowOnFind: existing });
+
+    await harness.service.findOne(makeUser({ role: 'sysadmin' }), existing.id);
+
+    expect(harness.repo.listClassifications).toHaveBeenCalledTimes(1);
+    expect(harness.repo.listClassifications).toHaveBeenCalledWith(existing.id);
+    expect(harness.repo.listClassificationsByPatternIds).not.toHaveBeenCalled();
   });
 });
