@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import type { RootCode } from '@repo/contracts/classification-category';
-import { and, asc, eq, exists, inArray, sql, type SQL } from 'drizzle-orm';
+import { and, asc, eq, exists, inArray, notInArray, sql, type SQL } from 'drizzle-orm';
 
 import {
   DRIZZLE,
@@ -87,6 +87,12 @@ export class PatternRepository {
    * Replace the full classification set: delete-not-in + upsert-with-sortOrder.
    * Preserves the submitted order via the `sort_order` column on the junction.
    */
+  /**
+   * Replace the full classification set: delete-not-in + bulk upsert.
+   * See `TechniqueRepository.replaceClassifications` for the
+   * round-trip math and rationale — this is the same shape applied
+   * to the pattern junction table.
+   */
   async replaceClassifications(
     patternId: string,
     classificationIds: string[],
@@ -104,41 +110,32 @@ export class PatternRepository {
       }
     }
 
-    const existing = await executor
-      .select({ id: patternClassification.classificationCategoryId })
-      .from(patternClassification)
-      .where(eq(patternClassification.patternId, patternId));
-
-    const existingSet = new Set(existing.map((r) => r.id));
-    const keepSet = new Set(dedup);
-    const toRemove = [...existingSet].filter((x) => !keepSet.has(x));
-
-    if (toRemove.length > 0) {
-      await executor
-        .delete(patternClassification)
-        .where(
-          and(
+    // Step 1 — delete rows the new set no longer wants.
+    const deleteWhere =
+      dedup.length === 0
+        ? eq(patternClassification.patternId, patternId)
+        : and(
             eq(patternClassification.patternId, patternId),
-            inArray(patternClassification.classificationCategoryId, toRemove),
-          ),
-        );
-    }
+            notInArray(patternClassification.classificationCategoryId, dedup),
+          );
+    await executor.delete(patternClassification).where(deleteWhere);
 
-    for (const [i, catId] of dedup.entries()) {
+    // Step 2 — bulk upsert the keepers. No-op when nothing to insert.
+    if (dedup.length > 0) {
+      const values = dedup.map((catId, i) => ({
+        patternId,
+        classificationCategoryId: catId,
+        sortOrder: i,
+      }));
       await executor
         .insert(patternClassification)
-        .values({
-          patternId,
-          classificationCategoryId: catId,
-          sortOrder: i,
-          createdAt: new Date(),
-        })
+        .values(values)
         .onConflictDoUpdate({
           target: [
             patternClassification.patternId,
             patternClassification.classificationCategoryId,
           ],
-          set: { sortOrder: i },
+          set: { sortOrder: sql`excluded.sort_order` },
         });
     }
   }
