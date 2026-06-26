@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import type { RootCode } from '@repo/contracts/classification-category';
-import { and, asc, eq, exists, inArray, sql, type SQL } from 'drizzle-orm';
+import { and, asc, eq, exists, inArray, notInArray, sql, type SQL } from 'drizzle-orm';
 
 import {
   DRIZZLE,
@@ -84,8 +84,21 @@ export class TechniqueRepository {
   }
 
   /**
-   * Replace the full classification set: delete-not-in + upsert-with-sortOrder.
-   * Preserves the submitted order via the `sort_order` column on the junction.
+   * Replace the full classification set: delete-not-in + bulk upsert.
+   *
+   * Old shape was N+2 round-trips for an N-item replace (1 SELECT,
+   * 1 DELETE, then one INSERT...ON CONFLICT per item). New shape is
+   * 1–2 round-trips regardless of N:
+   *
+   *   1. One DELETE with `WHERE techniqueId = ? AND classification_id
+   *      NOT IN (?, ?, …)` — when the keep list is empty, the
+   *      not-in predicate is dropped so the DELETE strips every
+   *      existing row for the technique.
+   *   2. One INSERT with all rows + `ON CONFLICT DO UPDATE SET
+   *      sort_order = EXCLUDED.sort_order` — skipped when the keep
+   *      list is empty. `EXCLUDED.sort_order` (the inserting row's
+   *      value) is what makes the bulk upsert preserve submitted
+   *      ordering without a per-row UPDATE.
    */
   async replaceClassifications(
     techniqueId: string,
@@ -104,41 +117,32 @@ export class TechniqueRepository {
       }
     }
 
-    const existing = await executor
-      .select({ id: techniqueClassification.classificationCategoryId })
-      .from(techniqueClassification)
-      .where(eq(techniqueClassification.techniqueId, techniqueId));
-
-    const existingSet = new Set(existing.map((r) => r.id));
-    const keepSet = new Set(dedup);
-    const toRemove = [...existingSet].filter((x) => !keepSet.has(x));
-
-    if (toRemove.length > 0) {
-      await executor
-        .delete(techniqueClassification)
-        .where(
-          and(
+    // Step 1 — delete rows the new set no longer wants.
+    const deleteWhere =
+      dedup.length === 0
+        ? eq(techniqueClassification.techniqueId, techniqueId)
+        : and(
             eq(techniqueClassification.techniqueId, techniqueId),
-            inArray(techniqueClassification.classificationCategoryId, toRemove),
-          ),
-        );
-    }
+            notInArray(techniqueClassification.classificationCategoryId, dedup),
+          );
+    await executor.delete(techniqueClassification).where(deleteWhere);
 
-    for (const [i, catId] of dedup.entries()) {
+    // Step 2 — bulk upsert the keepers. No-op when nothing to insert.
+    if (dedup.length > 0) {
+      const values = dedup.map((catId, i) => ({
+        techniqueId,
+        classificationCategoryId: catId,
+        sortOrder: i,
+      }));
       await executor
         .insert(techniqueClassification)
-        .values({
-          techniqueId,
-          classificationCategoryId: catId,
-          sortOrder: i,
-          createdAt: new Date(),
-        })
+        .values(values)
         .onConflictDoUpdate({
           target: [
             techniqueClassification.techniqueId,
             techniqueClassification.classificationCategoryId,
           ],
-          set: { sortOrder: i },
+          set: { sortOrder: sql`excluded.sort_order` },
         });
     }
   }
