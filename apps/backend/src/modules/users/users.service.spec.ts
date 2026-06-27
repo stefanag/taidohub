@@ -6,6 +6,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ConfigService } from '@nestjs/config';
 
 import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
+import { AuthUserCache } from '../../infrastructure/auth/auth-user.cache.js';
 import { UserContextService } from '../../infrastructure/auth/user-context.service.js';
 import { DRIZZLE } from '../../infrastructure/database/client.js';
 import { BETTER_AUTH } from '../../infrastructure/auth/better-auth.js';
@@ -124,6 +125,7 @@ async function makeService(
       UsersService,
       AbilityFactory,
       UserContextService,
+      AuthUserCache,
       UsersAbilityRules,
       { provide: OrganisationsAbilityRules, useValue: { contributeTo: () => {} } },
       { provide: AuditLogAbilityRules, useValue: { contributeTo: () => {} } },

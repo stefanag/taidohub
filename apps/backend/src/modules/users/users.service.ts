@@ -15,6 +15,7 @@ import {
 } from '@repo/contracts/users';
 
 import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
+import { AuthUserCache } from '../../infrastructure/auth/auth-user.cache.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import { VerificationTokenService } from '../../infrastructure/auth/verification-token.service.js';
 import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
@@ -34,6 +35,7 @@ export class UsersService {
     private readonly config: ConfigService<Env, true>,
     private readonly tokens: VerificationTokenService,
     @Inject(EMAIL_SERVICE) private readonly email: EmailService,
+    private readonly authUserCache: AuthUserCache,
   ) {}
 
   async findOne(id: string, user: AuthenticatedUser | null): Promise<User> {
@@ -140,6 +142,9 @@ export class UsersService {
         before,
         after,
       });
+      // Role / email / name changes feed `req.user`; drop the cached
+      // tuple so the next request sees the new state immediately.
+      this.authUserCache.invalidate(id);
       return after;
     });
   }
@@ -196,6 +201,10 @@ export class UsersService {
         before: this.toApi(existing),
         after,
       });
+      // The guard reads `deactivatedAt` from this tuple — drop the
+      // cache so the now-deactivated user is rejected on the next
+      // request instead of after the TTL.
+      this.authUserCache.invalidate(id);
       return after;
     });
   }
@@ -235,6 +244,7 @@ export class UsersService {
         before: this.toApi(existing),
         after,
       });
+      this.authUserCache.invalidate(id);
       return after;
     });
   }
@@ -285,6 +295,7 @@ export class UsersService {
       });
       await this.repo.delete(id, tx);
     });
+    this.authUserCache.invalidate(id);
   }
 
   /**

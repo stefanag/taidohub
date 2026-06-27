@@ -9,6 +9,7 @@ import {
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
+import { AuthUserCache } from '../../infrastructure/auth/auth-user.cache.js';
 import { UserContextService } from '../../infrastructure/auth/user-context.service.js';
 import { DRIZZLE } from '../../infrastructure/database/client.js';
 import { AuditLogService } from '../audit-log/audit-log.service.js';
@@ -95,6 +96,7 @@ async function makeService(
       MembershipsService,
       AbilityFactory,
       UserContextService,
+      AuthUserCache,
       UsersAbilityRules,
       OrganisationsAbilityRules,
       AuditLogAbilityRules,

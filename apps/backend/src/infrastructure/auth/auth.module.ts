@@ -7,6 +7,7 @@ import { type Env } from '../../config/env.schema.js';
 import { DRIZZLE, type DrizzleDb } from '../database/client.js';
 import { EMAIL_SERVICE, type EmailService } from '../email/email.types.js';
 import { AuthGuard } from './auth.guard.js';
+import { AuthUserCache } from './auth-user.cache.js';
 import { BETTER_AUTH, buildBetterAuth } from './better-auth.js';
 import { UserContextService } from './user-context.service.js';
 import { VerificationTokenService } from './verification-token.service.js';
@@ -57,6 +58,7 @@ const betterAuthProvider: Provider = {
   providers: [
     betterAuthProvider,
     AuthGuard,
+    AuthUserCache,
     UserContextService,
     VerificationTokenService,
     { provide: APP_GUARD, useClass: AuthGuard },
@@ -64,6 +66,7 @@ const betterAuthProvider: Provider = {
   exports: [
     betterAuthProvider,
     AuthGuard,
+    AuthUserCache,
     UserContextService,
     VerificationTokenService,
   ],

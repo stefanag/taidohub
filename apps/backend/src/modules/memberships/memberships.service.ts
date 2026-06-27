@@ -16,6 +16,7 @@ import type {
 } from '@repo/contracts/memberships';
 
 import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
+import { AuthUserCache } from '../../infrastructure/auth/auth-user.cache.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
 import { type DbOrganisationMembership } from '../../infrastructure/database/schema/index.js';
@@ -32,6 +33,7 @@ export class MembershipsService {
     private readonly abilities: AbilityFactory,
     private readonly audit: AuditLogService,
     @Inject(DRIZZLE) private readonly db: DrizzleDb,
+    private readonly authUserCache: AuthUserCache,
   ) {}
 
   async list(
@@ -94,7 +96,7 @@ export class MembershipsService {
       });
     }
 
-    return this.db.transaction(async (tx) => {
+    const created = await this.db.transaction(async (tx) => {
       const row = await this.repo.create(input, tx);
       const after = this.toApi(row);
       await this.audit.record({
@@ -110,6 +112,9 @@ export class MembershipsService {
       });
       return after;
     });
+    // Membership change feeds the cached `req.user.memberships`.
+    this.authUserCache.invalidate(input.userId);
+    return created;
   }
 
   async update(
@@ -128,7 +133,7 @@ export class MembershipsService {
     }
     this.validateRoleAgainstOrgType(input.role, org.type as string);
 
-    return this.db.transaction(async (tx) => {
+    const updated = await this.db.transaction(async (tx) => {
       const row = await this.repo.update(id, input, tx);
       if (!row) throw new NotFoundException(this.notFound(id));
       const before = this.toApi(existing);
@@ -146,6 +151,8 @@ export class MembershipsService {
       });
       return after;
     });
+    this.authUserCache.invalidate(existing.userId);
+    return updated;
   }
 
   async delete(
@@ -198,6 +205,7 @@ export class MembershipsService {
         after: null,
       });
     });
+    this.authUserCache.invalidate(existing.userId);
   }
 
   private validateRoleAgainstOrgType(

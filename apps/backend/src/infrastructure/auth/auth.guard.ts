@@ -16,6 +16,7 @@ import type { MembershipRole } from '@repo/contracts/memberships';
 import { DRIZZLE, type DrizzleDb } from '../database/client.js';
 import { organisationMembership, user as userTable } from '../database/schema/index.js';
 
+import { AuthUserCache, type CachedAuthUser } from './auth-user.cache.js';
 import { type Auth, BETTER_AUTH } from './better-auth.js';
 import { IS_PUBLIC_KEY } from './public.decorator.js';
 import { type AuthenticatedUser } from './auth.types.js';
@@ -28,8 +29,12 @@ import { UserContextService } from './user-context.service.js';
  * - Routes mounted under `/api/auth/*` are handled by better-auth's own
  *   express handler before Nest ever sees them, so they don't reach this
  *   guard.
- * - The hydrated `req.user.memberships` loads on every request. Profile if
- *   it becomes a bottleneck; v1 keeps it simple.
+ * - The user-row + memberships tuple is cached in {@link AuthUserCache}
+ *   with a short TTL (Chunk 3.2). On a cache hit the guard performs no
+ *   DB work beyond better-auth's session validation; on a miss it
+ *   parallelises the two reads. Mutation paths that change role,
+ *   deactivation, or membership call `cache.invalidate(userId)` so the
+ *   next request sees fresh state.
  * - Deactivated users (where `user.deactivated_at IS NOT NULL`) are
  *   rejected with 403 even when their session is still valid — fresh
  *   sign-in is blocked too because better-auth's own check sees the row.
@@ -41,6 +46,7 @@ export class AuthGuard implements CanActivate {
     @Inject(BETTER_AUTH) private readonly auth: Auth,
     @Inject(DRIZZLE) private readonly db: DrizzleDb,
     private readonly userContext: UserContextService,
+    private readonly userCache: AuthUserCache,
   ) {}
 
   async canActivate(ctx: ExecutionContext): Promise<boolean> {
@@ -74,36 +80,58 @@ export class AuthGuard implements CanActivate {
 
     // Reload the row so we see deactivated_at and the authoritative role,
     // not whatever was cached in the session cookie at sign-in time.
-    const rows = await this.db
-      .select({
-        role: userTable.role,
-        deactivatedAt: userTable.deactivatedAt,
-      })
-      .from(userTable)
-      .where(eq(userTable.id, sessionUser.id))
-      .limit(1);
-    const row = rows[0];
-    if (!row) {
-      throw new UnauthorizedException({
-        error: { code: 'UNAUTHORIZED', message: 'User no longer exists.' },
+    // Cache the tuple so repeat requests within the TTL window skip both
+    // reads. On a cache miss the two SELECTs are parallelised — they're
+    // independent so there's no reason to wait for the user row before
+    // firing the memberships query.
+    let cached: CachedAuthUser;
+    try {
+      cached = await this.userCache.getOrLoad(sessionUser.id, async () => {
+        const [rows, memberships] = await Promise.all([
+          this.db
+            .select({
+              role: userTable.role,
+              deactivatedAt: userTable.deactivatedAt,
+            })
+            .from(userTable)
+            .where(eq(userTable.id, sessionUser.id))
+            .limit(1),
+          this.db
+            .select({
+              organisationId: organisationMembership.organisationId,
+              role: organisationMembership.role,
+            })
+            .from(organisationMembership)
+            .where(eq(organisationMembership.userId, sessionUser.id)),
+        ]);
+        const row = rows[0];
+        if (!row) {
+          // Bubble up via a sentinel — getOrLoad doesn't distinguish
+          // miss from "user gone." Throwing here keeps the cache empty
+          // for this id (the loader rejection skips the .set call).
+          throw new UnauthorizedException({
+            error: { code: 'UNAUTHORIZED', message: 'User no longer exists.' },
+          });
+        }
+        return {
+          role: row.role as Role,
+          deactivatedAt: row.deactivatedAt ?? null,
+          memberships: memberships.map((m) => ({
+            organisationId: m.organisationId,
+            role: m.role as MembershipRole,
+          })),
+        };
       });
+    } catch (err) {
+      if (err instanceof UnauthorizedException) throw err;
+      throw err;
     }
 
-    const deactivatedAt: Date | null = row.deactivatedAt ?? null;
-
-    if (deactivatedAt !== null) {
+    if (cached.deactivatedAt !== null) {
       throw new ForbiddenException({
         error: { code: 'DEACTIVATED', message: 'Account is deactivated.' },
       });
     }
-
-    const memberships = await this.db
-      .select({
-        organisationId: organisationMembership.organisationId,
-        role: organisationMembership.role,
-      })
-      .from(organisationMembership)
-      .where(eq(organisationMembership.userId, sessionUser.id));
 
     const rawImpersonatedBy = (session.session as { impersonatedBy?: string | null })
       .impersonatedBy;
@@ -118,13 +146,10 @@ export class AuthGuard implements CanActivate {
       emailVerified: sessionUser.emailVerified ?? false,
       name: sessionUser.name ?? null,
       image: sessionUser.image ?? null,
-      role: row.role as Role,
+      role: cached.role,
       locale: sessionUser.locale ?? 'en',
       deactivatedAt: null,
-      memberships: memberships.map((m) => ({
-        organisationId: m.organisationId,
-        role: m.role as MembershipRole,
-      })),
+      memberships: cached.memberships,
       ...(impersonatedBy !== undefined ? { impersonatedBy } : {}),
     };
 
