@@ -1,8 +1,13 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import * as authApi from '@/features/auth-by-email';
+// `useSignOut` calls `signOut` via a direct import from the api source
+// module, not via the barrel. Spying on the barrel re-export doesn't
+// intercept that — point the spy at the source module instead.
+import * as authApiSource from '@/features/auth-by-email/api/auth.api.js';
 import i18n from '@/i18n';
 import { AbilityContext, defineAbilityFor } from '@/shared/lib/casl';
 import { SidebarProvider } from '@/shared/ui';
@@ -56,24 +61,29 @@ vi.mock('@tanstack/react-router', async (orig) => {
 
 import { AppSidebar } from './AppSidebar.js';
 
-function renderInProvider(): ReturnType<typeof render> {
+// `useSignOut` (called from `NavUser`) reads the React Query cache via
+// `useQueryClient`, so the sidebar now requires a `QueryClientProvider`
+// in its test harness even though no direct query work happens here.
+function withProviders(node: React.ReactNode): ReturnType<typeof render> {
   return render(
-    <SidebarProvider>
-      <AppSidebar />
-    </SidebarProvider>,
+    <QueryClientProvider client={new QueryClient()}>
+      <SidebarProvider>{node}</SidebarProvider>
+    </QueryClientProvider>,
   );
+}
+
+function renderInProvider(): ReturnType<typeof render> {
+  return withProviders(<AppSidebar />);
 }
 
 function renderInProviderWithAbility(
   role: 'sysadmin' | 'user',
 ): ReturnType<typeof render> {
   const ability = defineAbilityFor({ id: 'u1', role });
-  return render(
-    <SidebarProvider>
-      <AbilityContext.Provider value={ability}>
-        <AppSidebar />
-      </AbilityContext.Provider>
-    </SidebarProvider>,
+  return withProviders(
+    <AbilityContext.Provider value={ability}>
+      <AppSidebar />
+    </AbilityContext.Provider>,
   );
 }
 
@@ -118,7 +128,7 @@ describe('<AppSidebar>', () => {
   });
 
   it('signs the user out and navigates to / when sign-out is clicked from the user menu', async () => {
-    const signOutSpy = vi.spyOn(authApi, 'signOut').mockResolvedValue();
+    const signOutSpy = vi.spyOn(authApiSource, 'signOut').mockResolvedValue();
     vi.spyOn(authApi, 'useSession').mockReturnValue({
       data: { user: { id: 'u1', email: 'ada@example.com' }, session: { id: 's1' } },
       isPending: false,

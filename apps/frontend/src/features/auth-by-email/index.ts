@@ -10,5 +10,6 @@ export {
   type Session,
 } from './api/auth.api.js';
 export { sessionKeys, sessionQueryOptions } from './model/auth.queries.js';
+export { useSignOut } from './model/useSignOut.js';
 export { LoginForm, type LoginFormProps } from './ui/LoginForm.js';
 export { SignupForm, type SignupFormProps } from './ui/SignupForm.js';
