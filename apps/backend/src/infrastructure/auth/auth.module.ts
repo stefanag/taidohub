@@ -8,6 +8,7 @@ import { DRIZZLE, type DrizzleDb } from '../database/client.js';
 import { EMAIL_SERVICE, type EmailService } from '../email/email.types.js';
 import { AuthGuard } from './auth.guard.js';
 import { BETTER_AUTH, buildBetterAuth } from './better-auth.js';
+import { UserContextService } from './user-context.service.js';
 import { VerificationTokenService } from './verification-token.service.js';
 
 const betterAuthProvider: Provider = {
@@ -56,9 +57,15 @@ const betterAuthProvider: Provider = {
   providers: [
     betterAuthProvider,
     AuthGuard,
+    UserContextService,
     VerificationTokenService,
     { provide: APP_GUARD, useClass: AuthGuard },
   ],
-  exports: [betterAuthProvider, AuthGuard, VerificationTokenService],
+  exports: [
+    betterAuthProvider,
+    AuthGuard,
+    UserContextService,
+    VerificationTokenService,
+  ],
 })
 export class InfraAuthModule {}

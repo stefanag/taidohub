@@ -19,6 +19,7 @@ import { organisationMembership, user as userTable } from '../database/schema/in
 import { type Auth, BETTER_AUTH } from './better-auth.js';
 import { IS_PUBLIC_KEY } from './public.decorator.js';
 import { type AuthenticatedUser } from './auth.types.js';
+import { UserContextService } from './user-context.service.js';
 
 /**
  * Global guard that turns the better-auth session cookie into `req.user`.
@@ -39,6 +40,7 @@ export class AuthGuard implements CanActivate {
     private readonly reflector: Reflector,
     @Inject(BETTER_AUTH) private readonly auth: Auth,
     @Inject(DRIZZLE) private readonly db: DrizzleDb,
+    private readonly userContext: UserContextService,
   ) {}
 
   async canActivate(ctx: ExecutionContext): Promise<boolean> {
@@ -125,6 +127,12 @@ export class AuthGuard implements CanActivate {
       })),
       ...(impersonatedBy !== undefined ? { impersonatedBy } : {}),
     };
+
+    // Bind the user (and a placeholder ability slot) to the rest of
+    // this request's async chain so downstream services can call
+    // `AbilityFactory.forCurrentRequest()` without rebuilding the
+    // 14-rule tree on every check.
+    this.userContext.enter(req.user);
 
     return true;
   }

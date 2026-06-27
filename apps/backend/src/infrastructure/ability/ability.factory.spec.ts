@@ -6,6 +6,7 @@ import { MembershipsAbilityRules } from '../../modules/memberships/memberships.a
 import { OrganisationsAbilityRules } from '../../modules/organisations/organisations.abilities.js';
 import { UsersAbilityRules } from '../../modules/users/users.abilities.js';
 import { type AuthenticatedUser } from '../auth/auth.types.js';
+import { UserContextService } from '../auth/user-context.service.js';
 
 import { AbilityFactory } from './ability.factory.js';
 
@@ -26,6 +27,7 @@ async function makeFactory(): Promise<AbilityFactory> {
   const module = await Test.createTestingModule({
     providers: [
       AbilityFactory,
+      UserContextService,
       UsersAbilityRules,
       OrganisationsAbilityRules,
       AuditLogAbilityRules,

@@ -3,6 +3,8 @@ import { ConflictException, ForbiddenException, NotFoundException, BadRequestExc
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
+import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
+import { UserContextService } from '../../infrastructure/auth/user-context.service.js';
 import { DRIZZLE } from '../../infrastructure/database/client.js';
 import { AuditLogAbilityRules } from '../audit-log/audit-log.abilities.js';
 import { AuditLogService } from '../audit-log/audit-log.service.js';
@@ -80,11 +82,13 @@ async function makeService(
   repo: ReturnType<typeof repoStub>,
   audit: ReturnType<typeof auditStub> = auditStub(),
   labels: ReturnType<typeof labelsStub> = labelsStub(),
+  currentUser: AuthenticatedUser = admin,
 ) {
   const module = await Test.createTestingModule({
     providers: [
       OrganisationsService,
       AbilityFactory,
+      UserContextService,
       OrganisationsAbilityRules,
       { provide: UsersAbilityRules, useValue: { contributeTo: () => {} } },
       { provide: AuditLogAbilityRules, useValue: { contributeTo: () => {} } },
@@ -94,7 +98,14 @@ async function makeService(
       { provide: LabelsService, useValue: labels },
     ],
   }).compile();
-  return { service: module.get(OrganisationsService), audit, labels };
+  // `setForTesting` is the spec-only fallback that bypasses
+  // AsyncLocalStorage — see `UserContextService` for the rationale.
+  // Each `makeService` call returns a fresh DI module with its own
+  // UserContextService instance, so the test fallback is scoped to
+  // this service tree.
+  const userContext = module.get(UserContextService);
+  userContext.setForTesting(currentUser);
+  return { service: module.get(OrganisationsService), audit, labels, userContext };
 }
 
 describe('OrganisationsService — hierarchy', () => {
@@ -230,7 +241,7 @@ describe('OrganisationsService — delete', () => {
 describe('OrganisationsService — authorization', () => {
   it('non-admin cannot create', async () => {
     const repo = repoStub();
-    const { service } = await makeService(repo);
+    const { service } = await makeService(repo, undefined, undefined, civilian);
     await expect(
       service.create({ ...IF_ROW, parentId: null, type: 'international_federation' } as any, civilian),
     ).rejects.toThrow(ForbiddenException);
@@ -248,7 +259,7 @@ describe('OrganisationsService — org-scoped authorization', () => {
     const repo = repoStub();
     repo.findById.mockResolvedValue(CLUB_ROW);
     repo.update.mockResolvedValue({ ...CLUB_ROW, nameEn: 'X' });
-    const { service } = await makeService(repo);
+    const { service } = await makeService(repo, undefined, undefined, orgadminOfClub1);
     const out = await service.update('club-1', { nameEn: 'X' }, orgadminOfClub1);
     expect(out.nameEn).toBe('X');
   });
@@ -256,7 +267,7 @@ describe('OrganisationsService — org-scoped authorization', () => {
   it('orgadmin cannot update a different organisation', async () => {
     const repo = repoStub();
     repo.findById.mockResolvedValue(NF_ROW);
-    const { service } = await makeService(repo);
+    const { service } = await makeService(repo, undefined, undefined, orgadminOfClub1);
     await expect(service.update('nf-1', { nameEn: 'X' }, orgadminOfClub1)).rejects.toThrow(
       ForbiddenException,
     );
@@ -265,13 +276,13 @@ describe('OrganisationsService — org-scoped authorization', () => {
   it('orgadmin cannot delete a different organisation', async () => {
     const repo = repoStub();
     repo.findById.mockResolvedValue(NF_ROW);
-    const { service } = await makeService(repo);
+    const { service } = await makeService(repo, undefined, undefined, orgadminOfClub1);
     await expect(service.delete('nf-1', orgadminOfClub1)).rejects.toThrow(ForbiddenException);
   });
 
   it('orgadmin cannot create an organisation', async () => {
     const repo = repoStub();
-    const { service } = await makeService(repo);
+    const { service } = await makeService(repo, undefined, undefined, orgadminOfClub1);
     await expect(
       service.create({ ...CLUB_ROW, parentId: 'nf-1', type: 'club' } as any, orgadminOfClub1),
     ).rejects.toThrow(ForbiddenException);
@@ -280,7 +291,7 @@ describe('OrganisationsService — org-scoped authorization', () => {
   it('orgadmin can read their bound organisation', async () => {
     const repo = repoStub();
     repo.findById.mockResolvedValue(CLUB_ROW);
-    const { service } = await makeService(repo);
+    const { service } = await makeService(repo, undefined, undefined, orgadminOfClub1);
     const out = await service.findOne('club-1', orgadminOfClub1);
     expect(out.id).toBe('club-1');
   });
@@ -288,14 +299,14 @@ describe('OrganisationsService — org-scoped authorization', () => {
   it('orgadmin cannot read a different organisation', async () => {
     const repo = repoStub();
     repo.findById.mockResolvedValue(NF_ROW);
-    const { service } = await makeService(repo);
+    const { service } = await makeService(repo, undefined, undefined, orgadminOfClub1);
     await expect(service.findOne('nf-1', orgadminOfClub1)).rejects.toThrow(ForbiddenException);
   });
 
   it('list filters to organisations the orgadmin can read', async () => {
     const repo = repoStub();
     repo.list.mockResolvedValue({ data: [CLUB_ROW, NF_ROW], total: 2 });
-    const { service } = await makeService(repo);
+    const { service } = await makeService(repo, undefined, undefined, orgadminOfClub1);
     const out = await service.list({} as any, orgadminOfClub1);
     expect(out.data.map((o) => o.id)).toEqual(['club-1']);
     expect(out.total).toBe(1);

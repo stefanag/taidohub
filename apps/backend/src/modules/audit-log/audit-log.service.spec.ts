@@ -3,6 +3,7 @@ import { ForbiddenException } from '@nestjs/common';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
+import { UserContextService } from '../../infrastructure/auth/user-context.service.js';
 import { UsersAbilityRules } from '../users/users.abilities.js';
 import { OrganisationsAbilityRules } from '../organisations/organisations.abilities.js';
 import { AuditLogAbilityRules } from './audit-log.abilities.js';
@@ -28,6 +29,7 @@ async function makeService(repo: ReturnType<typeof repoStub>) {
     providers: [
       AuditLogService,
       AbilityFactory,
+      UserContextService,
       AuditLogAbilityRules,
       { provide: UsersAbilityRules, useValue: { contributeTo: () => {} } },
       { provide: OrganisationsAbilityRules, useValue: { contributeTo: () => {} } },

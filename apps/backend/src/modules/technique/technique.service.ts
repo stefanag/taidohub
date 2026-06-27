@@ -262,9 +262,17 @@ export class TechniqueService {
   /**
    * Row-level write check. Uses the CASL ability built from the actor so
    * orgadmin's conditional `manage` rule scopes them to their own org.
+   *
+   * `forCurrentRequest()` reads the cached ability for this HTTP
+   * request — first call in the request builds it, subsequent calls
+   * (including across the update and delete endpoints when a client
+   * batches mutations on the same row) return the cached instance.
+   * The `actor` parameter is kept on the signature so the call sites
+   * stay self-documenting about whose check this is.
    */
   private assertCanManage(actor: AuthenticatedUser, row: TechniqueRow): void {
-    const ability = this.abilities.createForUser(actor);
+    void actor;
+    const ability = this.abilities.forCurrentRequest();
     const subject = {
       __caslSubjectType__: 'Technique' as const,
       createdByOrganisationId: row.createdByOrganisationId,
