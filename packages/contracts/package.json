@@ -59,6 +59,16 @@
         "default": "./dist/errors.cjs"
       }
     },
+    "./paginated": {
+      "import": {
+        "types": "./dist/paginated.d.ts",
+        "default": "./dist/paginated.js"
+      },
+      "require": {
+        "types": "./dist/paginated.d.cts",
+        "default": "./dist/paginated.cjs"
+      }
+    },
     "./routes": {
       "import": {
         "types": "./dist/routes.d.ts",

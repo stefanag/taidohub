@@ -176,8 +176,11 @@ export class FeedbackController {
   @Get('inbox')
   async inbox(
     @CurrentUser() user: AuthenticatedUser,
-  ): Promise<{ data: FeedbackInboxItem[] }> {
+  ): Promise<{ data: FeedbackInboxItem[]; nextCursor: string | null }> {
     const data = await this.service.getInbox(user);
-    return { data };
+    // `nextCursor` is the contract's `Paginated<T>` envelope — `null`
+    // until this endpoint grows past its current 50-row internal cap.
+    // Clients pass it back to the next request when present.
+    return { data, nextCursor: null };
   }
 }

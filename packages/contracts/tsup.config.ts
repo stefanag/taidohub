@@ -7,6 +7,7 @@ export default defineConfig({
     auth: 'src/auth.ts',
     casl: 'src/casl.ts',
     errors: 'src/errors.ts',
+    paginated: 'src/paginated.ts',
     routes: 'src/routes.ts',
     openapi: 'src/openapi.ts',
     organisations: 'src/organisations.ts',

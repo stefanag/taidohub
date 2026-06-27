@@ -10,6 +10,7 @@
 export * from './zod-openapi.js';
 
 export * from './errors.js';
+export * from './paginated.js';
 export * from './casl.js';
 export * from './routes.js';
 export * from './users.js';

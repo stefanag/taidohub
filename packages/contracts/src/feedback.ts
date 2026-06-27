@@ -1,3 +1,4 @@
+import { paginated } from './paginated.js';
 import { z } from './zod-openapi.js';
 
 const FEEDBACK_UUID_EXAMPLE = '8d3f2a1c-9b4e-4d6f-a7c8-1e9f3a4b5c6d';
@@ -188,12 +189,13 @@ export const FeedbackInboxItemSchema = z
 
 export type FeedbackInboxItem = z.infer<typeof FeedbackInboxItemSchema>;
 
-export const FeedbackInboxResponseSchema = z
-  .object({ data: FeedbackInboxItemSchema.array() })
-  .meta({
-    id: 'FeedbackInboxResponse',
-    description: 'GET /api/feedback/inbox — unread threads for the actor, ordered by `lastActivityAt` DESC.',
-  });
+export const FeedbackInboxResponseSchema = paginated(FeedbackInboxItemSchema, {
+  id: 'FeedbackInboxResponse',
+  description:
+    'GET /api/feedback/inbox — unread threads for the actor, ordered by `lastActivityAt` DESC. ' +
+    'Pagination via the standard `{ data, nextCursor }` envelope; nextCursor is always `null` until the ' +
+    'endpoint grows past its current 50-row internal cap.',
+});
 
 // ─── Input bodies ───────────────────────────────────────────────────────────
 
