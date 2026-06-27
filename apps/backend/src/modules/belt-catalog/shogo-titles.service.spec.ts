@@ -33,6 +33,7 @@ const ROW = {
 function repoStub() {
   return {
     findByCode: vi.fn(),
+    findByKey: vi.fn(),
     findAll: vi.fn(),
     insert: vi.fn(),
     update: vi.fn(),

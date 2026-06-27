@@ -28,6 +28,11 @@ export class BeltSystemsRepository {
     return rows[0] ?? null;
   }
 
+  /** Alias for {@link findById} — satisfies the `LookupTableRepository` contract. */
+  findByKey(key: string, tx?: DrizzleExecutor): Promise<DbBeltSystem | null> {
+    return this.findById(key, tx);
+  }
+
   async findAll(tx?: DrizzleExecutor): Promise<DbBeltSystem[]> {
     const conn = tx ?? this.db;
     return conn.select().from(beltSystems).orderBy(beltSystems.sortOrder, beltSystems.nameEn);
