@@ -300,9 +300,13 @@ export class PatternService {
   /**
    * Row-level write check. Uses the CASL ability built from the actor so
    * orgadmin's conditional `manage` rule scopes them to their own org.
+   *
+   * See `TechniqueService.assertCanManage` for the rationale behind
+   * `forCurrentRequest()` — same shape, applied to patterns.
    */
   private assertCanManage(actor: AuthenticatedUser, row: PatternRow): void {
-    const ability = this.abilities.createForUser(actor);
+    void actor;
+    const ability = this.abilities.forCurrentRequest();
     const subject = {
       __caslSubjectType__: 'Pattern' as const,
       createdByOrganisationId: row.createdByOrganisationId,

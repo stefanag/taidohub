@@ -242,7 +242,15 @@ export class OrganisationsService {
     action: 'create' | 'read' | 'update' | 'delete',
     organisationId?: string,
   ): void {
-    const ability = this.abilities.createForUser(user);
+    // When `user` is non-null we can use the request-cached ability —
+    // common case for every authenticated organisations endpoint.
+    // When `user` is null we're in an anonymous-read code path; fall
+    // back to the uncached factory call so the ability reflects the
+    // anonymous rule set (which the cache wouldn't hold).
+    const ability =
+      user === null
+        ? this.abilities.createForUser(null)
+        : this.abilities.forCurrentRequest();
     const subject = organisationId
       ? ({ __caslSubjectType__: 'Organisation', id: organisationId } as const)
       : ({ __caslSubjectType__: 'Organisation' } as const);

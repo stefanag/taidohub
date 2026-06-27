@@ -64,7 +64,10 @@ interface Harness {
   classifications: { resolveRootCodes: ReturnType<typeof vi.fn>; getRootMap: ReturnType<typeof vi.fn> };
   classificationRepo: { findManyByIds: ReturnType<typeof vi.fn> };
   audit: { record: ReturnType<typeof vi.fn> };
-  abilities: { createForUser: ReturnType<typeof vi.fn> };
+  abilities: {
+    createForUser: ReturnType<typeof vi.fn>;
+    forCurrentRequest: ReturnType<typeof vi.fn>;
+  };
   db: { transaction: ReturnType<typeof vi.fn> };
 }
 
@@ -101,10 +104,13 @@ function build(
 
   const audit = { record: vi.fn().mockResolvedValue(undefined) };
 
+  // Mirror of the technique harness — see comment there.
+  const fakeAbility = {
+    can: vi.fn().mockReturnValue(initial.canManage ?? true),
+  };
   const abilities = {
-    createForUser: vi.fn().mockReturnValue({
-      can: vi.fn().mockReturnValue(initial.canManage ?? true),
-    }),
+    createForUser: vi.fn().mockReturnValue(fakeAbility),
+    forCurrentRequest: vi.fn().mockReturnValue(fakeAbility),
   };
 
   const db = {

@@ -7,6 +7,7 @@ import type { DrizzleDb } from '../database/client.js';
 import { AuthGuard } from './auth.guard.js';
 import { type AuthenticatedUser } from './auth.types.js';
 import { type Auth } from './better-auth.js';
+import { UserContextService } from './user-context.service.js';
 
 type Req = { headers: Record<string, string>; user?: AuthenticatedUser };
 
@@ -84,7 +85,12 @@ describe('AuthGuard', () => {
       [],
     ]);
 
-    const guard = new AuthGuard(reflector as unknown as Reflector, auth, db);
+    const guard = new AuthGuard(
+      reflector as unknown as Reflector,
+      auth,
+      db,
+      new UserContextService(),
+    );
     const req: Req = { headers: {} };
 
     await expect(guard.canActivate(fakeCtx(req))).resolves.toBe(true);
@@ -113,7 +119,12 @@ describe('AuthGuard', () => {
       [],
     ]);
 
-    const guard = new AuthGuard(reflector as unknown as Reflector, auth, db);
+    const guard = new AuthGuard(
+      reflector as unknown as Reflector,
+      auth,
+      db,
+      new UserContextService(),
+    );
     const req: Req = { headers: {} };
 
     await expect(guard.canActivate(fakeCtx(req))).resolves.toBe(true);
