@@ -1,80 +1,57 @@
 import { useNavigate, useSearch } from '@tanstack/react-router';
-import { Plus } from 'lucide-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { Pattern } from '@repo/contracts/patterns';
 
-import { useClassificationCategoriesByRootQuery } from '@/entities/classification-category';
+import { useClassificationCodeFilter } from '@/entities/classification-category';
 import {
   useDeletePatternMutation,
   usePatternsQuery,
 } from '@/entities/pattern';
 import { PatternListItem } from '@/features/pattern-list-item';
-import { Button, ClassificationMultiSelect } from '@/shared/ui';
+import { ClassificationMultiSelect, ResourceAdminListPage } from '@/shared/ui';
 
 /**
- * Admin pattern catalogue list page (sysadmin-only — the layout route
- * carries the guard once). Filter state lives in the URL as
+ * Admin pattern catalogue list page (sysadmin-only — the layout
+ * route carries the guard once). Filter state lives in the URL as
  * comma-separated **classification codes** under `?type=…&subtype=…`;
  * resolution to UUIDs happens at render time via the classification
  * queries. Codes are the user-stable handle, so the URL stays
  * human-readable and survives classification ID changes.
  *
- * Row click → view page. Delete is inline (`window.confirm` + mutation).
- * "New pattern" navigates to the create page.
+ * Row click → view page. Delete is inline (`window.confirm` +
+ * mutation). "New pattern" navigates to the create page.
+ *
+ * The header, filter section, and list wrapper come from
+ * `<ResourceAdminListPage>` (Chunk 2.3); the code↔id bridge comes
+ * from `useClassificationCodeFilter()`. The only pattern-specific
+ * piece is the conditional `hokei_subtype` filter — it only renders
+ * when `pattern_type` includes `hokei` so subtypes can't be selected
+ * for non-hokei patterns.
  */
+type Search = { type?: string; subtype?: string };
+
 export function AdminPatternsListPage(): React.ReactElement {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const search = useSearch({ from: '/_app/admin/patterns/' }) as {
-    type?: string;
-    subtype?: string;
-  };
+  const search = useSearch({ from: '/_app/admin/patterns/' }) as Search;
 
-  const typeOpts = useClassificationCategoriesByRootQuery('pattern_type');
-  const subtypeOpts = useClassificationCategoriesByRootQuery('hokei_subtype');
-
-  // Build code ↔ id bridges so the URL stays in codes but the API call uses UUIDs.
-  const typeIdByCode = React.useMemo(
-    () => new Map((typeOpts.data ?? []).map((c) => [c.code, c.id] as const)),
-    [typeOpts.data],
-  );
-  const typeCodeById = React.useMemo(
-    () => new Map((typeOpts.data ?? []).map((c) => [c.id, c.code] as const)),
-    [typeOpts.data],
-  );
-  const subtypeIdByCode = React.useMemo(
-    () => new Map((subtypeOpts.data ?? []).map((c) => [c.code, c.id] as const)),
-    [subtypeOpts.data],
-  );
-  const subtypeCodeById = React.useMemo(
-    () => new Map((subtypeOpts.data ?? []).map((c) => [c.id, c.code] as const)),
-    [subtypeOpts.data],
-  );
+  const type = useClassificationCodeFilter('pattern_type');
+  const subtype = useClassificationCodeFilter('hokei_subtype');
 
   const typeIds = React.useMemo(
-    () =>
-      (search.type ?? '')
-        .split(',')
-        .filter(Boolean)
-        .map((code) => typeIdByCode.get(code))
-        .filter((id): id is string => Boolean(id)),
-    [search.type, typeIdByCode],
+    () => type.codesToIds(search.type),
+    [type, search.type],
   );
   const subtypeIds = React.useMemo(
-    () =>
-      (search.subtype ?? '')
-        .split(',')
-        .filter(Boolean)
-        .map((code) => subtypeIdByCode.get(code))
-        .filter((id): id is string => Boolean(id)),
-    [search.subtype, subtypeIdByCode],
+    () => subtype.codesToIds(search.subtype),
+    [subtype, search.subtype],
   );
 
   const hokeiTypeId = React.useMemo(
-    () => (typeOpts.data ?? []).find((o) => o.code === 'hokei')?.id,
-    [typeOpts.data],
+    () => type.options.find((o) => o.code === 'hokei')?.id,
+    [type.options],
   );
   const showSubtype = Boolean(hokeiTypeId) && typeIds.includes(hokeiTypeId!);
 
@@ -85,16 +62,8 @@ export function AdminPatternsListPage(): React.ReactElement {
   const { data: patterns = [] } = usePatternsQuery(filterIds);
   const deleteMut = useDeletePatternMutation();
 
-  const idsToSearchString = (
-    ids: string[],
-    codeMap: Map<string, string>,
-  ): string | undefined => {
-    const codes = ids.map((id) => codeMap.get(id)).filter((c): c is string => Boolean(c));
-    return codes.length > 0 ? codes.join(',') : undefined;
-  };
-
   const setTypeFilter = (ids: string[]): void => {
-    const next = idsToSearchString(ids, typeCodeById);
+    const next = type.idsToCsv(ids);
     void navigate({
       to: '/admin/patterns',
       // `exactOptionalPropertyTypes` rejects `{ key: undefined }`, so omit
@@ -112,7 +81,7 @@ export function AdminPatternsListPage(): React.ReactElement {
     });
   };
   const setSubtypeFilter = (ids: string[]): void => {
-    const next = idsToSearchString(ids, subtypeCodeById);
+    const next = subtype.idsToCsv(ids);
     void navigate({
       to: '/admin/patterns',
       search: (prev) => {
@@ -125,9 +94,6 @@ export function AdminPatternsListPage(): React.ReactElement {
     });
   };
 
-  const onNew = (): void => {
-    void navigate({ to: '/admin/patterns/new' });
-  };
   const onRowClick = (row: Pattern): void => {
     void navigate({
       to: '/admin/patterns/$patternId',
@@ -141,57 +107,45 @@ export function AdminPatternsListPage(): React.ReactElement {
   };
 
   return (
-    <main className="container py-8">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">
-            {t('admin.patterns.title')}
-          </h1>
-          <p className="mt-2 max-w-2xl text-on-surface-variant">
-            {t('admin.patterns.description')}
-          </p>
-        </div>
-        <Button onClick={onNew} className="gap-2">
-          <Plus className="size-4" aria-hidden />
-          {t('admin.patterns.newPattern')}
-        </Button>
-      </div>
-
-      <section
-        aria-label={t('patterns.filters.patternType')}
-        className="mt-6 space-y-3"
-      >
-        <ClassificationMultiSelect
-          options={typeOpts.data ?? []}
-          isPending={typeOpts.isPending}
-          selectedIds={typeIds}
-          onChange={setTypeFilter}
-          label={t('patterns.filters.patternType')}
-        />
-        {showSubtype ? (
+    <ResourceAdminListPage
+      title={t('admin.patterns.title')}
+      description={t('admin.patterns.description')}
+      newAction={{
+        label: t('admin.patterns.newPattern'),
+        onClick: () => void navigate({ to: '/admin/patterns/new' }),
+      }}
+      filters={
+        <>
           <ClassificationMultiSelect
-            options={subtypeOpts.data ?? []}
-            isPending={subtypeOpts.isPending}
-            selectedIds={subtypeIds}
-            onChange={setSubtypeFilter}
-            label={t('patterns.filters.hokeiSubtype')}
+            options={type.options}
+            isPending={type.isPending}
+            selectedIds={typeIds}
+            onChange={setTypeFilter}
+            label={t('patterns.filters.patternType')}
           />
-        ) : null}
-      </section>
-
-      <section className="mt-8">
-        <ul className="space-y-2">
-          {patterns.map((row) => (
-            <PatternListItem
-              key={row.id}
-              pattern={row}
-              onClick={onRowClick}
-              onDelete={onDelete}
-              isDeleting={deleteMut.isPending}
+          {showSubtype ? (
+            <ClassificationMultiSelect
+              options={subtype.options}
+              isPending={subtype.isPending}
+              selectedIds={subtypeIds}
+              onChange={setSubtypeFilter}
+              label={t('patterns.filters.hokeiSubtype')}
             />
-          ))}
-        </ul>
-      </section>
-    </main>
+          ) : null}
+        </>
+      }
+    >
+      <ul className="space-y-2">
+        {patterns.map((row) => (
+          <PatternListItem
+            key={row.id}
+            pattern={row}
+            onClick={onRowClick}
+            onDelete={onDelete}
+            isDeleting={deleteMut.isPending}
+          />
+        ))}
+      </ul>
+    </ResourceAdminListPage>
   );
 }
