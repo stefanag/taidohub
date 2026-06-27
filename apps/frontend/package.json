@@ -15,7 +15,8 @@
     "test:coverage": "vitest run --coverage",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "arch": "steiger ./src"
+    "arch": "steiger ./src && pnpm run arch:routes",
+    "arch:routes": "node ./scripts/check-route-mount.mjs"
   },
   "dependencies": {
     "@casl/ability": "^6.7.1",
