@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 
 import { ProgressModule } from '../progress/progress.module.js';
 
-import { StudentAbilityRules } from './students.ability-rules.js';
+import { StudentAbilityRules } from './students.abilities.js';
 import { StudentsController } from './students.controller.js';
 import { StudentsRepository } from './students.repository.js';
 import { StudentsService } from './students.service.js';

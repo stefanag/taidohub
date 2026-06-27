@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { type AppAbility } from '../../infrastructure/ability/ability.types.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 
-import { LabelsAbilityRules } from './labels.ability-rules.js';
+import { LabelsAbilityRules } from './labels.abilities.js';
 
 const baseUser = (overrides: Partial<AuthenticatedUser>): AuthenticatedUser => ({
   id: 'u-1',

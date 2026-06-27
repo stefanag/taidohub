@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { type AppAbility } from '../../infrastructure/ability/ability.types.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 
-import { PatternAbilityRules } from './pattern.ability-rules.js';
+import { PatternAbilityRules } from './pattern.abilities.js';
 
 function makeUser(overrides: Partial<AuthenticatedUser> = {}): AuthenticatedUser {
   return {
