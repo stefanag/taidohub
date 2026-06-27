@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 
 import { FeatureFlagsModule } from '../feature-flags/feature-flags.module.js';
 
+import { FeedbackAccessPolicy } from './feedback.access-policy.js';
 import { FeedbackController } from './feedback.controller.js';
 import { FeedbackRepository } from './feedback.repository.js';
 import { FeedbackService } from './feedback.service.js';
@@ -17,7 +18,7 @@ import { FeedbackService } from './feedback.service.js';
 @Module({
   imports: [FeatureFlagsModule],
   controllers: [FeedbackController],
-  providers: [FeedbackRepository, FeedbackService],
+  providers: [FeedbackRepository, FeedbackService, FeedbackAccessPolicy],
   exports: [FeedbackService],
 })
 export class FeedbackModule {}

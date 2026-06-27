@@ -64,7 +64,11 @@ describe('PatternRepository.listClassificationsByPatternIds', () => {
 
     expect(out).toEqual([]);
     expect(counters.selectCalls).toBe(0);
- * Same structural contract as the technique spec — see
+  });
+});
+
+/**
+ * `replaceClassifications` mirror of the technique spec — see
  * `technique.repository.spec.ts` for the round-trip math. This
  * mirror exists because the pattern junction table is a separate
  * code path; without its own spec, the loop could regress on one

@@ -1,10 +1,10 @@
 import {
   ConflictException,
   ForbiddenException,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { eq } from 'drizzle-orm';
 
 import type {
   CreateFeedbackCommentInput,
@@ -20,9 +20,6 @@ import type {
   UpdateFeedbackCommentInput,
 } from '@repo/contracts/feedback';
 
-import { Inject } from '@nestjs/common';
-import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
-import { rankHistory } from '../../infrastructure/database/schema/rank-history.js';
 import {
   type DbFeedbackComment,
   type DbFeedbackReaction,
@@ -30,31 +27,22 @@ import {
 } from '../../infrastructure/database/schema/index.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 
+import { FeedbackAccessPolicy } from './feedback.access-policy.js';
 import { FeedbackRepository } from './feedback.repository.js';
 
 const EDIT_WINDOW_MS = 24 * 60 * 60 * 1000;
 
 /**
- * Business logic for the instructor-feedback feature.
- *
- * Access control is procedural (see `canAccessThread`) rather than CASL —
- * the rules cross multiple tables (organisation_membership both ways,
- * rank_history for the grading-examiner case) and the conditions are
- * easier to read as code than as MongoDB-style CASL queries.
- *
- *   1. Subject       — actor IS the student.
- *   2. Sysadmin      — always.
- *   3. Club admin    — orgadmin of an org the student is also a member of.
- *   4. Instructor    — instructor in an org the student is also a member of
- *                       (the `student` role made this a single join).
- *   5. Grading examiner — for `entityType='grading'`, the actor is the
- *                       row's verifiedByUserId or recordedByUserId.
+ * Business logic for the instructor-feedback feature. Access control
+ * lives in {@link FeedbackAccessPolicy} — this service delegates to
+ * it for every read/write that touches a thread; what's left here is
+ * the create/edit/delete + reaction + read-status + inbox logic.
  */
 @Injectable()
 export class FeedbackService {
   constructor(
-    @Inject(DRIZZLE) private readonly db: DrizzleDb,
     private readonly repo: FeedbackRepository,
+    private readonly access: FeedbackAccessPolicy,
   ) {}
 
   // ── Threads ───────────────────────────────────────────────────────────
@@ -63,7 +51,7 @@ export class FeedbackService {
     actor: AuthenticatedUser,
     query: GetFeedbackThreadQuery,
   ): Promise<FeedbackThread | null> {
-    await this.assertAccessForKey(
+    await this.access.assertAccessForKey(
       actor,
       query.studentId,
       query.entityType,
@@ -81,7 +69,7 @@ export class FeedbackService {
     actor: AuthenticatedUser,
     studentId: string,
   ): Promise<FeedbackThread[]> {
-    await this.assertAccessForKey(actor, studentId);
+    await this.access.assertAccessForKey(actor, studentId);
     const rows = await this.repo.listThreadsByStudent(studentId);
     return rows.map((r) => this.toThread(r));
   }
@@ -95,7 +83,7 @@ export class FeedbackService {
     actor: AuthenticatedUser,
     input: CreateFeedbackThreadInput,
   ): Promise<{ thread: FeedbackThread; created: boolean }> {
-    await this.assertAccessForKey(
+    await this.access.assertAccessForKey(
       actor,
       input.studentId,
       input.entityType,
@@ -125,7 +113,7 @@ export class FeedbackService {
     threadId: string,
   ): Promise<FeedbackComment[]> {
     const thread = await this.requireThread(threadId);
-    await this.assertAccessToThread(actor, thread);
+    await this.access.assertAccessToThread(actor, thread);
     const isStudent = actor.id === thread.studentId;
     const rows = await this.repo.listCommentsByThread(threadId, isStudent);
     const reactions = await this.repo.listReactionsByCommentIds(
@@ -148,7 +136,7 @@ export class FeedbackService {
     input: CreateFeedbackCommentInput,
   ): Promise<FeedbackComment> {
     const thread = await this.requireThread(threadId);
-    await this.assertAccessToThread(actor, thread);
+    await this.access.assertAccessToThread(actor, thread);
 
     // Students may never post instructor-only comments. Force the flag
     // server-side regardless of the request body.
@@ -202,7 +190,7 @@ export class FeedbackService {
   ): Promise<FeedbackReactionRecord> {
     const comment = await this.requireComment(commentId);
     const thread = await this.requireThread(comment.threadId);
-    await this.assertAccessToThread(actor, thread);
+    await this.access.assertAccessToThread(actor, thread);
     // A student can react to a comment they can see, so the instructor-
     // only visibility filter at list-time is enough to prevent them
     // reacting to hidden rows in practice — the API still rejects
@@ -226,7 +214,7 @@ export class FeedbackService {
   ): Promise<void> {
     const comment = await this.requireComment(commentId);
     const thread = await this.requireThread(comment.threadId);
-    await this.assertAccessToThread(actor, thread);
+    await this.access.assertAccessToThread(actor, thread);
     await this.repo.deleteReaction(commentId, actor.id);
   }
 
@@ -234,7 +222,7 @@ export class FeedbackService {
 
   async markRead(actor: AuthenticatedUser, threadId: string): Promise<void> {
     const thread = await this.requireThread(threadId);
-    await this.assertAccessToThread(actor, thread);
+    await this.access.assertAccessToThread(actor, thread);
     await this.repo.upsertReadStatus(threadId, actor.id);
   }
 
@@ -291,77 +279,6 @@ export class FeedbackService {
     return Array.from(byThread.values()).sort((a, b) =>
       a.lastActivityAt < b.lastActivityAt ? 1 : -1,
     );
-  }
-
-  // ── Access control ────────────────────────────────────────────────────
-
-  /**
-   * Asserts the actor may read/write threads keyed by the given studentId
-   * (and optionally an entityType+entityId for the grading-examiner
-   * branch). Throws 403 if none of the five rules match.
-   */
-  private async assertAccessForKey(
-    actor: AuthenticatedUser,
-    studentId: string,
-    entityType?: FeedbackEntityType,
-    entityId?: string,
-  ): Promise<void> {
-    // 1. Subject.
-    if (actor.id === studentId) return;
-    // 2. Sysadmin.
-    if (actor.role === 'sysadmin') return;
-    // 3. Club admin — orgadmin of an org the student is in.
-    const orgAdminOrgs = actor.memberships
-      .filter((m) => m.role === 'orgadmin')
-      .map((m) => m.organisationId);
-    if (orgAdminOrgs.length > 0) {
-      const studentOrgs = await this.repo.listStudentOrgIds(studentId);
-      if (studentOrgs.some((id) => orgAdminOrgs.includes(id))) return;
-    }
-    // 4. Linked instructor.
-    if (await this.repo.isInstructorOf(actor.id, studentId)) return;
-    // 5. Grading examiner — only meaningful for entityType='grading'.
-    if (entityType === 'grading' && entityId && (await this.isGradingExaminer(actor.id, entityId))) {
-      return;
-    }
-    throw new ForbiddenException({
-      error: { code: 'FORBIDDEN', message: 'Access denied to feedback thread.' },
-    });
-  }
-
-  /** Variant that takes a thread row when one is already loaded. */
-  private async assertAccessToThread(
-    actor: AuthenticatedUser,
-    thread: DbFeedbackThread,
-  ): Promise<void> {
-    await this.assertAccessForKey(
-      actor,
-      thread.studentId,
-      thread.entityType as FeedbackEntityType,
-      thread.entityId,
-    );
-  }
-
-  /**
-   * True when the actor either recorded or verified the rank_history row
-   * referenced by `entityId`. Adapts the spec's `grading_event_officers`
-   * concept (which we don't have a table for) to what taidohub does have.
-   */
-  private async isGradingExaminer(
-    actorId: string,
-    rankHistoryId: string,
-  ): Promise<boolean> {
-    const rows = await this.db
-      .select({
-        recordedByUserId: rankHistory.recordedByUserId,
-        verifiedByUserId: rankHistory.verifiedByUserId,
-      })
-      .from(rankHistory)
-      .where(eq(rankHistory.id, rankHistoryId))
-      .limit(1);
-    const row = rows[0];
-    if (!row) return false;
-    return row.verifiedByUserId === actorId || row.recordedByUserId === actorId;
   }
 
   // ── Author + edit-window guard ────────────────────────────────────────

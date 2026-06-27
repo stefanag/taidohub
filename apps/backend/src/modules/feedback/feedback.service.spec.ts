@@ -8,6 +8,7 @@ import type {
   DbFeedbackThread,
 } from '../../infrastructure/database/schema/index.js';
 
+import { FeedbackAccessPolicy } from './feedback.access-policy.js';
 import { FeedbackRepository } from './feedback.repository.js';
 import { FeedbackService } from './feedback.service.js';
 
@@ -139,7 +140,13 @@ function build(): Harness {
   const select = vi.fn().mockReturnValue({ from });
   const db = { select } as never;
 
-  const service = new FeedbackService(db, repo as unknown as FeedbackRepository);
+  // Access checks now live on `FeedbackAccessPolicy`. The harness
+  // builds a real one against the same repo + db stubs so the 17
+  // acceptance tests don't change shape — the rank_history grading-
+  // examiner branch and the org-membership joins are still driven by
+  // the existing mocks.
+  const access = new FeedbackAccessPolicy(db, repo as unknown as FeedbackRepository);
+  const service = new FeedbackService(repo as unknown as FeedbackRepository, access);
 
   return {
     service,

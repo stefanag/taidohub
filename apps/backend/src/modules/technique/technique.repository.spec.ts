@@ -72,6 +72,10 @@ describe('TechniqueRepository.listClassificationsByTechniqueIds', () => {
 
     expect(out).toEqual([]);
     expect(counters.selectCalls).toBe(0);
+  });
+});
+
+/**
  * Structural test for `replaceClassifications` — pins the new
  * "1–2 round-trips regardless of N" contract.
  *
