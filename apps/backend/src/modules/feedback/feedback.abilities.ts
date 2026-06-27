@@ -1,6 +1,7 @@
 import { type AbilityBuilder } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
 
+import { AbilityContributor } from '../../infrastructure/ability/ability-contributor.decorator.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import {
   type AbilityRuleContributor,
@@ -19,6 +20,7 @@ import {
  * service throws 403 with the spec's `FORBIDDEN` code when the
  * per-thread check fails.
  */
+@AbilityContributor()
 @Injectable()
 export class FeedbackAbilityRules implements AbilityRuleContributor {
   contributeTo(builder: AbilityBuilder<AppAbility>, user: AuthenticatedUser | null): void {

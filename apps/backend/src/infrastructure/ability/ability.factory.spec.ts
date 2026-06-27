@@ -1,3 +1,6 @@
+import { type AbilityBuilder, type MongoAbility } from '@casl/ability';
+import { Injectable } from '@nestjs/common';
+import { DiscoveryModule } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
 import { describe, expect, it } from 'vitest';
 
@@ -8,7 +11,12 @@ import { UsersAbilityRules } from '../../modules/users/users.abilities.js';
 import { type AuthenticatedUser } from '../auth/auth.types.js';
 import { UserContextService } from '../auth/user-context.service.js';
 
+import { AbilityContributor } from './ability-contributor.decorator.js';
 import { AbilityFactory } from './ability.factory.js';
+import {
+  type AbilityRuleContributor,
+  type AppAbilityTuple,
+} from './ability.types.js';
 
 const baseUser = (overrides: Partial<AuthenticatedUser>): AuthenticatedUser => ({
   id: 'u-1',
@@ -23,8 +31,11 @@ const baseUser = (overrides: Partial<AuthenticatedUser>): AuthenticatedUser => (
   ...overrides,
 });
 
-async function makeFactory(): Promise<AbilityFactory> {
+type Provider = NonNullable<Parameters<typeof Test.createTestingModule>[0]['providers']>[number];
+
+async function makeFactory(extraProviders: Provider[] = []): Promise<AbilityFactory> {
   const module = await Test.createTestingModule({
+    imports: [DiscoveryModule],
     providers: [
       AbilityFactory,
       UserContextService,
@@ -32,8 +43,10 @@ async function makeFactory(): Promise<AbilityFactory> {
       OrganisationsAbilityRules,
       AuditLogAbilityRules,
       MembershipsAbilityRules,
+      ...extraProviders,
     ],
   }).compile();
+  await module.init();
   return module.get(AbilityFactory);
 }
 
@@ -136,5 +149,49 @@ describe('AbilityFactory — anonymous', () => {
     expect(ability.can('read', 'Organisation')).toBe(false);
     expect(ability.can('read', 'AuditLog')).toBe(false);
     expect(ability.can('read', 'OrganisationMembership')).toBe(false);
+  });
+});
+
+describe('AbilityFactory — auto-discovery contract', () => {
+  // A contributor that, IF discovered, would grant `manage all`
+  // — easy to detect from a generated ability. The test below
+  // confirms that omitting the `@AbilityContributor()` decorator
+  // keeps it OUT of the discovery list, even though it implements
+  // the interface and is a registered provider.
+
+  @Injectable()
+  class UndecoratedContributor implements AbilityRuleContributor {
+    contributeTo(builder: AbilityBuilder<MongoAbility<AppAbilityTuple>>): void {
+      builder.can('manage', 'all');
+    }
+  }
+
+  @AbilityContributor()
+  @Injectable()
+  class DecoratedContributor implements AbilityRuleContributor {
+    contributeTo(builder: AbilityBuilder<MongoAbility<AppAbilityTuple>>): void {
+      builder.can('manage', 'all');
+    }
+  }
+
+  it('ignores classes that implement the contributor interface but lack @AbilityContributor()', async () => {
+    const factory = await makeFactory([UndecoratedContributor]);
+
+    // The base 4 contributors don't grant unconditional `manage all`,
+    // so if the undecorated provider had been discovered, this would
+    // flip to true.
+    const ability = factory.createForUser(
+      baseUser({ role: 'user', memberships: [] }),
+    );
+    expect(ability.can('manage', 'all')).toBe(false);
+  });
+
+  it('picks up an additional @AbilityContributor()-decorated provider', async () => {
+    const factory = await makeFactory([DecoratedContributor]);
+
+    const ability = factory.createForUser(
+      baseUser({ role: 'user', memberships: [] }),
+    );
+    expect(ability.can('manage', 'all')).toBe(true);
   });
 });

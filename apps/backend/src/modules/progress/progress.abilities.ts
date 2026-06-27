@@ -5,6 +5,7 @@ import {
   type AbilityRuleContributor,
   type AppAbility,
 } from '../../infrastructure/ability/ability.types.js';
+import { AbilityContributor } from '../../infrastructure/ability/ability-contributor.decorator.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 
 /**
@@ -22,6 +23,7 @@ import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js'
  * is per-user data, not editorial content, so the `manage` rule is the only
  * grant the module emits.
  */
+@AbilityContributor()
 @Injectable()
 export class ProgressAbilityRules implements AbilityRuleContributor {
   contributeTo(

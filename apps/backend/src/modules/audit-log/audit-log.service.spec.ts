@@ -1,3 +1,4 @@
+import { DiscoveryModule } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
 import { ForbiddenException } from '@nestjs/common';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -26,6 +27,7 @@ function repoStub() {
 
 async function makeService(repo: ReturnType<typeof repoStub>) {
   const module = await Test.createTestingModule({
+    imports: [DiscoveryModule],
     providers: [
       AuditLogService,
       AbilityFactory,
@@ -36,6 +38,7 @@ async function makeService(repo: ReturnType<typeof repoStub>) {
       { provide: AuditLogRepository, useValue: repo },
     ],
   }).compile();
+  await module.init();
   return module.get(AuditLogService);
 }
 

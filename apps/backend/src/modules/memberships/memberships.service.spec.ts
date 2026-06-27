@@ -1,3 +1,4 @@
+import { DiscoveryModule } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
 import {
   BadRequestException,
@@ -89,6 +90,7 @@ async function makeService(
   audit: ReturnType<typeof auditStub> = auditStub(),
 ) {
   const module = await Test.createTestingModule({
+    imports: [DiscoveryModule],
     providers: [
       MembershipsService,
       AbilityFactory,
@@ -103,6 +105,7 @@ async function makeService(
       { provide: DRIZZLE, useValue: fakeDb },
     ],
   }).compile();
+  await module.init();
   return { service: module.get(MembershipsService), audit };
 }
 
