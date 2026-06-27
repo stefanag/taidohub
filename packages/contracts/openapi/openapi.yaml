@@ -2822,7 +2822,19 @@ paths:
       responses:
         "200":
           description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FeedbackInboxResponseDto"
+        "401":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
       security: *a36
+      summary: List unread feedback threads for the actor, ordered by `lastActivityAt`
+        DESC.
       tags: *a37
   /api/admin/impersonate-user:
     post:
@@ -6617,6 +6629,97 @@ components:
         - page
         - perPage
         - total
+    FeedbackInboxResponseDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/$defs/FeedbackInboxItem"
+          x-nestjs_zod-has-null: true
+          x-nestjs_zod-parent-has-refs: true
+          x-nestjs_zod-$defs: &a72
+            FeedbackInboxItem:
+              type: object
+              properties:
+                threadId:
+                  type: string
+                  format: uuid
+                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                entityType:
+                  $ref: "#/$defs/FeedbackEntityType"
+                entityId:
+                  type: string
+                  minLength: 1
+                studentId:
+                  type: string
+                  minLength: 1
+                studentName:
+                  anyOf:
+                    - type: string
+                    - type: "null"
+                contextLabel:
+                  type: string
+                unreadCount:
+                  type: integer
+                  exclusiveMinimum: 0
+                  maximum: 9007199254740991
+                lastActivityAt:
+                  type: string
+                  format: date-time
+                  pattern: ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+              required:
+                - threadId
+                - entityType
+                - entityId
+                - studentId
+                - studentName
+                - contextLabel
+                - unreadCount
+                - lastActivityAt
+              description: One thread the actor has unread visible comments on, with the
+                student's name and a human label of the related entity prejoined
+                for the inbox UI.
+              example:
+                threadId: 8d3f2a1c-9b4e-4d6f-a7c8-1e9f3a4b5c6d
+                entityType: technique
+                entityId: 8d3f2a1c-9b4e-4d6f-a7c8-1e9f3a4b5c6d
+                studentId: u-student
+                studentName: Anne Doe
+                contextLabel: Tsuki
+                unreadCount: 2
+                lastActivityAt: 2026-06-18T08:00:00.000Z
+            FeedbackEntityType:
+              type: string
+              enum:
+                - grading
+                - session
+                - technique
+                - pattern
+                - general
+              description: Domain entity a feedback thread attaches to.
+              example: grading
+          x-nestjs_zod-parent-metadata:
+            description: GET /api/feedback/inbox — unread threads for the actor, ordered by
+              `lastActivityAt` DESC. Pagination via the standard `{ data,
+              nextCursor }` envelope; nextCursor is always `null` until the
+              endpoint grows past its current 50-row internal cap.
+        nextCursor:
+          anyOf:
+            - type: string
+            - type: "null"
+          x-nestjs_zod-has-null: true
+          x-nestjs_zod-parent-has-refs: true
+          x-nestjs_zod-empty-type: true
+          x-nestjs_zod-$defs: *a72
+          x-nestjs_zod-parent-metadata:
+            description: GET /api/feedback/inbox — unread threads for the actor, ordered by
+              `lastActivityAt` DESC. Pagination via the standard `{ data,
+              nextCursor }` envelope; nextCursor is always `null` until the
+              endpoint grows past its current 50-row internal cap.
+      required:
+        - data
+        - nextCursor
     ErrorEnvelope:
       $ref: "#/components/schemas/ErrorEnvelope"
     ErrorPayload:
