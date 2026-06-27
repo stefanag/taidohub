@@ -28,6 +28,11 @@ export class ShogoTitlesRepository {
     return rows[0] ?? null;
   }
 
+  /** Alias for {@link findByCode} — satisfies the `LookupTableRepository` contract. */
+  findByKey(key: string, tx?: DrizzleExecutor): Promise<DbShogoTitle | null> {
+    return this.findByCode(key, tx);
+  }
+
   async findAll(tx?: DrizzleExecutor): Promise<DbShogoTitle[]> {
     const conn = tx ?? this.db;
     return conn.select().from(shogoTitles).orderBy(shogoTitles.sortOrder);

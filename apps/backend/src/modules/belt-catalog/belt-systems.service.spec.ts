@@ -33,6 +33,7 @@ function repoStub() {
     findById: vi.fn(),
     findAll: vi.fn(),
     findByCode: vi.fn(),
+    findByKey: vi.fn(),
     insert: vi.fn(),
     update: vi.fn(),
     delete: vi.fn(),
