@@ -29,4 +29,4 @@ export {
   type DeleteRankHistoryVariables,
   type UpdateRankHistoryVariables,
   type VerifyRankHistoryVariables,
-} from './model/rank-history.queries.js';
+} from './lib/hooks.js';

@@ -22,4 +22,4 @@ export {
   useUpdateMembership,
   type DeleteMembershipVariables,
   type UpdateMembershipVariables,
-} from './model/membership.queries.js';
+} from './lib/hooks.js';

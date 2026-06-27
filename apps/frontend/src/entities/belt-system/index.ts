@@ -17,4 +17,4 @@ export {
   useCreateBeltSystem,
   useDeleteBeltSystem,
   useUpdateBeltSystem,
-} from './model/belt-system.queries.js';
+} from './lib/hooks.js';

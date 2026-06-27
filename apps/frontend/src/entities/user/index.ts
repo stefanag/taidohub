@@ -33,4 +33,4 @@ export {
   useUpdateUser,
   userKeys,
   type UpdateUserVariables,
-} from './model/user.queries.js';
+} from './lib/hooks.js';
