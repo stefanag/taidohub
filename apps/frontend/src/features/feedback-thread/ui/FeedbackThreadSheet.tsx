@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import type { FeedbackEntityType } from '@repo/contracts/feedback';
 
-import { useFeatureFlag } from '@/shared/lib/feature-flags';
+import { FeatureFlag } from '@/shared/lib/feature-flags';
 import { Button } from '@/shared/ui';
 import {
   Sheet,
@@ -33,22 +33,29 @@ export interface FeedbackThreadSheetProps {
  * / `useFeedbackCommentsQuery` lazy, so a list of 50 techniques doesn't fire
  * 50 thread fetches on render.
  *
- * Gated by the `instructor-feedback` feature flag: when off the component
- * returns `null` so the trigger button disappears entirely and the backend
- * never sees a flag-disabled request.
+ * Outer `<FeatureFlag>` gate keeps the trigger button and the
+ * Sheet's hook surface (`useState(open)`) from rendering at all
+ * when `instructor-feedback` is off — a row in the 50-technique
+ * list never even tries to mount the per-row React state slot
+ * when the feature is disabled.
  */
-export function FeedbackThreadSheet({
+export function FeedbackThreadSheet(props: FeedbackThreadSheetProps): React.ReactElement {
+  return (
+    <FeatureFlag code="instructor-feedback">
+      <FeedbackThreadSheetContent {...props} />
+    </FeatureFlag>
+  );
+}
+
+function FeedbackThreadSheetContent({
   entityType,
   entityId,
   studentId,
   contextLabel,
   trigger,
-}: FeedbackThreadSheetProps): React.ReactElement | null {
+}: FeedbackThreadSheetProps): React.ReactElement {
   const { t } = useTranslation();
-  const flagOn = useFeatureFlag('instructor-feedback');
   const [open, setOpen] = React.useState(false);
-
-  if (!flagOn) return null;
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
