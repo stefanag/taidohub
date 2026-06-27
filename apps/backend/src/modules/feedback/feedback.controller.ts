@@ -14,6 +14,10 @@ import {
   Res,
 } from '@nestjs/common';
 import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
+
+import { ErrorEnvelopeDto } from '../../common/dto/error-envelope.dto.js';
+import { ApiEndpoint } from '../../common/swagger/api-endpoint.decorator.js';
+import { FeedbackInboxResponseDto } from './dto/feedback-inbox-response.dto.js';
 import type { Response } from 'express';
 import {
   CreateFeedbackCommentSchema,
@@ -174,6 +178,13 @@ export class FeedbackController {
   }
 
   @Get('inbox')
+  @ApiEndpoint({
+    summary: 'List unread feedback threads for the actor, ordered by `lastActivityAt` DESC.',
+    operationId: 'FeedbackController_inbox',
+    ok: FeedbackInboxResponseDto,
+    errorType: ErrorEnvelopeDto,
+    errors: ['401'],
+  })
   async inbox(
     @CurrentUser() user: AuthenticatedUser,
   ): Promise<{ data: FeedbackInboxItem[]; nextCursor: string | null }> {
