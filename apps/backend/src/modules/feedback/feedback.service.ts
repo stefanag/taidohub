@@ -264,12 +264,12 @@ export class FeedbackService {
         studentId: r.student_id,
         studentName: r.student_name,
         contextLabel: r.context_label,
-        unreadCount: Number(r.unread_count),
-        // `db.execute` returns timestamps as ISO strings, not Date — the
-        // postgres-js → Drizzle row mapper only does the Date coercion for
-        // query-builder reads. Wrap in `new Date(...)` so the input is
-        // either accepted and re-stringified.
-        lastActivityAt: new Date(r.last_activity_at).toISOString(),
+        unreadCount: r.unread_count,
+        // `last_activity_at` arrives as a real `Date` thanks to
+        // `coerceRow` at the repo boundary (Chunk 3.4) — the
+        // previous inline `new Date(r.last_activity_at)` wrap is no
+        // longer needed.
+        lastActivityAt: r.last_activity_at.toISOString(),
       };
       if (!existing || existing.unreadCount < item.unreadCount) {
         byThread.set(r.thread_id, item);

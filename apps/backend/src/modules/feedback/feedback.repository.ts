@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { and, asc, desc, eq, isNotNull, isNull, or, sql } from 'drizzle-orm';
 
 import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
+import { coerceRow } from '../../infrastructure/database/coerce-row.js';
 import {
   feedbackComment,
   feedbackReaction,
@@ -25,10 +26,11 @@ export interface FeedbackCommentWithAuthor extends DbFeedbackComment {
 }
 
 /**
- * Raw row shape returned by the inbox SELECTs — snake_case from `db.execute`.
- * `last_activity_at` is a string here (not Date) because `db.execute` bypasses
- * Drizzle's column-driven type coercion; the service wraps it in `new Date()`
- * before re-serialising.
+ * Coerced row shape returned by the inbox SELECTs. The repo runs
+ * `coerceRow` at the boundary so `db.execute`'s raw outputs land as
+ * the JS types this codebase expects — `last_activity_at` as a real
+ * `Date`, `unread_count` as a JS number. The service then calls
+ * `.toISOString()` directly without an inline `new Date()` wrap.
  */
 export type InboxItemRow = {
   thread_id: string;
@@ -38,7 +40,7 @@ export type InboxItemRow = {
   student_name: string | null;
   context_label: string;
   unread_count: number;
-  last_activity_at: string;
+  last_activity_at: Date;
 } & Record<string, unknown>;
 
 /**
@@ -444,7 +446,7 @@ export class FeedbackRepository {
       ORDER BY MAX(c.created_at) DESC
       LIMIT 50
     `);
-    return Array.from(rows);
+    return Array.from(rows).map((r) => coerceRow(r, { last_activity_at: 'date', unread_count: 'int' }));
   }
 
   async listInstructorInboxItems(actorId: string): Promise<InboxItemRow[]> {
@@ -463,7 +465,7 @@ export class FeedbackRepository {
       ORDER BY MAX(c.created_at) DESC
       LIMIT 50
     `);
-    return Array.from(rows);
+    return Array.from(rows).map((r) => coerceRow(r, { last_activity_at: 'date', unread_count: 'int' }));
   }
 
   async listAllInboxItems(actorId: string): Promise<InboxItemRow[]> {
@@ -476,7 +478,7 @@ export class FeedbackRepository {
       ORDER BY MAX(c.created_at) DESC
       LIMIT 50
     `);
-    return Array.from(rows);
+    return Array.from(rows).map((r) => coerceRow(r, { last_activity_at: 'date', unread_count: 'int' }));
   }
 
   // Silence unused-import warnings for utilities reserved for future tweaks
