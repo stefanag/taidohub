@@ -1,3 +1,4 @@
+import { DiscoveryModule } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
 import { ConflictException, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -118,6 +119,7 @@ async function makeService(
   config: ReturnType<typeof configStub> = configStub(),
 ) {
   const module = await Test.createTestingModule({
+    imports: [DiscoveryModule],
     providers: [
       UsersService,
       AbilityFactory,
@@ -135,6 +137,7 @@ async function makeService(
       { provide: ConfigService, useValue: config },
     ],
   }).compile();
+  await module.init();
   return module.get(UsersService);
 }
 

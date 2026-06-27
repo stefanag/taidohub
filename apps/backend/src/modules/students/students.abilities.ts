@@ -5,6 +5,7 @@ import {
   type AbilityRuleContributor,
   type AppAbility,
 } from '../../infrastructure/ability/ability.types.js';
+import { AbilityContributor } from '../../infrastructure/ability/ability-contributor.decorator.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 
 /**
@@ -24,6 +25,7 @@ import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js'
  *  - Regular users without an instructor membership get nothing — the
  *    StudentsController is only useful to instructors and sysadmins.
  */
+@AbilityContributor()
 @Injectable()
 export class StudentAbilityRules implements AbilityRuleContributor {
   contributeTo(

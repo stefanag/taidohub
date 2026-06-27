@@ -1,6 +1,7 @@
 import { type AbilityBuilder } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
 
+import { AbilityContributor } from '../../infrastructure/ability/ability-contributor.decorator.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import {
   type AbilityRuleContributor,
@@ -15,6 +16,7 @@ import {
  * - Each `instructor` membership grants `read` on the one club it
  *   binds to.
  */
+@AbilityContributor()
 @Injectable()
 export class OrganisationsAbilityRules implements AbilityRuleContributor {
   contributeTo(builder: AbilityBuilder<AppAbility>, user: AuthenticatedUser | null): void {

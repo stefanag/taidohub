@@ -1,6 +1,7 @@
 import { type AbilityBuilder } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
 
+import { AbilityContributor } from '../../infrastructure/ability/ability-contributor.decorator.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import {
   type AbilityRuleContributor,
@@ -15,6 +16,7 @@ import {
  *   has no global `manage all` wildcard — each module grants its own
  *   sysadmin rules (mirrors `OrganisationsAbilityRules`).
  */
+@AbilityContributor()
 @Injectable()
 export class BeltCatalogAbilityRules implements AbilityRuleContributor {
   contributeTo(builder: AbilityBuilder<AppAbility>, user: AuthenticatedUser | null): void {

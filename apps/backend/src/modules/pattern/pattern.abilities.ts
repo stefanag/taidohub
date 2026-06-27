@@ -1,6 +1,7 @@
 import { type AbilityBuilder } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
 
+import { AbilityContributor } from '../../infrastructure/ability/ability-contributor.decorator.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import {
   type AbilityRuleContributor,
@@ -24,6 +25,7 @@ import {
  *
  * Read-only (plain) users / instructors can only read.
  */
+@AbilityContributor()
 @Injectable()
 export class PatternAbilityRules implements AbilityRuleContributor {
   contributeTo(builder: AbilityBuilder<AppAbility>, user: AuthenticatedUser | null): void {

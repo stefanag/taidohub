@@ -1,3 +1,4 @@
+import { DiscoveryModule } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
 import { ConflictException, ForbiddenException, NotFoundException, BadRequestException } from '@nestjs/common';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -85,6 +86,7 @@ async function makeService(
   currentUser: AuthenticatedUser = admin,
 ) {
   const module = await Test.createTestingModule({
+    imports: [DiscoveryModule],
     providers: [
       OrganisationsService,
       AbilityFactory,
@@ -98,6 +100,7 @@ async function makeService(
       { provide: LabelsService, useValue: labels },
     ],
   }).compile();
+  await module.init();
   // `setForTesting` is the spec-only fallback that bypasses
   // AsyncLocalStorage — see `UserContextService` for the rationale.
   // Each `makeService` call returns a fresh DI module with its own

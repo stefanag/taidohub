@@ -1,6 +1,7 @@
 import { type AbilityBuilder } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
 
+import { AbilityContributor } from '../../infrastructure/ability/ability-contributor.decorator.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import {
   type AbilityRuleContributor,
@@ -19,6 +20,7 @@ import {
  * - `sysadmin` additionally can `manage` (= read/update/anything) — the
  *   only mutation today is `PATCH /:id` from the admin UI.
  */
+@AbilityContributor()
 @Injectable()
 export class ClassificationCategoryAbilityRules implements AbilityRuleContributor {
   contributeTo(builder: AbilityBuilder<AppAbility>, user: AuthenticatedUser | null): void {
