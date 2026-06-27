@@ -20,7 +20,7 @@ import { FeedbackThread, FeedbackThreadSheet } from '@/features/feedback-thread'
 import { GradingTimeline } from '@/features/grading-timeline';
 import { StudentProgressEditorDialog } from '@/features/student-progress-editor-dialog';
 import { HttpError } from '@/shared/api';
-import { useFeatureFlag } from '@/shared/lib/feature-flags';
+import { FeatureFlag } from '@/shared/lib/feature-flags';
 import { ProgressPill } from '@/shared/ui';
 
 /**
@@ -35,7 +35,6 @@ import { ProgressPill } from '@/shared/ui';
 export function StudentDetailPage(): React.ReactElement {
   const { t } = useTranslation();
   const { userId } = useParams({ strict: false }) as { userId: string };
-  const feedbackEnabled = useFeatureFlag('instructor-feedback');
 
   const techniquesQ = useTechniquesQuery([]);
   const patternsQ = usePatternsQuery([]);
@@ -140,7 +139,7 @@ export function StudentDetailPage(): React.ReactElement {
         {student?.email && student.name ? student.email : null}
       </p>
 
-      {feedbackEnabled ? (
+      <FeatureFlag code="instructor-feedback">
         <section className="mt-8">
           <h2 className="text-lg font-semibold">{t('feedback.title')}</h2>
           <div className="mt-4 rounded-md border border-outline-variant/40 p-4">
@@ -151,7 +150,7 @@ export function StudentDetailPage(): React.ReactElement {
             />
           </div>
         </section>
-      ) : null}
+      </FeatureFlag>
 
       <section className="mt-8">
         <h2 className="text-lg font-semibold">

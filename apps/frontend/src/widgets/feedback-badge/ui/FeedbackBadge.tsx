@@ -10,7 +10,7 @@ import {
 } from '@/entities/feedback';
 import { useSession } from '@/features/auth-by-email';
 import { FeedbackThread } from '@/features/feedback-thread';
-import { useFeatureFlag } from '@/shared/lib/feature-flags';
+import { FeatureFlag } from '@/shared/lib/feature-flags';
 import { Button } from '@/shared/ui';
 import {
   Sheet,
@@ -35,9 +35,23 @@ import {
  * A "View on student page" link in the thread view preserves the
  * deep-link path for the common instructor-viewing-a-student case.
  */
-export function FeedbackBadge(): React.ReactElement | null {
+/**
+ * Outer flag gate. When `instructor-feedback` is off, nothing under
+ * the wrapper mounts — no badge, no unread poll, no inbox SELECT.
+ * The inner component holds all the hook calls, so the lazy
+ * "queries don't run when the feature is disabled" contract is
+ * enforced structurally rather than by an early `return null`.
+ */
+export function FeedbackBadge(): React.ReactElement {
+  return (
+    <FeatureFlag code="instructor-feedback">
+      <FeedbackBadgeContent />
+    </FeatureFlag>
+  );
+}
+
+function FeedbackBadgeContent(): React.ReactElement {
   const { t, i18n } = useTranslation();
-  const flagOn = useFeatureFlag('instructor-feedback');
   const navigate = useNavigate();
   const session = useSession();
   const actorId = session.data?.user?.id ?? null;
@@ -53,8 +67,6 @@ export function FeedbackBadge(): React.ReactElement | null {
   React.useEffect(() => {
     if (!open) setSelected(null);
   }, [open]);
-
-  if (!flagOn) return null;
 
   const raw = data?.count ?? 0;
   const display = raw > 99 ? '99+' : String(raw);

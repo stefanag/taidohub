@@ -14,7 +14,7 @@ import {
   useFeedbackThreadQuery,
   useMarkFeedbackThreadReadMutation,
 } from '@/entities/feedback';
-import { useFeatureFlag } from '@/shared/lib/feature-flags';
+import { FeatureFlag } from '@/shared/lib/feature-flags';
 import { Button } from '@/shared/ui';
 
 import { FeedbackComment } from './FeedbackComment.js';
@@ -33,24 +33,30 @@ export interface FeedbackThreadProps {
  * none yet exists.
  *
  * Gated by the `instructor-feedback` feature flag — when off the
- * component renders nothing. The backend's flag guard would 404 the
- * API calls anyway, but skipping the queries also keeps the badge
- * count and react-query cache clean.
+ * outer `<FeatureFlag>` short-circuits before the inner
+ * `FeedbackThreadContent` mounts, so no queries run, no react-query
+ * keys get cached, and the backend never sees a flag-disabled
+ * request.
  */
-export function FeedbackThread({
+export function FeedbackThread(props: FeedbackThreadProps): React.ReactElement {
+  return (
+    <FeatureFlag code="instructor-feedback">
+      <FeedbackThreadContent {...props} />
+    </FeatureFlag>
+  );
+}
+
+function FeedbackThreadContent({
   entityType,
   entityId,
   studentId,
-}: FeedbackThreadProps): React.ReactElement | null {
+}: FeedbackThreadProps): React.ReactElement {
   const { t } = useTranslation();
-  const flagOn = useFeatureFlag('instructor-feedback');
   const session = useSession();
   const userId = session.data?.user.id ?? null;
   const isStudent = userId === studentId;
 
-  const threadQuery = useFeedbackThreadQuery(
-    flagOn ? { entityType, entityId, studentId } : null,
-  );
+  const threadQuery = useFeedbackThreadQuery({ entityType, entityId, studentId });
   const thread = threadQuery.data ?? null;
 
   const commentsQuery = useFeedbackCommentsQuery(thread?.id ?? null);
@@ -94,7 +100,6 @@ export function FeedbackThread({
     return { topLevel: tl, replies: map };
   }, [comments]);
 
-  if (!flagOn) return null;
 
   const post = async (): Promise<void> => {
     const trimmed = body.trim();
