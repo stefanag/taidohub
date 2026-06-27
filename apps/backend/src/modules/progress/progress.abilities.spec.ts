@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { type AppAbility } from '../../infrastructure/ability/ability.types.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 
-import { ProgressAbilityRules } from './progress.ability-rules.js';
+import { ProgressAbilityRules } from './progress.abilities.js';
 
 function makeUser(overrides: Partial<AuthenticatedUser> = {}): AuthenticatedUser {
   return {
