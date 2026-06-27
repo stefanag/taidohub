@@ -7,4 +7,4 @@ export {
   profileKeys,
   userProfileQueryOptions,
   useUpdateMyProfile,
-} from './model/profile.queries.js';
+} from './lib/hooks.js';

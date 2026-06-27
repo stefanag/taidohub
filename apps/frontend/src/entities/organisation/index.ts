@@ -31,7 +31,7 @@ export {
   useDeleteOrganisation,
   useUpdateOrganisation,
   type UpdateOrganisationVariables,
-} from './model/organisation.queries.js';
+} from './lib/hooks.js';
 
 export { buildTree, type OrganisationNode } from './lib/buildTree.js';
 export { countryAlpha2, countryName } from './lib/countryName.js';

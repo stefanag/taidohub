@@ -22,4 +22,4 @@ export {
   useCreateBeltRank,
   useDeleteBeltRank,
   useUpdateBeltRank,
-} from './model/belt-rank.queries.js';
+} from './lib/hooks.js';

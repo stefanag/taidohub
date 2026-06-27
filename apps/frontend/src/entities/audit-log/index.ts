@@ -6,5 +6,5 @@ export type {
 } from '@repo/contracts/audit-log';
 
 export { listAuditLog } from './api/audit-log.api.js';
-export { auditLogKeys, listAuditLogQueryOptions } from './model/audit-log.queries.js';
+export { auditLogKeys, listAuditLogQueryOptions } from './lib/hooks.js';
 export { diffFields, type FieldDiff } from './lib/diffFields.js';

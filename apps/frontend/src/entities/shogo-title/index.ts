@@ -18,4 +18,4 @@ export {
   useCreateShogoTitle,
   useDeleteShogoTitle,
   useUpdateShogoTitle,
-} from './model/shogo-title.queries.js';
+} from './lib/hooks.js';
