@@ -139,6 +139,16 @@ re-export `useSession` (and the `Session` type) from
 
 ## Chunk 5.2 — BeltRanks → `LookupTableService` migration
 
+> **Status:** Closed without migration (2026-06-28). Attempt
+> failed the LOC acceptance gate (243 → 269 lines); the PR was
+> reverted. Lesson captured in
+> [`architecture-investigations.md` § INV-2](./architecture-investigations.md#inv-2--lookuptableservice-abstraction-scope)
+> — `LookupTableService` is the right abstraction for entities
+> with ≤ 1 bespoke override hook; BeltRanks needs override
+> hooks in 2 CRUD verbs plus a hydrated lookup, so the LOC cost
+> outweighs the consistency gain at the current 3-entity scale.
+> Revisit if a 4th simple-shaped lookup table arrives.
+
 **Branch:** `refactor/p5-2-belt-ranks-lookup-migration`
 **Effort:** 1 day
 **Risk:** Low — internal restructure of one service; the
