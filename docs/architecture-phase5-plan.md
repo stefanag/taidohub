@@ -257,12 +257,17 @@ alongside the base's CRUD plumbing.
 >   - **B** (two scaffolds, shared shell): net **+95** LOC.
 >   - **C** (don't migrate): net **0** LOC.
 >
-> User picked **Option C**. Same outcome as chunk 5.2 / INV-2 —
-> the abstraction's overhead exceeds the duplication it would
-> retire at the current 1-consumer scale. The 2.3 non-goal stays
-> as the documented decision. 5.3b is closed-without-migration;
-> the design pass is the artifact future re-visitors should
-> consult.
+> User picked **Option C**. Same SHAPE of decision process as
+> chunk 5.2 (investigated → measured → weighed LOC vs
+> consistency), opposite OUTCOME. 5.2 shipped despite a +26
+> LOC tax because the abstraction earned shape consistency
+> across three belt-catalog services; 5.3's organisations
+> admin is a single consumer with no peers, so the
+> consistency argument doesn't apply and the +5 / +95 LOC
+> deltas of A / B don't earn anything in return. The 2.3
+> non-goal stays as the documented decision. 5.3b is
+> closed-without-migration; the design pass is the artefact
+> future re-visitors should consult.
 
 **Branch family:** `refactor/p5-3-<short-slug>` (design then migration)
 **Effort:** 3–4 days (1 day design, 2–3 days migration)

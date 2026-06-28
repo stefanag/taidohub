@@ -268,16 +268,21 @@ The addressable savings (~27 lines of chrome) doesn't clear the
 LOC overhead of either abstraction. The 2.3 non-goal was the
 right call; the Phase 5 revisit confirms it with measurement.
 
-INV-2 codified the principle: extract an abstraction only when
-the LOC actually shrinks at the codebase level, not just at the
-call site. By that test, A is roughly break-even (+5) and B is
-clearly worse (+95). Neither earns the new architectural
-surface they introduce.
+INV-2 codified the measurement discipline: count the LOC at the
+codebase level, not at the call site, and weigh the result
+against any consistency value the abstraction brings. For
+BeltRanks the +26 LOC tax was offset by aligning the three
+belt-catalog services on one outer shape — the team shipped
+the migration knowingly. For organisations the math is
+different: there's no peer consumer waiting to benefit from a
+shared shape, so the +5 LOC of Option A or the +95 LOC of
+Option B earn nothing structural in return.
 
 Phase 5.3b (the migration step) is **closed-without-migration**
 under this recommendation. The Phase 5 plan's chunk 5.3 gets a
-status update mirroring 5.2's INV-2 outcome: the work was
-investigated, the data was negative, the lesson is captured.
+status update mirroring the 5.2 / INV-2 PROCESS — investigated,
+measured, weighed — but with the opposite outcome because the
+inputs to the trade-off are different.
 
 If the user prefers A or B despite the LOC data, 5.3b opens
 with the chosen option. Otherwise this section serves as the
