@@ -35,6 +35,21 @@ export default defineConfig([
     },
   },
   {
+    // `entities/me/index.ts` re-exports `useSession` + `Session` from
+    // `features/auth-by-email` so consumers outside the auth feature can
+    // reach for "current actor" facts through a single entity boundary
+    // (memberships AND session live behind `entities/me`). FSD strictly
+    // forbids an entity from importing a feature; the re-export is the
+    // chosen public-surface compaction, scoped to the barrel only. The
+    // implementation stays in `auth-by-email` because that's where the
+    // better-auth wire adapter is wired up. Documented in the entity
+    // barrel.
+    files: ['src/entities/me/index.ts'],
+    rules: {
+      'fsd/forbidden-imports': 'off',
+    },
+  },
+  {
     // LocaleSwitcher composes i18n state with auth-by-email's `updateUser`
     // so an authenticated user's locale choice gets persisted to their DB
     // row. That's an intentional cross-feature dependency — strict FSD

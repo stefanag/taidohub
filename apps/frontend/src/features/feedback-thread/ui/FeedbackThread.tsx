@@ -6,7 +6,7 @@ import type {
   FeedbackEntityType,
 } from '@repo/contracts/feedback';
 
-import { useSession } from '@/features/auth-by-email';
+import { useSession } from '@/entities/me';
 import {
   useCreateFeedbackCommentMutation,
   useCreateFeedbackThreadMutation,

@@ -9,7 +9,7 @@ import {
   type MembershipRole,
   type OrganisationMembership,
 } from '@/entities/membership';
-import { useSession } from '@/features/auth-by-email';
+import { useSession } from '@/entities/me';
 import { HttpError } from '@/shared/api';
 import { AbilityContext } from '@/shared/lib/casl';
 import { Button } from '@/shared/ui';

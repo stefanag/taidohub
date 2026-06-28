@@ -59,6 +59,11 @@ vi.mock('@tanstack/react-query', async (orig) => {
 
 vi.mock('@/entities/me', () => ({
   useMyMembershipsQuery: () => useMyMembershipsSpy(),
+  // `useSession` lives on `entities/me` after the 5.1a re-export.
+  // The fixture mirrors the `auth-by-email` mock below so the
+  // component sees the same actor regardless of which barrel it
+  // reaches through.
+  useSession: () => ({ data: { user: { id: ACTOR_ID, role: 'sysadmin' } } }),
 }));
 
 vi.mock('@/entities/organisation', async (orig) => {

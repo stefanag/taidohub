@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import type { FeedbackComment, FeedbackReaction } from '@repo/contracts/feedback';
 
-import { useSession } from '@/features/auth-by-email';
+import { useSession } from '@/entities/me';
 import {
   useDeleteFeedbackCommentMutation,
   useRemoveFeedbackReactionMutation,
