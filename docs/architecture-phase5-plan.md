@@ -256,6 +256,28 @@ alongside the base's CRUD plumbing.
 
 ## Chunk 5.3 — Organisations admin → tree-aware admin scaffold
 
+> **Status:** Closed without migration (2026-06-28). The 5.3a
+> design pass (see
+> [`docs/resource-admin-pattern.md` — Tree-aware variant — design pass](./resource-admin-pattern.md#tree-aware-variant--design-pass-phase-53a))
+> measured the addressable savings at ~27 of 243 lines (≈ 11 %)
+> and scored three options:
+>
+>   - **A** (one scaffold, slot-based): net **+5** LOC.
+>   - **B** (two scaffolds, shared shell): net **+95** LOC.
+>   - **C** (don't migrate): net **0** LOC.
+>
+> User picked **Option C**. Same SHAPE of decision process as
+> chunk 5.2 (investigated → measured → weighed LOC vs
+> consistency), opposite OUTCOME. 5.2 shipped despite a +26
+> LOC tax because the abstraction earned shape consistency
+> across three belt-catalog services; 5.3's organisations
+> admin is a single consumer with no peers, so the
+> consistency argument doesn't apply and the +5 / +95 LOC
+> deltas of A / B don't earn anything in return. The 2.3
+> non-goal stays as the documented decision. 5.3b is
+> closed-without-migration; the design pass is the artefact
+> future re-visitors should consult.
+
 **Branch family:** `refactor/p5-3-<short-slug>` (design then migration)
 **Effort:** 3–4 days (1 day design, 2–3 days migration)
 **Risk:** Medium — the organisations admin is the largest
