@@ -1,12 +1,26 @@
 # Architecture follow-ups — implementation plan
 
-> **Status:** Drafted 2026-06-27, after the original 23-chunk plan
-> (`docs/architecture-refactor-plan.md`) closed out.
+> **Status:** Complete (2026-06-28). Every chunk has either landed
+> or been documented as a deliberate non-goal. Kept for archaeology
+> alongside its predecessor — open new follow-up work in a new doc
+> rather than appending here.
 >
-> **Predecessor:** `docs/architecture-refactor-plan.md` (Phases 1–3).
-> Read that first for context on the audit + the patterns this plan
+> **Predecessors:**
+> [`architecture-review.md`](./architecture-review.md) — the original
+> senior-engineer audit. [`architecture-refactor-plan.md`](./architecture-refactor-plan.md) —
+> the Phase 1–3 chunked implementation plan derived from that audit.
+> Read both first for context on the audit + the patterns this plan
 > reuses (per-chunk branch, PR-per-chunk, audit-then-verify-then-merge
 > protocol).
+>
+> **Delivery summary.**
+>
+> | Chunk | Title                                                | Status     |
+> |-------|------------------------------------------------------|------------|
+> | 4.1   | Inbox `@ApiResponse` so OpenAPI reflects `Paginated<T>` | DONE (PR #46) |
+> | 4.2   | Steiger / FSD layering cleanup — audit + barrel recipe | DONE (PR #48) — scope corrected during execution: only 2 of the 7 arch errors were the predicted shape; the other 5 are `fsd/forbidden-imports`, out of scope here. |
+> | 4.3   | Steiger / FSD layering cleanup — entity migrations   | DONE (PR #49) — reduced to one PR after the 4.2 correction. The 16 pre-existing override blocks in `steiger.config.js` are technical debt the recipe can retire incrementally, not "the 4.3 work." |
+> | 4.4   | Mark the original refactor plan + review as delivered | DONE (this PR) |
 
 ## What this plan covers
 
