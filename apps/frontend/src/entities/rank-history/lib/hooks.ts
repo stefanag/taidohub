@@ -14,7 +14,7 @@ import {
   verifyRankHistory,
 } from '../api/rank-history.api.js';
 
-import { authClient } from '@/features/auth-by-email';
+import { refreshSession } from '@/entities/me';
 
 import type {
   CreateRankHistoryInput,
@@ -39,17 +39,6 @@ export function gradingHistoryQueryOptions(userId: string) {
     queryFn: () => getGradingHistory(userId),
     enabled: Boolean(userId),
   });
-}
-
-/**
- * After any mutation that might affect the shogo recompute (verify, unverify,
- * or an edit that changed the shogo on a verified row), refetch the
- * better-auth session so a synced `user.shogoTitle` (followup D4) is reflected
- * in the sidebar / header without a full reload. Today this is a no-op on the
- * shogo-title field but the refresh is cheap and forward-compatible.
- */
-function refreshSession(): void {
-  void authClient.getSession();
 }
 
 /** Variables for the `useCreateRankHistory` mutation — `subjectUserId` is the user the entry is recorded for. */

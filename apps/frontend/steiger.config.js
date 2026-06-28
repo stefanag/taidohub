@@ -44,7 +44,7 @@ export default defineConfig([
     // implementation stays in `auth-by-email` because that's where the
     // better-auth wire adapter is wired up. Documented in the entity
     // barrel.
-    files: ['src/entities/me/index.ts'],
+    files: ['src/entities/me/**'],
     rules: {
       'fsd/forbidden-imports': 'off',
     },

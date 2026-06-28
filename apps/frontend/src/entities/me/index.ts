@@ -1,5 +1,6 @@
 export * from './api/me.api.js';
 export * from './lib/hooks.js';
+export { refreshSession } from './lib/refresh-session.js';
 
 // Public-surface compaction: `useSession` and `Session` describe "the
 // currently authenticated user", which is exactly what `entities/me`
