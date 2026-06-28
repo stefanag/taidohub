@@ -1,7 +1,20 @@
 # Architecture Review — taidohub
 
+> **Status:** Historical. Authored 2026-05 as the senior-engineer
+> onboarding audit. Every problem flagged here has either been
+> addressed by the companion implementation plan or documented as
+> a deliberate non-goal. Kept for archaeology — do NOT add new
+> work here; open it in [`architecture-followups-plan.md`](./architecture-followups-plan.md)
+> instead.
+>
+> **Companions.**
+> [`architecture-refactor-plan.md`](./architecture-refactor-plan.md) —
+> the chunked implementation plan derived from this review (Phases 1–3).
+> [`architecture-followups-plan.md`](./architecture-followups-plan.md) —
+> Phase 4 follow-ups + the residual `fsd/forbidden-imports` work this
+> review did not anticipate.
+
 > Senior-engineer onboarding audit. No code changes; investigation only.
-> See companion document [`architecture-refactor-plan.md`](./architecture-refactor-plan.md) for the chunked implementation plan.
 
 ---
 

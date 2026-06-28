@@ -1,5 +1,43 @@
 # Architecture Refactor — Implementation Plan
 
+> **Status:** Complete (2026-06-27). Every chunk has either landed
+> or been documented as a deliberate non-goal. Kept for archaeology
+> — do NOT add new work here; open it in
+> [`architecture-followups-plan.md`](./architecture-followups-plan.md)
+> instead.
+>
+> **Delivery summary.**
+>
+> | Chunk | Title                                                | Status     |
+> |-------|------------------------------------------------------|------------|
+> | 1.1   | `queryClient.clear()` on sign-out                    | DONE (PR #26) |
+> | 1.2   | AllExceptionsFilter logs the `cause` chain           | DONE (PR #27) |
+> | 1.3   | Pool-singleton assertion in the Drizzle client factory | DONE (PR #28) |
+> | 1.4   | Batch `replaceClassifications` writes                | DONE (PR #20) |
+> | 1.5   | Replace technique hydration 1+N with a JOIN-based read | DONE (PR #21) |
+> | 1.6   | Same JOIN-based read for patterns                    | DONE (PR #22) |
+> | 1.7   | Request-scoped UserContext + `@CurrentAbility()`     | DONE (PR #23) |
+> | 2.1   | Ability-contributor auto-discovery                   | DONE (PR #31) |
+> | 2.2   | `FeedbackAccessPolicy` as a stand-alone class        | DONE (PR #29) |
+> | 2.3   | `<ResourceAdminPage<T>>` scaffold + organisations migration | DONE (PR #32, #33) — scope pivoted; organisations documented as non-goal due to tree/move/members specialisation. Scaffold migrated techniques + patterns instead. |
+> | 2.4   | Migrate techniques admin to the scaffold             | DONE — folded into 2.3 |
+> | 2.5   | Migrate patterns admin to the scaffold               | DONE — folded into 2.3 |
+> | 2.6   | Consolidate entity shape (drop `model/*.queries.ts`) | DONE (PR #30) |
+> | 2.7   | `<FeatureGate code="...">` wrapper                   | DONE (PR #24) |
+> | 2.8   | Rename `*.ability-rules.ts` → `*.abilities.ts`       | DONE (PR #25) |
+> | 3.1   | `Paginated<T>` contract + migrate one endpoint       | DONE (PR #37) — inbox `@ApiResponse` wired later in P4.1 (#46) |
+> | 3.2   | AuthGuard memberships caching                        | DONE (PR #38) |
+> | 3.3   | `arch` rule against parent-as-component routes       | DONE (PR #35) |
+> | 3.4   | `coerceRow<T>()` helper for `db.execute` reads       | DONE (PR #36) |
+> | 3.5   | Generic `LookupTableModule` for belt-catalog         | DONE (PR #39) — BeltRanks deliberately not migrated; doc non-goal |
+> | 3.6   | Remove `SCAFFOLD_PROMPT.md`                          | DONE (PR #34) |
+> | 3.7   | Testing backfill (rolling)                           | DONE — audit-log #40, users #41, organisations #42, memberships #43, auth #44, belt-catalog #45. Repository-layer Postgres-harness specs deferred to a follow-on plan. |
+>
+> **Phase 4 follow-ups** (not part of this plan; tracked in
+> [`architecture-followups-plan.md`](./architecture-followups-plan.md)):
+> 4.1 inbox OpenAPI response (#46), 4.2 FSD barrel recipe (#48), 4.3
+> OrgMembershipEditor barrel migration (#49), 4.4 this archive pass.
+
 > Companion to [`architecture-review.md`](./architecture-review.md). Reading the review first is assumed; this document is the work breakdown only.
 
 ---
