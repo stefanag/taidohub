@@ -391,6 +391,53 @@ The frontend has different testing axes than the backend:
 
 **Behaviour change.** None.
 
+### 5.4a deliverables (2026-06-28)
+
+The 5.4a audit shipped with two artifacts:
+
+  - [`docs/frontend-test-recipe.md`](./frontend-test-recipe.md)
+    documenting the four test patterns (entity hook → renderHook
+    + QueryClient; feature component → providers + i18n; widget
+    → adds router-partial-mock + matchMedia polyfill; page →
+    barrel-mock fixtures + feature stubs) plus the Radix
+    pointer-capture trick and an explicit "don't do this" list
+    (deep imports, shared QueryClient, i18n-key assertions).
+  - This target table.
+
+**Top-level layer survey (2026-06-28):**
+
+| Layer    | Source | Specs | Ratio |
+|----------|-------:|------:|------:|
+| entities | 60     | 19    | 32 %  |
+| features | 74     | 27    | 36 %  |
+| widgets  | 21     | 7     | 33 %  |
+| pages    | 63     | 11    | 17 %  |
+
+**Per-slice 0 %-ratio gaps that drive the 5.4 target list:**
+
+| # | Target                                          | Layer    | Src files | Impact rationale |
+|---|-------------------------------------------------|----------|----------:|------------------|
+| 1 | `entities/feedback`                             | entity   | 3         | Mutation graph for the feedback feature — invalidation bugs here silently leak comments / read-status across views. Foundational; small PR. |
+| 2 | `features/feedback-thread`                      | feature  | 5         | Largest 0 % slice in features (FeedbackThread + FeedbackComment + FeedbackThreadSheet). Hot product code. May split into 2 PRs (thread + comment). |
+| 3 | `features/technique-form` + `features/pattern-form` | feature  | 4 total   | Paired. Same shape; covered together as one PR. Catalogue form correctness is what catches techniques/patterns regressions. |
+| 4 | `features/technique-list-item` + `features/pattern-list-item` | feature  | 4 total   | Paired with #3 conceptually but separable. Per-row UI; cheap PR. |
+| 5 | `widgets/feedback-badge` + `widgets/header` + `widgets/users-filters` | widget | 6 total | Three small widgets bundled as one PR. `feedback-badge` is the bell-icon gate; `header` and `users-filters` are smaller. |
+
+**Recommended order.** 5.4b (`entities/feedback`) lands first
+because its mutation graph is the foundation that #2 and the
+later page-level integration tests assume. After 5.4b, the
+remaining slices (5.4c–5.4f) are independent and can land in
+any order.
+
+**Out of scope for the 5.4 track.** The `pages/admin/*` aggregate
+shows 0 % at the directory level but the actual leaf pages
+(`pages/admin/{techniques,patterns}/list/`) were migrated to the
+ResourceAdminListPage scaffold in Chunk 2.3. Each page has
+~6 lines of bespoke logic above the scaffold — too thin to
+warrant a per-page integration spec until something composing
+THEM grows enough to justify one. Re-evaluate if the admin page
+shape changes again.
+
 ---
 
 ## Execution order
