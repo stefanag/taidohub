@@ -4,10 +4,6 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import * as authApi from '@/features/auth-by-email';
-// `useSignOut` calls `signOut` via a direct import from the api source
-// module, not via the barrel. Spying on the barrel re-export doesn't
-// intercept that — point the spy at the source module instead.
-import * as authApiSource from '@/features/auth-by-email/api/auth.api.js';
 import i18n from '@/i18n';
 import { AbilityContext, defineAbilityFor } from '@/shared/lib/casl';
 import { SidebarProvider } from '@/shared/ui';
@@ -21,6 +17,20 @@ const useMyMembershipsQueryMock = vi.fn<() => { data: Array<{ organisationId: st
 vi.mock('@/entities/me', () => ({
   useMyMembershipsQuery: () => useMyMembershipsQueryMock(),
 }));
+
+// Mock `useSignOut` through the feature's public API. The sidebar's
+// `NavUser` consumes `useSignOut()` from the barrel; mocking the hook to
+// return a stable `signOutMock` lets the test assert the click-to-sign-out
+// path without touching the underlying `signOut` import inside the
+// feature (deep-importing `@/features/auth-by-email/api/auth.api.js`
+// would trigger `fsd/no-public-api-sidestep`).
+const { signOutMock } = vi.hoisted(() => ({
+  signOutMock: vi.fn<() => Promise<void>>(() => Promise.resolve()),
+}));
+vi.mock('@/features/auth-by-email', async (orig) => {
+  const actual = await orig<typeof import('@/features/auth-by-email')>();
+  return { ...actual, useSignOut: () => signOutMock };
+});
 
 // jsdom doesn't implement matchMedia; shadcn's `useIsMobile` hook calls it.
 beforeAll(() => {
@@ -99,6 +109,7 @@ describe('<AppSidebar>', () => {
     navigateMock.mockReset();
     useRouterStateMock.mockReset();
     useMyMembershipsQueryMock.mockReset();
+    signOutMock.mockClear();
   });
 
   it('renders the nav entries with translated English labels', () => {
@@ -128,7 +139,6 @@ describe('<AppSidebar>', () => {
   });
 
   it('signs the user out and navigates to / when sign-out is clicked from the user menu', async () => {
-    const signOutSpy = vi.spyOn(authApiSource, 'signOut').mockResolvedValue();
     vi.spyOn(authApi, 'useSession').mockReturnValue({
       data: { user: { id: 'u1', email: 'ada@example.com' }, session: { id: 's1' } },
       isPending: false,
@@ -144,7 +154,7 @@ describe('<AppSidebar>', () => {
     // Then click the Log out item in the menu.
     await user.click(await screen.findByRole('menuitem', { name: /Sign out/i }));
 
-    expect(signOutSpy).toHaveBeenCalledTimes(1);
+    expect(signOutMock).toHaveBeenCalledTimes(1);
     await vi.waitFor(() => {
       expect(navigateMock).toHaveBeenCalledWith({ to: '/' });
     });
