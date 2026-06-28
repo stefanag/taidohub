@@ -109,6 +109,23 @@ export default defineConfig([
     },
   },
   {
+    // GradingTimelineEntry renders the FeedbackThreadSheet inline for
+    // each grading row when the actor is allowed to view feedback for
+    // it. The thread + the grading event are conceptually one unit at
+    // the timeline level — separating them would force the timeline's
+    // call site (`pages/grading-history`, `user-form`'s Grading
+    // history tab) to compose both features per row, duplicating the
+    // visibility gating that already lives in the timeline. Strict
+    // FSD would lift the timeline to a widget; doing so here costs
+    // more than the override (the timeline is itself used from two
+    // upstream features already covered by other overrides — see
+    // `user-form` above). Allow the cross-feature import here only.
+    files: ['src/features/grading-timeline/**'],
+    rules: {
+      'fsd/forbidden-imports': 'off',
+    },
+  },
+  {
     // The invite-user-dialog test mocks the user entity API module by its
     // deep path because `user.queries.ts` imports the fetcher from there
     // directly (not via the barrel). Mocking the barrel wouldn't reach that
