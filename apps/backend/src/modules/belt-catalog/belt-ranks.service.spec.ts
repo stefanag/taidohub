@@ -48,6 +48,7 @@ const ROW = {
 function repoStub() {
   return {
     findById: vi.fn(),
+    findByKey: vi.fn(),
     findAll: vi.fn(),
     findBySystemAndLevel: vi.fn().mockResolvedValue(null),
     findPublicBySlug: vi.fn(),
