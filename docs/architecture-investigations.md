@@ -162,13 +162,14 @@ The investigation closes once one of those is committed to.
 ## INV-2 — `LookupTableService` abstraction scope
 
 **Surfaced from.** Phase 5.2 (`BeltRanksService` migration to
-`LookupTableService`). The migration was attempted in PR
-[refactor/p5-2-belt-ranks-lookup-migration]; the work passed
-all tests + typecheck but failed the plan's LOC acceptance
+`LookupTableService`). The migration shipped in PR
+[`refactor/p5-2-belt-ranks-lookup-migration` (#56)] — the work
+passed all tests + typecheck, failed the plan's LOC acceptance
 criterion ("class shrinks meaningfully; if LOC goes UP, the
-scaffold is too leaky") and was reverted. This entry pins the
-lesson so a future engineer doesn't re-attempt the migration
-without first reading what happened.
+scaffold is too leaky"), and the team chose to ship anyway
+for shape consistency across the belt-catalog services. This
+entry pins what was measured so a future engineer evaluating
+a similar migration starts from the data, not from optimism.
 
 ### What was attempted
 
@@ -198,7 +199,7 @@ Implementation:
   - All 63 belt-catalog specs + the full 544-test backend
     suite passed without modification.
 
-### Why it was reverted
+### Why the LOC gate failed
 
 The plan's acceptance gate:
 
@@ -221,7 +222,29 @@ Cause:
 The method bodies actually shrank ~13 lines vs the original
 implementation. The +26 line growth lived in the docstring,
 generic class header, and the hook-override pattern. The
-abstraction worked but didn't pay rent.
+abstraction works (every test passes, the controller surface
+is unchanged) but doesn't pay rent in LOC.
+
+### Why the team shipped despite the gate
+
+The plan's gate said "pause and reconsider," not "do not
+merge." The reconsideration:
+
+  - All three belt-catalog services now have the same outer
+    shape (`extends LookupTableService<...>`). A future reader
+    can move between them without learning a per-service
+    contract.
+  - The bespoke logic (level collision, slug refine, cycle
+    check, three-table delete guard) is still in BeltRanks
+    where it belongs — as overrides, not inheritance. The
+    abstraction doesn't hide them.
+  - +26 LOC at the codebase level is small. The value of
+    "third example follows the pattern" is paid in 1-2
+    seconds of a future reader's time per visit.
+
+The trade-off is documented here so a future engineer
+evaluating a similar migration can see what the team
+weighed.
 
 ### The lesson
 
@@ -274,9 +297,14 @@ diagnosis won't change.
 ### Status
 
   - **Opened:** 2026-06-28.
-  - **Closed:** 2026-06-28 — decision recorded; PR reverted.
-  - **Related PR:** `refactor/p5-2-belt-ranks-lookup-migration`
-    (closed unmerged; the data point lives in its commit
-    message + this entry).
-  - **Follow-up:** none required. The Phase 5 plan's chunk 5.2
-    is considered closed-without-migration.
+  - **Closed:** 2026-06-28 — migration shipped despite the
+    LOC gate failure. Heuristic above stands for future
+    migration evaluations; the data point about scaffold
+    leakiness at 3-entity scale stands too.
+  - **Related PR:** [`refactor/p5-2-belt-ranks-lookup-migration` (#56)] —
+    merged unreverted. `BeltRanksService extends
+    LookupTableService<...>` is live in main.
+  - **Follow-up:** none required. The 4-step heuristic is the
+    durable artefact this investigation produced; the
+    "shipped vs not-shipped" outcome on this one entity is
+    second-order.

@@ -139,15 +139,24 @@ re-export `useSession` (and the `Session` type) from
 
 ## Chunk 5.2 — BeltRanks → `LookupTableService` migration
 
-> **Status:** Closed without migration (2026-06-28). Attempt
-> failed the LOC acceptance gate (243 → 269 lines); the PR was
-> reverted. Lesson captured in
+> **Status:** Merged (PR #56, 2026-06-28) with the LOC
+> acceptance gate explicitly failed: 243 → 269 lines (+26).
+> The team approved the trade-off for shape consistency
+> across the belt-catalog services — all three now share the
+> same `extends LookupTableService<...>` outer shape — and
+> recorded the heuristic in
 > [`architecture-investigations.md` § INV-2](./architecture-investigations.md#inv-2--lookuptableservice-abstraction-scope)
-> — `LookupTableService` is the right abstraction for entities
-> with ≤ 1 bespoke override hook; BeltRanks needs override
-> hooks in 2 CRUD verbs plus a hydrated lookup, so the LOC cost
-> outweighs the consistency gain at the current 3-entity scale.
-> Revisit if a 4th simple-shaped lookup table arrives.
+> so a future engineer evaluating a similar migration starts
+> from the data, not from optimism.
+>
+> Heuristic in short: `LookupTableService` is well-fitted to
+> entities with ≤ 1 bespoke override hook. BeltRanks needs
+> hooks in 2 CRUD verbs plus a hydrated lookup; the LOC cost
+> exceeds the consistency gain at 3-entity scale. The
+> shipped migration accepts that cost knowingly — it isn't a
+> retraction of the heuristic, it's a data point about how
+> the team weighs LOC vs shape consistency on a per-case
+> basis.
 
 **Branch:** `refactor/p5-2-belt-ranks-lookup-migration`
 **Effort:** 1 day
