@@ -8,40 +8,52 @@ import type { MembershipRole } from '@/entities/membership';
 
 import i18n from '@/i18n';
 
-// Mock the underlying users API so `listUsersQueryOptions` resolves with a
-// known fixture. vi.mock is hoisted so the fixture is inlined.
-vi.mock('@/entities/user/api/user.api.js', async (orig) => {
-  const actual = await orig<typeof import('@/entities/user/api/user.api.js')>();
+// Mock through the entity's public API barrel rather than the deep
+// path `@/entities/user/api/user.api.js` — `fsd/no-public-api-sidestep`
+// flags the deep import. We intercept at the hook layer: replace
+// `listUsersQueryOptions` with a stable queryOptions object whose
+// `queryFn` resolves the fixture synchronously. The component reads
+// `useQuery(listUsersQueryOptions(...))`, so the mock takes effect
+// without touching the underlying `listUsers` fetcher. Recipe lives
+// in `docs/fsd-test-barrel-recipe.md`.
+const { listUsersFixture } = vi.hoisted(() => ({
+  listUsersFixture: {
+    data: [
+      {
+        id: 'u-ada',
+        email: 'ada@example.com',
+        name: 'Ada Lovelace',
+        emailVerified: true,
+        image: null,
+        role: 'user' as const,
+        deactivatedAt: null,
+        createdAt: '2026-01-01T00:00:00.000Z',
+        updatedAt: '2026-01-01T00:00:00.000Z',
+      },
+      {
+        id: 'u-bob',
+        email: 'bob@example.com',
+        name: null,
+        emailVerified: true,
+        image: null,
+        role: 'user' as const,
+        deactivatedAt: null,
+        createdAt: '2026-01-01T00:00:00.000Z',
+        updatedAt: '2026-01-01T00:00:00.000Z',
+      },
+    ],
+    total: 2,
+    page: 1,
+    perPage: 25,
+  },
+}));
+vi.mock('@/entities/user', async (orig) => {
+  const actual = await orig<typeof import('@/entities/user')>();
   return {
     ...actual,
-    listUsers: vi.fn().mockResolvedValue({
-      data: [
-        {
-          id: 'u-ada',
-          email: 'ada@example.com',
-          name: 'Ada Lovelace',
-          emailVerified: true,
-          image: null,
-          role: 'user',
-          deactivatedAt: null,
-          createdAt: '2026-01-01T00:00:00.000Z',
-          updatedAt: '2026-01-01T00:00:00.000Z',
-        },
-        {
-          id: 'u-bob',
-          email: 'bob@example.com',
-          name: null,
-          emailVerified: true,
-          image: null,
-          role: 'user',
-          deactivatedAt: null,
-          createdAt: '2026-01-01T00:00:00.000Z',
-          updatedAt: '2026-01-01T00:00:00.000Z',
-        },
-      ],
-      total: 2,
-      page: 1,
-      perPage: 25,
+    listUsersQueryOptions: (query: import('@/entities/user').ListUsersQuery) => ({
+      queryKey: ['user', 'list', query] as const,
+      queryFn: () => Promise.resolve(listUsersFixture),
     }),
   };
 });
