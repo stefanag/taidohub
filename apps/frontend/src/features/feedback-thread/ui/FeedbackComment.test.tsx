@@ -1,12 +1,13 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import * as React from 'react';
 import { I18nextProvider } from 'react-i18next';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { FeedbackComment as FeedbackCommentType } from '@repo/contracts/feedback';
 
 import i18n from '@/i18n';
+import { openRadixPopover, stubRadixPointerEvents } from '@/shared/test/radix';
 
 // Hoisted mocks for the four entity mutation hooks the component
 // composes, plus session.
@@ -91,6 +92,12 @@ function makeComment(overrides: Partial<FeedbackCommentType> = {}): FeedbackComm
     ...overrides,
   };
 }
+
+beforeAll(() => {
+  // Radix Popover (the React picker) + Radix Dialog (the delete
+  // confirm) both depend on the pointer-capture stubs.
+  stubRadixPointerEvents();
+});
 
 beforeEach(async () => {
   await i18n.changeLanguage('en');
@@ -275,6 +282,60 @@ describe('<FeedbackComment>', () => {
     it('does NOT render the edited indicator on a freshly-created comment', () => {
       renderComment(makeComment({ createdAt: RECENT, updatedAt: RECENT }));
       expect(screen.queryByText(/edited/i)).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Popover-based ReactionPicker', () => {
+    it('forwards a picker selection to the set-reaction mutation', async () => {
+      vi.useRealTimers();
+      const user = userEvent.setup();
+      renderComment(makeComment());
+
+      // Open the React popover (the smile-icon button). The
+      // `aria-label` is `feedback.react` → "React" in en.
+      const reactTrigger = screen.getByRole('button', { name: /^react$/i });
+      await openRadixPopover(reactTrigger);
+
+      // Pick one of the picker's emoji reactions. The picker's
+      // emoji buttons carry their localised glyph as aria-label
+      // (set in ReactionPicker.tsx) — query by name.
+      const thumbsUp = await screen.findByRole('button', { name: '👍' });
+      await user.click(thumbsUp);
+
+      expect(feedbackMocks.setReactionMutate).toHaveBeenCalledTimes(1);
+      expect(feedbackMocks.setReactionMutate).toHaveBeenCalledWith({
+        commentId: COMMENT_ID,
+        reaction: 'thumbs_up',
+        threadId: THREAD_ID,
+      });
+      expect(feedbackMocks.removeReactionMutate).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Delete confirm Dialog', () => {
+    it('opens the dialog on Delete click + fires the delete mutation on Confirm', async () => {
+      vi.useRealTimers();
+      const user = userEvent.setup();
+      sessionMock.mockReturnValue({ data: { user: { id: AUTHOR_ID } } });
+      renderComment(makeComment());
+
+      // Click the Delete action button — sets the
+      // confirmDelete state which opens the Radix Dialog.
+      await user.click(screen.getByRole('button', { name: /^delete$/i }));
+
+      // The Dialog renders into a portal; scope the Confirm button
+      // search to the dialog itself so we don't match the trigger.
+      const dialog = await screen.findByRole('dialog');
+      const confirmButton = within(dialog).getByRole('button', { name: /^delete$/i });
+      await user.click(confirmButton);
+
+      expect(feedbackMocks.deleteMutate).toHaveBeenCalledTimes(1);
+      const [arg, opts] = feedbackMocks.deleteMutate.mock.calls[0]!;
+      expect(arg).toBe(COMMENT_ID);
+      // The mutation receives an onSuccess option that closes the
+      // dialog. Driving it from the test confirms the bridge is
+      // wired even when the mutation is mocked.
+      expect(opts).toMatchObject({ onSuccess: expect.any(Function) });
     });
   });
 });

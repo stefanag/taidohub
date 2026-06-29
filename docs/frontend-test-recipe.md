@@ -204,26 +204,41 @@ page's tab-strip behaviour against the membership fixture.
 
 ## Radix primitive interactions in jsdom
 
-Radix Select / Dropdown / Sheet use pointer events that jsdom
-doesn't model. To open them in a test, stub the pointer-capture
-methods first:
+Radix Select / Dropdown / Popover / Sheet / Dialog use pointer
+events that jsdom doesn't implement (`hasPointerCapture`,
+`setPointerCapture`, `releasePointerCapture`) plus
+`scrollIntoView` for positioning. Spec files that exercise these
+flows need to stub them first.
+
+Use the shared helpers in `apps/frontend/src/shared/test/radix.ts`:
 
 ```ts
-function openRadixSelect(trigger: HTMLElement): void {
-  window.HTMLElement.prototype.hasPointerCapture ??= vi.fn(() => false);
-  window.HTMLElement.prototype.setPointerCapture ??= vi.fn();
-  window.HTMLElement.prototype.releasePointerCapture ??= vi.fn();
-  window.HTMLElement.prototype.scrollIntoView ??= vi.fn();
-  fireEvent.pointerDown(trigger, { button: 0, ctrlKey: false, pointerId: 1 });
-  fireEvent.pointerUp(trigger, { button: 0, ctrlKey: false, pointerId: 1 });
-  fireEvent.click(trigger);
-}
+import { stubRadixPointerEvents, openRadixPopover } from '@/shared/test/radix';
+
+beforeAll(() => {
+  stubRadixPointerEvents();
+});
+
+it('opens the popover on trigger click', async () => {
+  render(<Component />);
+  await openRadixPopover(screen.getByRole('button', { name: /open/i }));
+  expect(await screen.findByRole('menuitem', { name: /reply/i })).toBeInTheDocument();
+});
 ```
 
-The block is reused across MembershipEditor.test.tsx,
-OrgMembershipEditor.test.tsx, and others. Copy it locally when
-a new spec needs it — Phase 5.4 may extract it to
-`shared/test/radix.ts` if the third or fourth spec wants it.
+  - **`stubRadixPointerEvents()`** patches the four prototype
+    methods if they aren't already set. Idempotent — call once in
+    `beforeAll`. Required for any Radix open path (Popover,
+    Dropdown, Select). Dialog / Sheet only need the prototype
+    stubs; their triggers respond to plain `userEvent.click` after
+    that.
+  - **`openRadixPopover(trigger)`** drives the full pointer
+    sequence (`pointerDown` → `pointerUp` → `click`). Use this for
+    Popover / Dropdown / Select triggers that open into a portal.
+
+Existing consumers: `FeedbackBadge.test.tsx`,
+`FeedbackComment.test.tsx`, `MembershipEditor.test.tsx`,
+`OrgMembershipEditor.test.tsx`.
 
 ## Things to avoid
 
