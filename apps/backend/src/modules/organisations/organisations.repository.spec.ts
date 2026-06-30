@@ -92,12 +92,13 @@ describe('getAncestorIds', () => {
     // Verify that maxDepth=2 parameter was actually passed to execute.
     // The SQL object contains queryChunks with embedded template values.
     // A regression that hard-coded maxDepth to 16 would fail this assertion.
-    const sqlObj = executeMock.mock.calls[0][0] as unknown as { queryChunks?: Array<unknown> };
-    if (sqlObj && 'queryChunks' in sqlObj && Array.isArray(sqlObj.queryChunks)) {
-      // queryChunks alternates between string template parts and values.
-      // Check if any chunk is the number 2 (the maxDepth we passed).
-      const hasMaxDepth = sqlObj.queryChunks.some((c) => c === 2);
-      expect(hasMaxDepth).toBe(true);
-    }
+    const sqlObj = executeMock.mock.calls[0][0] as unknown as { queryChunks?: unknown };
+    expect(sqlObj).toHaveProperty('queryChunks');
+    expect(Array.isArray(sqlObj.queryChunks)).toBe(true);
+    const chunks = sqlObj.queryChunks as Array<unknown>;
+    // queryChunks alternates between string template parts and values.
+    // Check if any chunk is the number 2 (the maxDepth we passed).
+    const hasMaxDepth = chunks.some((c) => c === 2);
+    expect(hasMaxDepth).toBe(true);
   });
 });
