@@ -32,6 +32,7 @@ export const SubjectSchema = z
     'Technique',
     'Pattern',
     'Progress',
+    'RequirementSet',
     'Student',
     'FeedbackThread',
     'all',
@@ -178,6 +179,13 @@ export type StudentSubjectShape = {
   organisationIds?: readonly string[];
 };
 
+export type RequirementSetSubjectShape = {
+  readonly __caslSubjectType__: 'RequirementSet';
+  id?: string;
+  organisationId?: string | null;
+  isActive?: boolean;
+};
+
 /**
  * Shape used to gate access to a feedback thread. The fine-grained
  * access logic (subject / sysadmin / club admin / linked instructor /
@@ -219,6 +227,7 @@ export type AppSubject =
   | TechniqueSubjectShape
   | PatternSubjectShape
   | ProgressSubjectShape
+  | RequirementSetSubjectShape
   | StudentSubjectShape
   | FeedbackThreadSubjectShape;
 
