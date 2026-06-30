@@ -1,8 +1,12 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
-import type { GradingRequirements } from '@repo/contracts/grading-requirements';
+import { BadRequestException, ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import type {
+  GradingRequirements,
+  SetGradingRequirementsInput,
+} from '@repo/contracts/grading-requirements';
 
 import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
+import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
 import { MembershipsRepository } from '../memberships/memberships.repository.js';
 import { OrganisationsRepository } from '../organisations/organisations.repository.js';
 
@@ -16,6 +20,7 @@ import { RequirementSetsRepository } from './requirement-sets.repository.js';
 @Injectable()
 export class RankRequirementsService {
   constructor(
+    @Inject(DRIZZLE) private readonly db: DrizzleDb,
     private readonly repo: RankRequirementsRepository,
     private readonly sets: RequirementSetsRepository,
     private readonly orgs: OrganisationsRepository,
@@ -174,5 +179,159 @@ export class RankRequirementsService {
     }
 
     return this.emptyRequirements(rankId, null);
+  }
+
+  // ── Write methods ────────────────────────────────────────────────────────
+
+  async replace(
+    rankId: string,
+    body: SetGradingRequirementsInput,
+    user: AuthenticatedUser,
+  ): Promise<GradingRequirements> {
+    if (!body.setId) {
+      throw new BadRequestException({ error: 'setId is required', code: 'VALIDATION_ERROR' });
+    }
+    const set = await this.sets.findById(body.setId);
+    if (!set) throw new NotFoundException({ error: 'Set not found', code: 'NOT_FOUND' });
+    this.assertCanManageSet(user, set.organisationId);
+
+    await this.db.transaction(async (tx) => {
+      await this.repo.deleteScope(rankId, body.setId, tx);
+      await this.repo.insertScalar(
+        {
+          rankId,
+          setId: body.setId,
+          jissenMinutes: body.jissenMinutes ?? null,
+          jissenTested: body.jissenTested ?? false,
+          minMonthsSincePreviousRank: body.minMonthsSincePreviousRank ?? null,
+          requiresTheoricExam: body.requiresTheoricExam ?? false,
+          requiresEssay: body.requiresEssay ?? false,
+        },
+        tx,
+      );
+
+      const techRows = [
+        ...(body.kihon ?? []).map((id) => ({ rankId, setId: body.setId, techniqueId: id, isTested: false })),
+        ...(body.kihonTested ?? []).map((id) => ({ rankId, setId: body.setId, techniqueId: id, isTested: true })),
+      ];
+      const dedupTech = this.dedupTested(techRows, 'techniqueId');
+      if (dedupTech.length) await this.repo.insertTechniques(dedupTech, tx);
+
+      const patternRows = [
+        ...(body.kobo ?? []).map((id) => ({ rankId, setId: body.setId, patternId: id, isTested: false })),
+        ...(body.koboTested ?? []).map((id) => ({ rankId, setId: body.setId, patternId: id, isTested: true })),
+        ...(body.otherPatterns ?? []).map((id) => ({ rankId, setId: body.setId, patternId: id, isTested: false })),
+        ...(body.otherPatternsTested ?? []).map((id) => ({ rankId, setId: body.setId, patternId: id, isTested: true })),
+      ];
+      const dedupPat = this.dedupTested(patternRows, 'patternId');
+      if (dedupPat.length) await this.repo.insertPatterns(dedupPat, tx);
+
+      for (const group of body.hokeiGroups ?? []) {
+        const clamped = Math.min(group.pickCount, group.patternIds.length);
+        const inserted = await this.repo.insertHokeiGroup(
+          {
+            rankId,
+            setId: body.setId,
+            groupOrder: group.groupOrder ?? 0,
+            pickCount: clamped,
+            isTested: group.isTested ?? false,
+            labelEn: group.labelEn ?? null,
+            labelFi: group.labelFi ?? null,
+            labelSv: group.labelSv ?? null,
+          },
+          tx,
+        );
+        await this.repo.insertHokeiGroupPatterns(
+          group.patternIds.map((pid, i) => ({ groupId: inserted.id, patternId: pid, sortOrder: i })),
+          tx,
+        );
+      }
+    });
+
+    return this.fetchForScope(rankId, body.setId);
+  }
+
+  async clearForScope(rankId: string, setId: string, user: AuthenticatedUser): Promise<void> {
+    const set = await this.sets.findById(setId);
+    if (!set) throw new NotFoundException({ error: 'Set not found', code: 'NOT_FOUND' });
+    this.assertCanManageSet(user, set.organisationId);
+    await this.db.transaction(async (tx) => {
+      await this.repo.deleteScope(rankId, setId, tx);
+    });
+  }
+
+  async deepCopyDetailsForSet(sourceSetId: string, targetSetId: string): Promise<void> {
+    await this.db.transaction(async (tx) => {
+      const rankIds = await this.repo.distinctRankIdsForSet(sourceSetId, tx);
+      for (const rankId of rankIds) {
+        const scalar = await this.repo.fetchScalar(rankId, sourceSetId, tx);
+        if (!scalar) continue;
+        await this.repo.insertScalar(
+          {
+            rankId,
+            setId: targetSetId,
+            jissenMinutes: scalar.jissenMinutes,
+            jissenTested: scalar.jissenTested,
+            minMonthsSincePreviousRank: scalar.minMonthsSincePreviousRank,
+            requiresTheoricExam: scalar.requiresTheoricExam,
+            requiresEssay: scalar.requiresEssay,
+          },
+          tx,
+        );
+        const techniques = await this.repo.fetchTechniques(rankId, sourceSetId, tx);
+        if (techniques.length) {
+          await this.repo.insertTechniques(
+            techniques.map((t) => ({ rankId, setId: targetSetId, techniqueId: t.techniqueId, isTested: t.isTested })),
+            tx,
+          );
+        }
+        const patterns = await this.repo.fetchPatternsWithType(rankId, sourceSetId, tx);
+        if (patterns.length) {
+          await this.repo.insertPatterns(
+            patterns.map((p) => ({ rankId, setId: targetSetId, patternId: p.patternId, isTested: p.isTested })),
+            tx,
+          );
+        }
+        const groups = await this.repo.fetchHokeiGroups(rankId, sourceSetId, tx);
+        for (const g of groups) {
+          const inserted = await this.repo.insertHokeiGroup(
+            {
+              rankId,
+              setId: targetSetId,
+              groupOrder: g.groupOrder,
+              pickCount: g.pickCount,
+              isTested: g.isTested,
+              labelEn: g.labelEn,
+              labelFi: g.labelFi,
+              labelSv: g.labelSv,
+            },
+            tx,
+          );
+          await this.repo.insertHokeiGroupPatterns(
+            g.patternIds.map((pid, i) => ({ groupId: inserted.id, patternId: pid, sortOrder: i })),
+            tx,
+          );
+        }
+      }
+    });
+  }
+
+  // ── Private helpers ───────────────────────────────────────────────────────
+
+  private assertCanManageSet(user: AuthenticatedUser, orgId: string | null): void {
+    const ability = this.abilityFactory.createForUser(user);
+    if (!ability.can('manage', { __caslSubjectType__: 'RequirementSet', organisationId: orgId })) {
+      throw new ForbiddenException({ error: 'Forbidden', code: 'FORBIDDEN' });
+    }
+  }
+
+  private dedupTested<T extends { isTested: boolean }>(rows: T[], keyField: keyof T): T[] {
+    const map = new Map<unknown, T>();
+    for (const r of rows) {
+      const k = r[keyField];
+      const existing = map.get(k);
+      if (!existing || r.isTested) map.set(k, r);
+    }
+    return [...map.values()];
   }
 }

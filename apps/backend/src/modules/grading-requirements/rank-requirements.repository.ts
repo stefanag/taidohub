@@ -209,6 +209,22 @@ export class RankRequirementsRepository {
   }
 
   // -------------------------------------------------------------------------
+  // Distinct rank helpers
+  // -------------------------------------------------------------------------
+
+  async distinctRankIdsForSet(
+    setId: string,
+    tx?: DrizzleExecutor,
+  ): Promise<string[]> {
+    const client = tx ?? this.db;
+    const rows = await client
+      .selectDistinct({ rankId: rankGradingRequirement.rankId })
+      .from(rankGradingRequirement)
+      .where(eq(rankGradingRequirement.setId, setId));
+    return rows.map((r) => r.rankId);
+  }
+
+  // -------------------------------------------------------------------------
   // Insert methods
   // -------------------------------------------------------------------------
 

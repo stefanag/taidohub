@@ -1,4 +1,4 @@
-import { ForbiddenException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
@@ -59,6 +59,8 @@ function membershipRow(overrides: Partial<Record<string, unknown>> = {}) {
 
 // ── Harness ──────────────────────────────────────────────────────────────────
 
+const FAKE_TX = { __tx: true } as unknown;
+
 interface Harness {
   svc: RankRequirementsService;
   repo: { [K in keyof RankRequirementsRepository]: ReturnType<typeof vi.fn> };
@@ -66,10 +68,11 @@ interface Harness {
   orgs: { getAncestorIds: ReturnType<typeof vi.fn> };
   memberships: { list: ReturnType<typeof vi.fn> };
   abilities: { createForUser: ReturnType<typeof vi.fn> };
+  fakeDb: { transaction: ReturnType<typeof vi.fn> };
 }
 
-function build(opts: { canRead?: boolean } = {}): Harness {
-  const { canRead = true } = opts;
+function build(opts: { canRead?: boolean; canManage?: boolean } = {}): Harness {
+  const { canRead = true, canManage = true } = opts;
 
   const repo = {
     fetchScalar: vi.fn().mockResolvedValue(null),
@@ -77,16 +80,17 @@ function build(opts: { canRead?: boolean } = {}): Harness {
     fetchPatternsWithType: vi.fn().mockResolvedValue([]),
     fetchHokeiGroups: vi.fn().mockResolvedValue([]),
     deleteScope: vi.fn().mockResolvedValue(undefined),
-    insertScalar: vi.fn(),
-    insertTechniques: vi.fn(),
-    insertPatterns: vi.fn(),
-    insertHokeiGroup: vi.fn(),
-    insertHokeiGroupPatterns: vi.fn(),
+    insertScalar: vi.fn().mockResolvedValue({ id: 'scalar-1' }),
+    insertTechniques: vi.fn().mockResolvedValue(undefined),
+    insertPatterns: vi.fn().mockResolvedValue(undefined),
+    insertHokeiGroup: vi.fn().mockResolvedValue({ id: 'hg-1' }),
+    insertHokeiGroupPatterns: vi.fn().mockResolvedValue(undefined),
+    distinctRankIdsForSet: vi.fn().mockResolvedValue([]),
   };
 
   const sets = {
     list: vi.fn().mockResolvedValue([]),
-    findById: vi.fn().mockResolvedValue(null),
+    findById: vi.fn().mockResolvedValue({ id: 's-1', organisationId: 'orgA' }),
     insert: vi.fn(),
     update: vi.fn(),
     delete: vi.fn(),
@@ -103,12 +107,17 @@ function build(opts: { canRead?: boolean } = {}): Harness {
     list: vi.fn().mockResolvedValue({ data: [], total: 0 }),
   };
 
-  const fakeAbility = { can: vi.fn().mockReturnValue(canRead) };
+  const fakeAbility = { can: vi.fn().mockReturnValue(canRead && canManage) };
   const abilities = {
     createForUser: vi.fn().mockReturnValue(fakeAbility),
   };
 
+  const fakeDb = {
+    transaction: vi.fn(async (cb: (tx: unknown) => Promise<unknown>) => cb(FAKE_TX)),
+  };
+
   const svc = new RankRequirementsService(
+    fakeDb as never,
     repo as unknown as RankRequirementsRepository,
     sets as unknown as RequirementSetsRepository,
     orgs as unknown as OrganisationsRepository,
@@ -116,7 +125,7 @@ function build(opts: { canRead?: boolean } = {}): Harness {
     abilities as unknown as AbilityFactory,
   );
 
-  return { svc, repo, sets, orgs, memberships, abilities };
+  return { svc, repo, sets, orgs, memberships, abilities, fakeDb };
 }
 
 // ── Tests: fetchForScope ─────────────────────────────────────────────────────
@@ -402,5 +411,246 @@ describe('RankRequirementsService.resolveForSet', () => {
     const result = await svc.resolveForSet('rank-1', 'set-1', actor);
 
     expect(result).toEqual(svc.emptyRequirements('rank-1', 'set-1'));
+  });
+});
+
+// ── Tests: replace ───────────────────────────────────────────────────────────
+
+describe('RankRequirementsService.replace', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('rejects 400 when setId is missing', async () => {
+    const { svc } = build();
+    const user = makeUser();
+    await expect(svc.replace('rank-1', { setId: '' } as any, user)).rejects.toBeInstanceOf(
+      BadRequestException,
+    );
+  });
+
+  it('rejects 400 when setId is undefined', async () => {
+    const { svc } = build();
+    const user = makeUser();
+    await expect(svc.replace('rank-1', {} as any, user)).rejects.toBeInstanceOf(
+      BadRequestException,
+    );
+  });
+
+  it('throws ForbiddenException when caller cannot manage the set org', async () => {
+    const { svc, sets, abilities } = build();
+    sets.findById = vi.fn().mockResolvedValue({ id: 's-1', organisationId: 'orgB' });
+    abilities.createForUser.mockReturnValue({ can: vi.fn().mockReturnValue(false) });
+    const user = makeUser();
+    await expect(svc.replace('rank-1', { setId: 's-1' } as any, user)).rejects.toBeInstanceOf(
+      ForbiddenException,
+    );
+  });
+
+  it('throws NotFoundException when set does not exist', async () => {
+    const { svc, sets } = build();
+    sets.findById = vi.fn().mockResolvedValue(null);
+    const user = makeUser();
+    await expect(svc.replace('rank-1', { setId: 's-missing' } as any, user)).rejects.toBeInstanceOf(
+      NotFoundException,
+    );
+  });
+
+  it('calls deleteScope BEFORE any insertScalar', async () => {
+    const { svc, repo } = build();
+    // fetchScalar after insert returns null so fetchForScope returns empty
+    repo.fetchScalar = vi.fn().mockResolvedValue(null);
+
+    const user = makeUser();
+    await svc.replace('rank-1', {
+      setId: 's-1',
+      kihon: [],
+      kihonTested: [],
+      kobo: [],
+      koboTested: [],
+      otherPatterns: [],
+      otherPatternsTested: [],
+      hokeiGroups: [],
+      jissenTested: false,
+      requiresTheoricExam: false,
+      requiresEssay: false,
+    }, user);
+
+    const deleteOrder = repo.deleteScope.mock.invocationCallOrder[0]!;
+    const insertOrder = repo.insertScalar.mock.invocationCallOrder[0]!;
+    expect(deleteOrder).toBeLessThan(insertOrder);
+  });
+
+  it('clamps pickCount to patternIds.length', async () => {
+    const { svc, repo } = build();
+    repo.fetchScalar = vi.fn().mockResolvedValue(null);
+
+    const user = makeUser();
+    await svc.replace('rank-1', {
+      setId: 's-1',
+      kihon: [],
+      kihonTested: [],
+      kobo: [],
+      koboTested: [],
+      otherPatterns: [],
+      otherPatternsTested: [],
+      hokeiGroups: [{ pickCount: 5, patternIds: ['p1', 'p2', 'p3'], groupOrder: 0, isTested: false }],
+      jissenTested: false,
+      requiresTheoricExam: false,
+      requiresEssay: false,
+    }, user);
+
+    expect(repo.insertHokeiGroup).toHaveBeenCalledWith(
+      expect.objectContaining({ pickCount: 3 }),
+      FAKE_TX,
+    );
+  });
+
+  it('deduplicates technique rows, preferring isTested=true when same id in kihon and kihonTested', async () => {
+    const { svc, repo } = build();
+    repo.fetchScalar = vi.fn().mockResolvedValue(null);
+
+    const user = makeUser();
+    await svc.replace('rank-1', {
+      setId: 's-1',
+      kihon: ['t1', 't2'],
+      kihonTested: ['t1'], // t1 appears in both
+      kobo: [],
+      koboTested: [],
+      otherPatterns: [],
+      otherPatternsTested: [],
+      hokeiGroups: [],
+      jissenTested: false,
+      requiresTheoricExam: false,
+      requiresEssay: false,
+    }, user);
+
+    // Only 2 rows should be inserted (t1 with isTested=true, t2 with isTested=false)
+    expect(repo.insertTechniques).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({ techniqueId: 't1', isTested: true }),
+        expect.objectContaining({ techniqueId: 't2', isTested: false }),
+      ]),
+      FAKE_TX,
+    );
+    // Exactly 2 rows (no duplicate for t1)
+    const insertedRows = repo.insertTechniques.mock.calls[0]![0] as unknown[];
+    expect(insertedRows).toHaveLength(2);
+  });
+});
+
+// ── Tests: clearForScope ─────────────────────────────────────────────────────
+
+describe('RankRequirementsService.clearForScope', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('throws NotFoundException when the set does not exist', async () => {
+    const { svc, sets } = build();
+    sets.findById = vi.fn().mockResolvedValue(null);
+    const user = makeUser();
+    await expect(svc.clearForScope('rank-1', 's-missing', user)).rejects.toBeInstanceOf(
+      NotFoundException,
+    );
+  });
+
+  it('throws ForbiddenException when caller cannot manage the set org', async () => {
+    const { svc, sets, abilities } = build();
+    sets.findById = vi.fn().mockResolvedValue({ id: 's-1', organisationId: 'orgB' });
+    abilities.createForUser.mockReturnValue({ can: vi.fn().mockReturnValue(false) });
+    const user = makeUser();
+    await expect(svc.clearForScope('rank-1', 's-1', user)).rejects.toBeInstanceOf(
+      ForbiddenException,
+    );
+  });
+
+  it('calls deleteScope with correct rankId and setId when authorized', async () => {
+    const { svc, repo } = build();
+    const user = makeUser();
+    await svc.clearForScope('rank-1', 's-1', user);
+    expect(repo.deleteScope).toHaveBeenCalledWith('rank-1', 's-1', FAKE_TX);
+  });
+});
+
+// ── Tests: deepCopyDetailsForSet ─────────────────────────────────────────────
+
+describe('RankRequirementsService.deepCopyDetailsForSet', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('calls distinctRankIdsForSet on the source set to discover ranks', async () => {
+    const { svc, repo } = build();
+    repo.distinctRankIdsForSet = vi.fn().mockResolvedValue([]);
+    await svc.deepCopyDetailsForSet('src-set', 'tgt-set');
+    expect(repo.distinctRankIdsForSet).toHaveBeenCalledWith('src-set', FAKE_TX);
+  });
+
+  it('re-points each detail row to the target set, preserving isTested + groupOrder + pickCount', async () => {
+    const { svc, repo } = build();
+
+    repo.distinctRankIdsForSet = vi.fn().mockResolvedValue(['rank-A']);
+    repo.fetchScalar = vi.fn().mockResolvedValue(scalarRow({ rankId: 'rank-A', setId: 'src-set', jissenMinutes: 10 }));
+    repo.fetchTechniques = vi.fn().mockResolvedValue([
+      { techniqueId: 'tech-1', isTested: true },
+      { techniqueId: 'tech-2', isTested: false },
+    ]);
+    repo.fetchPatternsWithType = vi.fn().mockResolvedValue([
+      { patternId: 'pat-1', isTested: false, isKobo: true },
+    ]);
+    repo.fetchHokeiGroups = vi.fn().mockResolvedValue([
+      { id: 'hg-src', rankId: 'rank-A', setId: 'src-set', groupOrder: 1, pickCount: 2, isTested: true, labelEn: 'G', labelFi: null, labelSv: null, patternIds: ['p1', 'p2'] },
+    ]);
+
+    await svc.deepCopyDetailsForSet('src-set', 'tgt-set');
+
+    // scalar re-inserted with targetSetId
+    expect(repo.insertScalar).toHaveBeenCalledWith(
+      expect.objectContaining({ rankId: 'rank-A', setId: 'tgt-set', jissenMinutes: 10 }),
+      FAKE_TX,
+    );
+
+    // techniques re-inserted with targetSetId
+    expect(repo.insertTechniques).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({ rankId: 'rank-A', setId: 'tgt-set', techniqueId: 'tech-1', isTested: true }),
+        expect.objectContaining({ rankId: 'rank-A', setId: 'tgt-set', techniqueId: 'tech-2', isTested: false }),
+      ]),
+      FAKE_TX,
+    );
+
+    // patterns re-inserted with targetSetId
+    expect(repo.insertPatterns).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({ rankId: 'rank-A', setId: 'tgt-set', patternId: 'pat-1', isTested: false }),
+      ]),
+      FAKE_TX,
+    );
+
+    // hokei group re-inserted with targetSetId and correct fields
+    expect(repo.insertHokeiGroup).toHaveBeenCalledWith(
+      expect.objectContaining({ rankId: 'rank-A', setId: 'tgt-set', groupOrder: 1, pickCount: 2, isTested: true }),
+      FAKE_TX,
+    );
+
+    // group patterns re-inserted
+    expect(repo.insertHokeiGroupPatterns).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({ patternId: 'p1', sortOrder: 0 }),
+        expect.objectContaining({ patternId: 'p2', sortOrder: 1 }),
+      ]),
+      FAKE_TX,
+    );
+  });
+
+  it('skips a rank when scalar is missing (graceful no-op)', async () => {
+    const { svc, repo } = build();
+    repo.distinctRankIdsForSet = vi.fn().mockResolvedValue(['rank-B']);
+    repo.fetchScalar = vi.fn().mockResolvedValue(null); // no scalar
+
+    await svc.deepCopyDetailsForSet('src-set', 'tgt-set');
+
+    expect(repo.insertScalar).not.toHaveBeenCalled();
   });
 });

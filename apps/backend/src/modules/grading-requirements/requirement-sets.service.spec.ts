@@ -5,6 +5,7 @@ import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js'
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import { OrganisationsRepository } from '../organisations/organisations.repository.js';
 
+import { RankRequirementsService } from './rank-requirements.service.js';
 import {
   RequirementSetsRepository,
   type RequirementSetRow,
@@ -53,6 +54,7 @@ interface Harness {
   orgs: { getAncestorIds: ReturnType<typeof vi.fn> };
   abilities: { createForUser: ReturnType<typeof vi.fn> };
   fakeDb: { transaction: ReturnType<typeof vi.fn> };
+  rankReqs: { deepCopyDetailsForSet: ReturnType<typeof vi.fn> };
 }
 
 function build(opts: { canManage?: boolean; rowOnFind?: RequirementSetRow | null } = {}): Harness {
@@ -82,14 +84,19 @@ function build(opts: { canManage?: boolean; rowOnFind?: RequirementSetRow | null
     transaction: vi.fn(async (cb: (tx: unknown) => Promise<unknown>) => cb(FAKE_TX)),
   };
 
+  const rankReqs = {
+    deepCopyDetailsForSet: vi.fn().mockResolvedValue(undefined),
+  };
+
   const service = new RequirementSetsService(
     fakeDb as never,
     repo as unknown as RequirementSetsRepository,
     orgs as unknown as OrganisationsRepository,
     abilities as unknown as AbilityFactory,
+    rankReqs as unknown as RankRequirementsService,
   );
 
-  return { service, repo, orgs, abilities, fakeDb };
+  return { service, repo, orgs, abilities, fakeDb, rankReqs };
 }
 
 // ── Tests ────────────────────────────────────────────────────────────────
@@ -284,7 +291,18 @@ describe('RequirementSetsService', () => {
     );
     expect(result.isActive).toBe(false);
     expect(result.clonedFromId).toBe('rs-source');
-    // NOTE: detail-row copy verified in Task 12 once RankRequirementsService exists.
+  });
+
+  it('clone: calls deepCopyDetailsForSet with source.id and created.id', async () => {
+    const source = row({ id: 'rs-source', name: 'Original', organisationId: 'org-A' });
+    const cloned = row({ id: 'rs-clone', clonedFromId: 'rs-source', isActive: false });
+    const { service, repo, rankReqs } = build({ rowOnFind: source, canManage: true });
+
+    repo.insert.mockResolvedValue(cloned);
+
+    await service.clone('rs-source', { name: 'Clone Name' }, makeUser({ role: 'sysadmin' }));
+
+    expect(rankReqs.deepCopyDetailsForSet).toHaveBeenCalledWith('rs-source', 'rs-clone');
   });
 
   it('clone: defaults name to "{source.name} (copy)" when body.name absent', async () => {

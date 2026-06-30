@@ -1,5 +1,6 @@
 import {
   ForbiddenException,
+  forwardRef,
   Inject,
   Injectable,
   NotFoundException,
@@ -16,6 +17,7 @@ import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js'
 import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
 import { OrganisationsRepository } from '../organisations/organisations.repository.js';
 
+import { RankRequirementsService } from './rank-requirements.service.js';
 import {
   RequirementSetsRepository,
   type RequirementSetRow,
@@ -49,6 +51,8 @@ export class RequirementSetsService {
     private readonly repo: RequirementSetsRepository,
     private readonly orgs: OrganisationsRepository,
     private readonly abilityFactory: AbilityFactory,
+    @Inject(forwardRef(() => RankRequirementsService))
+    private readonly rankReqs: RankRequirementsService,
   ) {}
 
   async list(user: AuthenticatedUser): Promise<RequirementSet[]> {
@@ -161,7 +165,7 @@ export class RequirementSetsService {
       effectiveDate: source.effectiveDate,
       clonedFromId: source.id,
     });
-    // TODO(Task 12): wire RankRequirementsService.deepCopyDetailsForSet(source.id, created.id) here.
+    await this.rankReqs.deepCopyDetailsForSet(source.id, created.id);
     return mapRow(created);
   }
 

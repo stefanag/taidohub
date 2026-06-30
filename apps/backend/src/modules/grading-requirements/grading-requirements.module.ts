@@ -1,8 +1,11 @@
 import { Module } from '@nestjs/common';
 
 import { OrganisationsModule } from '../organisations/organisations.module.js';
+import { MembershipsModule } from '../memberships/memberships.module.js';
 
 import { GradingRequirementsAbilityRules } from './grading-requirements.ability-rules.js';
+import { RankRequirementsRepository } from './rank-requirements.repository.js';
+import { RankRequirementsService } from './rank-requirements.service.js';
 import { RequirementSetsController } from './requirement-sets.controller.js';
 import { RequirementSetsRepository } from './requirement-sets.repository.js';
 import { RequirementSetsService } from './requirement-sets.service.js';
@@ -13,25 +16,29 @@ import { RequirementSetsService } from './requirement-sets.service.js';
  *
  * `OrganisationsModule` is imported because `RequirementSetsService` injects
  * `OrganisationsRepository` to resolve ancestor org IDs for list scoping.
+ * `MembershipsModule` is imported because `RankRequirementsService` injects
+ * `MembershipsRepository` for the resolveForUser ancestor-walk.
  *
  * `GradingRequirementsAbilityRules` is registered alongside the other rule
  * contributors in `AbilityModule` — re-declaring it here would create a second
  * instance and the `@AbilityContributor()` decorator-based auto-discovery would
  * pick it up twice.
  *
- * `RequirementSetsService` is exported so future modules (rank-requirements,
- * grading sessions) can depend on it directly.
+ * `RequirementSetsService` and `RankRequirementsService` are exported so future
+ * modules (grading sessions, etc.) can depend on them directly.
+ *
+ * `RankRequirementsController` will be added in Task 13.
  */
 @Module({
-  imports: [OrganisationsModule],
-  // TODO(Task 12-13): add RankRequirementsController once it exists.
+  imports: [OrganisationsModule, MembershipsModule],
   controllers: [RequirementSetsController],
   providers: [
     RequirementSetsRepository,
     RequirementSetsService,
-    // TODO(Task 12-13): add RankRequirementsService + RankRequirementsRepository once they exist.
+    RankRequirementsRepository,
+    RankRequirementsService,
     GradingRequirementsAbilityRules,
   ],
-  exports: [RequirementSetsService],
+  exports: [RequirementSetsService, RankRequirementsService],
 })
 export class GradingRequirementsModule {}
