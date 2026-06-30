@@ -57,6 +57,7 @@ function repoStub() {
     delete: vi.fn(),
     countChildren: vi.fn(),
     findHeadInstructorOrgIds: vi.fn().mockResolvedValue([] as string[]),
+    getAncestorIds: vi.fn(),
   } satisfies Record<keyof OrganisationsRepository, ReturnType<typeof vi.fn>>;
 }
 

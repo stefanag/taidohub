@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { and, eq, inArray, isNull } from 'drizzle-orm';
 
-import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
+import { DRIZZLE, type DrizzleDb, type DrizzleExecutor } from '../../infrastructure/database/client.js';
 import { requirementSet } from '../../infrastructure/database/schema/grading-requirements.js';
 
 export type RequirementSetRow = typeof requirementSet.$inferSelect;
@@ -52,7 +52,7 @@ export class RequirementSetsRepository {
 
   async update(
     id: string,
-    patch: Partial<{ name: string; effectiveDate: string }>,
+    patch: { name?: string | undefined; effectiveDate?: string | undefined },
   ): Promise<RequirementSetRow | null> {
     const [row] = await this.db
       .update(requirementSet)
@@ -70,7 +70,7 @@ export class RequirementSetsRepository {
     return res.length > 0;
   }
 
-  async setActive(id: string, isActive: boolean, tx?: DrizzleDb): Promise<void> {
+  async setActive(id: string, isActive: boolean, tx?: DrizzleExecutor): Promise<void> {
     const client = tx ?? this.db;
     await client
       .update(requirementSet)
@@ -78,7 +78,7 @@ export class RequirementSetsRepository {
       .where(eq(requirementSet.id, id));
   }
 
-  async deactivateActiveForOrg(organisationId: string | null, tx?: DrizzleDb): Promise<void> {
+  async deactivateActiveForOrg(organisationId: string | null, tx?: DrizzleExecutor): Promise<void> {
     const client = tx ?? this.db;
     const where =
       organisationId === null
