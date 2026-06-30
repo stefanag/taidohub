@@ -321,4 +321,86 @@ describe('RankRequirementsService.resolveForUser', () => {
     // Should NOT throw even though ability denies
     await expect(svc.resolveForUser('rank-1', 'u-target', actor)).resolves.toBeDefined();
   });
+
+  it('falls back to the global active set (organisationId IS NULL) when no ancestor org has a hit', async () => {
+    const { svc, repo, sets, orgs, memberships } = build();
+
+    // Target user has a student membership in 'org-club'
+    memberships.list.mockResolvedValue({
+      data: [membershipRow({ userId: 'u-target', organisationId: 'org-club', role: 'student' })],
+      total: 1,
+    });
+
+    // Ancestor walk returns [org-club, org-root]
+    orgs.getAncestorIds.mockResolvedValue(['org-club', 'org-root']);
+
+    // No active set in either ancestor, but global set exists
+    sets.findActiveByOrg.mockImplementation((orgId: string | null) => {
+      if (orgId === null) return Promise.resolve({ id: 's-global', organisationId: null });
+      return Promise.resolve(null);
+    });
+
+    // Scalar exists for the global set
+    repo.fetchScalar.mockImplementation((rankId: string, setId: string | null) => {
+      if (setId === 's-global') {
+        return Promise.resolve(
+          scalarRow({
+            rankId,
+            setId: 's-global',
+            jissenMinutes: null,
+            jissenTested: false,
+            minMonthsSincePreviousRank: null,
+            requiresTheoricExam: false,
+            requiresEssay: false,
+          }),
+        );
+      }
+      return Promise.resolve(null);
+    });
+
+    // Other fetch methods return empty arrays
+    repo.fetchTechniques.mockResolvedValue([]);
+    repo.fetchPatternsWithType.mockResolvedValue([]);
+    repo.fetchHokeiGroups.mockResolvedValue([]);
+
+    const actor = makeUser({ id: 'u-target' });
+    const result = await svc.resolveForUser('rank-1', 'u-target', actor);
+
+    expect(sets.findActiveByOrg).toHaveBeenCalledWith(null); // the key contract pin
+    expect(result.setId).toBe('s-global');
+  });
+});
+
+// ── Tests: resolveForSet ─────────────────────────────────────────────────────
+
+describe('RankRequirementsService.resolveForSet', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('throws NotFoundException when the set does not exist', async () => {
+    const { svc, sets } = build();
+    sets.findById = vi.fn().mockResolvedValue(null);
+
+    const actor = makeUser({ id: 'u-actor' });
+
+    const NotFoundException = await import('@nestjs/common').then((m) => m.NotFoundException);
+    await expect(svc.resolveForSet('rank-1', 'set-missing', actor)).rejects.toBeInstanceOf(
+      NotFoundException,
+    );
+  });
+
+  it('returns the projection when the set exists', async () => {
+    const { svc, repo, sets } = build();
+    sets.findById = vi.fn().mockResolvedValue({ id: 'set-1', organisationId: 'org-A' });
+    repo.fetchScalar = vi.fn().mockResolvedValue(null); // empty scope
+    repo.fetchTechniques.mockResolvedValue([]);
+    repo.fetchPatternsWithType.mockResolvedValue([]);
+    repo.fetchHokeiGroups.mockResolvedValue([]);
+
+    const actor = makeUser({ id: 'u-actor' });
+    const result = await svc.resolveForSet('rank-1', 'set-1', actor);
+
+    expect(result).toEqual(svc.emptyRequirements('rank-1', 'set-1'));
+  });
 });
