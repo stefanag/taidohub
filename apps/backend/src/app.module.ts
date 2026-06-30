@@ -16,6 +16,7 @@ import { ClassificationCategoryModule } from './modules/classification-category/
 import { FeatureFlagsModule } from './modules/feature-flags/feature-flags.module.js';
 import { FeedbackModule } from './modules/feedback/feedback.module.js';
 import { GradingHistoryProjectionModule } from './modules/grading-history-projection/grading-history.module.js';
+import { GradingRequirementsModule } from './modules/grading-requirements/grading-requirements.module.js';
 import { RankHistoryModule } from './modules/rank-history/rank-history.module.js';
 import { HealthModule } from './modules/health/health.module.js';
 import { LabelsModule } from './modules/labels/labels.module.js';
@@ -40,6 +41,7 @@ import { UsersModule } from './modules/users/users.module.js';
     BeltCatalogModule,
     RankHistoryModule,
     GradingHistoryProjectionModule,
+    GradingRequirementsModule,
     HealthModule,
     UsersModule,
     ProfileModule,
