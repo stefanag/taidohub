@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { type DrizzleDb } from '../../infrastructure/database/client.js';
 
@@ -88,5 +88,16 @@ describe('getAncestorIds', () => {
     expect(executeMock).toHaveBeenCalledOnce();
     // The ifId grandparent is absent — the cap (maxDepth=2) cut the walk short.
     expect(ids).not.toContain(ifId);
+
+    // Verify that maxDepth=2 parameter was actually passed to execute.
+    // The SQL object contains queryChunks with embedded template values.
+    // A regression that hard-coded maxDepth to 16 would fail this assertion.
+    const sqlObj = executeMock.mock.calls[0][0] as unknown as { queryChunks?: Array<unknown> };
+    if (sqlObj && 'queryChunks' in sqlObj && Array.isArray(sqlObj.queryChunks)) {
+      // queryChunks alternates between string template parts and values.
+      // Check if any chunk is the number 2 (the maxDepth we passed).
+      const hasMaxDepth = sqlObj.queryChunks.some((c) => c === 2);
+      expect(hasMaxDepth).toBe(true);
+    }
   });
 });
