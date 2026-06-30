@@ -70,14 +70,16 @@ export class RequirementSetsRepository {
     return res.length > 0;
   }
 
-  async setActive(id: string, isActive: boolean): Promise<void> {
-    await this.db
+  async setActive(id: string, isActive: boolean, tx?: DrizzleDb): Promise<void> {
+    const client = tx ?? this.db;
+    await client
       .update(requirementSet)
       .set({ isActive, updatedAt: new Date() })
       .where(eq(requirementSet.id, id));
   }
 
-  async deactivateActiveForOrg(organisationId: string | null): Promise<void> {
+  async deactivateActiveForOrg(organisationId: string | null, tx?: DrizzleDb): Promise<void> {
+    const client = tx ?? this.db;
     const where =
       organisationId === null
         ? and(eq(requirementSet.isActive, true), isNull(requirementSet.organisationId))
@@ -85,7 +87,7 @@ export class RequirementSetsRepository {
             eq(requirementSet.isActive, true),
             eq(requirementSet.organisationId, organisationId),
           );
-    await this.db
+    await client
       .update(requirementSet)
       .set({ isActive: false, updatedAt: new Date() })
       .where(where);

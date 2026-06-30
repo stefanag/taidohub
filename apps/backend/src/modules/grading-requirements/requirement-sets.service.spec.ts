@@ -42,6 +42,9 @@ function makeUser(overrides: Partial<AuthenticatedUser> = {}): AuthenticatedUser
   };
 }
 
+// Drizzle db.transaction(cb) calls cb(tx) and returns its result. Fake it.
+const FAKE_TX = { __tx: true } as unknown;
+
 // ── Harness ─────────────────────────────────────────────────────────────
 
 interface Harness {
@@ -49,6 +52,7 @@ interface Harness {
   repo: { [K in keyof RequirementSetsRepository]: ReturnType<typeof vi.fn> };
   orgs: { getAncestorIds: ReturnType<typeof vi.fn> };
   abilities: { createForUser: ReturnType<typeof vi.fn> };
+  fakeDb: { transaction: ReturnType<typeof vi.fn> };
 }
 
 function build(opts: { canManage?: boolean; rowOnFind?: RequirementSetRow | null } = {}): Harness {
@@ -74,13 +78,18 @@ function build(opts: { canManage?: boolean; rowOnFind?: RequirementSetRow | null
     createForUser: vi.fn().mockReturnValue(fakeAbility),
   };
 
+  const fakeDb = {
+    transaction: vi.fn(async (cb: (tx: unknown) => Promise<unknown>) => cb(FAKE_TX)),
+  };
+
   const service = new RequirementSetsService(
+    fakeDb as never,
     repo as unknown as RequirementSetsRepository,
     orgs as unknown as OrganisationsRepository,
     abilities as unknown as AbilityFactory,
   );
 
-  return { service, repo, orgs, abilities };
+  return { service, repo, orgs, abilities, fakeDb };
 }
 
 // ── Tests ────────────────────────────────────────────────────────────────
@@ -150,7 +159,13 @@ describe('RequirementSetsService', () => {
     const created = row({ id: 'rs-new', name: 'Test', organisationId: 'org-A' });
     const { service, repo, abilities } = build();
 
-    const fakeAbility = { can: vi.fn().mockReturnValue(false) };
+    // Non-sysadmin: can('manage','all') = false, but can manage their own org
+    const fakeAbility = {
+      can: vi.fn((action: string, subject: unknown) => {
+        if (action === 'manage' && subject === 'all') return false;
+        return true; // allow manage on org-A
+      }),
+    };
     abilities.createForUser.mockReturnValue(fakeAbility);
     repo.insert.mockResolvedValue(created);
 
@@ -162,14 +177,64 @@ describe('RequirementSetsService', () => {
     expect(result.id).toBe('rs-new');
   });
 
+  it('create: rejects when user has only a student membership in the target org', async () => {
+    const student = makeUser({
+      role: 'user',
+      memberships: [{ organisationId: 'org-A', role: 'student' }],
+    });
+    const { service, abilities } = build();
+
+    // Student: can('manage','all') = false; cannot manage RequirementSet for org-A
+    const fakeAbility = { can: vi.fn().mockReturnValue(false) };
+    abilities.createForUser.mockReturnValue(fakeAbility);
+
+    await expect(
+      service.create({ name: 'x', effectiveDate: '2026-07-01', organisationId: 'org-A' }, student),
+    ).rejects.toBeInstanceOf(ForbiddenException);
+  });
+
+  describe('update', () => {
+    it('throws ForbiddenException when ability denies manage', async () => {
+      const existing = row({ id: 'rs-1', organisationId: 'org-X' });
+      const { service, repo, abilities } = build({ rowOnFind: existing });
+
+      const fakeAbility = { can: vi.fn().mockReturnValue(false) };
+      abilities.createForUser.mockReturnValue(fakeAbility);
+      repo.findById.mockResolvedValue(existing);
+
+      await expect(
+        service.update('rs-1', { name: 'New Name' }, makeUser()),
+      ).rejects.toBeInstanceOf(ForbiddenException);
+
+      expect(repo.update).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('delete', () => {
+    it('throws ForbiddenException when ability denies manage', async () => {
+      const existing = row({ id: 'rs-1', organisationId: 'org-X' });
+      const { service, repo, abilities } = build({ rowOnFind: existing });
+
+      const fakeAbility = { can: vi.fn().mockReturnValue(false) };
+      abilities.createForUser.mockReturnValue(fakeAbility);
+      repo.findById.mockResolvedValue(existing);
+
+      await expect(
+        service.delete('rs-1', makeUser()),
+      ).rejects.toBeInstanceOf(ForbiddenException);
+
+      expect(repo.delete).not.toHaveBeenCalled();
+    });
+  });
+
   it('get: 404 when missing', async () => {
     const { service } = build({ rowOnFind: null });
     await expect(service.get('missing-id', makeUser())).rejects.toBeInstanceOf(NotFoundException);
   });
 
-  it('activate: deactivates sibling active sets in same org', async () => {
+  it('activate: deactivates sibling active sets in same org inside a transaction', async () => {
     const target = row({ id: 'rs-1', organisationId: 'org-A', isActive: false });
-    const { service, repo } = build({ rowOnFind: target, canManage: true });
+    const { service, repo, fakeDb } = build({ rowOnFind: target, canManage: true });
 
     // After activation, findById returns the activated row
     repo.findById
@@ -178,8 +243,9 @@ describe('RequirementSetsService', () => {
 
     await service.activate('rs-1', makeUser({ role: 'sysadmin' }));
 
-    expect(repo.deactivateActiveForOrg).toHaveBeenCalledWith('org-A');
-    expect(repo.setActive).toHaveBeenCalledWith('rs-1', true);
+    expect(fakeDb.transaction).toHaveBeenCalledOnce();
+    expect(repo.deactivateActiveForOrg).toHaveBeenCalledWith('org-A', FAKE_TX);
+    expect(repo.setActive).toHaveBeenCalledWith('rs-1', true, FAKE_TX);
     // deactivateActiveForOrg must be called before setActive
     const deactivateOrder = repo.deactivateActiveForOrg.mock.invocationCallOrder[0];
     const setActiveOrder = repo.setActive.mock.invocationCallOrder[0];

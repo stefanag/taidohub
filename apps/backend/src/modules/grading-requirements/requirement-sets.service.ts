@@ -1,5 +1,6 @@
 import {
   ForbiddenException,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -12,6 +13,7 @@ import type {
 
 import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
+import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
 import { OrganisationsRepository } from '../organisations/organisations.repository.js';
 
 import {
@@ -43,6 +45,7 @@ function mapRows(rows: RequirementSetRow[]): RequirementSet[] {
 @Injectable()
 export class RequirementSetsService {
   constructor(
+    @Inject(DRIZZLE) private readonly db: DrizzleDb,
     private readonly repo: RequirementSetsRepository,
     private readonly orgs: OrganisationsRepository,
     private readonly abilityFactory: AbilityFactory,
@@ -72,20 +75,21 @@ export class RequirementSetsService {
     let organisationId = body.organisationId ?? null;
 
     if (!isSysadmin) {
-      const callerOrgIds = new Set(user.memberships.map((m) => m.organisationId));
-
       if (organisationId === null) {
         // Default to caller's first non-student membership
         const first = user.memberships.find((m) => m.role !== 'student');
         organisationId = first?.organisationId ?? null;
       }
 
-      if (organisationId === null || !callerOrgIds.has(organisationId)) {
+      if (organisationId === null) {
         throw new ForbiddenException({
           error: 'Cannot create requirement set for another organisation',
           code: 'FORBIDDEN',
         });
       }
+
+      // CASL gate: only orgadmin/instructor memberships satisfy manage on RequirementSet
+      this.assertCanManage(user, organisationId);
     }
 
     const row = await this.repo.insert({
@@ -121,13 +125,11 @@ export class RequirementSetsService {
     if (!existing) throw new NotFoundException({ error: 'Not found', code: 'NOT_FOUND' });
     this.assertCanManage(user, existing.organisationId);
 
-    // Deactivate current active set for this org first, then activate the target.
-    // Both steps happen in sequence (transaction semantics — the repo's underlying
-    // db connection is shared, so the two updates are atomic at the DB level when
-    // called within a single request). A proper tx wrapper can be added once the
-    // repository exposes one.
-    await this.repo.deactivateActiveForOrg(existing.organisationId);
-    await this.repo.setActive(id, true);
+    // Deactivate sibling active sets and flip the target in one atomic transaction.
+    await this.db.transaction(async (tx) => {
+      await this.repo.deactivateActiveForOrg(existing.organisationId, tx);
+      await this.repo.setActive(id, true, tx);
+    });
 
     const updated = await this.repo.findById(id);
     if (!updated) throw new NotFoundException({ error: 'Not found', code: 'NOT_FOUND' });
