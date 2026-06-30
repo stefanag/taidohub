@@ -225,6 +225,13 @@
       "when": 1782221262765,
       "tag": "0031_yellow_korvac",
       "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1782812040010,
+      "tag": "0032_unusual_the_twelve",
+      "breakpoints": true
     }
   ]
 }
