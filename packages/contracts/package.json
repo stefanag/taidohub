@@ -248,6 +248,16 @@
         "types": "./dist/feedback.d.cts",
         "default": "./dist/feedback.cjs"
       }
+    },
+    "./grading-requirements": {
+      "import": {
+        "types": "./dist/grading-requirements.d.ts",
+        "default": "./dist/grading-requirements.js"
+      },
+      "require": {
+        "types": "./dist/grading-requirements.d.cts",
+        "default": "./dist/grading-requirements.cjs"
+      }
     }
   },
   "files": [

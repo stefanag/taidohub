@@ -26,6 +26,7 @@ export default defineConfig({
     progress: 'src/progress.ts',
     students: 'src/students.ts',
     feedback: 'src/feedback.ts',
+    'grading-requirements': 'src/grading-requirements.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,

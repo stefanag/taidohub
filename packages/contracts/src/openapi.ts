@@ -25,6 +25,7 @@ import { ProgressOpenApiRegistry } from './progress.js';
 import { StudentsOpenApiRegistry } from './students.js';
 import { TechniqueOpenApiRegistry } from './techniques.js';
 import { UsersOpenApiRegistry } from './users.js';
+import { GradingRequirementsOpenApiRegistry } from './grading-requirements.js';
 
 /**
  * A registry maps OpenAPI component names to the Zod schemas that describe them.
@@ -62,6 +63,7 @@ export function registerContractSchemas(
     PatternOpenApiRegistry,
     ProgressOpenApiRegistry,
     StudentsOpenApiRegistry,
+    GradingRequirementsOpenApiRegistry,
   ],
 ): OpenAPIObject {
   document.components ??= {};
@@ -104,4 +106,5 @@ export const ContractRegistries = {
   patterns: PatternOpenApiRegistry,
   progress: ProgressOpenApiRegistry,
   students: StudentsOpenApiRegistry,
+  gradingRequirements: GradingRequirementsOpenApiRegistry,
 } as const;
