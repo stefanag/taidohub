@@ -83,6 +83,11 @@ const useSessionSpy = vi.fn(() => ({ data: { user: { id: ACTOR_ID } } }));
 const requirementsSpy = vi.fn();
 const techProgressSpy = vi.fn(() => ({ data: [] as Progress[], isPending: false, isError: false }));
 const patProgressSpy = vi.fn(() => ({ data: [] as Progress[], isPending: false, isError: false }));
+const studentProgressSpy = vi.fn((userId: string | null) => ({
+  data: [] as Progress[],
+  isPending: false,
+  isError: false,
+}));
 
 vi.mock('../lib/useNextRank.js', () => ({
   useNextRank: () => useNextRankSpy(),
@@ -101,6 +106,10 @@ vi.mock('@/entities/rank-requirement', () => ({
 vi.mock('@/entities/progress', () => ({
   useProgressListQuery: (contentType: 'technique' | 'pattern') =>
     contentType === 'technique' ? techProgressSpy() : patProgressSpy(),
+}));
+
+vi.mock('@/entities/student', () => ({
+  useStudentProgressQuery: (userId: string | null) => studentProgressSpy(userId),
 }));
 
 function renderCard(props: Partial<React.ComponentProps<typeof NextRankCard>> = {}) {
@@ -125,6 +134,8 @@ beforeEach(async () => {
   techProgressSpy.mockReturnValue({ data: [], isPending: false, isError: false });
   patProgressSpy.mockReset();
   patProgressSpy.mockReturnValue({ data: [], isPending: false, isError: false });
+  studentProgressSpy.mockReset();
+  studentProgressSpy.mockReturnValue({ data: [], isPending: false, isError: false });
 });
 
 describe('<NextRankCard>', () => {
@@ -227,5 +238,33 @@ describe('<NextRankCard>', () => {
     renderCard({ userId: 'other-student' });
 
     expect(requirementsSpy).toHaveBeenCalledWith(NEXT_RANK_ID, 'other-student');
+  });
+
+  it('uses the student-scoped progress query (not the actor-scoped one) when userId is set for another user', () => {
+    useNextRankSpy.mockReturnValue({
+      currentRank: null,
+      nextRank: NEXT_RANK,
+      isPending: false,
+      isError: false,
+      error: null,
+    });
+    requirementsSpy.mockReturnValue({
+      data: makeRequirements({ kihon: ['t-1'] }),
+      isPending: false,
+      isError: false,
+    });
+    studentProgressSpy.mockReturnValue({
+      data: [makeProgress({ userId: 'other-student', techniqueId: 't-1', status: 'grading_ready' })],
+      isPending: false,
+      isError: false,
+    });
+
+    renderCard({ userId: 'other-student' });
+
+    // Cross-user progress hook was called with the target student's id...
+    expect(studentProgressSpy).toHaveBeenCalledWith('other-student');
+    // ...and its data drove the caption, proving the card isn't silently
+    // falling back to the actor-scoped `useProgressListQuery` rows (Task 22 gap).
+    expect(screen.getByText('1/1 requirements ready')).toBeInTheDocument();
   });
 });

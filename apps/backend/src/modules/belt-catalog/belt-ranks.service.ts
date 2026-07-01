@@ -16,6 +16,8 @@ import {
   type DbBeltRank,
   type DbNewBeltRank,
 } from '../../infrastructure/database/schema/index.js';
+import { RankRequirementsService } from '../grading-requirements/rank-requirements.service.js';
+import { RequirementSetsRepository } from '../grading-requirements/requirement-sets.repository.js';
 
 import { BeltRankPatch, BeltRanksRepository } from './belt-ranks.repository.js';
 import { LookupTableService } from './lookup-table.service.js';
@@ -56,7 +58,11 @@ export class BeltRanksService extends LookupTableService<
 > {
   protected readonly entityLabel = 'Rank';
 
-  constructor(protected readonly repo: BeltRanksRepository) {
+  constructor(
+    protected readonly repo: BeltRanksRepository,
+    private readonly rankRequirements: RankRequirementsService,
+    private readonly requirementSets: RequirementSetsRepository,
+  ) {
     super();
   }
 
@@ -166,7 +172,25 @@ export class BeltRanksService extends LookupTableService<
             nameFi: orgNameFi!,
           }
         : null,
+      requirements: await this.resolvePublicRequirements(row.id, row.organisationId),
     };
+  }
+
+  /**
+   * Resolves the `GradingRequirements` projection for the rank's own
+   * organisation's active `RequirementSet` — no ancestor walk, no fallback
+   * to the global default set. A public rank page shows only what its own
+   * organisation (or, for global ranks, the platform) has actively
+   * configured; `null` here just means "not configured yet", which the
+   * frontend treats as "omit the requirements section" rather than an error.
+   */
+  private async resolvePublicRequirements(
+    rankId: string,
+    organisationId: string | null,
+  ): Promise<PublicRankResponse['requirements']> {
+    const activeSet = await this.requirementSets.findActiveByOrg(organisationId);
+    if (!activeSet) return null;
+    return this.rankRequirements.fetchForScope(rankId, activeSet.id);
   }
 
   protected toApi(row: DbBeltRank): BeltRank {

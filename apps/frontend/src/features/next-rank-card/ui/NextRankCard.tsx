@@ -6,6 +6,7 @@ import { useNextRank } from '../lib/useNextRank.js';
 import { useSession } from '@/entities/me';
 import { useProgressListQuery } from '@/entities/progress';
 import { useRequirementsForUserQuery, useRequirementsQuery } from '@/entities/rank-requirement';
+import { useStudentProgressQuery } from '@/entities/student';
 import { calculateRankProgress } from '@/shared/lib/rankProgress';
 import { Card, CardContent, CardHeader, CardTitle, Progress } from '@/shared/ui';
 
@@ -36,8 +37,30 @@ export function NextRankCard({ userId: userIdProp }: NextRankCardProps): React.R
   );
   const requirementsQuery = isActor ? requirementsQueryForActor : requirementsQueryForUser;
 
-  const techProgressQuery = useProgressListQuery('technique');
-  const patProgressQuery = useProgressListQuery('pattern');
+  // Progress is actor-scoped by default (`useProgressListQuery` reads the
+  // caller's own rows). When `userId` points at another user (instructor
+  // viewing a student), fetch that student's progress via the student-scoped
+  // endpoint instead — otherwise the actor's own progress would be shown
+  // under the student's name (Task 22 cross-user gap, fixed in Task 25).
+  const actorTechProgressQuery = useProgressListQuery('technique');
+  const actorPatProgressQuery = useProgressListQuery('pattern');
+  const studentProgressQuery = useStudentProgressQuery(isActor ? null : userId);
+
+  const studentTechProgress = React.useMemo(
+    () => (studentProgressQuery.data ?? []).filter((p) => p.contentType === 'technique'),
+    [studentProgressQuery.data],
+  );
+  const studentPatProgress = React.useMemo(
+    () => (studentProgressQuery.data ?? []).filter((p) => p.contentType === 'pattern'),
+    [studentProgressQuery.data],
+  );
+
+  const techProgressQuery = isActor
+    ? actorTechProgressQuery
+    : { ...studentProgressQuery, data: studentTechProgress };
+  const patProgressQuery = isActor
+    ? actorPatProgressQuery
+    : { ...studentProgressQuery, data: studentPatProgress };
 
   const isPending =
     rankPending ||

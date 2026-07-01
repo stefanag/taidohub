@@ -127,36 +127,76 @@ describe('BeltRankSchema', () => {
 });
 
 describe('PublicRankResponseSchema', () => {
-  it('accepts a full payload with a non-null organisation', () => {
+  const RANK = {
+    id: UUID,
+    organisationId: null,
+    systemId: UUID,
+    level: 1,
+    sortOrder: 10,
+    nameJa: null,
+    nameRomaji: 'Jukyu',
+    nameEn: '10th Kyu',
+    nameSv: '10 Kyu',
+    nameFi: '10. Kyu',
+    beltColor: '#FFFFFF',
+    visuals: { gradient: 'white' },
+    imageUrl: null,
+    descriptionEn: null,
+    descriptionSv: null,
+    descriptionFi: null,
+    publiclyVisible: true,
+    slug: 'jukyu',
+    minAge: null,
+    nextRankId: null,
+    createdAt: ISO,
+    updatedAt: ISO,
+  };
+  const SYSTEM = { id: UUID, code: 'kyu', nameEn: 'Kyu', nameSv: 'Kyu', nameFi: 'Kyu' };
+
+  it('accepts a full payload with a non-null organisation and null requirements', () => {
     expect(
       PublicRankResponseSchema.safeParse({
-        rank: {
-          id: UUID,
-          organisationId: null,
-          systemId: UUID,
-          level: 1,
-          sortOrder: 10,
-          nameJa: null,
-          nameRomaji: 'Jukyu',
-          nameEn: '10th Kyu',
-          nameSv: '10 Kyu',
-          nameFi: '10. Kyu',
-          beltColor: '#FFFFFF',
-          visuals: { gradient: 'white' },
-          imageUrl: null,
-          descriptionEn: null,
-          descriptionSv: null,
-          descriptionFi: null,
-          publiclyVisible: true,
-          slug: 'jukyu',
-          minAge: null,
-          nextRankId: null,
-          createdAt: ISO,
-          updatedAt: ISO,
-        },
-        system: { id: UUID, code: 'kyu', nameEn: 'Kyu', nameSv: 'Kyu', nameFi: 'Kyu' },
+        rank: RANK,
+        system: SYSTEM,
         organisation: null,
+        requirements: null,
       }).success,
     ).toBe(true);
+  });
+
+  it('accepts a payload with a populated requirements projection', () => {
+    expect(
+      PublicRankResponseSchema.safeParse({
+        rank: RANK,
+        system: SYSTEM,
+        organisation: null,
+        requirements: {
+          rankId: UUID,
+          setId: UUID,
+          hokeiGroups: [],
+          kobo: [],
+          koboTested: [],
+          otherPatterns: [],
+          otherPatternsTested: [],
+          kihon: [],
+          kihonTested: [],
+          jissenMinutes: null,
+          jissenTested: false,
+          minMonthsSincePreviousRank: null,
+          requiresTheoricExam: false,
+          requiresEssay: false,
+        },
+      }).success,
+    ).toBe(true);
+  });
+
+  it('rejects a payload missing the requirements field', () => {
+    expect(
+      PublicRankResponseSchema.safeParse({
+        rank: RANK,
+        system: SYSTEM,
+        organisation: null,
+      }).success,
+    ).toBe(false);
   });
 });

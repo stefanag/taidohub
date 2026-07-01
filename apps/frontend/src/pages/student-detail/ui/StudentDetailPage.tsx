@@ -13,21 +13,28 @@ import {
   useUnverifyRankHistory,
   useVerifyRankHistory,
 } from '@/entities/rank-history';
+import { useRequirementsForUserQuery } from '@/entities/rank-requirement';
 import { listShogoTitlesQueryOptions, type ShogoTitle } from '@/entities/shogo-title';
 import { useStudentProgressQuery, useStudentsQuery } from '@/entities/student';
 import { useTechniquesQuery } from '@/entities/technique';
 import { FeedbackThread, FeedbackThreadSheet } from '@/features/feedback-thread';
 import { GradingTimeline } from '@/features/grading-timeline';
+import { NextRankCard, useNextRank } from '@/features/next-rank-card';
+import { RankRequirementsDisplay } from '@/features/rank-requirements-display';
 import { StudentProgressEditorDialog } from '@/features/student-progress-editor-dialog';
 import { HttpError } from '@/shared/api';
 import { FeatureFlag } from '@/shared/lib/feature-flags';
 import { ProgressPill } from '@/shared/ui';
 
 /**
- * Instructor view of a single student's progress. Two sections — Techniques
- * and Patterns — each rendering the full catalogue with a `<ProgressPill>`
- * per row. Clicking a pill opens `<StudentProgressEditorDialog>` for that
- * row.
+ * Instructor view of a single student's progress. Leads with `<NextRankCard
+ * userId={studentId} />` and, once the student's next rank and its resolved
+ * requirements are known, a `<RankRequirementsDisplay />` section — both
+ * driven by the *student's* progress (`useStudentProgressQuery`), not the
+ * instructor's own (Task 22 cross-user fix, Task 25). Below that, two
+ * sections — Techniques and Patterns — each rendering the full catalogue
+ * with a `<ProgressPill>` per row. Clicking a pill opens
+ * `<StudentProgressEditorDialog>` for that row.
  *
  * Forbidden (403) — the student is not in any of the instructor's orgs — is
  * rendered as a friendly inline message instead of a stack trace.
@@ -46,6 +53,9 @@ export function StudentDetailPage(): React.ReactElement {
   const shogoQ = useQuery(listShogoTitlesQueryOptions());
   const verifyMut = useVerifyRankHistory();
   const unverifyMut = useUnverifyRankHistory();
+
+  const { nextRank } = useNextRank(userId);
+  const requirementsQ = useRequirementsForUserQuery(nextRank?.id ?? null, userId);
 
   const rankMap = React.useMemo(() => {
     const m = new Map<string, BeltRank>();
@@ -110,6 +120,21 @@ export function StudentDetailPage(): React.ReactElement {
     return m;
   }, [progressRows]);
 
+  const techProgressRows = React.useMemo(
+    () => progressRows.filter((p) => p.contentType === 'technique'),
+    [progressRows],
+  );
+  const patProgressRows = React.useMemo(
+    () => progressRows.filter((p) => p.contentType === 'pattern'),
+    [progressRows],
+  );
+
+  const requirementsLookup = React.useMemo(() => {
+    const techniqueMap = new Map(techniques.map((t) => [t.id, t]));
+    const patternMap = new Map(patterns.map((p) => [p.id, p]));
+    return { techniques: techniqueMap, patterns: patternMap };
+  }, [techniques, patterns]);
+
   const [editing, setEditing] = React.useState<{
     contentType: ContentType;
     contentId: string;
@@ -138,6 +163,24 @@ export function StudentDetailPage(): React.ReactElement {
       <p className="mt-2 text-on-surface-variant">
         {student?.email && student.name ? student.email : null}
       </p>
+
+      <section className="mt-8">
+        <NextRankCard userId={userId} />
+      </section>
+
+      {nextRank && requirementsQ.data ? (
+        <section className="mt-8">
+          <h2 className="text-lg font-semibold">{t('students.detail.requirements')}</h2>
+          <div className="mt-4">
+            <RankRequirementsDisplay
+              requirements={requirementsQ.data}
+              techProgress={techProgressRows}
+              patProgress={patProgressRows}
+              lookup={requirementsLookup}
+            />
+          </div>
+        </section>
+      ) : null}
 
       <FeatureFlag code="instructor-feedback">
         <section className="mt-8">

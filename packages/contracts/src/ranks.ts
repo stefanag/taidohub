@@ -1,3 +1,4 @@
+import { GradingRequirementsSchema } from './grading-requirements.js';
 import { z } from './zod-openapi.js';
 
 const ISO_DATETIME_EXAMPLE = '2026-05-24T08:00:00.000Z';
@@ -177,6 +178,11 @@ export type BeltRank = z.infer<typeof BeltRankSchema>;
  * plus the system (so the page can compute BeltGraphic visuals) and a small
  * organisation summary (for footer attribution). Returned only when
  * `publiclyVisible=true`; the controller 404s otherwise.
+ *
+ * `requirements` is the resolved `GradingRequirements` projection for the
+ * rank's organisation's active `RequirementSet`, or `null` when the
+ * organisation (or the global default) has no active set — e.g. the
+ * requirements editor hasn't been used yet for this rank.
  */
 export const PublicRankResponseSchema = z
   .object({
@@ -197,10 +203,12 @@ export const PublicRankResponseSchema = z
         nameFi: z.string(),
       })
       .nullable(),
+    requirements: GradingRequirementsSchema.nullable(),
   })
   .meta({
     id: 'PublicRankResponse',
-    description: 'A publicly-visible rank plus its system and (optional) organisation summary.',
+    description:
+      'A publicly-visible rank plus its system, an (optional) organisation summary, and the resolved grading requirements for its active requirement set (null when none is active).',
   });
 
 export type PublicRankResponse = z.infer<typeof PublicRankResponseSchema>;

@@ -188,7 +188,8 @@
     "detail": {
       "title": "{{name}}",
       "techniques": "Tekniker",
-      "patterns": "Mönster"
+      "patterns": "Mönster",
+      "requirements": "Krav för nästa grad"
     },
     "errors": {
       "forbidden": "Du har inte åtkomst till denna student."

@@ -188,7 +188,8 @@
     "detail": {
       "title": "{{name}}",
       "techniques": "Techniques",
-      "patterns": "Patterns"
+      "patterns": "Patterns",
+      "requirements": "Next rank requirements"
     },
     "errors": {
       "forbidden": "You don't have access to this student."

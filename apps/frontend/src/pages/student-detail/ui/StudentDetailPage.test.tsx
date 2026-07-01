@@ -69,6 +69,42 @@ vi.mock('@/entities/pattern', () => ({
   }),
 }));
 
+vi.mock('@/entities/rank-requirement', () => ({
+  useRequirementsForUserQuery: () => ({
+    data: {
+      rankId: 'rank-2',
+      setId: 'set-1',
+      hokeiGroups: [],
+      kobo: [],
+      koboTested: [],
+      otherPatterns: [],
+      otherPatternsTested: [],
+      kihon: ['t-1'],
+      kihonTested: [],
+      jissenMinutes: null,
+      jissenTested: false,
+      minMonthsSincePreviousRank: null,
+      requiresTheoricExam: false,
+      requiresEssay: false,
+    },
+    isPending: false,
+    isError: false,
+  }),
+}));
+
+vi.mock('@/features/next-rank-card', () => ({
+  NextRankCard: ({ userId }: { userId?: string }) => (
+    <div data-testid="next-rank-card">next-rank-card:{userId}</div>
+  ),
+  useNextRank: () => ({
+    currentRank: null,
+    nextRank: { id: 'rank-2', nameRomaji: 'Kukyu' },
+    isPending: false,
+    isError: false,
+    error: null,
+  }),
+}));
+
 // Lightweight dialog stub — renders a recognisable marker when open.
 vi.mock('@/features/student-progress-editor-dialog', () => ({
   StudentProgressEditorDialog: ({
@@ -108,8 +144,31 @@ describe('<StudentDetailPage>', () => {
     expect(
       screen.getByRole('heading', { name: 'Patterns' }),
     ).toBeInTheDocument();
-    expect(screen.getByText('mae geri')).toBeInTheDocument();
+    // 'mae geri' also appears in the RankRequirementsDisplay section (its
+    // kihon requirement label), so use getAllByText here.
+    expect(screen.getAllByText('mae geri').length).toBeGreaterThan(0);
     expect(screen.getByText('hokei sho')).toBeInTheDocument();
+  });
+
+  it('renders the NextRankCard for the viewed student', () => {
+    renderPage();
+
+    const card = screen.getByTestId('next-rank-card');
+    expect(card).toBeInTheDocument();
+    expect(card).toHaveTextContent('next-rank-card:u-1');
+  });
+
+  it('renders the RankRequirementsDisplay section for the student\'s next rank', () => {
+    renderPage();
+
+    expect(
+      screen.getByRole('heading', { name: 'Next rank requirements' }),
+    ).toBeInTheDocument();
+    // 't-1' is the only kihon requirement id in the mocked requirements
+    // payload, and 'mae geri' is its label from the mocked technique catalogue.
+    expect(
+      screen.getByRole('heading', { name: 'Kihon (techniques)' }),
+    ).toBeInTheDocument();
   });
 
   it('opens the StudentProgressEditorDialog when a progress pill is clicked', async () => {

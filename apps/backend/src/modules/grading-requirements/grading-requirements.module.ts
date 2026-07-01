@@ -27,6 +27,10 @@ import { RequirementSetsService } from './requirement-sets.service.js';
  *
  * `RequirementSetsService` and `RankRequirementsService` are exported so future
  * modules (grading sessions, etc.) can depend on them directly.
+ * `RequirementSetsRepository` is also exported — `BeltCatalogModule`'s
+ * `BeltRanksService` needs its unauthenticated `findActiveByOrg` lookup
+ * directly (the public-rank projection has no `AuthenticatedUser` to hand
+ * to `RequirementSetsService`, which gates every method on one).
  *
  * `RankRequirementsController` is registered alongside `RequirementSetsController`.
  */
@@ -40,6 +44,6 @@ import { RequirementSetsService } from './requirement-sets.service.js';
     RankRequirementsService,
     GradingRequirementsAbilityRules,
   ],
-  exports: [RequirementSetsService, RankRequirementsService],
+  exports: [RequirementSetsService, RankRequirementsService, RequirementSetsRepository],
 })
 export class GradingRequirementsModule {}

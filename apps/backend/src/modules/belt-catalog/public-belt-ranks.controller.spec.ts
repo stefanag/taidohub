@@ -49,6 +49,7 @@ const sampleResponse: PublicRankResponse = {
   },
   system: { id: 's-1', code: 'kyu-dan', nameEn: 'Kyu/Dan', nameSv: 'Kyu/Dan', nameFi: 'Kyu/Dan' },
   organisation: null,
+  requirements: null,
 };
 
 function serviceStub() {
