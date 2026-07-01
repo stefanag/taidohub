@@ -51,7 +51,7 @@ describe('rank-requirement api', () => {
     mockedHttp.mockResolvedValueOnce(STUB_GRADING_REQUIREMENTS);
     const out = await getRequirementsForUser(RANK_ID, USER_ID);
     expect(mockedHttp).toHaveBeenCalledWith(
-      `/api/requirements/${RANK_ID}?forUserId=${USER_ID}`,
+      `/api/requirements/${RANK_ID}?forUserId=${encodeURIComponent(USER_ID)}`,
     );
     expect(out.rankId).toBe(RANK_ID);
   });
@@ -59,7 +59,7 @@ describe('rank-requirement api', () => {
   it('getRequirementsForSet(rankId, setId) GETs /api/requirements/:rankId?setId=', async () => {
     mockedHttp.mockResolvedValueOnce(STUB_GRADING_REQUIREMENTS);
     const out = await getRequirementsForSet(RANK_ID, SET_ID);
-    expect(mockedHttp).toHaveBeenCalledWith(`/api/requirements/${RANK_ID}?setId=${SET_ID}`);
+    expect(mockedHttp).toHaveBeenCalledWith(`/api/requirements/${RANK_ID}?setId=${encodeURIComponent(SET_ID)}`);
     expect(out.setId).toBe(SET_ID);
   });
 
@@ -91,7 +91,7 @@ describe('rank-requirement api', () => {
   it('clearRequirements(rankId, setId) DELETEs /api/requirements/:rankId?setId=', async () => {
     mockedHttp.mockResolvedValueOnce(undefined);
     await clearRequirements(RANK_ID, SET_ID);
-    expect(mockedHttp).toHaveBeenCalledWith(`/api/requirements/${RANK_ID}?setId=${SET_ID}`, {
+    expect(mockedHttp).toHaveBeenCalledWith(`/api/requirements/${RANK_ID}?setId=${encodeURIComponent(SET_ID)}`, {
       method: 'DELETE',
     });
   });
