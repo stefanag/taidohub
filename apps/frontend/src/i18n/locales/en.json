@@ -707,5 +707,26 @@
       "pattern": "Pattern feedback",
       "general": "General feedback"
     }
+  },
+  "progression": {
+    "tested": "Tested",
+    "mastered": "Mastered",
+    "sections": {
+      "kihon": "Kihon (techniques)",
+      "kobo": "Kobo",
+      "otherPatterns": "Other patterns",
+      "hokeiGroups": "Hokei groups",
+      "scalars": "Other requirements"
+    },
+    "hokei": {
+      "pickN": "Pick {{pick}} of {{of}}",
+      "all": "All required"
+    },
+    "scalars": {
+      "jissenMinutes": "Jissen sparring minutes: {{n}}",
+      "minMonths": "Minimum months since previous rank: {{n}}",
+      "theory": "Theory exam required",
+      "essay": "Essay required"
+    }
   }
 }

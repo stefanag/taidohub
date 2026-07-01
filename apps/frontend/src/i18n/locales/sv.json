@@ -690,5 +690,26 @@
       "pattern": "Mönster",
       "general": "Allmänt"
     }
+  },
+  "progression": {
+    "tested": "Testas",
+    "mastered": "Behärskas",
+    "sections": {
+      "kihon": "Kihon (tekniker)",
+      "kobo": "Kobo",
+      "otherPatterns": "Andra mönster",
+      "hokeiGroups": "Hokei-grupper",
+      "scalars": "Övriga krav"
+    },
+    "hokei": {
+      "pickN": "Välj {{pick}} av {{of}}",
+      "all": "Alla krävs"
+    },
+    "scalars": {
+      "jissenMinutes": "Jissen-sparring, minuter: {{n}}",
+      "minMonths": "Minsta antal månader sedan föregående grad: {{n}}",
+      "theory": "Teoriprov krävs",
+      "essay": "Uppsats krävs"
+    }
   }
 }

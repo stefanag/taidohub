@@ -690,5 +690,26 @@
       "pattern": "Kuvio",
       "general": "Yleinen"
     }
+  },
+  "progression": {
+    "tested": "Testataan",
+    "mastered": "Hallitaan",
+    "sections": {
+      "kihon": "Kihon (tekniikat)",
+      "kobo": "Kobo",
+      "otherPatterns": "Muut kuviot",
+      "hokeiGroups": "Hokei-ryhmät",
+      "scalars": "Muut vaatimukset"
+    },
+    "hokei": {
+      "pickN": "Valitse {{pick}} / {{of}}",
+      "all": "Kaikki vaaditaan"
+    },
+    "scalars": {
+      "jissenMinutes": "Jissen-otteluminuutit: {{n}}",
+      "minMonths": "Vähimmäiskuukaudet edellisestä arvosta: {{n}}",
+      "theory": "Teoriakoe vaaditaan",
+      "essay": "Essee vaaditaan"
+    }
   }
 }
