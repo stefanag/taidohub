@@ -310,6 +310,38 @@
       "deleteConfirm": "Ta bort denna kravuppsättning? Detta kan inte ångras.",
       "empty": "Inga kravuppsättningar än."
     },
+    "rankRequirements": {
+      "saved": "Sparat.",
+      "sections": {
+        "kihon": "Kihon",
+        "kihonEmpty": "Inga kihon valda ännu.",
+        "kobo": "Kobo-mönster",
+        "koboEmpty": "Inga kobo-mönster valda ännu.",
+        "otherPatterns": "Övriga mönster",
+        "otherPatternsEmpty": "Inga övriga mönster valda ännu.",
+        "hokeiGroups": "Hokei-grupper"
+      },
+      "hokei": {
+        "add": "Lägg till grupp",
+        "remove": "Ta bort grupp",
+        "empty": "Inga hokei-grupper än.",
+        "groupOrder": "Grupp {{order}}",
+        "pickCount": "Antal att välja",
+        "isTested": "Testad",
+        "labelEn": "Etikett (EN)",
+        "labelFi": "Etikett (FI)",
+        "labelSv": "Etikett (SV)",
+        "patterns": "Mönster"
+      },
+      "scalars": {
+        "title": "Övriga krav",
+        "jissenMinutes": "Jissen-minuter",
+        "jissenTested": "Jissen testad",
+        "minMonthsSincePreviousRank": "Min antal månader sedan föregående grad",
+        "requiresTheoricExam": "Kräver teoriprov",
+        "requiresEssay": "Kräver uppsats"
+      }
+    },
     "organisations": {
       "title": "Organisationer",
       "newOrganisation": "Ny organisation",

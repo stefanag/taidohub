@@ -310,6 +310,38 @@
       "deleteConfirm": "Delete this requirement set? Cannot be undone.",
       "empty": "No requirement sets yet."
     },
+    "rankRequirements": {
+      "saved": "Saved.",
+      "sections": {
+        "kihon": "Kihon",
+        "kihonEmpty": "No kihon selected yet.",
+        "kobo": "Kobo patterns",
+        "koboEmpty": "No kobo patterns selected yet.",
+        "otherPatterns": "Other patterns",
+        "otherPatternsEmpty": "No other patterns selected yet.",
+        "hokeiGroups": "Hokei groups"
+      },
+      "hokei": {
+        "add": "Add group",
+        "remove": "Remove group",
+        "empty": "No hokei groups yet.",
+        "groupOrder": "Group {{order}}",
+        "pickCount": "Pick count",
+        "isTested": "Tested",
+        "labelEn": "Label (EN)",
+        "labelFi": "Label (FI)",
+        "labelSv": "Label (SV)",
+        "patterns": "Patterns"
+      },
+      "scalars": {
+        "title": "Other requirements",
+        "jissenMinutes": "Jissen minutes",
+        "jissenTested": "Jissen tested",
+        "minMonthsSincePreviousRank": "Min months since previous rank",
+        "requiresTheoricExam": "Requires theoretical exam",
+        "requiresEssay": "Requires essay"
+      }
+    },
     "organisations": {
       "title": "Organisations",
       "newOrganisation": "New organisation",

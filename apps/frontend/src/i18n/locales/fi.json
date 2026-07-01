@@ -310,6 +310,38 @@
       "deleteConfirm": "Poistetaanko tämä vaatimuskokoelma? Tätä ei voi peruuttaa.",
       "empty": "Ei vielä vaatimuskokoelmia."
     },
+    "rankRequirements": {
+      "saved": "Tallennettu.",
+      "sections": {
+        "kihon": "Kihon",
+        "kihonEmpty": "Ei vielä valittuja kihon-tekniikoita.",
+        "kobo": "Kobo-kuviot",
+        "koboEmpty": "Ei vielä valittuja kobo-kuvioita.",
+        "otherPatterns": "Muut kuviot",
+        "otherPatternsEmpty": "Ei vielä valittuja muita kuvioita.",
+        "hokeiGroups": "Hokei-ryhmät"
+      },
+      "hokei": {
+        "add": "Lisää ryhmä",
+        "remove": "Poista ryhmä",
+        "empty": "Ei vielä hokei-ryhmiä.",
+        "groupOrder": "Ryhmä {{order}}",
+        "pickCount": "Valittava määrä",
+        "isTested": "Testattu",
+        "labelEn": "Nimike (EN)",
+        "labelFi": "Nimike (FI)",
+        "labelSv": "Nimike (SV)",
+        "patterns": "Kuviot"
+      },
+      "scalars": {
+        "title": "Muut vaatimukset",
+        "jissenMinutes": "Jissen-minuutit",
+        "jissenTested": "Jissen testattu",
+        "minMonthsSincePreviousRank": "Vähimmäiskuukaudet edellisestä arvosta",
+        "requiresTheoricExam": "Vaatii teoriakokeen",
+        "requiresEssay": "Vaatii esseen"
+      }
+    },
     "organisations": {
       "title": "Organisaatiot",
       "newOrganisation": "Uusi organisaatio",
