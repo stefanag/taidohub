@@ -178,6 +178,12 @@ export function RankRequirementsEditor({
   const onSubmit = form.handleSubmit(async (values) => {
     setSubmitError(undefined);
     setSavedAt(undefined);
+    // Resync hokei groupOrder to array indices before submit to ensure
+    // removed or reordered groups have correct sequential groupOrder values.
+    const normalizedValues = {
+      ...values,
+      hokeiGroups: (values.hokeiGroups ?? []).map((g, i) => ({ ...g, groupOrder: i })),
+    };
     // `zodResolver` already validated `values` against the schema by the
     // time this callback runs, but its RHF-facing type is still the
     // pre-default `z.input` shape. Re-parsing resolves the `.default(...)`
@@ -185,7 +191,7 @@ export function RankRequirementsEditor({
     // the API client expects — and injects `setId` from props, matching the
     // brief's "inject setId on submit" contract.
     const body: SetGradingRequirementsInput = SetGradingRequirementsSchema.parse({
-      ...values,
+      ...normalizedValues,
       setId,
     });
     try {

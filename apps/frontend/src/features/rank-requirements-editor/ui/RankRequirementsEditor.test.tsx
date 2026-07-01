@@ -287,4 +287,79 @@ describe('<RankRequirementsEditor>', () => {
     expect(calledRankId).toBe(RANK_ID);
     expect(body.setId).toBe(SET_ID);
   });
+
+  it('resyncs hokei groupOrder to array indices when first group is removed', async () => {
+    const { user } = renderEditor();
+
+    // Load the editor with 3 existing hokei groups.
+    const initialRequirements: GradingRequirements = {
+      ...EMPTY_REQUIREMENTS,
+      hokeiGroups: [
+        {
+          id: '00000000-0000-4000-8000-000000000001',
+          groupOrder: 0,
+          pickCount: 1,
+          isTested: false,
+          labelEn: 'Group 0',
+          labelFi: 'Ryhmä 0',
+          labelSv: 'Grupp 0',
+          patternIds: [PATTERN_KOBO.id],
+        },
+        {
+          id: '00000000-0000-4000-8000-000000000002',
+          groupOrder: 1,
+          pickCount: 1,
+          isTested: false,
+          labelEn: 'Group 1',
+          labelFi: 'Ryhmä 1',
+          labelSv: 'Grupp 1',
+          patternIds: [PATTERN_OTHER.id],
+        },
+        {
+          id: '00000000-0000-4000-8000-000000000003',
+          groupOrder: 2,
+          pickCount: 1,
+          isTested: false,
+          labelEn: 'Group 2',
+          labelFi: 'Ryhmä 2',
+          labelSv: 'Grupp 2',
+          patternIds: [PATTERN_OTHER_2.id],
+        },
+      ],
+    };
+    hooks.getRequirementsForSet.mockResolvedValue(initialRequirements);
+
+    const { container } = renderEditor();
+
+    // Wait for groups to load.
+    await screen.findByText('Group 0');
+
+    // Remove the first group.
+    const groupCards = screen.getAllByTestId(/^hokei-group-/);
+    expect(groupCards).toHaveLength(3);
+    const firstGroupRemoveButton = within(groupCards[0]!).getByRole('button', {
+      name: /^remove group$/i,
+    });
+    await user.click(firstGroupRemoveButton);
+
+    // Verify we now have 2 groups.
+    const remainingGroupCards = screen.queryAllByTestId(/^hokei-group-/);
+    expect(remainingGroupCards).toHaveLength(2);
+
+    // Submit the form.
+    const forms = container.querySelectorAll('form');
+    expect(forms.length).toBeGreaterThan(0);
+    const form = forms[forms.length - 1] as HTMLFormElement;
+    const submitButton = form.querySelector('button[type="submit"]');
+    expect(submitButton).toBeTruthy();
+    await user.click(submitButton as HTMLElement);
+
+    await waitFor(() => expect(hooks.setRequirements).toHaveBeenCalledTimes(1));
+    const [, body] = hooks.setRequirements.mock.calls[0]!;
+
+    // Assert that the remaining groups have groupOrder 0 and 1 (not the stale 1, 2).
+    expect(body.hokeiGroups).toHaveLength(2);
+    expect(body.hokeiGroups[0]?.groupOrder).toBe(0);
+    expect(body.hokeiGroups[1]?.groupOrder).toBe(1);
+  });
 });
