@@ -4,6 +4,7 @@ import { OrganisationsModule } from '../organisations/organisations.module.js';
 import { MembershipsModule } from '../memberships/memberships.module.js';
 
 import { GradingRequirementsAbilityRules } from './grading-requirements.ability-rules.js';
+import { RankRequirementsController } from './rank-requirements.controller.js';
 import { RankRequirementsRepository } from './rank-requirements.repository.js';
 import { RankRequirementsService } from './rank-requirements.service.js';
 import { RequirementSetsController } from './requirement-sets.controller.js';
@@ -27,11 +28,11 @@ import { RequirementSetsService } from './requirement-sets.service.js';
  * `RequirementSetsService` and `RankRequirementsService` are exported so future
  * modules (grading sessions, etc.) can depend on them directly.
  *
- * `RankRequirementsController` will be added in Task 13.
+ * `RankRequirementsController` is registered alongside `RequirementSetsController`.
  */
 @Module({
   imports: [OrganisationsModule, MembershipsModule],
-  controllers: [RequirementSetsController],
+  controllers: [RequirementSetsController, RankRequirementsController],
   providers: [
     RequirementSetsRepository,
     RequirementSetsService,
