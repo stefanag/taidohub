@@ -711,5 +711,12 @@
       "theory": "Teoriakoe vaaditaan",
       "essay": "Essee vaaditaan"
     }
+  },
+  "nextRank": {
+    "title": "Seuraava arvo",
+    "caption": "{{ready}}/{{total}} vaatimusta valmiina",
+    "atHighest": "Olet saavuttanut korkeimman arvon",
+    "loading": "Ladataan…",
+    "empty": "Ei vielä kirjattua edistymistä"
   }
 }

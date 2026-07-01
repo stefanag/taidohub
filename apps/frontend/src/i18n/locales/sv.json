@@ -711,5 +711,12 @@
       "theory": "Teoriprov krävs",
       "essay": "Uppsats krävs"
     }
+  },
+  "nextRank": {
+    "title": "Nästa grad",
+    "caption": "{{ready}}/{{total}} krav uppfyllda",
+    "atHighest": "Du har nått den högsta graden",
+    "loading": "Laddar…",
+    "empty": "Ingen framsteg registrerad än"
   }
 }

@@ -116,6 +116,7 @@ export {
   type ClassificationMultiSelectProps,
 } from './classification-multi-select.js';
 export { ProgressPill, type ProgressPillProps } from './progress-pill.js';
+export { Progress, type ProgressProps } from './progress.js';
 export {
   ResourceAdminListPage,
   type ResourceAdminListPageProps,
