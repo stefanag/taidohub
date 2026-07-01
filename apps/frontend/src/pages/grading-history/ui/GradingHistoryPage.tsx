@@ -11,6 +11,7 @@ import { listShogoTitlesQueryOptions, type ShogoTitle } from '@/entities/shogo-t
 import { useSession } from '@/features/auth-by-email';
 import { GradingTimeline } from '@/features/grading-timeline';
 import { RankHistoryFormDialog } from '@/features/rank-history-form';
+import { NextRankCard } from '@/features/next-rank-card';
 
 import { FeatureFlag, useFeatureFlag } from '@/shared/lib/feature-flags';
 import { Button } from '@/shared/ui';
@@ -120,6 +121,7 @@ export function GradingHistoryPage(): React.ReactElement {
         </section>
 
         <aside className="space-y-6">
+          <NextRankCard />
           {userId ? <ClubCard userId={userId} /> : null}
         </aside>
       </div>
