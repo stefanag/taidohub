@@ -1,5 +1,5 @@
 import { Link, useRouterState } from '@tanstack/react-router';
-import { Award, BookOpen, Building2, ClipboardCheck, ClipboardList, Flag, GraduationCap, History, LayoutDashboard, LibraryBig, ScrollText, Swords, Tag, UserRound, Users, Wrench } from 'lucide-react';
+import { Award, BookOpen, Building2, ClipboardCheck, ClipboardList, Flag, GraduationCap, History, LayoutDashboard, LibraryBig, ScrollText, Swords, Tag, TrendingUp, UserRound, Users, Wrench } from 'lucide-react';
 import * as React from 'react';
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -30,6 +30,7 @@ import {
 const NAV = [
   { to: '/dashboard', icon: LayoutDashboard, labelKey: 'nav.dashboard' as const },
   { to: '/profile', icon: UserRound, labelKey: 'nav.profile' as const },
+  { to: '/progression', icon: TrendingUp, labelKey: 'nav.progression' as const },
   { to: '/grading-history', icon: ScrollText, labelKey: 'nav.gradingHistory' as const },
   { to: '/techniques', icon: Swords, labelKey: 'nav.techniques' as const },
   { to: '/patterns', icon: BookOpen, labelKey: 'nav.patterns' as const },

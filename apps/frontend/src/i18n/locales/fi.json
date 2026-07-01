@@ -54,7 +54,8 @@
     "myOrganisation": "Oma organisaatio",
     "profile": "Oma profiili",
     "settings": "Asetukset",
-    "language": "Kieli"
+    "language": "Kieli",
+    "progression": "Eteneminen"
   },
   "dashboard": {
     "title": "Kojelauta"
@@ -692,6 +693,7 @@
     }
   },
   "progression": {
+    "title": "Eteneminen",
     "tested": "Testataan",
     "mastered": "Hallitaan",
     "sections": {

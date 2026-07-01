@@ -17,6 +17,7 @@ import { Route as PublicLoginRouteImport } from './routes/_public.login'
 import { Route as AppTechniquesRouteImport } from './routes/_app.techniques'
 import { Route as AppStudentsRouteImport } from './routes/_app.students'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
+import { Route as AppProgressionRouteImport } from './routes/_app.progression'
 import { Route as AppProfileRouteImport } from './routes/_app.profile'
 import { Route as AppPatternsRouteImport } from './routes/_app.patterns'
 import { Route as AppMyOrganisationRouteImport } from './routes/_app.my-organisation'
@@ -91,6 +92,11 @@ const AppStudentsRoute = AppStudentsRouteImport.update({
 const AppSettingsRoute = AppSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppProgressionRoute = AppProgressionRouteImport.update({
+  id: '/progression',
+  path: '/progression',
   getParentRoute: () => AppRoute,
 } as any)
 const AppProfileRoute = AppProfileRouteImport.update({
@@ -300,6 +306,7 @@ export interface FileRoutesByFullPath {
   '/my-organisation': typeof AppMyOrganisationRoute
   '/patterns': typeof AppPatternsRoute
   '/profile': typeof AppProfileRoute
+  '/progression': typeof AppProgressionRoute
   '/settings': typeof AppSettingsRouteWithChildren
   '/students': typeof AppStudentsRouteWithChildren
   '/techniques': typeof AppTechniquesRoute
@@ -345,6 +352,7 @@ export interface FileRoutesByTo {
   '/my-organisation': typeof AppMyOrganisationRoute
   '/patterns': typeof AppPatternsRoute
   '/profile': typeof AppProfileRoute
+  '/progression': typeof AppProgressionRoute
   '/techniques': typeof AppTechniquesRoute
   '/login': typeof PublicLoginRoute
   '/set-password': typeof PublicSetPasswordRoute
@@ -382,6 +390,7 @@ export interface FileRoutesById {
   '/_app/my-organisation': typeof AppMyOrganisationRoute
   '/_app/patterns': typeof AppPatternsRoute
   '/_app/profile': typeof AppProfileRoute
+  '/_app/progression': typeof AppProgressionRoute
   '/_app/settings': typeof AppSettingsRouteWithChildren
   '/_app/students': typeof AppStudentsRouteWithChildren
   '/_app/techniques': typeof AppTechniquesRoute
@@ -430,6 +439,7 @@ export interface FileRouteTypes {
     | '/my-organisation'
     | '/patterns'
     | '/profile'
+    | '/progression'
     | '/settings'
     | '/students'
     | '/techniques'
@@ -475,6 +485,7 @@ export interface FileRouteTypes {
     | '/my-organisation'
     | '/patterns'
     | '/profile'
+    | '/progression'
     | '/techniques'
     | '/login'
     | '/set-password'
@@ -511,6 +522,7 @@ export interface FileRouteTypes {
     | '/_app/my-organisation'
     | '/_app/patterns'
     | '/_app/profile'
+    | '/_app/progression'
     | '/_app/settings'
     | '/_app/students'
     | '/_app/techniques'
@@ -612,6 +624,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/progression': {
+      id: '/_app/progression'
+      path: '/progression'
+      fullPath: '/progression'
+      preLoaderRoute: typeof AppProgressionRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/profile': {
@@ -1039,6 +1058,7 @@ interface AppRouteChildren {
   AppMyOrganisationRoute: typeof AppMyOrganisationRoute
   AppPatternsRoute: typeof AppPatternsRoute
   AppProfileRoute: typeof AppProfileRoute
+  AppProgressionRoute: typeof AppProgressionRoute
   AppSettingsRoute: typeof AppSettingsRouteWithChildren
   AppStudentsRoute: typeof AppStudentsRouteWithChildren
   AppTechniquesRoute: typeof AppTechniquesRoute
@@ -1060,6 +1080,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppMyOrganisationRoute: AppMyOrganisationRoute,
   AppPatternsRoute: AppPatternsRoute,
   AppProfileRoute: AppProfileRoute,
+  AppProgressionRoute: AppProgressionRoute,
   AppSettingsRoute: AppSettingsRouteWithChildren,
   AppStudentsRoute: AppStudentsRouteWithChildren,
   AppTechniquesRoute: AppTechniquesRoute,

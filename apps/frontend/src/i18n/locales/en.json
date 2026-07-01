@@ -54,7 +54,8 @@
     "myOrganisation": "My organisation",
     "profile": "My profile",
     "settings": "Settings",
-    "language": "Language"
+    "language": "Language",
+    "progression": "Progression"
   },
   "dashboard": {
     "title": "Dashboard"
@@ -709,6 +710,7 @@
     }
   },
   "progression": {
+    "title": "Progression",
     "tested": "Tested",
     "mastered": "Mastered",
     "sections": {

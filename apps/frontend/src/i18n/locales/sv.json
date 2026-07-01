@@ -54,7 +54,8 @@
     "myOrganisation": "Min organisation",
     "profile": "Min profil",
     "settings": "Inställningar",
-    "language": "Språk"
+    "language": "Språk",
+    "progression": "Progression"
   },
   "dashboard": {
     "title": "Översikt"
@@ -692,6 +693,7 @@
     }
   },
   "progression": {
+    "title": "Progression",
     "tested": "Testas",
     "mastered": "Behärskas",
     "sections": {
