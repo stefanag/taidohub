@@ -128,28 +128,32 @@ export function AppSidebar(): React.ReactElement {
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ) : null}
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={pathname.startsWith('/admin/organisations')}
-                  >
-                    <Link to="/admin/organisations">
-                      <Building2 />
-                      <span>{t('nav.adminOrganisations')}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={pathname.startsWith('/admin/audit-log')}
-                  >
-                    <Link to="/admin/audit-log">
-                      <History />
-                      <span>{t('nav.adminAuditLog')}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                {ability?.can('manage', 'Organisation') ? (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={pathname.startsWith('/admin/organisations')}
+                    >
+                      <Link to="/admin/organisations">
+                        <Building2 />
+                        <span>{t('nav.adminOrganisations')}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ) : null}
+                {ability?.can('manage', 'Organisation') ? (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={pathname.startsWith('/admin/audit-log')}
+                    >
+                      <Link to="/admin/audit-log">
+                        <History />
+                        <span>{t('nav.adminAuditLog')}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ) : null}
                 {ability?.can('manage', 'BeltRank') ? (
                   <SidebarMenuItem>
                     <SidebarMenuButton
