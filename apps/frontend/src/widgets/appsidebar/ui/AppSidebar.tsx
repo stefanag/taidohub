@@ -1,5 +1,5 @@
 import { Link, useRouterState } from '@tanstack/react-router';
-import { Award, BookOpen, Building2, Flag, GraduationCap, History, LayoutDashboard, LibraryBig, ScrollText, Swords, Tag, UserRound, Users, Wrench } from 'lucide-react';
+import { Award, BookOpen, Building2, ClipboardList, Flag, GraduationCap, History, LayoutDashboard, LibraryBig, ScrollText, Swords, Tag, UserRound, Users, Wrench } from 'lucide-react';
 import * as React from 'react';
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -47,6 +47,14 @@ export function AppSidebar(): React.ReactElement {
   const isInstructor = memberships.some((m) => m.role === 'instructor');
   const showStudents = isInstructor || ability?.can('manage', 'all') === true;
   const isOrgAdmin = memberships.some((m) => m.role === 'orgadmin');
+
+  // RequirementSet is manageable by sysadmins (CASL `manage all`) and by
+  // org-scoped orgadmin/instructor members (mirrors the backend's
+  // `GradingRequirementsAbilityRules`, which the frontend ability doesn't
+  // model since better-auth sessions carry no memberships).
+  const canManageRequirementSets =
+    ability?.can('manage', 'all') === true ||
+    memberships.some((m) => m.role === 'orgadmin' || m.role === 'instructor');
 
   return (
     <Sidebar collapsible="icon">
@@ -102,7 +110,7 @@ export function AppSidebar(): React.ReactElement {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {ability?.can('manage', 'Organisation') ? (
+        {ability?.can('manage', 'Organisation') || canManageRequirementSets ? (
           <SidebarGroup>
             <SidebarGroupLabel>{t('admin.title')}</SidebarGroupLabel>
             <SidebarGroupContent>
@@ -203,6 +211,19 @@ export function AppSidebar(): React.ReactElement {
                       <Link to="/admin/feature-flags">
                         <Flag />
                         <span>{t('nav.adminFeatureFlags')}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ) : null}
+                {canManageRequirementSets ? (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={pathname.startsWith('/admin/requirement-sets')}
+                    >
+                      <Link to="/admin/requirement-sets">
+                        <ClipboardList />
+                        <span>{t('nav.adminRequirementSets')}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
