@@ -1,5 +1,5 @@
 import { Link, useRouterState } from '@tanstack/react-router';
-import { Award, BookOpen, Building2, ClipboardList, Flag, GraduationCap, History, LayoutDashboard, LibraryBig, ScrollText, Swords, Tag, UserRound, Users, Wrench } from 'lucide-react';
+import { Award, BookOpen, Building2, ClipboardCheck, ClipboardList, Flag, GraduationCap, History, LayoutDashboard, LibraryBig, ScrollText, Swords, Tag, UserRound, Users, Wrench } from 'lucide-react';
 import * as React from 'react';
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -228,6 +228,19 @@ export function AppSidebar(): React.ReactElement {
                       <Link to="/admin/requirement-sets">
                         <ClipboardList />
                         <span>{t('nav.adminRequirementSets')}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ) : null}
+                {canManageRequirementSets ? (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={pathname.startsWith('/admin/rank-requirements')}
+                    >
+                      <Link to="/admin/rank-requirements">
+                        <ClipboardCheck />
+                        <span>{t('nav.adminRankRequirements')}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

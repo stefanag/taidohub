@@ -45,6 +45,7 @@
     "adminPatterns": "Kuviot",
     "adminTechniques": "Tekniikat",
     "adminRequirementSets": "Vaatimuskokoelmat",
+    "adminRankRequirements": "Arvovaatimukset",
     "adminUsers": "Käyttäjät",
     "gradingHistory": "Vyökoehistoria",
     "patterns": "Kuviot",
@@ -311,33 +312,45 @@
       "empty": "Ei vielä vaatimuskokoelmia."
     },
     "rankRequirements": {
-      "saved": "Tallennettu.",
+      "title": "Arvovaatimukset",
+      "description": "Muokkaa kihonia, koboa, kuvioita, hokei-ryhmiä ja arvovaatimuksia arvoittain.",
+      "selectSet": "Valitse vaatimusjoukko",
+      "selectRank": "Valitse arvo",
+      "save": "Tallenna vaatimukset",
+      "saved": "Vaatimukset tallennettu",
       "sections": {
-        "kihon": "Kihon",
+        "kihon": "Kihon (tekniikat)",
         "kihonEmpty": "Ei vielä valittuja kihon-tekniikoita.",
-        "kobo": "Kobo-kuviot",
+        "kobo": "Kobo",
         "koboEmpty": "Ei vielä valittuja kobo-kuvioita.",
         "otherPatterns": "Muut kuviot",
         "otherPatternsEmpty": "Ei vielä valittuja muita kuvioita.",
-        "hokeiGroups": "Hokei-ryhmät"
+        "hokei": "Hokei-ryhmät",
+        "hokeiGroups": "Hokei-ryhmät",
+        "scalars": "Arvovaatimukset"
       },
       "hokei": {
         "add": "Lisää ryhmä",
+        "addGroup": "Lisää hokei-ryhmä",
         "remove": "Poista ryhmä",
+        "removeGroup": "Poista ryhmä",
         "empty": "Ei vielä hokei-ryhmiä.",
         "groupOrder": "Ryhmä {{order}}",
         "pickCount": "Valittava määrä",
-        "isTested": "Testattu",
+        "isTested": "Testattu kokeessa",
         "labelEn": "Nimike (EN)",
         "labelFi": "Nimike (FI)",
         "labelSv": "Nimike (SV)",
+        "addPattern": "Lisää kuvio",
         "patterns": "Kuviot"
       },
       "scalars": {
         "title": "Muut vaatimukset",
         "jissenMinutes": "Jissen-minuutit",
-        "jissenTested": "Jissen testattu",
+        "jissenTested": "Jissen testattu kokeessa",
+        "minMonths": "Vähimmäiskuukaudet edellisestä arvosta",
         "minMonthsSincePreviousRank": "Vähimmäiskuukaudet edellisestä arvosta",
+        "requiresExam": "Vaatii teoriakokeen",
         "requiresTheoricExam": "Vaatii teoriakokeen",
         "requiresEssay": "Vaatii esseen"
       }

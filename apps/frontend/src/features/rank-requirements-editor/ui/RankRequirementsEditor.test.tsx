@@ -200,7 +200,7 @@ describe('<RankRequirementsEditor>', () => {
     await screen.findByText('Kobo pattern one');
     await screen.findByText('Other pattern one');
 
-    const koboHeading = screen.getByRole('heading', { name: /kobo patterns/i });
+    const koboHeading = screen.getByRole('heading', { name: /^kobo$/i });
     const koboSection = koboHeading.closest('section')!;
     expect(within(koboSection).getByText('Kobo pattern one')).toBeInTheDocument();
     expect(within(koboSection).queryByText('Other pattern one')).not.toBeInTheDocument();

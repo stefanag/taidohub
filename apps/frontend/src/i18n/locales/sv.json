@@ -45,6 +45,7 @@
     "adminPatterns": "Mönster",
     "adminTechniques": "Tekniker",
     "adminRequirementSets": "Kravuppsättningar",
+    "adminRankRequirements": "Gradkrav",
     "adminUsers": "Användare",
     "gradingHistory": "Graderingshistorik",
     "patterns": "Mönster",
@@ -311,33 +312,45 @@
       "empty": "Inga kravuppsättningar än."
     },
     "rankRequirements": {
-      "saved": "Sparat.",
+      "title": "Gradkrav",
+      "description": "Redigera kihon, kobo, mönster, hokei-grupper och gradkrav per grad.",
+      "selectSet": "Välj ett kravset",
+      "selectRank": "Välj en grad",
+      "save": "Spara krav",
+      "saved": "Kraven sparades",
       "sections": {
-        "kihon": "Kihon",
+        "kihon": "Kihon (tekniker)",
         "kihonEmpty": "Inga kihon valda ännu.",
-        "kobo": "Kobo-mönster",
+        "kobo": "Kobo",
         "koboEmpty": "Inga kobo-mönster valda ännu.",
         "otherPatterns": "Övriga mönster",
         "otherPatternsEmpty": "Inga övriga mönster valda ännu.",
-        "hokeiGroups": "Hokei-grupper"
+        "hokei": "Hokei-grupper",
+        "hokeiGroups": "Hokei-grupper",
+        "scalars": "Gradkrav"
       },
       "hokei": {
         "add": "Lägg till grupp",
+        "addGroup": "Lägg till hokei-grupp",
         "remove": "Ta bort grupp",
+        "removeGroup": "Ta bort grupp",
         "empty": "Inga hokei-grupper än.",
         "groupOrder": "Grupp {{order}}",
         "pickCount": "Antal att välja",
-        "isTested": "Testad",
+        "isTested": "Testad vid gradering",
         "labelEn": "Etikett (EN)",
         "labelFi": "Etikett (FI)",
         "labelSv": "Etikett (SV)",
+        "addPattern": "Lägg till mönster",
         "patterns": "Mönster"
       },
       "scalars": {
         "title": "Övriga krav",
         "jissenMinutes": "Jissen-minuter",
-        "jissenTested": "Jissen testad",
+        "jissenTested": "Jissen testad vid gradering",
+        "minMonths": "Minsta antal månader sedan föregående grad",
         "minMonthsSincePreviousRank": "Min antal månader sedan föregående grad",
+        "requiresExam": "Kräver teoriprov",
         "requiresTheoricExam": "Kräver teoriprov",
         "requiresEssay": "Kräver uppsats"
       }

@@ -45,6 +45,7 @@
     "adminPatterns": "Patterns",
     "adminTechniques": "Techniques",
     "adminRequirementSets": "Requirement sets",
+    "adminRankRequirements": "Rank requirements",
     "adminUsers": "Users",
     "gradingHistory": "Grading history",
     "patterns": "Patterns",
@@ -311,33 +312,45 @@
       "empty": "No requirement sets yet."
     },
     "rankRequirements": {
-      "saved": "Saved.",
+      "title": "Rank requirements",
+      "description": "Edit per-rank kihon, kobo, patterns, hokei groups, and grading rules.",
+      "selectSet": "Select a requirement set",
+      "selectRank": "Select a rank",
+      "save": "Save requirements",
+      "saved": "Requirements saved",
       "sections": {
-        "kihon": "Kihon",
+        "kihon": "Kihon (techniques)",
         "kihonEmpty": "No kihon selected yet.",
-        "kobo": "Kobo patterns",
+        "kobo": "Kobo",
         "koboEmpty": "No kobo patterns selected yet.",
         "otherPatterns": "Other patterns",
         "otherPatternsEmpty": "No other patterns selected yet.",
-        "hokeiGroups": "Hokei groups"
+        "hokei": "Hokei groups",
+        "hokeiGroups": "Hokei groups",
+        "scalars": "Grading rules"
       },
       "hokei": {
         "add": "Add group",
+        "addGroup": "Add hokei group",
         "remove": "Remove group",
+        "removeGroup": "Remove group",
         "empty": "No hokei groups yet.",
         "groupOrder": "Group {{order}}",
         "pickCount": "Pick count",
-        "isTested": "Tested",
+        "isTested": "Tested at grading",
         "labelEn": "Label (EN)",
         "labelFi": "Label (FI)",
         "labelSv": "Label (SV)",
+        "addPattern": "Add pattern",
         "patterns": "Patterns"
       },
       "scalars": {
         "title": "Other requirements",
         "jissenMinutes": "Jissen minutes",
-        "jissenTested": "Jissen tested",
+        "jissenTested": "Jissen tested at grading",
+        "minMonths": "Minimum months since previous rank",
         "minMonthsSincePreviousRank": "Min months since previous rank",
+        "requiresExam": "Requires theory exam",
         "requiresTheoricExam": "Requires theoretical exam",
         "requiresEssay": "Requires essay"
       }
