@@ -1,5 +1,5 @@
 import { Link, useRouterState } from '@tanstack/react-router';
-import { Award, BookOpen, Building2, Flag, GraduationCap, History, LayoutDashboard, LibraryBig, ScrollText, Swords, Tag, UserRound, Users, Wrench } from 'lucide-react';
+import { Award, BookOpen, Building2, ClipboardCheck, ClipboardList, Flag, GraduationCap, History, LayoutDashboard, LibraryBig, ScrollText, Swords, Tag, TrendingUp, UserRound, Users, Wrench } from 'lucide-react';
 import * as React from 'react';
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -30,6 +30,7 @@ import {
 const NAV = [
   { to: '/dashboard', icon: LayoutDashboard, labelKey: 'nav.dashboard' as const },
   { to: '/profile', icon: UserRound, labelKey: 'nav.profile' as const },
+  { to: '/progression', icon: TrendingUp, labelKey: 'nav.progression' as const },
   { to: '/grading-history', icon: ScrollText, labelKey: 'nav.gradingHistory' as const },
   { to: '/techniques', icon: Swords, labelKey: 'nav.techniques' as const },
   { to: '/patterns', icon: BookOpen, labelKey: 'nav.patterns' as const },
@@ -47,6 +48,14 @@ export function AppSidebar(): React.ReactElement {
   const isInstructor = memberships.some((m) => m.role === 'instructor');
   const showStudents = isInstructor || ability?.can('manage', 'all') === true;
   const isOrgAdmin = memberships.some((m) => m.role === 'orgadmin');
+
+  // RequirementSet is manageable by sysadmins (CASL `manage all`) and by
+  // org-scoped orgadmin/instructor members (mirrors the backend's
+  // `GradingRequirementsAbilityRules`, which the frontend ability doesn't
+  // model since better-auth sessions carry no memberships).
+  const canManageRequirementSets =
+    ability?.can('manage', 'all') === true ||
+    memberships.some((m) => m.role === 'orgadmin' || m.role === 'instructor');
 
   return (
     <Sidebar collapsible="icon">
@@ -102,7 +111,7 @@ export function AppSidebar(): React.ReactElement {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {ability?.can('manage', 'Organisation') ? (
+        {ability?.can('manage', 'Organisation') || canManageRequirementSets ? (
           <SidebarGroup>
             <SidebarGroupLabel>{t('admin.title')}</SidebarGroupLabel>
             <SidebarGroupContent>
@@ -120,28 +129,32 @@ export function AppSidebar(): React.ReactElement {
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ) : null}
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={pathname.startsWith('/admin/organisations')}
-                  >
-                    <Link to="/admin/organisations">
-                      <Building2 />
-                      <span>{t('nav.adminOrganisations')}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={pathname.startsWith('/admin/audit-log')}
-                  >
-                    <Link to="/admin/audit-log">
-                      <History />
-                      <span>{t('nav.adminAuditLog')}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                {ability?.can('manage', 'Organisation') ? (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={pathname.startsWith('/admin/organisations')}
+                    >
+                      <Link to="/admin/organisations">
+                        <Building2 />
+                        <span>{t('nav.adminOrganisations')}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ) : null}
+                {ability?.can('manage', 'Organisation') ? (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={pathname.startsWith('/admin/audit-log')}
+                    >
+                      <Link to="/admin/audit-log">
+                        <History />
+                        <span>{t('nav.adminAuditLog')}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ) : null}
                 {ability?.can('manage', 'BeltRank') ? (
                   <SidebarMenuItem>
                     <SidebarMenuButton
@@ -203,6 +216,32 @@ export function AppSidebar(): React.ReactElement {
                       <Link to="/admin/feature-flags">
                         <Flag />
                         <span>{t('nav.adminFeatureFlags')}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ) : null}
+                {canManageRequirementSets ? (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={pathname.startsWith('/admin/requirement-sets')}
+                    >
+                      <Link to="/admin/requirement-sets">
+                        <ClipboardList />
+                        <span>{t('nav.adminRequirementSets')}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ) : null}
+                {canManageRequirementSets ? (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={pathname.startsWith('/admin/rank-requirements')}
+                    >
+                      <Link to="/admin/rank-requirements">
+                        <ClipboardCheck />
+                        <span>{t('nav.adminRankRequirements')}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

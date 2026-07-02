@@ -102,10 +102,12 @@ describe('belt-rank api', () => {
       rank: ROW,
       system: { id: '7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f4', code: 'kyu', nameEn: 'Kyu', nameSv: 'Kyu', nameFi: 'Kyu' },
       organisation: null,
+      requirements: null,
     };
     mockedHttp.mockResolvedValueOnce(PUBLIC_PAYLOAD);
     const out = await getPublicRank('jukyu');
     expect(mockedHttp).toHaveBeenCalledWith('/api/public/ranks/jukyu');
     expect(out.rank.nameRomaji).toBe('Jukyu');
+    expect(out.requirements).toBeNull();
   });
 });

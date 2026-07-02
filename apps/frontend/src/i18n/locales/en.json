@@ -44,6 +44,8 @@
     "adminFeatureFlags": "Feature flags",
     "adminPatterns": "Patterns",
     "adminTechniques": "Techniques",
+    "adminRequirementSets": "Requirement sets",
+    "adminRankRequirements": "Rank requirements",
     "adminUsers": "Users",
     "gradingHistory": "Grading history",
     "patterns": "Patterns",
@@ -52,7 +54,8 @@
     "myOrganisation": "My organisation",
     "profile": "My profile",
     "settings": "Settings",
-    "language": "Language"
+    "language": "Language",
+    "progression": "Progression"
   },
   "dashboard": {
     "title": "Dashboard"
@@ -185,7 +188,8 @@
     "detail": {
       "title": "{{name}}",
       "techniques": "Techniques",
-      "patterns": "Patterns"
+      "patterns": "Patterns",
+      "requirements": "Next rank requirements"
     },
     "errors": {
       "forbidden": "You don't have access to this student."
@@ -286,6 +290,72 @@
       "newTechnique": "New technique",
       "editTechnique": "Edit technique",
       "deleteConfirm": "Delete this technique? This cannot be undone."
+    },
+    "requirementSets": {
+      "title": "Requirement sets",
+      "description": "Versioned bundles of grading requirements. One active set per organisation.",
+      "newSet": "New set",
+      "name": "Name",
+      "organisation": "Organisation",
+      "organisationGlobal": "Global",
+      "effectiveDate": "Effective date",
+      "active": "Active",
+      "inactive": "Inactive",
+      "actions": "Actions",
+      "activate": "Activate",
+      "deactivate": "Deactivate",
+      "clone": "Clone",
+      "clonePrompt": "Name for cloned set",
+      "cloneTitle": "Clone requirement set",
+      "edit": "Edit",
+      "editTitle": "Edit requirement set",
+      "delete": "Delete",
+      "deleteConfirm": "Delete this requirement set? Cannot be undone.",
+      "empty": "No requirement sets yet."
+    },
+    "rankRequirements": {
+      "title": "Rank requirements",
+      "description": "Edit per-rank kihon, kobo, patterns, hokei groups, and grading rules.",
+      "selectSet": "Select a requirement set",
+      "selectRank": "Select a rank",
+      "save": "Save requirements",
+      "saved": "Requirements saved",
+      "sections": {
+        "kihon": "Kihon (techniques)",
+        "kihonEmpty": "No kihon selected yet.",
+        "kobo": "Kobo",
+        "koboEmpty": "No kobo patterns selected yet.",
+        "otherPatterns": "Other patterns",
+        "otherPatternsEmpty": "No other patterns selected yet.",
+        "hokei": "Hokei groups",
+        "hokeiGroups": "Hokei groups",
+        "scalars": "Grading rules"
+      },
+      "hokei": {
+        "add": "Add group",
+        "addGroup": "Add hokei group",
+        "remove": "Remove group",
+        "removeGroup": "Remove group",
+        "empty": "No hokei groups yet.",
+        "groupOrder": "Group {{order}}",
+        "pickCount": "Pick count",
+        "isTested": "Tested at grading",
+        "labelEn": "Label (EN)",
+        "labelFi": "Label (FI)",
+        "labelSv": "Label (SV)",
+        "addPattern": "Add pattern",
+        "patterns": "Patterns"
+      },
+      "scalars": {
+        "title": "Other requirements",
+        "jissenMinutes": "Jissen minutes",
+        "jissenTested": "Jissen tested at grading",
+        "minMonths": "Minimum months since previous rank",
+        "minMonthsSincePreviousRank": "Min months since previous rank",
+        "requiresExam": "Requires theory exam",
+        "requiresTheoricExam": "Requires theoretical exam",
+        "requiresEssay": "Requires essay"
+      }
     },
     "organisations": {
       "title": "Organisations",
@@ -639,5 +709,35 @@
       "pattern": "Pattern feedback",
       "general": "General feedback"
     }
+  },
+  "progression": {
+    "title": "Progression",
+    "tested": "Tested",
+    "mastered": "Mastered",
+    "sections": {
+      "kihon": "Kihon (techniques)",
+      "kobo": "Kobo",
+      "otherPatterns": "Other patterns",
+      "hokeiGroups": "Hokei groups",
+      "scalars": "Other requirements"
+    },
+    "hokei": {
+      "pickN": "Pick {{pick}} of {{of}}",
+      "all": "All required"
+    },
+    "scalars": {
+      "jissenMinutes": "Jissen sparring minutes: {{n}}",
+      "minMonths": "Minimum months since previous rank: {{n}}",
+      "theory": "Theory exam required",
+      "essay": "Essay required"
+    }
+  },
+  "nextRank": {
+    "title": "Next rank",
+    "caption": "{{ready}}/{{total}} requirements ready",
+    "atHighest": "You've reached the highest rank",
+    "noRankYet": "No grading history yet — start tracking progress toward your first rank.",
+    "loading": "Loading…",
+    "empty": "No progress recorded yet"
   }
 }

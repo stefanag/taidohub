@@ -1,0 +1,335 @@
+import { ForbiddenException, NotFoundException } from '@nestjs/common';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
+import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
+import { OrganisationsRepository } from '../organisations/organisations.repository.js';
+
+import { RankRequirementsService } from './rank-requirements.service.js';
+import {
+  RequirementSetsRepository,
+  type RequirementSetRow,
+} from './requirement-sets.repository.js';
+import { RequirementSetsService } from './requirement-sets.service.js';
+
+// ── Shared fixtures ────────────────────────────────────────────────────
+
+function row(overrides: Partial<RequirementSetRow> = {}): RequirementSetRow {
+  return {
+    id: 'rs-1',
+    name: 'Default Set',
+    organisationId: 'org-A',
+    effectiveDate: '2026-01-01',
+    isActive: false,
+    clonedFromId: null,
+    createdAt: new Date('2026-01-01T00:00:00Z'),
+    updatedAt: new Date('2026-01-01T00:00:00Z'),
+    ...overrides,
+  };
+}
+
+function makeUser(overrides: Partial<AuthenticatedUser> = {}): AuthenticatedUser {
+  return {
+    id: 'u-1',
+    email: 'u@example.com',
+    emailVerified: true,
+    name: null,
+    image: null,
+    role: 'user',
+    locale: 'en',
+    deactivatedAt: null,
+    memberships: [],
+    ...overrides,
+  };
+}
+
+// Drizzle db.transaction(cb) calls cb(tx) and returns its result. Fake it.
+const FAKE_TX = { __tx: true } as unknown;
+
+// ── Harness ─────────────────────────────────────────────────────────────
+
+interface Harness {
+  service: RequirementSetsService;
+  repo: { [K in keyof RequirementSetsRepository]: ReturnType<typeof vi.fn> };
+  orgs: { getAncestorIds: ReturnType<typeof vi.fn> };
+  abilities: { createForUser: ReturnType<typeof vi.fn> };
+  fakeDb: { transaction: ReturnType<typeof vi.fn> };
+  rankReqs: { deepCopyDetailsForSet: ReturnType<typeof vi.fn> };
+}
+
+function build(opts: { canManage?: boolean; rowOnFind?: RequirementSetRow | null } = {}): Harness {
+  const { canManage = true, rowOnFind = null } = opts;
+
+  const repo = {
+    list: vi.fn().mockResolvedValue([]),
+    findById: vi.fn().mockResolvedValue(rowOnFind),
+    insert: vi.fn(),
+    update: vi.fn(),
+    delete: vi.fn().mockResolvedValue(true),
+    setActive: vi.fn().mockResolvedValue(undefined),
+    deactivateActiveForOrg: vi.fn().mockResolvedValue(undefined),
+    findActiveByOrg: vi.fn().mockResolvedValue(null),
+  };
+
+  const orgs = {
+    getAncestorIds: vi.fn().mockResolvedValue([]),
+  };
+
+  const fakeAbility = { can: vi.fn().mockReturnValue(canManage) };
+  const abilities = {
+    createForUser: vi.fn().mockReturnValue(fakeAbility),
+  };
+
+  const fakeDb = {
+    transaction: vi.fn(async (cb: (tx: unknown) => Promise<unknown>) => cb(FAKE_TX)),
+  };
+
+  const rankReqs = {
+    deepCopyDetailsForSet: vi.fn().mockResolvedValue(undefined),
+  };
+
+  const service = new RequirementSetsService(
+    fakeDb as never,
+    repo as unknown as RequirementSetsRepository,
+    orgs as unknown as OrganisationsRepository,
+    abilities as unknown as AbilityFactory,
+    rankReqs as unknown as RankRequirementsService,
+  );
+
+  return { service, repo, orgs, abilities, fakeDb, rankReqs };
+}
+
+// ── Tests ────────────────────────────────────────────────────────────────
+
+describe('RequirementSetsService', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('list: sysadmin sees every set', async () => {
+    const sysadmin = makeUser({ role: 'sysadmin', memberships: [] });
+    const { service, repo } = build();
+
+    // Sysadmin detection is a direct role check (user.role === 'sysadmin').
+    const sets = [row({ id: 'rs-1' }), row({ id: 'rs-2' })];
+    repo.list.mockResolvedValue(sets);
+
+    const result = await service.list(sysadmin);
+
+    expect(repo.list).toHaveBeenCalledWith('all');
+    expect(result).toHaveLength(2);
+  });
+
+  it('list: org user sees only sets in their ancestor org chain', async () => {
+    const orgUser = makeUser({
+      role: 'user',
+      memberships: [{ organisationId: 'org-child', role: 'instructor' }],
+    });
+    const { service, repo, orgs } = build();
+
+    // Non-sysadmin: user.role !== 'sysadmin', so falls through to ancestor-org listing.
+    orgs.getAncestorIds.mockResolvedValue(['org-child', 'org-parent']);
+    repo.list.mockResolvedValue([row({ id: 'rs-1', organisationId: 'org-parent' })]);
+
+    const result = await service.list(orgUser);
+
+    expect(orgs.getAncestorIds).toHaveBeenCalledWith('org-child');
+    expect(repo.list).toHaveBeenCalledWith(expect.arrayContaining(['org-child', 'org-parent']));
+    expect(result).toHaveLength(1);
+  });
+
+  it('create: rejects when non-sysadmin passes another org id', async () => {
+    const orgAdmin = makeUser({
+      role: 'user',
+      memberships: [{ organisationId: 'org-A', role: 'orgadmin' }],
+    });
+    const { service, abilities } = build();
+
+    // Non-sysadmin (user.role !== 'sysadmin'); CASL denies manage on org-OTHER
+    const fakeAbility = { can: vi.fn().mockReturnValue(false) };
+    abilities.createForUser.mockReturnValue(fakeAbility);
+
+    await expect(
+      service.create({ name: 'Test', organisationId: 'org-OTHER', effectiveDate: '2026-01-01' }, orgAdmin),
+    ).rejects.toBeInstanceOf(ForbiddenException);
+  });
+
+  it('create: defaults organisationId to caller primary org for non-sysadmin', async () => {
+    const orgAdmin = makeUser({
+      role: 'user',
+      memberships: [{ organisationId: 'org-A', role: 'orgadmin' }],
+    });
+    const created = row({ id: 'rs-new', name: 'Test', organisationId: 'org-A' });
+    const { service, repo, abilities } = build();
+
+    // Non-sysadmin (user.role !== 'sysadmin'), but CASL allows manage on org-A
+    const fakeAbility = { can: vi.fn().mockReturnValue(true) };
+    abilities.createForUser.mockReturnValue(fakeAbility);
+    repo.insert.mockResolvedValue(created);
+
+    const result = await service.create({ name: 'Test', effectiveDate: '2026-01-01' }, orgAdmin);
+
+    expect(repo.insert).toHaveBeenCalledWith(
+      expect.objectContaining({ organisationId: 'org-A', name: 'Test' }),
+    );
+    expect(result.id).toBe('rs-new');
+  });
+
+  it('create: rejects when user has only a student membership in the target org', async () => {
+    const student = makeUser({
+      role: 'user',
+      memberships: [{ organisationId: 'org-A', role: 'student' }],
+    });
+    const { service, abilities } = build();
+
+    // Student (user.role !== 'sysadmin'); CASL denies manage on RequirementSet for org-A
+    const fakeAbility = { can: vi.fn().mockReturnValue(false) };
+    abilities.createForUser.mockReturnValue(fakeAbility);
+
+    await expect(
+      service.create({ name: 'x', effectiveDate: '2026-07-01', organisationId: 'org-A' }, student),
+    ).rejects.toBeInstanceOf(ForbiddenException);
+  });
+
+  describe('update', () => {
+    it('throws ForbiddenException when ability denies manage', async () => {
+      const existing = row({ id: 'rs-1', organisationId: 'org-X' });
+      const { service, repo, abilities } = build({ rowOnFind: existing });
+
+      const fakeAbility = { can: vi.fn().mockReturnValue(false) };
+      abilities.createForUser.mockReturnValue(fakeAbility);
+      repo.findById.mockResolvedValue(existing);
+
+      await expect(
+        service.update('rs-1', { name: 'New Name' }, makeUser()),
+      ).rejects.toBeInstanceOf(ForbiddenException);
+
+      expect(repo.update).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('delete', () => {
+    it('throws ForbiddenException when ability denies manage', async () => {
+      const existing = row({ id: 'rs-1', organisationId: 'org-X' });
+      const { service, repo, abilities } = build({ rowOnFind: existing });
+
+      const fakeAbility = { can: vi.fn().mockReturnValue(false) };
+      abilities.createForUser.mockReturnValue(fakeAbility);
+      repo.findById.mockResolvedValue(existing);
+
+      await expect(
+        service.delete('rs-1', makeUser()),
+      ).rejects.toBeInstanceOf(ForbiddenException);
+
+      expect(repo.delete).not.toHaveBeenCalled();
+    });
+  });
+
+  it('get: 404 when missing', async () => {
+    const { service } = build({ rowOnFind: null });
+    await expect(service.get('missing-id', makeUser())).rejects.toBeInstanceOf(NotFoundException);
+  });
+
+  it('activate: deactivates sibling active sets in same org inside a transaction', async () => {
+    const target = row({ id: 'rs-1', organisationId: 'org-A', isActive: false });
+    const { service, repo, fakeDb } = build({ rowOnFind: target, canManage: true });
+
+    // After activation, findById returns the activated row
+    repo.findById
+      .mockResolvedValueOnce(target) // first call in activate()
+      .mockResolvedValue({ ...target, isActive: true }); // second call after transaction
+
+    await service.activate('rs-1', makeUser({ role: 'sysadmin' }));
+
+    expect(fakeDb.transaction).toHaveBeenCalledOnce();
+    expect(repo.deactivateActiveForOrg).toHaveBeenCalledWith('org-A', FAKE_TX);
+    expect(repo.setActive).toHaveBeenCalledWith('rs-1', true, FAKE_TX);
+    // deactivateActiveForOrg must be called before setActive
+    const deactivateOrder = repo.deactivateActiveForOrg.mock.invocationCallOrder[0];
+    const setActiveOrder = repo.setActive.mock.invocationCallOrder[0];
+    expect(deactivateOrder).toBeLessThan(setActiveOrder!);
+  });
+
+  it('deactivate: only flips isActive on the target set', async () => {
+    const target = row({ id: 'rs-1', organisationId: 'org-A', isActive: true });
+    const { service, repo } = build({ rowOnFind: target, canManage: true });
+
+    repo.findById
+      .mockResolvedValueOnce(target)
+      .mockResolvedValue({ ...target, isActive: false });
+
+    const result = await service.deactivate('rs-1', makeUser({ role: 'sysadmin' }));
+
+    expect(repo.setActive).toHaveBeenCalledWith('rs-1', false);
+    expect(repo.deactivateActiveForOrg).not.toHaveBeenCalled();
+    expect(result.isActive).toBe(false);
+  });
+
+  it('clone: copies set row with isActive=false and clonedFromId=source.id', async () => {
+    const source = row({ id: 'rs-source', name: 'Original', organisationId: 'org-A' });
+    const cloned = row({ id: 'rs-clone', clonedFromId: 'rs-source', isActive: false });
+    const { service, repo } = build({ rowOnFind: source, canManage: true });
+
+    repo.insert.mockResolvedValue(cloned);
+
+    const result = await service.clone('rs-source', { name: 'Clone Name' }, makeUser({ role: 'sysadmin' }));
+
+    expect(repo.insert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        clonedFromId: 'rs-source',
+        organisationId: 'org-A',
+      }),
+    );
+    expect(result.isActive).toBe(false);
+    expect(result.clonedFromId).toBe('rs-source');
+  });
+
+  it('clone: calls deepCopyDetailsForSet with source.id and created.id', async () => {
+    const source = row({ id: 'rs-source', name: 'Original', organisationId: 'org-A' });
+    const cloned = row({ id: 'rs-clone', clonedFromId: 'rs-source', isActive: false });
+    const { service, repo, rankReqs } = build({ rowOnFind: source, canManage: true });
+
+    repo.insert.mockResolvedValue(cloned);
+
+    await service.clone('rs-source', { name: 'Clone Name' }, makeUser({ role: 'sysadmin' }));
+
+    expect(rankReqs.deepCopyDetailsForSet).toHaveBeenCalledWith('rs-source', 'rs-clone');
+  });
+
+  it('clone: defaults name to "{source.name} (copy)" when body.name absent', async () => {
+    const source = row({ id: 'rs-source', name: 'Original', organisationId: 'org-A' });
+    const cloned = row({ id: 'rs-clone', name: 'Original (copy)', clonedFromId: 'rs-source' });
+    const { service, repo } = build({ rowOnFind: source, canManage: true });
+
+    repo.insert.mockResolvedValue(cloned);
+
+    await service.clone('rs-source', {}, makeUser({ role: 'sysadmin' }));
+
+    expect(repo.insert).toHaveBeenCalledWith(
+      expect.objectContaining({ name: 'Original (copy)' }),
+    );
+  });
+
+  // ── findActiveByOrg (unauthenticated, used by BeltRanksService) ────────
+
+  it('findActiveByOrg: returns null when the repo has no active set for the org (no auth check)', async () => {
+    const { service, repo } = build();
+    repo.findActiveByOrg.mockResolvedValue(null);
+
+    const result = await service.findActiveByOrg('org-A');
+
+    expect(repo.findActiveByOrg).toHaveBeenCalledWith('org-A');
+    expect(result).toBeNull();
+  });
+
+  it('findActiveByOrg: maps the row to the API shape when an active set exists', async () => {
+    const { service, repo } = build();
+    repo.findActiveByOrg.mockResolvedValue(row({ id: 'rs-active', isActive: true }));
+
+    const result = await service.findActiveByOrg('org-A');
+
+    expect(result).not.toBeNull();
+    expect(result!.id).toBe('rs-active');
+    expect(result!.isActive).toBe(true);
+  });
+});

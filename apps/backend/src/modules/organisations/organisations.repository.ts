@@ -4,7 +4,7 @@ import type {
   ListOrganisationsQuery,
   UpdateOrganisationInput,
 } from '@repo/contracts/organisations';
-import { and, count, eq, ilike, inArray, isNull, or, type SQL } from 'drizzle-orm';
+import { and, count, eq, ilike, inArray, isNull, or, sql, type SQL } from 'drizzle-orm';
 
 import { DRIZZLE, type DrizzleDb, type DrizzleExecutor } from '../../infrastructure/database/client.js';
 import { organisations, type DbOrganisation } from '../../infrastructure/database/schema/index.js';
@@ -118,5 +118,30 @@ export class OrganisationsRepository {
       .from(organisations)
       .where(eq(organisations.headInstructorId, userId));
     return rows.map((r) => r.id);
+  }
+
+  /**
+   * Returns [self_id, parent_id, grandparent_id, …] in self → root order.
+   *
+   * Uses a recursive CTE to walk the `parent_id` chain without issuing one
+   * query per level. The `maxDepth` guard prevents infinite loops on any
+   * malformed data that slips past FK constraints (e.g. cycles introduced
+   * via a direct DB patch). Returns `[]` when `orgId` is not found.
+   */
+  async getAncestorIds(orgId: string, maxDepth = 16): Promise<string[]> {
+    const rows = await this.db.execute<{ id: string; depth: number }>(sql`
+      WITH RECURSIVE ancestors(id, parent_id, depth) AS (
+        SELECT id, parent_id, 0
+        FROM organisations
+        WHERE id = ${orgId}
+        UNION ALL
+        SELECT o.id, o.parent_id, a.depth + 1
+        FROM organisations o
+        JOIN ancestors a ON o.id = a.parent_id
+        WHERE a.depth + 1 < ${maxDepth}
+      )
+      SELECT id, depth FROM ancestors ORDER BY depth ASC
+    `);
+    return Array.from(rows).map((r) => r.id);
   }
 }

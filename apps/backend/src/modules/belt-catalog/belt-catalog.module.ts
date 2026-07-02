@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 
+import { GradingRequirementsModule } from '../grading-requirements/grading-requirements.module.js';
+
 import { BeltRanksController } from './belt-ranks.controller.js';
 import { BeltRanksRepository } from './belt-ranks.repository.js';
 import { BeltRanksService } from './belt-ranks.service.js';
@@ -11,7 +13,15 @@ import { ShogoTitlesController } from './shogo-titles.controller.js';
 import { ShogoTitlesRepository } from './shogo-titles.repository.js';
 import { ShogoTitlesService } from './shogo-titles.service.js';
 
+/**
+ * `GradingRequirementsModule` is imported so `BeltRanksService` can inject
+ * `RankRequirementsService`/`RequirementSetsService` to populate the
+ * `requirements` field of `findPublicBySlug`'s response (Task 25). No
+ * reverse dependency exists — `GradingRequirementsModule` does not import
+ * `BeltCatalogModule` — so this does not introduce a cycle.
+ */
 @Module({
+  imports: [GradingRequirementsModule],
   providers: [
     BeltSystemsRepository,
     BeltSystemsService,

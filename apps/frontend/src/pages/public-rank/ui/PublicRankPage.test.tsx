@@ -67,6 +67,27 @@ const MOCK_PAYLOAD = {
     nameFi: 'Kyu',
   },
   organisation: null,
+  requirements: null,
+};
+
+const MOCK_PAYLOAD_WITH_REQUIREMENTS = {
+  ...MOCK_PAYLOAD,
+  requirements: {
+    rankId: '00000000-0000-0000-0000-000000000001',
+    setId: '00000000-0000-0000-0000-000000000003',
+    hokeiGroups: [],
+    kobo: [],
+    koboTested: [],
+    otherPatterns: [],
+    otherPatternsTested: [],
+    kihon: ['00000000-0000-0000-0000-000000000004'],
+    kihonTested: [],
+    jissenMinutes: null,
+    jissenTested: false,
+    minMonthsSincePreviousRank: null,
+    requiresTheoricExam: false,
+    requiresEssay: false,
+  },
 };
 
 function renderPage() {
@@ -128,5 +149,29 @@ describe('<PublicRankPage>', () => {
     const link = await screen.findByRole('link', { name: /back to home/i });
     expect(link).toBeInTheDocument();
     expect(link).toHaveAttribute('href', '/');
+  });
+
+  it('does not render a requirements section when requirements is null', async () => {
+    (getPublicRank as GetPublicRankMock).mockResolvedValueOnce(MOCK_PAYLOAD);
+
+    renderPage();
+
+    await screen.findByText('10th Kyu');
+    expect(
+      screen.queryByRole('heading', { name: 'Next rank requirements' }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('renders the RankRequirementsDisplay section when requirements is present', async () => {
+    (getPublicRank as GetPublicRankMock).mockResolvedValueOnce(MOCK_PAYLOAD_WITH_REQUIREMENTS);
+
+    renderPage();
+
+    expect(
+      await screen.findByRole('heading', { name: 'Next rank requirements' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Kihon (techniques)' }),
+    ).toBeInTheDocument();
   });
 });

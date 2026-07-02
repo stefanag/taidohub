@@ -44,6 +44,8 @@
     "adminFeatureFlags": "Ominaisuusliput",
     "adminPatterns": "Kuviot",
     "adminTechniques": "Tekniikat",
+    "adminRequirementSets": "Vaatimuskokoelmat",
+    "adminRankRequirements": "Arvovaatimukset",
     "adminUsers": "Käyttäjät",
     "gradingHistory": "Vyökoehistoria",
     "patterns": "Kuviot",
@@ -52,7 +54,8 @@
     "myOrganisation": "Oma organisaatio",
     "profile": "Oma profiili",
     "settings": "Asetukset",
-    "language": "Kieli"
+    "language": "Kieli",
+    "progression": "Eteneminen"
   },
   "dashboard": {
     "title": "Kojelauta"
@@ -250,7 +253,8 @@
     "detail": {
       "title": "{{name}}",
       "techniques": "Tekniikat",
-      "patterns": "Kuviot"
+      "patterns": "Kuviot",
+      "requirements": "Seuraavan vyöarvon vaatimukset"
     },
     "errors": {
       "forbidden": "Sinulla ei ole pääsyä tähän opiskelijaan."
@@ -286,6 +290,72 @@
       "newTechnique": "Uusi tekniikka",
       "editTechnique": "Muokkaa tekniikkaa",
       "deleteConfirm": "Poistetaanko tämä tekniikka? Tätä ei voi peruuttaa."
+    },
+    "requirementSets": {
+      "title": "Vaatimuskokoelmat",
+      "description": "Versioidut arviointivaatimuskokoelmat. Yksi aktiivinen kokoelma organisaatiota kohden.",
+      "newSet": "Uusi kokoelma",
+      "name": "Nimi",
+      "organisation": "Organisaatio",
+      "organisationGlobal": "Globaali",
+      "effectiveDate": "Voimaantulopäivä",
+      "active": "Aktiivinen",
+      "inactive": "Ei aktiivinen",
+      "actions": "Toiminnot",
+      "activate": "Aktivoi",
+      "deactivate": "Poista käytöstä",
+      "clone": "Kloonaa",
+      "clonePrompt": "Kloonatun kokoelman nimi",
+      "cloneTitle": "Kloonaa vaatimuskokoelma",
+      "edit": "Muokkaa",
+      "editTitle": "Muokkaa vaatimuskokoelmaa",
+      "delete": "Poista",
+      "deleteConfirm": "Poistetaanko tämä vaatimuskokoelma? Tätä ei voi peruuttaa.",
+      "empty": "Ei vielä vaatimuskokoelmia."
+    },
+    "rankRequirements": {
+      "title": "Arvovaatimukset",
+      "description": "Muokkaa kihonia, koboa, kuvioita, hokei-ryhmiä ja arvovaatimuksia arvoittain.",
+      "selectSet": "Valitse vaatimusjoukko",
+      "selectRank": "Valitse arvo",
+      "save": "Tallenna vaatimukset",
+      "saved": "Vaatimukset tallennettu",
+      "sections": {
+        "kihon": "Kihon (tekniikat)",
+        "kihonEmpty": "Ei vielä valittuja kihon-tekniikoita.",
+        "kobo": "Kobo",
+        "koboEmpty": "Ei vielä valittuja kobo-kuvioita.",
+        "otherPatterns": "Muut kuviot",
+        "otherPatternsEmpty": "Ei vielä valittuja muita kuvioita.",
+        "hokei": "Hokei-ryhmät",
+        "hokeiGroups": "Hokei-ryhmät",
+        "scalars": "Arvovaatimukset"
+      },
+      "hokei": {
+        "add": "Lisää ryhmä",
+        "addGroup": "Lisää hokei-ryhmä",
+        "remove": "Poista ryhmä",
+        "removeGroup": "Poista ryhmä",
+        "empty": "Ei vielä hokei-ryhmiä.",
+        "groupOrder": "Ryhmä {{order}}",
+        "pickCount": "Valittava määrä",
+        "isTested": "Testattu kokeessa",
+        "labelEn": "Nimike (EN)",
+        "labelFi": "Nimike (FI)",
+        "labelSv": "Nimike (SV)",
+        "addPattern": "Lisää kuvio",
+        "patterns": "Kuviot"
+      },
+      "scalars": {
+        "title": "Muut vaatimukset",
+        "jissenMinutes": "Jissen-minuutit",
+        "jissenTested": "Jissen testattu kokeessa",
+        "minMonths": "Vähimmäiskuukaudet edellisestä arvosta",
+        "minMonthsSincePreviousRank": "Vähimmäiskuukaudet edellisestä arvosta",
+        "requiresExam": "Vaatii teoriakokeen",
+        "requiresTheoricExam": "Vaatii teoriakokeen",
+        "requiresEssay": "Vaatii esseen"
+      }
     },
     "organisations": {
       "title": "Organisaatiot",
@@ -622,5 +692,35 @@
       "pattern": "Kuvio",
       "general": "Yleinen"
     }
+  },
+  "progression": {
+    "title": "Eteneminen",
+    "tested": "Testataan",
+    "mastered": "Hallitaan",
+    "sections": {
+      "kihon": "Kihon (tekniikat)",
+      "kobo": "Kobo",
+      "otherPatterns": "Muut kuviot",
+      "hokeiGroups": "Hokei-ryhmät",
+      "scalars": "Muut vaatimukset"
+    },
+    "hokei": {
+      "pickN": "Valitse {{pick}} / {{of}}",
+      "all": "Kaikki vaaditaan"
+    },
+    "scalars": {
+      "jissenMinutes": "Jissen-otteluminuutit: {{n}}",
+      "minMonths": "Vähimmäiskuukaudet edellisestä arvosta: {{n}}",
+      "theory": "Teoriakoe vaaditaan",
+      "essay": "Essee vaaditaan"
+    }
+  },
+  "nextRank": {
+    "title": "Seuraava arvo",
+    "caption": "{{ready}}/{{total}} vaatimusta valmiina",
+    "atHighest": "Olet saavuttanut korkeimman arvon",
+    "noRankYet": "Ei vielä arviointihistoriaa — ala seurata edistymistä kohti ensimmäistä arvoasi.",
+    "loading": "Ladataan…",
+    "empty": "Ei vielä kirjattua edistymistä"
   }
 }

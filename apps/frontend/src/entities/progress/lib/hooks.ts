@@ -20,10 +20,14 @@ export const progressKeys = {
   byPattern: (id: string) => ['progress', 'pattern', id] as const,
 };
 
-export function useProgressListQuery(contentType?: ContentType) {
+export function useProgressListQuery(
+  contentType?: ContentType,
+  options?: { enabled?: boolean },
+) {
   return useQuery({
     queryKey: progressKeys.list(contentType),
     queryFn: () => api.getProgressList(contentType),
+    enabled: options?.enabled ?? true,
   });
 }
 

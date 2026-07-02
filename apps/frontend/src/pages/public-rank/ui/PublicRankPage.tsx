@@ -4,8 +4,18 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { publicRankQueryOptions } from '@/entities/belt-rank';
+import { RankRequirementsDisplay } from '@/features/rank-requirements-display';
 import { type Lang } from '@/shared/lib/rank-label';
 import { BeltGraphic } from '@/shared/ui/belt-graphic';
+
+// The technique/pattern catalogue endpoints require an authenticated
+// session, so this unauthenticated page cannot resolve requirement ids to
+// technique/pattern names. `RankRequirementsDisplay` already degrades
+// gracefully (falls back to the raw id) when a lookup entry is missing, so
+// an empty lookup here is a deliberate, documented gap rather than a bug —
+// see Task 25 report for the follow-up (a public techniques/patterns
+// catalogue projection) needed to show real names on this page.
+const EMPTY_LOOKUP = { techniques: new Map(), patterns: new Map() };
 
 function pickDescription(
   rank: { descriptionEn: string | null; descriptionSv: string | null; descriptionFi: string | null },
@@ -81,6 +91,20 @@ export function PublicRankPage(): React.ReactElement {
       {description ? (
         <section className="mb-10 text-on-surface">
           <p>{description}</p>
+        </section>
+      ) : null}
+
+      {query.data.requirements ? (
+        <section className="mb-10">
+          <h2 className="mb-4 font-headline text-2xl text-primary">
+            {t('students.detail.requirements')}
+          </h2>
+          <RankRequirementsDisplay
+            requirements={query.data.requirements}
+            techProgress={[]}
+            patProgress={[]}
+            lookup={EMPTY_LOOKUP}
+          />
         </section>
       ) : null}
 

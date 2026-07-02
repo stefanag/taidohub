@@ -17,16 +17,21 @@ import { Route as PublicLoginRouteImport } from './routes/_public.login'
 import { Route as AppTechniquesRouteImport } from './routes/_app.techniques'
 import { Route as AppStudentsRouteImport } from './routes/_app.students'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
+import { Route as AppProgressionRouteImport } from './routes/_app.progression'
 import { Route as AppProfileRouteImport } from './routes/_app.profile'
 import { Route as AppPatternsRouteImport } from './routes/_app.patterns'
 import { Route as AppMyOrganisationRouteImport } from './routes/_app.my-organisation'
 import { Route as AppGradingHistoryRouteImport } from './routes/_app.grading-history'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
+import { Route as AppStudentsIndexRouteImport } from './routes/_app.students.index'
+import { Route as AppSettingsIndexRouteImport } from './routes/_app.settings.index'
 import { Route as PublicRanksSlugRouteImport } from './routes/_public.ranks.$slug'
 import { Route as AppStudentsUserIdRouteImport } from './routes/_app.students.$userId'
 import { Route as AppSettingsLabelsRouteImport } from './routes/_app.settings.labels'
 import { Route as AppAdminUsersRouteImport } from './routes/_app.admin.users'
 import { Route as AppAdminTechniquesRouteImport } from './routes/_app.admin.techniques'
+import { Route as AppAdminRequirementSetsRouteImport } from './routes/_app.admin.requirement-sets'
+import { Route as AppAdminRankRequirementsRouteImport } from './routes/_app.admin.rank-requirements'
 import { Route as AppAdminPatternsRouteImport } from './routes/_app.admin.patterns'
 import { Route as AppAdminOrganisationsRouteImport } from './routes/_app.admin.organisations'
 import { Route as AppAdminLabelsRouteImport } from './routes/_app.admin.labels'
@@ -34,6 +39,8 @@ import { Route as AppAdminFeatureFlagsRouteImport } from './routes/_app.admin.fe
 import { Route as AppAdminBeltCatalogRouteImport } from './routes/_app.admin.belt-catalog'
 import { Route as AppAdminAuditLogRouteImport } from './routes/_app.admin.audit-log'
 import { Route as AppAdminTechniquesIndexRouteImport } from './routes/_app.admin.techniques.index'
+import { Route as AppAdminRequirementSetsIndexRouteImport } from './routes/_app.admin.requirement-sets.index'
+import { Route as AppAdminRankRequirementsIndexRouteImport } from './routes/_app.admin.rank-requirements.index'
 import { Route as AppAdminPatternsIndexRouteImport } from './routes/_app.admin.patterns.index'
 import { Route as AppAdminOrganisationsIndexRouteImport } from './routes/_app.admin.organisations.index'
 import { Route as AppAdminTechniquesNewRouteImport } from './routes/_app.admin.techniques.new'
@@ -87,6 +94,11 @@ const AppSettingsRoute = AppSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AppRoute,
 } as any)
+const AppProgressionRoute = AppProgressionRouteImport.update({
+  id: '/progression',
+  path: '/progression',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppProfileRoute = AppProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -111,6 +123,16 @@ const AppDashboardRoute = AppDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => AppRoute,
+} as any)
+const AppStudentsIndexRoute = AppStudentsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppStudentsRoute,
+} as any)
+const AppSettingsIndexRoute = AppSettingsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppSettingsRoute,
 } as any)
 const PublicRanksSlugRoute = PublicRanksSlugRouteImport.update({
   id: '/ranks/$slug',
@@ -137,6 +159,17 @@ const AppAdminTechniquesRoute = AppAdminTechniquesRouteImport.update({
   path: '/admin/techniques',
   getParentRoute: () => AppRoute,
 } as any)
+const AppAdminRequirementSetsRoute = AppAdminRequirementSetsRouteImport.update({
+  id: '/admin/requirement-sets',
+  path: '/admin/requirement-sets',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAdminRankRequirementsRoute =
+  AppAdminRankRequirementsRouteImport.update({
+    id: '/admin/rank-requirements',
+    path: '/admin/rank-requirements',
+    getParentRoute: () => AppRoute,
+  } as any)
 const AppAdminPatternsRoute = AppAdminPatternsRouteImport.update({
   id: '/admin/patterns',
   path: '/admin/patterns',
@@ -172,6 +205,18 @@ const AppAdminTechniquesIndexRoute = AppAdminTechniquesIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppAdminTechniquesRoute,
 } as any)
+const AppAdminRequirementSetsIndexRoute =
+  AppAdminRequirementSetsIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AppAdminRequirementSetsRoute,
+  } as any)
+const AppAdminRankRequirementsIndexRoute =
+  AppAdminRankRequirementsIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AppAdminRankRequirementsRoute,
+  } as any)
 const AppAdminPatternsIndexRoute = AppAdminPatternsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -261,6 +306,7 @@ export interface FileRoutesByFullPath {
   '/my-organisation': typeof AppMyOrganisationRoute
   '/patterns': typeof AppPatternsRoute
   '/profile': typeof AppProfileRoute
+  '/progression': typeof AppProgressionRoute
   '/settings': typeof AppSettingsRouteWithChildren
   '/students': typeof AppStudentsRouteWithChildren
   '/techniques': typeof AppTechniquesRoute
@@ -272,11 +318,15 @@ export interface FileRoutesByFullPath {
   '/admin/labels': typeof AppAdminLabelsRoute
   '/admin/organisations': typeof AppAdminOrganisationsRouteWithChildren
   '/admin/patterns': typeof AppAdminPatternsRouteWithChildren
+  '/admin/rank-requirements': typeof AppAdminRankRequirementsRouteWithChildren
+  '/admin/requirement-sets': typeof AppAdminRequirementSetsRouteWithChildren
   '/admin/techniques': typeof AppAdminTechniquesRouteWithChildren
   '/admin/users': typeof AppAdminUsersRoute
   '/settings/labels': typeof AppSettingsLabelsRoute
   '/students/$userId': typeof AppStudentsUserIdRoute
   '/ranks/$slug': typeof PublicRanksSlugRoute
+  '/settings/': typeof AppSettingsIndexRoute
+  '/students/': typeof AppStudentsIndexRoute
   '/admin/organisations/$organisationId': typeof AppAdminOrganisationsOrganisationIdRouteWithChildren
   '/admin/organisations/new': typeof AppAdminOrganisationsNewRoute
   '/admin/patterns/$patternId': typeof AppAdminPatternsPatternIdRouteWithChildren
@@ -285,6 +335,8 @@ export interface FileRoutesByFullPath {
   '/admin/techniques/new': typeof AppAdminTechniquesNewRoute
   '/admin/organisations/': typeof AppAdminOrganisationsIndexRoute
   '/admin/patterns/': typeof AppAdminPatternsIndexRoute
+  '/admin/rank-requirements/': typeof AppAdminRankRequirementsIndexRoute
+  '/admin/requirement-sets/': typeof AppAdminRequirementSetsIndexRoute
   '/admin/techniques/': typeof AppAdminTechniquesIndexRoute
   '/admin/organisations/$organisationId/edit': typeof AppAdminOrganisationsOrganisationIdEditRoute
   '/admin/patterns/$patternId/edit': typeof AppAdminPatternsPatternIdEditRoute
@@ -300,8 +352,7 @@ export interface FileRoutesByTo {
   '/my-organisation': typeof AppMyOrganisationRoute
   '/patterns': typeof AppPatternsRoute
   '/profile': typeof AppProfileRoute
-  '/settings': typeof AppSettingsRouteWithChildren
-  '/students': typeof AppStudentsRouteWithChildren
+  '/progression': typeof AppProgressionRoute
   '/techniques': typeof AppTechniquesRoute
   '/login': typeof PublicLoginRoute
   '/set-password': typeof PublicSetPasswordRoute
@@ -313,11 +364,15 @@ export interface FileRoutesByTo {
   '/settings/labels': typeof AppSettingsLabelsRoute
   '/students/$userId': typeof AppStudentsUserIdRoute
   '/ranks/$slug': typeof PublicRanksSlugRoute
+  '/settings': typeof AppSettingsIndexRoute
+  '/students': typeof AppStudentsIndexRoute
   '/admin/organisations/new': typeof AppAdminOrganisationsNewRoute
   '/admin/patterns/new': typeof AppAdminPatternsNewRoute
   '/admin/techniques/new': typeof AppAdminTechniquesNewRoute
   '/admin/organisations': typeof AppAdminOrganisationsIndexRoute
   '/admin/patterns': typeof AppAdminPatternsIndexRoute
+  '/admin/rank-requirements': typeof AppAdminRankRequirementsIndexRoute
+  '/admin/requirement-sets': typeof AppAdminRequirementSetsIndexRoute
   '/admin/techniques': typeof AppAdminTechniquesIndexRoute
   '/admin/organisations/$organisationId/edit': typeof AppAdminOrganisationsOrganisationIdEditRoute
   '/admin/patterns/$patternId/edit': typeof AppAdminPatternsPatternIdEditRoute
@@ -335,6 +390,7 @@ export interface FileRoutesById {
   '/_app/my-organisation': typeof AppMyOrganisationRoute
   '/_app/patterns': typeof AppPatternsRoute
   '/_app/profile': typeof AppProfileRoute
+  '/_app/progression': typeof AppProgressionRoute
   '/_app/settings': typeof AppSettingsRouteWithChildren
   '/_app/students': typeof AppStudentsRouteWithChildren
   '/_app/techniques': typeof AppTechniquesRoute
@@ -347,11 +403,15 @@ export interface FileRoutesById {
   '/_app/admin/labels': typeof AppAdminLabelsRoute
   '/_app/admin/organisations': typeof AppAdminOrganisationsRouteWithChildren
   '/_app/admin/patterns': typeof AppAdminPatternsRouteWithChildren
+  '/_app/admin/rank-requirements': typeof AppAdminRankRequirementsRouteWithChildren
+  '/_app/admin/requirement-sets': typeof AppAdminRequirementSetsRouteWithChildren
   '/_app/admin/techniques': typeof AppAdminTechniquesRouteWithChildren
   '/_app/admin/users': typeof AppAdminUsersRoute
   '/_app/settings/labels': typeof AppSettingsLabelsRoute
   '/_app/students/$userId': typeof AppStudentsUserIdRoute
   '/_public/ranks/$slug': typeof PublicRanksSlugRoute
+  '/_app/settings/': typeof AppSettingsIndexRoute
+  '/_app/students/': typeof AppStudentsIndexRoute
   '/_app/admin/organisations/$organisationId': typeof AppAdminOrganisationsOrganisationIdRouteWithChildren
   '/_app/admin/organisations/new': typeof AppAdminOrganisationsNewRoute
   '/_app/admin/patterns/$patternId': typeof AppAdminPatternsPatternIdRouteWithChildren
@@ -360,6 +420,8 @@ export interface FileRoutesById {
   '/_app/admin/techniques/new': typeof AppAdminTechniquesNewRoute
   '/_app/admin/organisations/': typeof AppAdminOrganisationsIndexRoute
   '/_app/admin/patterns/': typeof AppAdminPatternsIndexRoute
+  '/_app/admin/rank-requirements/': typeof AppAdminRankRequirementsIndexRoute
+  '/_app/admin/requirement-sets/': typeof AppAdminRequirementSetsIndexRoute
   '/_app/admin/techniques/': typeof AppAdminTechniquesIndexRoute
   '/_app/admin/organisations/$organisationId/edit': typeof AppAdminOrganisationsOrganisationIdEditRoute
   '/_app/admin/patterns/$patternId/edit': typeof AppAdminPatternsPatternIdEditRoute
@@ -377,6 +439,7 @@ export interface FileRouteTypes {
     | '/my-organisation'
     | '/patterns'
     | '/profile'
+    | '/progression'
     | '/settings'
     | '/students'
     | '/techniques'
@@ -388,11 +451,15 @@ export interface FileRouteTypes {
     | '/admin/labels'
     | '/admin/organisations'
     | '/admin/patterns'
+    | '/admin/rank-requirements'
+    | '/admin/requirement-sets'
     | '/admin/techniques'
     | '/admin/users'
     | '/settings/labels'
     | '/students/$userId'
     | '/ranks/$slug'
+    | '/settings/'
+    | '/students/'
     | '/admin/organisations/$organisationId'
     | '/admin/organisations/new'
     | '/admin/patterns/$patternId'
@@ -401,6 +468,8 @@ export interface FileRouteTypes {
     | '/admin/techniques/new'
     | '/admin/organisations/'
     | '/admin/patterns/'
+    | '/admin/rank-requirements/'
+    | '/admin/requirement-sets/'
     | '/admin/techniques/'
     | '/admin/organisations/$organisationId/edit'
     | '/admin/patterns/$patternId/edit'
@@ -416,8 +485,7 @@ export interface FileRouteTypes {
     | '/my-organisation'
     | '/patterns'
     | '/profile'
-    | '/settings'
-    | '/students'
+    | '/progression'
     | '/techniques'
     | '/login'
     | '/set-password'
@@ -429,11 +497,15 @@ export interface FileRouteTypes {
     | '/settings/labels'
     | '/students/$userId'
     | '/ranks/$slug'
+    | '/settings'
+    | '/students'
     | '/admin/organisations/new'
     | '/admin/patterns/new'
     | '/admin/techniques/new'
     | '/admin/organisations'
     | '/admin/patterns'
+    | '/admin/rank-requirements'
+    | '/admin/requirement-sets'
     | '/admin/techniques'
     | '/admin/organisations/$organisationId/edit'
     | '/admin/patterns/$patternId/edit'
@@ -450,6 +522,7 @@ export interface FileRouteTypes {
     | '/_app/my-organisation'
     | '/_app/patterns'
     | '/_app/profile'
+    | '/_app/progression'
     | '/_app/settings'
     | '/_app/students'
     | '/_app/techniques'
@@ -462,11 +535,15 @@ export interface FileRouteTypes {
     | '/_app/admin/labels'
     | '/_app/admin/organisations'
     | '/_app/admin/patterns'
+    | '/_app/admin/rank-requirements'
+    | '/_app/admin/requirement-sets'
     | '/_app/admin/techniques'
     | '/_app/admin/users'
     | '/_app/settings/labels'
     | '/_app/students/$userId'
     | '/_public/ranks/$slug'
+    | '/_app/settings/'
+    | '/_app/students/'
     | '/_app/admin/organisations/$organisationId'
     | '/_app/admin/organisations/new'
     | '/_app/admin/patterns/$patternId'
@@ -475,6 +552,8 @@ export interface FileRouteTypes {
     | '/_app/admin/techniques/new'
     | '/_app/admin/organisations/'
     | '/_app/admin/patterns/'
+    | '/_app/admin/rank-requirements/'
+    | '/_app/admin/requirement-sets/'
     | '/_app/admin/techniques/'
     | '/_app/admin/organisations/$organisationId/edit'
     | '/_app/admin/patterns/$patternId/edit'
@@ -547,6 +626,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSettingsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/progression': {
+      id: '/_app/progression'
+      path: '/progression'
+      fullPath: '/progression'
+      preLoaderRoute: typeof AppProgressionRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/profile': {
       id: '/_app/profile'
       path: '/profile'
@@ -582,6 +668,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDashboardRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/students/': {
+      id: '/_app/students/'
+      path: '/'
+      fullPath: '/students/'
+      preLoaderRoute: typeof AppStudentsIndexRouteImport
+      parentRoute: typeof AppStudentsRoute
+    }
+    '/_app/settings/': {
+      id: '/_app/settings/'
+      path: '/'
+      fullPath: '/settings/'
+      preLoaderRoute: typeof AppSettingsIndexRouteImport
+      parentRoute: typeof AppSettingsRoute
+    }
     '/_public/ranks/$slug': {
       id: '/_public/ranks/$slug'
       path: '/ranks/$slug'
@@ -615,6 +715,20 @@ declare module '@tanstack/react-router' {
       path: '/admin/techniques'
       fullPath: '/admin/techniques'
       preLoaderRoute: typeof AppAdminTechniquesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/admin/requirement-sets': {
+      id: '/_app/admin/requirement-sets'
+      path: '/admin/requirement-sets'
+      fullPath: '/admin/requirement-sets'
+      preLoaderRoute: typeof AppAdminRequirementSetsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/admin/rank-requirements': {
+      id: '/_app/admin/rank-requirements'
+      path: '/admin/rank-requirements'
+      fullPath: '/admin/rank-requirements'
+      preLoaderRoute: typeof AppAdminRankRequirementsRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/admin/patterns': {
@@ -665,6 +779,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/techniques/'
       preLoaderRoute: typeof AppAdminTechniquesIndexRouteImport
       parentRoute: typeof AppAdminTechniquesRoute
+    }
+    '/_app/admin/requirement-sets/': {
+      id: '/_app/admin/requirement-sets/'
+      path: '/'
+      fullPath: '/admin/requirement-sets/'
+      preLoaderRoute: typeof AppAdminRequirementSetsIndexRouteImport
+      parentRoute: typeof AppAdminRequirementSetsRoute
+    }
+    '/_app/admin/rank-requirements/': {
+      id: '/_app/admin/rank-requirements/'
+      path: '/'
+      fullPath: '/admin/rank-requirements/'
+      preLoaderRoute: typeof AppAdminRankRequirementsIndexRouteImport
+      parentRoute: typeof AppAdminRankRequirementsRoute
     }
     '/_app/admin/patterns/': {
       id: '/_app/admin/patterns/'
@@ -769,10 +897,12 @@ declare module '@tanstack/react-router' {
 
 interface AppSettingsRouteChildren {
   AppSettingsLabelsRoute: typeof AppSettingsLabelsRoute
+  AppSettingsIndexRoute: typeof AppSettingsIndexRoute
 }
 
 const AppSettingsRouteChildren: AppSettingsRouteChildren = {
   AppSettingsLabelsRoute: AppSettingsLabelsRoute,
+  AppSettingsIndexRoute: AppSettingsIndexRoute,
 }
 
 const AppSettingsRouteWithChildren = AppSettingsRoute._addFileChildren(
@@ -781,10 +911,12 @@ const AppSettingsRouteWithChildren = AppSettingsRoute._addFileChildren(
 
 interface AppStudentsRouteChildren {
   AppStudentsUserIdRoute: typeof AppStudentsUserIdRoute
+  AppStudentsIndexRoute: typeof AppStudentsIndexRoute
 }
 
 const AppStudentsRouteChildren: AppStudentsRouteChildren = {
   AppStudentsUserIdRoute: AppStudentsUserIdRoute,
+  AppStudentsIndexRoute: AppStudentsIndexRoute,
 }
 
 const AppStudentsRouteWithChildren = AppStudentsRoute._addFileChildren(
@@ -858,6 +990,34 @@ const AppAdminPatternsRouteChildren: AppAdminPatternsRouteChildren = {
 const AppAdminPatternsRouteWithChildren =
   AppAdminPatternsRoute._addFileChildren(AppAdminPatternsRouteChildren)
 
+interface AppAdminRankRequirementsRouteChildren {
+  AppAdminRankRequirementsIndexRoute: typeof AppAdminRankRequirementsIndexRoute
+}
+
+const AppAdminRankRequirementsRouteChildren: AppAdminRankRequirementsRouteChildren =
+  {
+    AppAdminRankRequirementsIndexRoute: AppAdminRankRequirementsIndexRoute,
+  }
+
+const AppAdminRankRequirementsRouteWithChildren =
+  AppAdminRankRequirementsRoute._addFileChildren(
+    AppAdminRankRequirementsRouteChildren,
+  )
+
+interface AppAdminRequirementSetsRouteChildren {
+  AppAdminRequirementSetsIndexRoute: typeof AppAdminRequirementSetsIndexRoute
+}
+
+const AppAdminRequirementSetsRouteChildren: AppAdminRequirementSetsRouteChildren =
+  {
+    AppAdminRequirementSetsIndexRoute: AppAdminRequirementSetsIndexRoute,
+  }
+
+const AppAdminRequirementSetsRouteWithChildren =
+  AppAdminRequirementSetsRoute._addFileChildren(
+    AppAdminRequirementSetsRouteChildren,
+  )
+
 interface AppAdminTechniquesTechniqueIdRouteChildren {
   AppAdminTechniquesTechniqueIdEditRoute: typeof AppAdminTechniquesTechniqueIdEditRoute
   AppAdminTechniquesTechniqueIdIndexRoute: typeof AppAdminTechniquesTechniqueIdIndexRoute
@@ -898,6 +1058,7 @@ interface AppRouteChildren {
   AppMyOrganisationRoute: typeof AppMyOrganisationRoute
   AppPatternsRoute: typeof AppPatternsRoute
   AppProfileRoute: typeof AppProfileRoute
+  AppProgressionRoute: typeof AppProgressionRoute
   AppSettingsRoute: typeof AppSettingsRouteWithChildren
   AppStudentsRoute: typeof AppStudentsRouteWithChildren
   AppTechniquesRoute: typeof AppTechniquesRoute
@@ -907,6 +1068,8 @@ interface AppRouteChildren {
   AppAdminLabelsRoute: typeof AppAdminLabelsRoute
   AppAdminOrganisationsRoute: typeof AppAdminOrganisationsRouteWithChildren
   AppAdminPatternsRoute: typeof AppAdminPatternsRouteWithChildren
+  AppAdminRankRequirementsRoute: typeof AppAdminRankRequirementsRouteWithChildren
+  AppAdminRequirementSetsRoute: typeof AppAdminRequirementSetsRouteWithChildren
   AppAdminTechniquesRoute: typeof AppAdminTechniquesRouteWithChildren
   AppAdminUsersRoute: typeof AppAdminUsersRoute
 }
@@ -917,6 +1080,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppMyOrganisationRoute: AppMyOrganisationRoute,
   AppPatternsRoute: AppPatternsRoute,
   AppProfileRoute: AppProfileRoute,
+  AppProgressionRoute: AppProgressionRoute,
   AppSettingsRoute: AppSettingsRouteWithChildren,
   AppStudentsRoute: AppStudentsRouteWithChildren,
   AppTechniquesRoute: AppTechniquesRoute,
@@ -926,6 +1090,8 @@ const AppRouteChildren: AppRouteChildren = {
   AppAdminLabelsRoute: AppAdminLabelsRoute,
   AppAdminOrganisationsRoute: AppAdminOrganisationsRouteWithChildren,
   AppAdminPatternsRoute: AppAdminPatternsRouteWithChildren,
+  AppAdminRankRequirementsRoute: AppAdminRankRequirementsRouteWithChildren,
+  AppAdminRequirementSetsRoute: AppAdminRequirementSetsRouteWithChildren,
   AppAdminTechniquesRoute: AppAdminTechniquesRouteWithChildren,
   AppAdminUsersRoute: AppAdminUsersRoute,
 }

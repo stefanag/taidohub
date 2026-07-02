@@ -19,3 +19,4 @@ export * from './technique.js';
 export * from './pattern.js';
 export * from './user-content-progress.js';
 export * from './feedback.js';
+export * from './grading-requirements.js';

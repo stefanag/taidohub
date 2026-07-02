@@ -44,6 +44,8 @@
     "adminFeatureFlags": "Funktionsflaggor",
     "adminPatterns": "Mönster",
     "adminTechniques": "Tekniker",
+    "adminRequirementSets": "Kravuppsättningar",
+    "adminRankRequirements": "Gradkrav",
     "adminUsers": "Användare",
     "gradingHistory": "Graderingshistorik",
     "patterns": "Mönster",
@@ -52,7 +54,8 @@
     "myOrganisation": "Min organisation",
     "profile": "Min profil",
     "settings": "Inställningar",
-    "language": "Språk"
+    "language": "Språk",
+    "progression": "Progression"
   },
   "dashboard": {
     "title": "Översikt"
@@ -185,7 +188,8 @@
     "detail": {
       "title": "{{name}}",
       "techniques": "Tekniker",
-      "patterns": "Mönster"
+      "patterns": "Mönster",
+      "requirements": "Krav för nästa grad"
     },
     "errors": {
       "forbidden": "Du har inte åtkomst till denna student."
@@ -286,6 +290,72 @@
       "newTechnique": "Ny teknik",
       "editTechnique": "Redigera teknik",
       "deleteConfirm": "Ta bort denna teknik? Detta kan inte ångras."
+    },
+    "requirementSets": {
+      "title": "Kravuppsättningar",
+      "description": "Versionerade uppsättningar av examinationskrav. En aktiv uppsättning per organisation.",
+      "newSet": "Ny uppsättning",
+      "name": "Namn",
+      "organisation": "Organisation",
+      "organisationGlobal": "Global",
+      "effectiveDate": "Ikraftträdandedatum",
+      "active": "Aktiv",
+      "inactive": "Inaktiv",
+      "actions": "Åtgärder",
+      "activate": "Aktivera",
+      "deactivate": "Inaktivera",
+      "clone": "Klona",
+      "clonePrompt": "Namn för den klonade uppsättningen",
+      "cloneTitle": "Klona kravuppsättning",
+      "edit": "Redigera",
+      "editTitle": "Redigera kravuppsättning",
+      "delete": "Ta bort",
+      "deleteConfirm": "Ta bort denna kravuppsättning? Detta kan inte ångras.",
+      "empty": "Inga kravuppsättningar än."
+    },
+    "rankRequirements": {
+      "title": "Gradkrav",
+      "description": "Redigera kihon, kobo, mönster, hokei-grupper och gradkrav per grad.",
+      "selectSet": "Välj ett kravset",
+      "selectRank": "Välj en grad",
+      "save": "Spara krav",
+      "saved": "Kraven sparades",
+      "sections": {
+        "kihon": "Kihon (tekniker)",
+        "kihonEmpty": "Inga kihon valda ännu.",
+        "kobo": "Kobo",
+        "koboEmpty": "Inga kobo-mönster valda ännu.",
+        "otherPatterns": "Övriga mönster",
+        "otherPatternsEmpty": "Inga övriga mönster valda ännu.",
+        "hokei": "Hokei-grupper",
+        "hokeiGroups": "Hokei-grupper",
+        "scalars": "Gradkrav"
+      },
+      "hokei": {
+        "add": "Lägg till grupp",
+        "addGroup": "Lägg till hokei-grupp",
+        "remove": "Ta bort grupp",
+        "removeGroup": "Ta bort grupp",
+        "empty": "Inga hokei-grupper än.",
+        "groupOrder": "Grupp {{order}}",
+        "pickCount": "Antal att välja",
+        "isTested": "Testad vid gradering",
+        "labelEn": "Etikett (EN)",
+        "labelFi": "Etikett (FI)",
+        "labelSv": "Etikett (SV)",
+        "addPattern": "Lägg till mönster",
+        "patterns": "Mönster"
+      },
+      "scalars": {
+        "title": "Övriga krav",
+        "jissenMinutes": "Jissen-minuter",
+        "jissenTested": "Jissen testad vid gradering",
+        "minMonths": "Minsta antal månader sedan föregående grad",
+        "minMonthsSincePreviousRank": "Min antal månader sedan föregående grad",
+        "requiresExam": "Kräver teoriprov",
+        "requiresTheoricExam": "Kräver teoriprov",
+        "requiresEssay": "Kräver uppsats"
+      }
     },
     "organisations": {
       "title": "Organisationer",
@@ -622,5 +692,35 @@
       "pattern": "Mönster",
       "general": "Allmänt"
     }
+  },
+  "progression": {
+    "title": "Progression",
+    "tested": "Testas",
+    "mastered": "Behärskas",
+    "sections": {
+      "kihon": "Kihon (tekniker)",
+      "kobo": "Kobo",
+      "otherPatterns": "Andra mönster",
+      "hokeiGroups": "Hokei-grupper",
+      "scalars": "Övriga krav"
+    },
+    "hokei": {
+      "pickN": "Välj {{pick}} av {{of}}",
+      "all": "Alla krävs"
+    },
+    "scalars": {
+      "jissenMinutes": "Jissen-sparring, minuter: {{n}}",
+      "minMonths": "Minsta antal månader sedan föregående grad: {{n}}",
+      "theory": "Teoriprov krävs",
+      "essay": "Uppsats krävs"
+    }
+  },
+  "nextRank": {
+    "title": "Nästa grad",
+    "caption": "{{ready}}/{{total}} krav uppfyllda",
+    "atHighest": "Du har nått den högsta graden",
+    "noRankYet": "Ingen graderingshistorik än — börja följa framstegen mot din första grad.",
+    "loading": "Laddar…",
+    "empty": "Ingen framsteg registrerad än"
   }
 }

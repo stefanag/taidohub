@@ -6,6 +6,7 @@ import { BeltCatalogAbilityRules } from '../../modules/belt-catalog/belt-catalog
 import { ClassificationCategoryAbilityRules } from '../../modules/classification-category/classification-category.abilities.js';
 import { FeatureFlagsAbilityRules } from '../../modules/feature-flags/feature-flags.abilities.js';
 import { FeedbackAbilityRules } from '../../modules/feedback/feedback.abilities.js';
+import { GradingRequirementsAbilityRules } from '../../modules/grading-requirements/grading-requirements.ability-rules.js';
 import { LabelsAbilityRules } from '../../modules/labels/labels.abilities.js';
 import { MembershipsAbilityRules } from '../../modules/memberships/memberships.abilities.js';
 import { OrganisationsAbilityRules } from '../../modules/organisations/organisations.abilities.js';
@@ -48,6 +49,7 @@ import { AbilityGuard } from './ability.guard.js';
     ClassificationCategoryAbilityRules,
     FeatureFlagsAbilityRules,
     FeedbackAbilityRules,
+    GradingRequirementsAbilityRules,
     LabelsAbilityRules,
     MembershipsAbilityRules,
     OrganisationsAbilityRules,

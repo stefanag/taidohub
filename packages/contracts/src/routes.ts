@@ -100,3 +100,15 @@ export const FeedbackRoutes = {
   /** GET → inbox: threads with unread activity, with student name + context label prejoined. */
   inbox: '/api/feedback/inbox',
 } as const;
+
+export const RequirementSetsRoutes = {
+  base: '/api/requirement-sets',
+  byId: (id: string) => `/api/requirement-sets/${id}` as const,
+  activate: (id: string) => `/api/requirement-sets/${id}/activate` as const,
+  deactivate: (id: string) => `/api/requirement-sets/${id}/deactivate` as const,
+  clone: (id: string) => `/api/requirement-sets/${id}/clone` as const,
+} as const;
+
+export const RankRequirementsRoutes = {
+  byRankId: (rankId: string) => `/api/requirements/${rankId}` as const,
+} as const;
