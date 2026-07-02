@@ -135,9 +135,9 @@ export class RankRequirementsRepository {
         labelSv: rankRequirementHokeiGroup.labelSv,
         patternIds: sql<string[]>`
           COALESCE(
-            array_agg(${rankRequirementHokeiGroupPattern.patternId} ORDER BY ${rankRequirementHokeiGroupPattern.sortOrder})
+            json_agg(${rankRequirementHokeiGroupPattern.patternId} ORDER BY ${rankRequirementHokeiGroupPattern.sortOrder})
             FILTER (WHERE ${rankRequirementHokeiGroupPattern.patternId} IS NOT NULL),
-            ARRAY[]::uuid[]
+            '[]'::json
           )
         `,
       })

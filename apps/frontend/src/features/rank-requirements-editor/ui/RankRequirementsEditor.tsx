@@ -201,7 +201,9 @@ export function RankRequirementsEditor({
       setSubmitError(
         err instanceof HttpError
           ? err.message
-          : t('common.unknownError', { defaultValue: 'Unknown error' }),
+          : err instanceof Error
+            ? err.message
+            : t('common.unknownError', { defaultValue: 'Unknown error' }),
       );
     }
   });
