@@ -19,6 +19,13 @@ import { Label } from './label.js';
  * - Display label is localised by `i18n.resolvedLanguage`, falling back to
  *   `nameEn`, then `code`.
  * - `aria-pressed` reflects selection state for accessibility.
+ * - Chips are wrapped in a `role="group"` whose `aria-labelledby` points at
+ *   the field's `<Label>` (when one is provided). Screen-reader users
+ *   entering the chip cluster hear the field label as the group name —
+ *   important on the technique form where THREE multi-selects stack
+ *   vertically (`technique_type`, `sotai_category`, `attack_type`) and the
+ *   chip-only accessible name "Kihon" alone tells you nothing about which
+ *   selector you're in.
  */
 export interface ClassificationMultiSelectProps {
   /** Available options from the matching root. Caller fetches them. */
@@ -62,6 +69,8 @@ export function ClassificationMultiSelect({
   const lang: SupportedLang =
     resolved === 'sv' || resolved === 'fi' ? resolved : 'en';
 
+  const labelId = React.useId();
+
   const options = React.useMemo<ClassificationCategory[]>(() => {
     const selected = new Set(selectedIds);
     return rawOptions.filter((opt) => opt.isActive || selected.has(opt.id));
@@ -81,7 +90,7 @@ export function ClassificationMultiSelect({
   return (
     <div className={className}>
       {label ? (
-        <Label className="mb-2 block">
+        <Label id={labelId} className="mb-2 block">
           {label}
           {required ? <span aria-hidden="true"> *</span> : null}
         </Label>
@@ -89,7 +98,11 @@ export function ClassificationMultiSelect({
       {isPending && options.length === 0 ? (
         <p className="text-sm text-muted-foreground">…</p>
       ) : (
-        <div className="flex flex-wrap gap-2">
+        <div
+          role="group"
+          {...(label ? { 'aria-labelledby': labelId } : {})}
+          className="flex flex-wrap gap-2"
+        >
           {options.map((opt) => {
             const active = selectedIds.includes(opt.id);
             return (
