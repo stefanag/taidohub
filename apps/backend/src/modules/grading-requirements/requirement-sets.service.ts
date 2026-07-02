@@ -57,8 +57,7 @@ export class RequirementSetsService {
   ) {}
 
   async list(user: AuthenticatedUser): Promise<RequirementSet[]> {
-    const ability = this.abilityFactory.createForUser(user);
-    if (ability.can('manage', 'all')) {
+    if (user.role === 'sysadmin') {
       return mapRows(await this.repo.list('all'));
     }
     const orgIds = user.memberships.map((m) => m.organisationId);
@@ -79,8 +78,7 @@ export class RequirementSetsService {
   }
 
   async create(body: CreateRequirementSetInput, user: AuthenticatedUser): Promise<RequirementSet> {
-    const ability = this.abilityFactory.createForUser(user);
-    const isSysadmin = ability.can('manage', 'all');
+    const isSysadmin = user.role === 'sysadmin';
     let organisationId = body.organisationId ?? null;
 
     if (!isSysadmin) {

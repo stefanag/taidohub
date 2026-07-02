@@ -108,10 +108,9 @@ describe('RequirementSetsService', () => {
 
   it('list: sysadmin sees every set', async () => {
     const sysadmin = makeUser({ role: 'sysadmin', memberships: [] });
-    const { service, repo, abilities } = build();
+    const { service, repo } = build();
 
-    // Sysadmin: ability.can('manage', 'all') returns true
-    abilities.createForUser.mockReturnValue({ can: vi.fn().mockReturnValue(true) });
+    // Sysadmin detection is a direct role check (user.role === 'sysadmin').
     const sets = [row({ id: 'rs-1' }), row({ id: 'rs-2' })];
     repo.list.mockResolvedValue(sets);
 
@@ -126,12 +125,9 @@ describe('RequirementSetsService', () => {
       role: 'user',
       memberships: [{ organisationId: 'org-child', role: 'instructor' }],
     });
-    const { service, repo, orgs, abilities } = build();
+    const { service, repo, orgs } = build();
 
-    // Non-sysadmin: ability.can('manage', 'all') returns false
-    const fakeAbility = { can: vi.fn().mockReturnValue(false) };
-    abilities.createForUser.mockReturnValue(fakeAbility);
-
+    // Non-sysadmin: user.role !== 'sysadmin', so falls through to ancestor-org listing.
     orgs.getAncestorIds.mockResolvedValue(['org-child', 'org-parent']);
     repo.list.mockResolvedValue([row({ id: 'rs-1', organisationId: 'org-parent' })]);
 
@@ -149,7 +145,7 @@ describe('RequirementSetsService', () => {
     });
     const { service, abilities } = build();
 
-    // Non-sysadmin: can('manage', 'all') = false
+    // Non-sysadmin (user.role !== 'sysadmin'); CASL denies manage on org-OTHER
     const fakeAbility = { can: vi.fn().mockReturnValue(false) };
     abilities.createForUser.mockReturnValue(fakeAbility);
 
@@ -166,13 +162,8 @@ describe('RequirementSetsService', () => {
     const created = row({ id: 'rs-new', name: 'Test', organisationId: 'org-A' });
     const { service, repo, abilities } = build();
 
-    // Non-sysadmin: can('manage','all') = false, but can manage their own org
-    const fakeAbility = {
-      can: vi.fn((action: string, subject: unknown) => {
-        if (action === 'manage' && subject === 'all') return false;
-        return true; // allow manage on org-A
-      }),
-    };
+    // Non-sysadmin (user.role !== 'sysadmin'), but CASL allows manage on org-A
+    const fakeAbility = { can: vi.fn().mockReturnValue(true) };
     abilities.createForUser.mockReturnValue(fakeAbility);
     repo.insert.mockResolvedValue(created);
 
@@ -191,7 +182,7 @@ describe('RequirementSetsService', () => {
     });
     const { service, abilities } = build();
 
-    // Student: can('manage','all') = false; cannot manage RequirementSet for org-A
+    // Student (user.role !== 'sysadmin'); CASL denies manage on RequirementSet for org-A
     const fakeAbility = { can: vi.fn().mockReturnValue(false) };
     abilities.createForUser.mockReturnValue(fakeAbility);
 

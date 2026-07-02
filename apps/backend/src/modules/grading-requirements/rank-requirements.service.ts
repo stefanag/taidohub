@@ -166,7 +166,7 @@ export class RankRequirementsService {
     const ability = this.abilityFactory.createForUser(actor);
 
     if (actor.id !== targetUserId) {
-      if (!ability.can('manage', 'all')) {
+      if (actor.role !== 'sysadmin') {
         const targetOrgIds = allMemberships.map((m) => m.organisationId);
 
         if (
