@@ -212,6 +212,26 @@ describe('<NextRankCard>', () => {
     expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
   });
 
+  it('renders the "no rank yet" empty state when both currentRank and nextRank are null', () => {
+    useNextRankSpy.mockReturnValue({
+      currentRank: null,
+      nextRank: null,
+      isPending: false,
+      isError: false,
+      error: null,
+    });
+
+    renderCard();
+
+    expect(
+      screen.getByText(
+        'No grading history yet — start tracking progress toward your first rank.',
+      ),
+    ).toBeInTheDocument();
+    expect(screen.queryByText("You've reached the highest rank")).not.toBeInTheDocument();
+    expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
+  });
+
   it('renders a loading state while the rank-history/requirements queries are pending', () => {
     useNextRankSpy.mockReturnValue({
       currentRank: null,

@@ -154,14 +154,17 @@ export class RankRequirementsService {
     targetUserId: string,
     actor: AuthenticatedUser,
   ): Promise<GradingRequirements> {
-    // 1. Authorise
+    // 1. Fetch target's org memberships once — reused for both the auth
+    //    check below and the student org walk in step 2 (previously fetched
+    //    twice per call; see Task 25 final review finding #3).
+    const { data: allMemberships } = await this.memberships.list({ userId: targetUserId });
+
+    // 2. Authorise
     const ability = this.abilityFactory.createForUser(actor);
 
     if (actor.id !== targetUserId) {
       if (!ability.can('manage', 'all')) {
-        // Fetch target's org memberships to build the CASL subject
-        const { data: targetMemberships } = await this.memberships.list({ userId: targetUserId });
-        const targetOrgIds = targetMemberships.map((m) => m.organisationId);
+        const targetOrgIds = allMemberships.map((m) => m.organisationId);
 
         if (
           !ability.can('read', {
@@ -174,15 +177,14 @@ export class RankRequirementsService {
       }
     }
 
-    // 2. Resolve student org via the most-recently-updated student membership
-    const { data: allMemberships } = await this.memberships.list({ userId: targetUserId });
+    // 3. Resolve student org via the most-recently-updated student membership
     const studentOrg = allMemberships
       .filter((m) => m.role === 'student')
       .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())[0]?.organisationId ?? null;
 
     if (!studentOrg) return this.emptyRequirements(rankId, null);
 
-    // 3. Walk ancestors self → root; return on first org with an active set that has this rank
+    // 4. Walk ancestors self → root; return on first org with an active set that has this rank
     const ancestors = await this.orgs.getAncestorIds(studentOrg);
     for (const orgId of ancestors) {
       const active = await this.sets.findActiveByOrg(orgId);
@@ -191,7 +193,7 @@ export class RankRequirementsService {
       if (scalar) return this.fetchForScope(rankId, active.id);
     }
 
-    // 4. Fall back to global default set (organisationId IS NULL)
+    // 5. Fall back to global default set (organisationId IS NULL)
     const globalActive = await this.sets.findActiveByOrg(null);
     if (globalActive) {
       const scalar = await this.repo.fetchScalar(rankId, globalActive.id);

@@ -736,6 +736,7 @@
     "title": "Next rank",
     "caption": "{{ready}}/{{total}} requirements ready",
     "atHighest": "You've reached the highest rank",
+    "noRankYet": "No grading history yet — start tracking progress toward your first rank.",
     "loading": "Loading…",
     "empty": "No progress recorded yet"
   }

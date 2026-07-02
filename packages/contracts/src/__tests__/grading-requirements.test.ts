@@ -27,7 +27,9 @@ describe('SetGradingRequirementsSchema', () => {
   });
 
   it('defaults every array to []', () => {
-    const parsed = SetGradingRequirementsSchema.parse({ setId: 'set-1' });
+    const parsed = SetGradingRequirementsSchema.parse({
+      setId: '7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5',
+    });
     expect(parsed.kobo).toEqual([]);
     expect(parsed.kihon).toEqual([]);
     expect(parsed.otherPatterns).toEqual([]);
@@ -38,7 +40,7 @@ describe('SetGradingRequirementsSchema', () => {
 
   it('accepts jissenMinutes null', () => {
     const parsed = SetGradingRequirementsSchema.parse({
-      setId: 'set-1',
+      setId: '7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5',
       jissenMinutes: null,
     });
     expect(parsed.jissenMinutes).toBeNull();
@@ -46,8 +48,15 @@ describe('SetGradingRequirementsSchema', () => {
 
   it('rejects negative jissenMinutes', () => {
     expect(() =>
-      SetGradingRequirementsSchema.parse({ setId: 'set-1', jissenMinutes: -1 }),
+      SetGradingRequirementsSchema.parse({
+        setId: '7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5',
+        jissenMinutes: -1,
+      }),
     ).toThrow();
+  });
+
+  it('rejects non-UUID setId', () => {
+    expect(() => SetGradingRequirementsSchema.parse({ setId: 'set-1' })).toThrow();
   });
 });
 

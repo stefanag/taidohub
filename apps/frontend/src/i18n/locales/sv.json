@@ -719,6 +719,7 @@
     "title": "Nästa grad",
     "caption": "{{ready}}/{{total}} krav uppfyllda",
     "atHighest": "Du har nått den högsta graden",
+    "noRankYet": "Ingen graderingshistorik än — börja följa framstegen mot din första grad.",
     "loading": "Laddar…",
     "empty": "Ingen framsteg registrerad än"
   }

@@ -34,7 +34,7 @@ export type HokeiGroup = z.infer<typeof HokeiGroupSchema>;
 
 export const SetGradingRequirementsSchema = z
   .object({
-    setId: z.string().min(1),
+    setId: z.string().uuid(),
     hokeiGroups: z.array(HokeiGroupInputSchema).default([]),
     kobo: z.array(z.string().uuid()).default([]),
     koboTested: z.array(z.string().uuid()).default([]),

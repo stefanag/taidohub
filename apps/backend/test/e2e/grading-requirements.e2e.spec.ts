@@ -339,7 +339,7 @@ describe.skipIf(!hasDatabase())('Grading requirements e2e', () => {
   // ────────────────────────────────────────────────────────────────────────────
 
   it('3. setId required on PUT: empty setId → 400 VALIDATION_ERROR', async () => {
-    // The Zod schema has setId: z.string().min(1), so an empty string fails Zod.
+    // The Zod schema has setId: z.string().uuid(), so an empty string fails Zod.
     const res = await request(app.getHttpServer())
       .put(`/api/requirements/${rankId}`)
       .set('Cookie', sysadminCookie)

@@ -49,7 +49,7 @@ export class RankRequirementsController {
   async get(
     @Param('rankId', new ParseUUIDPipe()) rankId: string,
     @CurrentUser() user: AuthenticatedUser,
-    @Query('setId') setId?: string,
+    @Query('setId', new ParseUUIDPipe({ optional: true })) setId?: string,
     @Query('forUserId') forUserId?: string,
   ): Promise<GradingRequirements> {
     if (setId && forUserId) {
@@ -86,7 +86,7 @@ export class RankRequirementsController {
   @Delete(':rankId')
   async delete(
     @Param('rankId', new ParseUUIDPipe()) rankId: string,
-    @Query('setId') setId: string,
+    @Query('setId', new ParseUUIDPipe({ optional: true })) setId: string,
     @CurrentUser() user: AuthenticatedUser,
   ): Promise<{ ok: true }> {
     if (!setId) {

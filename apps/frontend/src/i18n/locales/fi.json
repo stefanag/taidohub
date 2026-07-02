@@ -719,6 +719,7 @@
     "title": "Seuraava arvo",
     "caption": "{{ready}}/{{total}} vaatimusta valmiina",
     "atHighest": "Olet saavuttanut korkeimman arvon",
+    "noRankYet": "Ei vielä arviointihistoriaa — ala seurata edistymistä kohti ensimmäistä arvoasi.",
     "loading": "Ladataan…",
     "empty": "Ei vielä kirjattua edistymistä"
   }

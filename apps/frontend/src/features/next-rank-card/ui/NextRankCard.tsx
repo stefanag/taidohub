@@ -18,8 +18,11 @@ export interface NextRankCardProps {
 /**
  * Compact "next rank" progress card for the dashboard and history pages.
  * Shows a progress bar + "{ready}/{total} requirements ready" caption for
- * the student's next rank in their belt system, or an empty state when the
- * student is already at the highest rank (no `nextRankId`).
+ * the student's next rank in their belt system, or one of two empty states
+ * when `nextRank` is null: "at highest rank" when the student has a
+ * `currentRank` but no `nextRankId`, or "no rank yet" when the student has
+ * no grading history at all (`currentRank` is also null) — these are
+ * distinct situations and must not share copy (Task 25 final review).
  */
 export function NextRankCard({ userId: userIdProp }: NextRankCardProps): React.ReactElement {
   const { t } = useTranslation();
@@ -28,7 +31,12 @@ export function NextRankCard({ userId: userIdProp }: NextRankCardProps): React.R
   const userId = userIdProp ?? actorId;
   const isActor = !userIdProp || userIdProp === actorId;
 
-  const { nextRank, isPending: rankPending, isError: rankError } = useNextRank(userId);
+  const {
+    currentRank,
+    nextRank,
+    isPending: rankPending,
+    isError: rankError,
+  } = useNextRank(userId);
 
   const requirementsQueryForActor = useRequirementsQuery(isActor ? (nextRank?.id ?? null) : null);
   const requirementsQueryForUser = useRequirementsForUserQuery(
@@ -93,6 +101,13 @@ export function NextRankCard({ userId: userIdProp }: NextRankCardProps): React.R
         ) : isError ? (
           <p role="alert" className="text-sm text-destructive">
             {t('common.unknownError', { defaultValue: 'unknown error' })}
+          </p>
+        ) : !nextRank && !currentRank ? (
+          <p className="text-sm text-on-surface-variant">
+            {t('nextRank.noRankYet', {
+              defaultValue:
+                'No grading history yet — start tracking progress toward your first rank.',
+            })}
           </p>
         ) : !nextRank ? (
           <p className="text-sm text-on-surface-variant">
