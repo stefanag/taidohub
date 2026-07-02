@@ -1670,6 +1670,310 @@
         ]
       }
     },
+    "/api/requirement-sets": {
+      "get": {
+        "operationId": "RequirementSetsController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "requirement-sets"
+        ]
+      },
+      "post": {
+        "operationId": "RequirementSetsController_create",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "requirement-sets"
+        ]
+      }
+    },
+    "/api/requirement-sets/{id}": {
+      "get": {
+        "operationId": "RequirementSetsController_get",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "requirement-sets"
+        ]
+      },
+      "patch": {
+        "operationId": "RequirementSetsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "requirement-sets"
+        ]
+      },
+      "delete": {
+        "operationId": "RequirementSetsController_delete",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "requirement-sets"
+        ]
+      }
+    },
+    "/api/requirement-sets/{id}/activate": {
+      "post": {
+        "operationId": "RequirementSetsController_activate",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "requirement-sets"
+        ]
+      }
+    },
+    "/api/requirement-sets/{id}/deactivate": {
+      "post": {
+        "operationId": "RequirementSetsController_deactivate",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "requirement-sets"
+        ]
+      }
+    },
+    "/api/requirement-sets/{id}/clone": {
+      "post": {
+        "operationId": "RequirementSetsController_clone",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "requirement-sets"
+        ]
+      }
+    },
+    "/api/requirements/{rankId}": {
+      "get": {
+        "operationId": "RankRequirementsController_get",
+        "parameters": [
+          {
+            "name": "rankId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "setId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "forUserId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "grading-requirements"
+        ]
+      },
+      "put": {
+        "operationId": "RankRequirementsController_put",
+        "parameters": [
+          {
+            "name": "rankId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "grading-requirements"
+        ]
+      },
+      "delete": {
+        "operationId": "RankRequirementsController_delete",
+        "parameters": [
+          {
+            "name": "rankId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "setId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "grading-requirements"
+        ]
+      }
+    },
     "/api/health": {
       "get": {
         "operationId": "HealthController_check",
@@ -13473,10 +13777,209 @@
                   "gradient": "yellow",
                   "badge": true
                 }
+              },
+              "GradingRequirements": {
+                "type": "object",
+                "properties": {
+                  "rankId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "setId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "hokeiGroups": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/HokeiGroup"
+                    }
+                  },
+                  "kobo": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "koboTested": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "otherPatterns": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "otherPatternsTested": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "kihon": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "kihonTested": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "jissenMinutes": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "jissenTested": {
+                    "type": "boolean"
+                  },
+                  "minMonthsSincePreviousRank": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "requiresTheoricExam": {
+                    "type": "boolean"
+                  },
+                  "requiresEssay": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "rankId",
+                  "setId",
+                  "hokeiGroups",
+                  "kobo",
+                  "koboTested",
+                  "otherPatterns",
+                  "otherPatternsTested",
+                  "kihon",
+                  "kihonTested",
+                  "jissenMinutes",
+                  "jissenTested",
+                  "minMonthsSincePreviousRank",
+                  "requiresTheoricExam",
+                  "requiresEssay"
+                ],
+                "description": "Projected requirements for one rank within a single scope. Returned as a fully-formed empty object when no requirements exist for the scope (NOT 404)."
+              },
+              "HokeiGroup": {
+                "type": "object",
+                "properties": {
+                  "groupOrder": {
+                    "default": 0,
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "pickCount": {
+                    "default": 1,
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "isTested": {
+                    "default": false,
+                    "type": "boolean"
+                  },
+                  "labelEn": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "labelFi": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "labelSv": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "patternIds": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  }
+                },
+                "required": [
+                  "patternIds",
+                  "id"
+                ],
+                "description": "A hokei group as returned by the resolution endpoint."
               }
             },
             "x-nestjs_zod-parent-metadata": {
-              "description": "A publicly-visible rank plus its system and (optional) organisation summary."
+              "description": "A publicly-visible rank plus its system, an (optional) organisation summary, and the resolved grading requirements for its active requirement set (null when none is active)."
             }
           },
           "system": {
@@ -13776,10 +14279,209 @@
                   "gradient": "yellow",
                   "badge": true
                 }
+              },
+              "GradingRequirements": {
+                "type": "object",
+                "properties": {
+                  "rankId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "setId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "hokeiGroups": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/HokeiGroup"
+                    }
+                  },
+                  "kobo": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "koboTested": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "otherPatterns": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "otherPatternsTested": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "kihon": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "kihonTested": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "jissenMinutes": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "jissenTested": {
+                    "type": "boolean"
+                  },
+                  "minMonthsSincePreviousRank": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "requiresTheoricExam": {
+                    "type": "boolean"
+                  },
+                  "requiresEssay": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "rankId",
+                  "setId",
+                  "hokeiGroups",
+                  "kobo",
+                  "koboTested",
+                  "otherPatterns",
+                  "otherPatternsTested",
+                  "kihon",
+                  "kihonTested",
+                  "jissenMinutes",
+                  "jissenTested",
+                  "minMonthsSincePreviousRank",
+                  "requiresTheoricExam",
+                  "requiresEssay"
+                ],
+                "description": "Projected requirements for one rank within a single scope. Returned as a fully-formed empty object when no requirements exist for the scope (NOT 404)."
+              },
+              "HokeiGroup": {
+                "type": "object",
+                "properties": {
+                  "groupOrder": {
+                    "default": 0,
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "pickCount": {
+                    "default": 1,
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "isTested": {
+                    "default": false,
+                    "type": "boolean"
+                  },
+                  "labelEn": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "labelFi": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "labelSv": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "patternIds": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  }
+                },
+                "required": [
+                  "patternIds",
+                  "id"
+                ],
+                "description": "A hokei group as returned by the resolution endpoint."
               }
             },
             "x-nestjs_zod-parent-metadata": {
-              "description": "A publicly-visible rank plus its system and (optional) organisation summary."
+              "description": "A publicly-visible rank plus its system, an (optional) organisation summary, and the resolved grading requirements for its active requirement set (null when none is active)."
             }
           },
           "organisation": {
@@ -14086,17 +14788,700 @@
                   "gradient": "yellow",
                   "badge": true
                 }
+              },
+              "GradingRequirements": {
+                "type": "object",
+                "properties": {
+                  "rankId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "setId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "hokeiGroups": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/HokeiGroup"
+                    }
+                  },
+                  "kobo": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "koboTested": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "otherPatterns": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "otherPatternsTested": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "kihon": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "kihonTested": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "jissenMinutes": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "jissenTested": {
+                    "type": "boolean"
+                  },
+                  "minMonthsSincePreviousRank": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "requiresTheoricExam": {
+                    "type": "boolean"
+                  },
+                  "requiresEssay": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "rankId",
+                  "setId",
+                  "hokeiGroups",
+                  "kobo",
+                  "koboTested",
+                  "otherPatterns",
+                  "otherPatternsTested",
+                  "kihon",
+                  "kihonTested",
+                  "jissenMinutes",
+                  "jissenTested",
+                  "minMonthsSincePreviousRank",
+                  "requiresTheoricExam",
+                  "requiresEssay"
+                ],
+                "description": "Projected requirements for one rank within a single scope. Returned as a fully-formed empty object when no requirements exist for the scope (NOT 404)."
+              },
+              "HokeiGroup": {
+                "type": "object",
+                "properties": {
+                  "groupOrder": {
+                    "default": 0,
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "pickCount": {
+                    "default": 1,
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "isTested": {
+                    "default": false,
+                    "type": "boolean"
+                  },
+                  "labelEn": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "labelFi": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "labelSv": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "patternIds": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  }
+                },
+                "required": [
+                  "patternIds",
+                  "id"
+                ],
+                "description": "A hokei group as returned by the resolution endpoint."
               }
             },
             "x-nestjs_zod-parent-metadata": {
-              "description": "A publicly-visible rank plus its system and (optional) organisation summary."
+              "description": "A publicly-visible rank plus its system, an (optional) organisation summary, and the resolved grading requirements for its active requirement set (null when none is active)."
+            }
+          },
+          "requirements": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/GradingRequirements"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "BeltRank": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "organisationId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "systemId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "level": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "sortOrder": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "nameJa": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "nameRomaji": {
+                    "type": "string"
+                  },
+                  "nameEn": {
+                    "type": "string"
+                  },
+                  "nameSv": {
+                    "type": "string"
+                  },
+                  "nameFi": {
+                    "type": "string"
+                  },
+                  "beltColor": {
+                    "type": "string"
+                  },
+                  "visuals": {
+                    "$ref": "#/$defs/BeltVisuals"
+                  },
+                  "imageUrl": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "descriptionEn": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "descriptionSv": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "descriptionFi": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "publiclyVisible": {
+                    "type": "boolean"
+                  },
+                  "slug": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "minAge": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "nextRankId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                  },
+                  "updatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                  }
+                },
+                "required": [
+                  "id",
+                  "organisationId",
+                  "systemId",
+                  "level",
+                  "sortOrder",
+                  "nameJa",
+                  "nameRomaji",
+                  "nameEn",
+                  "nameSv",
+                  "nameFi",
+                  "beltColor",
+                  "visuals",
+                  "imageUrl",
+                  "descriptionEn",
+                  "descriptionSv",
+                  "descriptionFi",
+                  "publiclyVisible",
+                  "slug",
+                  "minAge",
+                  "nextRankId",
+                  "createdAt",
+                  "updatedAt"
+                ],
+                "description": "A specific rank inside a belt system.",
+                "example": {
+                  "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "organisationId": null,
+                  "systemId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "level": 1,
+                  "sortOrder": 10,
+                  "nameJa": null,
+                  "nameRomaji": "Jukyu",
+                  "nameEn": "10th Kyu",
+                  "nameSv": "10 Kyu",
+                  "nameFi": "10. Kyu",
+                  "beltColor": "#FFFFFF",
+                  "visuals": {
+                    "gradient": "white"
+                  },
+                  "imageUrl": null,
+                  "descriptionEn": null,
+                  "descriptionSv": null,
+                  "descriptionFi": null,
+                  "publiclyVisible": false,
+                  "slug": null,
+                  "minAge": null,
+                  "nextRankId": null,
+                  "createdAt": "2026-05-24T08:00:00.000Z",
+                  "updatedAt": "2026-05-24T08:00:00.000Z"
+                }
+              },
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              },
+              "GradingRequirements": {
+                "type": "object",
+                "properties": {
+                  "rankId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "setId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "hokeiGroups": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/HokeiGroup"
+                    }
+                  },
+                  "kobo": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "koboTested": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "otherPatterns": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "otherPatternsTested": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "kihon": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "kihonTested": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "jissenMinutes": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "jissenTested": {
+                    "type": "boolean"
+                  },
+                  "minMonthsSincePreviousRank": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "requiresTheoricExam": {
+                    "type": "boolean"
+                  },
+                  "requiresEssay": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "rankId",
+                  "setId",
+                  "hokeiGroups",
+                  "kobo",
+                  "koboTested",
+                  "otherPatterns",
+                  "otherPatternsTested",
+                  "kihon",
+                  "kihonTested",
+                  "jissenMinutes",
+                  "jissenTested",
+                  "minMonthsSincePreviousRank",
+                  "requiresTheoricExam",
+                  "requiresEssay"
+                ],
+                "description": "Projected requirements for one rank within a single scope. Returned as a fully-formed empty object when no requirements exist for the scope (NOT 404)."
+              },
+              "HokeiGroup": {
+                "type": "object",
+                "properties": {
+                  "groupOrder": {
+                    "default": 0,
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "pickCount": {
+                    "default": 1,
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "isTested": {
+                    "default": false,
+                    "type": "boolean"
+                  },
+                  "labelEn": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "labelFi": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "labelSv": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "patternIds": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  }
+                },
+                "required": [
+                  "patternIds",
+                  "id"
+                ],
+                "description": "A hokei group as returned by the resolution endpoint."
+              }
+            },
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A publicly-visible rank plus its system, an (optional) organisation summary, and the resolved grading requirements for its active requirement set (null when none is active)."
             }
           }
         },
         "required": [
           "rank",
           "system",
-          "organisation"
+          "organisation",
+          "requirements"
         ]
       },
       "CreateRankHistoryDto": {
@@ -19924,6 +21309,30 @@
       },
       "StudentRosterRow": {
         "$ref": "#/components/schemas/StudentRosterRow"
+      },
+      "HokeiGroup": {
+        "$ref": "#/components/schemas/HokeiGroup"
+      },
+      "HokeiGroupInput": {
+        "$ref": "#/components/schemas/HokeiGroupInput"
+      },
+      "SetGradingRequirementsInput": {
+        "$ref": "#/components/schemas/SetGradingRequirementsInput"
+      },
+      "GradingRequirements": {
+        "$ref": "#/components/schemas/GradingRequirements"
+      },
+      "RequirementSet": {
+        "$ref": "#/components/schemas/RequirementSet"
+      },
+      "CreateRequirementSetInput": {
+        "$ref": "#/components/schemas/CreateRequirementSetInput"
+      },
+      "UpdateRequirementSetInput": {
+        "$ref": "#/components/schemas/UpdateRequirementSetInput"
+      },
+      "CloneRequirementSetInput": {
+        "$ref": "#/components/schemas/CloneRequirementSetInput"
       }
     }
   }
