@@ -169,6 +169,17 @@ export class RequirementSetsService {
     return mapRow(created);
   }
 
+  /**
+   * Unauthenticated lookup used by `BeltRanksService.resolvePublicRequirements`
+   * — the public-rank projection has no `AuthenticatedUser` to gate a method
+   * on, and reading "is there an active requirement set for this org" isn't
+   * sensitive on its own (no requirement content is returned here).
+   */
+  async findActiveByOrg(organisationId: string | null): Promise<RequirementSet | null> {
+    const row = await this.repo.findActiveByOrg(organisationId);
+    return row ? mapRow(row) : null;
+  }
+
   // ── Internals ─────────────────────────────────────────────────────────
 
   private assertCanManage(user: AuthenticatedUser, orgId: string | null): void {

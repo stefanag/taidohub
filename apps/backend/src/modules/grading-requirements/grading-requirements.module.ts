@@ -27,10 +27,15 @@ import { RequirementSetsService } from './requirement-sets.service.js';
  *
  * `RequirementSetsService` and `RankRequirementsService` are exported so future
  * modules (grading sessions, etc.) can depend on them directly.
- * `RequirementSetsRepository` is also exported — `BeltCatalogModule`'s
- * `BeltRanksService` needs its unauthenticated `findActiveByOrg` lookup
- * directly (the public-rank projection has no `AuthenticatedUser` to hand
- * to `RequirementSetsService`, which gates every method on one).
+ * `RequirementSetsRepository` and `RankRequirementsRepository` are NOT
+ * exported — neither has any auth checks of its own (only the services do),
+ * so exporting either would let an importing module bypass CASL by injecting
+ * the repository directly. `BeltCatalogModule`'s `BeltRanksService` needs an
+ * unauthenticated "is there an active set for this org" lookup for the
+ * public-rank projection (no `AuthenticatedUser` to hand to the gated
+ * methods); that's exposed as `RequirementSetsService.findActiveByOrg` and
+ * `RankRequirementsService.resolveForSetOrNull` instead of reaching for the
+ * repositories.
  *
  * `RankRequirementsController` is registered alongside `RequirementSetsController`.
  */
@@ -44,6 +49,6 @@ import { RequirementSetsService } from './requirement-sets.service.js';
     RankRequirementsService,
     GradingRequirementsAbilityRules,
   ],
-  exports: [RequirementSetsService, RankRequirementsService, RequirementSetsRepository],
+  exports: [RequirementSetsService, RankRequirementsService],
 })
 export class GradingRequirementsModule {}

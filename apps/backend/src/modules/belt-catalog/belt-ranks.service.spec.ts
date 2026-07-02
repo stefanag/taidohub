@@ -3,7 +3,7 @@ import { Test } from '@nestjs/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { RankRequirementsService } from '../grading-requirements/rank-requirements.service.js';
-import { RequirementSetsRepository } from '../grading-requirements/requirement-sets.repository.js';
+import { RequirementSetsService } from '../grading-requirements/requirement-sets.service.js';
 
 import { BeltRanksRepository } from './belt-ranks.repository.js';
 import { BeltRanksService } from './belt-ranks.service.js';
@@ -68,13 +68,14 @@ function repoStub() {
 function rankRequirementsStub() {
   return {
     fetchForScope: vi.fn(),
+    resolveForSetOrNull: vi.fn(),
   } as unknown as Record<keyof RankRequirementsService, ReturnType<typeof vi.fn>>;
 }
 
 function requirementSetsStub() {
   return {
     findActiveByOrg: vi.fn().mockResolvedValue(null),
-  } as unknown as Record<keyof RequirementSetsRepository, ReturnType<typeof vi.fn>>;
+  } as unknown as Record<keyof RequirementSetsService, ReturnType<typeof vi.fn>>;
 }
 
 async function makeService(
@@ -87,7 +88,7 @@ async function makeService(
       BeltRanksService,
       { provide: BeltRanksRepository, useValue: repo },
       { provide: RankRequirementsService, useValue: rankRequirements },
-      { provide: RequirementSetsRepository, useValue: requirementSets },
+      { provide: RequirementSetsService, useValue: requirementSets },
     ],
   }).compile();
   return module.get(BeltRanksService);
@@ -270,11 +271,36 @@ describe('BeltRanksService.findPublicBySlug', () => {
     const out = await service.findPublicBySlug('jukyu');
 
     expect(requirementSets.findActiveByOrg).toHaveBeenCalledWith(ROW.organisationId);
-    expect(rankRequirements.fetchForScope).not.toHaveBeenCalled();
+    expect(rankRequirements.resolveForSetOrNull).not.toHaveBeenCalled();
     expect(out.requirements).toBeNull();
   });
 
-  it('resolves requirements via RankRequirementsService.fetchForScope when an active set exists', async () => {
+  it('returns requirements: null when an active set exists but has no data for this rank (empty-scope guard)', async () => {
+    repo.findPublicBySlug.mockResolvedValue({
+      ...ROW,
+      publiclyVisible: true,
+      slug: 'jukyu',
+      systemCode: 'kyu',
+      systemNameEn: 'Kyu',
+      systemNameSv: 'Kyu',
+      systemNameFi: 'Kyu',
+      orgShortCode: null,
+      orgNameEn: null,
+      orgNameSv: null,
+      orgNameFi: null,
+    });
+    requirementSets.findActiveByOrg.mockResolvedValue({ id: 'set-1' });
+    // Scope has no scalar anchor row for this rank — resolveForSetOrNull
+    // contracts to null rather than the truthy empty-shell object.
+    rankRequirements.resolveForSetOrNull.mockResolvedValue(null);
+
+    const out = await service.findPublicBySlug('jukyu');
+
+    expect(rankRequirements.resolveForSetOrNull).toHaveBeenCalledWith(RANK_UUID, 'set-1');
+    expect(out.requirements).toBeNull();
+  });
+
+  it('resolves requirements via RankRequirementsService.resolveForSetOrNull when an active set has data for this rank', async () => {
     repo.findPublicBySlug.mockResolvedValue({
       ...ROW,
       publiclyVisible: true,
@@ -305,11 +331,11 @@ describe('BeltRanksService.findPublicBySlug', () => {
       requiresTheoricExam: false,
       requiresEssay: false,
     };
-    rankRequirements.fetchForScope.mockResolvedValue(projected);
+    rankRequirements.resolveForSetOrNull.mockResolvedValue(projected);
 
     const out = await service.findPublicBySlug('jukyu');
 
-    expect(rankRequirements.fetchForScope).toHaveBeenCalledWith(RANK_UUID, 'set-1');
+    expect(rankRequirements.resolveForSetOrNull).toHaveBeenCalledWith(RANK_UUID, 'set-1');
     expect(out.requirements).toBe(projected);
   });
 });

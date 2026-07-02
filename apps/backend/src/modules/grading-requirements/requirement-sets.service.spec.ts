@@ -318,4 +318,27 @@ describe('RequirementSetsService', () => {
       expect.objectContaining({ name: 'Original (copy)' }),
     );
   });
+
+  // ── findActiveByOrg (unauthenticated, used by BeltRanksService) ────────
+
+  it('findActiveByOrg: returns null when the repo has no active set for the org (no auth check)', async () => {
+    const { service, repo } = build();
+    repo.findActiveByOrg.mockResolvedValue(null);
+
+    const result = await service.findActiveByOrg('org-A');
+
+    expect(repo.findActiveByOrg).toHaveBeenCalledWith('org-A');
+    expect(result).toBeNull();
+  });
+
+  it('findActiveByOrg: maps the row to the API shape when an active set exists', async () => {
+    const { service, repo } = build();
+    repo.findActiveByOrg.mockResolvedValue(row({ id: 'rs-active', isActive: true }));
+
+    const result = await service.findActiveByOrg('org-A');
+
+    expect(result).not.toBeNull();
+    expect(result!.id).toBe('rs-active');
+    expect(result!.isActive).toBe(true);
+  });
 });

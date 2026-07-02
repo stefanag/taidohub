@@ -15,7 +15,7 @@ import { ShogoTitlesService } from './shogo-titles.service.js';
 
 /**
  * `GradingRequirementsModule` is imported so `BeltRanksService` can inject
- * `RankRequirementsService`/`RequirementSetsRepository` to populate the
+ * `RankRequirementsService`/`RequirementSetsService` to populate the
  * `requirements` field of `findPublicBySlug`'s response (Task 25). No
  * reverse dependency exists — `GradingRequirementsModule` does not import
  * `BeltCatalogModule` — so this does not introduce a cycle.

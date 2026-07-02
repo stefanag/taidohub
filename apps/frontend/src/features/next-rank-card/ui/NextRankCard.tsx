@@ -42,8 +42,8 @@ export function NextRankCard({ userId: userIdProp }: NextRankCardProps): React.R
   // viewing a student), fetch that student's progress via the student-scoped
   // endpoint instead — otherwise the actor's own progress would be shown
   // under the student's name (Task 22 cross-user gap, fixed in Task 25).
-  const actorTechProgressQuery = useProgressListQuery('technique');
-  const actorPatProgressQuery = useProgressListQuery('pattern');
+  const actorTechProgressQuery = useProgressListQuery('technique', { enabled: isActor });
+  const actorPatProgressQuery = useProgressListQuery('pattern', { enabled: isActor });
   const studentProgressQuery = useStudentProgressQuery(isActor ? null : userId);
 
   const studentTechProgress = React.useMemo(

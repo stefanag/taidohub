@@ -127,6 +127,26 @@ export class RankRequirementsService {
     return this.fetchForScope(rankId, setId);
   }
 
+  /**
+   * Unauthenticated variant used by the public-rank projection
+   * ({@link BeltRanksService.findPublicBySlug}), which has no
+   * `AuthenticatedUser` to hand to `resolveForSet`.
+   *
+   * Returns `null` when the rank+set scope has no configured requirements
+   * (no scalar anchor row) rather than the truthy empty-shell object
+   * `fetchForScope` would otherwise return — the public rank page treats
+   * `null` as "omit the requirements section" (see the comment on
+   * `BeltRanksService.resolvePublicRequirements`).
+   */
+  async resolveForSetOrNull(
+    rankId: string,
+    setId: string,
+  ): Promise<GradingRequirements | null> {
+    const scalar = await this.repo.fetchScalar(rankId, setId);
+    if (!scalar) return null;
+    return this.fetchForScope(rankId, setId);
+  }
+
   // ── Ancestor-walk resolution ─────────────────────────────────────────────
 
   async resolveForUser(

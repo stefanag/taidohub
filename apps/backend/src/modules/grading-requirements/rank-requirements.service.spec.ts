@@ -414,6 +414,37 @@ describe('RankRequirementsService.resolveForSet', () => {
   });
 });
 
+// ── Tests: resolveForSetOrNull ───────────────────────────────────────────────
+
+describe('RankRequirementsService.resolveForSetOrNull', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('returns null when the scope has no scalar anchor row for this rank (not the empty-shell object)', async () => {
+    const { svc, repo } = build();
+    repo.fetchScalar = vi.fn().mockResolvedValue(null); // no data for this rank+set
+
+    const result = await svc.resolveForSetOrNull('rank-1', 'set-1');
+
+    expect(result).toBeNull();
+    expect(repo.fetchTechniques).not.toHaveBeenCalled();
+  });
+
+  it('returns the projection when the scope has a scalar anchor row', async () => {
+    const { svc, repo } = build();
+    repo.fetchScalar = vi.fn().mockResolvedValue(scalarRow());
+    repo.fetchTechniques.mockResolvedValue([]);
+    repo.fetchPatternsWithType.mockResolvedValue([]);
+    repo.fetchHokeiGroups.mockResolvedValue([]);
+
+    const result = await svc.resolveForSetOrNull('rank-1', 'set-1');
+
+    expect(result).not.toBeNull();
+    expect(result).toEqual(await svc.fetchForScope('rank-1', 'set-1'));
+  });
+});
+
 // ── Tests: replace ───────────────────────────────────────────────────────────
 
 describe('RankRequirementsService.replace', () => {

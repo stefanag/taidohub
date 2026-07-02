@@ -17,7 +17,7 @@ import {
   type DbNewBeltRank,
 } from '../../infrastructure/database/schema/index.js';
 import { RankRequirementsService } from '../grading-requirements/rank-requirements.service.js';
-import { RequirementSetsRepository } from '../grading-requirements/requirement-sets.repository.js';
+import { RequirementSetsService } from '../grading-requirements/requirement-sets.service.js';
 
 import { BeltRankPatch, BeltRanksRepository } from './belt-ranks.repository.js';
 import { LookupTableService } from './lookup-table.service.js';
@@ -61,7 +61,7 @@ export class BeltRanksService extends LookupTableService<
   constructor(
     protected readonly repo: BeltRanksRepository,
     private readonly rankRequirements: RankRequirementsService,
-    private readonly requirementSets: RequirementSetsRepository,
+    private readonly requirementSets: RequirementSetsService,
   ) {
     super();
   }
@@ -183,6 +183,12 @@ export class BeltRanksService extends LookupTableService<
    * organisation (or, for global ranks, the platform) has actively
    * configured; `null` here just means "not configured yet", which the
    * frontend treats as "omit the requirements section" rather than an error.
+   *
+   * That "not configured" case covers two situations: no active set at all
+   * for this org, OR an active set exists but this specific rank has no
+   * requirements row in it yet. `RankRequirementsService.resolveForSetOrNull`
+   * returns `null` for the latter (rather than the truthy empty-shell object
+   * `fetchForScope` returns) so both collapse to the same `null` contract here.
    */
   private async resolvePublicRequirements(
     rankId: string,
@@ -190,7 +196,7 @@ export class BeltRanksService extends LookupTableService<
   ): Promise<PublicRankResponse['requirements']> {
     const activeSet = await this.requirementSets.findActiveByOrg(organisationId);
     if (!activeSet) return null;
-    return this.rankRequirements.fetchForScope(rankId, activeSet.id);
+    return this.rankRequirements.resolveForSetOrNull(rankId, activeSet.id);
   }
 
   protected toApi(row: DbBeltRank): BeltRank {

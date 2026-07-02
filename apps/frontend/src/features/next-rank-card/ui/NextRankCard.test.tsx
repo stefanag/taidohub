@@ -81,8 +81,12 @@ function makeProgress(overrides: Partial<Progress>): Progress {
 const useNextRankSpy = vi.fn();
 const useSessionSpy = vi.fn(() => ({ data: { user: { id: ACTOR_ID } } }));
 const requirementsSpy = vi.fn();
-const techProgressSpy = vi.fn(() => ({ data: [] as Progress[], isPending: false, isError: false }));
-const patProgressSpy = vi.fn(() => ({ data: [] as Progress[], isPending: false, isError: false }));
+const techProgressSpy = vi.fn(
+  (_options?: { enabled?: boolean }) => ({ data: [] as Progress[], isPending: false, isError: false }),
+);
+const patProgressSpy = vi.fn(
+  (_options?: { enabled?: boolean }) => ({ data: [] as Progress[], isPending: false, isError: false }),
+);
 const studentProgressSpy = vi.fn((userId: string | null) => ({
   data: [] as Progress[],
   isPending: false,
@@ -104,8 +108,10 @@ vi.mock('@/entities/rank-requirement', () => ({
 }));
 
 vi.mock('@/entities/progress', () => ({
-  useProgressListQuery: (contentType: 'technique' | 'pattern') =>
-    contentType === 'technique' ? techProgressSpy() : patProgressSpy(),
+  useProgressListQuery: (
+    contentType: 'technique' | 'pattern',
+    options?: { enabled?: boolean },
+  ) => (contentType === 'technique' ? techProgressSpy(options) : patProgressSpy(options)),
 }));
 
 vi.mock('@/entities/student', () => ({
@@ -266,5 +272,45 @@ describe('<NextRankCard>', () => {
     // ...and its data drove the caption, proving the card isn't silently
     // falling back to the actor-scoped `useProgressListQuery` rows (Task 22 gap).
     expect(screen.getByText('1/1 requirements ready')).toBeInTheDocument();
+  });
+
+  it('disables the actor-scoped useProgressListQuery calls when viewing another user (Task 25 review)', () => {
+    useNextRankSpy.mockReturnValue({
+      currentRank: null,
+      nextRank: NEXT_RANK,
+      isPending: false,
+      isError: false,
+      error: null,
+    });
+    requirementsSpy.mockReturnValue({
+      data: makeRequirements({ kihon: ['t-1'] }),
+      isPending: false,
+      isError: false,
+    });
+
+    renderCard({ userId: 'other-student' });
+
+    expect(techProgressSpy).toHaveBeenCalledWith({ enabled: false });
+    expect(patProgressSpy).toHaveBeenCalledWith({ enabled: false });
+  });
+
+  it('enables the actor-scoped useProgressListQuery calls for the actor-viewing-self path', () => {
+    useNextRankSpy.mockReturnValue({
+      currentRank: null,
+      nextRank: NEXT_RANK,
+      isPending: false,
+      isError: false,
+      error: null,
+    });
+    requirementsSpy.mockReturnValue({
+      data: makeRequirements({ kihon: ['t-1'] }),
+      isPending: false,
+      isError: false,
+    });
+
+    renderCard();
+
+    expect(techProgressSpy).toHaveBeenCalledWith({ enabled: true });
+    expect(patProgressSpy).toHaveBeenCalledWith({ enabled: true });
   });
 });
