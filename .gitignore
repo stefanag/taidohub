@@ -31,11 +31,13 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Environment files (keep .env.example)
+# Environment files (keep .env.example / .env.e2e.example)
 .env
 .env.local
 .env.*.local
+.env.e2e
 !.env.example
+!.env.e2e.example
 
 # OS files
 .DS_Store
