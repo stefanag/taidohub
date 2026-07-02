@@ -5,6 +5,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { ErrorCodes } from '@repo/contracts/errors';
 import type {
   CloneRequirementSetInput,
   CreateRequirementSetInput,
@@ -69,7 +70,11 @@ export class RequirementSetsService {
   async get(id: string, user: AuthenticatedUser): Promise<RequirementSet> {
     void user;
     const row = await this.repo.findById(id);
-    if (!row) throw new NotFoundException({ error: 'Requirement set not found', code: 'NOT_FOUND' });
+    if (!row) {
+      throw new NotFoundException({
+        error: { code: ErrorCodes.NOT_FOUND, message: 'Requirement set not found' },
+      });
+    }
     return mapRow(row);
   }
 
@@ -87,8 +92,10 @@ export class RequirementSetsService {
 
       if (organisationId === null) {
         throw new ForbiddenException({
-          error: 'Cannot create requirement set for another organisation',
-          code: 'FORBIDDEN',
+          error: {
+            code: ErrorCodes.FORBIDDEN,
+            message: 'Cannot create requirement set for another organisation',
+          },
         });
       }
 
@@ -110,23 +117,31 @@ export class RequirementSetsService {
     user: AuthenticatedUser,
   ): Promise<RequirementSet> {
     const existing = await this.repo.findById(id);
-    if (!existing) throw new NotFoundException({ error: 'Not found', code: 'NOT_FOUND' });
+    if (!existing) {
+      throw new NotFoundException({ error: { code: ErrorCodes.NOT_FOUND, message: 'Not found' } });
+    }
     this.assertCanManage(user, existing.organisationId);
     const updated = await this.repo.update(id, body);
-    if (!updated) throw new NotFoundException({ error: 'Not found', code: 'NOT_FOUND' });
+    if (!updated) {
+      throw new NotFoundException({ error: { code: ErrorCodes.NOT_FOUND, message: 'Not found' } });
+    }
     return mapRow(updated);
   }
 
   async delete(id: string, user: AuthenticatedUser): Promise<void> {
     const existing = await this.repo.findById(id);
-    if (!existing) throw new NotFoundException({ error: 'Not found', code: 'NOT_FOUND' });
+    if (!existing) {
+      throw new NotFoundException({ error: { code: ErrorCodes.NOT_FOUND, message: 'Not found' } });
+    }
     this.assertCanManage(user, existing.organisationId);
     await this.repo.delete(id);
   }
 
   async activate(id: string, user: AuthenticatedUser): Promise<RequirementSet> {
     const existing = await this.repo.findById(id);
-    if (!existing) throw new NotFoundException({ error: 'Not found', code: 'NOT_FOUND' });
+    if (!existing) {
+      throw new NotFoundException({ error: { code: ErrorCodes.NOT_FOUND, message: 'Not found' } });
+    }
     this.assertCanManage(user, existing.organisationId);
 
     // Deactivate sibling active sets and flip the target in one atomic transaction.
@@ -136,17 +151,23 @@ export class RequirementSetsService {
     });
 
     const updated = await this.repo.findById(id);
-    if (!updated) throw new NotFoundException({ error: 'Not found', code: 'NOT_FOUND' });
+    if (!updated) {
+      throw new NotFoundException({ error: { code: ErrorCodes.NOT_FOUND, message: 'Not found' } });
+    }
     return mapRow(updated);
   }
 
   async deactivate(id: string, user: AuthenticatedUser): Promise<RequirementSet> {
     const existing = await this.repo.findById(id);
-    if (!existing) throw new NotFoundException({ error: 'Not found', code: 'NOT_FOUND' });
+    if (!existing) {
+      throw new NotFoundException({ error: { code: ErrorCodes.NOT_FOUND, message: 'Not found' } });
+    }
     this.assertCanManage(user, existing.organisationId);
     await this.repo.setActive(id, false);
     const updated = await this.repo.findById(id);
-    if (!updated) throw new NotFoundException({ error: 'Not found', code: 'NOT_FOUND' });
+    if (!updated) {
+      throw new NotFoundException({ error: { code: ErrorCodes.NOT_FOUND, message: 'Not found' } });
+    }
     return mapRow(updated);
   }
 
@@ -156,7 +177,9 @@ export class RequirementSetsService {
     user: AuthenticatedUser,
   ): Promise<RequirementSet> {
     const source = await this.repo.findById(id);
-    if (!source) throw new NotFoundException({ error: 'Not found', code: 'NOT_FOUND' });
+    if (!source) {
+      throw new NotFoundException({ error: { code: ErrorCodes.NOT_FOUND, message: 'Not found' } });
+    }
     this.assertCanManage(user, source.organisationId);
 
     const created = await this.repo.insert({
@@ -185,7 +208,9 @@ export class RequirementSetsService {
   private assertCanManage(user: AuthenticatedUser, orgId: string | null): void {
     const ability = this.abilityFactory.createForUser(user);
     if (!ability.can('manage', { __caslSubjectType__: 'RequirementSet', organisationId: orgId })) {
-      throw new ForbiddenException({ error: 'Forbidden', code: 'FORBIDDEN' });
+      throw new ForbiddenException({
+        error: { code: ErrorCodes.FORBIDDEN, message: 'Forbidden' },
+      });
     }
   }
 }

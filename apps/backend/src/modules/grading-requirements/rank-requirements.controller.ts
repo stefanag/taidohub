@@ -10,6 +10,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
+import { ErrorCodes } from '@repo/contracts/errors';
 import {
   SetGradingRequirementsSchema,
   type SetGradingRequirementsInput,
@@ -54,8 +55,10 @@ export class RankRequirementsController {
   ): Promise<GradingRequirements> {
     if (setId && forUserId) {
       throw new BadRequestException({
-        error: 'setId and forUserId are mutually exclusive',
-        code: 'VALIDATION_ERROR',
+        error: {
+          code: ErrorCodes.VALIDATION_FAILED,
+          message: 'setId and forUserId are mutually exclusive',
+        },
       });
     }
     if (setId) return this.svc.resolveForSet(rankId, setId, user);
@@ -91,8 +94,7 @@ export class RankRequirementsController {
   ): Promise<{ ok: true }> {
     if (!setId) {
       throw new BadRequestException({
-        error: 'setId is required',
-        code: 'VALIDATION_ERROR',
+        error: { code: ErrorCodes.VALIDATION_FAILED, message: 'setId is required' },
       });
     }
     await this.svc.clearForScope(rankId, setId, user);

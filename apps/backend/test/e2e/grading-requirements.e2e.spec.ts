@@ -338,7 +338,7 @@ describe.skipIf(!hasDatabase())('Grading requirements e2e', () => {
   // Scenario 3: setId required on PUT
   // ────────────────────────────────────────────────────────────────────────────
 
-  it('3. setId required on PUT: empty setId → 400 VALIDATION_ERROR', async () => {
+  it('3. setId required on PUT: empty setId → 400 VALIDATION_FAILED', async () => {
     // The Zod schema has setId: z.string().uuid(), so an empty string fails Zod.
     const res = await request(app.getHttpServer())
       .put(`/api/requirements/${rankId}`)
@@ -347,12 +347,12 @@ describe.skipIf(!hasDatabase())('Grading requirements e2e', () => {
     expect(res.status).toBe(400);
   });
 
-  it('3b. setId required on DELETE: missing → 400', async () => {
+  it('3b. setId required on DELETE: missing → 400 VALIDATION_FAILED', async () => {
     const res = await request(app.getHttpServer())
       .delete(`/api/requirements/${rankId}`)
       .set('Cookie', sysadminCookie);
     expect(res.status).toBe(400);
-    expect(res.body.code).toBe('VALIDATION_ERROR');
+    expect(res.body.error.code).toBe('VALIDATION_FAILED');
   });
 
   // ────────────────────────────────────────────────────────────────────────────
@@ -565,13 +565,13 @@ describe.skipIf(!hasDatabase())('Grading requirements e2e', () => {
   // Bonus: mutual-exclusion guard on GET
   // ────────────────────────────────────────────────────────────────────────────
 
-  it('bonus: GET with both setId and forUserId → 400 VALIDATION_ERROR', async () => {
+  it('bonus: GET with both setId and forUserId → 400 VALIDATION_FAILED', async () => {
     const set = await createSet('MutexTest');
     const res = await request(app.getHttpServer())
       .get(`/api/requirements/${rankId}?setId=${set.id}&forUserId=${orgAdminUserId}`)
       .set('Cookie', sysadminCookie);
     expect(res.status).toBe(400);
-    expect(res.body.code).toBe('VALIDATION_ERROR');
+    expect(res.body.error.code).toBe('VALIDATION_FAILED');
   });
 
   // ────────────────────────────────────────────────────────────────────────────

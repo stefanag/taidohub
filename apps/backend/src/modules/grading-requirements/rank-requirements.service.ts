@@ -1,4 +1,5 @@
 import { BadRequestException, ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { ErrorCodes } from '@repo/contracts/errors';
 import type {
   GradingRequirements,
   SetGradingRequirementsInput,
@@ -122,7 +123,9 @@ export class RankRequirementsService {
     void user; // Every authenticated user is allowed to read RequirementSet (Task 7 ability rule)
     const set = await this.sets.findById(setId);
     if (!set) {
-      throw new NotFoundException({ error: 'Requirement set not found', code: 'NOT_FOUND' });
+      throw new NotFoundException({
+        error: { code: ErrorCodes.NOT_FOUND, message: 'Requirement set not found' },
+      });
     }
     return this.fetchForScope(rankId, setId);
   }
@@ -172,7 +175,9 @@ export class RankRequirementsService {
             organisationIds: targetOrgIds,
           })
         ) {
-          throw new ForbiddenException({ error: 'Forbidden', code: 'FORBIDDEN' });
+          throw new ForbiddenException({
+            error: { code: ErrorCodes.FORBIDDEN, message: 'Forbidden' },
+          });
         }
       }
     }
@@ -211,10 +216,16 @@ export class RankRequirementsService {
     user: AuthenticatedUser,
   ): Promise<GradingRequirements> {
     if (!body.setId) {
-      throw new BadRequestException({ error: 'setId is required', code: 'VALIDATION_ERROR' });
+      throw new BadRequestException({
+        error: { code: ErrorCodes.VALIDATION_FAILED, message: 'setId is required' },
+      });
     }
     const set = await this.sets.findById(body.setId);
-    if (!set) throw new NotFoundException({ error: 'Set not found', code: 'NOT_FOUND' });
+    if (!set) {
+      throw new NotFoundException({
+        error: { code: ErrorCodes.NOT_FOUND, message: 'Set not found' },
+      });
+    }
     this.assertCanManageSet(user, set.organisationId);
 
     await this.db.transaction(async (tx) => {
@@ -275,7 +286,11 @@ export class RankRequirementsService {
 
   async clearForScope(rankId: string, setId: string, user: AuthenticatedUser): Promise<void> {
     const set = await this.sets.findById(setId);
-    if (!set) throw new NotFoundException({ error: 'Set not found', code: 'NOT_FOUND' });
+    if (!set) {
+      throw new NotFoundException({
+        error: { code: ErrorCodes.NOT_FOUND, message: 'Set not found' },
+      });
+    }
     this.assertCanManageSet(user, set.organisationId);
     await this.db.transaction(async (tx) => {
       await this.repo.deleteScope(rankId, setId, tx);
@@ -343,7 +358,9 @@ export class RankRequirementsService {
   private assertCanManageSet(user: AuthenticatedUser, orgId: string | null): void {
     const ability = this.abilityFactory.createForUser(user);
     if (!ability.can('manage', { __caslSubjectType__: 'RequirementSet', organisationId: orgId })) {
-      throw new ForbiddenException({ error: 'Forbidden', code: 'FORBIDDEN' });
+      throw new ForbiddenException({
+        error: { code: ErrorCodes.FORBIDDEN, message: 'Forbidden' },
+      });
     }
   }
 
