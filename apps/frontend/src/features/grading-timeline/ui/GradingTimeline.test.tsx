@@ -190,7 +190,36 @@ describe('<GradingTimeline>', () => {
     expect(onUnverify).toHaveBeenCalledWith(baseRow.id);
   });
 
-  it('renders rows in date-descending order (latest first)', () => {
+  it('renders rows in rank order — highest belt on top (lower sortOrder first)', () => {
+    // In this codebase, lower `sortOrder` = higher belt (top of the ladder).
+    const HIGHER: BeltRank = { ...RANK, id: 'rank-shodan', sortOrder: 10, nameRomaji: 'Shodan' };
+    const LOWER: BeltRank = { ...RANK, id: 'rank-kyu', sortOrder: 100, nameRomaji: 'Yonkyu' };
+    const localRankMap = new Map<string, BeltRank>([
+      [HIGHER.id, HIGHER],
+      [LOWER.id, LOWER],
+    ]);
+    const higher: GradingHistoryRow = { ...baseRow, id: 'higher', rankId: HIGHER.id, date: '2020-01-01' };
+    const lower: GradingHistoryRow = { ...baseRow, id: 'lower', rankId: LOWER.id, date: '2024-09-01' };
+    // Pass rows in the "wrong" order so the sort is what proves the ordering.
+    render(
+      <FeatureFlagsProvider flags={DEFAULT_FLAGS}>
+        <I18nextProvider i18n={i18n}>
+          <GradingTimeline
+            entries={[lower, higher]}
+            rankMap={localRankMap}
+            systemCodeMap={systemCodeMap}
+            shogoTitleMap={shogoTitleMap}
+          />
+        </I18nextProvider>
+      </FeatureFlagsProvider>,
+    );
+    const dateCells = screen.getAllByText(/\d{4}-\d{2}-\d{2}/);
+    // Higher rank (Shodan, sortOrder 10) rendered first even though its date is older.
+    expect(dateCells[0]?.textContent).toBe('2020-01-01');
+    expect(dateCells[1]?.textContent).toBe('2024-09-01');
+  });
+
+  it('breaks ties within the same rank by date DESC (newer first)', () => {
     const older: GradingHistoryRow = { ...baseRow, id: 'older', date: '2020-01-01' };
     const newer: GradingHistoryRow = { ...baseRow, id: 'newer', date: '2024-09-01' };
     renderTimeline([older, newer]);

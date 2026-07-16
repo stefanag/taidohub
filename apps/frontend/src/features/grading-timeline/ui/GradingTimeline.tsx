@@ -8,7 +8,13 @@ import type { ShogoTitle } from '@/entities/shogo-title';
 import { GradingTimelineEntry } from './GradingTimelineEntry.js';
 
 export interface GradingTimelineProps {
-  /** Rows to render. The component re-sorts by date DESC internally. */
+  /**
+   * Rows to render. The component re-sorts internally: primary key is the
+   * rank's `sortOrder` ASC (highest belt on top — this project's seeds
+   * assign the lowest `sortOrder` to the top of the ladder), with date DESC
+   * as the tiebreaker when several entries share the same rank (e.g. a
+   * re-take of a failed attempt).
+   */
   entries: GradingHistoryRow[];
   rankMap: Map<string, BeltRank>;
   systemCodeMap: Map<string, string>;
@@ -26,8 +32,9 @@ export interface GradingTimelineProps {
 
 /**
  * Vertical timeline of grading entries. Re-sorts on every render (cheap; the
- * list is short). The latest pass index is computed once and passed down so
- * one row gets full-opacity styling.
+ * list is short) — highest rank on top, oldest at the bottom. Within a single
+ * rank the newest attempt comes first. The current-rank pass index is
+ * computed once and passed down so one row gets full-opacity styling.
  */
 export function GradingTimeline({
   entries,
@@ -41,8 +48,18 @@ export function GradingTimeline({
 }: GradingTimelineProps): React.ReactElement {
   const { t } = useTranslation();
   const sorted = React.useMemo(
-    () => [...entries].sort((a, b) => b.date.localeCompare(a.date)),
-    [entries],
+    () =>
+      [...entries].sort((a, b) => {
+        // Rank sortOrder ASC — this project's belt seeds use ascending
+        // sortOrder from top of ladder down, so lower value = higher belt.
+        // Rows whose rank is missing from the map sink to the bottom.
+        const aRank = rankMap.get(a.rankId)?.sortOrder ?? Infinity;
+        const bRank = rankMap.get(b.rankId)?.sortOrder ?? Infinity;
+        if (aRank !== bRank) return aRank - bRank;
+        // Same rank → newer date first (a re-take of a fail lands above the fail).
+        return b.date.localeCompare(a.date);
+      }),
+    [entries, rankMap],
   );
 
   if (sorted.length === 0) {
@@ -53,6 +70,9 @@ export function GradingTimeline({
     );
   }
 
+  // With the rank-ASC (highest belt first) then date-DESC sort, the first
+  // pass in the list is the user's current top rank (the highest belt
+  // they've passed).
   const latestPassIdx = sorted.findIndex((e) => e.result === 'pass');
 
   return (
