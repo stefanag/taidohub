@@ -59,9 +59,11 @@ export function AdminBeltCatalogPage(): React.ReactElement {
   const [groupBy, setGroupBy] = React.useState<GroupBy>('none');
   const [sortBy, setSortBy] = React.useState<SortBy>('sortOrder');
 
-  const systems = systemsQuery.data ?? [];
-  const allRanks = ranksQuery.data ?? [];
-  const orgs = orgsQuery.data?.data ?? [];
+  // Memoize the array coalesces so downstream useMemo deps stay
+  // reference-stable across renders (react-hooks/exhaustive-deps).
+  const systems = React.useMemo(() => systemsQuery.data ?? [], [systemsQuery.data]);
+  const allRanks = React.useMemo(() => ranksQuery.data ?? [], [ranksQuery.data]);
+  const orgs = React.useMemo(() => orgsQuery.data?.data ?? [], [orgsQuery.data]);
 
   /** Orgs that own at least one belt_rank — the only ones the org filter lists. */
   const orgsWithRanks = React.useMemo(() => {

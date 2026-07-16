@@ -60,7 +60,10 @@ function FeedbackThreadContent({
   const thread = threadQuery.data ?? null;
 
   const commentsQuery = useFeedbackCommentsQuery(thread?.id ?? null);
-  const comments: FeedbackCommentType[] = commentsQuery.data ?? [];
+  const comments: FeedbackCommentType[] = React.useMemo(
+    () => commentsQuery.data ?? [],
+    [commentsQuery.data],
+  );
 
   const markRead = useMarkFeedbackThreadReadMutation();
   // Mark the thread read whenever its id changes and the comments

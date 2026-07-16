@@ -46,7 +46,10 @@ export function AdminOrganisationEditPage(): React.ReactElement {
     });
   };
 
-  const allOrgs = orgsListQuery.data?.data ?? [];
+  const allOrgs = React.useMemo(
+    () => orgsListQuery.data?.data ?? [],
+    [orgsListQuery.data],
+  );
   const tree = React.useMemo(() => buildTree(allOrgs), [allOrgs]);
   const treeById = React.useMemo(() => {
     const m = new Map<string, OrganisationNode>();
