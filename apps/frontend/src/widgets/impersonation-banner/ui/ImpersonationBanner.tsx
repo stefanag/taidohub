@@ -30,14 +30,20 @@ export function ImpersonationBanner(): React.ReactElement | null {
     | { name?: string | null; email?: string }
     | undefined;
 
+  // Tick every 30s so the "N minutes remaining" display stays fresh
+  // without calling Date.now() during render (which is impure).
+  const [now, setNow] = React.useState<number>(() => Date.now());
+  React.useEffect(() => {
+    const id = window.setInterval(() => setNow(Date.now()), 30_000);
+    return () => window.clearInterval(id);
+  }, []);
+
   if (!sessionRecord?.impersonatedBy) return null;
 
   const minutes = sessionRecord.expiresAt
     ? Math.max(
         0,
-        Math.floor(
-          (new Date(sessionRecord.expiresAt).getTime() - Date.now()) / 60_000,
-        ),
+        Math.floor((new Date(sessionRecord.expiresAt).getTime() - now) / 60_000),
       )
     : 0;
 

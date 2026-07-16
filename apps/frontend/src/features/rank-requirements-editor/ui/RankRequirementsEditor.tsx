@@ -196,6 +196,10 @@ export function RankRequirementsEditor({
     });
     try {
       await saveMut.mutateAsync({ rankId, body });
+      // Date.now() runs inside a submit-event callback, not during render.
+      // The linter is conservative about form.handleSubmit's callback scope
+      // and can't tell — flag it explicitly.
+      // eslint-disable-next-line react-hooks/purity
       setSavedAt(Date.now());
     } catch (err) {
       setSubmitError(
