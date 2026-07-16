@@ -56,6 +56,10 @@ export function TechniqueListItem({
     : 'flex items-center justify-between rounded-lg border border-outline-variant p-3';
 
   return (
+    // TODO(a11y): the click handler on <li> should be a proper button around
+    // the info area, not on the row itself — the row also contains Edit/Delete
+    // buttons and nested interactive roles are ambiguous. Tracked as a follow-up.
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
     <li className={liClass} onClick={onClick ? () => onClick(technique) : undefined}>
       <div className="min-w-0">
         <div className="truncate font-medium">{technique.nameRomaji}</div>

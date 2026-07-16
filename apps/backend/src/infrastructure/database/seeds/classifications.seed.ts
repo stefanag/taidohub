@@ -42,7 +42,7 @@ export interface ClassificationsSeedResult {
 }
 
 export async function seedClassifications(db: DrizzleDb): Promise<ClassificationsSeedResult> {
-  const raw = readFileSync(FIXTURE_PATH, 'utf8').replace(/^﻿/, '');
+  const raw = readFileSync(FIXTURE_PATH, 'utf8').replace(/^ /, '');
   const fixture = JSON.parse(raw) as ClassificationsSeedJson;
 
   const result: ClassificationsSeedResult = {
