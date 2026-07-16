@@ -274,7 +274,7 @@
     "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true});require('node:fs').rmSync('.turbo',{recursive:true,force:true})\""
   },
   "dependencies": {
-    "openapi3-ts": "^4.4.0",
+    "openapi3-ts": "^4.6.0",
     "zod": "^4.4.3",
     "zod-openapi": "^5.4.6"
   },
