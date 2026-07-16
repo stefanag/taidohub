@@ -2981,7 +2981,7 @@
             "name": "type",
             "required": false,
             "in": "query",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -3003,7 +3003,7 @@
             "name": "country",
             "required": false,
             "in": "query",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "OrganisationType": {
@@ -3025,7 +3025,7 @@
             "name": "parentId",
             "required": false,
             "in": "query",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -3056,7 +3056,7 @@
             "name": "q",
             "required": false,
             "in": "query",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "OrganisationType": {
@@ -3077,7 +3077,7 @@
             "name": "tag",
             "required": false,
             "in": "query",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "OrganisationType": {
@@ -3103,7 +3103,7 @@
             "name": "category",
             "required": false,
             "in": "query",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "OrganisationType": {
@@ -3777,6 +3777,7 @@
             "name": "entityType",
             "required": false,
             "in": "query",
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "AuditLogAction": {
@@ -3800,6 +3801,7 @@
             "name": "entityId",
             "required": false,
             "in": "query",
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "AuditLogAction": {
@@ -3823,6 +3825,7 @@
             "name": "userId",
             "required": false,
             "in": "query",
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "AuditLogAction": {
@@ -3846,6 +3849,7 @@
             "name": "action",
             "required": false,
             "in": "query",
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -3870,6 +3874,7 @@
             "name": "from",
             "required": false,
             "in": "query",
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "AuditLogAction": {
@@ -3895,6 +3900,7 @@
             "name": "to",
             "required": false,
             "in": "query",
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "AuditLogAction": {
@@ -3920,6 +3926,7 @@
             "name": "page",
             "required": false,
             "in": "query",
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "AuditLogAction": {
@@ -3946,6 +3953,7 @@
             "name": "perPage",
             "required": false,
             "in": "query",
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "AuditLogAction": {
@@ -6329,7 +6337,7 @@
             "type": "string",
             "format": "uuid",
             "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -6437,7 +6445,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -6539,7 +6547,7 @@
             "type": "string",
             "format": "uuid",
             "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -6640,7 +6648,7 @@
             "type": "integer",
             "minimum": 0,
             "maximum": 9007199254740991,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -6741,7 +6749,7 @@
             "type": "integer",
             "minimum": 0,
             "maximum": 9007199254740991,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -6847,7 +6855,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -6947,7 +6955,7 @@
           },
           "nameRomaji": {
             "type": "string",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -7046,7 +7054,7 @@
           },
           "nameEn": {
             "type": "string",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -7145,7 +7153,7 @@
           },
           "nameSv": {
             "type": "string",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -7244,7 +7252,7 @@
           },
           "nameFi": {
             "type": "string",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -7343,7 +7351,7 @@
           },
           "beltColor": {
             "type": "string",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -7443,7 +7451,7 @@
           "visuals": {
             "$ref": "#/$defs/BeltVisuals",
             "type": "",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -7550,7 +7558,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -7657,7 +7665,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -7764,7 +7772,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -7871,7 +7879,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -7971,7 +7979,7 @@
           },
           "publiclyVisible": {
             "type": "boolean",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -8077,7 +8085,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -8186,7 +8194,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -8295,7 +8303,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -8397,7 +8405,7 @@
             "type": "string",
             "format": "date-time",
             "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -8498,7 +8506,7 @@
             "type": "string",
             "format": "date-time",
             "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -8635,7 +8643,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -8711,7 +8719,7 @@
             "type": "string",
             "format": "uuid",
             "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -8786,7 +8794,7 @@
             "type": "integer",
             "minimum": 0,
             "maximum": 9007199254740991,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -8862,7 +8870,7 @@
             "type": "integer",
             "minimum": 0,
             "maximum": 9007199254740991,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -8944,7 +8952,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -9020,7 +9028,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -9095,7 +9103,7 @@
             "default": "",
             "type": "string",
             "maxLength": 100,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -9170,7 +9178,7 @@
             "default": "",
             "type": "string",
             "maxLength": 100,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -9245,7 +9253,7 @@
             "default": "",
             "type": "string",
             "maxLength": 100,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -9319,7 +9327,7 @@
           "beltColor": {
             "type": "string",
             "pattern": "^#[0-9a-fA-F]{6}$",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -9396,7 +9404,7 @@
             },
             "$ref": "#/$defs/BeltVisuals",
             "type": "",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -9478,7 +9486,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -9560,7 +9568,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -9642,7 +9650,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -9724,7 +9732,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -9799,7 +9807,7 @@
           "publiclyVisible": {
             "default": false,
             "type": "boolean",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -9880,7 +9888,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -9963,7 +9971,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -10046,7 +10054,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -10140,7 +10148,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -10216,7 +10224,7 @@
             "type": "string",
             "format": "uuid",
             "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -10291,7 +10299,7 @@
             "type": "integer",
             "minimum": 0,
             "maximum": 9007199254740991,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -10366,7 +10374,7 @@
             "type": "integer",
             "minimum": 0,
             "maximum": 9007199254740991,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -10447,7 +10455,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -10523,7 +10531,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -10597,7 +10605,7 @@
           "nameEn": {
             "type": "string",
             "maxLength": 100,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -10671,7 +10679,7 @@
           "nameSv": {
             "type": "string",
             "maxLength": 100,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -10745,7 +10753,7 @@
           "nameFi": {
             "type": "string",
             "maxLength": 100,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -10819,7 +10827,7 @@
           "beltColor": {
             "type": "string",
             "pattern": "^#[0-9a-fA-F]{6}$",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -10893,7 +10901,7 @@
           "visuals": {
             "$ref": "#/$defs/BeltVisuals",
             "type": "",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -10975,7 +10983,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -11056,7 +11064,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -11137,7 +11145,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -11218,7 +11226,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -11292,7 +11300,7 @@
           },
           "publiclyVisible": {
             "type": "boolean",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -11373,7 +11381,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -11456,7 +11464,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -11539,7 +11547,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -11620,7 +11628,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 30,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -11695,7 +11703,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -11770,7 +11778,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -11845,7 +11853,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -11920,7 +11928,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -12002,7 +12010,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -12079,7 +12087,7 @@
             "type": "integer",
             "minimum": 0,
             "maximum": 9007199254740991,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -12156,7 +12164,7 @@
             },
             "$ref": "#/$defs/BeltVisuals",
             "type": "",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -12244,7 +12252,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 30,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -12332,7 +12340,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -12420,7 +12428,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -12508,7 +12516,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -12596,7 +12604,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -12691,7 +12699,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -12780,7 +12788,7 @@
             "type": "integer",
             "minimum": 0,
             "maximum": 9007199254740991,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -12867,7 +12875,7 @@
           "visuals": {
             "$ref": "#/$defs/BeltVisuals",
             "type": "",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -12971,7 +12979,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -13046,7 +13054,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -13121,7 +13129,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -13196,7 +13204,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -13278,7 +13286,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -13354,7 +13362,7 @@
             "type": "integer",
             "minimum": 0,
             "maximum": 9007199254740991,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "BeltVisuals": {
@@ -13428,7 +13436,7 @@
           "visuals": {
             "$ref": "#/$defs/BeltVisuals",
             "type": "",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -13508,7 +13516,7 @@
           "rank": {
             "$ref": "#/$defs/BeltRank",
             "type": "",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -14010,7 +14018,7 @@
               "nameSv",
               "nameFi"
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-self-required": true,
             "x-nestjs_zod-$defs": {
@@ -14519,7 +14527,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -15002,7 +15010,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -15491,7 +15499,7 @@
             "type": "string",
             "format": "uuid",
             "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Create-external-rank-history payload."
             }
@@ -15507,7 +15515,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Create-external-rank-history payload."
@@ -15516,7 +15524,7 @@
           "date": {
             "type": "string",
             "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Create-external-rank-history payload."
             }
@@ -15531,7 +15539,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Create-external-rank-history payload."
@@ -15547,7 +15555,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Create-external-rank-history payload."
@@ -15563,7 +15571,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Create-external-rank-history payload."
@@ -15582,7 +15590,7 @@
             "type": "string",
             "format": "uuid",
             "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "RankHistoryResult": {
@@ -15628,7 +15636,7 @@
           },
           "userId": {
             "type": "string",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "RankHistoryResult": {
@@ -15676,7 +15684,7 @@
             "type": "string",
             "format": "uuid",
             "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "RankHistoryResult": {
@@ -15729,7 +15737,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -15777,7 +15785,7 @@
           "date": {
             "type": "string",
             "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "RankHistoryResult": {
@@ -15824,7 +15832,7 @@
           "result": {
             "$ref": "#/$defs/RankHistoryResult",
             "type": "",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -15872,7 +15880,7 @@
           "source": {
             "$ref": "#/$defs/RankHistorySource",
             "type": "",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -15928,7 +15936,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -15975,7 +15983,7 @@
           },
           "recordedByUserId": {
             "type": "string",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "RankHistoryResult": {
@@ -16028,7 +16036,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -16082,7 +16090,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -16136,7 +16144,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -16183,7 +16191,7 @@
           },
           "verified": {
             "type": "boolean",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "RankHistoryResult": {
@@ -16236,7 +16244,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -16292,7 +16300,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -16341,7 +16349,7 @@
             "type": "string",
             "format": "date-time",
             "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "RankHistoryResult": {
@@ -16396,7 +16404,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -16450,7 +16458,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -16524,7 +16532,7 @@
             "type": "string",
             "format": "uuid",
             "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Update-external-rank-history patch."
             }
@@ -16540,7 +16548,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Update-external-rank-history patch."
@@ -16549,7 +16557,7 @@
           "date": {
             "type": "string",
             "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Update-external-rank-history patch."
             }
@@ -16564,7 +16572,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Update-external-rank-history patch."
@@ -16580,7 +16588,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Update-external-rank-history patch."
@@ -16596,7 +16604,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "Update-external-rank-history patch."
@@ -16610,7 +16618,7 @@
           "id": {
             "type": "string",
             "description": "Unique identifier — an opaque string assigned by the auth provider (not necessarily a UUID).",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "Role": {
@@ -16643,7 +16651,7 @@
             "format": "email",
             "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$",
             "description": "The user’s primary email address.",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "Role": {
@@ -16681,7 +16689,7 @@
               }
             ],
             "description": "Display name; null until the user sets one.",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -16713,7 +16721,7 @@
           "emailVerified": {
             "type": "boolean",
             "description": "Whether the email address has been verified.",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "Role": {
@@ -16752,7 +16760,7 @@
               }
             ],
             "description": "URL to the user’s avatar, if any.",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -16785,7 +16793,7 @@
             "description": "Global role; org-scoped roles live in `organisation_membership`.",
             "$ref": "#/$defs/Role",
             "type": "",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -16826,7 +16834,7 @@
               }
             ],
             "description": "When the account was deactivated. Null = active. Deactivated users cannot sign in.",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -16860,7 +16868,7 @@
             "format": "date-time",
             "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
             "description": "ISO-8601 timestamp the account was created.",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "Role": {
@@ -16893,7 +16901,7 @@
             "format": "date-time",
             "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
             "description": "ISO-8601 timestamp the account was last modified.",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "Role": {
@@ -17741,7 +17749,7 @@
         "properties": {
           "userId": {
             "type": "string",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "A user's self-service profile — personal and taido-training details.",
               "example": {
@@ -17777,7 +17785,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "A user's self-service profile — personal and taido-training details.",
@@ -17814,7 +17822,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "A user's self-service profile — personal and taido-training details.",
@@ -17853,7 +17861,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "A user's self-service profile — personal and taido-training details.",
@@ -17892,7 +17900,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "A user's self-service profile — personal and taido-training details.",
@@ -17929,7 +17937,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "A user's self-service profile — personal and taido-training details.",
@@ -17966,7 +17974,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "A user's self-service profile — personal and taido-training details.",
@@ -18003,7 +18011,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "A user's self-service profile — personal and taido-training details.",
@@ -18040,7 +18048,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "A user's self-service profile — personal and taido-training details.",
@@ -18073,7 +18081,7 @@
             "items": {
               "type": "string"
             },
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "A user's self-service profile — personal and taido-training details.",
               "example": {
@@ -18118,7 +18126,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "A user's self-service profile — personal and taido-training details.",
@@ -18174,7 +18182,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "A partial profile patch — omit a field to leave it unchanged.",
@@ -18198,7 +18206,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "A partial profile patch — omit a field to leave it unchanged.",
@@ -18223,7 +18231,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "A partial profile patch — omit a field to leave it unchanged.",
@@ -18248,7 +18256,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "A partial profile patch — omit a field to leave it unchanged.",
@@ -18272,7 +18280,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "A partial profile patch — omit a field to leave it unchanged.",
@@ -18296,7 +18304,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "A partial profile patch — omit a field to leave it unchanged.",
@@ -18320,7 +18328,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "A partial profile patch — omit a field to leave it unchanged.",
@@ -18343,7 +18351,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "A partial profile patch — omit a field to leave it unchanged.",
@@ -18362,7 +18370,7 @@
             "items": {
               "type": "string"
             },
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "A partial profile patch — omit a field to leave it unchanged.",
               "example": {
@@ -18393,7 +18401,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-parent-metadata": {
               "description": "A partial profile patch — omit a field to leave it unchanged.",
@@ -18805,7 +18813,7 @@
             "format": "uuid",
             "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
             "description": "Unique identifier.",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "OrganisationType": {
@@ -18851,7 +18859,7 @@
               }
             ],
             "description": "Parent organisation id, null for international federations.",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -18889,7 +18897,7 @@
           "type": {
             "$ref": "#/$defs/OrganisationType",
             "type": "",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -18929,7 +18937,7 @@
             "minLength": 1,
             "maxLength": 20,
             "description": "Short display code, e.g. \"WTF\".",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "OrganisationType": {
@@ -18975,7 +18983,7 @@
               }
             ],
             "description": "URL-safe full name. Unique when present.",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -19021,7 +19029,7 @@
               }
             ],
             "description": "ISO 3166-1 alpha-3 country code. Null for international federations.",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -19060,7 +19068,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 200,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "OrganisationType": {
@@ -19098,7 +19106,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 200,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "OrganisationType": {
@@ -19136,7 +19144,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 200,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "OrganisationType": {
@@ -19180,7 +19188,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -19225,7 +19233,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -19269,7 +19277,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -19315,7 +19323,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -19359,7 +19367,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -19398,7 +19406,7 @@
             "type": "string",
             "format": "date-time",
             "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "OrganisationType": {
@@ -19436,7 +19444,7 @@
             "type": "string",
             "format": "date-time",
             "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "OrganisationType": {
@@ -19504,7 +19512,7 @@
               }
             ],
             "description": "Parent organisation id, null for international federations.",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -19522,7 +19530,7 @@
           "type": {
             "$ref": "#/$defs/OrganisationType",
             "type": "",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -19542,7 +19550,7 @@
             "minLength": 1,
             "maxLength": 20,
             "description": "Short display code, e.g. \"WTF\".",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "OrganisationType": {
@@ -19568,7 +19576,7 @@
               }
             ],
             "description": "URL-safe full name. Unique when present.",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -19594,7 +19602,7 @@
               }
             ],
             "description": "ISO 3166-1 alpha-3 country code. Null for international federations.",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -19613,7 +19621,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 200,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "OrganisationType": {
@@ -19631,7 +19639,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 200,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "OrganisationType": {
@@ -19649,7 +19657,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 200,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "OrganisationType": {
@@ -19673,7 +19681,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -19698,7 +19706,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -19722,7 +19730,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -19748,7 +19756,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -19772,7 +19780,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -19818,7 +19826,7 @@
               }
             ],
             "description": "Parent organisation id, null for international federations.",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true
           },
           "shortCode": {
@@ -19826,7 +19834,7 @@
             "minLength": 1,
             "maxLength": 20,
             "description": "Short display code, e.g. \"WTF\".",
-            "x-nestjs_zod-has-null": true
+            "x-nestjs_zod-uses-3-point-1-syntax": true
           },
           "slug": {
             "anyOf": [
@@ -19840,7 +19848,7 @@
               }
             ],
             "description": "URL-safe full name. Unique when present.",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true
           },
           "country": {
@@ -19854,26 +19862,26 @@
               }
             ],
             "description": "ISO 3166-1 alpha-3 country code. Null for international federations.",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true
           },
           "nameEn": {
             "type": "string",
             "minLength": 1,
             "maxLength": 200,
-            "x-nestjs_zod-has-null": true
+            "x-nestjs_zod-uses-3-point-1-syntax": true
           },
           "nameSv": {
             "type": "string",
             "minLength": 1,
             "maxLength": 200,
-            "x-nestjs_zod-has-null": true
+            "x-nestjs_zod-uses-3-point-1-syntax": true
           },
           "nameFi": {
             "type": "string",
             "minLength": 1,
             "maxLength": 200,
-            "x-nestjs_zod-has-null": true
+            "x-nestjs_zod-uses-3-point-1-syntax": true
           },
           "nameJa": {
             "anyOf": [
@@ -19885,7 +19893,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true
           },
           "logoUrl": {
@@ -19898,7 +19906,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true
           },
           "address": {
@@ -19910,7 +19918,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true
           },
           "contactEmail": {
@@ -19924,7 +19932,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true
           },
           "headInstructorId": {
@@ -19936,7 +19944,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-empty-type": true
           }
         }
@@ -20199,7 +20207,7 @@
             "type": "string",
             "format": "uuid",
             "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "MembershipRole": {
@@ -20230,7 +20238,7 @@
           "userId": {
             "type": "string",
             "minLength": 1,
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "MembershipRole": {
@@ -20262,7 +20270,7 @@
             "type": "string",
             "format": "uuid",
             "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "MembershipRole": {
@@ -20293,7 +20301,7 @@
           "role": {
             "$ref": "#/$defs/MembershipRole",
             "type": "",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -20326,7 +20334,7 @@
             "type": "string",
             "format": "date-time",
             "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "MembershipRole": {
@@ -20358,7 +20366,7 @@
             "type": "string",
             "format": "date-time",
             "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "MembershipRole": {
@@ -20395,7 +20403,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -20433,7 +20441,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {
@@ -20506,6 +20514,7 @@
             "items": {
               "$ref": "#/$defs/AuditLogEntry"
             },
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "AuditLogEntry": {
@@ -20605,6 +20614,7 @@
             "type": "integer",
             "exclusiveMinimum": 0,
             "maximum": 9007199254740991,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "AuditLogEntry": {
@@ -20704,6 +20714,7 @@
             "type": "integer",
             "exclusiveMinimum": 0,
             "maximum": 9007199254740991,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "AuditLogEntry": {
@@ -20803,6 +20814,7 @@
             "type": "integer",
             "minimum": 0,
             "maximum": 9007199254740991,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "AuditLogEntry": {
@@ -20914,7 +20926,7 @@
             "items": {
               "$ref": "#/$defs/FeedbackInboxItem"
             },
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-$defs": {
               "FeedbackInboxItem": {
@@ -21008,7 +21020,7 @@
                 "type": "null"
               }
             ],
-            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
             "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
             "x-nestjs_zod-$defs": {

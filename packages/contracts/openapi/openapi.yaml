@@ -1696,7 +1696,7 @@ paths:
         - name: type
           required: false
           in: query
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: &a19
@@ -1712,7 +1712,7 @@ paths:
         - name: country
           required: false
           in: query
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a19
           schema:
@@ -1721,7 +1721,7 @@ paths:
         - name: parentId
           required: false
           in: query
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a19
@@ -1734,7 +1734,7 @@ paths:
         - name: q
           required: false
           in: query
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a19
           schema:
@@ -1742,7 +1742,7 @@ paths:
         - name: tag
           required: false
           in: query
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a19
           schema:
@@ -1754,7 +1754,7 @@ paths:
         - name: category
           required: false
           in: query
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a19
           schema:
@@ -2142,6 +2142,7 @@ paths:
         - name: entityType
           required: false
           in: query
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: &a24
             AuditLogAction:
@@ -2159,6 +2160,7 @@ paths:
         - name: entityId
           required: false
           in: query
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a24
           schema:
@@ -2166,6 +2168,7 @@ paths:
         - name: userId
           required: false
           in: query
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a24
           schema:
@@ -2173,6 +2176,7 @@ paths:
         - name: action
           required: false
           in: query
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a24
@@ -2181,6 +2185,7 @@ paths:
         - name: from
           required: false
           in: query
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a24
           schema:
@@ -2190,6 +2195,7 @@ paths:
         - name: to
           required: false
           in: query
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a24
           schema:
@@ -2199,6 +2205,7 @@ paths:
         - name: page
           required: false
           in: query
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a24
           schema:
@@ -2209,6 +2216,7 @@ paths:
         - name: perPage
           required: false
           in: query
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a24
           schema:
@@ -3424,7 +3432,7 @@ components:
           type: string
           format: uuid
           pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: &a48
             BeltVisuals:
@@ -3508,7 +3516,7 @@ components:
               format: uuid
               pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a48
@@ -3519,7 +3527,7 @@ components:
           type: string
           format: uuid
           pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a48
           x-nestjs_zod-parent-metadata:
@@ -3529,7 +3537,7 @@ components:
           type: integer
           minimum: 0
           maximum: 9007199254740991
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a48
           x-nestjs_zod-parent-metadata:
@@ -3539,7 +3547,7 @@ components:
           type: integer
           minimum: 0
           maximum: 9007199254740991
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a48
           x-nestjs_zod-parent-metadata:
@@ -3549,7 +3557,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a48
@@ -3558,7 +3566,7 @@ components:
             example: *a49
         nameRomaji:
           type: string
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a48
           x-nestjs_zod-parent-metadata:
@@ -3566,7 +3574,7 @@ components:
             example: *a49
         nameEn:
           type: string
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a48
           x-nestjs_zod-parent-metadata:
@@ -3574,7 +3582,7 @@ components:
             example: *a49
         nameSv:
           type: string
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a48
           x-nestjs_zod-parent-metadata:
@@ -3582,7 +3590,7 @@ components:
             example: *a49
         nameFi:
           type: string
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a48
           x-nestjs_zod-parent-metadata:
@@ -3590,7 +3598,7 @@ components:
             example: *a49
         beltColor:
           type: string
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a48
           x-nestjs_zod-parent-metadata:
@@ -3599,7 +3607,7 @@ components:
         visuals:
           $ref: "#/$defs/BeltVisuals"
           type: ""
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a48
@@ -3610,7 +3618,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a48
@@ -3621,7 +3629,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a48
@@ -3632,7 +3640,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a48
@@ -3643,7 +3651,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a48
@@ -3652,7 +3660,7 @@ components:
             example: *a49
         publiclyVisible:
           type: boolean
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a48
           x-nestjs_zod-parent-metadata:
@@ -3662,7 +3670,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a48
@@ -3675,7 +3683,7 @@ components:
               minimum: -9007199254740991
               maximum: 9007199254740991
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a48
@@ -3688,7 +3696,7 @@ components:
               format: uuid
               pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a48
@@ -3699,7 +3707,7 @@ components:
           type: string
           format: date-time
           pattern: ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a48
           x-nestjs_zod-parent-metadata:
@@ -3709,7 +3717,7 @@ components:
           type: string
           format: date-time
           pattern: ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a48
           x-nestjs_zod-parent-metadata:
@@ -3747,7 +3755,7 @@ components:
               format: uuid
               pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: &a50
@@ -3806,7 +3814,7 @@ components:
           type: string
           format: uuid
           pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a50
           x-nestjs_zod-parent-metadata:
@@ -3815,7 +3823,7 @@ components:
           type: integer
           minimum: 0
           maximum: 9007199254740991
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a50
           x-nestjs_zod-parent-metadata:
@@ -3825,7 +3833,7 @@ components:
           type: integer
           minimum: 0
           maximum: 9007199254740991
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a50
           x-nestjs_zod-parent-metadata:
@@ -3836,7 +3844,7 @@ components:
             - type: string
               maxLength: 100
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a50
@@ -3846,7 +3854,7 @@ components:
           type: string
           minLength: 1
           maxLength: 100
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a50
           x-nestjs_zod-parent-metadata:
@@ -3855,7 +3863,7 @@ components:
           default: ""
           type: string
           maxLength: 100
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a50
           x-nestjs_zod-parent-metadata:
@@ -3864,7 +3872,7 @@ components:
           default: ""
           type: string
           maxLength: 100
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a50
           x-nestjs_zod-parent-metadata:
@@ -3873,7 +3881,7 @@ components:
           default: ""
           type: string
           maxLength: 100
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a50
           x-nestjs_zod-parent-metadata:
@@ -3881,7 +3889,7 @@ components:
         beltColor:
           type: string
           pattern: ^#[0-9a-fA-F]{6}$
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a50
           x-nestjs_zod-parent-metadata:
@@ -3891,7 +3899,7 @@ components:
             gradient: white
           $ref: "#/$defs/BeltVisuals"
           type: ""
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a50
@@ -3902,7 +3910,7 @@ components:
             - type: string
               format: uri
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a50
@@ -3913,7 +3921,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a50
@@ -3924,7 +3932,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a50
@@ -3935,7 +3943,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a50
@@ -3944,7 +3952,7 @@ components:
         publiclyVisible:
           default: false
           type: boolean
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a50
           x-nestjs_zod-parent-metadata:
@@ -3954,7 +3962,7 @@ components:
             - type: string
               pattern: ^[a-z0-9-]+$
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a50
@@ -3966,7 +3974,7 @@ components:
               minimum: 0
               maximum: 9007199254740991
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a50
@@ -3978,7 +3986,7 @@ components:
               format: uuid
               pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a50
@@ -3998,7 +4006,7 @@ components:
               format: uuid
               pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: &a51
@@ -4057,7 +4065,7 @@ components:
           type: string
           format: uuid
           pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a51
           x-nestjs_zod-parent-metadata:
@@ -4066,7 +4074,7 @@ components:
           type: integer
           minimum: 0
           maximum: 9007199254740991
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a51
           x-nestjs_zod-parent-metadata:
@@ -4075,7 +4083,7 @@ components:
           type: integer
           minimum: 0
           maximum: 9007199254740991
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a51
           x-nestjs_zod-parent-metadata:
@@ -4085,7 +4093,7 @@ components:
             - type: string
               maxLength: 100
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a51
@@ -4095,7 +4103,7 @@ components:
           type: string
           minLength: 1
           maxLength: 100
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a51
           x-nestjs_zod-parent-metadata:
@@ -4103,7 +4111,7 @@ components:
         nameEn:
           type: string
           maxLength: 100
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a51
           x-nestjs_zod-parent-metadata:
@@ -4111,7 +4119,7 @@ components:
         nameSv:
           type: string
           maxLength: 100
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a51
           x-nestjs_zod-parent-metadata:
@@ -4119,7 +4127,7 @@ components:
         nameFi:
           type: string
           maxLength: 100
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a51
           x-nestjs_zod-parent-metadata:
@@ -4127,7 +4135,7 @@ components:
         beltColor:
           type: string
           pattern: ^#[0-9a-fA-F]{6}$
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a51
           x-nestjs_zod-parent-metadata:
@@ -4135,7 +4143,7 @@ components:
         visuals:
           $ref: "#/$defs/BeltVisuals"
           type: ""
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a51
@@ -4146,7 +4154,7 @@ components:
             - type: string
               format: uri
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a51
@@ -4156,7 +4164,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a51
@@ -4166,7 +4174,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a51
@@ -4176,7 +4184,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a51
@@ -4184,7 +4192,7 @@ components:
             description: Update-belt-rank patch — omit a field to leave it unchanged.
         publiclyVisible:
           type: boolean
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a51
           x-nestjs_zod-parent-metadata:
@@ -4194,7 +4202,7 @@ components:
             - type: string
               pattern: ^[a-z0-9-]+$
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a51
@@ -4206,7 +4214,7 @@ components:
               minimum: 0
               maximum: 9007199254740991
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a51
@@ -4218,7 +4226,7 @@ components:
               format: uuid
               pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a51
@@ -4231,7 +4239,7 @@ components:
           type: string
           minLength: 1
           maxLength: 30
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: &a52
             BeltVisuals:
@@ -4289,7 +4297,7 @@ components:
           type: string
           minLength: 1
           maxLength: 100
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a52
           x-nestjs_zod-parent-metadata:
@@ -4298,7 +4306,7 @@ components:
           type: string
           minLength: 1
           maxLength: 100
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a52
           x-nestjs_zod-parent-metadata:
@@ -4307,7 +4315,7 @@ components:
           type: string
           minLength: 1
           maxLength: 100
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a52
           x-nestjs_zod-parent-metadata:
@@ -4316,7 +4324,7 @@ components:
           type: string
           minLength: 1
           maxLength: 100
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a52
           x-nestjs_zod-parent-metadata:
@@ -4327,7 +4335,7 @@ components:
               format: uuid
               pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a52
@@ -4338,7 +4346,7 @@ components:
           type: integer
           minimum: 0
           maximum: 9007199254740991
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a52
           x-nestjs_zod-parent-metadata:
@@ -4348,7 +4356,7 @@ components:
             gradient: black
           $ref: "#/$defs/BeltVisuals"
           type: ""
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a52
@@ -4367,7 +4375,7 @@ components:
           type: string
           minLength: 1
           maxLength: 30
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: &a53
             BeltVisuals:
@@ -4436,7 +4444,7 @@ components:
           type: string
           minLength: 1
           maxLength: 100
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a53
           x-nestjs_zod-parent-metadata:
@@ -4446,7 +4454,7 @@ components:
           type: string
           minLength: 1
           maxLength: 100
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a53
           x-nestjs_zod-parent-metadata:
@@ -4456,7 +4464,7 @@ components:
           type: string
           minLength: 1
           maxLength: 100
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a53
           x-nestjs_zod-parent-metadata:
@@ -4466,7 +4474,7 @@ components:
           type: string
           minLength: 1
           maxLength: 100
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a53
           x-nestjs_zod-parent-metadata:
@@ -4478,7 +4486,7 @@ components:
               format: uuid
               pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a53
@@ -4489,7 +4497,7 @@ components:
           type: integer
           minimum: 0
           maximum: 9007199254740991
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a53
           x-nestjs_zod-parent-metadata:
@@ -4498,7 +4506,7 @@ components:
         visuals:
           $ref: "#/$defs/BeltVisuals"
           type: ""
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a53
@@ -4521,7 +4529,7 @@ components:
           type: string
           minLength: 1
           maxLength: 100
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: &a55
             BeltVisuals:
@@ -4579,7 +4587,7 @@ components:
           type: string
           minLength: 1
           maxLength: 100
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a55
           x-nestjs_zod-parent-metadata:
@@ -4588,7 +4596,7 @@ components:
           type: string
           minLength: 1
           maxLength: 100
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a55
           x-nestjs_zod-parent-metadata:
@@ -4597,7 +4605,7 @@ components:
           type: string
           minLength: 1
           maxLength: 100
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a55
           x-nestjs_zod-parent-metadata:
@@ -4608,7 +4616,7 @@ components:
               format: uuid
               pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a55
@@ -4618,7 +4626,7 @@ components:
           type: integer
           minimum: 0
           maximum: 9007199254740991
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a55
           x-nestjs_zod-parent-metadata:
@@ -4626,7 +4634,7 @@ components:
         visuals:
           $ref: "#/$defs/BeltVisuals"
           type: ""
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a55
@@ -4638,7 +4646,7 @@ components:
         rank:
           $ref: "#/$defs/BeltRank"
           type: ""
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: &a56
@@ -4982,7 +4990,7 @@ components:
             - nameEn
             - nameSv
             - nameFi
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-self-required: true
           x-nestjs_zod-$defs: *a56
@@ -5013,7 +5021,7 @@ components:
                 - nameSv
                 - nameFi
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a56
@@ -5025,7 +5033,7 @@ components:
           anyOf:
             - $ref: "#/$defs/GradingRequirements"
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a56
@@ -5045,7 +5053,7 @@ components:
           type: string
           format: uuid
           pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-metadata:
             description: Create-external-rank-history payload.
         shogoTitle:
@@ -5054,14 +5062,14 @@ components:
               minLength: 1
               maxLength: 50
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-parent-metadata:
             description: Create-external-rank-history payload.
         date:
           type: string
           pattern: ^\d{4}-\d{2}-\d{2}$
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-metadata:
             description: Create-external-rank-history payload.
         examinerName:
@@ -5069,7 +5077,7 @@ components:
             - type: string
               maxLength: 200
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-parent-metadata:
             description: Create-external-rank-history payload.
@@ -5078,7 +5086,7 @@ components:
             - type: string
               maxLength: 200
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-parent-metadata:
             description: Create-external-rank-history payload.
@@ -5087,7 +5095,7 @@ components:
             - type: string
               maxLength: 5000
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-parent-metadata:
             description: Create-external-rank-history payload.
@@ -5101,7 +5109,7 @@ components:
           type: string
           format: uuid
           pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: &a57
             RankHistoryResult:
@@ -5140,7 +5148,7 @@ components:
               updatedByUserId: null
         userId:
           type: string
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a57
           x-nestjs_zod-parent-metadata:
@@ -5150,7 +5158,7 @@ components:
           type: string
           format: uuid
           pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a57
           x-nestjs_zod-parent-metadata:
@@ -5160,7 +5168,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a57
@@ -5170,7 +5178,7 @@ components:
         date:
           type: string
           pattern: ^\d{4}-\d{2}-\d{2}$
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a57
           x-nestjs_zod-parent-metadata:
@@ -5179,7 +5187,7 @@ components:
         result:
           $ref: "#/$defs/RankHistoryResult"
           type: ""
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a57
@@ -5189,7 +5197,7 @@ components:
         source:
           $ref: "#/$defs/RankHistorySource"
           type: ""
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a57
@@ -5202,7 +5210,7 @@ components:
               format: uuid
               pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a57
@@ -5211,7 +5219,7 @@ components:
             example: *a58
         recordedByUserId:
           type: string
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a57
           x-nestjs_zod-parent-metadata:
@@ -5221,7 +5229,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a57
@@ -5232,7 +5240,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a57
@@ -5243,7 +5251,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a57
@@ -5252,7 +5260,7 @@ components:
             example: *a58
         verified:
           type: boolean
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a57
           x-nestjs_zod-parent-metadata:
@@ -5262,7 +5270,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a57
@@ -5275,7 +5283,7 @@ components:
               format: date-time
               pattern: ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a57
@@ -5286,7 +5294,7 @@ components:
           type: string
           format: date-time
           pattern: ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a57
           x-nestjs_zod-parent-metadata:
@@ -5298,7 +5306,7 @@ components:
               format: date-time
               pattern: ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a57
@@ -5309,7 +5317,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a57
@@ -5342,7 +5350,7 @@ components:
           type: string
           format: uuid
           pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-metadata:
             description: Update-external-rank-history patch.
         shogoTitle:
@@ -5351,14 +5359,14 @@ components:
               minLength: 1
               maxLength: 50
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-parent-metadata:
             description: Update-external-rank-history patch.
         date:
           type: string
           pattern: ^\d{4}-\d{2}-\d{2}$
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-metadata:
             description: Update-external-rank-history patch.
         examinerName:
@@ -5366,7 +5374,7 @@ components:
             - type: string
               maxLength: 200
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-parent-metadata:
             description: Update-external-rank-history patch.
@@ -5375,7 +5383,7 @@ components:
             - type: string
               maxLength: 200
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-parent-metadata:
             description: Update-external-rank-history patch.
@@ -5384,7 +5392,7 @@ components:
             - type: string
               maxLength: 5000
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-parent-metadata:
             description: Update-external-rank-history patch.
@@ -5395,7 +5403,7 @@ components:
           type: string
           description: Unique identifier — an opaque string assigned by the auth provider
             (not necessarily a UUID).
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: &a59
             Role:
@@ -5422,7 +5430,7 @@ components:
           format: email
           pattern: ^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$
           description: The user’s primary email address.
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a59
           x-nestjs_zod-parent-metadata:
@@ -5433,7 +5441,7 @@ components:
             - type: string
             - type: "null"
           description: Display name; null until the user sets one.
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a59
@@ -5443,7 +5451,7 @@ components:
         emailVerified:
           type: boolean
           description: Whether the email address has been verified.
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a59
           x-nestjs_zod-parent-metadata:
@@ -5455,7 +5463,7 @@ components:
               format: uri
             - type: "null"
           description: URL to the user’s avatar, if any.
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a59
@@ -5466,7 +5474,7 @@ components:
           description: Global role; org-scoped roles live in `organisation_membership`.
           $ref: "#/$defs/Role"
           type: ""
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a59
@@ -5481,7 +5489,7 @@ components:
             - type: "null"
           description: When the account was deactivated. Null = active. Deactivated users
             cannot sign in.
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a59
@@ -5493,7 +5501,7 @@ components:
           format: date-time
           pattern: ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
           description: ISO-8601 timestamp the account was created.
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a59
           x-nestjs_zod-parent-metadata:
@@ -5504,7 +5512,7 @@ components:
           format: date-time
           pattern: ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
           description: ISO-8601 timestamp the account was last modified.
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a59
           x-nestjs_zod-parent-metadata:
@@ -5789,7 +5797,7 @@ components:
       properties:
         userId:
           type: string
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-metadata:
             description: A user's self-service profile — personal and taido-training
               details.
@@ -5814,7 +5822,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-parent-metadata:
             description: A user's self-service profile — personal and taido-training
@@ -5824,7 +5832,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-parent-metadata:
             description: A user's self-service profile — personal and taido-training
@@ -5836,7 +5844,7 @@ components:
               format: date
               pattern: ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))$
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-parent-metadata:
             description: A user's self-service profile — personal and taido-training
@@ -5848,7 +5856,7 @@ components:
               format: date
               pattern: ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))$
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-parent-metadata:
             description: A user's self-service profile — personal and taido-training
@@ -5858,7 +5866,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-parent-metadata:
             description: A user's self-service profile — personal and taido-training
@@ -5868,7 +5876,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-parent-metadata:
             description: A user's self-service profile — personal and taido-training
@@ -5878,7 +5886,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-parent-metadata:
             description: A user's self-service profile — personal and taido-training
@@ -5888,7 +5896,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-parent-metadata:
             description: A user's self-service profile — personal and taido-training
@@ -5898,7 +5906,7 @@ components:
           type: array
           items:
             type: string
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-metadata:
             description: A user's self-service profile — personal and taido-training
               details.
@@ -5913,7 +5921,7 @@ components:
               required:
                 - ops
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-parent-metadata:
             description: A user's self-service profile — personal and taido-training
@@ -5939,7 +5947,7 @@ components:
             - type: string
               maxLength: 200
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-parent-metadata:
             description: A partial profile patch — omit a field to leave it unchanged.
@@ -5954,7 +5962,7 @@ components:
             - type: string
               maxLength: 200
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-parent-metadata:
             description: A partial profile patch — omit a field to leave it unchanged.
@@ -5965,7 +5973,7 @@ components:
               format: date
               pattern: ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))$
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-parent-metadata:
             description: A partial profile patch — omit a field to leave it unchanged.
@@ -5976,7 +5984,7 @@ components:
               format: date
               pattern: ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))$
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-parent-metadata:
             description: A partial profile patch — omit a field to leave it unchanged.
@@ -5986,7 +5994,7 @@ components:
             - type: string
               maxLength: 300
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-parent-metadata:
             description: A partial profile patch — omit a field to leave it unchanged.
@@ -5996,7 +6004,7 @@ components:
             - type: string
               maxLength: 20
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-parent-metadata:
             description: A partial profile patch — omit a field to leave it unchanged.
@@ -6006,7 +6014,7 @@ components:
             - type: string
               maxLength: 200
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-parent-metadata:
             description: A partial profile patch — omit a field to leave it unchanged.
@@ -6015,7 +6023,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-parent-metadata:
             description: A partial profile patch — omit a field to leave it unchanged.
@@ -6024,7 +6032,7 @@ components:
           type: array
           items:
             type: string
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-metadata:
             description: A partial profile patch — omit a field to leave it unchanged.
             example: *a66
@@ -6038,7 +6046,7 @@ components:
               required:
                 - ops
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-parent-metadata:
             description: A partial profile patch — omit a field to leave it unchanged.
@@ -6189,7 +6197,7 @@ components:
           format: uuid
           pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
           description: Unique identifier.
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: &a68
             OrganisationType:
@@ -6224,7 +6232,7 @@ components:
               pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
             - type: "null"
           description: Parent organisation id, null for international federations.
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a68
@@ -6233,7 +6241,7 @@ components:
         type:
           $ref: "#/$defs/OrganisationType"
           type: ""
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a68
@@ -6244,7 +6252,7 @@ components:
           minLength: 1
           maxLength: 20
           description: Short display code, e.g. "WTF".
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a68
           x-nestjs_zod-parent-metadata:
@@ -6256,7 +6264,7 @@ components:
               maxLength: 100
             - type: "null"
           description: URL-safe full name. Unique when present.
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a68
@@ -6268,7 +6276,7 @@ components:
               pattern: ^[A-Z]{3}$
             - type: "null"
           description: ISO 3166-1 alpha-3 country code. Null for international federations.
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a68
@@ -6278,7 +6286,7 @@ components:
           type: string
           minLength: 1
           maxLength: 200
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a68
           x-nestjs_zod-parent-metadata:
@@ -6287,7 +6295,7 @@ components:
           type: string
           minLength: 1
           maxLength: 200
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a68
           x-nestjs_zod-parent-metadata:
@@ -6296,7 +6304,7 @@ components:
           type: string
           minLength: 1
           maxLength: 200
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a68
           x-nestjs_zod-parent-metadata:
@@ -6306,7 +6314,7 @@ components:
             - type: string
               maxLength: 200
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a68
@@ -6317,7 +6325,7 @@ components:
             - type: string
               format: uri
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a68
@@ -6327,7 +6335,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a68
@@ -6339,7 +6347,7 @@ components:
               format: email
               pattern: ^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a68
@@ -6349,7 +6357,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a68
@@ -6359,7 +6367,7 @@ components:
           type: string
           format: date-time
           pattern: ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a68
           x-nestjs_zod-parent-metadata:
@@ -6368,7 +6376,7 @@ components:
           type: string
           format: date-time
           pattern: ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a68
           x-nestjs_zod-parent-metadata:
@@ -6399,7 +6407,7 @@ components:
               pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
             - type: "null"
           description: Parent organisation id, null for international federations.
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: &a70
@@ -6413,7 +6421,7 @@ components:
         type:
           $ref: "#/$defs/OrganisationType"
           type: ""
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a70
@@ -6422,7 +6430,7 @@ components:
           minLength: 1
           maxLength: 20
           description: Short display code, e.g. "WTF".
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a70
         slug:
@@ -6432,7 +6440,7 @@ components:
               maxLength: 100
             - type: "null"
           description: URL-safe full name. Unique when present.
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a70
@@ -6442,7 +6450,7 @@ components:
               pattern: ^[A-Z]{3}$
             - type: "null"
           description: ISO 3166-1 alpha-3 country code. Null for international federations.
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a70
@@ -6450,21 +6458,21 @@ components:
           type: string
           minLength: 1
           maxLength: 200
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a70
         nameSv:
           type: string
           minLength: 1
           maxLength: 200
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a70
         nameFi:
           type: string
           minLength: 1
           maxLength: 200
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a70
         nameJa:
@@ -6472,7 +6480,7 @@ components:
             - type: string
               maxLength: 200
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a70
@@ -6481,7 +6489,7 @@ components:
             - type: string
               format: uri
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a70
@@ -6489,7 +6497,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a70
@@ -6499,7 +6507,7 @@ components:
               format: email
               pattern: ^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a70
@@ -6507,7 +6515,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a70
@@ -6534,14 +6542,14 @@ components:
               pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
             - type: "null"
           description: Parent organisation id, null for international federations.
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
         shortCode:
           type: string
           minLength: 1
           maxLength: 20
           description: Short display code, e.g. "WTF".
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
         slug:
           anyOf:
             - type: string
@@ -6549,7 +6557,7 @@ components:
               maxLength: 100
             - type: "null"
           description: URL-safe full name. Unique when present.
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
         country:
           anyOf:
@@ -6557,42 +6565,42 @@ components:
               pattern: ^[A-Z]{3}$
             - type: "null"
           description: ISO 3166-1 alpha-3 country code. Null for international federations.
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
         nameEn:
           type: string
           minLength: 1
           maxLength: 200
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
         nameSv:
           type: string
           minLength: 1
           maxLength: 200
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
         nameFi:
           type: string
           minLength: 1
           maxLength: 200
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
         nameJa:
           anyOf:
             - type: string
               maxLength: 200
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
         logoUrl:
           anyOf:
             - type: string
               format: uri
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
         address:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
         contactEmail:
           anyOf:
@@ -6600,13 +6608,13 @@ components:
               format: email
               pattern: ^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
         headInstructorId:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
     ListMembershipsResponseDto:
       type: object
@@ -6722,7 +6730,7 @@ components:
           type: string
           format: uuid
           pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: &a73
             MembershipRole:
@@ -6747,7 +6755,7 @@ components:
         userId:
           type: string
           minLength: 1
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a73
           x-nestjs_zod-parent-metadata:
@@ -6757,7 +6765,7 @@ components:
           type: string
           format: uuid
           pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a73
           x-nestjs_zod-parent-metadata:
@@ -6766,7 +6774,7 @@ components:
         role:
           $ref: "#/$defs/MembershipRole"
           type: ""
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a73
@@ -6777,7 +6785,7 @@ components:
           type: string
           format: date-time
           pattern: ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a73
           x-nestjs_zod-parent-metadata:
@@ -6787,7 +6795,7 @@ components:
           type: string
           format: date-time
           pattern: ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a73
           x-nestjs_zod-parent-metadata:
@@ -6797,7 +6805,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a73
@@ -6808,7 +6816,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a73
@@ -6848,6 +6856,7 @@ components:
           type: array
           items:
             $ref: "#/$defs/AuditLogEntry"
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: &a75
             AuditLogEntry:
@@ -6919,18 +6928,21 @@ components:
           type: integer
           exclusiveMinimum: 0
           maximum: 9007199254740991
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a75
         perPage:
           type: integer
           exclusiveMinimum: 0
           maximum: 9007199254740991
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a75
         total:
           type: integer
           minimum: 0
           maximum: 9007199254740991
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: *a75
       required:
@@ -6945,7 +6957,7 @@ components:
           type: array
           items:
             $ref: "#/$defs/FeedbackInboxItem"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-$defs: &a76
             FeedbackInboxItem:
@@ -7017,7 +7029,7 @@ components:
           anyOf:
             - type: string
             - type: "null"
-          x-nestjs_zod-has-null: true
+          x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
           x-nestjs_zod-$defs: *a76
