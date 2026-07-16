@@ -100,23 +100,19 @@ export function StudentProgressEditorDialog({
     );
   }, [progressQ.data, contentType, contentId]);
 
-  const [status, setStatus] = React.useState<ProgressStatus>('not_started');
-  const [instructorNotes, setInstructorNotes] = React.useState('');
-  const [lastPracticedAt, setLastPracticedAt] = React.useState<string>('');
+  const [status, setStatus] = React.useState<ProgressStatus>(
+    existing?.status ?? 'not_started',
+  );
+  const [instructorNotes, setInstructorNotes] = React.useState(
+    existing?.instructorNotes ?? '',
+  );
+  const [lastPracticedAt, setLastPracticedAt] = React.useState<string>(
+    existing?.lastPracticedAt ?? '',
+  );
 
-  // Reseed when the dialog opens with a new content row.
-  React.useEffect(() => {
-    if (!open) return;
-    setStatus(existing?.status ?? 'not_started');
-    setInstructorNotes(existing?.instructorNotes ?? '');
-    setLastPracticedAt(existing?.lastPracticedAt ?? '');
-  }, [
-    open,
-    existing?.id,
-    existing?.status,
-    existing?.instructorNotes,
-    existing?.lastPracticedAt,
-  ]);
+  // Reseed-on-open handled by the parent's conditional render — each open
+  // fresh-mounts this component, so the useState initializers above pick up
+  // the current row's data.
 
   const upsertTech = useUpsertStudentTechniqueProgressMutation(studentUserId);
   const upsertPat = useUpsertStudentPatternProgressMutation(studentUserId);

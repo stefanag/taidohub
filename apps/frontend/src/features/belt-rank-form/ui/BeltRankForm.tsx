@@ -88,6 +88,10 @@ export function BeltRankForm({
 
   // Form-bound visuals — the user authors them via the visuals editor below,
   // so preview + submit both read directly from form state.
+  // react-hook-form's `form.watch(...)` returns non-stable function/value
+  // references that React Compiler can't memoize; the rule warns but
+  // behaviour is fine (Compiler just skips auto-memo for this component).
+  // eslint-disable-next-line react-hooks/incompatible-library
   const watchedSystemId = form.watch('systemId');
   const watchedLevel = form.watch('level');
   const watchedColor = form.watch('beltColor');

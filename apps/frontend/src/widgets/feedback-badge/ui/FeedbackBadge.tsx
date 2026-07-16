@@ -63,10 +63,12 @@ function FeedbackBadgeContent(): React.ReactElement {
   const inboxQ = useFeedbackInboxQuery(open);
 
   // Reset the inline thread view whenever the sheet closes — otherwise
-  // reopening would surprise the user by skipping the list.
-  React.useEffect(() => {
-    if (!open) setSelected(null);
-  }, [open]);
+  // reopening would surprise the user by skipping the list. Handled
+  // inline in setOpenChange below, not via a setState-in-effect.
+  const handleOpenChange = React.useCallback((next: boolean): void => {
+    setOpen(next);
+    if (!next) setSelected(null);
+  }, []);
 
   const raw = data?.count ?? 0;
   const display = raw > 99 ? '99+' : String(raw);
@@ -111,7 +113,7 @@ function FeedbackBadgeContent(): React.ReactElement {
         ) : null}
       </Button>
 
-      <Sheet open={open} onOpenChange={setOpen}>
+      <Sheet open={open} onOpenChange={handleOpenChange}>
         <SheetContent side="right" className="w-full sm:max-w-md overflow-y-auto">
           {selected === null ? (
             <>

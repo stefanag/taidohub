@@ -42,13 +42,9 @@ export function UserDeleteDialog({
   const [submitting, setSubmitting] = React.useState(false);
   const [submitError, setSubmitError] = React.useState<string | undefined>();
 
-  // Reset the typed value and error whenever the dialog closes or the target user changes.
-  React.useEffect(() => {
-    if (!open) {
-      setSubmitError(undefined);
-    }
-    setTyped('');
-  }, [open, user.email]);
+  // Reset-on-close/user-swap handled by the parent via
+  // `key={\`${open ? 'open' : 'closed'}:${user.id}\`}` — fresh mount runs
+  // the useState initializers above.
 
   const confirmed = typed.trim() === user.email;
 

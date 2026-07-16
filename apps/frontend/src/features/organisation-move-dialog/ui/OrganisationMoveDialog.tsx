@@ -48,11 +48,9 @@ export function OrganisationMoveDialog({
   );
   const [submitting, setSubmitting] = React.useState(false);
 
-  React.useEffect(() => {
-    if (open) {
-      setSelected(organisation.parentId ?? '__none');
-    }
-  }, [open, organisation.parentId]);
+  // Reset-on-open is now driven by the parent via
+  // `key={`${open ? 'open' : 'closed'}:${organisation.id}`}` — a fresh
+  // mount runs the `useState` initializer with the current parentId.
 
   const handleConfirm = async (): Promise<void> => {
     setSubmitting(true);

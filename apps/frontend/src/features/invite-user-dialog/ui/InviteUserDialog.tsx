@@ -51,17 +51,8 @@ export function InviteUserDialog({
   const [error, setError] = React.useState<string | undefined>();
   const [createdLink, setCreatedLink] = React.useState<string | undefined>();
 
-  // Reset local state whenever the dialog closes.
-  React.useEffect(() => {
-    if (!open) {
-      setEmail('');
-      setName('');
-      setMode('invite');
-      setRole('user');
-      setError(undefined);
-      setCreatedLink(undefined);
-    }
-  }, [open]);
+  // Reset-on-close is now driven by the parent via `key={open ? 'open' : 'closed'}`
+  // — a fresh mount runs the useState initializers above.
 
   const mapError = React.useCallback(
     (err: unknown): string => {
