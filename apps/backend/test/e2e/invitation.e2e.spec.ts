@@ -1,9 +1,12 @@
 import { type NestExpressApplication } from '@nestjs/platform-express';
+import { eq } from 'drizzle-orm';
 import request from 'supertest';
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { BETTER_AUTH, type Auth } from '../../src/infrastructure/auth/better-auth.js';
 import { type AuthenticatedUser } from '../../src/infrastructure/auth/auth.types.js';
+import { DRIZZLE, type DrizzleDb } from '../../src/infrastructure/database/client.js';
+import { user as userTable } from '../../src/infrastructure/database/schema/users.js';
 import { UsersService } from '../../src/modules/users/users.service.js';
 import { buildTestApp, hasDatabase } from '../helpers/app-factory.js';
 
@@ -32,9 +35,27 @@ describe.skipIf(!hasDatabase())('Invitation flow (integration)', () => {
     close = built.close;
     users = built.app.get(UsersService);
     betterAuth = built.app.get<Auth>(BETTER_AUTH);
+
+    // The invite path writes an audit_log entry with user_id = SYSADMIN.id, and
+    // audit_log.user_id has a FK to user.id. Seed a matching user row so the
+    // FK is satisfied — otherwise the insert fails with 23503.
+    const db = built.app.get<DrizzleDb>(DRIZZLE);
+    await db
+      .insert(userTable)
+      .values({
+        id: SYSADMIN.id,
+        email: SYSADMIN.email,
+        emailVerified: true,
+        name: SYSADMIN.name,
+        role: 'sysadmin',
+        locale: 'en',
+      })
+      .onConflictDoNothing();
   });
 
   afterAll(async () => {
+    const db = app.get<DrizzleDb>(DRIZZLE);
+    await db.delete(userTable).where(eq(userTable.id, SYSADMIN.id));
     await close();
   });
 
