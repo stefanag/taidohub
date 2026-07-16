@@ -32,8 +32,10 @@ import {
  */
 
 function wrap(client: QueryClient) {
-  return ({ children }: { children: React.ReactNode }) =>
+  const Wrapper = ({ children }: { children: React.ReactNode }) =>
     React.createElement(QueryClientProvider, { client }, children);
+  Wrapper.displayName = 'QueryWrapper';
+  return Wrapper;
 }
 
 const THREAD_ID = 'thread-1';

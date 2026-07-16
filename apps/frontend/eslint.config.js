@@ -1,5 +1,6 @@
 // For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
 import storybook from "eslint-plugin-storybook";
+import globals from 'globals';
 
 import react from '@repo/eslint-config/react';
 
@@ -123,6 +124,20 @@ export default [...react, {
         ],
       },
     ],
+  },
+}, {
+  // Node scripts + Storybook config live outside src/ and target Node,
+  // not the browser. Give them the correct global set so `URL`, `console`,
+  // and `process` aren't flagged as undefined by the tightened eslint 10
+  // defaults.
+  files: ['scripts/**/*.{mjs,cjs,js}', '.storybook/**/*.{ts,tsx,js,mjs}'],
+  languageOptions: {
+    globals: {
+      ...globals.node,
+    },
+  },
+  rules: {
+    'no-console': 'off',
   },
 }, {
   ignores: [
