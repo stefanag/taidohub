@@ -62,7 +62,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@feature-sliced/steiger-plugin": "^0.5.8",
+    "@feature-sliced/steiger-plugin": "^0.7.0",
     "@repo/eslint-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",
     "@storybook/addon-a11y": "^10.5.0",

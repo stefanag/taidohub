@@ -32,6 +32,12 @@ export default defineConfig([
       // the count is a recommendation, not a defect, and grouping all 21
       // features into subdirectories is a larger refactor for later.
       'fsd/excessive-slicing': 'warn',
+      // Steiger 0.6 promoted `segments-by-purpose` to an error by default.
+      // The rule flags names like `src/app/providers` for describing WHAT
+      // the segment contains rather than WHY. `providers` is a broadly
+      // understood React idiom (app-level context providers) and renaming
+      // it would touch every consumer for no functional gain. Downgrade.
+      'fsd/segments-by-purpose': 'warn',
     },
   },
   {
@@ -309,6 +315,44 @@ export default defineConfig([
     files: ['src/entities/rank-history/model/**'],
     rules: {
       'fsd/forbidden-imports': 'off',
+    },
+  },
+  {
+    // FeedbackComment test mocks `@/shared/test/radix` deep — pointer capture
+    // + scrollIntoView shims that MUST be installed on jsdom's HTMLElement
+    // prototype before the test module graph loads. Barrel-mocking wouldn't
+    // reach the direct-imported shim helpers.
+    files: ['src/features/feedback-thread/**/*.test.{ts,tsx}'],
+    rules: {
+      'fsd/no-public-api-sidestep': 'off',
+    },
+  },
+  {
+    // FeedbackBadge widget test — same shared/test/radix pointer-capture shim
+    // as the FeedbackComment test above.
+    files: ['src/widgets/feedback-badge/**/*.test.{ts,tsx}'],
+    rules: {
+      'fsd/no-public-api-sidestep': 'off',
+    },
+  },
+  {
+    // RankRequirementsEditor test mocks the rank-requirement entity API module
+    // by its deep path because the mutation-options factory captures the
+    // fetcher directly (not via the barrel). Mocking the barrel wouldn't reach
+    // that import, so `vi.mock` MUST target the deep path.
+    files: ['src/features/rank-requirements-editor/**/*.test.{ts,tsx}'],
+    rules: {
+      'fsd/no-public-api-sidestep': 'off',
+    },
+  },
+  {
+    // The admin-rank-requirements page test mocks the requirement-set entity
+    // API module by its deep path because the query-options factory captures
+    // the fetcher directly (not via the barrel). Mocking the barrel wouldn't
+    // reach that import, so `vi.mock` MUST target the deep path.
+    files: ['src/pages/admin-rank-requirements/**/*.test.{ts,tsx}'],
+    rules: {
+      'fsd/no-public-api-sidestep': 'off',
     },
   },
 ]);
