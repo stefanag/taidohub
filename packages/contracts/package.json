@@ -274,16 +274,16 @@
     "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true});require('node:fs').rmSync('.turbo',{recursive:true,force:true})\""
   },
   "dependencies": {
+    "openapi3-ts": "^4.4.0",
     "zod": "^4.4.3",
-    "zod-openapi": "^5.4.6",
-    "openapi3-ts": "^4.4.0"
+    "zod-openapi": "^5.4.6"
   },
   "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/tsconfig": "workspace:*",
+    "eslint": "^10.7.0",
     "tsup": "^8.3.5",
     "typescript": "^6.0.3",
-    "eslint": "^10.3.0",
-    "vitest": "^4.1.6",
-    "@repo/tsconfig": "workspace:*",
-    "@repo/eslint-config": "workspace:*"
+    "vitest": "^4.1.10"
   }
 }
