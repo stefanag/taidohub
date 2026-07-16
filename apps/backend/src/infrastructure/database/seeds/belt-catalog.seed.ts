@@ -88,7 +88,7 @@ export async function seedBeltCatalog(db: DrizzleDb): Promise<BeltCatalogSeedRes
   // Strip a leading UTF-8 BOM if a Windows editor (notably PowerShell on
   // older default encodings) re-saved the file. `JSON.parse` rejects the
   // BOM as an unexpected token, which makes the failure mode opaque.
-  const raw = readFileSync(FIXTURE_PATH, 'utf8').replace(/^﻿/, '');
+  const raw = readFileSync(FIXTURE_PATH, 'utf8').replace(/^ /, '');
   const fixture = JSON.parse(raw) as BeltCatalogSeedJson;
 
   const result: BeltCatalogSeedResult = {

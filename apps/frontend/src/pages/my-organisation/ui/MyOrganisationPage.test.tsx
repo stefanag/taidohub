@@ -28,6 +28,12 @@ const ORG_B = '22222222-2222-4222-8222-222222222222';
 const ACTOR_ID = 'actor-user';
 
 // --- Stub the entities ------------------------------------------------------
+// The vi.fn spies deliberately mirror the entity hooks' `use*` naming so the
+// test signals which hook is being stubbed. In a real component this would
+// violate rules-of-hooks; inside vi.mock closures the calls are just plain
+// function invocations, so silence the rule for this file.
+/* eslint-disable react-hooks/rules-of-hooks */
+
 const useMyMembershipsSpy =
   vi.fn<() => { data: MeMembership[] | undefined; isPending: boolean }>(
     () => ({ data: [], isPending: false }),

@@ -115,7 +115,7 @@ export async function seedClubMembers(
   db: DrizzleDb,
   deps: ClubMembersSeedDeps,
 ): Promise<ClubMembersSeedResult> {
-  const raw = readFileSync(FIXTURE_PATH, 'utf8').replace(/^﻿/, '');
+  const raw = readFileSync(FIXTURE_PATH, 'utf8').replace(/^ /, '');
   const fixture = JSON.parse(raw) as ClubMembersSeedJson;
 
   // --- Resolve fixed references --------------------------------------------

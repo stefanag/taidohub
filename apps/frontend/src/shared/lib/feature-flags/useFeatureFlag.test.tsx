@@ -18,9 +18,11 @@ import { httpClient } from '@/shared/api';
 const mockedHttpClient = vi.mocked(httpClient);
 
 function wrapper(flags: FeatureFlagMap) {
-  return ({ children }: { children: React.ReactNode }): React.ReactElement => (
+  const Wrapper = ({ children }: { children: React.ReactNode }): React.ReactElement => (
     <FeatureFlagsProvider flags={flags}>{children}</FeatureFlagsProvider>
   );
+  Wrapper.displayName = 'FeatureFlagsWrapper';
+  return Wrapper;
 }
 
 function renderWithQuery(ui: React.ReactElement): void {

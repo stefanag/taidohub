@@ -83,7 +83,7 @@ export interface PatternsSeedResult {
 }
 
 export async function seedPatterns(db: DrizzleDb): Promise<PatternsSeedResult> {
-  const raw = readFileSync(FIXTURE_PATH, 'utf8').replace(/^﻿/, '');
+  const raw = readFileSync(FIXTURE_PATH, 'utf8').replace(/^ /, '');
   const fixture = JSON.parse(raw) as PatternsSeedJson;
 
   // ── Classification lookup (rootCode, code) -> uuid ─────────────────────

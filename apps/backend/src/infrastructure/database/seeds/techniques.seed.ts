@@ -59,7 +59,7 @@ export interface TechniquesSeedResult {
 }
 
 export async function seedTechniques(db: DrizzleDb): Promise<TechniquesSeedResult> {
-  const raw = readFileSync(FIXTURE_PATH, 'utf8').replace(/^﻿/, '');
+  const raw = readFileSync(FIXTURE_PATH, 'utf8').replace(/^ /, '');
   const fixture = JSON.parse(raw) as TechniquesSeedJson;
 
   // Build `${rootCode}:${code} → uuid` lookup against the live taxonomy.

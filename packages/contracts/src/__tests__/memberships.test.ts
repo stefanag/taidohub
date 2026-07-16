@@ -13,9 +13,10 @@ const UUID = '7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5';
 const ISO = '2026-05-18T08:00:00.000Z';
 
 describe('MembershipRoleSchema', () => {
-  it('accepts the two allowed values', () => {
+  it('accepts the three allowed values', () => {
     expect(MembershipRoleSchema.safeParse('orgadmin').success).toBe(true);
     expect(MembershipRoleSchema.safeParse('instructor').success).toBe(true);
+    expect(MembershipRoleSchema.safeParse('student').success).toBe(true);
   });
 
   it('rejects unknown values', () => {
@@ -24,7 +25,11 @@ describe('MembershipRoleSchema', () => {
   });
 
   it('exposes options for cross-package reuse', () => {
-    expect([...MembershipRoleSchema.options].sort()).toEqual(['instructor', 'orgadmin']);
+    expect([...MembershipRoleSchema.options].sort()).toEqual([
+      'instructor',
+      'orgadmin',
+      'student',
+    ]);
   });
 });
 
