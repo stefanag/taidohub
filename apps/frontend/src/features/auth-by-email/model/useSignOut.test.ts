@@ -19,8 +19,10 @@ import { useSignOut } from './useSignOut.js';
  */
 describe('useSignOut', () => {
   function wrap(client: QueryClient) {
-    return ({ children }: { children: React.ReactNode }) =>
+    const Wrapper = ({ children }: { children: React.ReactNode }) =>
       React.createElement(QueryClientProvider, { client }, children);
+    Wrapper.displayName = 'QueryWrapper';
+    return Wrapper;
   }
 
   it('calls authClient.signOut() and clears the query cache', async () => {
