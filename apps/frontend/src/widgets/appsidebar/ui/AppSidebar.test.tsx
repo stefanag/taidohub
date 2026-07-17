@@ -5,7 +5,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vite
 
 import * as authApi from '@/features/auth-by-email';
 import i18n from '@/i18n';
-import { AbilityContext, defineAbilityFor } from '@/shared/lib/casl';
+import { AbilityProvider, defineAbilityFor } from '@/shared/lib/casl';
 import { SidebarProvider } from '@/shared/ui';
 
 // Stub the memberships query — the sidebar's Students and My organisation
@@ -91,9 +91,9 @@ function renderInProviderWithAbility(
 ): ReturnType<typeof render> {
   const ability = defineAbilityFor({ id: 'u1', role });
   return withProviders(
-    <AbilityContext.Provider value={ability}>
+    <AbilityProvider value={ability}>
       <AppSidebar />
-    </AbilityContext.Provider>,
+    </AbilityProvider>,
   );
 }
 
