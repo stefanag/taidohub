@@ -77,6 +77,17 @@ const NOW = new Date('2026-06-28T12:00:00.000Z').getTime();
 const RECENT = new Date(NOW - 60_000).toISOString(); // 1 min ago
 const ONE_DAY_AGO = new Date(NOW - 24 * 60 * 60 * 1000 - 1000).toISOString();
 
+/**
+ * A createdAt anchored to real time — for tests that call
+ * `vi.useRealTimers()`. The static `RECENT` above is anchored to `NOW`
+ * (a fake-timer date), so under real timers it reads as ~24h+ old and
+ * the edit window closes, hiding the Edit/Delete buttons those tests
+ * depend on.
+ */
+function realRecentCreatedAt(): string {
+  return new Date(Date.now() - 60_000).toISOString();
+}
+
 function makeComment(overrides: Partial<FeedbackCommentType> = {}): FeedbackCommentType {
   return {
     id: COMMENT_ID,
@@ -245,7 +256,7 @@ describe('<FeedbackComment>', () => {
       vi.useRealTimers();
       const user = userEvent.setup();
       sessionMock.mockReturnValue({ data: { user: { id: AUTHOR_ID } } });
-      renderComment(makeComment());
+      renderComment(makeComment({ createdAt: realRecentCreatedAt() }));
       await user.click(screen.getByRole('button', { name: /^edit$/i }));
       const textarea = screen.getByRole('textbox');
       await user.clear(textarea);
@@ -317,7 +328,7 @@ describe('<FeedbackComment>', () => {
       vi.useRealTimers();
       const user = userEvent.setup();
       sessionMock.mockReturnValue({ data: { user: { id: AUTHOR_ID } } });
-      renderComment(makeComment());
+      renderComment(makeComment({ createdAt: realRecentCreatedAt() }));
 
       // Click the Delete action button — sets the
       // confirmDelete state which opens the Radix Dialog.
