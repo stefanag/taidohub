@@ -13,7 +13,7 @@ import type {
   ListOrganisationsResponse,
   Organisation,
 } from '@/entities/organisation';
-import { AbilityContext, type AppAbility } from '@/shared/lib/casl';
+import { AbilityProvider, type AppAbility } from '@/shared/lib/casl';
 
 import i18n from '@/i18n';
 
@@ -146,9 +146,9 @@ function renderPage(): void {
   render(
     <QueryClientProvider client={qc}>
       <I18nextProvider i18n={i18n}>
-        <AbilityContext.Provider value={makeAbility()}>
+        <AbilityProvider value={makeAbility()}>
           <MyOrganisationPage />
-        </AbilityContext.Provider>
+        </AbilityProvider>
       </I18nextProvider>
     </QueryClientProvider>,
   );

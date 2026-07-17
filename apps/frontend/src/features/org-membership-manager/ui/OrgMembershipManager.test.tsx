@@ -9,7 +9,7 @@ import type {
   OrganisationMembership,
 } from '@/entities/membership';
 import { HttpError } from '@/shared/api';
-import { AbilityContext, type AppAbility } from '@/shared/lib/casl';
+import { AbilityProvider, type AppAbility } from '@/shared/lib/casl';
 
 import i18n from '@/i18n';
 
@@ -79,17 +79,17 @@ function membership(
   };
 }
 
-function renderManager(ability: AppAbility | null = makeAbility()) {
+function renderManager(ability: AppAbility = makeAbility()) {
   const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   render(
     <QueryClientProvider client={qc}>
       <I18nextProvider i18n={i18n}>
-        <AbilityContext.Provider value={ability}>
+        <AbilityProvider value={ability}>
           <OrgMembershipManager
             organisationId={ORG_ID}
             orgLabel="Stockholm Club"
           />
-        </AbilityContext.Provider>
+        </AbilityProvider>
       </I18nextProvider>
     </QueryClientProvider>,
   );

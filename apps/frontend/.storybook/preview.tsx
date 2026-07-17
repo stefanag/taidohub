@@ -2,7 +2,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import type { Preview } from '@storybook/react-vite';
 import { initialize, mswLoader } from 'msw-storybook-addon';
 
-import { AbilityContext } from '../src/shared/lib/casl/ability-context';
+import { AbilityProvider } from '../src/shared/lib/casl/ability-context';
 import { defineAbilityFor } from '../src/shared/lib/casl/defineAbilityFor';
 import { createQueryClient } from '../src/shared/api/queryClient';
 
@@ -32,9 +32,9 @@ const preview: Preview = {
       const queryClient = createQueryClient();
       return (
         <QueryClientProvider client={queryClient}>
-          <AbilityContext.Provider value={permissiveAbility}>
+          <AbilityProvider value={permissiveAbility}>
             <Story />
-          </AbilityContext.Provider>
+          </AbilityProvider>
         </QueryClientProvider>
       );
     },
