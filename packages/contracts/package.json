@@ -276,7 +276,7 @@
   "dependencies": {
     "openapi3-ts": "^4.6.0",
     "zod": "^4.4.3",
-    "zod-openapi": "^5.4.6"
+    "zod-openapi": "^6.0.0"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
