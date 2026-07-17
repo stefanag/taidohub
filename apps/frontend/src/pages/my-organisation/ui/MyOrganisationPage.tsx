@@ -49,14 +49,14 @@ export function MyOrganisationPage(): React.ReactElement {
     [orgIndex],
   );
 
-  const [activeOrgId, setActiveOrgId] = React.useState<string | null>(
-    orgadminOrgs[0] ?? null,
-  );
-  React.useEffect(() => {
-    if (!activeOrgId && orgadminOrgs[0]) {
-      setActiveOrgId(orgadminOrgs[0]);
-    }
-  }, [orgadminOrgs, activeOrgId]);
+  // User's last picked org, or (if none picked yet) the first org they admin.
+  // Derived inline: on first render orgadminOrgs may still be loading, so
+  // pickedOrgId can be null; effectiveOrgId falls back to the first available
+  // when it exists. The previous setState-in-effect version did the same
+  // thing with an extra render pass.
+  const [pickedOrgId, setPickedOrgId] = React.useState<string | null>(null);
+  const activeOrgId = pickedOrgId ?? orgadminOrgs[0] ?? null;
+  const setActiveOrgId = setPickedOrgId;
 
   if (orgadminOrgs.length === 0) {
     return (

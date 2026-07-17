@@ -58,7 +58,10 @@ export function AdminOrganisationViewPage(): React.ReactElement {
     },
   });
 
-  const allOrgs = orgsListQuery.data?.data ?? [];
+  const allOrgs = React.useMemo(
+    () => orgsListQuery.data?.data ?? [],
+    [orgsListQuery.data],
+  );
   const orgsById = React.useMemo(() => {
     const m = new Map<string, string>();
     for (const o of allOrgs) m.set(o.id, displayName(o, i18n.language));

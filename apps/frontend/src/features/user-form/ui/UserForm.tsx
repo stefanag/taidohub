@@ -464,6 +464,10 @@ export function UserForm({
         </Button>
 
         <MembershipEditor
+          // key forces a fresh mount on every open, so the child's local
+          // form state resets naturally via useState initializers — no
+          // setState-in-effect needed.
+          key={editorOpen ? 'open' : 'closed'}
           open={editorOpen}
           onOpenChange={setEditorOpen}
           submitting={createMembership.isPending}

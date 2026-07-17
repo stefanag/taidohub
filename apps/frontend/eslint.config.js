@@ -127,7 +127,9 @@ export default [...react, {
   },
 }, {
   // Node scripts + Storybook config live outside src/ and target Node,
-  // not the browser. Give them the correct global set.
+  // not the browser. Give them the correct global set so `URL`, `console`,
+  // and `process` aren't flagged as undefined by the tightened eslint 10
+  // defaults.
   files: ['scripts/**/*.{mjs,cjs,js}', '.storybook/**/*.{ts,tsx,js,mjs}'],
   languageOptions: {
     globals: {

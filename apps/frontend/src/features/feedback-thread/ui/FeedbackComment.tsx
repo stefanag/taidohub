@@ -67,8 +67,16 @@ export function FeedbackComment({
 
   const isAuthor = !!userId && userId === comment.authorId;
   const isDeleted = comment.body === '[deleted]';
-  const ageMs = Date.now() - new Date(comment.createdAt).getTime();
-  const withinEditWindow = ageMs <= EDIT_WINDOW_MS;
+  // Date.now() during render is impure (React 19 rules-of-hooks). The
+  // edit window is measured from comment.createdAt — capturing "now"
+  // once at mount via a useState lazy initializer is behaviourally
+  // equivalent for a mounted comment (users don't stare at a single
+  // comment for the full 24h window).
+  const [mountedAt] = React.useState<number>(() => Date.now());
+  const withinEditWindow = React.useMemo(
+    () => mountedAt - new Date(comment.createdAt).getTime() <= EDIT_WINDOW_MS,
+    [mountedAt, comment.createdAt],
+  );
   const canModify = isAuthor && withinEditWindow && !isDeleted;
   const wasEdited = comment.createdAt !== comment.updatedAt;
 

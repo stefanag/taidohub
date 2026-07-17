@@ -172,6 +172,9 @@ export function RankHistoryFormDialog({
 
   // RHF watch — used both for dirty-detection on verified rows and for
   // disabling the submit button on missing required fields.
+  // react-hook-form's `form.watch()` returns non-stable references that
+  // React Compiler can't memoize; the rule warns, behaviour is fine.
+  // eslint-disable-next-line react-hooks/incompatible-library
   const watched = form.watch();
   const dirtyFields = form.formState.dirtyFields;
   const isVerifiedEdit = mode === 'edit' && entry?.verified === true;

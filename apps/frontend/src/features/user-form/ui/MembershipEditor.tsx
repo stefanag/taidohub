@@ -53,20 +53,15 @@ export function MembershipEditor({
   const pickedOrg = organisations.find((o) => o.id === organisationId);
   const instructorAllowed = pickedOrg?.type === 'club';
 
-  // Reset local state whenever the dialog closes, so a stale validation
-  // error or half-filled selection doesn't survive into the next open.
-  React.useEffect(() => {
-    if (!open) {
-      setError(undefined);
-      setOrganisationId('');
-      setRole('orgadmin');
-    }
-  }, [open]);
+  // Reset-on-close is now driven by the parent via `key={open ? 'open' : 'closed'}`
+  // — a fresh mount runs the useState initializers above, replacing the
+  // setState-in-effect pattern that react-hooks 7 forbids.
 
-  // Keep role consistent: if the picked org isn't a club, force orgadmin.
-  React.useEffect(() => {
-    if (!instructorAllowed && role === 'instructor') setRole('orgadmin');
-  }, [instructorAllowed, role]);
+  // Derive effective role inline instead of syncing it via an effect: if the
+  // picked org isn't a club, `instructor` isn't allowed — collapse to
+  // `orgadmin`. `setRole` still exists for user-driven picks.
+  const effectiveRole: MembershipRole =
+    !instructorAllowed && role === 'instructor' ? 'orgadmin' : role;
 
   const handleConfirm = async (): Promise<void> => {
     setError(undefined);
@@ -75,7 +70,7 @@ export function MembershipEditor({
       return;
     }
     try {
-      await onConfirm(organisationId, role);
+      await onConfirm(organisationId, effectiveRole);
       setOrganisationId('');
       setRole('orgadmin');
     } catch (err) {
@@ -118,7 +113,7 @@ export function MembershipEditor({
             <Label htmlFor="membership-role">
               {t('admin.users.memberships.role', { defaultValue: 'Role' })}
             </Label>
-            <Select value={role} onValueChange={(v) => setRole(v as MembershipRole)}>
+            <Select value={effectiveRole} onValueChange={(v) => setRole(v as MembershipRole)}>
               <SelectTrigger
                 id="membership-role"
                 aria-label={t('admin.users.memberships.role', { defaultValue: 'Role' })}

@@ -81,19 +81,19 @@ export function PatternForm({
   );
   const showSubtype = Boolean(hokeiTypeId) && typeIds.includes(hokeiTypeId!);
 
-  React.useEffect(() => {
-    if (!showSubtype && subtypeIds.length > 0) setSubtypeIds([]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showSubtype]);
+  // Derive the effective subtype list inline instead of syncing via an
+  // effect: subtypes only apply when the hokei type is picked. The user's
+  // last subtype pick lives in `subtypeIds`; when the hokei type is
+  // removed we render as if the list were empty. Re-picking hokei restores
+  // the last selection, which is a mild UX improvement over the previous
+  // "clear on toggle off" effect.
+  const effectiveSubtypeIds = showSubtype ? subtypeIds : [];
 
   const createMut = useCreatePatternMutation();
   const updateMut = useUpdatePatternMutation();
   const pending = createMut.isPending || updateMut.isPending;
 
-  const classificationIds = [
-    ...typeIds,
-    ...(showSubtype ? subtypeIds : []),
-  ];
+  const classificationIds = [...typeIds, ...effectiveSubtypeIds];
   const canSubmit =
     typeIds.length > 0 && nameRomaji.trim().length > 0 && !pending;
 

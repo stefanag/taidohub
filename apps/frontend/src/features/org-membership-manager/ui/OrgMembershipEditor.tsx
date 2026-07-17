@@ -67,23 +67,15 @@ export function OrgMembershipEditor({
   );
   const [error, setError] = React.useState<string | undefined>();
 
-  // Reset on close (mirror MembershipEditor.tsx).
-  React.useEffect(() => {
-    if (!open) {
-      setUserId('');
-      setSearch('');
-      setRole(allowedRoles[0] ?? 'instructor');
-      setError(undefined);
-    }
-  }, [open, allowedRoles]);
+  // Reset-on-close is now driven by the parent via `key={open ? 'open' : 'closed'}`
+  // — a fresh mount runs the useState initializers above.
 
-  // If allowedRoles changes (org context swap), make sure the selected role
-  // is still legal — otherwise snap to the first allowed.
-  React.useEffect(() => {
-    if (!allowedRoles.includes(role) && allowedRoles[0]) {
-      setRole(allowedRoles[0]);
-    }
-  }, [allowedRoles, role]);
+  // Derive the effective role from allowedRoles + the user's last pick. If
+  // the last pick isn't in the current allowedRoles, fall through to the
+  // first allowed. No effect needed.
+  const effectiveRole: MembershipRole = allowedRoles.includes(role)
+    ? role
+    : allowedRoles[0] ?? 'instructor';
 
   const handleConfirm = async (): Promise<void> => {
     setError(undefined);
@@ -96,7 +88,7 @@ export function OrgMembershipEditor({
       return;
     }
     try {
-      await onConfirm(userId, role);
+      await onConfirm(userId, effectiveRole);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed');
     }
@@ -164,7 +156,7 @@ export function OrgMembershipEditor({
               {t('admin.users.memberships.role', { defaultValue: 'Role' })}
             </Label>
             <Select
-              value={role}
+              value={effectiveRole}
               onValueChange={(v) => setRole(v as MembershipRole)}
             >
               <SelectTrigger

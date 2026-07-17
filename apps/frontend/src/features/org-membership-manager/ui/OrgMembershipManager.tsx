@@ -207,6 +207,9 @@ export function OrgMembershipManager({
       ) : null}
 
       <OrgMembershipEditor
+        // key forces a fresh mount on every open, so local form state
+        // resets via useState initializers — no setState-in-effect needed.
+        key={adding ? 'open' : 'closed'}
         open={adding}
         onOpenChange={setAdding}
         allowedRoles={allowedRoles}

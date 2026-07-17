@@ -66,13 +66,17 @@ export function PatternsPage(): React.ReactElement {
   );
   const showSubtype = Boolean(hokeiTypeId) && typeIds.includes(hokeiTypeId!);
 
-  React.useEffect(() => {
-    if (!showSubtype && subtypeIds.length > 0) setSubtypeIds([]);
-  }, [showSubtype, subtypeIds.length]);
-
+  // Derive the effective subtype set inline: when hokei isn't picked, subtype
+  // filters don't apply. Keeping the user's subtypeIds in state means picking
+  // hokei again restores the last selection — a mild UX win over the
+  // previous setState-in-effect version.
+  const effectiveSubtypeIds = React.useMemo(
+    () => (showSubtype ? subtypeIds : []),
+    [showSubtype, subtypeIds],
+  );
   const filterIds = React.useMemo(
-    () => [...typeIds, ...(showSubtype ? subtypeIds : [])],
-    [typeIds, subtypeIds, showSubtype],
+    () => [...typeIds, ...effectiveSubtypeIds],
+    [typeIds, effectiveSubtypeIds],
   );
   const { data: patterns = [], isPending } = usePatternsQuery(filterIds);
 

@@ -96,9 +96,9 @@ export function StudentDetailPage(): React.ReactElement {
     [studentsQ.data, userId],
   );
 
-  const techniques = techniquesQ.data ?? [];
-  const patterns = patternsQ.data ?? [];
-  const progressRows = progressQ.data ?? [];
+  const techniques = React.useMemo(() => techniquesQ.data ?? [], [techniquesQ.data]);
+  const patterns = React.useMemo(() => patternsQ.data ?? [], [patternsQ.data]);
+  const progressRows = React.useMemo(() => progressQ.data ?? [], [progressQ.data]);
 
   const progressByTechniqueId = React.useMemo(() => {
     const m = new Map<string, Progress>();

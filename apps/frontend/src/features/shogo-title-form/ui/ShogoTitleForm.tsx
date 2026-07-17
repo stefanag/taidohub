@@ -55,6 +55,9 @@ export function ShogoTitleForm({
     },
   });
 
+  // react-hook-form's `form.watch(...)` returns non-stable references that
+  // React Compiler can't memoize; the rule warns, behaviour is fine.
+  // eslint-disable-next-line react-hooks/incompatible-library
   const visuals = (form.watch('visuals') as BeltVisuals | undefined) ?? { gradient: 'black' };
 
   const create = useCreateShogoTitle();

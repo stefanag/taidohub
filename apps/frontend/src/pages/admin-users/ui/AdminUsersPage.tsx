@@ -154,6 +154,9 @@ export function AdminUsersPage(): React.ReactElement {
       </Dialog>
 
       <InviteUserDialog
+        // key forces a fresh mount on every open, so local form state
+        // resets naturally via useState initializers.
+        key={mode.kind === 'invite' ? 'open' : 'closed'}
         open={mode.kind === 'invite'}
         onOpenChange={(open) => {
           if (!open) setMode({ kind: 'idle' });
