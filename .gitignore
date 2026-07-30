@@ -36,6 +36,7 @@ lerna-debug.log*
 .env.local
 .env.*.local
 .env.e2e
+.env.*-backup
 !.env.example
 !.env.e2e.example
 

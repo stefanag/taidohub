@@ -23,6 +23,13 @@
     "db:migrate": "tsx --env-file-if-exists=../../.env src/infrastructure/database/migrate.ts",
     "db:seed": "tsx --env-file-if-exists=../../.env src/infrastructure/database/seed.ts",
     "db:studio": "drizzle-kit studio",
+    "db:dev:up": "docker compose -f docker-compose.dev.yml up -d --wait",
+    "db:dev:down": "docker compose -f docker-compose.dev.yml down",
+    "db:dev:migrate": "pnpm run db:migrate",
+    "db:dev:seed": "pnpm run db:seed",
+    "db:dev:reset": "docker compose -f docker-compose.dev.yml down -v && pnpm run db:dev:up && pnpm run db:dev:migrate && pnpm run db:dev:seed",
+    "db:native:up": "powershell -NoProfile -Command \"Start-Service postgresql-x64-17\"",
+    "db:native:down": "powershell -NoProfile -Command \"Stop-Service postgresql-x64-17\"",
     "openapi:generate": "nest build && node --env-file=./openapi-stub.env --env-file-if-exists=../../.env dist/src/openapi/generate.js"
   },
   "dependencies": {

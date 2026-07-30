@@ -1,0 +1,42 @@
+# Local Postgres for backend dev work.
+#
+# Use this when you'd rather point DATABASE_URL / DIRECT_URL at localhost
+# than at a shared Supabase project — no accidental writes to the shared
+# DB, no pooler quota to fight, works offline.
+#
+# Usage (from repo root):
+#   pnpm --filter backend db:dev:up          # start (persists across restarts)
+#   pnpm --filter backend db:dev:migrate     # apply Drizzle migrations
+#   pnpm --filter backend db:dev:seed        # seed the sysadmin + fixtures
+#   pnpm --filter backend db:dev:down        # stop (keeps the volume)
+#   pnpm --filter backend db:dev:reset       # wipe volume + re-migrate + re-seed
+#
+# Then edit .env at the repo root:
+#   DATABASE_URL=postgres://taidohub:taidohub@localhost:5432/taidohub_dev
+#   DIRECT_URL=postgres://taidohub:taidohub@localhost:5432/taidohub_dev
+#
+# Port 5432 is used so a URL that omits the port ("localhost/taidohub_dev")
+# still connects. If you already have a Postgres on 5432, override:
+#   DEV_POSTGRES_PORT=15432 pnpm --filter backend db:dev:up
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: taidohub-dev-postgres
+    environment:
+      POSTGRES_USER: taidohub
+      POSTGRES_PASSWORD: taidohub
+      POSTGRES_DB: taidohub_dev
+    ports:
+      - "${DEV_POSTGRES_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U taidohub -d taidohub_dev"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+    volumes:
+      # Named volume so state survives `db:dev:down`. Use `db:dev:reset`
+      # (or `down -v`) to wipe.
+      - taidohub_dev_pgdata:/var/lib/postgresql/data
+
+volumes:
+  taidohub_dev_pgdata:
