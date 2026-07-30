@@ -10,7 +10,11 @@ import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js'
 import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
 import { AuditLogService } from '../audit-log/audit-log.service.js';
 
-import { FeatureFlagsRepository, type FeatureFlagRow } from './feature-flags.repository.js';
+import {
+  FeatureFlagsRepository,
+  type FeatureFlagRow,
+  type FeatureFlagRowWithUpdater,
+} from './feature-flags.repository.js';
 
 /**
  * Business logic for feature flags.
@@ -54,9 +58,13 @@ export class FeatureFlagsService {
     return row?.enabled ?? false;
   }
 
-  /** Returns every row (full shape) for the sysadmin admin endpoint. */
-  async listRows(): Promise<FeatureFlagRow[]> {
-    return this.repo.list();
+  /**
+   * Returns every row plus the updater's `{ id, name, email }` for the
+   * sysadmin admin endpoint. The name is nullable at the schema level; the
+   * UI falls back to the email so a raw UUID never surfaces.
+   */
+  async listRows(): Promise<FeatureFlagRowWithUpdater[]> {
+    return this.repo.listWithUpdater();
   }
 
   /** Sysadmin-only mutation; throws 404 if the code isn't seeded. */
