@@ -20,6 +20,15 @@ The codebase is Postgres-only. No `@supabase/*` imports; auth is `better-auth`; 
 
 ### One-time setup
 
+Pick ONE of two paths:
+
+- **Docker Desktop** — matches CI/e2e exactly, one command wipes and re-hydrates. Larger install (~1 GB, needs WSL2, admin + reboot). Works cross-platform.
+- **Native Postgres on Windows via winget** — lighter install, no WSL2 needed. Windows-only. Reset is more manual.
+
+Both end at the same point: a Postgres reachable at `localhost:5432` with database `taidohub_dev`.
+
+#### Path A: Docker Desktop
+
 1. Install Docker Desktop (or Colima on macOS).
 2. Bring the container up:
    ```bash
@@ -40,18 +49,64 @@ The codebase is Postgres-only. No `@supabase/*` imports; auth is `better-auth`; 
    pnpm dev
    ```
 
+#### Path B: Native Postgres on Windows (via winget)
+
+Windows-only, no Docker. UAC prompts appear during install and (optionally) during daily start/stop.
+
+1. Install PostgreSQL 17 as a Windows service. Superuser password is set to `postgres` here — dev-only, do not reuse:
+   ```powershell
+   winget install PostgreSQL.PostgreSQL.17 `
+     --accept-source-agreements --accept-package-agreements `
+     --custom "--mode unattended --unattendedmodeui minimal --superpassword postgres --serverport 5432 --disable-components pgAdmin,stackbuilder"
+   ```
+   The installer runs elevated — click **Yes** on the UAC prompt. It sets up the service `postgresql-x64-17` on port 5432 and starts it.
+
+2. Create the app role and database (run from Git Bash or WSL — adjust the psql path if you installed to a non-default location):
+   ```bash
+   export PGPASSWORD=postgres
+   PSQL='/c/Program Files/PostgreSQL/17/bin/psql.exe'
+   "$PSQL" -U postgres -h localhost -p 5432 -c "CREATE USER taidohub WITH PASSWORD 'taidohub' CREATEDB;"
+   "$PSQL" -U postgres -h localhost -p 5432 -c "CREATE DATABASE taidohub_dev OWNER taidohub;"
+   unset PGPASSWORD
+   ```
+
+3. Same `.env` change as Path A — set both URLs to `postgres://taidohub:taidohub@localhost:5432/taidohub_dev`.
+
+4. Same migrate + seed as Path A:
+   ```bash
+   pnpm --filter backend db:migrate
+   pnpm --filter backend db:seed
+   ```
+   (The `db:dev:migrate` / `db:dev:seed` aliases work here too — they're just wrappers.)
+
+5. Start the app:
+   ```bash
+   pnpm dev
+   ```
+
+**Optional — start/stop the service with the dev workflow.** By default the service is set to `Automatic` startup (runs from Windows boot). To flip it to on-demand and control it explicitly:
+```powershell
+Set-Service postgresql-x64-17 -StartupType Manual   # admin, one-time
+```
+Then start/stop alongside your dev sessions:
+```bash
+pnpm --filter backend db:native:up    # Start-Service (UAC each time)
+pnpm --filter backend db:native:down  # Stop-Service  (UAC each time)
+```
+UAC-on-every-start gets old fast. If you use this workflow daily, grant your user account service-control rights once (Windows-standard chore, out of scope here) or just leave the service on `Automatic` — idle Postgres uses ~50 MB, marginal.
+
 ### Daily workflow
 
-The container persists across restarts (named volume `taidohub_dev_pgdata`), so day-to-day you just `pnpm dev` and forget about the DB. Common operations:
+Data persists across restarts on both paths (Docker: named volume; native: the service's data dir), so day-to-day you just `pnpm dev` and forget about the DB.
 
-| Task | Command |
-|---|---|
-| Start (or resume) local Postgres | `pnpm --filter backend db:dev:up` |
-| Stop (keeps data) | `pnpm --filter backend db:dev:down` |
-| Apply new migrations after `db:generate` | `pnpm --filter backend db:dev:migrate` |
-| Re-seed after a schema change | `pnpm --filter backend db:dev:seed` |
-| Full reset — wipe volume, re-migrate, re-seed | `pnpm --filter backend db:dev:reset` |
-| Open Drizzle Studio against local DB | `pnpm --filter backend db:studio` |
+| Task | Docker (Path A) | Native (Path B) |
+|---|---|---|
+| Start local Postgres | `pnpm --filter backend db:dev:up` | `pnpm --filter backend db:native:up` (or leave the service on `Automatic`) |
+| Stop | `pnpm --filter backend db:dev:down` | `pnpm --filter backend db:native:down` |
+| Apply new migrations after `db:generate` | `pnpm --filter backend db:dev:migrate` | same |
+| Re-seed after a schema change | `pnpm --filter backend db:dev:seed` | same |
+| Full reset — wipe data, re-migrate, re-seed | `pnpm --filter backend db:dev:reset` | manual: `DROP DATABASE taidohub_dev; CREATE DATABASE taidohub_dev OWNER taidohub;` then re-migrate + re-seed |
+| Open Drizzle Studio against local DB | `pnpm --filter backend db:studio` | same |
 
 ### Switching back to Supabase
 
