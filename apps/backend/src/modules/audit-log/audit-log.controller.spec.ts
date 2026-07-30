@@ -81,7 +81,7 @@ describe('AuditLogController.list', () => {
           entityType: 'organisation',
           entityId: 'org-1',
           action: 'create',
-          userId: 'u-admin',
+          user: { id: 'u-admin', name: 'Ada Lovelace', email: 'ada@example.com' },
           before: null,
           after: { name: 'New org' },
           createdAt: '2026-06-01T00:00:00.000Z',

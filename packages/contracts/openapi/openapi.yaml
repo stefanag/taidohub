@@ -6877,11 +6877,11 @@ components:
                     users).
                 action:
                   $ref: "#/$defs/AuditLogAction"
-                userId:
+                user:
                   anyOf:
-                    - type: string
+                    - $ref: "#/$defs/AuditLogUser"
                     - type: "null"
-                  description: Null when the audited user has since been deleted.
+                  description: Null when the acting user has since been deleted.
                 before:
                   anyOf:
                     - {}
@@ -6899,7 +6899,7 @@ components:
                 - entityType
                 - entityId
                 - action
-                - userId
+                - user
                 - before
                 - after
                 - createdAt
@@ -6908,7 +6908,10 @@ components:
                 entityType: organisation
                 entityId: 7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5
                 action: update
-                userId: u-admin
+                user:
+                  id: u-admin
+                  name: Ada Lovelace
+                  email: ada@example.com
                 before:
                   name: Old
                 after:
@@ -6924,6 +6927,21 @@ components:
                 - deactivate
                 - reactivate
                 - password_reset_triggered
+            AuditLogUser:
+              type: object
+              properties:
+                id:
+                  type: string
+                name:
+                  anyOf:
+                    - type: string
+                    - type: "null"
+                email:
+                  type: string
+              required:
+                - id
+                - name
+                - email
         page:
           type: integer
           exclusiveMinimum: 0
@@ -7083,6 +7101,8 @@ components:
       $ref: "#/components/schemas/ListOrganisationsResponse"
     AuditLogAction:
       $ref: "#/components/schemas/AuditLogAction"
+    AuditLogUser:
+      $ref: "#/components/schemas/AuditLogUser"
     AuditLogEntry:
       $ref: "#/components/schemas/AuditLogEntry"
     ListAuditLogQuery:

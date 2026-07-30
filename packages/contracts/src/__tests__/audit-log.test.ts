@@ -32,7 +32,7 @@ describe('AuditLogEntrySchema', () => {
     entityType: 'organisation',
     entityId: '7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5',
     action: 'update' as const,
-    userId: 'u-admin',
+    user: { id: 'u-admin', name: 'Ada Lovelace', email: 'ada@example.com' },
     before: { name: 'Old' },
     after: { name: 'New' },
     createdAt: '2026-05-17T08:00:00.000Z',
@@ -50,8 +50,17 @@ describe('AuditLogEntrySchema', () => {
     expect(AuditLogEntrySchema.safeParse({ ...valid, action: 'delete', after: null }).success).toBe(true);
   });
 
-  it('accepts null userId (deleted account)', () => {
-    expect(AuditLogEntrySchema.safeParse({ ...valid, userId: null }).success).toBe(true);
+  it('accepts user: null (deleted account — FK is ON DELETE SET NULL)', () => {
+    expect(AuditLogEntrySchema.safeParse({ ...valid, user: null }).success).toBe(true);
+  });
+
+  it('accepts user.name: null (users can sign up without a name)', () => {
+    expect(
+      AuditLogEntrySchema.safeParse({
+        ...valid,
+        user: { id: 'u-admin', name: null, email: 'ada@example.com' },
+      }).success,
+    ).toBe(true);
   });
 
   it('rejects empty entityType', () => {

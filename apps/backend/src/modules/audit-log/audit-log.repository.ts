@@ -3,7 +3,11 @@ import type { ListAuditLogQuery } from '@repo/contracts/audit-log';
 import { and, count, desc, eq, gte, inArray, lte, type SQL } from 'drizzle-orm';
 
 import { DRIZZLE, type DrizzleDb, type DrizzleExecutor } from '../../infrastructure/database/client.js';
-import { auditLog, type DbAuditLog, type DbNewAuditLog } from '../../infrastructure/database/schema/index.js';
+import { auditLog, user, type DbAuditLog, type DbNewAuditLog } from '../../infrastructure/database/schema/index.js';
+
+export interface DbAuditLogWithUser extends DbAuditLog {
+  user: { id: string; name: string | null; email: string } | null;
+}
 
 @Injectable()
 export class AuditLogRepository {
@@ -24,11 +28,16 @@ export class AuditLogRepository {
    *   scope: results are AND-ed with `entity_type = 'organisation'` and
    *   `entity_id IN (...)`. Used to confine an `orgadmin` to the organisations
    *   they administer. Omit for unrestricted (sysadmin) reads.
+   *
+   * The page LEFT JOINs `user` so the admin table can render the actor's
+   * name rather than a raw UUID; the left join preserves rows whose actor
+   * was later deleted (FK is `ON DELETE SET NULL`) — those come back with
+   * `user: null`.
    */
   async list(
     filter: ListAuditLogQuery,
     restrictToOrganisationIds?: readonly string[],
-  ): Promise<{ data: DbAuditLog[]; total: number }> {
+  ): Promise<{ data: DbAuditLogWithUser[]; total: number }> {
     const filters: SQL[] = [];
     if (filter.entityType) filters.push(eq(auditLog.entityType, filter.entityType));
     if (filter.entityId) filters.push(eq(auditLog.entityId, filter.entityId));
@@ -43,15 +52,22 @@ export class AuditLogRepository {
     const where = filters.length ? and(...filters) : undefined;
 
     const offset = (filter.page - 1) * filter.perPage;
-    const data = await this.db
-      .select()
+    const rows = await this.db
+      .select({
+        row: auditLog,
+        actor: { id: user.id, name: user.name, email: user.email },
+      })
       .from(auditLog)
+      .leftJoin(user, eq(user.id, auditLog.userId))
       .where(where)
       .orderBy(desc(auditLog.createdAt))
       .limit(filter.perPage)
       .offset(offset);
 
     const totalRows = await this.db.select({ value: count() }).from(auditLog).where(where);
-    return { data, total: Number(totalRows[0]?.value ?? 0) };
+    return {
+      data: rows.map((r) => ({ ...r.row, user: r.actor?.id ? r.actor : null })),
+      total: Number(totalRows[0]?.value ?? 0),
+    };
   }
 }

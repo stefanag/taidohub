@@ -149,7 +149,11 @@ function RowAndDetail({ row, expanded, onToggle, locale, t }: RowProps): React.R
         </td>
         <td className="px-2 py-2 whitespace-nowrap">{when}</td>
         <td className="px-2 py-2">
-          <code className="text-xs">{row.userId ?? '—'}</code>
+          {row.user ? (
+            <span>{row.user.name ?? row.user.email}</span>
+          ) : (
+            <span>—</span>
+          )}
         </td>
         <td className="px-2 py-2">
           <code className="text-xs">

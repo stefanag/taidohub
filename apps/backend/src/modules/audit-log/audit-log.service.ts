@@ -8,9 +8,8 @@ import type {
 
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import { type DrizzleExecutor } from '../../infrastructure/database/client.js';
-import { type DbAuditLog } from '../../infrastructure/database/schema/index.js';
 
-import { AuditLogRepository } from './audit-log.repository.js';
+import { AuditLogRepository, type DbAuditLogWithUser } from './audit-log.repository.js';
 
 export interface RecordInput {
   tx: DrizzleExecutor;
@@ -90,13 +89,13 @@ export class AuditLogService {
     return { data: data.map((r) => this.toApi(r)), total, page: query.page, perPage: query.perPage };
   }
 
-  private toApi(row: DbAuditLog): AuditLogEntry {
+  private toApi(row: DbAuditLogWithUser): AuditLogEntry {
     return {
       id: row.id,
       entityType: row.entityType,
       entityId: row.entityId,
       action: row.action as AuditLogAction,
-      userId: row.userId,
+      user: row.user,
       before: row.before,
       after: row.after,
       createdAt: row.createdAt.toISOString(),
