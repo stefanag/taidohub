@@ -62,15 +62,24 @@ describe('FeatureFlagSchema', () => {
     code: 'grading-history' as const,
     enabled: true,
     updatedAt: '2026-06-08T10:00:00.000Z',
-    updatedById: 'u-1',
+    updatedBy: { id: 'u-1', name: 'Ada Lovelace', email: 'ada@example.com' },
   };
 
   it('accepts a row with all fields populated', () => {
     expect(FeatureFlagSchema.safeParse(BASE).success).toBe(true);
   });
 
-  it('accepts updatedById: null (post user delete)', () => {
-    expect(FeatureFlagSchema.safeParse({ ...BASE, updatedById: null }).success).toBe(true);
+  it('accepts updatedBy.name: null (users can sign up without a name)', () => {
+    expect(
+      FeatureFlagSchema.safeParse({
+        ...BASE,
+        updatedBy: { id: 'u-1', name: null, email: 'ada@example.com' },
+      }).success,
+    ).toBe(true);
+  });
+
+  it('accepts updatedBy: null (post user delete — FK is ON DELETE SET NULL)', () => {
+    expect(FeatureFlagSchema.safeParse({ ...BASE, updatedBy: null }).success).toBe(true);
   });
 
   it('rejects an unknown code', () => {
