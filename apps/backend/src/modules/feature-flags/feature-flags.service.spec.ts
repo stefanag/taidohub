@@ -44,6 +44,7 @@ describe('FeatureFlagsService', () => {
   beforeEach(() => {
     repo = {
       list: vi.fn(),
+      listWithUpdater: vi.fn(),
       findByCode: vi.fn(),
       updateEnabled: vi.fn(),
     };
