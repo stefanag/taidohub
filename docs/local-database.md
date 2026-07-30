@@ -112,6 +112,8 @@ Data persists across restarts on both paths (Docker: named volume; native: the s
 
 Just edit `.env` — set `DATABASE_URL` and `DIRECT_URL` back to the Supabase URLs. The container can keep running in the background at no cost; you're just not pointed at it.
 
+> **Restart `pnpm dev` after ANY `.env` change.** Vite inlines `VITE_*` vars (including `VITE_API_URL`) at dev-server startup, not per request — so the frontend bundle keeps calling the previous backend URL until you Ctrl-C and start again. Symptom: sign-in appears to hang or hits an unexpected origin even though `curl` against the correct backend works. Same applies to the backend for `DATABASE_URL` / `DIRECT_URL` — Nest reads them once on boot.
+
 ### Troubleshooting
 
 **Port 5432 already in use.** You have another Postgres on 5432 (system install, another project's container). Two options:
