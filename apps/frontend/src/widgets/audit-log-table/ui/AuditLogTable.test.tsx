@@ -30,10 +30,22 @@ const FIXTURE_ROW = {
   entityType: 'organisation',
   entityId: 'org-1',
   action: 'update' as const,
-  userId: 'u-admin',
+  user: { id: 'u-admin', name: 'Ada Lovelace', email: 'ada@example.com' },
   before: { name: 'Old' },
   after: { name: 'New' },
   createdAt: '2026-05-17T08:00:00.000Z',
+};
+
+const FIXTURE_ROW_NAMELESS = {
+  ...FIXTURE_ROW,
+  id: '00000000-0000-4000-8000-000000000002',
+  user: { id: 'u-2', name: null, email: 'no-name@example.com' },
+};
+
+const FIXTURE_ROW_DELETED_ACTOR = {
+  ...FIXTURE_ROW,
+  id: '00000000-0000-4000-8000-000000000003',
+  user: null,
 };
 
 describe('<AuditLogTable>', () => {
@@ -74,7 +86,41 @@ describe('<AuditLogTable>', () => {
       expect(screen.getByText(/updated/i)).toBeInTheDocument();
     });
     expect(screen.getByText(/organisation:org-1/i)).toBeInTheDocument();
-    expect(screen.getByText(/u-admin/i)).toBeInTheDocument();
+    // "Who" column shows the actor's name, not their UUID.
+    expect(screen.getByText(/Ada Lovelace/)).toBeInTheDocument();
+    expect(screen.queryByText(/u-admin/)).not.toBeInTheDocument();
+  });
+
+  it('falls back to email when the actor has no name', async () => {
+    vi.mocked(listAuditLog).mockResolvedValue({
+      data: [FIXTURE_ROW_NAMELESS],
+      page: 1,
+      perPage: 25,
+      total: 1,
+    });
+
+    renderWithProviders(<AuditLogTable query={{ page: 1, perPage: 25 }} />);
+
+    await waitFor(() => {
+      expect(screen.getByText(/no-name@example\.com/)).toBeInTheDocument();
+    });
+    expect(screen.queryByText(/u-2/)).not.toBeInTheDocument();
+  });
+
+  it('shows an em-dash when the actor row was deleted', async () => {
+    vi.mocked(listAuditLog).mockResolvedValue({
+      data: [FIXTURE_ROW_DELETED_ACTOR],
+      page: 1,
+      perPage: 25,
+      total: 1,
+    });
+
+    renderWithProviders(<AuditLogTable query={{ page: 1, perPage: 25 }} />);
+
+    await waitFor(() => {
+      expect(screen.getByText(/organisation:org-1/i)).toBeInTheDocument();
+    });
+    expect(screen.getByText('—')).toBeInTheDocument();
   });
 
   it('expands a row to reveal before / after JSON, then collapses', async () => {

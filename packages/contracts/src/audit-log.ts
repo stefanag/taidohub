@@ -17,13 +17,27 @@ export const AuditLogActionSchema = z
 
 export type AuditLogAction = z.infer<typeof AuditLogActionSchema>;
 
+/**
+ * The actor who performed the audited action. `name` is nullable (users
+ * can sign up without one); the UI falls back to `email` in that case.
+ * The whole object is nullable — the row's user_id FK is `ON DELETE SET
+ * NULL`, so the audit trail survives the user being deleted.
+ */
+export const AuditLogUserSchema = z
+  .object({
+    id: z.string(),
+    name: z.string().nullable(),
+    email: z.string(),
+  })
+  .meta({ id: 'AuditLogUser' });
+
 export const AuditLogEntrySchema = z
   .object({
     id: z.string().uuid(),
     entityType: z.string().min(1).describe('Lowercase singular noun, e.g. "organisation".'),
     entityId: z.string().min(1).describe('Caller-defined id of the audited row (uuid for orgs, text for users).'),
     action: AuditLogActionSchema,
-    userId: z.string().nullable().describe('Null when the audited user has since been deleted.'),
+    user: AuditLogUserSchema.nullable().describe('Null when the acting user has since been deleted.'),
     before: z.unknown().nullable(),
     after: z.unknown().nullable(),
     createdAt: z.string().datetime(),
@@ -35,7 +49,7 @@ export const AuditLogEntrySchema = z
       entityType: 'organisation',
       entityId: UUID_EXAMPLE,
       action: 'update',
-      userId: 'u-admin',
+      user: { id: 'u-admin', name: 'Ada Lovelace', email: 'ada@example.com' },
       before: { name: 'Old' },
       after: { name: 'New' },
       createdAt: ISO_DATETIME_EXAMPLE,
@@ -70,6 +84,7 @@ export type ListAuditLogResponse = z.infer<typeof ListAuditLogResponseSchema>;
 
 export const AuditLogOpenApiRegistry = {
   AuditLogAction: AuditLogActionSchema,
+  AuditLogUser: AuditLogUserSchema,
   AuditLogEntry: AuditLogEntrySchema,
   ListAuditLogQuery: ListAuditLogQuerySchema,
   ListAuditLogResponse: ListAuditLogResponseSchema,

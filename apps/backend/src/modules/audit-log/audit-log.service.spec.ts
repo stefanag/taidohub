@@ -161,8 +161,10 @@ describe('AuditLogService.list', () => {
       data: [{
         id: '00000000-0000-4000-8000-000000000001',
         entityType: 'organisation', entityId: 'org-1', action: 'create',
-        userId: 'u-1', before: null, after: { id: 'org-1' },
+        userId: 'u-1', impersonatedById: null, actingUserId: null,
+        before: null, after: { id: 'org-1' },
         createdAt: new Date('2026-05-17T08:00:00.000Z'),
+        user: { id: 'u-1', name: 'Ada Lovelace', email: 'ada@example.com' },
       }],
       total: 1,
     });
@@ -171,6 +173,11 @@ describe('AuditLogService.list', () => {
 
     expect(out.data).toHaveLength(1);
     expect(out.data[0]?.entityType).toBe('organisation');
+    expect(out.data[0]?.user).toEqual({
+      id: 'u-1',
+      name: 'Ada Lovelace',
+      email: 'ada@example.com',
+    });
     expect(out.total).toBe(1);
     expect(out.page).toBe(1);
     expect(out.perPage).toBe(25);
