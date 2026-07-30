@@ -71,6 +71,11 @@ pnpm --filter backend db:migrate         # applies migrations via DIRECT_URL
 pnpm dev                                 # runs frontend + backend + contracts watcher concurrently
 ```
 
+> **Prefer a local Postgres instead of a shared Supabase project?** See
+> [`docs/local-database.md`](docs/local-database.md) — one docker-compose file,
+> `pnpm --filter backend db:dev:up`, point `.env` at `localhost:5432`, done.
+> No pooler quota to fight, no accidental writes to shared data, works offline.
+
 URLs that come up:
 
 | Service | URL |
