@@ -7155,6 +7155,8 @@ components:
       $ref: "#/components/schemas/FeatureFlagMap"
     FeatureFlag:
       $ref: "#/components/schemas/FeatureFlag"
+    FeatureFlagUpdatedBy:
+      $ref: "#/components/schemas/FeatureFlagUpdatedBy"
     UpdateFeatureFlagInput:
       $ref: "#/components/schemas/UpdateFeatureFlagInput"
     ClassificationCategory:

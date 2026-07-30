@@ -17,7 +17,7 @@ const FLAG_ROW = {
   code: 'grading-history' as const,
   enabled: false,
   updatedAt: '2026-06-08T10:00:00.000Z',
-  updatedById: 'u-1',
+  updatedBy: { id: 'u-1', name: 'Ada Lovelace', email: 'ada@example.com' },
 };
 
 const FLAG_MAP = {

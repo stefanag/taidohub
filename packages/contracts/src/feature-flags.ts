@@ -27,13 +27,25 @@ export const FeatureFlagMapSchema = z
   )
   .meta({ id: 'FeatureFlagMap' });
 
+/**
+ * Nested actor shape for the admin row's `updatedBy` — `name` is nullable
+ * (users can sign up without one); the UI falls back to `email` in that case.
+ */
+export const FeatureFlagUpdatedBySchema = z
+  .object({
+    id: z.string(),
+    name: z.string().nullable(),
+    email: z.string(),
+  })
+  .meta({ id: 'FeatureFlagUpdatedBy' });
+
 /** Wire shape of `GET /api/admin/feature-flags` (per-row). */
 export const FeatureFlagSchema = z
   .object({
     code: FeatureFlagCodeSchema,
     enabled: z.boolean(),
     updatedAt: z.iso.datetime(),
-    updatedById: z.string().nullable(),
+    updatedBy: FeatureFlagUpdatedBySchema.nullable(),
   })
   .meta({
     id: 'FeatureFlag',
@@ -42,7 +54,7 @@ export const FeatureFlagSchema = z
       code: 'grading-history',
       enabled: false,
       updatedAt: '2026-06-08T10:00:00.000Z',
-      updatedById: 'u-1',
+      updatedBy: { id: 'u-1', name: 'Ada Lovelace', email: 'ada@example.com' },
     },
   });
 
@@ -58,5 +70,6 @@ export type UpdateFeatureFlagInput = z.input<typeof UpdateFeatureFlagSchema>;
 export const FeatureFlagsOpenApiRegistry = {
   FeatureFlagMap: FeatureFlagMapSchema,
   FeatureFlag: FeatureFlagSchema,
+  FeatureFlagUpdatedBy: FeatureFlagUpdatedBySchema,
   UpdateFeatureFlagInput: UpdateFeatureFlagSchema,
 } as const;

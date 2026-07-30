@@ -17,6 +17,10 @@ import { Button } from '@/shared/ui';
  * i18n keys live under `admin.featureFlags.*`. They are seeded in Task 11;
  * before then the keys render as their raw paths, which is acceptable for
  * a sysadmin-only surface.
+ *
+ * The "last updated" cell shows the updater's name (or email if the name
+ * is null — some users signed up without a name) plus a locale-formatted
+ * timestamp. Raw UUIDs never surface.
  */
 export function AdminFeatureFlagsPage(): React.ReactElement {
   const { t } = useTranslation();
@@ -63,8 +67,8 @@ export function AdminFeatureFlagsPage(): React.ReactElement {
                 </Button>
               </td>
               <td className="py-3 text-sm text-on-surface-variant">
-                {row.updatedById
-                  ? `${row.updatedById} · ${new Date(row.updatedAt).toLocaleString()}`
+                {row.updatedBy
+                  ? `${row.updatedBy.name ?? row.updatedBy.email} · ${new Date(row.updatedAt).toLocaleString()}`
                   : '—'}
               </td>
             </tr>

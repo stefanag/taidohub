@@ -15,7 +15,10 @@ import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js'
 import { CheckAbility } from '../../infrastructure/ability/check-ability.decorator.js';
 
 import { FeatureFlagsService } from './feature-flags.service.js';
-import { type FeatureFlagRow } from './feature-flags.repository.js';
+import {
+  type FeatureFlagRow,
+  type FeatureFlagRowWithUpdater,
+} from './feature-flags.repository.js';
 
 /**
  * Public, unauthenticated endpoint that feeds the SPA's `FeatureFlagsProvider`
@@ -53,7 +56,7 @@ export class FeatureFlagsAdminController {
 
   @Get()
   @CheckAbility('manage', 'FeatureFlag')
-  listRows(): Promise<FeatureFlagRow[]> {
+  listRows(): Promise<FeatureFlagRowWithUpdater[]> {
     return this.service.listRows();
   }
 

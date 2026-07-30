@@ -4,8 +4,13 @@ import type { FeatureFlagCode } from '@repo/contracts/feature-flags';
 
 import { DRIZZLE, type DrizzleDb, type DrizzleExecutor } from '../../infrastructure/database/client.js';
 import { featureFlag } from '../../infrastructure/database/schema/feature-flag.js';
+import { user } from '../../infrastructure/database/schema/users.js';
 
 export type FeatureFlagRow = typeof featureFlag.$inferSelect;
+
+export interface FeatureFlagRowWithUpdater extends FeatureFlagRow {
+  updatedBy: { id: string; name: string | null; email: string } | null;
+}
 
 /**
  * Repository — the only file in the feature-flags module allowed to touch
@@ -22,6 +27,29 @@ export class FeatureFlagsRepository {
 
   async list(): Promise<FeatureFlagRow[]> {
     return this.db.select().from(featureFlag);
+  }
+
+  /**
+   * Same as `list()` but LEFT JOINs `user` so the caller doesn't have to
+   * chase the `updated_by_id` FK for display purposes. The join is left so
+   * a row whose updater no longer exists (FK is `ON DELETE SET NULL`) still
+   * comes back — it just has `updatedBy: null`.
+   *
+   * Only the admin surface needs this shape; the guard + resolveMap paths
+   * stay on the leaner `list()`.
+   */
+  async listWithUpdater(): Promise<FeatureFlagRowWithUpdater[]> {
+    const rows = await this.db
+      .select({
+        flag: featureFlag,
+        updater: { id: user.id, name: user.name, email: user.email },
+      })
+      .from(featureFlag)
+      .leftJoin(user, eq(user.id, featureFlag.updatedById));
+    return rows.map((r) => ({
+      ...r.flag,
+      updatedBy: r.updater?.id ? r.updater : null,
+    }));
   }
 
   async findByCode(code: FeatureFlagCode): Promise<FeatureFlagRow | undefined> {
