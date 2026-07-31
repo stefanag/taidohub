@@ -258,6 +258,16 @@
         "types": "./dist/grading-requirements.d.cts",
         "default": "./dist/grading-requirements.cjs"
       }
+    },
+    "./statistics": {
+      "import": {
+        "types": "./dist/statistics.d.ts",
+        "default": "./dist/statistics.js"
+      },
+      "require": {
+        "types": "./dist/statistics.d.cts",
+        "default": "./dist/statistics.cjs"
+      }
     }
   },
   "files": [

@@ -35,6 +35,7 @@ export const SubjectSchema = z
     'RequirementSet',
     'Student',
     'FeedbackThread',
+    'Statistics',
     'all',
   ])
   .meta({
@@ -203,6 +204,19 @@ export type FeedbackThreadSubjectShape = {
 };
 
 /**
+ * Statistics rows have no persistent id in the DB — they're identified by
+ * `scopeType` + `scopeId` (e.g. `organisation` + org id). `id` is kept
+ * optional for CASL's own conditional-rule engine, not because the row has one.
+ */
+export type StatisticsSubjectShape = {
+  readonly __caslSubjectType__: 'Statistics';
+  id?: string;
+  scopeType: 'platform' | 'organisation' | 'user';
+  scopeId: string;
+  organisationId?: string;
+};
+
+/**
  * The full CASL subject union: either a bare subject name (for class-level
  * rules like `can('create', 'Organisation')`) or a tagged subject shape (for
  * instance-level rules and for dispatching on a real row passed to
@@ -229,7 +243,8 @@ export type AppSubject =
   | ProgressSubjectShape
   | RequirementSetSubjectShape
   | StudentSubjectShape
-  | FeedbackThreadSubjectShape;
+  | FeedbackThreadSubjectShape
+  | StatisticsSubjectShape;
 
 /**
  * Tuple type compatible with `MongoAbility<[AppAction, AppSubject]>` from
