@@ -232,6 +232,13 @@
       "when": 1782812040010,
       "tag": "0032_unusual_the_twelve",
       "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1785526463617,
+      "tag": "0033_statistics_triggers",
+      "breakpoints": true
     }
   ]
 }
