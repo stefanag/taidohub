@@ -61,12 +61,13 @@ Windows-only, no Docker. UAC prompts appear during install and (optionally) duri
    ```
    The installer runs elevated — click **Yes** on the UAC prompt. It sets up the service `postgresql-x64-17` on port 5432 and starts it.
 
-2. Create the app role and database (run from Git Bash or WSL — adjust the psql path if you installed to a non-default location):
+2. Create the app role, the database, and (explicitly) the `public` schema. The winget installer on Windows sometimes creates a database without `public` — Drizzle's migrations then fail with a cryptic `3F000 / no schema has been selected` because the app's `search_path` (`"$user", public`) resolves to nothing writable. Creating the schema owned by `taidohub` avoids that trap. Run from Git Bash or WSL — adjust the psql path if you installed to a non-default location:
    ```bash
    export PGPASSWORD=postgres
    PSQL='/c/Program Files/PostgreSQL/17/bin/psql.exe'
    "$PSQL" -U postgres -h localhost -p 5432 -c "CREATE USER taidohub WITH PASSWORD 'taidohub' CREATEDB;"
    "$PSQL" -U postgres -h localhost -p 5432 -c "CREATE DATABASE taidohub_dev OWNER taidohub;"
+   "$PSQL" -U postgres -h localhost -p 5432 -d taidohub_dev -c "CREATE SCHEMA IF NOT EXISTS public AUTHORIZATION taidohub;"
    unset PGPASSWORD
    ```
 
@@ -130,6 +131,16 @@ Just edit `.env` — set `DATABASE_URL` and `DIRECT_URL` back to the Supabase UR
 **"database taidohub_dev does not exist".** The container was created against a different db name (perhaps from an old compose file). Wipe and start over: `pnpm --filter backend db:dev:reset`.
 
 **Everything looks weird after a schema change.** `db:dev:reset` is the hammer — wipes the volume, re-migrates from `apps/backend/drizzle/*.sql`, re-seeds.
+
+**`db:migrate` fails with `3F000` / "no schema has been selected to create in"** (native path, Path B only). The winget PG17 installer created the DB without a `public` schema. Check with `SELECT nspname FROM pg_namespace;` — if `public` is missing, create it (once), then re-run migrate:
+```bash
+export PGPASSWORD=postgres
+PSQL='/c/Program Files/PostgreSQL/17/bin/psql.exe'
+"$PSQL" -U postgres -h localhost -p 5432 -d taidohub_dev -c "CREATE SCHEMA IF NOT EXISTS public AUTHORIZATION taidohub;"
+unset PGPASSWORD
+pnpm --filter backend db:migrate
+```
+Setup instructions above now include this step, so it should only bite databases created before this note.
 
 ---
 
