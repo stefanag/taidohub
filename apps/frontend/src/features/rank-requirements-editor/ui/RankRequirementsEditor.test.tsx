@@ -27,7 +27,7 @@ const TECH_KIHON_1: Technique = {
   nameJa: '',
   nameRomaji: 'Mae geri',
   nameSv: 'Framre spark',
-  nameEn: 'Front kick',
+  nameEn: 'Mae geri',
   nameFi: 'Etupotku',
   descriptionSv: '',
   descriptionEn: '',
@@ -188,7 +188,7 @@ describe('<RankRequirementsEditor>', () => {
       expect(hooks.getRequirementsForSet).toHaveBeenCalledWith(RANK_ID, SET_ID);
     });
 
-    expect(await screen.findByText('Front kick')).toBeInTheDocument();
+    expect(await screen.findByText('Mae geri')).toBeInTheDocument();
     expect(screen.queryByText('Advanced thing')).not.toBeInTheDocument();
   });
 
@@ -216,7 +216,7 @@ describe('<RankRequirementsEditor>', () => {
     const { user } = renderEditor();
 
     // Wait for the techniques query to resolve before the chip exists.
-    const kihonChip = await screen.findByRole('button', { name: 'Front kick' });
+    const kihonChip = await screen.findByRole('button', { name: 'Mae geri' });
     const kihonSection = kihonChip.closest('section')!;
 
     // Select the technique first (moves it into the "selected" chip row).
@@ -235,13 +235,13 @@ describe('<RankRequirementsEditor>', () => {
   it('removing a selected technique removes it from both kihon and kihonTested', async () => {
     const { user } = renderEditor();
 
-    const kihonChip = await screen.findByRole('button', { name: 'Front kick' });
+    const kihonChip = await screen.findByRole('button', { name: 'Mae geri' });
     const kihonSection = kihonChip.closest('section')!;
 
     await user.click(kihonChip);
     await user.click(within(kihonSection).getByRole('button', { name: 'Tested' }));
     // Remove the chip.
-    await user.click(within(kihonSection).getByRole('button', { name: /remove front kick/i }));
+    await user.click(within(kihonSection).getByRole('button', { name: /remove mae geri/i }));
 
     await user.click(screen.getByRole('button', { name: /^save$/i }));
 
@@ -254,7 +254,7 @@ describe('<RankRequirementsEditor>', () => {
   it('adding a hokei group with pickCount=5 and 2 patterns sends pickCount 5 unclamped', async () => {
     const { user } = renderEditor();
 
-    await screen.findByText('Front kick');
+    await screen.findByText('Mae geri');
     await user.click(screen.getByRole('button', { name: /add group/i }));
 
     const groupCard = screen.getByTestId('hokei-group-0');
@@ -279,7 +279,7 @@ describe('<RankRequirementsEditor>', () => {
   it('calls useSetRequirementsMutation with rankId + setId-injected body on Save', async () => {
     const { user } = renderEditor();
 
-    await screen.findByText('Front kick');
+    await screen.findByText('Mae geri');
     await user.click(screen.getByRole('button', { name: /^save$/i }));
 
     await waitFor(() => expect(hooks.setRequirements).toHaveBeenCalledTimes(1));
