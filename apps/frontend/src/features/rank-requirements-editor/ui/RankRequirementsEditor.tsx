@@ -40,9 +40,17 @@ export type RankRequirementsFormValues = z.input<typeof SetGradingRequirementsSc
 
 const KOBO_CODE = 'kobo';
 
+/**
+ * @param preferRomaji Kihon technique names ("mae geri", "yoko geri", …) are
+ *   only ever the romaji transliteration in practice — translating them to
+ *   English/Swedish reads worse than the transliteration itself. Pass `true`
+ *   for kihon so the label shows `nameRomaji` regardless of UI language;
+ *   defaults `false` so patterns/hokei keep their localised labels.
+ */
 function toOptions(
   entities: Array<Technique | Pattern>,
   lang: string,
+  preferRomaji = false,
 ): EntityOption[] {
   const byLang: Record<string, (e: Technique | Pattern) => string> = {
     en: (e) => e.nameEn,
@@ -52,7 +60,9 @@ function toOptions(
   const pick = byLang[lang] ?? byLang.en!;
   return entities.map((e) => ({
     id: e.id,
-    label: pick(e) || e.nameEn || e.nameRomaji,
+    label: preferRomaji
+      ? e.nameRomaji || pick(e) || e.nameEn
+      : pick(e) || e.nameEn || e.nameRomaji,
   }));
 }
 
@@ -153,7 +163,7 @@ export function RankRequirementsEditor({
   // render even when `data` itself hasn't changed, which react-hooks/
   // exhaustive-deps flags as a footgun.
   const kihonOptions = React.useMemo(
-    () => toOptions((techniquesQuery.data ?? []).filter((tech) => tech.isKihon), lang),
+    () => toOptions((techniquesQuery.data ?? []).filter((tech) => tech.isKihon), lang, true),
     [techniquesQuery.data, lang],
   );
 
