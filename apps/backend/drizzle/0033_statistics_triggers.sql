@@ -61,12 +61,18 @@ BEGIN
   ON CONFLICT (scope_type, scope_id, metric, dimension_key)
   DO UPDATE SET value = stat_current.value + EXCLUDED.value, updated_at = now();
 
-  -- Per-org + ancestors (via user's memberships)
+  -- Per-org + ancestors (via user's memberships), deduplicated per user: a
+  -- user holding two memberships whose ancestor chains share a node (e.g.
+  -- two clubs under the same federation) must only count once at that
+  -- shared ancestor, not once per membership row.
   INSERT INTO stat_current (scope_type, scope_id, metric, dimension_key, value, updated_at)
-  SELECT 'organisation', a.organisation_id::text, 'rank_count', p_rank_id::text, p_delta, now()
-  FROM organisation_membership m
-  CROSS JOIN LATERAL statistics_org_and_ancestors(m.organisation_id) a
-  WHERE m.user_id = p_user_id
+  SELECT 'organisation', o.organisation_id::text, 'rank_count', p_rank_id::text, p_delta, now()
+  FROM (
+    SELECT DISTINCT a.organisation_id
+    FROM organisation_membership m
+    CROSS JOIN LATERAL statistics_org_and_ancestors(m.organisation_id) a
+    WHERE m.user_id = p_user_id
+  ) o
   ON CONFLICT (scope_type, scope_id, metric, dimension_key)
   DO UPDATE SET value = stat_current.value + EXCLUDED.value, updated_at = now();
 END;
@@ -169,7 +175,10 @@ BEGIN
     ON CONFLICT (scope_type, scope_id, metric, dimension_key)
     DO UPDATE SET value = stat_current.value + EXCLUDED.value, updated_at = now();
 
-    -- Remove user's rank_count from the org's ancestor rows for THIS org.
+    -- Remove user's rank_count from the org's ancestor rows for THIS org,
+    -- but only for ancestors not still covered by another membership this
+    -- user holds (e.g. user leaves Org-A but remains in Org-B, both under
+    -- Fed-X: Fed-X's rank_count must NOT be decremented).
     SELECT rank_id INTO v_current_rank
     FROM rank_history
     WHERE user_id = OLD.user_id AND result = 'pass'
@@ -179,6 +188,14 @@ BEGIN
       INSERT INTO stat_current (scope_type, scope_id, metric, dimension_key, value, updated_at)
       SELECT 'organisation', a.organisation_id::text, 'rank_count', v_current_rank::text, -1, now()
       FROM statistics_org_and_ancestors(OLD.organisation_id) a
+      WHERE NOT EXISTS (
+        SELECT 1
+        FROM organisation_membership m
+        CROSS JOIN LATERAL statistics_org_and_ancestors(m.organisation_id) a2
+        WHERE m.user_id = OLD.user_id
+          AND m.id <> OLD.id
+          AND a2.organisation_id = a.organisation_id
+      )
       ON CONFLICT (scope_type, scope_id, metric, dimension_key)
       DO UPDATE SET value = stat_current.value + EXCLUDED.value, updated_at = now();
     END IF;
@@ -201,10 +218,21 @@ BEGIN
     WHERE user_id = NEW.user_id AND result = 'pass'
     ORDER BY date DESC, created_at DESC LIMIT 1;
 
+    -- Only increment ancestors NOT already covered by another membership
+    -- this user holds (e.g. user already in Org-A joins Org-B, both under
+    -- Fed-X: Fed-X's rank_count must NOT be double-incremented).
     IF v_current_rank IS NOT NULL THEN
       INSERT INTO stat_current (scope_type, scope_id, metric, dimension_key, value, updated_at)
       SELECT 'organisation', a.organisation_id::text, 'rank_count', v_current_rank::text, +1, now()
       FROM statistics_org_and_ancestors(NEW.organisation_id) a
+      WHERE NOT EXISTS (
+        SELECT 1
+        FROM organisation_membership m
+        CROSS JOIN LATERAL statistics_org_and_ancestors(m.organisation_id) a2
+        WHERE m.user_id = NEW.user_id
+          AND m.id <> NEW.id
+          AND a2.organisation_id = a.organisation_id
+      )
       ON CONFLICT (scope_type, scope_id, metric, dimension_key)
       DO UPDATE SET value = stat_current.value + EXCLUDED.value, updated_at = now();
     END IF;
@@ -318,17 +346,22 @@ BEGIN
   ) rh
   GROUP BY rh.rank_id;
 
-  -- rank_count: per organisation (with ancestor rollup)
+  -- rank_count: per organisation (with ancestor rollup, deduplicated by
+  -- user: a user with two memberships whose ancestor chains share a node
+  -- counts once at that shared ancestor, not once per membership).
   INSERT INTO stat_current (scope_type, scope_id, metric, dimension_key, value, updated_at)
-  SELECT 'organisation', a.organisation_id::text, 'rank_count', rh.rank_id::text, COUNT(*), now()
+  SELECT 'organisation', pairs.organisation_id::text, 'rank_count', pairs.rank_id::text, COUNT(*), now()
   FROM (
-    SELECT DISTINCT ON (user_id) user_id, rank_id
-    FROM rank_history WHERE result = 'pass'
-    ORDER BY user_id, date DESC, created_at DESC
-  ) rh
-  JOIN organisation_membership m ON m.user_id = rh.user_id
-  JOIN LATERAL statistics_org_and_ancestors(m.organisation_id) a ON true
-  GROUP BY a.organisation_id, rh.rank_id;
+    SELECT DISTINCT rh.user_id, rh.rank_id, a.organisation_id
+    FROM (
+      SELECT DISTINCT ON (user_id) user_id, rank_id
+      FROM rank_history WHERE result = 'pass'
+      ORDER BY user_id, date DESC, created_at DESC
+    ) rh
+    JOIN organisation_membership m ON m.user_id = rh.user_id
+    JOIN LATERAL statistics_org_and_ancestors(m.organisation_id) a ON true
+  ) pairs
+  GROUP BY pairs.organisation_id, pairs.rank_id;
 
   -- membership_count: platform
   INSERT INTO stat_current (scope_type, scope_id, metric, dimension_key, value, updated_at)

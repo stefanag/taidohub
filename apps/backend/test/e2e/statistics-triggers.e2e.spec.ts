@@ -234,4 +234,82 @@ describe.skipIf(!hasDatabase())('statistics triggers (integration)', () => {
     const value = await getStatValue('user', userId, 'content_coverage_pct', rankId);
     expect(value).toBe(50);
   });
+
+  // ── Multi-membership dedup (fix round 1) ────────────────────────────────
+  //
+  // A user can hold multiple `organisation_membership` rows whose ancestor
+  // chains share a node (e.g. two clubs under the same federation). The
+  // shared ancestor's rank_count must reflect DISTINCT users, not one
+  // increment per membership row. See apply_rank_delta, rebuild_all()'s
+  // org-scope rank_count block, and on_membership_change's rank_count
+  // arithmetic in 0033_statistics_triggers.sql.
+
+  it("rebuild_all() dedups a multi-membership user's rank_count at a shared ancestor", async () => {
+    const userId = `stats-t7-${randomUUID()}`;
+    await seedUser(userId);
+    const fedXId = await seedOrg(); // root
+    const orgAId = await seedOrg(fedXId);
+    const orgBId = await seedOrg(fedXId);
+    const rankId = await seedBeltRank();
+
+    await seedRankHistoryPass(userId, rankId, '2026-01-01');
+    await seedMembership(userId, orgAId);
+    await seedMembership(userId, orgBId);
+
+    await sql`SELECT rebuild_all()`;
+
+    const fedXValue = await getStatValue('organisation', fedXId, 'rank_count', rankId);
+    const orgAValue = await getStatValue('organisation', orgAId, 'rank_count', rankId);
+    const orgBValue = await getStatValue('organisation', orgBId, 'rank_count', rankId);
+    expect(fedXValue).toBe(1);
+    expect(orgAValue).toBe(1);
+    expect(orgBValue).toBe(1);
+  });
+
+  it('inserting a second sibling membership does not double-increment the shared ancestor', async () => {
+    const userId = `stats-t8-${randomUUID()}`;
+    await seedUser(userId);
+    const fedXId = await seedOrg(); // root
+    const orgAId = await seedOrg(fedXId);
+    const orgBId = await seedOrg(fedXId);
+    const rankId = await seedBeltRank();
+
+    await seedRankHistoryPass(userId, rankId, '2026-01-01');
+    await seedMembership(userId, orgAId);
+
+    const fedXAfterFirst = await getStatValue('organisation', fedXId, 'rank_count', rankId);
+    expect(fedXAfterFirst).toBe(1);
+
+    await seedMembership(userId, orgBId);
+
+    const fedXAfterSecond = await getStatValue('organisation', fedXId, 'rank_count', rankId);
+    const orgBValue = await getStatValue('organisation', orgBId, 'rank_count', rankId);
+    expect(fedXAfterSecond).toBe(1);
+    expect(orgBValue).toBe(1);
+  });
+
+  it('deleting one of two sibling memberships keeps the shared ancestor count intact', async () => {
+    const userId = `stats-t9-${randomUUID()}`;
+    await seedUser(userId);
+    const fedXId = await seedOrg(); // root
+    const orgAId = await seedOrg(fedXId);
+    const orgBId = await seedOrg(fedXId);
+    const rankId = await seedBeltRank();
+
+    await seedRankHistoryPass(userId, rankId, '2026-01-01');
+    await seedMembership(userId, orgAId);
+    await seedMembership(userId, orgBId);
+
+    const fedXBefore = await getStatValue('organisation', fedXId, 'rank_count', rankId);
+    expect(fedXBefore).toBe(1);
+
+    await sql`DELETE FROM organisation_membership WHERE user_id = ${userId} AND organisation_id = ${orgAId}`;
+
+    const orgAAfter = await getStatValue('organisation', orgAId, 'rank_count', rankId);
+    const orgBAfter = await getStatValue('organisation', orgBId, 'rank_count', rankId);
+    const fedXAfter = await getStatValue('organisation', fedXId, 'rank_count', rankId);
+    expect(orgAAfter ?? 0).toBe(0);
+    expect(orgBAfter).toBe(1);
+    expect(fedXAfter).toBe(1);
+  });
 });
