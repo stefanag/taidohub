@@ -1,12 +1,18 @@
 /**
  * e2e suite for the statistics triggers + `rebuild_all()` shipped in
  * migration `0033_statistics_triggers.sql` (Task 2 of the statistics
- * implementation plan).
+ * implementation plan), plus (from the "Task 3: repository nightly-job
+ * methods" describe block onward) the `StatisticsRepository` methods that
+ * aren't trigger-maintained: `refreshActivityStats`, `recomputeAvgGapPerRank`,
+ * `captureMonthlyIfNewMonth`.
  *
- * Uses the raw `postgres` client directly against the docker-compose e2e
- * Postgres (see `apps/backend/docker-compose.e2e.yml`) rather than going
- * through the Nest app / Drizzle ORM — the thing under test is DB-level
- * trigger behaviour, not application code.
+ * The Task 2 tests use the raw `postgres` client directly against the
+ * docker-compose e2e Postgres (see `apps/backend/docker-compose.e2e.yml`)
+ * rather than going through the Nest app / Drizzle ORM — the thing under
+ * test is DB-level trigger behaviour, not application code. The Task 3
+ * tests exercise `StatisticsRepository` through a real `DrizzleDb` client
+ * (the actual production entrypoint into these queries) while still using
+ * the raw `sql` client for seeding, matching the Task 2 seed helpers.
  *
  * Isolation: each test seeds its own fresh user id, organisation id, and
  * belt rank id (all UUIDs / unique strings), so `stat_current` rows keyed
@@ -32,6 +38,12 @@ import { randomUUID } from 'node:crypto';
 import postgres from 'postgres';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
+import {
+  createDrizzleClient,
+  disposeDrizzleClient,
+  type DrizzleDb,
+} from '../../src/infrastructure/database/client.js';
+import { StatisticsRepository } from '../../src/modules/statistics/statistics.repository.js';
 import { hasDatabase } from '../helpers/app-factory.js';
 import { resetDatabase } from '../helpers/db-reset.js';
 
@@ -112,6 +124,37 @@ describe.skipIf(!hasDatabase())('statistics triggers (integration)', () => {
       WHERE scope_type = ${scopeType} AND scope_id = ${scopeId} AND metric = ${metric} AND dimension_key = ${dimensionKey}
     `;
     return row ? Number(row.value) : null;
+  }
+
+  // ── Task 3 seed helpers ──────────────────────────────────────────────────
+
+  /** A `user_content_progress` write (insert), which counts as an "activity" write. */
+  async function seedContentProgressWrite(userId: string, techniqueId: string): Promise<void> {
+    await sql`
+      INSERT INTO technique (id, name_romaji) VALUES (${techniqueId}, ${`Tech-${techniqueId.slice(0, 8)}`})
+    `;
+    await sql`
+      INSERT INTO user_content_progress (user_id, content_type, technique_id, status)
+      VALUES (${userId}, 'technique', ${techniqueId}, 'learning')
+    `;
+  }
+
+  /**
+   * A `feedback_thread` + one `feedback_comment` authored by `studentId`,
+   * using entity_type='general' (entityId === studentId per the contract).
+   * Both count as "activity" writes; the thread also counts toward
+   * feedback_threads_opened_month_to_date.
+   */
+  async function seedFeedbackThreadWithComment(studentId: string): Promise<void> {
+    const threadId = randomUUID();
+    await sql`
+      INSERT INTO feedback_thread (id, entity_type, entity_id, student_id, created_by_user_id)
+      VALUES (${threadId}, 'general', ${studentId}, ${studentId}, ${studentId})
+    `;
+    await sql`
+      INSERT INTO feedback_comment (id, thread_id, author_id, body)
+      VALUES (${randomUUID()}, ${threadId}, ${studentId}, 'Test comment')
+    `;
   }
 
   // ── Tests ────────────────────────────────────────────────────────────────
@@ -311,5 +354,202 @@ describe.skipIf(!hasDatabase())('statistics triggers (integration)', () => {
     expect(orgAAfter ?? 0).toBe(0);
     expect(orgBAfter).toBe(1);
     expect(fedXAfter).toBe(1);
+  });
+
+  // ── Task 3: repository nightly-job methods ──────────────────────────────
+  //
+  // `refreshActivityStats`, `recomputeAvgGapPerRank`, `captureMonthlyIfNewMonth`
+  // aren't trigger-maintained (they depend on a rolling/calendar window, not
+  // a row delta), so they're exercised directly through `StatisticsRepository`
+  // over a real `DrizzleDb` client — the same entrypoint the nightly job uses.
+
+  describe('StatisticsRepository nightly-job methods', () => {
+    let db: DrizzleDb;
+    let repo: StatisticsRepository;
+
+    beforeAll(() => {
+      const url = process.env.TEST_DATABASE_URL ?? process.env.DATABASE_URL!;
+      db = createDrizzleClient(url, { allowMultiple: true });
+      repo = new StatisticsRepository(db);
+    });
+
+    afterAll(async () => {
+      await disposeDrizzleClient(db);
+    });
+
+    it('refreshActivityStats computes grading_events_month_to_date for org + ancestors + platform', async () => {
+      const userId = `stats-t10-${randomUUID()}`;
+      await seedUser(userId);
+      const fedXId = await seedOrg();
+      const orgAId = await seedOrg(fedXId);
+      await seedMembership(userId, orgAId);
+      const rankId = await seedBeltRank();
+
+      const today = new Date().toISOString().slice(0, 10);
+      await seedRankHistoryPass(userId, rankId, today);
+
+      await repo.refreshActivityStats();
+
+      const orgValue = await getStatValue('organisation', orgAId, 'grading_events_month_to_date', '');
+      const fedXValue = await getStatValue('organisation', fedXId, 'grading_events_month_to_date', '');
+      const platformValue = await getStatValue('platform', '__platform__', 'grading_events_month_to_date', '');
+      expect(orgValue).toBe(1);
+      expect(fedXValue).toBe(1);
+      expect(platformValue).toBeGreaterThanOrEqual(1);
+    });
+
+    it('refreshActivityStats dedups a multi-membership user at a shared ancestor for grading_events_month_to_date', async () => {
+      const userId = `stats-t11-${randomUUID()}`;
+      await seedUser(userId);
+      const fedXId = await seedOrg();
+      const orgAId = await seedOrg(fedXId);
+      const orgBId = await seedOrg(fedXId);
+      await seedMembership(userId, orgAId);
+      await seedMembership(userId, orgBId);
+      const rankId = await seedBeltRank();
+
+      const today = new Date().toISOString().slice(0, 10);
+      await seedRankHistoryPass(userId, rankId, today);
+
+      await repo.refreshActivityStats();
+
+      const orgAValue = await getStatValue('organisation', orgAId, 'grading_events_month_to_date', '');
+      const orgBValue = await getStatValue('organisation', orgBId, 'grading_events_month_to_date', '');
+      const fedXValue = await getStatValue('organisation', fedXId, 'grading_events_month_to_date', '');
+      // One grading event; membership in both orgA and orgB (siblings under
+      // fedX) must not double-count fedX's total.
+      expect(orgAValue).toBe(1);
+      expect(orgBValue).toBe(1);
+      expect(fedXValue).toBe(1);
+    });
+
+    it('refreshActivityStats computes active_users_last_30_days from user_content_progress writes', async () => {
+      const userId = `stats-t12-${randomUUID()}`;
+      await seedUser(userId);
+      const orgId = await seedOrg();
+      await seedMembership(userId, orgId);
+      await seedContentProgressWrite(userId, randomUUID());
+
+      await repo.refreshActivityStats();
+
+      const orgValue = await getStatValue('organisation', orgId, 'active_users_last_30_days', '');
+      const platformValue = await getStatValue('platform', '__platform__', 'active_users_last_30_days', '');
+      expect(orgValue).toBe(1);
+      expect(platformValue).toBeGreaterThanOrEqual(1);
+    });
+
+    it('refreshActivityStats computes feedback_threads_opened_month_to_date via the student’s memberships', async () => {
+      const studentId = `stats-t13-${randomUUID()}`;
+      await seedUser(studentId);
+      const orgId = await seedOrg();
+      await seedMembership(studentId, orgId);
+      await seedFeedbackThreadWithComment(studentId);
+
+      await repo.refreshActivityStats();
+
+      const orgValue = await getStatValue('organisation', orgId, 'feedback_threads_opened_month_to_date', '');
+      const platformValue = await getStatValue(
+        'platform',
+        '__platform__',
+        'feedback_threads_opened_month_to_date',
+        '',
+      );
+      // The comment authored by the student is also an activity write.
+      const activeUsersValue = await getStatValue('organisation', orgId, 'active_users_last_30_days', '');
+      expect(orgValue).toBe(1);
+      expect(platformValue).toBeGreaterThanOrEqual(1);
+      expect(activeUsersValue).toBeGreaterThanOrEqual(1);
+    });
+
+    it('recomputeAvgGapPerRank computes the average gap between consecutive PASS rows, rolled up to ancestors', async () => {
+      const userId = `stats-t14-${randomUUID()}`;
+      await seedUser(userId);
+      const orgId = await seedOrg();
+      await seedMembership(userId, orgId);
+      const rankId = await seedBeltRank();
+
+      // 31-day gap: 2026-01-01 -> 2026-02-01.
+      await seedRankHistoryPass(userId, rankId, '2026-01-01');
+      await seedRankHistoryPass(userId, rankId, '2026-02-01');
+
+      await repo.recomputeAvgGapPerRank();
+
+      const value = await getStatValue('organisation', orgId, 'avg_months_between_ranks', rankId);
+      expect(value).not.toBeNull();
+      expect(value!).toBeCloseTo(31 / 30.44, 2);
+    });
+
+    it('recomputeAvgGapPerRank dedups a multi-membership user at a shared ancestor', async () => {
+      const fedXId = await seedOrg();
+      const orgAId = await seedOrg(fedXId);
+      const orgBId = await seedOrg(fedXId);
+      const rankId = await seedBeltRank();
+
+      // User one: single membership in orgA, 31-day gap.
+      const userOneId = `stats-t15a-${randomUUID()}`;
+      await seedUser(userOneId);
+      await seedMembership(userOneId, orgAId);
+      await seedRankHistoryPass(userOneId, rankId, '2026-01-01');
+      await seedRankHistoryPass(userOneId, rankId, '2026-02-01');
+
+      // User two: memberships in BOTH orgA and orgB (siblings under fedX),
+      // 90-day gap. Without dedup, fedX would average this gap in twice
+      // (once via orgA's ancestor path, once via orgB's).
+      const userTwoId = `stats-t15b-${randomUUID()}`;
+      await seedUser(userTwoId);
+      await seedMembership(userTwoId, orgAId);
+      await seedMembership(userTwoId, orgBId);
+      await seedRankHistoryPass(userTwoId, rankId, '2026-01-01');
+      await seedRankHistoryPass(userTwoId, rankId, '2026-04-01');
+
+      await repo.recomputeAvgGapPerRank();
+
+      const gapOne = 31 / 30.44;
+      const gapTwo = 90 / 30.44;
+      const orgAValue = await getStatValue('organisation', orgAId, 'avg_months_between_ranks', rankId);
+      const orgBValue = await getStatValue('organisation', orgBId, 'avg_months_between_ranks', rankId);
+      const fedXValue = await getStatValue('organisation', fedXId, 'avg_months_between_ranks', rankId);
+
+      // orgA: userOne + userTwo -> average of the two gaps.
+      expect(orgAValue!).toBeCloseTo((gapOne + gapTwo) / 2, 2);
+      // orgB: userTwo only.
+      expect(orgBValue!).toBeCloseTo(gapTwo, 2);
+      // fedX (shared ancestor): must equal orgA's two-distinct-user average,
+      // NOT a 3-row average that double-counts userTwo's gap.
+      expect(fedXValue!).toBeCloseTo((gapOne + gapTwo) / 2, 2);
+    });
+
+    it('captureMonthlyIfNewMonth snapshots stat_current into stat_snapshot_monthly for the previous month, once', async () => {
+      const userId = `stats-t16-${randomUUID()}`;
+      await seedUser(userId);
+      const orgId = await seedOrg();
+      await seedMembership(userId, orgId);
+      const rankId = await seedBeltRank();
+      await seedRankHistoryPass(userId, rankId, '2026-01-01');
+
+      const currentValue = await getStatValue('organisation', orgId, 'rank_count', rankId);
+      expect(currentValue).toBe(1);
+
+      const first = await repo.captureMonthlyIfNewMonth();
+      expect(first.captured).toBe(true);
+      expect(first.year).toBeGreaterThan(2000);
+      expect(first.month).toBeGreaterThanOrEqual(1);
+      expect(first.month).toBeLessThanOrEqual(12);
+
+      const [snapshotRow] = await sql<{ value: string }[]>`
+        SELECT value FROM stat_snapshot_monthly
+        WHERE scope_type = 'organisation' AND scope_id = ${orgId}
+          AND metric = 'rank_count' AND dimension_key = ${rankId}
+          AND year = ${first.year!} AND month = ${first.month!}
+      `;
+      expect(snapshotRow).toBeDefined();
+      expect(Number(snapshotRow!.value)).toBe(1);
+
+      // Already captured this month -> no-op the second time.
+      const second = await repo.captureMonthlyIfNewMonth();
+      expect(second.captured).toBe(false);
+      expect(second.year).toBeUndefined();
+      expect(second.month).toBeUndefined();
+    });
   });
 });
