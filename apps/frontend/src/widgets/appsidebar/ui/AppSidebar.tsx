@@ -1,5 +1,5 @@
 import { Link, useRouterState } from '@tanstack/react-router';
-import { Award, BookOpen, Building2, ClipboardCheck, ClipboardList, Flag, GraduationCap, History, LayoutDashboard, LibraryBig, ScrollText, Swords, Tag, TrendingUp, UserRound, Users, Wrench } from 'lucide-react';
+import { Award, BarChart3, BookOpen, Building2, ClipboardCheck, ClipboardList, Flag, GraduationCap, History, LayoutDashboard, LibraryBig, ScrollText, Swords, Tag, TrendingUp, UserRound, Users, Wrench } from 'lucide-react';
 import * as React from 'react';
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -216,6 +216,19 @@ export function AppSidebar(): React.ReactElement {
                       <Link to="/admin/feature-flags">
                         <Flag />
                         <span>{t('nav.adminFeatureFlags')}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ) : null}
+                {ability?.can('read', 'Statistics') ? (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={pathname.startsWith('/admin/statistics')}
+                    >
+                      <Link to="/admin/statistics">
+                        <BarChart3 />
+                        <span>{t('nav.statistics')}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

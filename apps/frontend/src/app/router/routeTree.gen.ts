@@ -30,6 +30,7 @@ import { Route as AppStudentsUserIdRouteImport } from './routes/_app.students.$u
 import { Route as AppSettingsLabelsRouteImport } from './routes/_app.settings.labels'
 import { Route as AppAdminUsersRouteImport } from './routes/_app.admin.users'
 import { Route as AppAdminTechniquesRouteImport } from './routes/_app.admin.techniques'
+import { Route as AppAdminStatisticsRouteImport } from './routes/_app.admin.statistics'
 import { Route as AppAdminRequirementSetsRouteImport } from './routes/_app.admin.requirement-sets'
 import { Route as AppAdminRankRequirementsRouteImport } from './routes/_app.admin.rank-requirements'
 import { Route as AppAdminPatternsRouteImport } from './routes/_app.admin.patterns'
@@ -157,6 +158,11 @@ const AppAdminUsersRoute = AppAdminUsersRouteImport.update({
 const AppAdminTechniquesRoute = AppAdminTechniquesRouteImport.update({
   id: '/admin/techniques',
   path: '/admin/techniques',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAdminStatisticsRoute = AppAdminStatisticsRouteImport.update({
+  id: '/admin/statistics',
+  path: '/admin/statistics',
   getParentRoute: () => AppRoute,
 } as any)
 const AppAdminRequirementSetsRoute = AppAdminRequirementSetsRouteImport.update({
@@ -320,6 +326,7 @@ export interface FileRoutesByFullPath {
   '/admin/patterns': typeof AppAdminPatternsRouteWithChildren
   '/admin/rank-requirements': typeof AppAdminRankRequirementsRouteWithChildren
   '/admin/requirement-sets': typeof AppAdminRequirementSetsRouteWithChildren
+  '/admin/statistics': typeof AppAdminStatisticsRoute
   '/admin/techniques': typeof AppAdminTechniquesRouteWithChildren
   '/admin/users': typeof AppAdminUsersRoute
   '/settings/labels': typeof AppSettingsLabelsRoute
@@ -360,6 +367,7 @@ export interface FileRoutesByTo {
   '/admin/belt-catalog': typeof AppAdminBeltCatalogRoute
   '/admin/feature-flags': typeof AppAdminFeatureFlagsRoute
   '/admin/labels': typeof AppAdminLabelsRoute
+  '/admin/statistics': typeof AppAdminStatisticsRoute
   '/admin/users': typeof AppAdminUsersRoute
   '/settings/labels': typeof AppSettingsLabelsRoute
   '/students/$userId': typeof AppStudentsUserIdRoute
@@ -405,6 +413,7 @@ export interface FileRoutesById {
   '/_app/admin/patterns': typeof AppAdminPatternsRouteWithChildren
   '/_app/admin/rank-requirements': typeof AppAdminRankRequirementsRouteWithChildren
   '/_app/admin/requirement-sets': typeof AppAdminRequirementSetsRouteWithChildren
+  '/_app/admin/statistics': typeof AppAdminStatisticsRoute
   '/_app/admin/techniques': typeof AppAdminTechniquesRouteWithChildren
   '/_app/admin/users': typeof AppAdminUsersRoute
   '/_app/settings/labels': typeof AppSettingsLabelsRoute
@@ -453,6 +462,7 @@ export interface FileRouteTypes {
     | '/admin/patterns'
     | '/admin/rank-requirements'
     | '/admin/requirement-sets'
+    | '/admin/statistics'
     | '/admin/techniques'
     | '/admin/users'
     | '/settings/labels'
@@ -493,6 +503,7 @@ export interface FileRouteTypes {
     | '/admin/belt-catalog'
     | '/admin/feature-flags'
     | '/admin/labels'
+    | '/admin/statistics'
     | '/admin/users'
     | '/settings/labels'
     | '/students/$userId'
@@ -537,6 +548,7 @@ export interface FileRouteTypes {
     | '/_app/admin/patterns'
     | '/_app/admin/rank-requirements'
     | '/_app/admin/requirement-sets'
+    | '/_app/admin/statistics'
     | '/_app/admin/techniques'
     | '/_app/admin/users'
     | '/_app/settings/labels'
@@ -715,6 +727,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/techniques'
       fullPath: '/admin/techniques'
       preLoaderRoute: typeof AppAdminTechniquesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/admin/statistics': {
+      id: '/_app/admin/statistics'
+      path: '/admin/statistics'
+      fullPath: '/admin/statistics'
+      preLoaderRoute: typeof AppAdminStatisticsRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/admin/requirement-sets': {
@@ -1070,6 +1089,7 @@ interface AppRouteChildren {
   AppAdminPatternsRoute: typeof AppAdminPatternsRouteWithChildren
   AppAdminRankRequirementsRoute: typeof AppAdminRankRequirementsRouteWithChildren
   AppAdminRequirementSetsRoute: typeof AppAdminRequirementSetsRouteWithChildren
+  AppAdminStatisticsRoute: typeof AppAdminStatisticsRoute
   AppAdminTechniquesRoute: typeof AppAdminTechniquesRouteWithChildren
   AppAdminUsersRoute: typeof AppAdminUsersRoute
 }
@@ -1092,6 +1112,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppAdminPatternsRoute: AppAdminPatternsRouteWithChildren,
   AppAdminRankRequirementsRoute: AppAdminRankRequirementsRouteWithChildren,
   AppAdminRequirementSetsRoute: AppAdminRequirementSetsRouteWithChildren,
+  AppAdminStatisticsRoute: AppAdminStatisticsRoute,
   AppAdminTechniquesRoute: AppAdminTechniquesRouteWithChildren,
   AppAdminUsersRoute: AppAdminUsersRoute,
 }

@@ -42,6 +42,7 @@
     "adminBeltCatalog": "Belt catalog",
     "adminLabels": "Labels",
     "adminFeatureFlags": "Feature flags",
+    "statistics": "Statistics",
     "adminPatterns": "Patterns",
     "adminTechniques": "Techniques",
     "adminRequirementSets": "Requirement sets",
@@ -276,6 +277,19 @@
       "lastUpdated": "Last updated",
       "on": "On",
       "off": "Off"
+    },
+    "statistics": {
+      "title": "Statistics",
+      "tiles": {
+        "students": "Students",
+        "instructors": "Instructors",
+        "activeUsers30d": "Active users (30d)",
+        "gradingsMtd": "Gradings this month"
+      },
+      "ranksHeading": "Belts across the platform",
+      "rebuild": "Rebuild statistics",
+      "rebuilding": "Rebuilding…",
+      "rebuiltIn": "Rebuilt in {{durationMs}}ms"
     },
     "patterns": {
       "title": "Manage patterns",
