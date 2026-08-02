@@ -116,7 +116,10 @@
     "save": "Spara profil",
     "saved": "Profilen sparad.",
     "empty": "Den här användaren har inte fyllt i sin profil ännu.",
-    "aboutMePlaceholder": "Skriv lite om din taidoresa, intressen eller bakgrund."
+    "aboutMePlaceholder": "Skriv lite om din taidoresa, intressen eller bakgrund.",
+    "progression": {
+      "heading": "Din progression"
+    }
   },
   "gradingHistory": {
     "title": "Graderingshistorik",
@@ -177,7 +180,8 @@
       "name": "Namn",
       "email": "E-post",
       "organisations": "Organisationer",
-      "progress": "Framsteg"
+      "progress": "Framsteg",
+      "coverage": "Täckning"
     },
     "summary": {
       "notStarted": "Ej påbörjat",

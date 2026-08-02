@@ -4,8 +4,78 @@ import { useTranslation } from 'react-i18next';
 
 import { useMyMembershipsQuery } from '@/entities/me';
 import { displayName, listOrganisationsQueryOptions } from '@/entities/organisation';
+import { useOrganisationStatsQuery } from '@/entities/statistics';
 import { OrgMembershipManager } from '@/features/org-membership-manager';
+import { RankBreakdown } from '@/features/rank-breakdown';
+import { StatTile } from '@/features/stat-tile';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs.js';
+
+/**
+ * Statistics section embedded under a single org's membership manager.
+ *
+ * Deliberately hides itself (returns `null`) on any query error rather than
+ * showing an inline error banner: the caller already sees the membership
+ * manager above (which requires the same orgadmin access), so a 403 here
+ * would only be a defense-in-depth edge case, not a normal user path, and a
+ * discreet omission keeps the page uncluttered.
+ */
+function OrgStatisticsSection({ orgId }: { orgId: string }): React.ReactElement | null {
+  const { t } = useTranslation();
+  const statsQuery = useOrganisationStatsQuery(orgId);
+
+  if (statsQuery.isError) return null;
+
+  return (
+    <section className="mt-8">
+      <h2 className="text-lg font-semibold tracking-tight">
+        {t('myOrganisation.statistics.heading', { defaultValue: 'Statistics' })}
+      </h2>
+      {statsQuery.isLoading ? (
+        <p className="mt-2 text-on-surface-variant">
+          {t('common.loading', { defaultValue: 'Loading…' })}
+        </p>
+      ) : statsQuery.data ? (
+        <>
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <StatTile
+              label={t('myOrganisation.statistics.tiles.students', { defaultValue: 'Students' })}
+              value={statsQuery.data.metrics.membershipCount.student}
+            />
+            <StatTile
+              label={t('myOrganisation.statistics.tiles.instructors', {
+                defaultValue: 'Instructors',
+              })}
+              value={statsQuery.data.metrics.membershipCount.instructor}
+            />
+            <StatTile
+              label={t('myOrganisation.statistics.tiles.activeUsers30d', {
+                defaultValue: 'Active users (30d)',
+              })}
+              value={statsQuery.data.metrics.activeUsersLast30Days}
+            />
+            <StatTile
+              label={t('myOrganisation.statistics.tiles.gradingsMtd', {
+                defaultValue: 'Gradings this month',
+              })}
+              value={statsQuery.data.metrics.gradingEventsMonthToDate}
+            />
+          </div>
+          <div className="mt-4">
+            <RankBreakdown ranks={statsQuery.data.ranks} />
+          </div>
+          <a
+            href={`/organisation/${orgId}/statistics`}
+            className="mt-4 inline-block text-sm text-primary hover:underline"
+          >
+            {t('myOrganisation.statistics.seeFullHistory', {
+              defaultValue: 'See full history',
+            })}
+          </a>
+        </>
+      ) : null}
+    </section>
+  );
+}
 
 /**
  * Orgadmin-facing self-service page. Lists the organisations the caller can
@@ -88,6 +158,7 @@ export function MyOrganisationPage(): React.ReactElement {
           })}
         </p>
         <OrgMembershipManager organisationId={id} orgLabel={labelFor(id)} />
+        <OrgStatisticsSection orgId={id} />
       </main>
     );
   }
@@ -117,6 +188,7 @@ export function MyOrganisationPage(): React.ReactElement {
         {orgadminOrgs.map((id) => (
           <TabsContent key={id} value={id}>
             <OrgMembershipManager organisationId={id} orgLabel={labelFor(id)} />
+            <OrgStatisticsSection orgId={id} />
           </TabsContent>
         ))}
       </Tabs>

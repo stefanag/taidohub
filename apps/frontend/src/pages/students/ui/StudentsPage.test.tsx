@@ -48,6 +48,25 @@ vi.mock('@tanstack/react-router', () => ({
   useNavigate: () => navigateMock,
 }));
 
+// Per-row coverage query, keyed by userId so each `StudentCoverageCell`
+// resolves independently.
+vi.mock('@/entities/statistics', () => ({
+  useUserStatsQuery: (userId: string) => ({
+    data: {
+      scope: { type: 'user', id: userId, name: null },
+      coverageByRank: [
+        {
+          rank: { id: 'r-4kyu', nameRomaji: 'Yonkyu', nameEn: '4th Kyu', sortOrder: 10 },
+          coveragePct: userId === 'u-1' ? 62 : 40,
+        },
+      ],
+      updatedAt: '2026-07-01T00:00:00.000Z',
+    },
+    isLoading: false,
+    isError: false,
+  }),
+}));
+
 import { StudentsPage } from './StudentsPage.js';
 
 function renderPage(): void {
@@ -86,5 +105,12 @@ describe('<StudentsPage>', () => {
       to: '/students/$userId',
       params: { userId: 'u-1' },
     });
+  });
+
+  it('renders one CoverageMeter per student row', () => {
+    renderPage();
+
+    const meters = screen.getAllByRole('progressbar');
+    expect(meters).toHaveLength(2);
   });
 });

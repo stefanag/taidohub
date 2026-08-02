@@ -13,6 +13,7 @@ import type {
   ListOrganisationsResponse,
   Organisation,
 } from '@/entities/organisation';
+import type { OrganisationStats } from '@repo/contracts/statistics';
 import { AbilityProvider, type AppAbility } from '@/shared/lib/casl';
 
 import i18n from '@/i18n';
@@ -48,6 +49,10 @@ const useMembersQuerySpy =
   vi.fn<() => { data: ListMembershipsResponse | undefined; isPending: boolean }>(
     () => ({ data: { data: [], total: 0 }, isPending: false }),
   );
+
+const useOrgStatsQuerySpy = vi.fn<
+  () => { data: OrganisationStats | undefined; isLoading: boolean; isError: boolean }
+>(() => ({ data: undefined, isLoading: true, isError: false }));
 
 // `useQuery` is routed by the queryKey prefix the entity's `*QueryOptions`
 // helpers return below.
@@ -86,6 +91,10 @@ vi.mock('@/entities/membership', () => ({
   listMembershipsQueryOptions: vi.fn(() => ({ queryKey: ['memberships'] })),
   useCreateMembership: () => ({ mutateAsync: vi.fn(), isPending: false }),
   useDeleteMembership: () => ({ mutateAsync: vi.fn(), isPending: false }),
+}));
+
+vi.mock('@/entities/statistics', () => ({
+  useOrganisationStatsQuery: () => useOrgStatsQuerySpy(),
 }));
 
 vi.mock('@/features/auth-by-email', () => ({
@@ -159,11 +168,17 @@ beforeEach(async () => {
   useMyMembershipsSpy.mockReset();
   useOrgsQuerySpy.mockReset();
   useMembersQuerySpy.mockReset();
+  useOrgStatsQuerySpy.mockReset();
   useMyMembershipsSpy.mockReturnValue({ data: [], isPending: false });
   useOrgsQuerySpy.mockReturnValue({ data: { data: [], total: 0 } });
   useMembersQuerySpy.mockReturnValue({
     data: { data: [], total: 0 },
     isPending: false,
+  });
+  useOrgStatsQuerySpy.mockReturnValue({
+    data: undefined,
+    isLoading: true,
+    isError: false,
   });
 });
 
@@ -205,6 +220,51 @@ describe('<MyOrganisationPage>', () => {
     expect(
       screen.getByRole('button', { name: /add member/i }),
     ).toBeInTheDocument();
+  });
+
+  it('renders the statistics section once the org stats query resolves', () => {
+    useMyMembershipsSpy.mockReturnValue({
+      data: [{ organisationId: ORG_A, role: 'orgadmin' }],
+      isPending: false,
+    });
+    useOrgsQuerySpy.mockReturnValue({
+      data: { data: [org({ id: ORG_A, nameEn: 'Stockholm Club' })], total: 1 },
+    });
+    useOrgStatsQuerySpy.mockReturnValue({
+      data: {
+        scope: { type: 'organisation', id: ORG_A, name: 'Stockholm Club' },
+        metrics: {
+          membershipCount: { student: 40, instructor: 6, orgadmin: 2 },
+          gradingEventsMonthToDate: 12,
+          activeUsersLast30Days: 30,
+          feedbackThreadsOpenedMonthToDate: 3,
+        },
+        ranks: [
+          {
+            rank: { id: 'r1', nameRomaji: 'Shodan', nameEn: '1st Dan', sortOrder: 10 },
+            count: 4,
+          },
+        ],
+        updatedAt: '2026-07-01T00:00:00.000Z',
+      },
+      isLoading: false,
+      isError: false,
+    });
+
+    renderPage();
+
+    expect(screen.getByText('Statistics')).toBeInTheDocument();
+    expect(screen.getByText('Students')).toBeInTheDocument();
+    expect(screen.getByText('40')).toBeInTheDocument();
+    expect(screen.getByText('Instructors')).toBeInTheDocument();
+    expect(screen.getByText('6')).toBeInTheDocument();
+    expect(screen.getByText('Active users (30d)')).toBeInTheDocument();
+    expect(screen.getByText('30')).toBeInTheDocument();
+    expect(screen.getByText('Gradings this month')).toBeInTheDocument();
+    expect(screen.getByText('12')).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: /see full history/i }),
+    ).toHaveAttribute('href', `/organisation/${ORG_A}/statistics`);
   });
 
   it('renders a tab strip with one tab per org when the caller has multiple', () => {

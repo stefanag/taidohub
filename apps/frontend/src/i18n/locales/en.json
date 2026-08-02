@@ -64,7 +64,17 @@
   "myOrganisation": {
     "title": "My organisation",
     "description": "Manage the instructors and administrators of your organisation.",
-    "empty": "You do not currently administer any organisations."
+    "empty": "You do not currently administer any organisations.",
+    "statistics": {
+      "heading": "Statistics",
+      "tiles": {
+        "students": "Students",
+        "instructors": "Instructors",
+        "activeUsers30d": "Active users (30d)",
+        "gradingsMtd": "Gradings this month"
+      },
+      "seeFullHistory": "See full history"
+    }
   },
   "organisation": {
     "statistics": {
@@ -135,7 +145,10 @@
     "save": "Save profile",
     "saved": "Profile saved.",
     "empty": "This user has not filled in their profile yet.",
-    "aboutMePlaceholder": "Share a little about your taido journey, interests, or background."
+    "aboutMePlaceholder": "Share a little about your taido journey, interests, or background.",
+    "progression": {
+      "heading": "Your progression"
+    }
   },
   "gradingHistory": {
     "title": "Grading history",
@@ -196,7 +209,8 @@
       "name": "Name",
       "email": "Email",
       "organisations": "Organisations",
-      "progress": "Progress"
+      "progress": "Progress",
+      "coverage": "Coverage"
     },
     "summary": {
       "notStarted": "Not started",

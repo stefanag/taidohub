@@ -116,7 +116,10 @@
     "save": "Tallenna profiili",
     "saved": "Profiili tallennettu.",
     "empty": "Tämä käyttäjä ei ole vielä täyttänyt profiiliaan.",
-    "aboutMePlaceholder": "Kerro hieman taidopolustasi, kiinnostuksen kohteistasi tai taustastasi."
+    "aboutMePlaceholder": "Kerro hieman taidopolustasi, kiinnostuksen kohteistasi tai taustastasi.",
+    "progression": {
+      "heading": "Etenemisesi"
+    }
   },
   "gradingHistory": {
     "title": "Vyökoehistoria",
@@ -242,7 +245,8 @@
       "name": "Nimi",
       "email": "Sähköposti",
       "organisations": "Organisaatiot",
-      "progress": "Edistyminen"
+      "progress": "Edistyminen",
+      "coverage": "Kattavuus"
     },
     "summary": {
       "notStarted": "Ei aloitettu",
