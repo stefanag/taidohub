@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { ScheduleModule } from '@nestjs/schedule';
 import { ZodValidationPipe } from 'nestjs-zod';
 
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter.js';
@@ -38,6 +39,7 @@ import { UsersModule } from './modules/users/users.module.js';
     EmailModule,
     InfraAuthModule,
     AbilityModule,
+    ScheduleModule.forRoot(),
     AuthDocsModule,
     BeltCatalogModule,
     RankHistoryModule,

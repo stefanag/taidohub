@@ -5591,6 +5591,156 @@
           "UserImpersonation"
         ]
       }
+    },
+    "/api/statistics/platform": {
+      "get": {
+        "operationId": "StatisticsController_getPlatform",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "statistics"
+        ]
+      }
+    },
+    "/api/statistics/organisation/{id}": {
+      "get": {
+        "operationId": "StatisticsController_getOrganisation",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "statistics"
+        ]
+      }
+    },
+    "/api/statistics/organisation/{id}/trends": {
+      "get": {
+        "operationId": "StatisticsController_getOrganisationTrends",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "statistics"
+        ]
+      }
+    },
+    "/api/statistics/user/{id}": {
+      "get": {
+        "operationId": "StatisticsController_getUser",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "statistics"
+        ]
+      }
+    },
+    "/api/statistics/user/{id}/trends": {
+      "get": {
+        "operationId": "StatisticsController_getUserTrends",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "statistics"
+        ]
+      }
+    },
+    "/api/admin/statistics/rebuild": {
+      "post": {
+        "operationId": "StatisticsAdminController_rebuild",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "statistics"
+        ]
+      }
     }
   },
   "info": {
@@ -21471,6 +21621,36 @@
       },
       "CloneRequirementSetInput": {
         "$ref": "#/components/schemas/CloneRequirementSetInput"
+      },
+      "StatsRankRow": {
+        "$ref": "#/components/schemas/StatsRankRow"
+      },
+      "StatsScope": {
+        "$ref": "#/components/schemas/StatsScope"
+      },
+      "StatsMembershipCounts": {
+        "$ref": "#/components/schemas/StatsMembershipCounts"
+      },
+      "PlatformStats": {
+        "$ref": "#/components/schemas/PlatformStats"
+      },
+      "OrganisationStats": {
+        "$ref": "#/components/schemas/OrganisationStats"
+      },
+      "UserStatsRankCoverage": {
+        "$ref": "#/components/schemas/UserStatsRankCoverage"
+      },
+      "UserStats": {
+        "$ref": "#/components/schemas/UserStats"
+      },
+      "StatsTrendPoint": {
+        "$ref": "#/components/schemas/StatsTrendPoint"
+      },
+      "StatsTrendResponse": {
+        "$ref": "#/components/schemas/StatsTrendResponse"
+      },
+      "RebuildStatsResponse": {
+        "$ref": "#/components/schemas/RebuildStatsResponse"
       }
     }
   }
