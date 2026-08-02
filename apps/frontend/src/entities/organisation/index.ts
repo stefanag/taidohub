@@ -29,6 +29,8 @@ export {
   organisationQueryOptions,
   useCreateOrganisation,
   useDeleteOrganisation,
+  useOrganisationChildrenQuery,
+  useOrganisationQuery,
   useUpdateOrganisation,
   type UpdateOrganisationVariables,
 } from './lib/hooks.js';

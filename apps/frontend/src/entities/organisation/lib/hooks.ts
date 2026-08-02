@@ -1,6 +1,7 @@
 import {
   queryOptions,
   useMutation,
+  useQuery,
   useQueryClient,
   type UseMutationOptions,
 } from '@tanstack/react-query';
@@ -47,6 +48,27 @@ export function organisationQueryOptions(id: string) {
     queryFn: () => getOrganisation(id),
     enabled: Boolean(id),
   });
+}
+
+/**
+ * Fetches a single organisation by id. Thin wrapper around
+ * `organisationQueryOptions` — introduced so pages that only need "get one
+ * org" (e.g. `OrganisationStatisticsPage`'s header + ancestor breadcrumb)
+ * don't have to import `useQuery` alongside the entity, and so tests can
+ * mock a single named hook instead of reaching into query options.
+ */
+export function useOrganisationQuery(id: string) {
+  return useQuery(organisationQueryOptions(id));
+}
+
+/**
+ * Direct children of an organisation (one level down), used for the
+ * drill-down list on `OrganisationStatisticsPage`. There is no dedicated
+ * "children" endpoint — this just filters `listOrganisations` by `parentId`,
+ * which the backend already supports for the admin org list.
+ */
+export function useOrganisationChildrenQuery(parentId: string) {
+  return useQuery(listOrganisationsQueryOptions({ parentId }));
 }
 
 // The composed-onSuccess pattern below intentionally spreads `options` FIRST

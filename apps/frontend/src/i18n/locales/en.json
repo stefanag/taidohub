@@ -66,6 +66,24 @@
     "description": "Manage the instructors and administrators of your organisation.",
     "empty": "You do not currently administer any organisations."
   },
+  "organisation": {
+    "statistics": {
+      "tiles": {
+        "students": "Students",
+        "instructors": "Instructors",
+        "activeUsers30d": "Active users (30d)",
+        "gradingsMtd": "Gradings this month"
+      },
+      "ranksHeading": "Belts in this organisation",
+      "trendLabel": "Students, last 12 months",
+      "childrenHeading": "Child organisations",
+      "noChildren": "No child organisations.",
+      "breadcrumbLabel": "Ancestors",
+      "errors": {
+        "forbidden": "You don't have access to this organisation's statistics."
+      }
+    }
+  },
   "settings": {
     "title": "Settings",
     "placeholder": "Settings options will appear here.",

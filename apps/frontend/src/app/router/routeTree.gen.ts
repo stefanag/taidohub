@@ -44,6 +44,7 @@ import { Route as AppAdminRequirementSetsIndexRouteImport } from './routes/_app.
 import { Route as AppAdminRankRequirementsIndexRouteImport } from './routes/_app.admin.rank-requirements.index'
 import { Route as AppAdminPatternsIndexRouteImport } from './routes/_app.admin.patterns.index'
 import { Route as AppAdminOrganisationsIndexRouteImport } from './routes/_app.admin.organisations.index'
+import { Route as AppOrganisationIdStatisticsRouteImport } from './routes/_app.organisation.$id.statistics'
 import { Route as AppAdminTechniquesNewRouteImport } from './routes/_app.admin.techniques.new'
 import { Route as AppAdminTechniquesTechniqueIdRouteImport } from './routes/_app.admin.techniques.$techniqueId'
 import { Route as AppAdminPatternsNewRouteImport } from './routes/_app.admin.patterns.new'
@@ -234,6 +235,12 @@ const AppAdminOrganisationsIndexRoute =
     path: '/',
     getParentRoute: () => AppAdminOrganisationsRoute,
   } as any)
+const AppOrganisationIdStatisticsRoute =
+  AppOrganisationIdStatisticsRouteImport.update({
+    id: '/organisation/$id/statistics',
+    path: '/organisation/$id/statistics',
+    getParentRoute: () => AppRoute,
+  } as any)
 const AppAdminTechniquesNewRoute = AppAdminTechniquesNewRouteImport.update({
   id: '/new',
   path: '/new',
@@ -340,6 +347,7 @@ export interface FileRoutesByFullPath {
   '/admin/patterns/new': typeof AppAdminPatternsNewRoute
   '/admin/techniques/$techniqueId': typeof AppAdminTechniquesTechniqueIdRouteWithChildren
   '/admin/techniques/new': typeof AppAdminTechniquesNewRoute
+  '/organisation/$id/statistics': typeof AppOrganisationIdStatisticsRoute
   '/admin/organisations/': typeof AppAdminOrganisationsIndexRoute
   '/admin/patterns/': typeof AppAdminPatternsIndexRoute
   '/admin/rank-requirements/': typeof AppAdminRankRequirementsIndexRoute
@@ -377,6 +385,7 @@ export interface FileRoutesByTo {
   '/admin/organisations/new': typeof AppAdminOrganisationsNewRoute
   '/admin/patterns/new': typeof AppAdminPatternsNewRoute
   '/admin/techniques/new': typeof AppAdminTechniquesNewRoute
+  '/organisation/$id/statistics': typeof AppOrganisationIdStatisticsRoute
   '/admin/organisations': typeof AppAdminOrganisationsIndexRoute
   '/admin/patterns': typeof AppAdminPatternsIndexRoute
   '/admin/rank-requirements': typeof AppAdminRankRequirementsIndexRoute
@@ -427,6 +436,7 @@ export interface FileRoutesById {
   '/_app/admin/patterns/new': typeof AppAdminPatternsNewRoute
   '/_app/admin/techniques/$techniqueId': typeof AppAdminTechniquesTechniqueIdRouteWithChildren
   '/_app/admin/techniques/new': typeof AppAdminTechniquesNewRoute
+  '/_app/organisation/$id/statistics': typeof AppOrganisationIdStatisticsRoute
   '/_app/admin/organisations/': typeof AppAdminOrganisationsIndexRoute
   '/_app/admin/patterns/': typeof AppAdminPatternsIndexRoute
   '/_app/admin/rank-requirements/': typeof AppAdminRankRequirementsIndexRoute
@@ -476,6 +486,7 @@ export interface FileRouteTypes {
     | '/admin/patterns/new'
     | '/admin/techniques/$techniqueId'
     | '/admin/techniques/new'
+    | '/organisation/$id/statistics'
     | '/admin/organisations/'
     | '/admin/patterns/'
     | '/admin/rank-requirements/'
@@ -513,6 +524,7 @@ export interface FileRouteTypes {
     | '/admin/organisations/new'
     | '/admin/patterns/new'
     | '/admin/techniques/new'
+    | '/organisation/$id/statistics'
     | '/admin/organisations'
     | '/admin/patterns'
     | '/admin/rank-requirements'
@@ -562,6 +574,7 @@ export interface FileRouteTypes {
     | '/_app/admin/patterns/new'
     | '/_app/admin/techniques/$techniqueId'
     | '/_app/admin/techniques/new'
+    | '/_app/organisation/$id/statistics'
     | '/_app/admin/organisations/'
     | '/_app/admin/patterns/'
     | '/_app/admin/rank-requirements/'
@@ -826,6 +839,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/organisations/'
       preLoaderRoute: typeof AppAdminOrganisationsIndexRouteImport
       parentRoute: typeof AppAdminOrganisationsRoute
+    }
+    '/_app/organisation/$id/statistics': {
+      id: '/_app/organisation/$id/statistics'
+      path: '/organisation/$id/statistics'
+      fullPath: '/organisation/$id/statistics'
+      preLoaderRoute: typeof AppOrganisationIdStatisticsRouteImport
+      parentRoute: typeof AppRoute
     }
     '/_app/admin/techniques/new': {
       id: '/_app/admin/techniques/new'
@@ -1092,6 +1112,7 @@ interface AppRouteChildren {
   AppAdminStatisticsRoute: typeof AppAdminStatisticsRoute
   AppAdminTechniquesRoute: typeof AppAdminTechniquesRouteWithChildren
   AppAdminUsersRoute: typeof AppAdminUsersRoute
+  AppOrganisationIdStatisticsRoute: typeof AppOrganisationIdStatisticsRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
@@ -1115,6 +1136,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppAdminStatisticsRoute: AppAdminStatisticsRoute,
   AppAdminTechniquesRoute: AppAdminTechniquesRouteWithChildren,
   AppAdminUsersRoute: AppAdminUsersRoute,
+  AppOrganisationIdStatisticsRoute: AppOrganisationIdStatisticsRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
