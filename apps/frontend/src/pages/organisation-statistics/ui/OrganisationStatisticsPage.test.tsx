@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import * as React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -183,6 +183,33 @@ describe('<OrganisationStatisticsPage>', () => {
     const ancestorLink = screen.getByRole('link', { name: 'World Federation' });
     expect(ancestorLink).toHaveAttribute('href', '/organisation/root-1/statistics');
     expect(screen.getByRole('heading', { name: 'Current Club' })).toBeInTheDocument();
+  });
+
+  it('handles a parentId cycle without infinite loop', () => {
+    // org-1's parent is root-1, and root-1's parent points back to org-1 —
+    // a corrupted cycle that the cycle guard in AncestorCrumbs must stop.
+    const orgWithCycleParent = makeOrg({ id: 'org-1', parentId: 'root-1', nameEn: 'Current Club' });
+    const rootWithCycleParent = makeOrg({
+      id: 'root-1',
+      parentId: 'org-1',
+      nameEn: 'World Federation',
+      type: 'international_federation',
+      country: null,
+    });
+    state.orgs = {
+      'org-1': { data: orgWithCycleParent, isLoading: false, isError: false, error: null },
+      'root-1': { data: rootWithCycleParent, isLoading: false, isError: false, error: null },
+    };
+
+    renderPage();
+
+    const nav = screen.getByRole('navigation', { name: 'Ancestors' });
+    // Only ancestor *links* are in scope here — the org's own name also
+    // appears once more as the non-link current-org label at the end of the
+    // breadcrumb, which is expected and not part of what the cycle guard
+    // governs.
+    expect(within(nav).getAllByRole('link', { name: 'World Federation' })).toHaveLength(1);
+    expect(within(nav).queryAllByRole('link', { name: 'Current Club' })).toHaveLength(1);
   });
 
   it('renders direct child-org links for drill-down', () => {

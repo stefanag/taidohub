@@ -25,15 +25,28 @@ import { HttpError } from '@/shared/api';
  * Renders nothing while its own org is loading/erroring; the chain simply
  * grows in as each level resolves rather than blocking on the whole chain.
  */
-function AncestorCrumbs({ parentId }: { parentId: string }): React.ReactElement | null {
+function AncestorCrumbs({
+  parentId,
+  visited = [],
+  depth = 0,
+}: {
+  parentId: string;
+  visited?: readonly string[];
+  depth?: number;
+}): React.ReactElement | null {
   const { i18n } = useTranslation();
   const { data: parent } = useOrganisationQuery(parentId);
 
-  if (!parent) return null;
+  // Defensive: guard against a corrupted parent_id cycle and mirror the backend's 16-level cap.
+  if (!parent || visited.includes(parentId) || depth >= 16) return null;
+
+  const nextVisited = [...visited, parentId];
 
   return (
     <>
-      {parent.parentId ? <AncestorCrumbs parentId={parent.parentId} /> : null}
+      {parent.parentId ? (
+        <AncestorCrumbs parentId={parent.parentId} visited={nextVisited} depth={depth + 1} />
+      ) : null}
       <a href={`/organisation/${parent.id}/statistics`} className="text-primary hover:underline">
         {displayName(parent, i18n.language)}
       </a>
