@@ -105,6 +105,9 @@ export const RebuildStatsResponseSchema = z
   .object({ ok: z.literal(true), durationMs: z.number().int().nonnegative() })
   .meta({ id: 'RebuildStatsResponse' });
 
+export type StatsRankRow = z.infer<typeof StatsRankRowSchema>;
+export type StatsScope = z.infer<typeof StatsScopeSchema>;
+export type StatsMembershipCounts = z.infer<typeof StatsMembershipCountsSchema>;
 export type PlatformStats = z.infer<typeof PlatformStatsSchema>;
 export type OrganisationStats = z.infer<typeof OrganisationStatsSchema>;
 export type UserStats = z.infer<typeof UserStatsSchema>;
