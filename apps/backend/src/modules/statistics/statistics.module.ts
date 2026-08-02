@@ -6,6 +6,7 @@ import { OrganisationsModule } from '../organisations/organisations.module.js';
 import { UsersModule } from '../users/users.module.js';
 
 import { StatisticsAdminController, StatisticsController } from './statistics.controller.js';
+import { StatisticsCronService } from './statistics.cron.js';
 import { StatisticsRepository } from './statistics.repository.js';
 import { StatisticsService } from './statistics.service.js';
 
@@ -31,15 +32,18 @@ import { StatisticsService } from './statistics.service.js';
  * (`statistics-endpoints.e2e.spec.ts`) can boot the real `AppModule` and
  * exercise `StatisticsController`/`StatisticsAdminController` over HTTP —
  * the brief for Task 5 explicitly requires that e2e, and it cannot pass
- * without the controllers being reachable through some module. Task 6/7 must
- * add `StatisticsCronService` to `providers` (and `ScheduleModule.forRoot()`
- * to `AppModule`) once the cron service is built; nothing here precludes
- * that later addition.
+ * without the controllers being reachable through some module.
+ *
+ * Task 6 adds `StatisticsCronService` to `providers` below. The `@Cron`
+ * decorator on `runNightly()` is inert until `ScheduleModule.forRoot()` is
+ * imported into `AppModule` — that wiring is deliberately left for Task 7,
+ * so the cron job does not fire yet even though the provider is registered
+ * and testable here.
  */
 @Module({
   imports: [OrganisationsModule, BeltCatalogModule, UsersModule, MembershipsModule],
   controllers: [StatisticsController, StatisticsAdminController],
-  providers: [StatisticsRepository, StatisticsService],
+  providers: [StatisticsRepository, StatisticsService, StatisticsCronService],
   exports: [StatisticsService],
 })
 export class StatisticsModule {}
