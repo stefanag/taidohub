@@ -161,6 +161,29 @@ describe('useUserTrendsQuery', () => {
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
     expect(spy).toHaveBeenCalledWith(USER_ID, q);
   });
+
+  it('does not call getUserTrends when enabled: false is passed', async () => {
+    const q = { metric: 'gradingEvents', dimensionKey: '', months: 12 };
+    const spy = vi
+      .spyOn(api, 'getUserTrends')
+      .mockResolvedValue({ metric: 'gradingEvents', dimensionKey: '', points: [] } as StatsTrendResponse);
+    // `vi.spyOn` on an already-spied method (from the earlier test in this
+    // describe block) returns the same mock instance, so its call history
+    // carries over; clear it so this assertion only reflects this test.
+    spy.mockClear();
+    const client = newClient();
+
+    const { result } = renderHook(() => useUserTrendsQuery(USER_ID, q, { enabled: false }), {
+      wrapper: wrap(client),
+    });
+
+    // Give any (incorrect) fetch a chance to fire before asserting it didn't.
+    await Promise.resolve();
+
+    expect(result.current.isPending).toBe(true);
+    expect(result.current.data).toBeUndefined();
+    expect(spy).not.toHaveBeenCalled();
+  });
 });
 
 describe('useRebuildStatsMutation', () => {

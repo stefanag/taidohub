@@ -43,16 +43,16 @@ vi.mock('@/features/profile-form', () => ({
 }));
 
 const useUserStatsQuerySpy = vi.fn<
-  () => { data: UserStats | undefined; isLoading: boolean; isError: boolean }
+  (...args: unknown[]) => { data: UserStats | undefined; isLoading: boolean; isError: boolean }
 >(() => ({ data: undefined, isLoading: true, isError: false }));
 
 const useUserTrendsQuerySpy = vi.fn<
-  () => { data: StatsTrendResponse | undefined; isLoading: boolean }
+  (...args: unknown[]) => { data: StatsTrendResponse | undefined; isLoading: boolean }
 >(() => ({ data: undefined, isLoading: true }));
 
 vi.mock('@/entities/statistics', () => ({
-  useUserStatsQuery: () => useUserStatsQuerySpy(),
-  useUserTrendsQuery: () => useUserTrendsQuerySpy(),
+  useUserStatsQuery: (...args: unknown[]) => useUserStatsQuerySpy(...args),
+  useUserTrendsQuery: (...args: unknown[]) => useUserTrendsQuerySpy(...args),
 }));
 
 
@@ -102,6 +102,13 @@ describe('<ProfilePage>', () => {
     const meter = screen.getByRole('progressbar', { name: '4th Kyu' });
     expect(meter).toHaveAttribute('aria-valuenow', '62');
     expect(screen.getByText('62%')).toBeInTheDocument();
+    // Once a current rank has resolved, the trend query is enabled and
+    // scoped to that rank's dimensionKey.
+    expect(useUserTrendsQuerySpy).toHaveBeenCalledWith(
+      USER_ID,
+      expect.objectContaining({ dimensionKey: 'r-4kyu' }),
+      { enabled: true },
+    );
   });
 
   it('hides the progression section entirely when the user has no coverage data', () => {
@@ -119,5 +126,12 @@ describe('<ProfilePage>', () => {
 
     expect(screen.queryByText('Your progression')).not.toBeInTheDocument();
     expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
+    // No current rank resolved -> the trend query must be disabled rather
+    // than firing a request with an empty dimensionKey.
+    expect(useUserTrendsQuerySpy).toHaveBeenCalledWith(
+      USER_ID,
+      expect.objectContaining({ dimensionKey: '' }),
+      { enabled: false },
+    );
   });
 });

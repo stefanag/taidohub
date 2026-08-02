@@ -50,10 +50,15 @@ export function useUserStatsQuery(userId: string) {
   });
 }
 
-export function useUserTrendsQuery(userId: string, q: StatsTrendQuery) {
+export function useUserTrendsQuery(
+  userId: string,
+  q: StatsTrendQuery,
+  { enabled = true }: { enabled?: boolean } = {},
+) {
   return useQuery({
     queryKey: statisticsKeys.userTrends(userId, q),
     queryFn: () => api.getUserTrends(userId, q),
+    enabled,
   });
 }
 

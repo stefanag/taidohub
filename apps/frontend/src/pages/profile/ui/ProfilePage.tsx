@@ -45,11 +45,15 @@ function ProgressionSection({ userId }: { userId: string }): React.ReactElement 
     );
   }, [statsQuery.data]);
 
-  const trendsQuery = useUserTrendsQuery(userId, {
-    metric: 'content_coverage_pct',
-    dimensionKey: currentRank?.rank.id ?? '',
-    months: 12,
-  });
+  const trendsQuery = useUserTrendsQuery(
+    userId,
+    {
+      metric: 'content_coverage_pct',
+      dimensionKey: currentRank?.rank.id ?? '',
+      months: 12,
+    },
+    { enabled: !!currentRank },
+  );
 
   if (!currentRank) return null;
 
