@@ -1,14 +1,14 @@
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 
-import { type AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
+import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import { type DbUser } from '../../infrastructure/database/schema/index.js';
-import { type BeltRanksService } from '../belt-catalog/belt-ranks.service.js';
-import { type MembershipsRepository } from '../memberships/memberships.repository.js';
-import { type OrganisationsRepository } from '../organisations/organisations.repository.js';
-import { type UsersRepository } from '../users/users.repository.js';
+import { BeltRanksService } from '../belt-catalog/belt-ranks.service.js';
+import { MembershipsRepository } from '../memberships/memberships.repository.js';
+import { OrganisationsRepository } from '../organisations/organisations.repository.js';
+import { UsersRepository } from '../users/users.repository.js';
 
-import { type StatisticsRepository, type OrgOrPlatformStatsRaw, type UserStatsRaw } from './statistics.repository.js';
+import { StatisticsRepository, type OrgOrPlatformStatsRaw, type UserStatsRaw } from './statistics.repository.js';
 
 import type {
   OrganisationStats,
