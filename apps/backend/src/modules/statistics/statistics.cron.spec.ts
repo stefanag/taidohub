@@ -12,7 +12,7 @@ describe('StatisticsCronService.runNightly', () => {
     };
     const svc = new StatisticsCronService(repo as never);
     await svc.runNightly();
-    expect(calls).toEqual(['activity', 'avgGap', 'snapshot', 'rebuild']);
+    expect(calls).toEqual(['rebuild', 'activity', 'avgGap', 'snapshot']);
   });
 
   it('logs the rebuildAll durationMs', async () => {

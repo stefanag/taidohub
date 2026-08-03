@@ -1,3 +1,4 @@
+import { STAT_METRICS } from '@repo/contracts/statistics';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, within } from '@testing-library/react';
 import * as React from 'react';
@@ -107,9 +108,16 @@ vi.mock('@/entities/organisation', () => ({
   useOrganisationChildrenQuery: () => state.children,
 }));
 
+const { useOrganisationTrendsQueryMock } = vi.hoisted(() => ({
+  useOrganisationTrendsQueryMock: vi.fn(),
+}));
+
 vi.mock('@/entities/statistics', () => ({
   useOrganisationStatsQuery: () => state.stats,
-  useOrganisationTrendsQuery: () => state.trends,
+  useOrganisationTrendsQuery: (...args: unknown[]) => {
+    useOrganisationTrendsQueryMock(...args);
+    return state.trends;
+  },
 }));
 
 function renderPage() {
@@ -129,6 +137,7 @@ describe('<OrganisationStatisticsPage>', () => {
     state.stats = { data: ORG_STATS, isLoading: false, isError: false, error: null };
     state.trends = { data: TRENDS, isLoading: false };
     state.children = { data: { data: [], total: 0 }, isLoading: false };
+    useOrganisationTrendsQueryMock.mockClear();
   });
 
   it('renders the loading state while org and stats queries are loading', () => {
@@ -171,6 +180,16 @@ describe('<OrganisationStatisticsPage>', () => {
     expect(polyline).not.toBeNull();
     const pairs = polyline?.getAttribute('points')?.trim().split(/\s+/) ?? [];
     expect(pairs).toHaveLength(TRENDS.points.length);
+  });
+
+  it('queries the trend hook with the snake_case wire metric name, not the camelCase contract field', () => {
+    renderPage();
+
+    expect(useOrganisationTrendsQueryMock).toHaveBeenCalledWith(
+      'org-1',
+      expect.objectContaining({ metric: STAT_METRICS.membershipCount }),
+    );
+    expect(STAT_METRICS.membershipCount).toBe('membership_count');
   });
 
   it('renders the ancestor breadcrumb when a parent chain exists', () => {

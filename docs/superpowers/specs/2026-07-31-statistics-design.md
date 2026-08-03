@@ -107,10 +107,14 @@ NestJS `StatisticsCronService`, using `@nestjs/schedule`.
 ```
 @Cron('0 3 * * *')   // 03:00 local, well after any batch jobs
 async runNightly() {
+  // rebuildAll() runs FIRST because it opens with TRUNCATE stat_current and
+  // only re-populates real-time metrics. Running it after the activity/gap
+  // steps below would wipe the activity metrics they just computed, so they
+  // must be layered on top of the rebuilt table, not before it.
+  await this.repo.rebuildAll();                // full self-heal; cheap at this scale (single-digit seconds)
   await this.repo.refreshActivityStats();      // grading_events_mtd, active_users_30d, feedback_mtd
   await this.repo.recomputeAvgGapPerRank();    // heavy-ish; nightly is fine
   await this.repo.captureMonthlyIfNewMonth();  // snapshot closing month on the first nightly of a new one
-  await this.repo.rebuildAll();                // full self-heal; cheap at this scale (single-digit seconds)
 }
 ```
 

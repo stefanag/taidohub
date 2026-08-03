@@ -220,7 +220,7 @@ export function AppSidebar(): React.ReactElement {
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ) : null}
-                {ability?.can('read', 'Statistics') ? (
+                {ability?.can('manage', 'all') === true ? (
                   <SidebarMenuItem>
                     <SidebarMenuButton
                       asChild

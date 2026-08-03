@@ -1,3 +1,4 @@
+import { STAT_METRICS } from '@repo/contracts/statistics';
 import { useParams } from '@tanstack/react-router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -77,7 +78,7 @@ export function OrganisationStatisticsPage(): React.ReactElement {
   const orgQuery = useOrganisationQuery(id);
   const statsQuery = useOrganisationStatsQuery(id);
   const trendsQuery = useOrganisationTrendsQuery(id, {
-    metric: 'membershipCount',
+    metric: STAT_METRICS.membershipCount,
     dimensionKey: 'student',
     months: 12,
   });

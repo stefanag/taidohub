@@ -116,6 +116,18 @@ export type StatsTrendResponse = z.infer<typeof StatsTrendResponseSchema>;
 export type StatsTrendQuery = z.input<typeof StatsTrendQuerySchema>;
 export type RebuildStatsResponse = z.infer<typeof RebuildStatsResponseSchema>;
 
+/** Canonical metric names used across the wire. Snake_case matches how the
+ *  SQL layer stores them in stat_current.metric and stat_snapshot_monthly.metric. */
+export const STAT_METRICS = {
+  rankCount: 'rank_count',
+  membershipCount: 'membership_count',
+  contentCoveragePct: 'content_coverage_pct',
+  gradingEventsMonthToDate: 'grading_events_month_to_date',
+  avgMonthsBetweenRanks: 'avg_months_between_ranks',
+  activeUsersLast30Days: 'active_users_last_30_days',
+  feedbackThreadsOpenedMonthToDate: 'feedback_threads_opened_month_to_date',
+} as const;
+
 export const StatisticsOpenApiRegistry = {
   StatsRankRow: StatsRankRowSchema,
   StatsScope: StatsScopeSchema,
