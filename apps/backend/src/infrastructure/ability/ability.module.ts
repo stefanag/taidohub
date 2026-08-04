@@ -13,6 +13,7 @@ import { OrganisationsAbilityRules } from '../../modules/organisations/organisat
 import { PatternAbilityRules } from '../../modules/pattern/pattern.abilities.js';
 import { ProgressAbilityRules } from '../../modules/progress/progress.abilities.js';
 import { RankHistoryAbilityRules } from '../../modules/rank-history/rank-history.abilities.js';
+import { StatisticsAbilityRules } from '../../modules/statistics/statistics.abilities.js';
 import { StudentAbilityRules } from '../../modules/students/students.abilities.js';
 import { TechniqueAbilityRules } from '../../modules/technique/technique.abilities.js';
 import { UsersAbilityRules } from '../../modules/users/users.abilities.js';
@@ -32,7 +33,7 @@ import { AbilityGuard } from './ability.guard.js';
  * list). The decorator + auto-discovery collapses that to a single
  * decorator on the contributor class plus one provider entry here.
  *
- * The 14 contributors below are still listed as providers so the
+ * The 15 contributors below are still listed as providers so the
  * Nest container instantiates them. They're not injected into
  * `AbilityFactory` directly anymore.
  *
@@ -55,6 +56,7 @@ import { AbilityGuard } from './ability.guard.js';
     OrganisationsAbilityRules,
     PatternAbilityRules,
     ProgressAbilityRules,
+    StatisticsAbilityRules,
     StudentAbilityRules,
     TechniqueAbilityRules,
     UsersAbilityRules,

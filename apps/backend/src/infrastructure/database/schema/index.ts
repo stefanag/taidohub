@@ -20,3 +20,4 @@ export * from './pattern.js';
 export * from './user-content-progress.js';
 export * from './feedback.js';
 export * from './grading-requirements.js';
+export * from './statistics.js';

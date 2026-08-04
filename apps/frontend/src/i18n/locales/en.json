@@ -42,6 +42,7 @@
     "adminBeltCatalog": "Belt catalog",
     "adminLabels": "Labels",
     "adminFeatureFlags": "Feature flags",
+    "statistics": "Statistics",
     "adminPatterns": "Patterns",
     "adminTechniques": "Techniques",
     "adminRequirementSets": "Requirement sets",
@@ -63,7 +64,35 @@
   "myOrganisation": {
     "title": "My organisation",
     "description": "Manage the instructors and administrators of your organisation.",
-    "empty": "You do not currently administer any organisations."
+    "empty": "You do not currently administer any organisations.",
+    "statistics": {
+      "heading": "Statistics",
+      "tiles": {
+        "students": "Students",
+        "instructors": "Instructors",
+        "activeUsers30d": "Active users (30d)",
+        "gradingsMtd": "Gradings this month"
+      },
+      "seeFullHistory": "See full history"
+    }
+  },
+  "organisation": {
+    "statistics": {
+      "tiles": {
+        "students": "Students",
+        "instructors": "Instructors",
+        "activeUsers30d": "Active users (30d)",
+        "gradingsMtd": "Gradings this month"
+      },
+      "ranksHeading": "Belts in this organisation",
+      "trendLabel": "Students, last 12 months",
+      "childrenHeading": "Child organisations",
+      "noChildren": "No child organisations.",
+      "breadcrumbLabel": "Ancestors",
+      "errors": {
+        "forbidden": "You don't have access to this organisation's statistics."
+      }
+    }
   },
   "settings": {
     "title": "Settings",
@@ -116,7 +145,10 @@
     "save": "Save profile",
     "saved": "Profile saved.",
     "empty": "This user has not filled in their profile yet.",
-    "aboutMePlaceholder": "Share a little about your taido journey, interests, or background."
+    "aboutMePlaceholder": "Share a little about your taido journey, interests, or background.",
+    "progression": {
+      "heading": "Your progression"
+    }
   },
   "gradingHistory": {
     "title": "Grading history",
@@ -177,7 +209,8 @@
       "name": "Name",
       "email": "Email",
       "organisations": "Organisations",
-      "progress": "Progress"
+      "progress": "Progress",
+      "coverage": "Coverage"
     },
     "summary": {
       "notStarted": "Not started",
@@ -276,6 +309,19 @@
       "lastUpdated": "Last updated",
       "on": "On",
       "off": "Off"
+    },
+    "statistics": {
+      "title": "Statistics",
+      "tiles": {
+        "students": "Students",
+        "instructors": "Instructors",
+        "activeUsers30d": "Active users (30d)",
+        "gradingsMtd": "Gradings this month"
+      },
+      "ranksHeading": "Belts across the platform",
+      "rebuild": "Rebuild statistics",
+      "rebuilding": "Rebuilding…",
+      "rebuiltIn": "Rebuilt in {{durationMs}}ms"
     },
     "patterns": {
       "title": "Manage patterns",

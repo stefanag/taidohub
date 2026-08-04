@@ -42,15 +42,15 @@
     "adminBeltCatalog": "Vyökatalogi",
     "adminLabels": "Tunnisteet",
     "adminFeatureFlags": "Ominaisuusliput",
-    "adminPatterns": "Kuviot",
+    "adminPatterns": "Hokei & liikesarjat",
     "adminTechniques": "Tekniikat",
     "adminRequirementSets": "Vaatimuskokoelmat",
     "adminRankRequirements": "Arvovaatimukset",
     "adminUsers": "Käyttäjät",
     "gradingHistory": "Vyökoehistoria",
-    "patterns": "Kuviot",
+    "patterns": "Hokei & liikesarjat",
     "techniques": "Tekniikat",
-    "students": "Opiskelijat",
+    "students": "Oppilaat",
     "myOrganisation": "Oma organisaatio",
     "profile": "Oma profiili",
     "settings": "Asetukset",
@@ -116,7 +116,10 @@
     "save": "Tallenna profiili",
     "saved": "Profiili tallennettu.",
     "empty": "Tämä käyttäjä ei ole vielä täyttänyt profiiliaan.",
-    "aboutMePlaceholder": "Kerro hieman taidopolustasi, kiinnostuksen kohteistasi tai taustastasi."
+    "aboutMePlaceholder": "Kerro hieman taidopolustasi, kiinnostuksen kohteistasi tai taustastasi.",
+    "progression": {
+      "heading": "Etenemisesi"
+    }
   },
   "gradingHistory": {
     "title": "Vyökoehistoria",
@@ -242,7 +245,8 @@
       "name": "Nimi",
       "email": "Sähköposti",
       "organisations": "Organisaatiot",
-      "progress": "Edistyminen"
+      "progress": "Edistyminen",
+      "coverage": "Kattavuus"
     },
     "summary": {
       "notStarted": "Ei aloitettu",

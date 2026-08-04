@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { ScheduleModule } from '@nestjs/schedule';
 import { ZodValidationPipe } from 'nestjs-zod';
 
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter.js';
@@ -25,6 +26,7 @@ import { OrganisationsModule } from './modules/organisations/organisations.modul
 import { PatternModule } from './modules/pattern/pattern.module.js';
 import { ProfileModule } from './modules/profile/profile.module.js';
 import { ProgressModule } from './modules/progress/progress.module.js';
+import { StatisticsModule } from './modules/statistics/statistics.module.js';
 import { StudentsModule } from './modules/students/students.module.js';
 import { TechniqueModule } from './modules/technique/technique.module.js';
 import { UserImpersonationModule } from './modules/user-impersonation/user-impersonation.module.js';
@@ -37,6 +39,7 @@ import { UsersModule } from './modules/users/users.module.js';
     EmailModule,
     InfraAuthModule,
     AbilityModule,
+    ScheduleModule.forRoot(),
     AuthDocsModule,
     BeltCatalogModule,
     RankHistoryModule,
@@ -57,6 +60,7 @@ import { UsersModule } from './modules/users/users.module.js';
     FeatureFlagsModule,
     FeedbackModule,
     UserImpersonationModule,
+    StatisticsModule,
   ],
   providers: [
     { provide: APP_PIPE, useClass: ZodValidationPipe },

@@ -27,6 +27,7 @@ export default defineConfig({
     students: 'src/students.ts',
     feedback: 'src/feedback.ts',
     'grading-requirements': 'src/grading-requirements.ts',
+    statistics: 'src/statistics.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,

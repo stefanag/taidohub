@@ -2,13 +2,48 @@ import { useNavigate } from '@tanstack/react-router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import type { UserStats } from '@repo/contracts/statistics';
+
+import { useUserStatsQuery } from '@/entities/statistic';
 import { useStudentsQuery } from '@/entities/student';
+import { CoverageMeter } from '@/features/coverage-meter';
 import { Badge } from '@/shared/ui';
+
+
+type UserStatsRankCoverage = UserStats['coverageByRank'][number];
+
+/**
+ * Compact per-row coverage indicator for the instructor roster. Fires its
+ * own `useUserStatsQuery(userId)` — one query per row is chatty at scale,
+ * but acceptable for the class sizes this page targets today (MVP; revisit
+ * with a batched endpoint if roster sizes grow).
+ *
+ * Renders nothing (not even a placeholder) once loaded with no coverage
+ * data — a student with no rank assigned yet has nothing meaningful to show
+ * in this slot.
+ */
+function StudentCoverageCell({ userId }: { userId: string }): React.ReactElement | null {
+  const statsQuery = useUserStatsQuery(userId);
+
+  const currentRank = React.useMemo<UserStatsRankCoverage | null>(() => {
+    const rows = statsQuery.data?.coverageByRank ?? [];
+    return rows.reduce<UserStatsRankCoverage | null>(
+      (max, row) => (!max || row.rank.sortOrder > max.rank.sortOrder ? row : max),
+      null,
+    );
+  }, [statsQuery.data]);
+
+  if (statsQuery.isLoading) return null;
+  if (!currentRank) return null;
+
+  return <CoverageMeter label={currentRank.rank.nameEn} pct={currentRank.coveragePct} />;
+}
 
 /**
  * Instructor-facing student roster. Columns: name → link to detail page,
  * email, organisations (joined), four progress-status count chips
- * (not_started / learning / competent / grading_ready).
+ * (not_started / learning / competent / grading_ready), current-rank
+ * coverage meter.
  *
  * Data comes from `useStudentsQuery()` — already scoped server-side to
  * students the calling instructor is allowed to see (or every student for
@@ -43,6 +78,7 @@ export function StudentsPage(): React.ReactElement {
                   {t('students.columns.organisations')}
                 </th>
                 <th className="px-2 py-2">{t('students.columns.progress')}</th>
+                <th className="px-2 py-2">{t('students.columns.coverage')}</th>
               </tr>
             </thead>
             <tbody>
@@ -83,6 +119,9 @@ export function StudentsPage(): React.ReactElement {
                         {t('students.summary.gradingReady')}: {s.progressSummary.grading_ready}
                       </Badge>
                     </div>
+                  </td>
+                  <td className="px-2 py-2">
+                    <StudentCoverageCell userId={s.userId} />
                   </td>
                 </tr>
               ))}
