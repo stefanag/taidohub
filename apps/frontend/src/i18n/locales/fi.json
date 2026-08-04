@@ -64,7 +64,17 @@
   "myOrganisation": {
     "title": "Oma organisaatio",
     "description": "Hallinnoi organisaatiosi ohjaajia ja ylläpitäjiä.",
-    "empty": "Et tällä hetkellä hallinnoi mitään organisaatiota."
+    "empty": "Et tällä hetkellä hallinnoi mitään organisaatiota.",
+    "statistics": {
+      "heading": "Tilastot",
+      "tiles": {
+        "students": "Oppilaat",
+        "instructors": "Ohjaajat",
+        "activeUsers30d": "Aktiiviset käyttäjät (30 pv)",
+        "gradingsMtd": "Vyökokeet tässä kuussa"
+      },
+      "seeFullHistory": "Näytä täysi historia"
+    }
   },
   "organisation": {
     "statistics": {
