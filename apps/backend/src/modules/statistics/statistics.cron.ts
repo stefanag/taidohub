@@ -1,11 +1,9 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { StatisticsRepository } from './statistics.repository.js';
 
 @Injectable()
 export class StatisticsCronService {
-  private readonly logger = new Logger(StatisticsCronService.name);
-
   constructor(private readonly repo: StatisticsRepository) {}
 
   @Cron('0 3 * * *') // 03:00 every day
