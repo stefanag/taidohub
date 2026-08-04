@@ -42,6 +42,7 @@
     "adminBeltCatalog": "Beltkatalog",
     "adminLabels": "Etiketter",
     "adminFeatureFlags": "Funktionsflaggor",
+    "statistics": "Statistik",
     "adminPatterns": "Hokei & sekvenser",
     "adminTechniques": "Tekniker",
     "adminRequirementSets": "Kravuppsättningar",
@@ -64,6 +65,24 @@
     "title": "Min organisation",
     "description": "Hantera instruktörerna och administratörerna i din organisation.",
     "empty": "Du administrerar för närvarande inga organisationer."
+  },
+  "organisation": {
+    "statistics": {
+      "tiles": {
+        "students": "Elever",
+        "instructors": "Instruktörer",
+        "activeUsers30d": "Aktiva användare (30 d)",
+        "gradingsMtd": "Graderingar denna månad"
+      },
+      "ranksHeading": "Bälten i denna organisation",
+      "trendLabel": "Elever, senaste 12 månaderna",
+      "childrenHeading": "Underorganisationer",
+      "noChildren": "Inga underorganisationer.",
+      "breadcrumbLabel": "Överordnade organisationer",
+      "errors": {
+        "forbidden": "Du har inte behörighet till denna organisations statistik."
+      }
+    }
   },
   "settings": {
     "title": "Inställningar",
@@ -280,6 +299,19 @@
       "lastUpdated": "Senast uppdaterad",
       "on": "På",
       "off": "Av"
+    },
+    "statistics": {
+      "title": "Statistik",
+      "tiles": {
+        "students": "Elever",
+        "instructors": "Instruktörer",
+        "activeUsers30d": "Aktiva användare (30 d)",
+        "gradingsMtd": "Graderingar denna månad"
+      },
+      "ranksHeading": "Bälten i hela systemet",
+      "rebuild": "Bygg om statistik",
+      "rebuilding": "Bygger om…",
+      "rebuiltIn": "Ombyggd på {{durationMs}} ms"
     },
     "patterns": {
       "title": "Hantera mönster",
