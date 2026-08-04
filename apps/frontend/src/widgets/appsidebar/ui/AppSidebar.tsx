@@ -220,6 +220,14 @@ export function AppSidebar(): React.ReactElement {
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ) : null}
+                {/*
+                  Placed after "Feature flags". The Task 10 plan asked for placement
+                  between "Feature flags" and "Audit log", but Audit log renders before
+                  Feature flags in this file — the requested slot doesn't exist. This
+                  location is the closest to the intent (grouped with the other admin
+                  entries, ordered after Feature flags) without reordering unrelated
+                  entries.
+                */}
                 {ability?.can('manage', 'all') === true ? (
                   <SidebarMenuItem>
                     <SidebarMenuButton
