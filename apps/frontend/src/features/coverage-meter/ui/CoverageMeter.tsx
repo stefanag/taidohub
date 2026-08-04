@@ -17,7 +17,7 @@ export function CoverageMeter({ label, pct }: CoverageMeterProps): React.ReactEl
     <div className="space-y-1">
       <div className="flex items-center justify-between text-sm">
         <span>{label}</span>
-        <span className="tabular-nums text-on-surface-variant">{pct}%</span>
+        <span className="tabular-nums text-on-surface-variant">{clamped}%</span>
       </div>
       <div
         role="progressbar"

@@ -32,4 +32,16 @@ describe('<CoverageMeter>', () => {
     const inner = bar.firstElementChild as HTMLElement;
     expect(inner.style.width).toBe('64%');
   });
+
+  it('clamps the visible % text when pct is out of range (high)', () => {
+    render(<CoverageMeter label="Coverage" pct={150} />);
+    expect(screen.getByText('100%')).toBeInTheDocument();
+    expect(screen.queryByText('150%')).not.toBeInTheDocument();
+  });
+
+  it('clamps the visible % text when pct is out of range (low)', () => {
+    render(<CoverageMeter label="Coverage" pct={-10} />);
+    expect(screen.getByText('0%')).toBeInTheDocument();
+    expect(screen.queryByText('-10%')).not.toBeInTheDocument();
+  });
 });
