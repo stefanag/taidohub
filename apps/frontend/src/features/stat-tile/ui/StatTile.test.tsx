@@ -19,4 +19,15 @@ describe('<StatTile>', () => {
     render(<StatTile label="X" value={10} deltaPct={-3.4} />);
     expect(screen.getByText(/−3\.4%/)).toBeInTheDocument();
   });
+
+  it('formats numbers with the caller-supplied locale', () => {
+    render(<StatTile label="Users" value={1234} locale="sv-SE" />);
+    // sv-SE uses non-breaking space as thousands separator
+    expect(screen.getByText(/1\s234/)).toBeInTheDocument();
+  });
+
+  it('still defaults to en-US when no locale is passed', () => {
+    render(<StatTile label="Users" value={1234} />);
+    expect(screen.getByText('1,234')).toBeInTheDocument();
+  });
 });

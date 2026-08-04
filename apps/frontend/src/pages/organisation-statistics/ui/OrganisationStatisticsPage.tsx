@@ -73,6 +73,7 @@ function AncestorCrumbs({
  */
 export function OrganisationStatisticsPage(): React.ReactElement {
   const { t, i18n } = useTranslation();
+  const locale = i18n.resolvedLanguage ?? 'en-US';
   const { id } = useParams({ from: '/_app/organisation/$id/statistics' });
 
   const orgQuery = useOrganisationQuery(id);
@@ -148,24 +149,28 @@ export function OrganisationStatisticsPage(): React.ReactElement {
             <StatTile
               label={t('organisation.statistics.tiles.students', { defaultValue: 'Students' })}
               value={statsQuery.data.metrics.membershipCount.student}
+              locale={locale}
             />
             <StatTile
               label={t('organisation.statistics.tiles.instructors', {
                 defaultValue: 'Instructors',
               })}
               value={statsQuery.data.metrics.membershipCount.instructor}
+              locale={locale}
             />
             <StatTile
               label={t('organisation.statistics.tiles.activeUsers30d', {
                 defaultValue: 'Active users (30d)',
               })}
               value={statsQuery.data.metrics.activeUsersLast30Days}
+              locale={locale}
             />
             <StatTile
               label={t('organisation.statistics.tiles.gradingsMtd', {
                 defaultValue: 'Gradings this month',
               })}
               value={statsQuery.data.metrics.gradingEventsMonthToDate}
+              locale={locale}
             />
           </div>
 

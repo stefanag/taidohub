@@ -20,7 +20,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs.js';
  * discreet omission keeps the page uncluttered.
  */
 function OrgStatisticsSection({ orgId }: { orgId: string }): React.ReactElement | null {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const locale = i18n.resolvedLanguage ?? 'en-US';
   const statsQuery = useOrganisationStatsQuery(orgId);
 
   if (statsQuery.isError) return null;
@@ -40,24 +41,28 @@ function OrgStatisticsSection({ orgId }: { orgId: string }): React.ReactElement 
             <StatTile
               label={t('myOrganisation.statistics.tiles.students', { defaultValue: 'Students' })}
               value={statsQuery.data.metrics.membershipCount.student}
+              locale={locale}
             />
             <StatTile
               label={t('myOrganisation.statistics.tiles.instructors', {
                 defaultValue: 'Instructors',
               })}
               value={statsQuery.data.metrics.membershipCount.instructor}
+              locale={locale}
             />
             <StatTile
               label={t('myOrganisation.statistics.tiles.activeUsers30d', {
                 defaultValue: 'Active users (30d)',
               })}
               value={statsQuery.data.metrics.activeUsersLast30Days}
+              locale={locale}
             />
             <StatTile
               label={t('myOrganisation.statistics.tiles.gradingsMtd', {
                 defaultValue: 'Gradings this month',
               })}
               value={statsQuery.data.metrics.gradingEventsMonthToDate}
+              locale={locale}
             />
           </div>
           <div className="mt-4">
