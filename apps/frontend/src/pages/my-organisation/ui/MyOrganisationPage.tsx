@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useMyMembershipsQuery } from '@/entities/me';
 import { displayName, listOrganisationsQueryOptions } from '@/entities/organisation';
-import { useOrganisationStatsQuery } from '@/entities/statistics';
+import { useOrganisationStatsQuery } from '@/entities/statistic';
 import { OrgMembershipManager } from '@/features/org-membership-manager';
 import { RankBreakdown } from '@/features/rank-breakdown';
 import { StatTile } from '@/features/stat-tile';

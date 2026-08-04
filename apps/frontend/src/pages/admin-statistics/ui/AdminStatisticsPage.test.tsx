@@ -46,10 +46,10 @@ const { state, mutateMock } = vi.hoisted(() => {
   };
 });
 
-// Mock the public `@/entities/statistics` barrel (not the deep api/lib
+// Mock the public `@/entities/statistic` barrel (not the deep api/lib
 // paths) so the FSD `no-public-api-sidestep` rule stays satisfied — mirrors
 // `apps/frontend/src/pages/admin-feature-flags/ui/AdminFeatureFlagsPage.test.tsx`.
-vi.mock('@/entities/statistics', () => ({
+vi.mock('@/entities/statistic', () => ({
   usePlatformStatsQuery: () => state.platform,
   useRebuildStatsMutation: () => state.rebuild,
 }));

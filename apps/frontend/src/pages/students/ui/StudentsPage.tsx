@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import type { UserStats } from '@repo/contracts/statistics';
 
-import { useUserStatsQuery } from '@/entities/statistics';
+import { useUserStatsQuery } from '@/entities/statistic';
 import { useStudentsQuery } from '@/entities/student';
 import { CoverageMeter } from '@/features/coverage-meter';
 import { Badge } from '@/shared/ui';

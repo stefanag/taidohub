@@ -8,7 +8,7 @@ import {
   useOrganisationChildrenQuery,
   useOrganisationQuery,
 } from '@/entities/organisation';
-import { useOrganisationStatsQuery, useOrganisationTrendsQuery } from '@/entities/statistics';
+import { useOrganisationStatsQuery, useOrganisationTrendsQuery } from '@/entities/statistic';
 import { RankBreakdown } from '@/features/rank-breakdown';
 import { StatTile } from '@/features/stat-tile';
 import { TrendSparkline } from '@/features/trend-sparkline';

@@ -93,7 +93,7 @@ vi.mock('@/entities/membership', () => ({
   useDeleteMembership: () => ({ mutateAsync: vi.fn(), isPending: false }),
 }));
 
-vi.mock('@/entities/statistics', () => ({
+vi.mock('@/entities/statistic', () => ({
   useOrganisationStatsQuery: () => useOrgStatsQuerySpy(),
 }));
 

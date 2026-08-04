@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { usePlatformStatsQuery, useRebuildStatsMutation } from '@/entities/statistics';
+import { usePlatformStatsQuery, useRebuildStatsMutation } from '@/entities/statistic';
 import { RankBreakdown } from '@/features/rank-breakdown';
 import { StatTile } from '@/features/stat-tile';
 import { Button } from '@/shared/ui';

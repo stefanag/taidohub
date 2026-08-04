@@ -6,7 +6,7 @@ import type { UserStats } from '@repo/contracts/statistics';
 
 import { useSession } from '@/entities/me';
 import { myProfileQueryOptions } from '@/entities/profile';
-import { useUserStatsQuery, useUserTrendsQuery } from '@/entities/statistics';
+import { useUserStatsQuery, useUserTrendsQuery } from '@/entities/statistic';
 import { authClient } from '@/features/auth-by-email';
 import { CoverageMeter } from '@/features/coverage-meter';
 import { ProfileForm } from '@/features/profile-form';

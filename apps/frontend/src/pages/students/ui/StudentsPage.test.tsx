@@ -50,7 +50,7 @@ vi.mock('@tanstack/react-router', () => ({
 
 // Per-row coverage query, keyed by userId so each `StudentCoverageCell`
 // resolves independently.
-vi.mock('@/entities/statistics', () => ({
+vi.mock('@/entities/statistic', () => ({
   useUserStatsQuery: (userId: string) => ({
     data: {
       scope: { type: 'user', id: userId, name: null },

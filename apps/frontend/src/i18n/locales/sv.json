@@ -42,20 +42,20 @@
     "adminBeltCatalog": "Beltkatalog",
     "adminLabels": "Etiketter",
     "adminFeatureFlags": "Funktionsflaggor",
-    "adminPatterns": "Mönster",
+    "adminPatterns": "Hokei & sekvenser",
     "adminTechniques": "Tekniker",
     "adminRequirementSets": "Kravuppsättningar",
-    "adminRankRequirements": "Gradkrav",
+    "adminRankRequirements": "Graderingskrav",
     "adminUsers": "Användare",
     "gradingHistory": "Graderingshistorik",
-    "patterns": "Mönster",
+    "patterns": "Hokei & sekvenser",
     "techniques": "Tekniker",
-    "students": "Studenter",
+    "students": "Elever",
     "myOrganisation": "Min organisation",
     "profile": "Min profil",
     "settings": "Inställningar",
     "language": "Språk",
-    "progression": "Progression"
+    "progression": "Utveckling"
   },
   "dashboard": {
     "title": "Översikt"

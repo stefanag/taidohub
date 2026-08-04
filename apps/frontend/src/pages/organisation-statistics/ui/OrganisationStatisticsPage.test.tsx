@@ -98,7 +98,7 @@ vi.mock('@tanstack/react-router', () => ({
   useParams: () => ({ id: 'org-1' }),
 }));
 
-// Mock the public `@/entities/organisation` / `@/entities/statistics`
+// Mock the public `@/entities/organisation` / `@/entities/statistic`
 // barrels (not the deep api/lib paths) so the FSD `no-public-api-sidestep`
 // rule stays satisfied — mirrors `AdminStatisticsPage.test.tsx`.
 vi.mock('@/entities/organisation', () => ({
@@ -112,7 +112,7 @@ const { useOrganisationTrendsQueryMock } = vi.hoisted(() => ({
   useOrganisationTrendsQueryMock: vi.fn(),
 }));
 
-vi.mock('@/entities/statistics', () => ({
+vi.mock('@/entities/statistic', () => ({
   useOrganisationStatsQuery: () => state.stats,
   useOrganisationTrendsQuery: (...args: unknown[]) => {
     useOrganisationTrendsQueryMock(...args);
