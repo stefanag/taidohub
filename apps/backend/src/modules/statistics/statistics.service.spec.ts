@@ -208,6 +208,19 @@ describe('StatisticsService', () => {
         ForbiddenException,
       );
     });
+
+    it('regression: Date(0) sentinel from the repo to a recent timestamp', async () => {
+      const { service, repo } = build();
+      repo.getPlatform.mockResolvedValue(orgOrPlatformRaw({ updatedAt: new Date(0) }));
+
+      const before = Date.now();
+      const result = await service.getPlatformStats(makeUser({ role: 'sysadmin' }));
+      const after = Date.now();
+
+      const updatedAtMs = new Date(result.updatedAt).getTime();
+      expect(updatedAtMs).toBeGreaterThanOrEqual(before);
+      expect(updatedAtMs).toBeLessThanOrEqual(after);
+    });
   });
 
   describe('getOrganisationStats', () => {
@@ -275,6 +288,20 @@ describe('StatisticsService', () => {
       await expect(service.getOrganisationStats('org-z', caller)).rejects.toBeInstanceOf(
         ForbiddenException,
       );
+    });
+
+    it('regression: Date(0) sentinel from the repo maps to a recent timestamp', async () => {
+      const { service, repo, orgs } = build();
+      repo.getOrganisation.mockResolvedValue(orgOrPlatformRaw({ updatedAt: new Date(0) }));
+      orgs.findById.mockResolvedValue(dbOrg({ id: 'org-x', nameEn: 'Org X' }));
+
+      const before = Date.now();
+      const result = await service.getOrganisationStats('org-x', makeUser({ role: 'sysadmin' }));
+      const after = Date.now();
+
+      const updatedAtMs = new Date(result.updatedAt).getTime();
+      expect(updatedAtMs).toBeGreaterThanOrEqual(before);
+      expect(updatedAtMs).toBeLessThanOrEqual(after);
     });
   });
 
@@ -404,6 +431,18 @@ describe('StatisticsService', () => {
       expect(result.scope.id).toBe('student-1');
     });
 
+    it('throws 403 before 404 when caller is unauthorized AND user does not exist', async () => {
+      const { service, users, memberships, fakeAbility } = build();
+      users.findById.mockResolvedValue(null); // user does not exist
+      memberships.list.mockResolvedValue({ data: [], total: 0 });
+      fakeAbility.can.mockReturnValue(false);
+
+      const caller = makeUser({ id: 'u-2', memberships: [] }); // non-sysadmin, no relevant memberships
+
+      await expect(service.getUserStats('missing-id', caller)).rejects.toThrow(ForbiddenException);
+      expect(users.findById).not.toHaveBeenCalled();
+    });
+
     it('regression: Date(0) sentinel from an empty coverage becomes "now", not 1970', async () => {
       const { service, repo, users } = build();
       users.findById.mockResolvedValue(dbUser({ id: 'u-1' }));
@@ -440,6 +479,27 @@ describe('StatisticsService', () => {
         6,
       );
       expect(result.points).toEqual([{ year: 2026, month: 2, value: 42 }]);
+    });
+
+    it('throws ForbiddenException for an unrelated caller', async () => {
+      const { service, users, memberships, fakeAbility } = build();
+      const targetUser = 'student-42';
+
+      users.findById.mockResolvedValue(dbUser({ id: targetUser, name: 'Student 42' }));
+      memberships.list.mockResolvedValue({
+        data: [{ id: 'm-1', userId: targetUser, organisationId: 'org-target', role: 'student' }],
+        total: 1,
+      });
+      fakeAbility.can.mockReturnValue(false);
+
+      const unrelatedCaller = makeUser({
+        id: 'u-3',
+        memberships: [],
+      });
+
+      await expect(
+        service.getUserTrends(targetUser, 'content_coverage_pct', 'some-rank-id', 12, unrelatedCaller),
+      ).rejects.toBeInstanceOf(ForbiddenException);
     });
   });
 
