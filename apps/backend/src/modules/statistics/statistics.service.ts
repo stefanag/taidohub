@@ -143,28 +143,38 @@ export class StatisticsService {
   }
 
   /**
+   * 403 before 404 — consistent with assertCanReadOrg. Reveals less
+   * information about existence to unauthorized callers.
+   *
    * sysadmin → always OK. Self → always OK. Otherwise the caller needs
    * either an instructor membership in one of the target user's clubs, or
    * an orgadmin membership in one of the target's clubs OR one of their
    * ancestors ("including subtree" — mirrors `assertCanReadOrg`'s rollup,
-   * applied from the target's org outward instead of the caller's).
-   *
-   * 404s before the ability check if the target user doesn't exist at
-   * all, so an unauthorised caller can't distinguish "forbidden" from
-   * "doesn't exist" for a user they have zero relationship to — but a
-   * caller who legitimately can't read ANY user still gets 404 before
-   * 403, same trade-off `UsersService.findOne` doesn't make (it 404s
-   * first too, then gates on `read`).
+   * applied from the target's org outward instead of the caller's). Only
+   * once one of those authorisation branches passes do we fetch the
+   * target user for the existence check.
    */
   private async assertCanReadUser(userId: string, user: AuthenticatedUser): Promise<DbUser> {
+    if (user.role !== 'sysadmin' && user.id !== userId) {
+      await this.assertHasAccessToUserStats(userId, user);
+    }
+
     const target = await this.users.findById(userId);
     if (!target) {
       throw new NotFoundException({
         error: { code: 'NOT_FOUND', message: `User ${userId} not found.` },
       });
     }
-    if (user.role === 'sysadmin' || user.id === userId) return target;
+    return target;
+  }
 
+  /**
+   * The non-sysadmin, non-self branch of `assertCanReadUser`'s
+   * authorisation: CASL instance check against the target's memberships,
+   * falling back to the orgadmin ancestor rollup. Throws
+   * `ForbiddenException` if neither grants access.
+   */
+  private async assertHasAccessToUserStats(userId: string, user: AuthenticatedUser): Promise<void> {
     const ability = this.abilityFactory.createForUser(user);
     const { data: targetMemberships } = await this.memberships.list({ userId });
 
@@ -177,7 +187,7 @@ export class StatisticsService {
           organisationId: m.organisationId,
         })
       ) {
-        return target;
+        return;
       }
     }
 
@@ -185,7 +195,7 @@ export class StatisticsService {
     if (orgadminOrgIds.length > 0) {
       for (const m of targetMemberships) {
         const ancestors = await this.orgs.getAncestorIds(m.organisationId);
-        if (ancestors.some((id) => orgadminOrgIds.includes(id))) return target;
+        if (ancestors.some((id) => orgadminOrgIds.includes(id))) return;
       }
     }
 

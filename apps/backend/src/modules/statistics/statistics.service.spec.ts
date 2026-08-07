@@ -404,6 +404,18 @@ describe('StatisticsService', () => {
       expect(result.scope.id).toBe('student-1');
     });
 
+    it('throws 403 before 404 when caller is unauthorized AND user does not exist', async () => {
+      const { service, users, memberships, fakeAbility } = build();
+      users.findById.mockResolvedValue(null); // user does not exist
+      memberships.list.mockResolvedValue({ data: [], total: 0 });
+      fakeAbility.can.mockReturnValue(false);
+
+      const caller = makeUser({ id: 'u-2', memberships: [] }); // non-sysadmin, no relevant memberships
+
+      await expect(service.getUserStats('missing-id', caller)).rejects.toThrow(ForbiddenException);
+      expect(users.findById).not.toHaveBeenCalled();
+    });
+
     it('regression: Date(0) sentinel from an empty coverage becomes "now", not 1970', async () => {
       const { service, repo, users } = build();
       users.findById.mockResolvedValue(dbUser({ id: 'u-1' }));
