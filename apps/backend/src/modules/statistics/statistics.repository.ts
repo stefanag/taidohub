@@ -339,8 +339,8 @@ export class StatisticsRepository {
     `);
 
     const targetRows = await executor.execute<{ year: number; month: number }>(sql`
-      SELECT EXTRACT(YEAR FROM (now() - INTERVAL '1 month'))::int AS year,
-             EXTRACT(MONTH FROM (now() - INTERVAL '1 month'))::int AS month
+      SELECT EXTRACT(YEAR FROM (now() - INTERVAL '1 month'))::smallint AS year,
+             EXTRACT(MONTH FROM (now() - INTERVAL '1 month'))::smallint AS month
     `);
     const target = targetRows[0];
     if (!target) throw new Error('captureMonthlyIfNewMonth: target-month query returned no rows');
