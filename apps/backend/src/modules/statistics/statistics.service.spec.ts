@@ -480,6 +480,27 @@ describe('StatisticsService', () => {
       );
       expect(result.points).toEqual([{ year: 2026, month: 2, value: 42 }]);
     });
+
+    it('throws ForbiddenException for an unrelated caller', async () => {
+      const { service, users, memberships, fakeAbility } = build();
+      const targetUser = 'student-42';
+
+      users.findById.mockResolvedValue(dbUser({ id: targetUser, name: 'Student 42' }));
+      memberships.list.mockResolvedValue({
+        data: [{ id: 'm-1', userId: targetUser, organisationId: 'org-target', role: 'student' }],
+        total: 1,
+      });
+      fakeAbility.can.mockReturnValue(false);
+
+      const unrelatedCaller = makeUser({
+        id: 'u-3',
+        memberships: [],
+      });
+
+      await expect(
+        service.getUserTrends(targetUser, 'content_coverage_pct', 'some-rank-id', 12, unrelatedCaller),
+      ).rejects.toBeInstanceOf(ForbiddenException);
+    });
   });
 
   describe('rebuild', () => {
