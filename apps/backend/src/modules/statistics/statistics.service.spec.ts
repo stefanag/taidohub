@@ -208,6 +208,19 @@ describe('StatisticsService', () => {
         ForbiddenException,
       );
     });
+
+    it('regression: Date(0) sentinel from the repo to a recent timestamp', async () => {
+      const { service, repo } = build();
+      repo.getPlatform.mockResolvedValue(orgOrPlatformRaw({ updatedAt: new Date(0) }));
+
+      const before = Date.now();
+      const result = await service.getPlatformStats(makeUser({ role: 'sysadmin' }));
+      const after = Date.now();
+
+      const updatedAtMs = new Date(result.updatedAt).getTime();
+      expect(updatedAtMs).toBeGreaterThanOrEqual(before);
+      expect(updatedAtMs).toBeLessThanOrEqual(after);
+    });
   });
 
   describe('getOrganisationStats', () => {
@@ -275,6 +288,20 @@ describe('StatisticsService', () => {
       await expect(service.getOrganisationStats('org-z', caller)).rejects.toBeInstanceOf(
         ForbiddenException,
       );
+    });
+
+    it('regression: Date(0) sentinel from the repo maps to a recent timestamp', async () => {
+      const { service, repo, orgs } = build();
+      repo.getOrganisation.mockResolvedValue(orgOrPlatformRaw({ updatedAt: new Date(0) }));
+      orgs.findById.mockResolvedValue(dbOrg({ id: 'org-x', nameEn: 'Org X' }));
+
+      const before = Date.now();
+      const result = await service.getOrganisationStats('org-x', makeUser({ role: 'sysadmin' }));
+      const after = Date.now();
+
+      const updatedAtMs = new Date(result.updatedAt).getTime();
+      expect(updatedAtMs).toBeGreaterThanOrEqual(before);
+      expect(updatedAtMs).toBeLessThanOrEqual(after);
     });
   });
 
