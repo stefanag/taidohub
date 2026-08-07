@@ -7299,8 +7299,6 @@ components:
       $ref: "#/components/schemas/CloneRequirementSetInput"
     StatsRankRow:
       $ref: "#/components/schemas/StatsRankRow"
-    StatsScope:
-      $ref: "#/components/schemas/StatsScope"
     StatsMembershipCounts:
       $ref: "#/components/schemas/StatsMembershipCounts"
     PlatformStats:

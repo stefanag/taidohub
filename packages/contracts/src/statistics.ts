@@ -13,14 +13,6 @@ export const StatsRankRowSchema = z
   })
   .meta({ id: 'StatsRankRow' });
 
-export const StatsScopeSchema = z
-  .discriminatedUnion('type', [
-    z.object({ type: z.literal('platform') }),
-    z.object({ type: z.literal('organisation'), id: z.string().uuid(), name: z.string() }),
-    z.object({ type: z.literal('user'), id: z.string(), name: z.string().nullable() }),
-  ])
-  .meta({ id: 'StatsScope' });
-
 export const StatsMembershipCountsSchema = z
   .object({
     student: z.number().int().nonnegative(),
@@ -106,7 +98,6 @@ export const RebuildStatsResponseSchema = z
   .meta({ id: 'RebuildStatsResponse' });
 
 export type StatsRankRow = z.infer<typeof StatsRankRowSchema>;
-export type StatsScope = z.infer<typeof StatsScopeSchema>;
 export type StatsMembershipCounts = z.infer<typeof StatsMembershipCountsSchema>;
 export type PlatformStats = z.infer<typeof PlatformStatsSchema>;
 export type OrganisationStats = z.infer<typeof OrganisationStatsSchema>;
@@ -130,7 +121,6 @@ export const STAT_METRICS = {
 
 export const StatisticsOpenApiRegistry = {
   StatsRankRow: StatsRankRowSchema,
-  StatsScope: StatsScopeSchema,
   StatsMembershipCounts: StatsMembershipCountsSchema,
   PlatformStats: PlatformStatsSchema,
   OrganisationStats: OrganisationStatsSchema,
