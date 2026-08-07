@@ -2,11 +2,9 @@ import { useQuery } from '@tanstack/react-query';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import type { UserStats } from '@repo/contracts/statistics';
-
 import { useSession } from '@/entities/me';
 import { myProfileQueryOptions } from '@/entities/profile';
-import { useUserStatsQuery, useUserTrendsQuery } from '@/entities/statistic';
+import { currentRank, useUserStatsQuery, useUserTrendsQuery } from '@/entities/statistic';
 import { authClient } from '@/features/auth-by-email';
 import { CoverageMeter } from '@/features/coverage-meter';
 import { ProfileForm } from '@/features/profile-form';
@@ -18,9 +16,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/shared/ui';
-
-
-type UserStatsRankCoverage = UserStats['coverageByRank'][number];
 
 /**
  * "Your progression" section: a `CoverageMeter` for the caller's current
@@ -37,25 +32,19 @@ function ProgressionSection({ userId }: { userId: string }): React.ReactElement 
   const { t } = useTranslation();
   const statsQuery = useUserStatsQuery(userId);
 
-  const currentRank = React.useMemo<UserStatsRankCoverage | null>(() => {
-    const rows = statsQuery.data?.coverageByRank ?? [];
-    return rows.reduce<UserStatsRankCoverage | null>(
-      (max, row) => (!max || row.rank.sortOrder > max.rank.sortOrder ? row : max),
-      null,
-    );
-  }, [statsQuery.data]);
+  const rank = currentRank(statsQuery.data?.coverageByRank ?? []);
 
   const trendsQuery = useUserTrendsQuery(
     userId,
     {
       metric: 'content_coverage_pct',
-      dimensionKey: currentRank?.rank.id ?? '',
+      dimensionKey: rank?.rank.id ?? '',
       months: 12,
     },
-    { enabled: !!currentRank },
+    { enabled: !!rank },
   );
 
-  if (!currentRank) return null;
+  if (!rank) return null;
 
   return (
     <Card className="mt-6 max-w-2xl">
@@ -63,7 +52,7 @@ function ProgressionSection({ userId }: { userId: string }): React.ReactElement 
         <CardTitle>{t('profile.progression.heading', { defaultValue: 'Your progression' })}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <CoverageMeter label={currentRank.rank.nameEn} pct={currentRank.coveragePct} />
+        <CoverageMeter label={rank.rank.nameEn} pct={rank.coveragePct} />
         {trendsQuery.data && trendsQuery.data.points.length > 0 ? (
           <TrendSparkline points={trendsQuery.data.points} />
         ) : null}
