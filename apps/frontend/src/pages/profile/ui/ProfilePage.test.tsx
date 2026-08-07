@@ -50,10 +50,14 @@ const useUserTrendsQuerySpy = vi.fn<
   (...args: unknown[]) => { data: StatsTrendResponse | undefined; isLoading: boolean }
 >(() => ({ data: undefined, isLoading: true }));
 
-vi.mock('@/entities/statistic', () => ({
-  useUserStatsQuery: (...args: unknown[]) => useUserStatsQuerySpy(...args),
-  useUserTrendsQuery: (...args: unknown[]) => useUserTrendsQuerySpy(...args),
-}));
+vi.mock('@/entities/statistic', async (importOriginal) => {
+  const actual = (await importOriginal()) as object;
+  return {
+    ...actual,
+    useUserStatsQuery: (...args: unknown[]) => useUserStatsQuerySpy(...args),
+    useUserTrendsQuery: (...args: unknown[]) => useUserTrendsQuerySpy(...args),
+  };
+});
 
 
 function renderPage(): void {

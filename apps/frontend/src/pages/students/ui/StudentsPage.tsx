@@ -2,15 +2,10 @@ import { useNavigate } from '@tanstack/react-router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import type { UserStats } from '@repo/contracts/statistics';
-
-import { useUserStatsQuery } from '@/entities/statistic';
+import { currentRank, useUserStatsQuery } from '@/entities/statistic';
 import { useStudentsQuery } from '@/entities/student';
 import { CoverageMeter } from '@/features/coverage-meter';
 import { Badge } from '@/shared/ui';
-
-
-type UserStatsRankCoverage = UserStats['coverageByRank'][number];
 
 /**
  * Compact per-row coverage indicator for the instructor roster. Fires its
@@ -25,18 +20,12 @@ type UserStatsRankCoverage = UserStats['coverageByRank'][number];
 function StudentCoverageCell({ userId }: { userId: string }): React.ReactElement | null {
   const statsQuery = useUserStatsQuery(userId);
 
-  const currentRank = React.useMemo<UserStatsRankCoverage | null>(() => {
-    const rows = statsQuery.data?.coverageByRank ?? [];
-    return rows.reduce<UserStatsRankCoverage | null>(
-      (max, row) => (!max || row.rank.sortOrder > max.rank.sortOrder ? row : max),
-      null,
-    );
-  }, [statsQuery.data]);
+  const rank = currentRank(statsQuery.data?.coverageByRank ?? []);
 
   if (statsQuery.isLoading) return null;
-  if (!currentRank) return null;
+  if (!rank) return null;
 
-  return <CoverageMeter label={currentRank.rank.nameEn} pct={currentRank.coveragePct} />;
+  return <CoverageMeter label={rank.rank.nameEn} pct={rank.coveragePct} />;
 }
 
 /**

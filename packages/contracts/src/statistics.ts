@@ -102,6 +102,8 @@ export type StatsMembershipCounts = z.infer<typeof StatsMembershipCountsSchema>;
 export type PlatformStats = z.infer<typeof PlatformStatsSchema>;
 export type OrganisationStats = z.infer<typeof OrganisationStatsSchema>;
 export type UserStats = z.infer<typeof UserStatsSchema>;
+/** Convenience type for a single row of UserStats.coverageByRank. */
+export type UserStatsRankCoverage = z.infer<typeof UserStatsRankCoverageSchema>;
 export type StatsTrendPoint = z.infer<typeof StatsTrendPointSchema>;
 export type StatsTrendResponse = z.infer<typeof StatsTrendResponseSchema>;
 export type StatsTrendQuery = z.input<typeof StatsTrendQuerySchema>;

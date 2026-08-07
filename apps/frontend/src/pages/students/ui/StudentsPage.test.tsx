@@ -50,22 +50,26 @@ vi.mock('@tanstack/react-router', () => ({
 
 // Per-row coverage query, keyed by userId so each `StudentCoverageCell`
 // resolves independently.
-vi.mock('@/entities/statistic', () => ({
-  useUserStatsQuery: (userId: string) => ({
-    data: {
-      scope: { type: 'user', id: userId, name: null },
-      coverageByRank: [
-        {
-          rank: { id: 'r-4kyu', nameRomaji: 'Yonkyu', nameEn: '4th Kyu', sortOrder: 10 },
-          coveragePct: userId === 'u-1' ? 62 : 40,
-        },
-      ],
-      updatedAt: '2026-07-01T00:00:00.000Z',
-    },
-    isLoading: false,
-    isError: false,
-  }),
-}));
+vi.mock('@/entities/statistic', async (importOriginal) => {
+  const actual = (await importOriginal()) as object;
+  return {
+    ...actual,
+    useUserStatsQuery: (userId: string) => ({
+      data: {
+        scope: { type: 'user', id: userId, name: null },
+        coverageByRank: [
+          {
+            rank: { id: 'r-4kyu', nameRomaji: 'Yonkyu', nameEn: '4th Kyu', sortOrder: 10 },
+            coveragePct: userId === 'u-1' ? 62 : 40,
+          },
+        ],
+        updatedAt: '2026-07-01T00:00:00.000Z',
+      },
+      isLoading: false,
+      isError: false,
+    }),
+  };
+});
 
 import { StudentsPage } from './StudentsPage.js';
 
