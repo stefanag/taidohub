@@ -551,5 +551,34 @@ describe.skipIf(!hasDatabase())('statistics triggers (integration)', () => {
       expect(second.year).toBeUndefined();
       expect(second.month).toBeUndefined();
     });
+
+    it('captureMonthlyIfNewMonth is idempotent under double invocation (ON CONFLICT DO NOTHING backstop)', async () => {
+      // The existence guard is table-global (not scoped to a single test's
+      // seed data), so clear any snapshot rows the previous test left for
+      // the "previous month" -- same date-arithmetic the guard itself uses
+      // -- to give this test a clean slate to observe a fresh capture.
+      await sql`
+        DELETE FROM stat_snapshot_monthly
+        WHERE year = EXTRACT(YEAR FROM (now() - INTERVAL '1 month'))::smallint
+          AND month = EXTRACT(MONTH FROM (now() - INTERVAL '1 month'))::smallint
+      `;
+
+      // Seed one stat_current row so captureMonthlyIfNewMonth has something
+      // to snapshot.
+      await sql`
+        INSERT INTO stat_current (scope_type, scope_id, metric, dimension_key, value)
+        VALUES ('platform', '__platform__', 'membership_count', 'student', 42)
+        ON CONFLICT DO NOTHING
+      `;
+
+      const first = await repo.captureMonthlyIfNewMonth();
+      const second = await repo.captureMonthlyIfNewMonth();
+
+      expect(first.captured).toBe(true);
+      expect(second.captured).toBe(false); // guard sees a row now.
+      // Neither call threw a PK violation, whether via the existence guard
+      // (primary defence) or the INSERT's ON CONFLICT DO NOTHING (backstop
+      // for a hypothetical concurrent double-invocation).
+    });
   });
 });

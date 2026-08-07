@@ -316,6 +316,14 @@ export class StatisticsRepository {
    * read {year, month} back from the same `now() - INTERVAL '1 month'`
    * expression used for the write, so the returned value can never drift
    * from what was persisted.
+   *
+   * The INSERT carries `ON CONFLICT (scope_type, scope_id, metric,
+   * dimension_key, year, month) DO NOTHING`, matching the table's composite
+   * PK. The pre-INSERT existence check above is the primary defence against
+   * re-entry; the `ON CONFLICT` clause is belt-and-braces for the
+   * hypothetical case of two nodes running the cron concurrently and both
+   * passing the guard before either commits — without it, that race would
+   * PK-violate and abort the whole nightly run instead of silently no-oping.
    */
   async captureMonthlyIfNewMonth(
     executor: DrizzleExecutor = this.db,
@@ -336,6 +344,7 @@ export class StatisticsRepository {
              EXTRACT(MONTH FROM (now() - INTERVAL '1 month'))::smallint,
              value
       FROM stat_current
+      ON CONFLICT (scope_type, scope_id, metric, dimension_key, year, month) DO NOTHING
     `);
 
     const targetRows = await executor.execute<{ year: number; month: number }>(sql`
