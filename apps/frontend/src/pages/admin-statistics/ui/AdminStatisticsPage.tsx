@@ -19,7 +19,8 @@ import { Button } from '@/shared/ui';
  * bundle is missing a key (mirrors `admin-users`/`admin-feature-flags`).
  */
 export function AdminStatisticsPage(): React.ReactElement {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const locale = i18n.resolvedLanguage ?? 'en-US';
   const { data, isLoading, isError, error } = usePlatformStatsQuery();
   const rebuildMut = useRebuildStatsMutation();
 
@@ -45,22 +46,26 @@ export function AdminStatisticsPage(): React.ReactElement {
             <StatTile
               label={t('admin.statistics.tiles.students', { defaultValue: 'Students' })}
               value={data.metrics.membershipCount.student}
+              locale={locale}
             />
             <StatTile
               label={t('admin.statistics.tiles.instructors', { defaultValue: 'Instructors' })}
               value={data.metrics.membershipCount.instructor}
+              locale={locale}
             />
             <StatTile
               label={t('admin.statistics.tiles.activeUsers30d', {
                 defaultValue: 'Active users (30d)',
               })}
               value={data.metrics.activeUsersLast30Days}
+              locale={locale}
             />
             <StatTile
               label={t('admin.statistics.tiles.gradingsMtd', {
                 defaultValue: 'Gradings this month',
               })}
               value={data.metrics.gradingEventsMonthToDate}
+              locale={locale}
             />
           </div>
 

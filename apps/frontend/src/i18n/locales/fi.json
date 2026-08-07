@@ -42,6 +42,7 @@
     "adminBeltCatalog": "Vyökatalogi",
     "adminLabels": "Tunnisteet",
     "adminFeatureFlags": "Ominaisuusliput",
+    "statistics": "Tilastot",
     "adminPatterns": "Hokei & liikesarjat",
     "adminTechniques": "Tekniikat",
     "adminRequirementSets": "Vaatimuskokoelmat",
@@ -63,7 +64,35 @@
   "myOrganisation": {
     "title": "Oma organisaatio",
     "description": "Hallinnoi organisaatiosi ohjaajia ja ylläpitäjiä.",
-    "empty": "Et tällä hetkellä hallinnoi mitään organisaatiota."
+    "empty": "Et tällä hetkellä hallinnoi mitään organisaatiota.",
+    "statistics": {
+      "heading": "Tilastot",
+      "tiles": {
+        "students": "Oppilaat",
+        "instructors": "Ohjaajat",
+        "activeUsers30d": "Aktiiviset käyttäjät (30 pv)",
+        "gradingsMtd": "Vyökokeet tässä kuussa"
+      },
+      "seeFullHistory": "Näytä täysi historia"
+    }
+  },
+  "organisation": {
+    "statistics": {
+      "tiles": {
+        "students": "Oppilaat",
+        "instructors": "Ohjaajat",
+        "activeUsers30d": "Aktiiviset käyttäjät (30 pv)",
+        "gradingsMtd": "Vyökokeet tässä kuussa"
+      },
+      "ranksHeading": "Vyöt tässä organisaatiossa",
+      "trendLabel": "Oppilaat, viimeiset 12 kuukautta",
+      "childrenHeading": "Alaorganisaatiot",
+      "noChildren": "Ei alaorganisaatioita.",
+      "breadcrumbLabel": "Yläorganisaatiot",
+      "errors": {
+        "forbidden": "Sinulla ei ole pääsyä tämän organisaation tilastoihin."
+      }
+    }
   },
   "settings": {
     "title": "Asetukset",
@@ -280,6 +309,19 @@
       "lastUpdated": "Viimeksi päivitetty",
       "on": "Päällä",
       "off": "Pois"
+    },
+    "statistics": {
+      "title": "Tilastot",
+      "tiles": {
+        "students": "Oppilaat",
+        "instructors": "Ohjaajat",
+        "activeUsers30d": "Aktiiviset käyttäjät (30 pv)",
+        "gradingsMtd": "Vyökokeet tässä kuussa"
+      },
+      "ranksHeading": "Vyöt koko järjestelmässä",
+      "rebuild": "Rakenna tilastot uudelleen",
+      "rebuilding": "Rakennetaan…",
+      "rebuiltIn": "Rakennettiin {{durationMs}} ms:ssa"
     },
     "patterns": {
       "title": "Hallitse kuvioita",
