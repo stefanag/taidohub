@@ -30,9 +30,12 @@ export default defineConfig({
     testTimeout: 30_000,
     hookTimeout: 30_000,
     pool: 'forks',
-    poolOptions: {
-      forks: { singleFork: true },
-    },
+    // Files share one database and several call resetDatabase() (TRUNCATE of
+    // every table), so they must never overlap. Vitest 4 dropped
+    // poolOptions.forks.singleFork, which used to guarantee this; run the
+    // files one at a time explicitly.
+    fileParallelism: false,
+    maxWorkers: 1,
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'lcov'],
