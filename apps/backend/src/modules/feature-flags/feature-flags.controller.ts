@@ -16,7 +16,6 @@ import { CheckAbility } from '../../infrastructure/ability/check-ability.decorat
 
 import { FeatureFlagsService } from './feature-flags.service.js';
 import {
-  type FeatureFlagRow,
   type FeatureFlagRowWithUpdater,
 } from './feature-flags.repository.js';
 
@@ -66,7 +65,7 @@ export class FeatureFlagsAdminController {
     @CurrentUser() user: AuthenticatedUser,
     @Param('code', new ZodValidationPipe(FeatureFlagCodeSchema)) code: FeatureFlagCode,
     @Body(new ZodValidationPipe(UpdateFeatureFlagSchema)) body: UpdateFeatureFlagInput,
-  ): Promise<FeatureFlagRow> {
+  ): Promise<FeatureFlagRowWithUpdater> {
     return this.service.setEnabled(code, body.enabled, user);
   }
 }
