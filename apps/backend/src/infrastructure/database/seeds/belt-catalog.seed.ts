@@ -52,6 +52,8 @@ interface SeedRank {
   descriptionFi?: string | null;
   publiclyVisible: boolean;
   slug?: string | null;
+  /** The rank that follows this one; null for the top of a ladder. */
+  nextRankId?: string | null;
 }
 
 interface SeedShogo {
@@ -219,6 +221,19 @@ export async function seedBeltCatalog(db: DrizzleDb): Promise<BeltCatalogSeedRes
       });
       result.ranks.inserted += 1;
     }
+  }
+
+  // ---- rank successors ----
+  //
+  // `next_rank_id` points at another rank in the same fixture, so it can only
+  // be set once every rank exists: a second pass after the upserts above.
+  // Without it the app cannot tell which rank comes next (the next-rank card
+  // and requirement lookups treat every rank as the top of its ladder).
+  for (const rank of fixture.beltRanks) {
+    await db
+      .update(beltRanks)
+      .set({ nextRankId: rank.nextRankId ?? null })
+      .where(eq(beltRanks.id, rank.id));
   }
 
   // ---- shogo titles (resolved by `code`) ----
