@@ -9,111 +9,66 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as PublicRouteImport } from './routes/_public'
 import { Route as AppRouteImport } from './routes/_app'
-import { Route as PublicIndexRouteImport } from './routes/_public.index'
-import { Route as PublicSetPasswordRouteImport } from './routes/_public.set-password'
-import { Route as PublicLoginRouteImport } from './routes/_public.login'
-import { Route as AppTechniquesRouteImport } from './routes/_app.techniques'
-import { Route as AppStudentsRouteImport } from './routes/_app.students'
-import { Route as AppSettingsRouteImport } from './routes/_app.settings'
-import { Route as AppProgressionRouteImport } from './routes/_app.progression'
-import { Route as AppProfileRouteImport } from './routes/_app.profile'
-import { Route as AppPatternsRouteImport } from './routes/_app.patterns'
-import { Route as AppMyOrganisationRouteImport } from './routes/_app.my-organisation'
-import { Route as AppGradingHistoryRouteImport } from './routes/_app.grading-history'
+import { Route as PublicRouteImport } from './routes/_public'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
-import { Route as AppStudentsIndexRouteImport } from './routes/_app.students.index'
-import { Route as AppSettingsIndexRouteImport } from './routes/_app.settings.index'
-import { Route as PublicRanksSlugRouteImport } from './routes/_public.ranks.$slug'
-import { Route as AppStudentsUserIdRouteImport } from './routes/_app.students.$userId'
-import { Route as AppSettingsLabelsRouteImport } from './routes/_app.settings.labels'
-import { Route as AppAdminUsersRouteImport } from './routes/_app.admin.users'
-import { Route as AppAdminTechniquesRouteImport } from './routes/_app.admin.techniques'
-import { Route as AppAdminStatisticsRouteImport } from './routes/_app.admin.statistics'
-import { Route as AppAdminRequirementSetsRouteImport } from './routes/_app.admin.requirement-sets'
-import { Route as AppAdminRankRequirementsRouteImport } from './routes/_app.admin.rank-requirements'
-import { Route as AppAdminPatternsRouteImport } from './routes/_app.admin.patterns'
-import { Route as AppAdminOrganisationsRouteImport } from './routes/_app.admin.organisations'
-import { Route as AppAdminLabelsRouteImport } from './routes/_app.admin.labels'
-import { Route as AppAdminFeatureFlagsRouteImport } from './routes/_app.admin.feature-flags'
-import { Route as AppAdminBeltCatalogRouteImport } from './routes/_app.admin.belt-catalog'
+import { Route as AppGradingHistoryRouteImport } from './routes/_app.grading-history'
+import { Route as AppMyOrganisationRouteImport } from './routes/_app.my-organisation'
+import { Route as AppPatternsRouteImport } from './routes/_app.patterns'
+import { Route as AppProfileRouteImport } from './routes/_app.profile'
+import { Route as AppProgressionRouteImport } from './routes/_app.progression'
+import { Route as AppSettingsRouteImport } from './routes/_app.settings'
+import { Route as AppStudentsRouteImport } from './routes/_app.students'
+import { Route as AppTechniquesRouteImport } from './routes/_app.techniques'
+import { Route as PublicIndexRouteImport } from './routes/_public.index'
+import { Route as PublicLoginRouteImport } from './routes/_public.login'
+import { Route as PublicSetPasswordRouteImport } from './routes/_public.set-password'
 import { Route as AppAdminAuditLogRouteImport } from './routes/_app.admin.audit-log'
-import { Route as AppAdminTechniquesIndexRouteImport } from './routes/_app.admin.techniques.index'
-import { Route as AppAdminRequirementSetsIndexRouteImport } from './routes/_app.admin.requirement-sets.index'
-import { Route as AppAdminRankRequirementsIndexRouteImport } from './routes/_app.admin.rank-requirements.index'
-import { Route as AppAdminPatternsIndexRouteImport } from './routes/_app.admin.patterns.index'
+import { Route as AppAdminBeltCatalogRouteImport } from './routes/_app.admin.belt-catalog'
+import { Route as AppAdminFeatureFlagsRouteImport } from './routes/_app.admin.feature-flags'
+import { Route as AppAdminLabelsRouteImport } from './routes/_app.admin.labels'
+import { Route as AppAdminOrganisationsRouteImport } from './routes/_app.admin.organisations'
+import { Route as AppAdminPatternsRouteImport } from './routes/_app.admin.patterns'
+import { Route as AppAdminRankRequirementsRouteImport } from './routes/_app.admin.rank-requirements'
+import { Route as AppAdminRequirementSetsRouteImport } from './routes/_app.admin.requirement-sets'
+import { Route as AppAdminStatisticsRouteImport } from './routes/_app.admin.statistics'
+import { Route as AppAdminTechniquesRouteImport } from './routes/_app.admin.techniques'
+import { Route as AppAdminUsersRouteImport } from './routes/_app.admin.users'
+import { Route as AppSettingsIndexRouteImport } from './routes/_app.settings.index'
+import { Route as AppSettingsLabelsRouteImport } from './routes/_app.settings.labels'
+import { Route as AppStudentsIndexRouteImport } from './routes/_app.students.index'
+import { Route as AppStudentsUserIdRouteImport } from './routes/_app.students.$userId'
+import { Route as PublicRanksSlugRouteImport } from './routes/_public.ranks.$slug'
 import { Route as AppAdminOrganisationsIndexRouteImport } from './routes/_app.admin.organisations.index'
-import { Route as AppOrganisationIdStatisticsRouteImport } from './routes/_app.organisation.$id.statistics'
-import { Route as AppAdminTechniquesNewRouteImport } from './routes/_app.admin.techniques.new'
-import { Route as AppAdminTechniquesTechniqueIdRouteImport } from './routes/_app.admin.techniques.$techniqueId'
-import { Route as AppAdminPatternsNewRouteImport } from './routes/_app.admin.patterns.new'
-import { Route as AppAdminPatternsPatternIdRouteImport } from './routes/_app.admin.patterns.$patternId'
-import { Route as AppAdminOrganisationsNewRouteImport } from './routes/_app.admin.organisations.new'
 import { Route as AppAdminOrganisationsOrganisationIdRouteImport } from './routes/_app.admin.organisations.$organisationId'
-import { Route as AppAdminTechniquesTechniqueIdIndexRouteImport } from './routes/_app.admin.techniques.$techniqueId.index'
-import { Route as AppAdminPatternsPatternIdIndexRouteImport } from './routes/_app.admin.patterns.$patternId.index'
+import { Route as AppAdminOrganisationsNewRouteImport } from './routes/_app.admin.organisations.new'
+import { Route as AppAdminPatternsIndexRouteImport } from './routes/_app.admin.patterns.index'
+import { Route as AppAdminPatternsPatternIdRouteImport } from './routes/_app.admin.patterns.$patternId'
+import { Route as AppAdminPatternsNewRouteImport } from './routes/_app.admin.patterns.new'
+import { Route as AppAdminRankRequirementsIndexRouteImport } from './routes/_app.admin.rank-requirements.index'
+import { Route as AppAdminRequirementSetsIndexRouteImport } from './routes/_app.admin.requirement-sets.index'
+import { Route as AppAdminTechniquesIndexRouteImport } from './routes/_app.admin.techniques.index'
+import { Route as AppAdminTechniquesTechniqueIdRouteImport } from './routes/_app.admin.techniques.$techniqueId'
+import { Route as AppAdminTechniquesNewRouteImport } from './routes/_app.admin.techniques.new'
+import { Route as AppOrganisationIdStatisticsRouteImport } from './routes/_app.organisation.$id.statistics'
 import { Route as AppAdminOrganisationsOrganisationIdIndexRouteImport } from './routes/_app.admin.organisations.$organisationId.index'
-import { Route as AppAdminTechniquesTechniqueIdEditRouteImport } from './routes/_app.admin.techniques.$techniqueId.edit'
-import { Route as AppAdminPatternsPatternIdEditRouteImport } from './routes/_app.admin.patterns.$patternId.edit'
 import { Route as AppAdminOrganisationsOrganisationIdEditRouteImport } from './routes/_app.admin.organisations.$organisationId.edit'
+import { Route as AppAdminPatternsPatternIdIndexRouteImport } from './routes/_app.admin.patterns.$patternId.index'
+import { Route as AppAdminPatternsPatternIdEditRouteImport } from './routes/_app.admin.patterns.$patternId.edit'
+import { Route as AppAdminTechniquesTechniqueIdIndexRouteImport } from './routes/_app.admin.techniques.$techniqueId.index'
+import { Route as AppAdminTechniquesTechniqueIdEditRouteImport } from './routes/_app.admin.techniques.$techniqueId.edit'
 
-const PublicRoute = PublicRouteImport.update({
-  id: '/_public',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AppRoute = AppRouteImport.update({
   id: '/_app',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PublicIndexRoute = PublicIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => PublicRoute,
+const PublicRoute = PublicRouteImport.update({
+  id: '/_public',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const PublicSetPasswordRoute = PublicSetPasswordRouteImport.update({
-  id: '/set-password',
-  path: '/set-password',
-  getParentRoute: () => PublicRoute,
-} as any)
-const PublicLoginRoute = PublicLoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => PublicRoute,
-} as any)
-const AppTechniquesRoute = AppTechniquesRouteImport.update({
-  id: '/techniques',
-  path: '/techniques',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppStudentsRoute = AppStudentsRouteImport.update({
-  id: '/students',
-  path: '/students',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppSettingsRoute = AppSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppProgressionRoute = AppProgressionRouteImport.update({
-  id: '/progression',
-  path: '/progression',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppProfileRoute = AppProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppPatternsRoute = AppPatternsRouteImport.update({
-  id: '/patterns',
-  path: '/patterns',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppMyOrganisationRoute = AppMyOrganisationRouteImport.update({
-  id: '/my-organisation',
-  path: '/my-organisation',
+const AppDashboardRoute = AppDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => AppRoute,
 } as any)
 const AppGradingHistoryRoute = AppGradingHistoryRouteImport.update({
@@ -121,54 +76,84 @@ const AppGradingHistoryRoute = AppGradingHistoryRouteImport.update({
   path: '/grading-history',
   getParentRoute: () => AppRoute,
 } as any)
-const AppDashboardRoute = AppDashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+const AppMyOrganisationRoute = AppMyOrganisationRouteImport.update({
+  id: '/my-organisation',
+  path: '/my-organisation',
   getParentRoute: () => AppRoute,
 } as any)
-const AppStudentsIndexRoute = AppStudentsIndexRouteImport.update({
+const AppPatternsRoute = AppPatternsRouteImport.update({
+  id: '/patterns',
+  path: '/patterns',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppProfileRoute = AppProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppProgressionRoute = AppProgressionRouteImport.update({
+  id: '/progression',
+  path: '/progression',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppStudentsRoute = AppStudentsRouteImport.update({
+  id: '/students',
+  path: '/students',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTechniquesRoute = AppTechniquesRouteImport.update({
+  id: '/techniques',
+  path: '/techniques',
+  getParentRoute: () => AppRoute,
+} as any)
+const PublicIndexRoute = PublicIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AppStudentsRoute,
-} as any)
-const AppSettingsIndexRoute = AppSettingsIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AppSettingsRoute,
-} as any)
-const PublicRanksSlugRoute = PublicRanksSlugRouteImport.update({
-  id: '/ranks/$slug',
-  path: '/ranks/$slug',
   getParentRoute: () => PublicRoute,
 } as any)
-const AppStudentsUserIdRoute = AppStudentsUserIdRouteImport.update({
-  id: '/$userId',
-  path: '/$userId',
-  getParentRoute: () => AppStudentsRoute,
+const PublicLoginRoute = PublicLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => PublicRoute,
 } as any)
-const AppSettingsLabelsRoute = AppSettingsLabelsRouteImport.update({
-  id: '/labels',
-  path: '/labels',
-  getParentRoute: () => AppSettingsRoute,
+const PublicSetPasswordRoute = PublicSetPasswordRouteImport.update({
+  id: '/set-password',
+  path: '/set-password',
+  getParentRoute: () => PublicRoute,
 } as any)
-const AppAdminUsersRoute = AppAdminUsersRouteImport.update({
-  id: '/admin/users',
-  path: '/admin/users',
+const AppAdminAuditLogRoute = AppAdminAuditLogRouteImport.update({
+  id: '/admin/audit-log',
+  path: '/admin/audit-log',
   getParentRoute: () => AppRoute,
 } as any)
-const AppAdminTechniquesRoute = AppAdminTechniquesRouteImport.update({
-  id: '/admin/techniques',
-  path: '/admin/techniques',
+const AppAdminBeltCatalogRoute = AppAdminBeltCatalogRouteImport.update({
+  id: '/admin/belt-catalog',
+  path: '/admin/belt-catalog',
   getParentRoute: () => AppRoute,
 } as any)
-const AppAdminStatisticsRoute = AppAdminStatisticsRouteImport.update({
-  id: '/admin/statistics',
-  path: '/admin/statistics',
+const AppAdminFeatureFlagsRoute = AppAdminFeatureFlagsRouteImport.update({
+  id: '/admin/feature-flags',
+  path: '/admin/feature-flags',
   getParentRoute: () => AppRoute,
 } as any)
-const AppAdminRequirementSetsRoute = AppAdminRequirementSetsRouteImport.update({
-  id: '/admin/requirement-sets',
-  path: '/admin/requirement-sets',
+const AppAdminLabelsRoute = AppAdminLabelsRouteImport.update({
+  id: '/admin/labels',
+  path: '/admin/labels',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAdminOrganisationsRoute = AppAdminOrganisationsRouteImport.update({
+  id: '/admin/organisations',
+  path: '/admin/organisations',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAdminPatternsRoute = AppAdminPatternsRouteImport.update({
+  id: '/admin/patterns',
+  path: '/admin/patterns',
   getParentRoute: () => AppRoute,
 } as any)
 const AppAdminRankRequirementsRoute =
@@ -177,96 +162,55 @@ const AppAdminRankRequirementsRoute =
     path: '/admin/rank-requirements',
     getParentRoute: () => AppRoute,
   } as any)
-const AppAdminPatternsRoute = AppAdminPatternsRouteImport.update({
-  id: '/admin/patterns',
-  path: '/admin/patterns',
+const AppAdminRequirementSetsRoute = AppAdminRequirementSetsRouteImport.update({
+  id: '/admin/requirement-sets',
+  path: '/admin/requirement-sets',
   getParentRoute: () => AppRoute,
 } as any)
-const AppAdminOrganisationsRoute = AppAdminOrganisationsRouteImport.update({
-  id: '/admin/organisations',
-  path: '/admin/organisations',
+const AppAdminStatisticsRoute = AppAdminStatisticsRouteImport.update({
+  id: '/admin/statistics',
+  path: '/admin/statistics',
   getParentRoute: () => AppRoute,
 } as any)
-const AppAdminLabelsRoute = AppAdminLabelsRouteImport.update({
-  id: '/admin/labels',
-  path: '/admin/labels',
+const AppAdminTechniquesRoute = AppAdminTechniquesRouteImport.update({
+  id: '/admin/techniques',
+  path: '/admin/techniques',
   getParentRoute: () => AppRoute,
 } as any)
-const AppAdminFeatureFlagsRoute = AppAdminFeatureFlagsRouteImport.update({
-  id: '/admin/feature-flags',
-  path: '/admin/feature-flags',
+const AppAdminUsersRoute = AppAdminUsersRouteImport.update({
+  id: '/admin/users',
+  path: '/admin/users',
   getParentRoute: () => AppRoute,
 } as any)
-const AppAdminBeltCatalogRoute = AppAdminBeltCatalogRouteImport.update({
-  id: '/admin/belt-catalog',
-  path: '/admin/belt-catalog',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppAdminAuditLogRoute = AppAdminAuditLogRouteImport.update({
-  id: '/admin/audit-log',
-  path: '/admin/audit-log',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppAdminTechniquesIndexRoute = AppAdminTechniquesIndexRouteImport.update({
+const AppSettingsIndexRoute = AppSettingsIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AppAdminTechniquesRoute,
+  getParentRoute: () => AppSettingsRoute,
 } as any)
-const AppAdminRequirementSetsIndexRoute =
-  AppAdminRequirementSetsIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => AppAdminRequirementSetsRoute,
-  } as any)
-const AppAdminRankRequirementsIndexRoute =
-  AppAdminRankRequirementsIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => AppAdminRankRequirementsRoute,
-  } as any)
-const AppAdminPatternsIndexRoute = AppAdminPatternsIndexRouteImport.update({
+const AppSettingsLabelsRoute = AppSettingsLabelsRouteImport.update({
+  id: '/labels',
+  path: '/labels',
+  getParentRoute: () => AppSettingsRoute,
+} as any)
+const AppStudentsIndexRoute = AppStudentsIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AppAdminPatternsRoute,
+  getParentRoute: () => AppStudentsRoute,
+} as any)
+const AppStudentsUserIdRoute = AppStudentsUserIdRouteImport.update({
+  id: '/$userId',
+  path: '/$userId',
+  getParentRoute: () => AppStudentsRoute,
+} as any)
+const PublicRanksSlugRoute = PublicRanksSlugRouteImport.update({
+  id: '/ranks/$slug',
+  path: '/ranks/$slug',
+  getParentRoute: () => PublicRoute,
 } as any)
 const AppAdminOrganisationsIndexRoute =
   AppAdminOrganisationsIndexRouteImport.update({
     id: '/',
     path: '/',
-    getParentRoute: () => AppAdminOrganisationsRoute,
-  } as any)
-const AppOrganisationIdStatisticsRoute =
-  AppOrganisationIdStatisticsRouteImport.update({
-    id: '/organisation/$id/statistics',
-    path: '/organisation/$id/statistics',
-    getParentRoute: () => AppRoute,
-  } as any)
-const AppAdminTechniquesNewRoute = AppAdminTechniquesNewRouteImport.update({
-  id: '/new',
-  path: '/new',
-  getParentRoute: () => AppAdminTechniquesRoute,
-} as any)
-const AppAdminTechniquesTechniqueIdRoute =
-  AppAdminTechniquesTechniqueIdRouteImport.update({
-    id: '/$techniqueId',
-    path: '/$techniqueId',
-    getParentRoute: () => AppAdminTechniquesRoute,
-  } as any)
-const AppAdminPatternsNewRoute = AppAdminPatternsNewRouteImport.update({
-  id: '/new',
-  path: '/new',
-  getParentRoute: () => AppAdminPatternsRoute,
-} as any)
-const AppAdminPatternsPatternIdRoute =
-  AppAdminPatternsPatternIdRouteImport.update({
-    id: '/$patternId',
-    path: '/$patternId',
-    getParentRoute: () => AppAdminPatternsRoute,
-  } as any)
-const AppAdminOrganisationsNewRoute =
-  AppAdminOrganisationsNewRouteImport.update({
-    id: '/new',
-    path: '/new',
     getParentRoute: () => AppAdminOrganisationsRoute,
   } as any)
 const AppAdminOrganisationsOrganisationIdRoute =
@@ -275,17 +219,61 @@ const AppAdminOrganisationsOrganisationIdRoute =
     path: '/$organisationId',
     getParentRoute: () => AppAdminOrganisationsRoute,
   } as any)
-const AppAdminTechniquesTechniqueIdIndexRoute =
-  AppAdminTechniquesTechniqueIdIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => AppAdminTechniquesTechniqueIdRoute,
+const AppAdminOrganisationsNewRoute =
+  AppAdminOrganisationsNewRouteImport.update({
+    id: '/new',
+    path: '/new',
+    getParentRoute: () => AppAdminOrganisationsRoute,
   } as any)
-const AppAdminPatternsPatternIdIndexRoute =
-  AppAdminPatternsPatternIdIndexRouteImport.update({
+const AppAdminPatternsIndexRoute = AppAdminPatternsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppAdminPatternsRoute,
+} as any)
+const AppAdminPatternsPatternIdRoute =
+  AppAdminPatternsPatternIdRouteImport.update({
+    id: '/$patternId',
+    path: '/$patternId',
+    getParentRoute: () => AppAdminPatternsRoute,
+  } as any)
+const AppAdminPatternsNewRoute = AppAdminPatternsNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => AppAdminPatternsRoute,
+} as any)
+const AppAdminRankRequirementsIndexRoute =
+  AppAdminRankRequirementsIndexRouteImport.update({
     id: '/',
     path: '/',
-    getParentRoute: () => AppAdminPatternsPatternIdRoute,
+    getParentRoute: () => AppAdminRankRequirementsRoute,
+  } as any)
+const AppAdminRequirementSetsIndexRoute =
+  AppAdminRequirementSetsIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AppAdminRequirementSetsRoute,
+  } as any)
+const AppAdminTechniquesIndexRoute = AppAdminTechniquesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppAdminTechniquesRoute,
+} as any)
+const AppAdminTechniquesTechniqueIdRoute =
+  AppAdminTechniquesTechniqueIdRouteImport.update({
+    id: '/$techniqueId',
+    path: '/$techniqueId',
+    getParentRoute: () => AppAdminTechniquesRoute,
+  } as any)
+const AppAdminTechniquesNewRoute = AppAdminTechniquesNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => AppAdminTechniquesRoute,
+} as any)
+const AppOrganisationIdStatisticsRoute =
+  AppOrganisationIdStatisticsRouteImport.update({
+    id: '/organisation/$id/statistics',
+    path: '/organisation/$id/statistics',
+    getParentRoute: () => AppRoute,
   } as any)
 const AppAdminOrganisationsOrganisationIdIndexRoute =
   AppAdminOrganisationsOrganisationIdIndexRouteImport.update({
@@ -293,11 +281,17 @@ const AppAdminOrganisationsOrganisationIdIndexRoute =
     path: '/',
     getParentRoute: () => AppAdminOrganisationsOrganisationIdRoute,
   } as any)
-const AppAdminTechniquesTechniqueIdEditRoute =
-  AppAdminTechniquesTechniqueIdEditRouteImport.update({
+const AppAdminOrganisationsOrganisationIdEditRoute =
+  AppAdminOrganisationsOrganisationIdEditRouteImport.update({
     id: '/edit',
     path: '/edit',
-    getParentRoute: () => AppAdminTechniquesTechniqueIdRoute,
+    getParentRoute: () => AppAdminOrganisationsOrganisationIdRoute,
+  } as any)
+const AppAdminPatternsPatternIdIndexRoute =
+  AppAdminPatternsPatternIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AppAdminPatternsPatternIdRoute,
   } as any)
 const AppAdminPatternsPatternIdEditRoute =
   AppAdminPatternsPatternIdEditRouteImport.update({
@@ -305,11 +299,17 @@ const AppAdminPatternsPatternIdEditRoute =
     path: '/edit',
     getParentRoute: () => AppAdminPatternsPatternIdRoute,
   } as any)
-const AppAdminOrganisationsOrganisationIdEditRoute =
-  AppAdminOrganisationsOrganisationIdEditRouteImport.update({
+const AppAdminTechniquesTechniqueIdIndexRoute =
+  AppAdminTechniquesTechniqueIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AppAdminTechniquesTechniqueIdRoute,
+  } as any)
+const AppAdminTechniquesTechniqueIdEditRoute =
+  AppAdminTechniquesTechniqueIdEditRouteImport.update({
     id: '/edit',
     path: '/edit',
-    getParentRoute: () => AppAdminOrganisationsOrganisationIdRoute,
+    getParentRoute: () => AppAdminTechniquesTechniqueIdRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -595,13 +595,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/_public': {
-      id: '/_public'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof PublicRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_app': {
       id: '/_app'
       path: ''
@@ -609,74 +602,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_public/': {
-      id: '/_public/'
-      path: '/'
+    '/_public': {
+      id: '/_public'
+      path: ''
       fullPath: '/'
-      preLoaderRoute: typeof PublicIndexRouteImport
-      parentRoute: typeof PublicRoute
+      preLoaderRoute: typeof PublicRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_public/set-password': {
-      id: '/_public/set-password'
-      path: '/set-password'
-      fullPath: '/set-password'
-      preLoaderRoute: typeof PublicSetPasswordRouteImport
-      parentRoute: typeof PublicRoute
-    }
-    '/_public/login': {
-      id: '/_public/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof PublicLoginRouteImport
-      parentRoute: typeof PublicRoute
-    }
-    '/_app/techniques': {
-      id: '/_app/techniques'
-      path: '/techniques'
-      fullPath: '/techniques'
-      preLoaderRoute: typeof AppTechniquesRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/students': {
-      id: '/_app/students'
-      path: '/students'
-      fullPath: '/students'
-      preLoaderRoute: typeof AppStudentsRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/settings': {
-      id: '/_app/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof AppSettingsRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/progression': {
-      id: '/_app/progression'
-      path: '/progression'
-      fullPath: '/progression'
-      preLoaderRoute: typeof AppProgressionRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/profile': {
-      id: '/_app/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof AppProfileRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/patterns': {
-      id: '/_app/patterns'
-      path: '/patterns'
-      fullPath: '/patterns'
-      preLoaderRoute: typeof AppPatternsRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/my-organisation': {
-      id: '/_app/my-organisation'
-      path: '/my-organisation'
-      fullPath: '/my-organisation'
-      preLoaderRoute: typeof AppMyOrganisationRouteImport
+    '/_app/dashboard': {
+      id: '/_app/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AppDashboardRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/grading-history': {
@@ -686,109 +623,81 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppGradingHistoryRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/dashboard': {
-      id: '/_app/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof AppDashboardRouteImport
+    '/_app/my-organisation': {
+      id: '/_app/my-organisation'
+      path: '/my-organisation'
+      fullPath: '/my-organisation'
+      preLoaderRoute: typeof AppMyOrganisationRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/students/': {
-      id: '/_app/students/'
-      path: '/'
-      fullPath: '/students/'
-      preLoaderRoute: typeof AppStudentsIndexRouteImport
-      parentRoute: typeof AppStudentsRoute
+    '/_app/patterns': {
+      id: '/_app/patterns'
+      path: '/patterns'
+      fullPath: '/patterns'
+      preLoaderRoute: typeof AppPatternsRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/_app/settings/': {
-      id: '/_app/settings/'
-      path: '/'
-      fullPath: '/settings/'
-      preLoaderRoute: typeof AppSettingsIndexRouteImport
-      parentRoute: typeof AppSettingsRoute
+    '/_app/profile': {
+      id: '/_app/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AppProfileRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/_public/ranks/$slug': {
-      id: '/_public/ranks/$slug'
-      path: '/ranks/$slug'
-      fullPath: '/ranks/$slug'
-      preLoaderRoute: typeof PublicRanksSlugRouteImport
+    '/_app/progression': {
+      id: '/_app/progression'
+      path: '/progression'
+      fullPath: '/progression'
+      preLoaderRoute: typeof AppProgressionRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/settings': {
+      id: '/_app/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/students': {
+      id: '/_app/students'
+      path: '/students'
+      fullPath: '/students'
+      preLoaderRoute: typeof AppStudentsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/techniques': {
+      id: '/_app/techniques'
+      path: '/techniques'
+      fullPath: '/techniques'
+      preLoaderRoute: typeof AppTechniquesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_public/': {
+      id: '/_public/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof PublicIndexRouteImport
       parentRoute: typeof PublicRoute
     }
-    '/_app/students/$userId': {
-      id: '/_app/students/$userId'
-      path: '/$userId'
-      fullPath: '/students/$userId'
-      preLoaderRoute: typeof AppStudentsUserIdRouteImport
-      parentRoute: typeof AppStudentsRoute
+    '/_public/login': {
+      id: '/_public/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof PublicLoginRouteImport
+      parentRoute: typeof PublicRoute
     }
-    '/_app/settings/labels': {
-      id: '/_app/settings/labels'
-      path: '/labels'
-      fullPath: '/settings/labels'
-      preLoaderRoute: typeof AppSettingsLabelsRouteImport
-      parentRoute: typeof AppSettingsRoute
+    '/_public/set-password': {
+      id: '/_public/set-password'
+      path: '/set-password'
+      fullPath: '/set-password'
+      preLoaderRoute: typeof PublicSetPasswordRouteImport
+      parentRoute: typeof PublicRoute
     }
-    '/_app/admin/users': {
-      id: '/_app/admin/users'
-      path: '/admin/users'
-      fullPath: '/admin/users'
-      preLoaderRoute: typeof AppAdminUsersRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/admin/techniques': {
-      id: '/_app/admin/techniques'
-      path: '/admin/techniques'
-      fullPath: '/admin/techniques'
-      preLoaderRoute: typeof AppAdminTechniquesRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/admin/statistics': {
-      id: '/_app/admin/statistics'
-      path: '/admin/statistics'
-      fullPath: '/admin/statistics'
-      preLoaderRoute: typeof AppAdminStatisticsRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/admin/requirement-sets': {
-      id: '/_app/admin/requirement-sets'
-      path: '/admin/requirement-sets'
-      fullPath: '/admin/requirement-sets'
-      preLoaderRoute: typeof AppAdminRequirementSetsRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/admin/rank-requirements': {
-      id: '/_app/admin/rank-requirements'
-      path: '/admin/rank-requirements'
-      fullPath: '/admin/rank-requirements'
-      preLoaderRoute: typeof AppAdminRankRequirementsRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/admin/patterns': {
-      id: '/_app/admin/patterns'
-      path: '/admin/patterns'
-      fullPath: '/admin/patterns'
-      preLoaderRoute: typeof AppAdminPatternsRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/admin/organisations': {
-      id: '/_app/admin/organisations'
-      path: '/admin/organisations'
-      fullPath: '/admin/organisations'
-      preLoaderRoute: typeof AppAdminOrganisationsRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/admin/labels': {
-      id: '/_app/admin/labels'
-      path: '/admin/labels'
-      fullPath: '/admin/labels'
-      preLoaderRoute: typeof AppAdminLabelsRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/admin/feature-flags': {
-      id: '/_app/admin/feature-flags'
-      path: '/admin/feature-flags'
-      fullPath: '/admin/feature-flags'
-      preLoaderRoute: typeof AppAdminFeatureFlagsRouteImport
+    '/_app/admin/audit-log': {
+      id: '/_app/admin/audit-log'
+      path: '/admin/audit-log'
+      fullPath: '/admin/audit-log'
+      preLoaderRoute: typeof AppAdminAuditLogRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/admin/belt-catalog': {
@@ -798,88 +707,109 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdminBeltCatalogRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/admin/audit-log': {
-      id: '/_app/admin/audit-log'
-      path: '/admin/audit-log'
-      fullPath: '/admin/audit-log'
-      preLoaderRoute: typeof AppAdminAuditLogRouteImport
+    '/_app/admin/feature-flags': {
+      id: '/_app/admin/feature-flags'
+      path: '/admin/feature-flags'
+      fullPath: '/admin/feature-flags'
+      preLoaderRoute: typeof AppAdminFeatureFlagsRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/admin/techniques/': {
-      id: '/_app/admin/techniques/'
-      path: '/'
-      fullPath: '/admin/techniques/'
-      preLoaderRoute: typeof AppAdminTechniquesIndexRouteImport
-      parentRoute: typeof AppAdminTechniquesRoute
+    '/_app/admin/labels': {
+      id: '/_app/admin/labels'
+      path: '/admin/labels'
+      fullPath: '/admin/labels'
+      preLoaderRoute: typeof AppAdminLabelsRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/_app/admin/requirement-sets/': {
-      id: '/_app/admin/requirement-sets/'
-      path: '/'
-      fullPath: '/admin/requirement-sets/'
-      preLoaderRoute: typeof AppAdminRequirementSetsIndexRouteImport
-      parentRoute: typeof AppAdminRequirementSetsRoute
+    '/_app/admin/organisations': {
+      id: '/_app/admin/organisations'
+      path: '/admin/organisations'
+      fullPath: '/admin/organisations'
+      preLoaderRoute: typeof AppAdminOrganisationsRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/_app/admin/rank-requirements/': {
-      id: '/_app/admin/rank-requirements/'
-      path: '/'
-      fullPath: '/admin/rank-requirements/'
-      preLoaderRoute: typeof AppAdminRankRequirementsIndexRouteImport
-      parentRoute: typeof AppAdminRankRequirementsRoute
+    '/_app/admin/patterns': {
+      id: '/_app/admin/patterns'
+      path: '/admin/patterns'
+      fullPath: '/admin/patterns'
+      preLoaderRoute: typeof AppAdminPatternsRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/_app/admin/patterns/': {
-      id: '/_app/admin/patterns/'
+    '/_app/admin/rank-requirements': {
+      id: '/_app/admin/rank-requirements'
+      path: '/admin/rank-requirements'
+      fullPath: '/admin/rank-requirements'
+      preLoaderRoute: typeof AppAdminRankRequirementsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/admin/requirement-sets': {
+      id: '/_app/admin/requirement-sets'
+      path: '/admin/requirement-sets'
+      fullPath: '/admin/requirement-sets'
+      preLoaderRoute: typeof AppAdminRequirementSetsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/admin/statistics': {
+      id: '/_app/admin/statistics'
+      path: '/admin/statistics'
+      fullPath: '/admin/statistics'
+      preLoaderRoute: typeof AppAdminStatisticsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/admin/techniques': {
+      id: '/_app/admin/techniques'
+      path: '/admin/techniques'
+      fullPath: '/admin/techniques'
+      preLoaderRoute: typeof AppAdminTechniquesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/admin/users': {
+      id: '/_app/admin/users'
+      path: '/admin/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AppAdminUsersRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/settings/': {
+      id: '/_app/settings/'
       path: '/'
-      fullPath: '/admin/patterns/'
-      preLoaderRoute: typeof AppAdminPatternsIndexRouteImport
-      parentRoute: typeof AppAdminPatternsRoute
+      fullPath: '/settings/'
+      preLoaderRoute: typeof AppSettingsIndexRouteImport
+      parentRoute: typeof AppSettingsRoute
+    }
+    '/_app/settings/labels': {
+      id: '/_app/settings/labels'
+      path: '/labels'
+      fullPath: '/settings/labels'
+      preLoaderRoute: typeof AppSettingsLabelsRouteImport
+      parentRoute: typeof AppSettingsRoute
+    }
+    '/_app/students/': {
+      id: '/_app/students/'
+      path: '/'
+      fullPath: '/students/'
+      preLoaderRoute: typeof AppStudentsIndexRouteImport
+      parentRoute: typeof AppStudentsRoute
+    }
+    '/_app/students/$userId': {
+      id: '/_app/students/$userId'
+      path: '/$userId'
+      fullPath: '/students/$userId'
+      preLoaderRoute: typeof AppStudentsUserIdRouteImport
+      parentRoute: typeof AppStudentsRoute
+    }
+    '/_public/ranks/$slug': {
+      id: '/_public/ranks/$slug'
+      path: '/ranks/$slug'
+      fullPath: '/ranks/$slug'
+      preLoaderRoute: typeof PublicRanksSlugRouteImport
+      parentRoute: typeof PublicRoute
     }
     '/_app/admin/organisations/': {
       id: '/_app/admin/organisations/'
       path: '/'
       fullPath: '/admin/organisations/'
       preLoaderRoute: typeof AppAdminOrganisationsIndexRouteImport
-      parentRoute: typeof AppAdminOrganisationsRoute
-    }
-    '/_app/organisation/$id/statistics': {
-      id: '/_app/organisation/$id/statistics'
-      path: '/organisation/$id/statistics'
-      fullPath: '/organisation/$id/statistics'
-      preLoaderRoute: typeof AppOrganisationIdStatisticsRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/admin/techniques/new': {
-      id: '/_app/admin/techniques/new'
-      path: '/new'
-      fullPath: '/admin/techniques/new'
-      preLoaderRoute: typeof AppAdminTechniquesNewRouteImport
-      parentRoute: typeof AppAdminTechniquesRoute
-    }
-    '/_app/admin/techniques/$techniqueId': {
-      id: '/_app/admin/techniques/$techniqueId'
-      path: '/$techniqueId'
-      fullPath: '/admin/techniques/$techniqueId'
-      preLoaderRoute: typeof AppAdminTechniquesTechniqueIdRouteImport
-      parentRoute: typeof AppAdminTechniquesRoute
-    }
-    '/_app/admin/patterns/new': {
-      id: '/_app/admin/patterns/new'
-      path: '/new'
-      fullPath: '/admin/patterns/new'
-      preLoaderRoute: typeof AppAdminPatternsNewRouteImport
-      parentRoute: typeof AppAdminPatternsRoute
-    }
-    '/_app/admin/patterns/$patternId': {
-      id: '/_app/admin/patterns/$patternId'
-      path: '/$patternId'
-      fullPath: '/admin/patterns/$patternId'
-      preLoaderRoute: typeof AppAdminPatternsPatternIdRouteImport
-      parentRoute: typeof AppAdminPatternsRoute
-    }
-    '/_app/admin/organisations/new': {
-      id: '/_app/admin/organisations/new'
-      path: '/new'
-      fullPath: '/admin/organisations/new'
-      preLoaderRoute: typeof AppAdminOrganisationsNewRouteImport
       parentRoute: typeof AppAdminOrganisationsRoute
     }
     '/_app/admin/organisations/$organisationId': {
@@ -889,19 +819,75 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdminOrganisationsOrganisationIdRouteImport
       parentRoute: typeof AppAdminOrganisationsRoute
     }
-    '/_app/admin/techniques/$techniqueId/': {
-      id: '/_app/admin/techniques/$techniqueId/'
-      path: '/'
-      fullPath: '/admin/techniques/$techniqueId/'
-      preLoaderRoute: typeof AppAdminTechniquesTechniqueIdIndexRouteImport
-      parentRoute: typeof AppAdminTechniquesTechniqueIdRoute
+    '/_app/admin/organisations/new': {
+      id: '/_app/admin/organisations/new'
+      path: '/new'
+      fullPath: '/admin/organisations/new'
+      preLoaderRoute: typeof AppAdminOrganisationsNewRouteImport
+      parentRoute: typeof AppAdminOrganisationsRoute
     }
-    '/_app/admin/patterns/$patternId/': {
-      id: '/_app/admin/patterns/$patternId/'
+    '/_app/admin/patterns/': {
+      id: '/_app/admin/patterns/'
       path: '/'
-      fullPath: '/admin/patterns/$patternId/'
-      preLoaderRoute: typeof AppAdminPatternsPatternIdIndexRouteImport
-      parentRoute: typeof AppAdminPatternsPatternIdRoute
+      fullPath: '/admin/patterns/'
+      preLoaderRoute: typeof AppAdminPatternsIndexRouteImport
+      parentRoute: typeof AppAdminPatternsRoute
+    }
+    '/_app/admin/patterns/$patternId': {
+      id: '/_app/admin/patterns/$patternId'
+      path: '/$patternId'
+      fullPath: '/admin/patterns/$patternId'
+      preLoaderRoute: typeof AppAdminPatternsPatternIdRouteImport
+      parentRoute: typeof AppAdminPatternsRoute
+    }
+    '/_app/admin/patterns/new': {
+      id: '/_app/admin/patterns/new'
+      path: '/new'
+      fullPath: '/admin/patterns/new'
+      preLoaderRoute: typeof AppAdminPatternsNewRouteImport
+      parentRoute: typeof AppAdminPatternsRoute
+    }
+    '/_app/admin/rank-requirements/': {
+      id: '/_app/admin/rank-requirements/'
+      path: '/'
+      fullPath: '/admin/rank-requirements/'
+      preLoaderRoute: typeof AppAdminRankRequirementsIndexRouteImport
+      parentRoute: typeof AppAdminRankRequirementsRoute
+    }
+    '/_app/admin/requirement-sets/': {
+      id: '/_app/admin/requirement-sets/'
+      path: '/'
+      fullPath: '/admin/requirement-sets/'
+      preLoaderRoute: typeof AppAdminRequirementSetsIndexRouteImport
+      parentRoute: typeof AppAdminRequirementSetsRoute
+    }
+    '/_app/admin/techniques/': {
+      id: '/_app/admin/techniques/'
+      path: '/'
+      fullPath: '/admin/techniques/'
+      preLoaderRoute: typeof AppAdminTechniquesIndexRouteImport
+      parentRoute: typeof AppAdminTechniquesRoute
+    }
+    '/_app/admin/techniques/$techniqueId': {
+      id: '/_app/admin/techniques/$techniqueId'
+      path: '/$techniqueId'
+      fullPath: '/admin/techniques/$techniqueId'
+      preLoaderRoute: typeof AppAdminTechniquesTechniqueIdRouteImport
+      parentRoute: typeof AppAdminTechniquesRoute
+    }
+    '/_app/admin/techniques/new': {
+      id: '/_app/admin/techniques/new'
+      path: '/new'
+      fullPath: '/admin/techniques/new'
+      preLoaderRoute: typeof AppAdminTechniquesNewRouteImport
+      parentRoute: typeof AppAdminTechniquesRoute
+    }
+    '/_app/organisation/$id/statistics': {
+      id: '/_app/organisation/$id/statistics'
+      path: '/organisation/$id/statistics'
+      fullPath: '/organisation/$id/statistics'
+      preLoaderRoute: typeof AppOrganisationIdStatisticsRouteImport
+      parentRoute: typeof AppRoute
     }
     '/_app/admin/organisations/$organisationId/': {
       id: '/_app/admin/organisations/$organisationId/'
@@ -910,12 +896,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdminOrganisationsOrganisationIdIndexRouteImport
       parentRoute: typeof AppAdminOrganisationsOrganisationIdRoute
     }
-    '/_app/admin/techniques/$techniqueId/edit': {
-      id: '/_app/admin/techniques/$techniqueId/edit'
+    '/_app/admin/organisations/$organisationId/edit': {
+      id: '/_app/admin/organisations/$organisationId/edit'
       path: '/edit'
-      fullPath: '/admin/techniques/$techniqueId/edit'
-      preLoaderRoute: typeof AppAdminTechniquesTechniqueIdEditRouteImport
-      parentRoute: typeof AppAdminTechniquesTechniqueIdRoute
+      fullPath: '/admin/organisations/$organisationId/edit'
+      preLoaderRoute: typeof AppAdminOrganisationsOrganisationIdEditRouteImport
+      parentRoute: typeof AppAdminOrganisationsOrganisationIdRoute
+    }
+    '/_app/admin/patterns/$patternId/': {
+      id: '/_app/admin/patterns/$patternId/'
+      path: '/'
+      fullPath: '/admin/patterns/$patternId/'
+      preLoaderRoute: typeof AppAdminPatternsPatternIdIndexRouteImport
+      parentRoute: typeof AppAdminPatternsPatternIdRoute
     }
     '/_app/admin/patterns/$patternId/edit': {
       id: '/_app/admin/patterns/$patternId/edit'
@@ -924,12 +917,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdminPatternsPatternIdEditRouteImport
       parentRoute: typeof AppAdminPatternsPatternIdRoute
     }
-    '/_app/admin/organisations/$organisationId/edit': {
-      id: '/_app/admin/organisations/$organisationId/edit'
+    '/_app/admin/techniques/$techniqueId/': {
+      id: '/_app/admin/techniques/$techniqueId/'
+      path: '/'
+      fullPath: '/admin/techniques/$techniqueId/'
+      preLoaderRoute: typeof AppAdminTechniquesTechniqueIdIndexRouteImport
+      parentRoute: typeof AppAdminTechniquesTechniqueIdRoute
+    }
+    '/_app/admin/techniques/$techniqueId/edit': {
+      id: '/_app/admin/techniques/$techniqueId/edit'
       path: '/edit'
-      fullPath: '/admin/organisations/$organisationId/edit'
-      preLoaderRoute: typeof AppAdminOrganisationsOrganisationIdEditRouteImport
-      parentRoute: typeof AppAdminOrganisationsOrganisationIdRoute
+      fullPath: '/admin/techniques/$techniqueId/edit'
+      preLoaderRoute: typeof AppAdminTechniquesTechniqueIdEditRouteImport
+      parentRoute: typeof AppAdminTechniquesTechniqueIdRoute
     }
   }
 }
