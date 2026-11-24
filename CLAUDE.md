@@ -166,9 +166,9 @@ pnpm format                              # prettier --write
 ## Testing
 
 Vitest across all workspaces. Backend: unit specs mock the Drizzle client; `*.e2e.spec.ts` boots a real
-Nest app against an ephemeral `postgres:16-alpine` container (see `.github/workflows/ci.yml`).
-Postgres versions differ today (CI 16, local installs 17, Hetzner 18); the target is 18 everywhere.
-Avoid features newer than Postgres 16 until CI is moved to 18. Frontend: component tests with
+Nest app against an ephemeral `postgres:18-alpine` container (see `.github/workflows/ci.yml`). CI,
+the Docker Compose files and Hetzner all run PostgreSQL 18; a native local install may be older
+(17), so upgrade it if a query behaves differently locally than in CI. Frontend: component tests with
 `@testing-library/react`, API hook tests against MSW handlers typed from `@repo/contracts`.
 `pnpm --filter backend db:studio` opens a Drizzle DB explorer for local debugging.
 
