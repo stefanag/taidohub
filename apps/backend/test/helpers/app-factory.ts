@@ -51,6 +51,11 @@ export async function buildTestApp(): Promise<{
   // the legacy `/api/auth/*` pattern. The bare prefix matches every nested
   // path identically and is what `main.ts` uses in production.
   app.use('/api/auth', toNodeHandler(auth));
+  // OAuth discovery for MCP clients (RFC 8414 authorization server metadata
+  // and RFC 9728 protected resource metadata). They must sit at the origin's
+  // root, outside /api/auth, and are answered by better-auth's MCP plugin.
+  app.use('/.well-known/oauth-authorization-server', toNodeHandler(auth));
+  app.use('/.well-known/oauth-protected-resource', toNodeHandler(auth));
 
   app.setGlobalPrefix('api');
   setupSwagger(app, config);

@@ -48,6 +48,11 @@ async function bootstrap(): Promise<void> {
   // attached with `app.use(prefix, ...)` matches every path that starts
   // with `prefix`, so all of better-auth's sub-routes still flow through.
   app.use('/api/auth', toNodeHandler(auth));
+  // OAuth discovery for MCP clients (RFC 8414 authorization server metadata
+  // and RFC 9728 protected resource metadata). They must sit at the origin's
+  // root, outside /api/auth, and are answered by better-auth's MCP plugin.
+  app.use('/.well-known/oauth-authorization-server', toNodeHandler(auth));
+  app.use('/.well-known/oauth-protected-resource', toNodeHandler(auth));
 
   // --- Nest pipeline ------------------------------------------------------
   app.setGlobalPrefix('api');
