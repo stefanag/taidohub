@@ -17,6 +17,7 @@ import { seedSysadmin, type SeedDeps } from './seed-sysadmin.js';
 import { seedBeltCatalog } from './seeds/belt-catalog.seed.js';
 import { seedClassifications } from './seeds/classifications.seed.js';
 import { seedClubMembers } from './seeds/club-members.seed.js';
+import { assertDemoSeedAllowed, seedDemoData } from './seeds/demo-data.seed.js';
 import { seedOrganisations } from './seeds/organisations.seed.js';
 import { seedPatterns } from './seeds/patterns.seed.js';
 import { seedTechniques } from './seeds/techniques.seed.js';
@@ -124,6 +125,25 @@ async function main(): Promise<void> {
   } else {
     // eslint-disable-next-line no-console
     console.info('[seed] club members (STAF): skipped (SEED_CLUB_MEMBERS=false)');
+  }
+
+  // Fictional demo data, for testing a deployed staging environment without
+  // real people's data. Off unless SEED_DEMO_DATA=true; refused in production.
+  if (env.SEED_DEMO_DATA === 'true') {
+    assertDemoSeedAllowed(env);
+    if (!env.DEMO_PASSWORD) {
+      throw new Error('SEED_DEMO_DATA=true needs DEMO_PASSWORD (at least 12 characters).');
+    }
+    const demo = await seedDemoData(db, {
+      signUpEmail: deps.signUpEmail,
+      sysadminEmail: env.SYSADMIN_EMAIL,
+      password: env.DEMO_PASSWORD,
+    });
+    // eslint-disable-next-line no-console
+    console.info(
+      `[seed] demo data: club=${demo.club} users(+${demo.users.inserted}/=${demo.users.existing}) ` +
+        `memberships(+${demo.memberships}) rank_history(+${demo.rankHistory}) progress(+${demo.progress})`,
+    );
   }
 
   // Close the postgres-js pool so the script can exit. Without this the
