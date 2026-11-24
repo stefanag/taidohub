@@ -34,12 +34,18 @@ need hcloud; need jq
 
 # The server type must be orderable in the location right now. Hetzner has
 # had plans marked unavailable in 2026; fail early with the alternatives.
+# Availability comes from server_types[].locations[].available (the
+# datacenters endpoints were removed from the API on 2026-10-01).
 check_type() {
-  local type="$1" ids available
-  ids="$(hcloud datacenter list -o json \
-    | jq -c --arg loc "$LOCATION" '[.[] | select(.location.name==$loc) | .server_types.available[]] | unique')"
-  available="$(hcloud server-type list -o json \
-    | jq -r --argjson ids "$ids" '.[] | select(.id as $i | $ids | index($i)) | .name' | sort -u)"
+  local type="$1" json available
+  json="$(hcloud server-type list -o json)"
+  if ! jq -e 'any(.[].locations[]?; has("available"))' <<< "$json" >/dev/null; then
+    echo "warning: this hcloud version does not report availability; skipping the check." >&2
+    echo "         Update hcloud if server creation fails with resource_unavailable." >&2
+    return 0
+  fi
+  available="$(jq -r --arg loc "$LOCATION" \
+    '.[] | select(any(.locations[]?; .name == $loc and .available == true)) | .name' <<< "$json" | sort -u)"
   if ! grep -qx "$type" <<< "$available"; then
     echo "Server type $type is not available in $LOCATION right now." >&2
     echo "Available: $(tr '\n' ' ' <<< "$available")" >&2
