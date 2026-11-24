@@ -239,6 +239,13 @@
       "when": 1785526463617,
       "tag": "0033_statistics_triggers",
       "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "7",
+      "when": 1795545649077,
+      "tag": "0034_cold_crystal",
+      "breakpoints": true
     }
   ]
 }
