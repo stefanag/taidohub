@@ -22,7 +22,7 @@ describe('<LoginForm>', () => {
   });
 
   it('posts the credentials to signInWithEmail on submit', async () => {
-    const signInSpy = vi.spyOn(authApi, 'signInWithEmail').mockResolvedValue();
+    const signInSpy = vi.spyOn(authApi, 'signInWithEmail').mockResolvedValue(undefined);
     const user = userEvent.setup();
     render(<LoginForm />);
 
@@ -41,7 +41,7 @@ describe('<LoginForm>', () => {
   });
 
   it('calls onSuccess after a successful sign-in', async () => {
-    const signInSpy = vi.spyOn(authApi, 'signInWithEmail').mockResolvedValue();
+    const signInSpy = vi.spyOn(authApi, 'signInWithEmail').mockResolvedValue(undefined);
     const onSuccess = vi.fn();
     const user = userEvent.setup();
     render(<LoginForm onSuccess={onSuccess} />);
@@ -52,6 +52,25 @@ describe('<LoginForm>', () => {
 
     await vi.waitFor(() => {
       expect(onSuccess).toHaveBeenCalledTimes(1);
+    });
+
+    signInSpy.mockRestore();
+  });
+
+  it('passes the OAuth redirect to onSuccess when the sign-in resumes an authorization', async () => {
+    const signInSpy = vi
+      .spyOn(authApi, 'signInWithEmail')
+      .mockResolvedValue('https://client.example/callback?code=abc');
+    const onSuccess = vi.fn();
+    const user = userEvent.setup();
+    render(<LoginForm onSuccess={onSuccess} />);
+
+    await user.type(screen.getByLabelText(/e-post/i), 'ada@example.com');
+    await user.type(screen.getByLabelText(/lösenord/i), 'correct-horse-battery-staple');
+    await user.click(screen.getByRole('button', { name: /logga in/i }));
+
+    await vi.waitFor(() => {
+      expect(onSuccess).toHaveBeenCalledWith('https://client.example/callback?code=abc');
     });
 
     signInSpy.mockRestore();

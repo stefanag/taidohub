@@ -38,6 +38,7 @@ import { Route as AppSettingsIndexRouteImport } from './routes/_app.settings.ind
 import { Route as AppSettingsLabelsRouteImport } from './routes/_app.settings.labels'
 import { Route as AppStudentsIndexRouteImport } from './routes/_app.students.index'
 import { Route as AppStudentsUserIdRouteImport } from './routes/_app.students.$userId'
+import { Route as PublicOauthConsentRouteImport } from './routes/_public.oauth.consent'
 import { Route as PublicRanksSlugRouteImport } from './routes/_public.ranks.$slug'
 import { Route as AppAdminOrganisationsIndexRouteImport } from './routes/_app.admin.organisations.index'
 import { Route as AppAdminOrganisationsOrganisationIdRouteImport } from './routes/_app.admin.organisations.$organisationId'
@@ -202,6 +203,11 @@ const AppStudentsUserIdRoute = AppStudentsUserIdRouteImport.update({
   path: '/$userId',
   getParentRoute: () => AppStudentsRoute,
 } as any)
+const PublicOauthConsentRoute = PublicOauthConsentRouteImport.update({
+  id: '/oauth/consent',
+  path: '/oauth/consent',
+  getParentRoute: () => PublicRoute,
+} as any)
 const PublicRanksSlugRoute = PublicRanksSlugRouteImport.update({
   id: '/ranks/$slug',
   path: '/ranks/$slug',
@@ -338,6 +344,7 @@ export interface FileRoutesByFullPath {
   '/admin/users': typeof AppAdminUsersRoute
   '/settings/labels': typeof AppSettingsLabelsRoute
   '/students/$userId': typeof AppStudentsUserIdRoute
+  '/oauth/consent': typeof PublicOauthConsentRoute
   '/ranks/$slug': typeof PublicRanksSlugRoute
   '/settings/': typeof AppSettingsIndexRoute
   '/students/': typeof AppStudentsIndexRoute
@@ -379,6 +386,7 @@ export interface FileRoutesByTo {
   '/admin/users': typeof AppAdminUsersRoute
   '/settings/labels': typeof AppSettingsLabelsRoute
   '/students/$userId': typeof AppStudentsUserIdRoute
+  '/oauth/consent': typeof PublicOauthConsentRoute
   '/ranks/$slug': typeof PublicRanksSlugRoute
   '/settings': typeof AppSettingsIndexRoute
   '/students': typeof AppStudentsIndexRoute
@@ -427,6 +435,7 @@ export interface FileRoutesById {
   '/_app/admin/users': typeof AppAdminUsersRoute
   '/_app/settings/labels': typeof AppSettingsLabelsRoute
   '/_app/students/$userId': typeof AppStudentsUserIdRoute
+  '/_public/oauth/consent': typeof PublicOauthConsentRoute
   '/_public/ranks/$slug': typeof PublicRanksSlugRoute
   '/_app/settings/': typeof AppSettingsIndexRoute
   '/_app/students/': typeof AppStudentsIndexRoute
@@ -477,6 +486,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/settings/labels'
     | '/students/$userId'
+    | '/oauth/consent'
     | '/ranks/$slug'
     | '/settings/'
     | '/students/'
@@ -518,6 +528,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/settings/labels'
     | '/students/$userId'
+    | '/oauth/consent'
     | '/ranks/$slug'
     | '/settings'
     | '/students'
@@ -565,6 +576,7 @@ export interface FileRouteTypes {
     | '/_app/admin/users'
     | '/_app/settings/labels'
     | '/_app/students/$userId'
+    | '/_public/oauth/consent'
     | '/_public/ranks/$slug'
     | '/_app/settings/'
     | '/_app/students/'
@@ -797,6 +809,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/students/$userId'
       preLoaderRoute: typeof AppStudentsUserIdRouteImport
       parentRoute: typeof AppStudentsRoute
+    }
+    '/_public/oauth/consent': {
+      id: '/_public/oauth/consent'
+      path: '/oauth/consent'
+      fullPath: '/oauth/consent'
+      preLoaderRoute: typeof PublicOauthConsentRouteImport
+      parentRoute: typeof PublicRoute
     }
     '/_public/ranks/$slug': {
       id: '/_public/ranks/$slug'
@@ -1145,6 +1164,7 @@ interface PublicRouteChildren {
   PublicLoginRoute: typeof PublicLoginRoute
   PublicSetPasswordRoute: typeof PublicSetPasswordRoute
   PublicIndexRoute: typeof PublicIndexRoute
+  PublicOauthConsentRoute: typeof PublicOauthConsentRoute
   PublicRanksSlugRoute: typeof PublicRanksSlugRoute
 }
 
@@ -1152,6 +1172,7 @@ const PublicRouteChildren: PublicRouteChildren = {
   PublicLoginRoute: PublicLoginRoute,
   PublicSetPasswordRoute: PublicSetPasswordRoute,
   PublicIndexRoute: PublicIndexRoute,
+  PublicOauthConsentRoute: PublicOauthConsentRoute,
   PublicRanksSlugRoute: PublicRanksSlugRoute,
 }
 

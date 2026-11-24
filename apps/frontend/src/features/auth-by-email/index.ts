@@ -3,6 +3,8 @@
  */
 export {
   authClient,
+  OAuthConsentNotAllowedError,
+  respondToOAuthConsent,
   signInWithEmail,
   signOut,
   signUpWithEmail,

@@ -15,7 +15,11 @@ import {
 import { signInWithEmail } from '../api/auth.api.js';
 
 export interface LoginFormProps {
-  onSuccess?: () => void;
+  /**
+   * Called after a successful sign-in. `redirectTo` is set when the sign-in
+   * resumed an OAuth authorization and the browser should leave the app.
+   */
+  onSuccess?: (redirectTo?: string) => void;
 }
 
 /**
@@ -36,8 +40,8 @@ export function LoginForm({ onSuccess }: LoginFormProps): React.ReactElement {
     if (!result.ok) return;
     setSubmitting(true);
     try {
-      await signInWithEmail(result.data);
-      onSuccess?.();
+      const redirectTo = await signInWithEmail(result.data);
+      onSuccess?.(redirectTo);
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : t('auth.login.failed'));
     } finally {
