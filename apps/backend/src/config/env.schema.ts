@@ -68,6 +68,15 @@ export const EnvSchema = z.object({
   SEED_CLUB_MEMBERS: z.enum(['true', 'false']).optional(),
 
   /**
+   * Seed-only: whether to seed fictional demo data (a demo club, demo
+   * orgadmin/instructor accounts and students). Off unless 'true'; refused
+   * against production. `DEMO_PASSWORD` is the shared password for every
+   * demo account and is required when this is on.
+   */
+  SEED_DEMO_DATA: z.enum(['true', 'false']).optional(),
+  DEMO_PASSWORD: z.string().min(12).optional(),
+
+  /**
    * One-time invite-token lifetime in hours. The set-password link in an
    * invite email stays valid this long. Default 48h.
    */

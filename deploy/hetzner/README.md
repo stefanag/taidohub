@@ -140,6 +140,17 @@ echo "<token>" | docker login ghcr.io -u stefanag --password-stdin
 
    It creates organisations, belt systems, classifications, techniques and patterns, but no members.
    Running it again does not duplicate anything.
+
+   To test staging with data (for example the MCP server), add fictional demo data:
+
+   ```bash
+   SEED_DEMO_DATA=true /opt/taidohub/seed.sh admin@taidohub.se
+   ```
+
+   It also asks for one password for the demo accounts and creates "Demo Taido Club (fictional)"
+   with `demo.orgadmin@example.com`, `demo.instructor@example.com` and six students
+   (`demo.student1…6@example.com`), all named "(DEMO)", with gradings and some progress. The app
+   refuses to do this on production.
 3. **Production:** Actions › Deploy › Run workflow › production, approve, then run `seed.sh` on the
    production server.
 
