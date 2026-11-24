@@ -113,4 +113,6 @@ jobs:
           ssh "deploy@${HOST}" "chmod +x /opt/taidohub/*.sh && /opt/taidohub/deploy.sh ${TAG}"
 
       - name: Smoke test
-        run: curl -fsS --retry 10 --retry-delay 3 --retry-all-errors "${{ vars.SITE_URL }}/api/health"
+        # Caddy obtains the TLS certificate on first start, which can take a
+        # minute or two; allow about three minutes before failing.
+        run: curl -fsS --retry 36 --retry-delay 5 --retry-all-errors "${{ vars.SITE_URL }}/api/health"
