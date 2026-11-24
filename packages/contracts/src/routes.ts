@@ -112,3 +112,9 @@ export const RequirementSetsRoutes = {
 export const RankRequirementsRoutes = {
   byRankId: (rankId: string) => `/api/requirements/${rankId}` as const,
 } as const;
+
+export const PendingOperationsRoutes = {
+  base: '/api/pending-operations',
+  approve: (id: string) => `/api/pending-operations/${id}/approve` as const,
+  reject: (id: string) => `/api/pending-operations/${id}/reject` as const,
+} as const;

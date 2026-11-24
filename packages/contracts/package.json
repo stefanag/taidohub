@@ -268,6 +268,26 @@
         "types": "./dist/statistics.d.cts",
         "default": "./dist/statistics.cjs"
       }
+    },
+    "./pending-operations": {
+      "import": {
+        "types": "./dist/pending-operations.d.ts",
+        "default": "./dist/pending-operations.js"
+      },
+      "require": {
+        "types": "./dist/pending-operations.d.cts",
+        "default": "./dist/pending-operations.cjs"
+      }
+    },
+    "./mcp": {
+      "import": {
+        "types": "./dist/mcp.d.ts",
+        "default": "./dist/mcp.js"
+      },
+      "require": {
+        "types": "./dist/mcp.d.cts",
+        "default": "./dist/mcp.cjs"
+      }
     }
   },
   "files": [

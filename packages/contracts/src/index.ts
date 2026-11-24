@@ -33,3 +33,5 @@ export * from './progress.js';
 export * from './students.js';
 export * from './feedback.js';
 export * from './grading-requirements.js';
+export * from './pending-operations.js';
+export * from './mcp.js';

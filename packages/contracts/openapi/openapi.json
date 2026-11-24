@@ -5762,6 +5762,211 @@
           "statistics"
         ]
       }
+    },
+    "/api/pending-operations": {
+      "get": {
+        "operationId": "PendingOperationsController_list",
+        "parameters": [
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "PendingOperationStatus": {
+                "type": "string",
+                "enum": [
+                  "pending",
+                  "approved",
+                  "rejected",
+                  "failed"
+                ],
+                "description": "`pending` until its proposer decides. `failed` means approval was attempted but the write was refused; nothing was written."
+              }
+            },
+            "x-nestjs_zod-parent-id": "ListPendingOperationsQuery",
+            "schema": {
+              "$ref": "#/$defs/PendingOperationStatus"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListPendingOperationsResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "List the caller's own proposals from AI clients, newest first.",
+        "tags": [
+          "pending-operations"
+        ]
+      }
+    },
+    "/api/pending-operations/{id}/approve": {
+      "post": {
+        "operationId": "PendingOperationsController_approve",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Pending operation id.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PendingOperationDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Approve one of your proposals and perform the write. Returns status `failed` with the reason if the write is refused.",
+        "tags": [
+          "pending-operations"
+        ]
+      }
+    },
+    "/api/pending-operations/{id}/reject": {
+      "post": {
+        "operationId": "PendingOperationsController_reject",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Pending operation id.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PendingOperationDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Reject one of your proposals. Nothing is written.",
+        "tags": [
+          "pending-operations"
+        ]
+      }
     }
   },
   "info": {
@@ -21365,6 +21570,2466 @@
           "nextCursor"
         ]
       },
+      "ListPendingOperationsResponseDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/PendingOperation"
+            },
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "PendingOperation": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "type": {
+                    "$ref": "#/$defs/PendingOperationType"
+                  },
+                  "status": {
+                    "$ref": "#/$defs/PendingOperationStatus"
+                  },
+                  "params": {
+                    "$ref": "#/$defs/ProposeRankEntryInput"
+                  },
+                  "preview": {
+                    "$ref": "#/$defs/RankEntryPreview"
+                  },
+                  "createdByUserId": {
+                    "type": "string"
+                  },
+                  "createdVia": {
+                    "$ref": "#/$defs/PendingOperationVia"
+                  },
+                  "resultEntityId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "error": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                  },
+                  "decidedAt": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "date-time",
+                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "id",
+                  "type",
+                  "status",
+                  "params",
+                  "preview",
+                  "createdByUserId",
+                  "createdVia",
+                  "resultEntityId",
+                  "error",
+                  "createdAt",
+                  "decidedAt"
+                ],
+                "description": "A write proposed by an AI client. Nothing is written until the user who proposed it approves it in the web app.",
+                "example": {
+                  "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "type": "rank_history.create",
+                  "status": "pending",
+                  "params": {
+                    "studentUserId": "usr_123",
+                    "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                    "date": "2026-11-20"
+                  },
+                  "preview": {
+                    "studentUserId": "usr_123",
+                    "studentName": "Aino Virtanen",
+                    "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                    "rankName": "5 kyu",
+                    "date": "2026-11-20",
+                    "shogoTitle": null,
+                    "examinerName": null,
+                    "organisationName": null,
+                    "notes": null
+                  },
+                  "createdByUserId": "usr_456",
+                  "createdVia": "mcp",
+                  "resultEntityId": null,
+                  "error": null,
+                  "createdAt": "2026-11-24T19:00:00.000Z",
+                  "decidedAt": null
+                }
+              },
+              "PendingOperationType": {
+                "type": "string",
+                "enum": [
+                  "rank_history.create"
+                ],
+                "description": "What a pending operation will do when approved."
+              },
+              "PendingOperationStatus": {
+                "type": "string",
+                "enum": [
+                  "pending",
+                  "approved",
+                  "rejected",
+                  "failed"
+                ],
+                "description": "`pending` until its proposer decides. `failed` means approval was attempted but the write was refused; nothing was written."
+              },
+              "ProposeRankEntryInput": {
+                "type": "object",
+                "properties": {
+                  "studentUserId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "rankId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "shogoTitle": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 50
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "date": {
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                  },
+                  "examinerName": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "organisationName": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "notes": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 5000
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "studentUserId",
+                  "rankId",
+                  "date"
+                ],
+                "additionalProperties": false,
+                "description": "A grading entry to add to a student’s rank history once approved."
+              },
+              "RankEntryPreview": {
+                "type": "object",
+                "properties": {
+                  "studentUserId": {
+                    "type": "string"
+                  },
+                  "studentName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "rankId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "rankName": {
+                    "type": "string"
+                  },
+                  "date": {
+                    "type": "string"
+                  },
+                  "shogoTitle": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "examinerName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "organisationName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "notes": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "studentUserId",
+                  "studentName",
+                  "rankId",
+                  "rankName",
+                  "date",
+                  "shogoTitle",
+                  "examinerName",
+                  "organisationName",
+                  "notes"
+                ],
+                "description": "What a proposed grading entry will record, with names resolved for display."
+              },
+              "PendingOperationVia": {
+                "type": "string",
+                "enum": [
+                  "mcp"
+                ],
+                "description": "Where the proposal came from. Only `mcp` (an AI client) today."
+              }
+            },
+            "x-nestjs_zod-parent-id": "ListPendingOperationsResponse",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "The calling user’s own pending operations, newest first."
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "PendingOperationDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "PendingOperationType": {
+                "type": "string",
+                "enum": [
+                  "rank_history.create"
+                ],
+                "description": "What a pending operation will do when approved."
+              },
+              "PendingOperationStatus": {
+                "type": "string",
+                "enum": [
+                  "pending",
+                  "approved",
+                  "rejected",
+                  "failed"
+                ],
+                "description": "`pending` until its proposer decides. `failed` means approval was attempted but the write was refused; nothing was written."
+              },
+              "ProposeRankEntryInput": {
+                "type": "object",
+                "properties": {
+                  "studentUserId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "rankId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "shogoTitle": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 50
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "date": {
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                  },
+                  "examinerName": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "organisationName": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "notes": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 5000
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "studentUserId",
+                  "rankId",
+                  "date"
+                ],
+                "additionalProperties": false,
+                "description": "A grading entry to add to a student’s rank history once approved."
+              },
+              "RankEntryPreview": {
+                "type": "object",
+                "properties": {
+                  "studentUserId": {
+                    "type": "string"
+                  },
+                  "studentName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "rankId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "rankName": {
+                    "type": "string"
+                  },
+                  "date": {
+                    "type": "string"
+                  },
+                  "shogoTitle": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "examinerName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "organisationName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "notes": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "studentUserId",
+                  "studentName",
+                  "rankId",
+                  "rankName",
+                  "date",
+                  "shogoTitle",
+                  "examinerName",
+                  "organisationName",
+                  "notes"
+                ],
+                "description": "What a proposed grading entry will record, with names resolved for display."
+              },
+              "PendingOperationVia": {
+                "type": "string",
+                "enum": [
+                  "mcp"
+                ],
+                "description": "Where the proposal came from. Only `mcp` (an AI client) today."
+              }
+            },
+            "x-nestjs_zod-parent-id": "PendingOperation",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A write proposed by an AI client. Nothing is written until the user who proposed it approves it in the web app.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "type": "rank_history.create",
+                "status": "pending",
+                "params": {
+                  "studentUserId": "usr_123",
+                  "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "date": "2026-11-20"
+                },
+                "preview": {
+                  "studentUserId": "usr_123",
+                  "studentName": "Aino Virtanen",
+                  "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "rankName": "5 kyu",
+                  "date": "2026-11-20",
+                  "shogoTitle": null,
+                  "examinerName": null,
+                  "organisationName": null,
+                  "notes": null
+                },
+                "createdByUserId": "usr_456",
+                "createdVia": "mcp",
+                "resultEntityId": null,
+                "error": null,
+                "createdAt": "2026-11-24T19:00:00.000Z",
+                "decidedAt": null
+              }
+            }
+          },
+          "type": {
+            "$ref": "#/$defs/PendingOperationType",
+            "type": "",
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "PendingOperationType": {
+                "type": "string",
+                "enum": [
+                  "rank_history.create"
+                ],
+                "description": "What a pending operation will do when approved."
+              },
+              "PendingOperationStatus": {
+                "type": "string",
+                "enum": [
+                  "pending",
+                  "approved",
+                  "rejected",
+                  "failed"
+                ],
+                "description": "`pending` until its proposer decides. `failed` means approval was attempted but the write was refused; nothing was written."
+              },
+              "ProposeRankEntryInput": {
+                "type": "object",
+                "properties": {
+                  "studentUserId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "rankId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "shogoTitle": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 50
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "date": {
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                  },
+                  "examinerName": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "organisationName": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "notes": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 5000
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "studentUserId",
+                  "rankId",
+                  "date"
+                ],
+                "additionalProperties": false,
+                "description": "A grading entry to add to a student’s rank history once approved."
+              },
+              "RankEntryPreview": {
+                "type": "object",
+                "properties": {
+                  "studentUserId": {
+                    "type": "string"
+                  },
+                  "studentName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "rankId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "rankName": {
+                    "type": "string"
+                  },
+                  "date": {
+                    "type": "string"
+                  },
+                  "shogoTitle": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "examinerName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "organisationName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "notes": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "studentUserId",
+                  "studentName",
+                  "rankId",
+                  "rankName",
+                  "date",
+                  "shogoTitle",
+                  "examinerName",
+                  "organisationName",
+                  "notes"
+                ],
+                "description": "What a proposed grading entry will record, with names resolved for display."
+              },
+              "PendingOperationVia": {
+                "type": "string",
+                "enum": [
+                  "mcp"
+                ],
+                "description": "Where the proposal came from. Only `mcp` (an AI client) today."
+              }
+            },
+            "x-nestjs_zod-parent-id": "PendingOperation",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A write proposed by an AI client. Nothing is written until the user who proposed it approves it in the web app.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "type": "rank_history.create",
+                "status": "pending",
+                "params": {
+                  "studentUserId": "usr_123",
+                  "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "date": "2026-11-20"
+                },
+                "preview": {
+                  "studentUserId": "usr_123",
+                  "studentName": "Aino Virtanen",
+                  "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "rankName": "5 kyu",
+                  "date": "2026-11-20",
+                  "shogoTitle": null,
+                  "examinerName": null,
+                  "organisationName": null,
+                  "notes": null
+                },
+                "createdByUserId": "usr_456",
+                "createdVia": "mcp",
+                "resultEntityId": null,
+                "error": null,
+                "createdAt": "2026-11-24T19:00:00.000Z",
+                "decidedAt": null
+              }
+            }
+          },
+          "status": {
+            "$ref": "#/$defs/PendingOperationStatus",
+            "type": "",
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "PendingOperationType": {
+                "type": "string",
+                "enum": [
+                  "rank_history.create"
+                ],
+                "description": "What a pending operation will do when approved."
+              },
+              "PendingOperationStatus": {
+                "type": "string",
+                "enum": [
+                  "pending",
+                  "approved",
+                  "rejected",
+                  "failed"
+                ],
+                "description": "`pending` until its proposer decides. `failed` means approval was attempted but the write was refused; nothing was written."
+              },
+              "ProposeRankEntryInput": {
+                "type": "object",
+                "properties": {
+                  "studentUserId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "rankId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "shogoTitle": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 50
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "date": {
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                  },
+                  "examinerName": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "organisationName": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "notes": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 5000
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "studentUserId",
+                  "rankId",
+                  "date"
+                ],
+                "additionalProperties": false,
+                "description": "A grading entry to add to a student’s rank history once approved."
+              },
+              "RankEntryPreview": {
+                "type": "object",
+                "properties": {
+                  "studentUserId": {
+                    "type": "string"
+                  },
+                  "studentName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "rankId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "rankName": {
+                    "type": "string"
+                  },
+                  "date": {
+                    "type": "string"
+                  },
+                  "shogoTitle": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "examinerName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "organisationName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "notes": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "studentUserId",
+                  "studentName",
+                  "rankId",
+                  "rankName",
+                  "date",
+                  "shogoTitle",
+                  "examinerName",
+                  "organisationName",
+                  "notes"
+                ],
+                "description": "What a proposed grading entry will record, with names resolved for display."
+              },
+              "PendingOperationVia": {
+                "type": "string",
+                "enum": [
+                  "mcp"
+                ],
+                "description": "Where the proposal came from. Only `mcp` (an AI client) today."
+              }
+            },
+            "x-nestjs_zod-parent-id": "PendingOperation",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A write proposed by an AI client. Nothing is written until the user who proposed it approves it in the web app.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "type": "rank_history.create",
+                "status": "pending",
+                "params": {
+                  "studentUserId": "usr_123",
+                  "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "date": "2026-11-20"
+                },
+                "preview": {
+                  "studentUserId": "usr_123",
+                  "studentName": "Aino Virtanen",
+                  "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "rankName": "5 kyu",
+                  "date": "2026-11-20",
+                  "shogoTitle": null,
+                  "examinerName": null,
+                  "organisationName": null,
+                  "notes": null
+                },
+                "createdByUserId": "usr_456",
+                "createdVia": "mcp",
+                "resultEntityId": null,
+                "error": null,
+                "createdAt": "2026-11-24T19:00:00.000Z",
+                "decidedAt": null
+              }
+            }
+          },
+          "params": {
+            "$ref": "#/$defs/ProposeRankEntryInput",
+            "type": "",
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "PendingOperationType": {
+                "type": "string",
+                "enum": [
+                  "rank_history.create"
+                ],
+                "description": "What a pending operation will do when approved."
+              },
+              "PendingOperationStatus": {
+                "type": "string",
+                "enum": [
+                  "pending",
+                  "approved",
+                  "rejected",
+                  "failed"
+                ],
+                "description": "`pending` until its proposer decides. `failed` means approval was attempted but the write was refused; nothing was written."
+              },
+              "ProposeRankEntryInput": {
+                "type": "object",
+                "properties": {
+                  "studentUserId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "rankId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "shogoTitle": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 50
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "date": {
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                  },
+                  "examinerName": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "organisationName": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "notes": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 5000
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "studentUserId",
+                  "rankId",
+                  "date"
+                ],
+                "additionalProperties": false,
+                "description": "A grading entry to add to a student’s rank history once approved."
+              },
+              "RankEntryPreview": {
+                "type": "object",
+                "properties": {
+                  "studentUserId": {
+                    "type": "string"
+                  },
+                  "studentName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "rankId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "rankName": {
+                    "type": "string"
+                  },
+                  "date": {
+                    "type": "string"
+                  },
+                  "shogoTitle": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "examinerName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "organisationName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "notes": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "studentUserId",
+                  "studentName",
+                  "rankId",
+                  "rankName",
+                  "date",
+                  "shogoTitle",
+                  "examinerName",
+                  "organisationName",
+                  "notes"
+                ],
+                "description": "What a proposed grading entry will record, with names resolved for display."
+              },
+              "PendingOperationVia": {
+                "type": "string",
+                "enum": [
+                  "mcp"
+                ],
+                "description": "Where the proposal came from. Only `mcp` (an AI client) today."
+              }
+            },
+            "x-nestjs_zod-parent-id": "PendingOperation",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A write proposed by an AI client. Nothing is written until the user who proposed it approves it in the web app.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "type": "rank_history.create",
+                "status": "pending",
+                "params": {
+                  "studentUserId": "usr_123",
+                  "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "date": "2026-11-20"
+                },
+                "preview": {
+                  "studentUserId": "usr_123",
+                  "studentName": "Aino Virtanen",
+                  "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "rankName": "5 kyu",
+                  "date": "2026-11-20",
+                  "shogoTitle": null,
+                  "examinerName": null,
+                  "organisationName": null,
+                  "notes": null
+                },
+                "createdByUserId": "usr_456",
+                "createdVia": "mcp",
+                "resultEntityId": null,
+                "error": null,
+                "createdAt": "2026-11-24T19:00:00.000Z",
+                "decidedAt": null
+              }
+            }
+          },
+          "preview": {
+            "$ref": "#/$defs/RankEntryPreview",
+            "type": "",
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "PendingOperationType": {
+                "type": "string",
+                "enum": [
+                  "rank_history.create"
+                ],
+                "description": "What a pending operation will do when approved."
+              },
+              "PendingOperationStatus": {
+                "type": "string",
+                "enum": [
+                  "pending",
+                  "approved",
+                  "rejected",
+                  "failed"
+                ],
+                "description": "`pending` until its proposer decides. `failed` means approval was attempted but the write was refused; nothing was written."
+              },
+              "ProposeRankEntryInput": {
+                "type": "object",
+                "properties": {
+                  "studentUserId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "rankId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "shogoTitle": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 50
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "date": {
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                  },
+                  "examinerName": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "organisationName": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "notes": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 5000
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "studentUserId",
+                  "rankId",
+                  "date"
+                ],
+                "additionalProperties": false,
+                "description": "A grading entry to add to a student’s rank history once approved."
+              },
+              "RankEntryPreview": {
+                "type": "object",
+                "properties": {
+                  "studentUserId": {
+                    "type": "string"
+                  },
+                  "studentName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "rankId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "rankName": {
+                    "type": "string"
+                  },
+                  "date": {
+                    "type": "string"
+                  },
+                  "shogoTitle": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "examinerName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "organisationName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "notes": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "studentUserId",
+                  "studentName",
+                  "rankId",
+                  "rankName",
+                  "date",
+                  "shogoTitle",
+                  "examinerName",
+                  "organisationName",
+                  "notes"
+                ],
+                "description": "What a proposed grading entry will record, with names resolved for display."
+              },
+              "PendingOperationVia": {
+                "type": "string",
+                "enum": [
+                  "mcp"
+                ],
+                "description": "Where the proposal came from. Only `mcp` (an AI client) today."
+              }
+            },
+            "x-nestjs_zod-parent-id": "PendingOperation",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A write proposed by an AI client. Nothing is written until the user who proposed it approves it in the web app.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "type": "rank_history.create",
+                "status": "pending",
+                "params": {
+                  "studentUserId": "usr_123",
+                  "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "date": "2026-11-20"
+                },
+                "preview": {
+                  "studentUserId": "usr_123",
+                  "studentName": "Aino Virtanen",
+                  "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "rankName": "5 kyu",
+                  "date": "2026-11-20",
+                  "shogoTitle": null,
+                  "examinerName": null,
+                  "organisationName": null,
+                  "notes": null
+                },
+                "createdByUserId": "usr_456",
+                "createdVia": "mcp",
+                "resultEntityId": null,
+                "error": null,
+                "createdAt": "2026-11-24T19:00:00.000Z",
+                "decidedAt": null
+              }
+            }
+          },
+          "createdByUserId": {
+            "type": "string",
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "PendingOperationType": {
+                "type": "string",
+                "enum": [
+                  "rank_history.create"
+                ],
+                "description": "What a pending operation will do when approved."
+              },
+              "PendingOperationStatus": {
+                "type": "string",
+                "enum": [
+                  "pending",
+                  "approved",
+                  "rejected",
+                  "failed"
+                ],
+                "description": "`pending` until its proposer decides. `failed` means approval was attempted but the write was refused; nothing was written."
+              },
+              "ProposeRankEntryInput": {
+                "type": "object",
+                "properties": {
+                  "studentUserId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "rankId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "shogoTitle": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 50
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "date": {
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                  },
+                  "examinerName": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "organisationName": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "notes": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 5000
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "studentUserId",
+                  "rankId",
+                  "date"
+                ],
+                "additionalProperties": false,
+                "description": "A grading entry to add to a student’s rank history once approved."
+              },
+              "RankEntryPreview": {
+                "type": "object",
+                "properties": {
+                  "studentUserId": {
+                    "type": "string"
+                  },
+                  "studentName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "rankId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "rankName": {
+                    "type": "string"
+                  },
+                  "date": {
+                    "type": "string"
+                  },
+                  "shogoTitle": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "examinerName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "organisationName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "notes": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "studentUserId",
+                  "studentName",
+                  "rankId",
+                  "rankName",
+                  "date",
+                  "shogoTitle",
+                  "examinerName",
+                  "organisationName",
+                  "notes"
+                ],
+                "description": "What a proposed grading entry will record, with names resolved for display."
+              },
+              "PendingOperationVia": {
+                "type": "string",
+                "enum": [
+                  "mcp"
+                ],
+                "description": "Where the proposal came from. Only `mcp` (an AI client) today."
+              }
+            },
+            "x-nestjs_zod-parent-id": "PendingOperation",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A write proposed by an AI client. Nothing is written until the user who proposed it approves it in the web app.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "type": "rank_history.create",
+                "status": "pending",
+                "params": {
+                  "studentUserId": "usr_123",
+                  "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "date": "2026-11-20"
+                },
+                "preview": {
+                  "studentUserId": "usr_123",
+                  "studentName": "Aino Virtanen",
+                  "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "rankName": "5 kyu",
+                  "date": "2026-11-20",
+                  "shogoTitle": null,
+                  "examinerName": null,
+                  "organisationName": null,
+                  "notes": null
+                },
+                "createdByUserId": "usr_456",
+                "createdVia": "mcp",
+                "resultEntityId": null,
+                "error": null,
+                "createdAt": "2026-11-24T19:00:00.000Z",
+                "decidedAt": null
+              }
+            }
+          },
+          "createdVia": {
+            "$ref": "#/$defs/PendingOperationVia",
+            "type": "",
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "PendingOperationType": {
+                "type": "string",
+                "enum": [
+                  "rank_history.create"
+                ],
+                "description": "What a pending operation will do when approved."
+              },
+              "PendingOperationStatus": {
+                "type": "string",
+                "enum": [
+                  "pending",
+                  "approved",
+                  "rejected",
+                  "failed"
+                ],
+                "description": "`pending` until its proposer decides. `failed` means approval was attempted but the write was refused; nothing was written."
+              },
+              "ProposeRankEntryInput": {
+                "type": "object",
+                "properties": {
+                  "studentUserId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "rankId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "shogoTitle": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 50
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "date": {
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                  },
+                  "examinerName": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "organisationName": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "notes": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 5000
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "studentUserId",
+                  "rankId",
+                  "date"
+                ],
+                "additionalProperties": false,
+                "description": "A grading entry to add to a student’s rank history once approved."
+              },
+              "RankEntryPreview": {
+                "type": "object",
+                "properties": {
+                  "studentUserId": {
+                    "type": "string"
+                  },
+                  "studentName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "rankId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "rankName": {
+                    "type": "string"
+                  },
+                  "date": {
+                    "type": "string"
+                  },
+                  "shogoTitle": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "examinerName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "organisationName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "notes": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "studentUserId",
+                  "studentName",
+                  "rankId",
+                  "rankName",
+                  "date",
+                  "shogoTitle",
+                  "examinerName",
+                  "organisationName",
+                  "notes"
+                ],
+                "description": "What a proposed grading entry will record, with names resolved for display."
+              },
+              "PendingOperationVia": {
+                "type": "string",
+                "enum": [
+                  "mcp"
+                ],
+                "description": "Where the proposal came from. Only `mcp` (an AI client) today."
+              }
+            },
+            "x-nestjs_zod-parent-id": "PendingOperation",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A write proposed by an AI client. Nothing is written until the user who proposed it approves it in the web app.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "type": "rank_history.create",
+                "status": "pending",
+                "params": {
+                  "studentUserId": "usr_123",
+                  "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "date": "2026-11-20"
+                },
+                "preview": {
+                  "studentUserId": "usr_123",
+                  "studentName": "Aino Virtanen",
+                  "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "rankName": "5 kyu",
+                  "date": "2026-11-20",
+                  "shogoTitle": null,
+                  "examinerName": null,
+                  "organisationName": null,
+                  "notes": null
+                },
+                "createdByUserId": "usr_456",
+                "createdVia": "mcp",
+                "resultEntityId": null,
+                "error": null,
+                "createdAt": "2026-11-24T19:00:00.000Z",
+                "decidedAt": null
+              }
+            }
+          },
+          "resultEntityId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "PendingOperationType": {
+                "type": "string",
+                "enum": [
+                  "rank_history.create"
+                ],
+                "description": "What a pending operation will do when approved."
+              },
+              "PendingOperationStatus": {
+                "type": "string",
+                "enum": [
+                  "pending",
+                  "approved",
+                  "rejected",
+                  "failed"
+                ],
+                "description": "`pending` until its proposer decides. `failed` means approval was attempted but the write was refused; nothing was written."
+              },
+              "ProposeRankEntryInput": {
+                "type": "object",
+                "properties": {
+                  "studentUserId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "rankId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "shogoTitle": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 50
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "date": {
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                  },
+                  "examinerName": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "organisationName": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "notes": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 5000
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "studentUserId",
+                  "rankId",
+                  "date"
+                ],
+                "additionalProperties": false,
+                "description": "A grading entry to add to a student’s rank history once approved."
+              },
+              "RankEntryPreview": {
+                "type": "object",
+                "properties": {
+                  "studentUserId": {
+                    "type": "string"
+                  },
+                  "studentName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "rankId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "rankName": {
+                    "type": "string"
+                  },
+                  "date": {
+                    "type": "string"
+                  },
+                  "shogoTitle": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "examinerName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "organisationName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "notes": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "studentUserId",
+                  "studentName",
+                  "rankId",
+                  "rankName",
+                  "date",
+                  "shogoTitle",
+                  "examinerName",
+                  "organisationName",
+                  "notes"
+                ],
+                "description": "What a proposed grading entry will record, with names resolved for display."
+              },
+              "PendingOperationVia": {
+                "type": "string",
+                "enum": [
+                  "mcp"
+                ],
+                "description": "Where the proposal came from. Only `mcp` (an AI client) today."
+              }
+            },
+            "x-nestjs_zod-parent-id": "PendingOperation",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A write proposed by an AI client. Nothing is written until the user who proposed it approves it in the web app.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "type": "rank_history.create",
+                "status": "pending",
+                "params": {
+                  "studentUserId": "usr_123",
+                  "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "date": "2026-11-20"
+                },
+                "preview": {
+                  "studentUserId": "usr_123",
+                  "studentName": "Aino Virtanen",
+                  "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "rankName": "5 kyu",
+                  "date": "2026-11-20",
+                  "shogoTitle": null,
+                  "examinerName": null,
+                  "organisationName": null,
+                  "notes": null
+                },
+                "createdByUserId": "usr_456",
+                "createdVia": "mcp",
+                "resultEntityId": null,
+                "error": null,
+                "createdAt": "2026-11-24T19:00:00.000Z",
+                "decidedAt": null
+              }
+            }
+          },
+          "error": {
+            "type": "",
+            "x-nestjs_zod-type-array": [
+              "string",
+              "null"
+            ],
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "PendingOperationType": {
+                "type": "string",
+                "enum": [
+                  "rank_history.create"
+                ],
+                "description": "What a pending operation will do when approved."
+              },
+              "PendingOperationStatus": {
+                "type": "string",
+                "enum": [
+                  "pending",
+                  "approved",
+                  "rejected",
+                  "failed"
+                ],
+                "description": "`pending` until its proposer decides. `failed` means approval was attempted but the write was refused; nothing was written."
+              },
+              "ProposeRankEntryInput": {
+                "type": "object",
+                "properties": {
+                  "studentUserId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "rankId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "shogoTitle": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 50
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "date": {
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                  },
+                  "examinerName": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "organisationName": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "notes": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 5000
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "studentUserId",
+                  "rankId",
+                  "date"
+                ],
+                "additionalProperties": false,
+                "description": "A grading entry to add to a student’s rank history once approved."
+              },
+              "RankEntryPreview": {
+                "type": "object",
+                "properties": {
+                  "studentUserId": {
+                    "type": "string"
+                  },
+                  "studentName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "rankId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "rankName": {
+                    "type": "string"
+                  },
+                  "date": {
+                    "type": "string"
+                  },
+                  "shogoTitle": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "examinerName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "organisationName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "notes": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "studentUserId",
+                  "studentName",
+                  "rankId",
+                  "rankName",
+                  "date",
+                  "shogoTitle",
+                  "examinerName",
+                  "organisationName",
+                  "notes"
+                ],
+                "description": "What a proposed grading entry will record, with names resolved for display."
+              },
+              "PendingOperationVia": {
+                "type": "string",
+                "enum": [
+                  "mcp"
+                ],
+                "description": "Where the proposal came from. Only `mcp` (an AI client) today."
+              }
+            },
+            "x-nestjs_zod-parent-id": "PendingOperation",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A write proposed by an AI client. Nothing is written until the user who proposed it approves it in the web app.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "type": "rank_history.create",
+                "status": "pending",
+                "params": {
+                  "studentUserId": "usr_123",
+                  "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "date": "2026-11-20"
+                },
+                "preview": {
+                  "studentUserId": "usr_123",
+                  "studentName": "Aino Virtanen",
+                  "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "rankName": "5 kyu",
+                  "date": "2026-11-20",
+                  "shogoTitle": null,
+                  "examinerName": null,
+                  "organisationName": null,
+                  "notes": null
+                },
+                "createdByUserId": "usr_456",
+                "createdVia": "mcp",
+                "resultEntityId": null,
+                "error": null,
+                "createdAt": "2026-11-24T19:00:00.000Z",
+                "decidedAt": null
+              }
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "PendingOperationType": {
+                "type": "string",
+                "enum": [
+                  "rank_history.create"
+                ],
+                "description": "What a pending operation will do when approved."
+              },
+              "PendingOperationStatus": {
+                "type": "string",
+                "enum": [
+                  "pending",
+                  "approved",
+                  "rejected",
+                  "failed"
+                ],
+                "description": "`pending` until its proposer decides. `failed` means approval was attempted but the write was refused; nothing was written."
+              },
+              "ProposeRankEntryInput": {
+                "type": "object",
+                "properties": {
+                  "studentUserId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "rankId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "shogoTitle": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 50
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "date": {
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                  },
+                  "examinerName": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "organisationName": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "notes": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 5000
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "studentUserId",
+                  "rankId",
+                  "date"
+                ],
+                "additionalProperties": false,
+                "description": "A grading entry to add to a student’s rank history once approved."
+              },
+              "RankEntryPreview": {
+                "type": "object",
+                "properties": {
+                  "studentUserId": {
+                    "type": "string"
+                  },
+                  "studentName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "rankId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "rankName": {
+                    "type": "string"
+                  },
+                  "date": {
+                    "type": "string"
+                  },
+                  "shogoTitle": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "examinerName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "organisationName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "notes": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "studentUserId",
+                  "studentName",
+                  "rankId",
+                  "rankName",
+                  "date",
+                  "shogoTitle",
+                  "examinerName",
+                  "organisationName",
+                  "notes"
+                ],
+                "description": "What a proposed grading entry will record, with names resolved for display."
+              },
+              "PendingOperationVia": {
+                "type": "string",
+                "enum": [
+                  "mcp"
+                ],
+                "description": "Where the proposal came from. Only `mcp` (an AI client) today."
+              }
+            },
+            "x-nestjs_zod-parent-id": "PendingOperation",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A write proposed by an AI client. Nothing is written until the user who proposed it approves it in the web app.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "type": "rank_history.create",
+                "status": "pending",
+                "params": {
+                  "studentUserId": "usr_123",
+                  "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "date": "2026-11-20"
+                },
+                "preview": {
+                  "studentUserId": "usr_123",
+                  "studentName": "Aino Virtanen",
+                  "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "rankName": "5 kyu",
+                  "date": "2026-11-20",
+                  "shogoTitle": null,
+                  "examinerName": null,
+                  "organisationName": null,
+                  "notes": null
+                },
+                "createdByUserId": "usr_456",
+                "createdVia": "mcp",
+                "resultEntityId": null,
+                "error": null,
+                "createdAt": "2026-11-24T19:00:00.000Z",
+                "decidedAt": null
+              }
+            }
+          },
+          "decidedAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "PendingOperationType": {
+                "type": "string",
+                "enum": [
+                  "rank_history.create"
+                ],
+                "description": "What a pending operation will do when approved."
+              },
+              "PendingOperationStatus": {
+                "type": "string",
+                "enum": [
+                  "pending",
+                  "approved",
+                  "rejected",
+                  "failed"
+                ],
+                "description": "`pending` until its proposer decides. `failed` means approval was attempted but the write was refused; nothing was written."
+              },
+              "ProposeRankEntryInput": {
+                "type": "object",
+                "properties": {
+                  "studentUserId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "rankId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "shogoTitle": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 50
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "date": {
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                  },
+                  "examinerName": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "organisationName": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "notes": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 5000
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "studentUserId",
+                  "rankId",
+                  "date"
+                ],
+                "additionalProperties": false,
+                "description": "A grading entry to add to a student’s rank history once approved."
+              },
+              "RankEntryPreview": {
+                "type": "object",
+                "properties": {
+                  "studentUserId": {
+                    "type": "string"
+                  },
+                  "studentName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "rankId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "rankName": {
+                    "type": "string"
+                  },
+                  "date": {
+                    "type": "string"
+                  },
+                  "shogoTitle": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "examinerName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "organisationName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "notes": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "studentUserId",
+                  "studentName",
+                  "rankId",
+                  "rankName",
+                  "date",
+                  "shogoTitle",
+                  "examinerName",
+                  "organisationName",
+                  "notes"
+                ],
+                "description": "What a proposed grading entry will record, with names resolved for display."
+              },
+              "PendingOperationVia": {
+                "type": "string",
+                "enum": [
+                  "mcp"
+                ],
+                "description": "Where the proposal came from. Only `mcp` (an AI client) today."
+              }
+            },
+            "x-nestjs_zod-parent-id": "PendingOperation",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A write proposed by an AI client. Nothing is written until the user who proposed it approves it in the web app.",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "type": "rank_history.create",
+                "status": "pending",
+                "params": {
+                  "studentUserId": "usr_123",
+                  "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "date": "2026-11-20"
+                },
+                "preview": {
+                  "studentUserId": "usr_123",
+                  "studentName": "Aino Virtanen",
+                  "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "rankName": "5 kyu",
+                  "date": "2026-11-20",
+                  "shogoTitle": null,
+                  "examinerName": null,
+                  "organisationName": null,
+                  "notes": null
+                },
+                "createdByUserId": "usr_456",
+                "createdVia": "mcp",
+                "resultEntityId": null,
+                "error": null,
+                "createdAt": "2026-11-24T19:00:00.000Z",
+                "decidedAt": null
+              }
+            }
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "status",
+          "params",
+          "preview",
+          "createdByUserId",
+          "createdVia",
+          "resultEntityId",
+          "error",
+          "createdAt",
+          "decidedAt"
+        ]
+      },
       "ErrorEnvelope": {
         "$ref": "#/components/schemas/ErrorEnvelope"
       },
@@ -21631,6 +24296,24 @@
       },
       "RebuildStatsResponse": {
         "$ref": "#/components/schemas/RebuildStatsResponse"
+      },
+      "PendingOperation": {
+        "$ref": "#/components/schemas/PendingOperation"
+      },
+      "PendingOperationType": {
+        "$ref": "#/components/schemas/PendingOperationType"
+      },
+      "PendingOperationStatus": {
+        "$ref": "#/components/schemas/PendingOperationStatus"
+      },
+      "ProposeRankEntryInput": {
+        "$ref": "#/components/schemas/ProposeRankEntryInput"
+      },
+      "RankEntryPreview": {
+        "$ref": "#/components/schemas/RankEntryPreview"
+      },
+      "ListPendingOperationsResponse": {
+        "$ref": "#/components/schemas/ListPendingOperationsResponse"
       }
     }
   }

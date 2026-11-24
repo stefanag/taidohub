@@ -6,9 +6,10 @@
 import { z } from './zod-openapi.js';
 
 /** Zod enum for runtime validation (e.g. parsing config or JSON). */
-export const ActionSchema = z.enum(['create', 'read', 'update', 'delete', 'manage']).meta({
+export const ActionSchema = z.enum(['create', 'read', 'update', 'delete', 'use', 'manage']).meta({
   id: 'Action',
-  description: 'A CASL action (verb) — `manage` is a wildcard covering every other action.',
+  description:
+    'A CASL action (verb) — `manage` is a wildcard covering every other action. `use` gates access to a feature as a whole (e.g. the MCP server).',
   example: 'read',
 });
 
@@ -36,6 +37,8 @@ export const SubjectSchema = z
     'Student',
     'FeedbackThread',
     'Statistics',
+    'Mcp',
+    'PendingOperation',
     'all',
   ])
   .meta({
@@ -216,6 +219,18 @@ export type StatisticsSubjectShape = {
   organisationId?: string;
 };
 
+/** The MCP server as a whole. Only class-level rules (`use Mcp`). */
+export type McpSubjectShape = {
+  readonly __caslSubjectType__: 'Mcp';
+};
+
+/** A write proposed by an AI client, waiting for its proposer to approve it. */
+export type PendingOperationSubjectShape = {
+  readonly __caslSubjectType__: 'PendingOperation';
+  id?: string;
+  createdByUserId?: string;
+};
+
 /**
  * The full CASL subject union: either a bare subject name (for class-level
  * rules like `can('create', 'Organisation')`) or a tagged subject shape (for
@@ -244,7 +259,9 @@ export type AppSubject =
   | RequirementSetSubjectShape
   | StudentSubjectShape
   | FeedbackThreadSubjectShape
-  | StatisticsSubjectShape;
+  | StatisticsSubjectShape
+  | McpSubjectShape
+  | PendingOperationSubjectShape;
 
 /**
  * Tuple type compatible with `MongoAbility<[AppAction, AppSubject]>` from
