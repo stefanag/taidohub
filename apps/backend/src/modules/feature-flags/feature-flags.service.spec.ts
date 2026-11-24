@@ -1,5 +1,6 @@
 import { NotFoundException } from '@nestjs/common';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { FeatureFlagSchema } from '@repo/contracts/feature-flags';
 
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import { type AuditLogService } from '../audit-log/audit-log.service.js';
@@ -120,6 +121,10 @@ describe('FeatureFlagsService', () => {
       const out = await service.setEnabled('grading-history', true, makeUser());
 
       expect(out.enabled).toBe(true);
+      // The admin page parses this against the FeatureFlag contract, which
+      // requires `updatedBy`; without it the toggle looked like a failure.
+      expect(out.updatedBy).toEqual({ id: 'u-1', name: makeUser().name, email: makeUser().email });
+      expect(FeatureFlagSchema.safeParse(JSON.parse(JSON.stringify(out))).success).toBe(true);
       expect(repo.updateEnabled).toHaveBeenCalledWith(
         'grading-history',
         true,

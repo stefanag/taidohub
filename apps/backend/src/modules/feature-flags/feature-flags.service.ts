@@ -12,7 +12,6 @@ import { AuditLogService } from '../audit-log/audit-log.service.js';
 
 import {
   FeatureFlagsRepository,
-  type FeatureFlagRow,
   type FeatureFlagRowWithUpdater,
 } from './feature-flags.repository.js';
 
@@ -67,12 +66,16 @@ export class FeatureFlagsService {
     return this.repo.listWithUpdater();
   }
 
-  /** Sysadmin-only mutation; throws 404 if the code isn't seeded. */
+  /**
+   * Sysadmin-only mutation; throws 404 if the code isn't seeded. Returns the
+   * row in the same shape as {@link listRows} (with `updatedBy`), which is
+   * what the `FeatureFlag` contract promises and the admin page parses.
+   */
   async setEnabled(
     code: FeatureFlagCode,
     enabled: boolean,
     actingUser: AuthenticatedUser,
-  ): Promise<FeatureFlagRow> {
+  ): Promise<FeatureFlagRowWithUpdater> {
     const existing = await this.repo.findByCode(code);
     if (!existing) throw new NotFoundException(`Unknown feature flag: ${code}`);
     return this.db.transaction(async (tx) => {
@@ -88,7 +91,10 @@ export class FeatureFlagsService {
         before: { enabled: existing.enabled },
         after: { enabled: next.enabled },
       });
-      return next;
+      return {
+        ...next,
+        updatedBy: { id: actingUser.id, name: actingUser.name, email: actingUser.email },
+      };
     });
   }
 }
