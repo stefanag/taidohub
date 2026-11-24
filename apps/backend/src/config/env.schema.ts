@@ -61,6 +61,13 @@ export const EnvSchema = z.object({
   SYSADMIN_PASSWORD: z.string().min(8).default('sysadmin'),
 
   /**
+   * Seed-only: whether to seed the STAF club-member roster (real names,
+   * shared dev password). Unset means 'true' outside production and
+   * 'false' in production.
+   */
+  SEED_CLUB_MEMBERS: z.enum(['true', 'false']).optional(),
+
+  /**
    * One-time invite-token lifetime in hours. The set-password link in an
    * invite email stays valid this long. Default 48h.
    */

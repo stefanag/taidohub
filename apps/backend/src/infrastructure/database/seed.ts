@@ -101,17 +101,30 @@ async function main(): Promise<void> {
   // Club members (STAF roster). Reuses the same `signUpEmail` callback as
   // the sysadmin seed for credential-account creation. Runs after orgs +
   // belt-catalog because it FKs against both.
-  const clubMembers = await seedClubMembers(db, {
-    signUpEmail: deps.signUpEmail,
-    sysadminEmail: env.SYSADMIN_EMAIL,
-  });
-  // eslint-disable-next-line no-console
-  console.info(
-    `[seed] club members (STAF): users(+${clubMembers.users.inserted}/~${clubMembers.users.updated}) ` +
-      `profiles(+${clubMembers.profiles.inserted}/~${clubMembers.profiles.updated}) ` +
-      `memberships(+${clubMembers.memberships.inserted}/~${clubMembers.memberships.updated}) ` +
-      `rank_history(+${clubMembers.rankHistory.inserted}/~${clubMembers.rankHistory.updated})`,
-  );
+  //
+  // The roster carries real names and a shared dev password, so it is never
+  // seeded into a deployed environment unless explicitly asked for:
+  // SEED_CLUB_MEMBERS defaults to 'true' outside production, 'false' in it.
+  const seedClub =
+    env.SEED_CLUB_MEMBERS !== undefined
+      ? env.SEED_CLUB_MEMBERS === 'true'
+      : env.NODE_ENV !== 'production';
+  if (seedClub) {
+    const clubMembers = await seedClubMembers(db, {
+      signUpEmail: deps.signUpEmail,
+      sysadminEmail: env.SYSADMIN_EMAIL,
+    });
+    // eslint-disable-next-line no-console
+    console.info(
+      `[seed] club members (STAF): users(+${clubMembers.users.inserted}/~${clubMembers.users.updated}) ` +
+        `profiles(+${clubMembers.profiles.inserted}/~${clubMembers.profiles.updated}) ` +
+        `memberships(+${clubMembers.memberships.inserted}/~${clubMembers.memberships.updated}) ` +
+        `rank_history(+${clubMembers.rankHistory.inserted}/~${clubMembers.rankHistory.updated})`,
+    );
+  } else {
+    // eslint-disable-next-line no-console
+    console.info('[seed] club members (STAF): skipped (SEED_CLUB_MEMBERS=false)');
+  }
 
   // Close the postgres-js pool so the script can exit. Without this the
   // connection pool keeps Node alive ~indefinitely and `pnpm db:seed` hangs.
