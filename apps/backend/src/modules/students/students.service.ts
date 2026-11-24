@@ -38,26 +38,34 @@ export class StudentsService {
   ) {}
 
   // ── Roster ──────────────────────────────────────────────────────────
+  /**
+   * Students in every organisation where the actor is an instructor or an
+   * orgadmin (all students for sysadmin).
+   */
   async listRoster(actor: AuthenticatedUser): Promise<StudentRosterRow[]> {
     if (actor.role === 'sysadmin') {
       return this.repo.listAllRoster();
     }
 
-    const instructorOrgs = actor.memberships
-      .filter((m) => m.role === 'instructor')
-      .map((m) => m.organisationId);
+    const readableOrgs = [
+      ...new Set(
+        actor.memberships
+          .filter((m) => m.role === 'instructor' || m.role === 'orgadmin')
+          .map((m) => m.organisationId),
+      ),
+    ];
 
-    if (instructorOrgs.length === 0) {
+    if (readableOrgs.length === 0) {
       throw new ForbiddenException({
         error: {
           code: 'FORBIDDEN',
-          message: 'Not an instructor in any organisation.',
+          message: 'Not an instructor or organisation admin in any organisation.',
         },
       });
     }
 
     const userIds = await this.repo.listStudentIdsInOrgs(
-      instructorOrgs,
+      readableOrgs,
       actor.id,
     );
     return this.repo.listRosterByUserIds(userIds);
@@ -68,7 +76,7 @@ export class StudentsService {
     actor: AuthenticatedUser,
     studentUserId: string,
   ): Promise<Progress[]> {
-    await this.assertCanManageStudent(actor, studentUserId);
+    await this.assertCanReadStudent(actor, studentUserId);
     const rows = await this.progressRepo.listByUser(studentUserId);
     return rows.map((r) => this.progress.toApi(r));
   }
@@ -103,6 +111,42 @@ export class StudentsService {
       contentType,
       contentId,
     );
+  }
+
+  /**
+   * Row-level read check. Passes when a *scoped* rule grants `read` on the
+   * student: the instructor's conditional `manage`, the orgadmin's
+   * conditional `read`, or sysadmin's unconditional `manage`. The
+   * class-level `read Student` that instructors and orgadmins hold for
+   * routing is unconditional and deliberately does not count, or every
+   * instructor could read every student.
+   */
+  async assertCanReadStudent(
+    actor: AuthenticatedUser,
+    studentUserId: string,
+  ): Promise<void> {
+    const ability = this.abilities.createForUser(actor);
+    const orgIds = await this.repo.listOrgIdsForUser(studentUserId);
+    const instance = {
+      __caslSubjectType__: 'Student' as const,
+      organisationIds: orgIds,
+    };
+    const allowed = ability
+      .rulesFor('read', 'Student')
+      .some(
+        (rule) =>
+          !rule.inverted &&
+          (rule.conditions !== undefined || rule.action === 'manage') &&
+          rule.matchesConditions(instance),
+      );
+    if (!allowed) {
+      throw new ForbiddenException({
+        error: {
+          code: 'FORBIDDEN',
+          message: 'You do not have access to this student.',
+        },
+      });
+    }
   }
 
   // ── Internals ────────────────────────────────────────────────────────

@@ -61,6 +61,27 @@ describe('StudentAbilityRules', () => {
     expect(ability.can('read', student(['org-d']))).toBe(true);
   });
 
+  it('orgadmin in org A gets a read rule scoped to A and no manage', () => {
+    const ability = build(
+      makeUser({ memberships: [{ organisationId: 'org-a', role: 'orgadmin' }] }),
+    );
+
+    const scoped = ability
+      .rulesFor('read', 'Student')
+      .filter((rule) => rule.conditions !== undefined);
+    expect(scoped).toHaveLength(1);
+    expect(scoped[0]!.matchesConditions(student(['org-a', 'org-c']))).toBe(true);
+    expect(scoped[0]!.matchesConditions(student(['org-d']))).toBe(false);
+    expect(ability.can('manage', student(['org-a']))).toBe(false);
+  });
+
+  it('a plain student gets nothing on Student', () => {
+    const ability = build(
+      makeUser({ memberships: [{ organisationId: 'org-a', role: 'student' }] }),
+    );
+    expect(ability.can('read', 'Student')).toBe(false);
+  });
+
   it('anonymous viewer has no permissions on Student', () => {
     const ability = build(null);
     expect(ability.can('manage', student(['org-a']))).toBe(false);

@@ -22,8 +22,15 @@ import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js'
  *        is in the query array).
  *      • unconditional `read Student` for routing / controller-level checks
  *        (the row-level write check still gates writes).
- *  - Regular users without an instructor membership get nothing — the
- *    StudentsController is only useful to instructors and sysadmins.
+ *  - Any user who is an `orgadmin` in at least one organisation gets
+ *    conditional `read Student` scoped to students whose `organisationIds`
+ *    overlap the orgadmin's orgadmin-org set, plus the same class-level
+ *    `read Student` for routing. Orgadmins read; they do not write progress.
+ *  - Regular users without an instructor or orgadmin membership get nothing.
+ *
+ * Because the class-level `read Student` is unconditional, an instance check
+ * must not rely on `can('read', student)` alone; use
+ * `StudentsService.assertCanReadStudent`, which counts only scoped rules.
  */
 @AbilityContributor()
 @Injectable()
@@ -53,6 +60,17 @@ export class StudentAbilityRules implements AbilityRuleContributor {
       // cast bridges the TS type vs runtime semantic gap.
       builder.can('manage', 'Student', {
         organisationIds: { $in: instructorOrgs },
+      } as never);
+      builder.can('read', 'Student');
+    }
+
+    const orgadminOrgs = user.memberships
+      .filter((m) => m.role === 'orgadmin')
+      .map((m) => m.organisationId);
+
+    if (orgadminOrgs.length > 0) {
+      builder.can('read', 'Student', {
+        organisationIds: { $in: orgadminOrgs },
       } as never);
       builder.can('read', 'Student');
     }
