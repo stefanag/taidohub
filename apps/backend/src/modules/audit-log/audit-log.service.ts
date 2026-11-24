@@ -29,6 +29,12 @@ export interface RecordInput {
   actingUserId: string | null;
   before: unknown | null;
   after: unknown | null;
+  /**
+   * Channel the change came through. Defaults to `'web'`; pass `'mcp'` for
+   * anything an AI client caused, including a proposal approved later in
+   * the web app.
+   */
+  origin?: 'web' | 'mcp';
 }
 
 @Injectable()
@@ -49,6 +55,7 @@ export class AuditLogService {
         // entity-specific Zod schemas.
         before: input.before as unknown,
         after: input.after as unknown,
+        origin: input.origin ?? 'web',
       },
       input.tx,
     );

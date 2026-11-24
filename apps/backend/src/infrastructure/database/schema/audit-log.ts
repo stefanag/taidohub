@@ -31,6 +31,8 @@ export const auditLog = pgTable(
     actingUserId: text('acting_user_id').references(() => user.id, { onDelete: 'set null' }),
     before: jsonb('before'),
     after: jsonb('after'),
+    /** Channel the change came through: the web app, or an AI client over MCP. */
+    origin: text('origin', { enum: ['web', 'mcp'] }).notNull().default('web'),
     createdAt: timestamp('created_at', { withTimezone: true, mode: 'date' }).notNull().defaultNow(),
   },
   (table) => ({

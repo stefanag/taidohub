@@ -47,26 +47,36 @@ export class RankHistoryService {
     return rows.map((r) => this.toApi(r));
   }
 
+  /**
+   * Recording-permission rule (spec §7.1 notes): actor may record for self
+   * or for a subject they can verify for (minus the recorder ≠ verifier
+   * gate, which is only relevant at verify time). Sysadmin always allowed.
+   * Public so a proposal can be checked before it is stored.
+   */
+  async assertCanRecord(subjectUserId: string, actor: AuthenticatedUser): Promise<void> {
+    if (actor.id === subjectUserId) return;
+    const allowedToRead = await this.auth.canRead(actor, subjectUserId);
+    const isSysadmin = actor.role === 'sysadmin';
+    if (!isSysadmin && !allowedToRead) {
+      throw new ForbiddenException({
+        error: { code: 'FORBIDDEN', message: 'Cannot record history for this user.' },
+      });
+    }
+  }
+
+  /**
+   * @param executor An outer transaction to join (as a savepoint), so a
+   *   caller can commit the new row together with its own writes.
+   */
   async create(
     subjectUserId: string,
     input: CreateRankHistoryInput,
     actor: AuthenticatedUser,
+    executor?: DrizzleExecutor,
   ): Promise<RankHistory> {
-    // Recording-permission rule (spec §7.1 notes): actor may record for self
-    // or for a subject they can verify for (minus the recorder ≠  verifier
-    // gate, which is only relevant at verify time). Sysadmin always allowed.
-    const isSelf = actor.id === subjectUserId;
-    if (!isSelf) {
-      const allowedToRead = await this.auth.canRead(actor, subjectUserId);
-      const isSysadmin = actor.role === 'sysadmin';
-      if (!isSysadmin && !allowedToRead) {
-        throw new ForbiddenException({
-          error: { code: 'FORBIDDEN', message: 'Cannot record history for this user.' },
-        });
-      }
-    }
+    await this.assertCanRecord(subjectUserId, actor);
 
-    return this.db.transaction(async (tx) => {
+    return (executor ?? this.db).transaction(async (tx) => {
       const row = await this.repo.insert(
         {
           userId: subjectUserId,
