@@ -34,8 +34,10 @@ mv .image.env.next .image.env
 # 2. Pull the new images.
 dc pull app web
 
-# 3. Database up, then migrations with the new app image.
-dc up -d db
+# 3. Database up and healthy (the first start initialises the cluster and
+#    refuses connections for a few seconds), then migrations with the new
+#    app image.
+dc up -d --wait --wait-timeout 120 db
 dc run --rm --no-deps app node dist/src/infrastructure/database/migrate.js
 
 # 4. Start the new app and Caddy.
