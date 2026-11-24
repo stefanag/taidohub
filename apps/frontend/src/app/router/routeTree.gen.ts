@@ -15,6 +15,7 @@ import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
 import { Route as AppGradingHistoryRouteImport } from './routes/_app.grading-history'
 import { Route as AppMyOrganisationRouteImport } from './routes/_app.my-organisation'
 import { Route as AppPatternsRouteImport } from './routes/_app.patterns'
+import { Route as AppPendingOperationsRouteImport } from './routes/_app.pending-operations'
 import { Route as AppProfileRouteImport } from './routes/_app.profile'
 import { Route as AppProgressionRouteImport } from './routes/_app.progression'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
@@ -85,6 +86,11 @@ const AppMyOrganisationRoute = AppMyOrganisationRouteImport.update({
 const AppPatternsRoute = AppPatternsRouteImport.update({
   id: '/patterns',
   path: '/patterns',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPendingOperationsRoute = AppPendingOperationsRouteImport.update({
+  id: '/pending-operations',
+  path: '/pending-operations',
   getParentRoute: () => AppRoute,
 } as any)
 const AppProfileRoute = AppProfileRouteImport.update({
@@ -324,6 +330,7 @@ export interface FileRoutesByFullPath {
   '/grading-history': typeof AppGradingHistoryRoute
   '/my-organisation': typeof AppMyOrganisationRoute
   '/patterns': typeof AppPatternsRoute
+  '/pending-operations': typeof AppPendingOperationsRoute
   '/profile': typeof AppProfileRoute
   '/progression': typeof AppProgressionRoute
   '/settings': typeof AppSettingsRouteWithChildren
@@ -373,6 +380,7 @@ export interface FileRoutesByTo {
   '/grading-history': typeof AppGradingHistoryRoute
   '/my-organisation': typeof AppMyOrganisationRoute
   '/patterns': typeof AppPatternsRoute
+  '/pending-operations': typeof AppPendingOperationsRoute
   '/profile': typeof AppProfileRoute
   '/progression': typeof AppProgressionRoute
   '/techniques': typeof AppTechniquesRoute
@@ -414,6 +422,7 @@ export interface FileRoutesById {
   '/_app/grading-history': typeof AppGradingHistoryRoute
   '/_app/my-organisation': typeof AppMyOrganisationRoute
   '/_app/patterns': typeof AppPatternsRoute
+  '/_app/pending-operations': typeof AppPendingOperationsRoute
   '/_app/profile': typeof AppProfileRoute
   '/_app/progression': typeof AppProgressionRoute
   '/_app/settings': typeof AppSettingsRouteWithChildren
@@ -466,6 +475,7 @@ export interface FileRouteTypes {
     | '/grading-history'
     | '/my-organisation'
     | '/patterns'
+    | '/pending-operations'
     | '/profile'
     | '/progression'
     | '/settings'
@@ -515,6 +525,7 @@ export interface FileRouteTypes {
     | '/grading-history'
     | '/my-organisation'
     | '/patterns'
+    | '/pending-operations'
     | '/profile'
     | '/progression'
     | '/techniques'
@@ -555,6 +566,7 @@ export interface FileRouteTypes {
     | '/_app/grading-history'
     | '/_app/my-organisation'
     | '/_app/patterns'
+    | '/_app/pending-operations'
     | '/_app/profile'
     | '/_app/progression'
     | '/_app/settings'
@@ -647,6 +659,13 @@ declare module '@tanstack/react-router' {
       path: '/patterns'
       fullPath: '/patterns'
       preLoaderRoute: typeof AppPatternsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/pending-operations': {
+      id: '/_app/pending-operations'
+      path: '/pending-operations'
+      fullPath: '/pending-operations'
+      preLoaderRoute: typeof AppPendingOperationsRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/profile': {
@@ -1115,6 +1134,7 @@ interface AppRouteChildren {
   AppGradingHistoryRoute: typeof AppGradingHistoryRoute
   AppMyOrganisationRoute: typeof AppMyOrganisationRoute
   AppPatternsRoute: typeof AppPatternsRoute
+  AppPendingOperationsRoute: typeof AppPendingOperationsRoute
   AppProfileRoute: typeof AppProfileRoute
   AppProgressionRoute: typeof AppProgressionRoute
   AppSettingsRoute: typeof AppSettingsRouteWithChildren
@@ -1139,6 +1159,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppGradingHistoryRoute: AppGradingHistoryRoute,
   AppMyOrganisationRoute: AppMyOrganisationRoute,
   AppPatternsRoute: AppPatternsRoute,
+  AppPendingOperationsRoute: AppPendingOperationsRoute,
   AppProfileRoute: AppProfileRoute,
   AppProgressionRoute: AppProgressionRoute,
   AppSettingsRoute: AppSettingsRouteWithChildren,

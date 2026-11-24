@@ -263,6 +263,25 @@ Every route requires a session (global `AuthGuard`) unless decorated `@Public()`
 
 Frontend mirrors the same `Subjects` / `Actions` unions (re-exported from `@repo/contracts/casl`) and gates UI with `<Can I="create" a="Post">` from `@casl/react`. The backend still enforces — the frontend check is a UX nicety, never a security boundary.
 
+### 13.1 Connecting an AI client (MCP)
+
+TaidoHub runs an MCP server at `/api/mcp` on the same origin as the app. AI clients sign in with
+OAuth 2.1 against better-auth (no client registration needed: clients identify themselves with a
+Client ID Metadata Document). Only **sysadmins** and **organisation admins** can connect; everyone
+else is refused at the consent screen and by the server.
+
+- **Claude Code:** `claude mcp add --transport http taidohub https://taidohub.se/api/mcp`, then run
+  `/mcp` and choose *Authenticate*.
+- **Claude.ai / Claude desktop:** Settings → Connectors → *Add custom connector*, URL
+  `https://taidohub.se/api/mcp`, then *Connect*.
+- **Staging:** the same with `https://staging.taidohub.se/api/mcp`.
+
+The tools read organisations, students, progress, next-rank requirements and statistics with the
+signed-in user's permissions. Writes are only proposed (`propose_rank_entry`): they appear under
+**Pending operations** in the web app and are saved only when the user who proposed them approves
+there. Design and conventions for new tools:
+[`docs/superpowers/specs/2026-11-24-mcp-module-design.md`](docs/superpowers/specs/2026-11-24-mcp-module-design.md).
+
 ---
 
 ## 14. Scripts cheat sheet
