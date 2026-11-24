@@ -768,5 +768,15 @@
     "noRankYet": "Ingen graderingshistorik än — börja följa framstegen mot din första grad.",
     "loading": "Laddar…",
     "empty": "Ingen framsteg registrerad än"
+  },
+  "oauthConsent": {
+    "title": "Anslut en AI-klient",
+    "description": "{{client}} vill komma åt TaidoHub för din räkning.",
+    "clientLabel": "Klient",
+    "scopesLabel": "Begärd åtkomst",
+    "allow": "Tillåt",
+    "deny": "Neka",
+    "notAllowed": "Bara systemadministratörer och organisationsadministratörer kan ansluta en AI-klient.",
+    "failed": "Något gick fel. Försök igen från AI-klienten."
   }
 }

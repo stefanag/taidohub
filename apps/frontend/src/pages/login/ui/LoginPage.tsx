@@ -50,7 +50,12 @@ export function LoginPage(): React.ReactElement {
           </CardHeader>
           <CardContent>
             <LoginForm
-              onSuccess={() => {
+              onSuccess={(redirectTo) => {
+                // Signing in to connect an AI client: continue the OAuth flow.
+                if (redirectTo) {
+                  window.location.assign(redirectTo);
+                  return;
+                }
                 void navigate({ to: APP_LANDING_ROUTE });
               }}
             />

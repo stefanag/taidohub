@@ -785,5 +785,15 @@
     "noRankYet": "No grading history yet — start tracking progress toward your first rank.",
     "loading": "Loading…",
     "empty": "No progress recorded yet"
+  },
+  "oauthConsent": {
+    "title": "Connect an AI client",
+    "description": "{{client}} wants to access TaidoHub on your behalf.",
+    "clientLabel": "Client",
+    "scopesLabel": "Requested access",
+    "allow": "Allow",
+    "deny": "Deny",
+    "notAllowed": "Only sysadmins and organisation admins can connect an AI client.",
+    "failed": "Something went wrong. Try again from the AI client."
   }
 }

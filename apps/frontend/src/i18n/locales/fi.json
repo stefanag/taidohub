@@ -768,5 +768,15 @@
     "noRankYet": "Ei vielä arviointihistoriaa — ala seurata edistymistä kohti ensimmäistä arvoasi.",
     "loading": "Ladataan…",
     "empty": "Ei vielä kirjattua edistymistä"
+  },
+  "oauthConsent": {
+    "title": "Yhdistä tekoälyasiakas",
+    "description": "{{client}} haluaa käyttää TaidoHubia puolestasi.",
+    "clientLabel": "Asiakas",
+    "scopesLabel": "Pyydetty käyttöoikeus",
+    "allow": "Salli",
+    "deny": "Estä",
+    "notAllowed": "Vain järjestelmänvalvojat ja organisaation ylläpitäjät voivat yhdistää tekoälyasiakkaan.",
+    "failed": "Jokin meni pieleen. Yritä uudelleen tekoälyasiakkaasta."
   }
 }

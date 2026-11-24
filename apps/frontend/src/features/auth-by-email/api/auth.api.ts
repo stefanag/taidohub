@@ -1,3 +1,4 @@
+import { oauthProviderClient } from '@better-auth/oauth-provider/client';
 import { createAuthClient } from 'better-auth/react';
 
 import type {
@@ -19,11 +20,30 @@ import { env } from '@/shared/lib/env';
  */
 export const authClient = createAuthClient({
   baseURL: env.VITE_API_URL,
+  // During an OAuth authorization (an AI client connecting over MCP), the
+  // login and consent pages are opened with a signed query. This plugin
+  // forwards it on sign-in and consent so better-auth can resume the flow.
+  plugins: [oauthProviderClient()],
 });
+
+/**
+ * Where better-auth wants the browser to go next, if anywhere. Set when a
+ * sign-in or consent resumes an OAuth authorization: the URL leads back to the
+ * AI client with an authorization code (or an error).
+ */
+function redirectTarget(data: unknown): string | undefined {
+  if (typeof data !== 'object' || data === null) return undefined;
+  const { redirect, url } = data as { redirect?: unknown; url?: unknown };
+  return redirect === true && typeof url === 'string' ? url : undefined;
+}
 
 export const { useSession } = authClient;
 
-export async function signInWithEmail(input: SignInWithEmailInput): Promise<void> {
+/**
+ * Signs in. Resolves with a URL to leave the app for when the sign-in resumes
+ * an OAuth authorization; otherwise with `undefined`.
+ */
+export async function signInWithEmail(input: SignInWithEmailInput): Promise<string | undefined> {
   const result = await authClient.signIn.email({
     email: input.email,
     password: input.password,
@@ -31,6 +51,33 @@ export async function signInWithEmail(input: SignInWithEmailInput): Promise<void
   if (result.error) {
     throw new Error(result.error.message ?? 'Sign in failed.');
   }
+  return redirectTarget(result.data);
+}
+
+/** Thrown by {@link respondToOAuthConsent} when the user may not grant access. */
+export class OAuthConsentNotAllowedError extends Error {
+  constructor() {
+    super('MCP_NOT_ALLOWED');
+    this.name = 'OAuthConsentNotAllowedError';
+  }
+}
+
+/**
+ * Accepts or denies an OAuth client's request for access. Resolves with the URL
+ * that returns the browser to the client.
+ */
+export async function respondToOAuthConsent(accept: boolean): Promise<string> {
+  const result = await authClient.$fetch('/oauth2/consent', {
+    method: 'POST',
+    body: { accept },
+  });
+  if (result.error) {
+    if (result.error.status === 403) throw new OAuthConsentNotAllowedError();
+    throw new Error(result.error.message ?? 'Consent failed.');
+  }
+  const url = redirectTarget(result.data);
+  if (!url) throw new Error('Consent failed.');
+  return url;
 }
 
 export async function signUpWithEmail(input: SignUpWithEmailInput): Promise<void> {

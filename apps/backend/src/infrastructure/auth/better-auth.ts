@@ -1,12 +1,24 @@
+import { cimd } from '@better-auth/cimd';
+import { fetchClientMetadataResource } from '@better-auth/cimd/node';
+import { mcp } from '@better-auth/mcp';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-import { admin } from 'better-auth/plugins';
+import { APIError, createAuthMiddleware, getSessionFromCtx } from 'better-auth/api';
+import { admin, jwt } from 'better-auth/plugins';
 import { adminAc, userAc } from 'better-auth/plugins/admin/access';
 
 import { type Env } from '../../config/env.schema.js';
 import { type DrizzleDb } from '../database/client.js';
 import * as schema from '../database/schema/index.js';
 import { type EmailService } from '../email/email.types.js';
+
+import { canConnectMcpClient, mcpResource } from './mcp-access.js';
+
+/**
+ * OAuth endpoints where a user grants an AI client access. Only users allowed
+ * by {@link canConnectMcpClient} may get past them.
+ */
+const MCP_GRANT_PATHS = new Set(['/oauth2/authorize', '/oauth2/consent']);
 
 /**
  * Build the better-auth server instance for a given environment.
@@ -36,8 +48,35 @@ export function buildBetterAuth(db: DrizzleDb, env: Env, emailService: EmailServ
         session: schema.session,
         account: schema.account,
         verification: schema.verification,
+        // JWT plugin and OAuth provider (MCP) tables, see schema/oauth.ts.
+        jwks: schema.jwks,
+        oauthClient: schema.oauthClient,
+        oauthResource: schema.oauthResource,
+        oauthClientResource: schema.oauthClientResource,
+        oauthRefreshToken: schema.oauthRefreshToken,
+        oauthAccessToken: schema.oauthAccessToken,
+        oauthConsent: schema.oauthConsent,
+        oauthClientAssertion: schema.oauthClientAssertion,
       },
     }),
+    // The JWT plugin's /token route would hand out session JWTs signed with
+    // the same key as MCP access tokens; the MCP plugin docs require it off.
+    disabledPaths: ['/token'],
+    hooks: {
+      // Only sysadmins and orgadmins may connect an AI client. Checked on the
+      // grant endpoints so no authorization code is ever issued to anyone else.
+      before: createAuthMiddleware(async (ctx) => {
+        if (!MCP_GRANT_PATHS.has(ctx.path)) return;
+        const session = await getSessionFromCtx(ctx);
+        if (!session) return; // not signed in yet: authorize redirects to the login page
+        if (!(await canConnectMcpClient(db, session.user.id))) {
+          throw new APIError('FORBIDDEN', {
+            code: 'MCP_NOT_ALLOWED',
+            message: 'Only sysadmins and organisation admins can connect an AI client.',
+          });
+        }
+      }),
+    },
     emailAndPassword: {
       enabled: true,
       autoSignIn: true,
@@ -96,6 +135,22 @@ export function buildBetterAuth(db: DrizzleDb, env: Env, emailService: EmailServ
         adminRoles: ['sysadmin'],
         // 1-hour cap on each impersonation session.
         impersonationSessionDuration: 60 * 60,
+      }),
+      // Signs MCP access tokens. Not used for sessions: no JWT header is set.
+      jwt({ disableSettingJwtHeader: true }),
+      // OAuth 2.1 authorization server for MCP clients (Claude, ChatGPT, ...).
+      // Endpoints live under /api/auth/oauth2/*; discovery documents are
+      // served at /.well-known/oauth-* (mounted in main.ts).
+      mcp({
+        loginPage: `${env.WEB_APP_URL}/login`,
+        consentPage: `${env.WEB_APP_URL}/oauth/consent`,
+        resource: mcpResource(env),
+      }),
+      // Client ID Metadata Documents: MCP clients identify themselves by a URL
+      // instead of registering. Dynamic client registration stays off.
+      cimd({
+        fetchClientMetadataResource,
+        metadataProfile: 'mcp-2026-07-28',
       }),
     ],
   });
