@@ -49,6 +49,7 @@
     "adminRankRequirements": "Graderingskrav",
     "adminUsers": "Användare",
     "gradingHistory": "Graderingshistorik",
+    "pendingOperations": "Väntande ändringar",
     "patterns": "Hokei & sekvenser",
     "techniques": "Tekniker",
     "students": "Elever",
@@ -778,5 +779,33 @@
     "deny": "Neka",
     "notAllowed": "Bara systemadministratörer och organisationsadministratörer kan ansluta en AI-klient.",
     "failed": "Något gick fel. Försök igen från AI-klienten."
+  },
+  "pendingOperations": {
+    "title": "Väntande ändringar",
+    "description": "Ändringar som en AI-klient har föreslagit för din räkning. Inget sparas förrän du godkänner det.",
+    "loading": "Laddar…",
+    "loadFailed": "Det gick inte att hämta dina väntande ändringar.",
+    "waiting": "Väntar på dig",
+    "empty": "Inget väntar på godkännande.",
+    "decided": "Avgjorda",
+    "approve": "Godkänn",
+    "reject": "Avvisa",
+    "actionFailed": "Det gick inte. Försök igen.",
+    "rankEntry": "Registrera {{rank}} för {{student}}",
+    "proposedAt": "Föreslogs {{date}}",
+    "failedReason": "Inte sparad: {{reason}}",
+    "status": {
+      "pending": "Väntar",
+      "approved": "Godkänd",
+      "rejected": "Avvisad",
+      "failed": "Misslyckades"
+    },
+    "fields": {
+      "date": "Graderingsdatum",
+      "examiner": "Examinator",
+      "organisation": "Organisation",
+      "shogoTitle": "Shogo-titel",
+      "notes": "Anteckningar"
+    }
   }
 }

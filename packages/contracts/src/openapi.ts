@@ -21,6 +21,7 @@ import { ProfileOpenApiRegistry } from './profile.js';
 import { RankHistoryOpenApiRegistry } from './rank-history.js';
 import { ShogoTitlesOpenApiRegistry } from './shogo-titles.js';
 import { PatternOpenApiRegistry } from './patterns.js';
+import { PendingOperationsOpenApiRegistry } from './pending-operations.js';
 import { ProgressOpenApiRegistry } from './progress.js';
 import { StatisticsOpenApiRegistry } from './statistics.js';
 import { StudentsOpenApiRegistry } from './students.js';
@@ -66,6 +67,7 @@ export function registerContractSchemas(
     StudentsOpenApiRegistry,
     GradingRequirementsOpenApiRegistry,
     StatisticsOpenApiRegistry,
+    PendingOperationsOpenApiRegistry,
   ],
 ): OpenAPIObject {
   document.components ??= {};

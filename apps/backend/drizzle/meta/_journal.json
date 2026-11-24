@@ -246,6 +246,13 @@
       "when": 1795545649077,
       "tag": "0034_cold_crystal",
       "breakpoints": true
+    },
+    {
+      "idx": 35,
+      "version": "7",
+      "when": 1795553454198,
+      "tag": "0035_goofy_darkstar",
+      "breakpoints": true
     }
   ]
 }

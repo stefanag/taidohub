@@ -49,6 +49,7 @@
     "adminRankRequirements": "Arvovaatimukset",
     "adminUsers": "Käyttäjät",
     "gradingHistory": "Vyökoehistoria",
+    "pendingOperations": "Odottavat muutokset",
     "patterns": "Hokei & liikesarjat",
     "techniques": "Tekniikat",
     "students": "Oppilaat",
@@ -778,5 +779,33 @@
     "deny": "Estä",
     "notAllowed": "Vain järjestelmänvalvojat ja organisaation ylläpitäjät voivat yhdistää tekoälyasiakkaan.",
     "failed": "Jokin meni pieleen. Yritä uudelleen tekoälyasiakkaasta."
+  },
+  "pendingOperations": {
+    "title": "Odottavat muutokset",
+    "description": "Muutokset, joita tekoälyasiakas on ehdottanut puolestasi. Mitään ei tallenneta ennen kuin hyväksyt sen.",
+    "loading": "Ladataan…",
+    "loadFailed": "Odottavia muutoksia ei voitu ladata.",
+    "waiting": "Odottaa sinua",
+    "empty": "Mikään ei odota hyväksyntää.",
+    "decided": "Ratkaistut",
+    "approve": "Hyväksy",
+    "reject": "Hylkää",
+    "actionFailed": "Se ei onnistunut. Yritä uudelleen.",
+    "rankEntry": "Kirjaa {{rank}} henkilölle {{student}}",
+    "proposedAt": "Ehdotettu {{date}}",
+    "failedReason": "Ei tallennettu: {{reason}}",
+    "status": {
+      "pending": "Odottaa",
+      "approved": "Hyväksytty",
+      "rejected": "Hylätty",
+      "failed": "Epäonnistui"
+    },
+    "fields": {
+      "date": "Vyökokeen päivä",
+      "examiner": "Tarkastaja",
+      "organisation": "Organisaatio",
+      "shogoTitle": "Shogo-arvonimi",
+      "notes": "Muistiinpanot"
+    }
   }
 }

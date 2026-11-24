@@ -49,6 +49,7 @@
     "adminRankRequirements": "Rank requirements",
     "adminUsers": "Users",
     "gradingHistory": "Grading history",
+    "pendingOperations": "Pending operations",
     "patterns": "Patterns",
     "techniques": "Techniques",
     "students": "Students",
@@ -795,5 +796,33 @@
     "deny": "Deny",
     "notAllowed": "Only sysadmins and organisation admins can connect an AI client.",
     "failed": "Something went wrong. Try again from the AI client."
+  },
+  "pendingOperations": {
+    "title": "Pending operations",
+    "description": "Changes an AI client has proposed on your behalf. Nothing is saved until you approve it.",
+    "loading": "Loading…",
+    "loadFailed": "Could not load your pending operations.",
+    "waiting": "Waiting for you",
+    "empty": "Nothing is waiting for approval.",
+    "decided": "Decided",
+    "approve": "Approve",
+    "reject": "Reject",
+    "actionFailed": "That did not go through. Try again.",
+    "rankEntry": "Record {{rank}} for {{student}}",
+    "proposedAt": "Proposed {{date}}",
+    "failedReason": "Not saved: {{reason}}",
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "failed": "Failed"
+    },
+    "fields": {
+      "date": "Grading date",
+      "examiner": "Examiner",
+      "organisation": "Organisation",
+      "shogoTitle": "Shogo title",
+      "notes": "Notes"
+    }
   }
 }

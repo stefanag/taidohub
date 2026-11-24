@@ -22,3 +22,4 @@ export * from './feedback.js';
 export * from './grading-requirements.js';
 export * from './statistics.js';
 export * from './oauth.js';
+export * from './pending-operations.js';

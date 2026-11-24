@@ -1,5 +1,5 @@
 import { Link, useRouterState } from '@tanstack/react-router';
-import { Award, BarChart3, BookOpen, Building2, ClipboardCheck, ClipboardList, Flag, GraduationCap, History, LayoutDashboard, LibraryBig, ScrollText, Swords, Tag, TrendingUp, UserRound, Users, Wrench } from 'lucide-react';
+import { Award, BarChart3, BookOpen, Bot, Building2, ClipboardCheck, ClipboardList, Flag, GraduationCap, History, LayoutDashboard, LibraryBig, ScrollText, Swords, Tag, TrendingUp, UserRound, Users, Wrench } from 'lucide-react';
 import * as React from 'react';
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -48,6 +48,9 @@ export function AppSidebar(): React.ReactElement {
   const isInstructor = memberships.some((m) => m.role === 'instructor');
   const showStudents = isInstructor || ability?.can('manage', 'all') === true;
   const isOrgAdmin = memberships.some((m) => m.role === 'orgadmin');
+  // Proposals from AI clients: only sysadmins and orgadmins may connect one
+  // (the backend's `use Mcp` rule), so only they can have any.
+  const showPendingOperations = isOrgAdmin || ability?.can('manage', 'all') === true;
 
   // RequirementSet is manageable by sysadmins (CASL `manage all`) and by
   // org-scoped orgadmin/instructor members (mirrors the backend's
@@ -90,6 +93,19 @@ export function AppSidebar(): React.ReactElement {
                     <Link to="/students">
                       <GraduationCap />
                       <span>{t('nav.students')}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ) : null}
+              {showPendingOperations ? (
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={pathname.startsWith('/pending-operations')}
+                  >
+                    <Link to="/pending-operations">
+                      <Bot />
+                      <span>{t('nav.pendingOperations')}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

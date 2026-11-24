@@ -1,8 +1,10 @@
+import { AbilityBuilder, createMongoAbility } from '@casl/ability';
 import { ForbiddenException } from '@nestjs/common';
 import type { StudentRosterRow } from '@repo/contracts/students';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
+import { type AppAbility } from '../../infrastructure/ability/ability.types.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import {
   ProgressRepository,
@@ -10,6 +12,7 @@ import {
 } from '../progress/progress.repository.js';
 import { ProgressService } from '../progress/progress.service.js';
 
+import { StudentAbilityRules } from './students.abilities.js';
 import { StudentsRepository } from './students.repository.js';
 import { StudentsService } from './students.service.js';
 
@@ -145,7 +148,7 @@ describe('StudentsService.listRoster', () => {
     vi.clearAllMocks();
   });
 
-  it("lists students from the caller's instructor orgs only (excluding self)", async () => {
+  it("lists students from the caller's instructor and orgadmin orgs (excluding self)", async () => {
     const harness = build();
     harness.repo.listStudentIdsInOrgs.mockResolvedValue(['s-1', 's-2']);
     const rows = [
@@ -165,7 +168,7 @@ describe('StudentsService.listRoster', () => {
     const out = await harness.service.listRoster(actor);
 
     expect(harness.repo.listStudentIdsInOrgs).toHaveBeenCalledWith(
-      ['org-a'],
+      ['org-a', 'org-b'],
       'instr-1',
     );
     expect(harness.repo.listRosterByUserIds).toHaveBeenCalledWith(['s-1', 's-2']);
@@ -188,10 +191,22 @@ describe('StudentsService.listRoster', () => {
     expect(out).toEqual(rows);
   });
 
-  it('throws Forbidden when the caller has no instructor memberships', async () => {
+  it('lists students for an orgadmin who is not an instructor', async () => {
     const harness = build();
     const actor = makeUser({
+      id: 'admin-1',
       memberships: [{ organisationId: 'org-a', role: 'orgadmin' }],
+    });
+
+    await harness.service.listRoster(actor);
+
+    expect(harness.repo.listStudentIdsInOrgs).toHaveBeenCalledWith(['org-a'], 'admin-1');
+  });
+
+  it('throws Forbidden when the caller is neither instructor nor orgadmin anywhere', async () => {
+    const harness = build();
+    const actor = makeUser({
+      memberships: [{ organisationId: 'org-a', role: 'student' }],
     });
 
     await expect(harness.service.listRoster(actor)).rejects.toBeInstanceOf(
@@ -204,17 +219,54 @@ describe('StudentsService.listRoster', () => {
 });
 
 // ── getStudentProgress (CASL boundary) ─────────────────────────────────
+// Uses the real Student rules: the point of these tests is that the
+// unconditional class-level `read Student` does not leak every student.
 describe('StudentsService.getStudentProgress', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('403s when the caller cannot manage the target student', async () => {
-    const harness = build({ canManage: false });
+  function withRealRules(orgIdsForStudent: string[]): Harness {
+    const harness = build({ orgIdsForStudent });
+    harness.abilities.createForUser.mockImplementation((user: AuthenticatedUser) => {
+      const builder = new AbilityBuilder<AppAbility>(createMongoAbility);
+      new StudentAbilityRules().contributeTo(builder, user);
+      return builder.build();
+    });
+    return harness;
+  }
+
+  it.each([
+    ['an instructor in the same organisation', 'instructor' as const],
+    ['an orgadmin in the same organisation', 'orgadmin' as const],
+  ])('lets %s read', async (_label, role) => {
+    const harness = withRealRules(['org-a']);
+    harness.progressRepo.listByUser.mockResolvedValue([
+      progressRow({ id: 'pr-1' }),
+      progressRow({ id: 'pr-2' }),
+    ]);
+
+    const out = await harness.service.getStudentProgress(
+      makeUser({ id: 'staff-1', memberships: [{ organisationId: 'org-a', role }] }),
+      'student-1',
+    );
+
+    expect(harness.progressRepo.listByUser).toHaveBeenCalledWith('student-1');
+    expect(out).toHaveLength(2);
+    expect(out[0]!.id).toBe('pr-1');
+  });
+
+  it.each([
+    ['an instructor in another organisation', 'instructor' as const],
+    ['an orgadmin in another organisation', 'orgadmin' as const],
+    ['a student in the same organisation', 'student' as const],
+  ])('403s for %s', async (label, role) => {
+    const harness = withRealRules(['org-z']);
+    const orgId = label.includes('same') ? 'org-z' : 'org-a';
 
     await expect(
       harness.service.getStudentProgress(
-        makeUser({ id: 'instr-1' }),
+        makeUser({ id: 'staff-1', memberships: [{ organisationId: orgId, role }] }),
         'student-1',
       ),
     ).rejects.toBeInstanceOf(ForbiddenException);
@@ -222,21 +274,12 @@ describe('StudentsService.getStudentProgress', () => {
     expect(harness.progressRepo.listByUser).not.toHaveBeenCalled();
   });
 
-  it('returns mapped progress rows when the caller can manage the student', async () => {
-    const harness = build({ canManage: true });
-    harness.progressRepo.listByUser.mockResolvedValue([
-      progressRow({ id: 'pr-1' }),
-      progressRow({ id: 'pr-2' }),
-    ]);
+  it('lets a sysadmin read any student', async () => {
+    const harness = withRealRules(['org-z']);
 
-    const out = await harness.service.getStudentProgress(
-      makeUser({ id: 'instr-1' }),
-      'student-1',
-    );
+    await harness.service.getStudentProgress(makeUser({ role: 'sysadmin' }), 'student-1');
 
     expect(harness.progressRepo.listByUser).toHaveBeenCalledWith('student-1');
-    expect(out).toHaveLength(2);
-    expect(out[0]!.id).toBe('pr-1');
   });
 });
 

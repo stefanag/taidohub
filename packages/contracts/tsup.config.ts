@@ -28,6 +28,8 @@ export default defineConfig({
     feedback: 'src/feedback.ts',
     'grading-requirements': 'src/grading-requirements.ts',
     statistics: 'src/statistics.ts',
+    'pending-operations': 'src/pending-operations.ts',
+    mcp: 'src/mcp.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,
