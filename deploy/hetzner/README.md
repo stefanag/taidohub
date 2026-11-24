@@ -49,14 +49,15 @@ On your own machine, with [hcloud](https://github.com/hetznercloud/cli) and `jq`
 ```bash
 cd deploy/hetzner
 export HCLOUD_TOKEN=...            # Hetzner Console › project › Security › API tokens (Read & Write)
-export ADMIN_CIDR=203.0.113.7/32   # your own IP, so SSH is not open to everyone
 ./provision.sh                     # or: ./provision.sh staging
 ```
 
 The script creates:
 
 - the SSH key `taidohub-admin`;
-- the firewall `taidohub-web` (SSH from `ADMIN_CIDR`; HTTP and HTTPS from anywhere);
+- the firewall `taidohub-web` (SSH, HTTP and HTTPS from anywhere). SSH has to be reachable from
+  GitHub Actions, whose runner addresses change; the servers accept SSH keys only, root login is
+  off and fail2ban blocks repeated failures;
 - the servers `taidohub-staging` and `taidohub-production`. Production gets Hetzner Backup and
   protection against deletion.
 
@@ -197,7 +198,7 @@ ssh -N -L 5433:127.0.0.1:5432 deploy@<ip>
 - [ ] A restore from the Storage Box has been tested on staging.
 - [ ] External monitoring of `https://taidohub.se/api/health` (for example Better Stack or
       UptimeRobot, free tier).
-- [ ] `ADMIN_CIDR` is limited to known IP addresses.
+- [ ] `sudo fail2ban-client status sshd` shows the SSH jail running on both servers.
 - [ ] Note: a new major PostgreSQL version later needs a dump and restore, not just a new image tag.
 
 ## What has been verified

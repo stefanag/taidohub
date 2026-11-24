@@ -11,7 +11,6 @@
 #   STAGING_TYPE     [cx23]  2 vCPU, 4 GB
 #   PRODUCTION_TYPE  [cx23]
 #   SSH_PUBKEY       [~/.ssh/id_ed25519.pub]
-#   ADMIN_CIDR       [0.0.0.0/0]  narrow SSH to your own IP, e.g. 203.0.113.7/32
 #
 # Requires: hcloud (https://github.com/hetznercloud/cli), jq.
 set -euo pipefail
@@ -22,7 +21,6 @@ LOCATION="${LOCATION:-hel1}"
 STAGING_TYPE="${STAGING_TYPE:-cx23}"
 PRODUCTION_TYPE="${PRODUCTION_TYPE:-cx23}"
 SSH_PUBKEY="${SSH_PUBKEY:-$HOME/.ssh/id_ed25519.pub}"
-ADMIN_CIDR="${ADMIN_CIDR:-0.0.0.0/0}"
 IMAGE="ubuntu-24.04"
 KEY_NAME="taidohub-admin"
 FIREWALL="taidohub-web"
@@ -59,11 +57,14 @@ if ! hcloud ssh-key describe "$KEY_NAME" >/dev/null 2>&1; then
   hcloud ssh-key create --name "$KEY_NAME" --public-key-from-file "$SSH_PUBKEY"
 fi
 
-# Firewall: SSH from ADMIN_CIDR, HTTP and HTTPS from anywhere, ping.
+# Firewall: SSH, HTTP and HTTPS from anywhere, ping. SSH must be reachable from
+# GitHub Actions runners, whose addresses change, so it cannot be limited to
+# one IP. The servers accept SSH keys only (no passwords, no root login) and
+# run fail2ban.
 if ! hcloud firewall describe "$FIREWALL" >/dev/null 2>&1; then
   cat > /tmp/taidohub-fw.json <<JSON
 [
-  {"direction":"in","protocol":"tcp","port":"22","source_ips":["$ADMIN_CIDR"],"description":"ssh"},
+  {"direction":"in","protocol":"tcp","port":"22","source_ips":["0.0.0.0/0","::/0"],"description":"ssh"},
   {"direction":"in","protocol":"tcp","port":"80","source_ips":["0.0.0.0/0","::/0"],"description":"http"},
   {"direction":"in","protocol":"tcp","port":"443","source_ips":["0.0.0.0/0","::/0"],"description":"https"},
   {"direction":"in","protocol":"udp","port":"443","source_ips":["0.0.0.0/0","::/0"],"description":"http3"},
