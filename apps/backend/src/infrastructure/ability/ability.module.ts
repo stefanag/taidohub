@@ -15,6 +15,8 @@ import { ProgressAbilityRules } from '../../modules/progress/progress.abilities.
 import { RankHistoryAbilityRules } from '../../modules/rank-history/rank-history.abilities.js';
 import { StatisticsAbilityRules } from '../../modules/statistics/statistics.abilities.js';
 import { StudentAbilityRules } from '../../modules/students/students.abilities.js';
+import { McpAbilityRules } from '../../modules/mcp/mcp.abilities.js';
+import { PendingOperationAbilityRules } from '../../modules/pending-operations/pending-operations.abilities.js';
 import { TechniqueAbilityRules } from '../../modules/technique/technique.abilities.js';
 import { UsersAbilityRules } from '../../modules/users/users.abilities.js';
 
@@ -52,9 +54,11 @@ import { AbilityGuard } from './ability.guard.js';
     FeedbackAbilityRules,
     GradingRequirementsAbilityRules,
     LabelsAbilityRules,
+    McpAbilityRules,
     MembershipsAbilityRules,
     OrganisationsAbilityRules,
     PatternAbilityRules,
+    PendingOperationAbilityRules,
     ProgressAbilityRules,
     StatisticsAbilityRules,
     StudentAbilityRules,

@@ -10,6 +10,7 @@ import helmet from 'helmet';
 import { AppModule } from '../../src/app.module.js';
 import { type Env } from '../../src/config/env.schema.js';
 import { BETTER_AUTH, type Auth } from '../../src/infrastructure/auth/better-auth.js';
+import { McpHttpService } from '../../src/modules/mcp/mcp-http.handler.js';
 import { setupSwagger } from '../../src/openapi/swagger.js';
 
 /**
@@ -56,6 +57,10 @@ export async function buildTestApp(): Promise<{
   // root, outside /api/auth, and are answered by better-auth's MCP plugin.
   app.use('/.well-known/oauth-authorization-server', toNodeHandler(auth));
   app.use('/.well-known/oauth-protected-resource', toNodeHandler(auth));
+  // MCP server for AI clients. Mounted beside better-auth, outside the Nest
+  // router: it authenticates with a bearer access token, not the session
+  // cookie the global AuthGuard reads. See McpHttpService.
+  app.use('/api/mcp', app.get(McpHttpService).nodeHandler());
 
   app.setGlobalPrefix('api');
   setupSwagger(app, config);

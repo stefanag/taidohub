@@ -21,9 +21,11 @@ import { GradingRequirementsModule } from './modules/grading-requirements/gradin
 import { RankHistoryModule } from './modules/rank-history/rank-history.module.js';
 import { HealthModule } from './modules/health/health.module.js';
 import { LabelsModule } from './modules/labels/labels.module.js';
+import { McpModule } from './modules/mcp/mcp.module.js';
 import { MembershipsModule } from './modules/memberships/memberships.module.js';
 import { OrganisationsModule } from './modules/organisations/organisations.module.js';
 import { PatternModule } from './modules/pattern/pattern.module.js';
+import { PendingOperationsModule } from './modules/pending-operations/pending-operations.module.js';
 import { ProfileModule } from './modules/profile/profile.module.js';
 import { ProgressModule } from './modules/progress/progress.module.js';
 import { StatisticsModule } from './modules/statistics/statistics.module.js';
@@ -61,6 +63,8 @@ import { UsersModule } from './modules/users/users.module.js';
     FeedbackModule,
     UserImpersonationModule,
     StatisticsModule,
+    PendingOperationsModule,
+    McpModule,
   ],
   providers: [
     { provide: APP_PIPE, useClass: ZodValidationPipe },
