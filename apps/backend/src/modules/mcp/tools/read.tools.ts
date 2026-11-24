@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import {
+  McpBeltRanksOutputSchema,
   McpEmptyInputSchema,
   McpListStudentsInputSchema,
   McpListStudentsOutputSchema,
@@ -137,8 +138,8 @@ export class McpReadTools {
               targetRank: null,
               requirements: null,
               note: current
-                ? 'The student holds the highest rank in their belt system.'
-                : 'No passed grading is recorded for this student. Pass rankId to choose a rank.',
+                ? `The belt catalogue does not say which rank follows ${rankName(current)}. Pass rankId (see list_belt_ranks).`
+                : 'No passed grading is recorded for this student. Pass rankId (see list_belt_ranks).',
             };
           }
           const target = await this.ranks.findById(targetId);
@@ -149,6 +150,28 @@ export class McpReadTools {
             note: null,
           };
         },
+      }),
+      defineTool({
+        name: 'list_belt_ranks',
+        title: 'List belt ranks',
+        description:
+          'Use to find rank ids and names, e.g. before get_next_rank_requirements or propose_rank_entry. Ranks with an organisationId belong to that federation’s curriculum; null means global.',
+        inputSchema: McpEmptyInputSchema,
+        outputSchema: McpBeltRanksOutputSchema,
+        ability: ['use', 'Mcp'],
+        kind: 'read',
+        handler: async () => ({
+          ranks: (await this.ranks.list()).map((rank) => ({
+            id: rank.id,
+            slug: rank.slug ?? null,
+            name: rankName(rank),
+            level: rank.level,
+            sortOrder: rank.sortOrder,
+            systemId: rank.systemId,
+            organisationId: rank.organisationId ?? null,
+            nextRankId: rank.nextRankId ?? null,
+          })),
+        }),
       }),
       defineTool({
         name: 'get_statistics_summary',

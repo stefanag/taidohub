@@ -302,6 +302,39 @@ describe.skipIf(!hasDatabase())('MCP server (integration)', () => {
       });
     });
 
+    it('lists belt ranks with their ids and successor', async () => {
+      const result = await callJson(client, 'list_belt_ranks');
+      const ranks = result.structuredContent!.ranks as { id: string; name: string; nextRankId: string | null }[];
+      expect(ranks).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id: firstRankId, name: '5th Kyu', nextRankId: secondRankId }),
+          expect.objectContaining({ id: secondRankId, name: '4th Kyu', nextRankId: null }),
+        ]),
+      );
+    });
+
+    it('says plainly when the catalogue names no next rank', async () => {
+      await db.insert(rankHistory).values({
+        userId: ids.student,
+        rankId: secondRankId,
+        date: '2026-06-01',
+        result: 'pass',
+        source: 'external',
+        recordedByUserId: ids.instructor,
+      });
+      try {
+        const result = await callJson(client, 'get_next_rank_requirements', { studentUserId: ids.student });
+        expect(result.structuredContent).toMatchObject({
+          currentRank: { id: secondRankId },
+          targetRank: null,
+          requirements: null,
+        });
+        expect(result.structuredContent!.note).toMatch(/does not say which rank follows 4th Kyu/);
+      } finally {
+        await db.delete(rankHistory).where(eq(rankHistory.date, '2026-06-01'));
+      }
+    });
+
     it('is refused statistics for another organisation and platform totals', async () => {
       const other = await callJson(client, 'get_statistics_summary', { organisationId: otherClubId });
       expect(other.content[0]!.text).toMatch(/^FORBIDDEN:/);

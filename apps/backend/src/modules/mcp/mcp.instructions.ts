@@ -12,4 +12,4 @@ Rules:
 4. Nothing you propose is written until the user approves it in the TaidoHub web app (Pending operations). After propose_rank_entry, tell the user it is waiting for approval; never say it is done.
 5. A tool result with isError means nothing was changed. Report the error text instead of guessing.
 
-Typical flow: list_my_organisations → list_students → get_student_progress or get_next_rank_requirements → propose_rank_entry if the user wants a grading recorded.`;
+Typical flow: list_my_organisations → list_students → get_student_progress or get_next_rank_requirements → propose_rank_entry if the user wants a grading recorded (rank ids from list_belt_ranks).`;

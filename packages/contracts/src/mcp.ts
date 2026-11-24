@@ -102,6 +102,23 @@ export const McpNextRankRequirementsOutputSchema = z.object({
   note: z.string().nullable(),
 });
 
+// ── list_belt_ranks ─────────────────────────────────────────────────────
+
+export const McpBeltRanksOutputSchema = z.object({
+  ranks: z.array(
+    z.object({
+      id: z.uuid(),
+      slug: z.string().nullable(),
+      name: z.string(),
+      level: z.number().int(),
+      sortOrder: z.number().int(),
+      systemId: z.uuid(),
+      organisationId: z.uuid().nullable(),
+      nextRankId: z.uuid().nullable(),
+    }),
+  ),
+});
+
 // ── get_statistics_summary ──────────────────────────────────────────────
 
 export const McpStatisticsInputSchema = z.strictObject({
