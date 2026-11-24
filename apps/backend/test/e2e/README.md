@@ -15,11 +15,11 @@ Env vars required (see [`.env.e2e.example`](../../.env.e2e.example)):
 
 ### CI (GitHub Actions)
 
-Already wired. The `backend-e2e` job in [`.github/workflows/ci.yml`](../../../.github/workflows/ci.yml) provisions a `postgres:16-alpine` service, sets the env, applies migrations, and runs `pnpm --filter backend test:e2e`. Every PR runs this automatically.
+Already wired. The `backend-e2e` job in [`.github/workflows/ci.yml`](../../../.github/workflows/ci.yml) provisions a `postgres:18-alpine` service, sets the env, applies migrations, and runs `pnpm --filter backend test:e2e`. Every PR runs this automatically.
 
 ### Local — with Docker
 
-Bundled `docker-compose.e2e.yml` starts `postgres:16-alpine` on **port 5433** (to avoid clashing with a dev Postgres on 5432). Data lives in a `tmpfs` mount so `down -v` truly discards everything.
+Bundled `docker-compose.e2e.yml` starts `postgres:18-alpine` on **port 5433** (to avoid clashing with a dev Postgres on 5432). Data lives in a `tmpfs` mount so `down -v` truly discards everything.
 
 ```bash
 # One shot: up → migrate → test → down (down runs even if tests fail)

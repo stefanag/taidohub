@@ -333,7 +333,7 @@ Frontend mirrors the same `Subjects` / `Actions` unions (re-exported from `@repo
 Three jobs:
 
 1. **build-test** — `pnpm install --frozen-lockfile` → restore Turbo cache → `pnpm turbo run lint typecheck arch build test` → `build-storybook` → upload `storybook-static/` as an artifact.
-2. **backend-e2e** — Spins up a `postgres:16-alpine` service container, builds contracts, runs `db:generate` + `db:migrate`, then `pnpm --filter backend test:e2e` against the ephemeral DB.
+2. **backend-e2e** — Spins up a `postgres:18-alpine` service container, builds contracts, runs `db:generate` + `db:migrate`, then `pnpm --filter backend test:e2e` against the ephemeral DB.
 3. **openapi-sync** — Runs `openapi:generate` and `git diff --exit-code packages/contracts/openapi/`. Fails the build if the committed spec is stale. Uploads the generated artifacts.
 
 Concurrency keys on `workflow + ref` cancel in-progress runs when you push again.

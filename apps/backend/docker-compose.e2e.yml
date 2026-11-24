@@ -14,7 +14,7 @@
 #   E2E_POSTGRES_PORT=15432 pnpm --filter backend test:e2e:up
 services:
   postgres:
-    image: postgres:16-alpine
+    image: postgres:18-alpine
     container_name: taidohub-e2e-postgres
     environment:
       POSTGRES_USER: taidohub
@@ -29,4 +29,5 @@ services:
       retries: 15
     tmpfs:
       # Speeds up test runs and guarantees data is thrown away on `down`.
-      - /var/lib/postgresql/data
+      # PG 18 images keep data under /var/lib/postgresql/18/docker.
+      - /var/lib/postgresql

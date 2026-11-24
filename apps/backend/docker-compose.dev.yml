@@ -20,7 +20,7 @@
 #   DEV_POSTGRES_PORT=15432 pnpm --filter backend db:dev:up
 services:
   postgres:
-    image: postgres:16-alpine
+    image: postgres:18-alpine
     container_name: taidohub-dev-postgres
     environment:
       POSTGRES_USER: taidohub
@@ -35,8 +35,10 @@ services:
       retries: 15
     volumes:
       # Named volume so state survives `db:dev:down`. Use `db:dev:reset`
-      # (or `down -v`) to wipe.
-      - taidohub_dev_pgdata:/var/lib/postgresql/data
+      # (or `down -v`) to wipe. PG 18 images keep data under
+      # /var/lib/postgresql/18/docker, so the volume mounts the parent. A
+      # volume created by the old postgres:16 setup must be reset once.
+      - taidohub_dev_pgdata18:/var/lib/postgresql
 
 volumes:
-  taidohub_dev_pgdata:
+  taidohub_dev_pgdata18:
