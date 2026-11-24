@@ -1,0 +1,80 @@
+# Taidohub on one Hetzner server: Postgres, the NestJS app and Caddy.
+# Lives in /opt/taidohub next to .env (secrets) and .image.env (current tag).
+# Always run through deploy.sh or:
+#   docker compose --env-file .env --env-file .image.env <command>
+name: taidohub
+
+services:
+  db:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: taidohub
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: taidohub
+    command:
+      - postgres
+      - -c
+      - shared_buffers=512MB
+      - -c
+      - effective_cache_size=1536MB
+      - -c
+      - max_connections=50
+    shm_size: 256mb
+    # PG 18 images keep data under /var/lib/postgresql/18/docker; mount the parent.
+    volumes:
+      - pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U taidohub -d taidohub"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    networks: [internal]
+    # Bound to the server's loopback only: reachable from the app and through
+    # an SSH tunnel, never from the internet.
+    ports:
+      - "127.0.0.1:5432:5432"
+
+  app:
+    image: ghcr.io/${GHCR_OWNER:?}/taidohub-app:${IMAGE_TAG:?run deploy.sh}
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: "3001"
+      DATABASE_URL: postgres://taidohub:${POSTGRES_PASSWORD}@db:5432/taidohub
+      DIRECT_URL: postgres://taidohub:${POSTGRES_PASSWORD}@db:5432/taidohub
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:?set BETTER_AUTH_SECRET in .env}
+      BETTER_AUTH_URL: https://${SITE_DOMAIN:?}
+      WEB_ORIGIN: https://${SITE_DOMAIN}
+      WEB_APP_URL: https://${SITE_DOMAIN}
+      ENABLE_SWAGGER: ${ENABLE_SWAGGER:-false}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks: [internal]
+
+  web:
+    image: ghcr.io/${GHCR_OWNER}/taidohub-web:${IMAGE_TAG}
+    restart: unless-stopped
+    environment:
+      SITE_DOMAIN: ${SITE_DOMAIN}
+      ACME_EMAIL: ${ACME_EMAIL:?set ACME_EMAIL in .env}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      app:
+        condition: service_healthy
+    networks: [internal]
+
+volumes:
+  pgdata:
+  caddy_data:
+  caddy_config:
+
+networks:
+  internal:

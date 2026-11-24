@@ -1,0 +1,106 @@
+# Build images and deploy to Hetzner.
+#
+# staging     automatically after CI passes on main
+# production  manually (Actions › Deploy › Run workflow), gated by the
+#             `production` environment's required reviewers
+#
+# Repository › Settings › Environments: create `staging` and `production`,
+# each with these secrets:
+#   DEPLOY_HOST          server IPv4
+#   DEPLOY_SSH_KEY       private key for the deploy user (a dedicated key)
+#   DEPLOY_KNOWN_HOSTS   output of: ssh-keyscan -t ed25519 <server-ip>
+# and this variable:
+#   SITE_URL             https://staging.taidohub.se or https://taidohub.se
+# Then set the repository variable DEPLOY_ENABLED=true (Settings › Variables).
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Target environment
+        type: choice
+        options: [staging, production]
+        default: staging
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: deploy-${{ github.event.inputs.environment || 'staging' }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    # No-op until the repository variable DEPLOY_ENABLED is 'true', so merging
+    # this before the servers exist does not produce failing runs. (Environment
+    # variables such as SITE_URL are not available in a job-level `if`.)
+    if: >-
+      vars.DEPLOY_ENABLED == 'true' &&
+      (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success')
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment || 'staging' }}
+    env:
+      ENV_NAME: ${{ github.event.inputs.environment || 'staging' }}
+      SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+      OWNER: ${{ github.repository_owner }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SHA }}
+
+      - name: Image tag
+        run: echo "TAG=${ENV_NAME}-${SHA::7}" >> "$GITHUB_ENV"
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push app
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: deploy/hetzner/Dockerfile
+          target: app
+          push: true
+          tags: ghcr.io/${{ env.OWNER }}/taidohub-app:${{ env.TAG }}
+          cache-from: type=gha,scope=app
+          cache-to: type=gha,scope=app,mode=max
+
+      - name: Build and push web
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: deploy/hetzner/Dockerfile
+          target: web
+          build-args: VITE_API_URL=${{ vars.SITE_URL }}
+          push: true
+          tags: ghcr.io/${{ env.OWNER }}/taidohub-web:${{ env.TAG }}
+          cache-from: type=gha,scope=web-${{ env.ENV_NAME }}
+          cache-to: type=gha,scope=web-${{ env.ENV_NAME }},mode=max
+
+      - name: SSH setup
+        run: |
+          install -d -m 700 ~/.ssh
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          echo "${{ secrets.DEPLOY_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+
+      - name: Copy deploy files and deploy
+        env:
+          HOST: ${{ secrets.DEPLOY_HOST }}
+        run: |
+          scp deploy/hetzner/{compose.yaml,deploy.sh,backup.sh,restore.sh,seed.sh} "deploy@${HOST}:/opt/taidohub/"
+          ssh "deploy@${HOST}" "chmod +x /opt/taidohub/*.sh && /opt/taidohub/deploy.sh ${TAG}"
+
+      - name: Smoke test
+        run: curl -fsS --retry 10 --retry-delay 3 --retry-all-errors "${{ vars.SITE_URL }}/api/health"

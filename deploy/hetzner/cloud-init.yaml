@@ -1,0 +1,77 @@
+#cloud-config
+# First-boot setup for a Taidohub server (Ubuntu 24.04). Passed by provision.sh.
+# Result: Docker, a `deploy` user with the same SSH key as root, root login and
+# passwords disabled over SSH, ufw, fail2ban, automatic security updates,
+# a 2 GB swapfile, and the daily backup timer (inactive until restic is set up).
+
+package_update: true
+package_upgrade: true
+packages:
+  - ca-certificates
+  - curl
+  - gnupg
+  - jq
+  - ufw
+  - fail2ban
+  - unattended-upgrades
+  - restic
+
+write_files:
+  - path: /etc/ssh/sshd_config.d/99-taidohub.conf
+    content: |
+      PermitRootLogin no
+      PasswordAuthentication no
+      KbdInteractiveAuthentication no
+  - path: /etc/apt/apt.conf.d/20auto-upgrades
+    content: |
+      APT::Periodic::Update-Package-Lists "1";
+      APT::Periodic::Unattended-Upgrade "1";
+  - path: /etc/docker/daemon.json
+    content: |
+      { "log-driver": "local", "log-opts": { "max-size": "20m", "max-file": "5" } }
+  - path: /etc/systemd/system/taidohub-backup.service
+    content: |
+      [Unit]
+      Description=Taidohub database backup
+      After=docker.service
+      [Service]
+      Type=oneshot
+      ExecStart=/opt/taidohub/backup.sh
+  - path: /etc/systemd/system/taidohub-backup.timer
+    content: |
+      [Unit]
+      Description=Daily Taidohub database backup
+      [Timer]
+      OnCalendar=*-*-* 03:15:00
+      RandomizedDelaySec=10m
+      Persistent=true
+      [Install]
+      WantedBy=timers.target
+
+runcmd:
+  # Docker Engine from Docker's apt repository.
+  - install -m 0755 -d /etc/apt/keyrings
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+  - chmod a+r /etc/apt/keyrings/docker.asc
+  - echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo $VERSION_CODENAME) stable" > /etc/apt/sources.list.d/docker.list
+  - apt-get update
+  - apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  - systemctl enable --now docker
+  # deploy user: runs docker compose, owns /opt/taidohub.
+  - useradd -m -s /bin/bash -G docker deploy
+  - install -d -m 700 -o deploy -g deploy /home/deploy/.ssh
+  - install -m 600 -o deploy -g deploy /root/.ssh/authorized_keys /home/deploy/.ssh/authorized_keys
+  - install -d -o deploy -g deploy /opt/taidohub /var/backups/taidohub
+  # Firewall: SSH, HTTP, HTTPS (incl. HTTP/3). Postgres is never published.
+  - ufw default deny incoming
+  - ufw allow OpenSSH
+  - ufw allow 80/tcp
+  - ufw allow 443/tcp
+  - ufw allow 443/udp
+  - ufw --force enable
+  # Swap helps docker pulls and node on a 4 GB machine.
+  - fallocate -l 2G /swapfile && chmod 600 /swapfile && mkswap /swapfile && swapon /swapfile
+  - echo '/swapfile none swap sw 0 0' >> /etc/fstab
+  - systemctl enable --now fail2ban
+  - systemctl daemon-reload
+  - systemctl restart ssh
