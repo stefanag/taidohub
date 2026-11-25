@@ -17,6 +17,7 @@ import { seedSysadmin, type SeedDeps } from './seed-sysadmin.js';
 import { seedBeltCatalog } from './seeds/belt-catalog.seed.js';
 import { seedClassifications } from './seeds/classifications.seed.js';
 import { seedClubMembers } from './seeds/club-members.seed.js';
+import { seedGradingRequirements } from './seeds/grading-requirements.seed.js';
 import { assertDemoSeedAllowed, seedDemoData } from './seeds/demo-data.seed.js';
 import { seedOrganisations } from './seeds/organisations.seed.js';
 import { seedPatterns } from './seeds/patterns.seed.js';
@@ -97,6 +98,15 @@ async function main(): Promise<void> {
   console.info(
     `[seed] patterns: rows(+${patterns.patterns.inserted}/~${patterns.patterns.updated}) ` +
       `edges(+${patterns.edges.inserted})`,
+  );
+
+  // Grading requirements reference ranks, techniques and patterns by id, so
+  // they seed after all three catalogues.
+  const requirements = await seedGradingRequirements(db);
+  // eslint-disable-next-line no-console
+  console.info(
+    `[seed] grading requirements: sets(+${requirements.sets.inserted}/~${requirements.sets.updated}) ` +
+      `ranks(~${requirements.ranks})`,
   );
 
   // Club members (STAF roster). Reuses the same `signUpEmail` callback as

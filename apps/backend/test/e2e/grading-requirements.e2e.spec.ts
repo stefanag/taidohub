@@ -412,6 +412,48 @@ describe.skipIf(!hasDatabase())('Grading requirements e2e', () => {
   // Scenario 5: Empty scope shape
   // ────────────────────────────────────────────────────────────────────────────
 
+  it('4b. kobo split: only patterns classified kobo resolve as kobo', async () => {
+    const { pattern: patternTable, patternClassification } = await import(
+      '../../src/infrastructure/database/schema/pattern.js'
+    );
+    const { classificationCategory } = await import(
+      '../../src/infrastructure/database/schema/classification-category.js'
+    );
+
+    const ts = Date.now();
+    const [root] = await db
+      .insert(classificationCategory)
+      .values({ code: `pattern_type_${ts}`, nameEn: 'Type', nameSv: 'Typ', nameFi: 'Tyyppi' })
+      .returning({ id: classificationCategory.id });
+    const [koboCategory] = await db
+      .insert(classificationCategory)
+      .values({ parentId: root!.id, code: 'kobo', nameEn: 'Kobo', nameSv: 'Kobo', nameFi: 'Kobo' })
+      .returning({ id: classificationCategory.id });
+    const [kobo] = await db
+      .insert(patternTable)
+      .values({ nameRomaji: `Kobo-${ts}`, nameEn: 'Kobo', nameSv: 'Kobo', nameFi: 'Kobo' })
+      .returning({ id: patternTable.id });
+    const [hokei] = await db
+      .insert(patternTable)
+      .values({ nameRomaji: `Hokei-${ts}`, nameEn: 'Hokei', nameSv: 'Hokei', nameFi: 'Hokei' })
+      .returning({ id: patternTable.id });
+    await db
+      .insert(patternClassification)
+      .values({ patternId: kobo!.id, classificationCategoryId: koboCategory!.id });
+
+    const set = await createSet('Kobo-Split');
+    const putRes = await request(app.getHttpServer())
+      .put(`/api/requirements/${rankId}`)
+      .set('Cookie', sysadminCookie)
+      .send({ setId: set.id, kobo: [kobo!.id], otherPatterns: [hokei!.id] });
+    expect(putRes.status).toBe(200);
+
+    // Before the fix every pattern resolved as kobo as soon as any pattern
+    // anywhere was classified kobo.
+    expect(putRes.body.kobo).toEqual([kobo!.id]);
+    expect(putRes.body.otherPatterns).toEqual([hokei!.id]);
+  });
+
   it('5. empty scope shape: GET on set with no rows → empty GradingRequirements (not 404)', async () => {
     const set = await createSet('Empty-Scope');
 

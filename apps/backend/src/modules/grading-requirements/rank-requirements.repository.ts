@@ -105,10 +105,13 @@ export class RankRequirementsRepository {
         setId: rankRequirementPattern.setId,
         patternId: rankRequirementPattern.patternId,
         isTested: rankRequirementPattern.isTested,
+        // The outer column is spelled out with its table: an interpolated
+        // column renders unqualified in a single-table select, which inside
+        // this subquery bound to `pc.pattern_id` and made every pattern kobo.
         isKobo: sql<boolean>`EXISTS (
           SELECT 1 FROM pattern_classification pc
           JOIN classification_category cc ON cc.id = pc.classification_category_id
-          WHERE pc.pattern_id = ${rankRequirementPattern.patternId}
+          WHERE pc.pattern_id = "rank_requirement_pattern"."pattern_id"
           AND cc.code = 'kobo'
         )`,
       })

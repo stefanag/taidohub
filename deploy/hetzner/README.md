@@ -138,7 +138,8 @@ echo "<token>" | docker login ghcr.io -u stefanag --password-stdin
    /opt/taidohub/seed.sh admin@taidohub.se    # asks for a password, at least 12 characters
    ```
 
-   It creates organisations, belt systems, classifications, techniques and patterns, but no members.
+   It creates organisations, belt systems, classifications, techniques, patterns and the federation's
+   grading requirements (STF training matrix and dan rules), but no members.
    Running it again does not duplicate anything.
 
    To test staging with data (for example the MCP server), add fictional demo data:

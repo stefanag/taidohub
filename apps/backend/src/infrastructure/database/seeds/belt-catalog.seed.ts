@@ -54,6 +54,8 @@ interface SeedRank {
   slug?: string | null;
   /** The rank that follows this one; null for the top of a ladder. */
   nextRankId?: string | null;
+  /** Minimum age in years to hold this rank (STF dan rules §3.4); null for none. */
+  minAge?: number | null;
 }
 
 interface SeedShogo {
@@ -194,6 +196,7 @@ export async function seedBeltCatalog(db: DrizzleDb): Promise<BeltCatalogSeedRes
           descriptionFi: rank.descriptionFi ?? null,
           publiclyVisible: rank.publiclyVisible,
           slug: rank.slug ?? null,
+          minAge: rank.minAge ?? null,
           updatedAt: new Date(),
         })
         .where(eq(beltRanks.id, existing.id));
@@ -218,6 +221,7 @@ export async function seedBeltCatalog(db: DrizzleDb): Promise<BeltCatalogSeedRes
         descriptionFi: rank.descriptionFi ?? null,
         publiclyVisible: rank.publiclyVisible,
         slug: rank.slug ?? null,
+        minAge: rank.minAge ?? null,
       });
       result.ranks.inserted += 1;
     }

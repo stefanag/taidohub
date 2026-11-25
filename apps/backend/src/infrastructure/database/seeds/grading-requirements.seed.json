@@ -1,0 +1,549 @@
+{
+  "requirementSets": [
+    {
+      "id": "8f3d6a52-6f0e-4d8b-9c11-5a7e2b9c4d01",
+      "name": "STF träningsmatrikel 2024-08-18",
+      "organisationSlug": "swedish-taido-association",
+      "effectiveDate": "2024-01-24"
+    }
+  ],
+  "requirements": [
+    {
+      "setId": "8f3d6a52-6f0e-4d8b-9c11-5a7e2b9c4d01",
+      "rankSlug": "8-kyu",
+      "kihon": [
+        {
+          "id": "ae744f24-7bc4-46c9-ba6b-f36e64ba84f5",
+          "name": "Chudan gamae"
+        },
+        {
+          "id": "65818c25-a325-48bb-9f9c-0ea8c43e99f7",
+          "name": "Gedan gamae"
+        },
+        {
+          "id": "775f57ff-63ce-4f6e-8557-ca5db206db1d",
+          "name": "Sonoba zuki"
+        },
+        {
+          "id": "a04f7385-7f1d-4552-a369-fe56bb715cdc",
+          "name": "Sonoba geri"
+        },
+        {
+          "id": "4e66225d-851d-437c-9936-19fcbd5505df",
+          "name": "Senagashi"
+        },
+        {
+          "id": "27385e19-32db-4bee-b7da-fe9179776ba5",
+          "name": "Fukuteki"
+        },
+        {
+          "id": "0462baaa-0086-41b0-8dc4-b8dd0d1607dc",
+          "name": "Shajo nagashi"
+        },
+        {
+          "id": "9c171878-3cc3-4dfc-a3f6-7274fc271890",
+          "name": "Untai eji zuki"
+        },
+        {
+          "id": "9431cfa2-d1c5-4cf3-ba19-1c6673368bce",
+          "name": "Untai sanbon nukite"
+        },
+        {
+          "id": "e2f22060-efa7-48a8-917e-a2bd35fe08a6",
+          "name": "Hentai ebi geri"
+        },
+        {
+          "id": "ebeef3f7-2011-426b-8310-2aa05ff2f968",
+          "name": "Hai zenten"
+        }
+      ],
+      "patterns": [
+        {
+          "id": "ad73fce7-caba-43d5-8628-c67ab5a2d88c",
+          "name": "Happo gamae shiho"
+        },
+        {
+          "id": "f8a7eb2a-36af-436b-bd63-3b32361cc0ba",
+          "name": "Unsoku 7kyu"
+        }
+      ],
+      "hokeiGroups": [],
+      "jissenMinutes": null,
+      "minMonthsSincePreviousRank": null
+    },
+    {
+      "setId": "8f3d6a52-6f0e-4d8b-9c11-5a7e2b9c4d01",
+      "rankSlug": "7-kyu",
+      "kihon": [
+        {
+          "id": "946473f7-6660-49e8-890f-1929b6c1f1ec",
+          "name": "Jodan gamae"
+        },
+        {
+          "id": "24461a8f-1c13-4009-b3f7-f62a22aa36c6",
+          "name": "Sentai chokujō zuki"
+        },
+        {
+          "id": "7761132d-7127-4ab6-9cc0-f086420559ce",
+          "name": "Sentai sanbon nukite"
+        },
+        {
+          "id": "62d1380d-f608-4ca1-bd65-eb55280321c8",
+          "name": "Untai shomen geri"
+        },
+        {
+          "id": "2fc06551-900d-4ffa-aead-39837fad0107",
+          "name": "Hentai hangetsu ate"
+        },
+        {
+          "id": "8742a693-7733-40b8-8652-da8159a7758a",
+          "name": "Hentai manji geri"
+        },
+        {
+          "id": "2a89462f-c19b-41f7-9b21-5e713d269590",
+          "name": "Hai koten"
+        },
+        {
+          "id": "6801bb1c-ca97-4c11-8e37-a26f43c729d0",
+          "name": "Ude sokuten"
+        }
+      ],
+      "patterns": [
+        {
+          "id": "87ebf46f-5678-4e1f-81e8-fdb668dd4322",
+          "name": "Unsoku Happo"
+        },
+        {
+          "id": "004f72a5-d1b1-4fc3-b1ca-eb5ab3c8daf1",
+          "name": "Taisosa gorendo"
+        },
+        {
+          "id": "671e7b1b-deff-4690-9476-782906c740ff",
+          "name": "Kobo Shodan"
+        },
+        {
+          "id": "f8a7eb2a-36af-436b-bd63-3b32361cc0ba",
+          "name": "Unsoku 7kyu"
+        }
+      ],
+      "hokeiGroups": [],
+      "jissenMinutes": null,
+      "minMonthsSincePreviousRank": null
+    },
+    {
+      "setId": "8f3d6a52-6f0e-4d8b-9c11-5a7e2b9c4d01",
+      "rankSlug": "6-kyu",
+      "kihon": [
+        {
+          "id": "89c56043-879c-4891-b424-eeb5b6e79daa",
+          "name": "Untai tobi zuki"
+        },
+        {
+          "id": "bff25fe4-d571-4a5a-9998-f00900dfec7f",
+          "name": "Untai oshi kuzushi"
+        },
+        {
+          "id": "8cabee7c-dd3a-49b1-a9d0-ac1707bf60a8",
+          "name": "Untai tobi nidan geri"
+        },
+        {
+          "id": "4470c8d2-753f-446f-a145-e7082e8da244",
+          "name": "Hentai senjo geri"
+        },
+        {
+          "id": "ee7d3cb0-0496-4570-8f31-d7ccbb186df4",
+          "name": "Hentai suihei geri"
+        },
+        {
+          "id": "aaef52ac-ccae-4e35-b2bd-84eeb1307a7d",
+          "name": "Nengi"
+        },
+        {
+          "id": "516bc23e-d9ca-44d6-8892-2e9839b30f9e",
+          "name": "Tentai hai zenten zuki"
+        }
+      ],
+      "patterns": [
+        {
+          "id": "0b8a2af3-cf7d-41fa-9d77-73ddbd50c34e",
+          "name": "Kobo Nidan"
+        }
+      ],
+      "hokeiGroups": [
+        {
+          "pickCount": 1,
+          "patterns": [
+            {
+              "id": "c7e5c490-8f23-47e8-b498-2c9c93b8b52c",
+              "name": "Sentai no hokei"
+            },
+            {
+              "id": "c5f90980-4984-4e8d-af72-d95014edbd85",
+              "name": "Senin no hokei"
+            }
+          ],
+          "labelSv": "Sentai eller senin no hokei",
+          "labelEn": "Sentai or senin no hokei",
+          "labelFi": "Sentai tai senin no hokei"
+        }
+      ],
+      "jissenMinutes": null,
+      "minMonthsSincePreviousRank": null
+    },
+    {
+      "setId": "8f3d6a52-6f0e-4d8b-9c11-5a7e2b9c4d01",
+      "rankSlug": "5-kyu",
+      "kihon": [
+        {
+          "id": "bfcaac59-f9fb-42b3-877d-98d466008eb9",
+          "name": "Sentai shajō geri"
+        },
+        {
+          "id": "a0b654c5-4563-42e5-9c0e-6aadfa245894",
+          "name": "Sentai kaijō geri"
+        },
+        {
+          "id": "bff25fe4-d571-4a5a-9998-f00900dfec7f",
+          "name": "Untai oshi kuzushi"
+        },
+        {
+          "id": "acc7d3eb-0712-40a5-b0a9-f6f97ecd915b",
+          "name": "Untai hien geri"
+        },
+        {
+          "id": "05a042da-9379-49a8-9f35-f572e76d5318",
+          "name": "Nentai hangetsu ate"
+        },
+        {
+          "id": "8e7d2e8c-1b82-4dd1-b9dc-ab23d2edf1cb",
+          "name": "Tentai hai koten geri"
+        }
+      ],
+      "patterns": [
+        {
+          "id": "04eb2332-754d-43eb-a076-72eb50a9ec6c",
+          "name": "Jodan no kobo"
+        },
+        {
+          "id": "b345cf46-49e1-4285-b1b1-56420ccecd58",
+          "name": "Ohen fubi"
+        }
+      ],
+      "hokeiGroups": [
+        {
+          "pickCount": 2,
+          "patterns": [
+            {
+              "id": "c7e5c490-8f23-47e8-b498-2c9c93b8b52c",
+              "name": "Sentai no hokei"
+            },
+            {
+              "id": "c5f90980-4984-4e8d-af72-d95014edbd85",
+              "name": "Senin no hokei"
+            }
+          ],
+          "labelSv": "Sentai och senin no hokei",
+          "labelEn": "Sentai and senin no hokei",
+          "labelFi": "Sentai ja senin no hokei"
+        }
+      ],
+      "jissenMinutes": null,
+      "minMonthsSincePreviousRank": null
+    },
+    {
+      "setId": "8f3d6a52-6f0e-4d8b-9c11-5a7e2b9c4d01",
+      "rankSlug": "4-kyu",
+      "kihon": [
+        {
+          "id": "5ba316b7-3e2b-4a85-96fc-2873cf2dcc2a",
+          "name": "Sentai harai kuzushi"
+        },
+        {
+          "id": "557b64e8-52b6-4351-8fe7-7d50a37e0193",
+          "name": "Untai tobi yoko geri"
+        },
+        {
+          "id": "6fd69032-d1a2-41b2-b097-1a189ae28472",
+          "name": "Hentai kake kuzushi"
+        },
+        {
+          "id": "3a7440e1-876d-4480-8128-325770af2551",
+          "name": "Nentai jun ashi garami"
+        },
+        {
+          "id": "d3bad0e3-2613-4a8d-8efe-fdf7fcaa474a",
+          "name": "Tentai ude sokuten zuki"
+        },
+        {
+          "id": "8e38b89c-b16e-4e3d-b014-621d4e64dd6a",
+          "name": "Ude zenten"
+        }
+      ],
+      "patterns": [
+        {
+          "id": "cefeb95d-c7fe-4d26-821e-00272a2851a3",
+          "name": "Chudan no kobo"
+        },
+        {
+          "id": "5f231465-38a6-4a12-bb70-5fefb9b4482a",
+          "name": "Seimei no hokei"
+        }
+      ],
+      "hokeiGroups": [
+        {
+          "pickCount": 2,
+          "patterns": [
+            {
+              "id": "007b98b3-5d9d-4461-8e0d-4aa72e2ac9ad",
+              "name": "Untai no hokei"
+            },
+            {
+              "id": "dba5b104-0a56-442e-8ce2-ce5c9d049a1c",
+              "name": "Unin no hokei"
+            }
+          ],
+          "labelSv": "Untai och unin no hokei",
+          "labelEn": "Untai and unin no hokei",
+          "labelFi": "Untai ja unin no hokei"
+        }
+      ],
+      "jissenMinutes": null,
+      "minMonthsSincePreviousRank": null
+    },
+    {
+      "setId": "8f3d6a52-6f0e-4d8b-9c11-5a7e2b9c4d01",
+      "rankSlug": "3-kyu",
+      "kihon": [
+        {
+          "id": "1594a69d-5db9-4416-a742-e0688d9d86fe",
+          "name": "Sentai shutō uchi"
+        },
+        {
+          "id": "eac50036-1c5e-47bd-b3f0-9b805f4f28fd",
+          "name": "Untai gajō geri"
+        },
+        {
+          "id": "c05b0450-1879-4144-9cc5-1e2bbf20d684",
+          "name": "Untai tobi ushiro geri"
+        },
+        {
+          "id": "824e8438-ccda-4265-9ebe-1ead982f3ba1",
+          "name": "Nentai gyaku ashi garami"
+        },
+        {
+          "id": "559501c2-224e-4314-aa2c-8ed52b64b19d",
+          "name": "Tentai ude sokuten geri"
+        },
+        {
+          "id": "6f0323a6-3fa2-4c45-94ee-b551e6162e40",
+          "name": "Ude koten"
+        }
+      ],
+      "patterns": [
+        {
+          "id": "d502a805-51e9-4f6a-aa0e-902adf88c362",
+          "name": "Gedan no kobo"
+        },
+        {
+          "id": "465a3cd4-af43-4894-b244-54811fdc3f6c",
+          "name": "Unsoku gorendo"
+        }
+      ],
+      "hokeiGroups": [
+        {
+          "pickCount": 1,
+          "patterns": [
+            {
+              "id": "2b59c2a8-70da-496b-a211-e35c7e1a67cb",
+              "name": "Hentai no hokei"
+            },
+            {
+              "id": "a53f85f8-325f-4bbe-940b-49f5d496ae61",
+              "name": "Henin no hokei"
+            }
+          ],
+          "labelSv": "Hentai eller henin no hokei",
+          "labelEn": "Hentai or henin no hokei",
+          "labelFi": "Hentai tai henin no hokei"
+        }
+      ],
+      "jissenMinutes": null,
+      "minMonthsSincePreviousRank": null
+    },
+    {
+      "setId": "8f3d6a52-6f0e-4d8b-9c11-5a7e2b9c4d01",
+      "rankSlug": "2-kyu",
+      "kihon": [
+        {
+          "id": "8b9accab-98a9-4c94-811c-7b25b5320e30",
+          "name": "Sentai haimen dori"
+        },
+        {
+          "id": "56d29c14-bf49-40e0-ad39-35dc17ccc3eb",
+          "name": "Untai fujō geri"
+        },
+        {
+          "id": "cbf0547f-2b2d-4acd-a00d-9ce4ed2c846e",
+          "name": "Hentai kaeshi geri"
+        },
+        {
+          "id": "84383431-62a4-4608-abdd-897f52f059e3",
+          "name": "Nentai gyaku do garami"
+        },
+        {
+          "id": "79aede7a-15eb-4a0f-aee8-cd1abe930667",
+          "name": "Chu koten"
+        }
+      ],
+      "patterns": [
+        {
+          "id": "d502a805-51e9-4f6a-aa0e-902adf88c362",
+          "name": "Gedan no kobo"
+        }
+      ],
+      "hokeiGroups": [
+        {
+          "pickCount": 2,
+          "patterns": [
+            {
+              "id": "2b59c2a8-70da-496b-a211-e35c7e1a67cb",
+              "name": "Hentai no hokei"
+            },
+            {
+              "id": "a53f85f8-325f-4bbe-940b-49f5d496ae61",
+              "name": "Henin no hokei"
+            }
+          ],
+          "labelSv": "Hentai och henin no hokei",
+          "labelEn": "Hentai and henin no hokei",
+          "labelFi": "Hentai ja henin no hokei"
+        }
+      ],
+      "jissenMinutes": null,
+      "minMonthsSincePreviousRank": null
+    },
+    {
+      "setId": "8f3d6a52-6f0e-4d8b-9c11-5a7e2b9c4d01",
+      "rankSlug": "1-kyu",
+      "kihon": [
+        {
+          "id": "2115b98e-0728-452c-8226-7bea86b8c547",
+          "name": "Sentai shittō ate"
+        },
+        {
+          "id": "818666f9-1234-424b-9ebc-c823866b03b8",
+          "name": "Sentai tetchū ate"
+        },
+        {
+          "id": "5445b3fa-8075-4b78-91d2-abdc1ccf766c",
+          "name": "Untai zenmen dori"
+        },
+        {
+          "id": "34beabd8-9034-4cd2-ae41-18ef83ff5fe5",
+          "name": "Untai tobi senjo geri"
+        },
+        {
+          "id": "36515853-8753-4ce4-a6f0-028b19178874",
+          "name": "Hentai nage kuzushi"
+        },
+        {
+          "id": "66b7b895-5e2f-4ccf-9ace-ab23094520f5",
+          "name": "Nentai jun do garami"
+        }
+      ],
+      "patterns": [],
+      "hokeiGroups": [
+        {
+          "pickCount": 1,
+          "patterns": [
+            {
+              "id": "97d152fc-8599-441e-8911-e0b1ddbd0727",
+              "name": "Nentai no hokei"
+            },
+            {
+              "id": "77729d48-0f52-4be1-a0fb-b87444140e81",
+              "name": "Nenin no hokei"
+            }
+          ],
+          "labelSv": "Nentai eller nenin no hokei",
+          "labelEn": "Nentai or nenin no hokei",
+          "labelFi": "Nentai tai nenin no hokei"
+        }
+      ],
+      "jissenMinutes": null,
+      "minMonthsSincePreviousRank": null
+    },
+    {
+      "setId": "8f3d6a52-6f0e-4d8b-9c11-5a7e2b9c4d01",
+      "rankSlug": "1-dan",
+      "kihon": [],
+      "patterns": [],
+      "hokeiGroups": [],
+      "jissenMinutes": null,
+      "minMonthsSincePreviousRank": 12
+    },
+    {
+      "setId": "8f3d6a52-6f0e-4d8b-9c11-5a7e2b9c4d01",
+      "rankSlug": "2-dan",
+      "kihon": [],
+      "patterns": [],
+      "hokeiGroups": [],
+      "jissenMinutes": null,
+      "minMonthsSincePreviousRank": 24
+    },
+    {
+      "setId": "8f3d6a52-6f0e-4d8b-9c11-5a7e2b9c4d01",
+      "rankSlug": "3-dan",
+      "kihon": [],
+      "patterns": [],
+      "hokeiGroups": [],
+      "jissenMinutes": null,
+      "minMonthsSincePreviousRank": 36
+    },
+    {
+      "setId": "8f3d6a52-6f0e-4d8b-9c11-5a7e2b9c4d01",
+      "rankSlug": "4-dan",
+      "kihon": [],
+      "patterns": [],
+      "hokeiGroups": [],
+      "jissenMinutes": null,
+      "minMonthsSincePreviousRank": 48
+    },
+    {
+      "setId": "8f3d6a52-6f0e-4d8b-9c11-5a7e2b9c4d01",
+      "rankSlug": "5-dan",
+      "kihon": [],
+      "patterns": [],
+      "hokeiGroups": [],
+      "jissenMinutes": null,
+      "minMonthsSincePreviousRank": 60
+    },
+    {
+      "setId": "8f3d6a52-6f0e-4d8b-9c11-5a7e2b9c4d01",
+      "rankSlug": "6-dan",
+      "kihon": [],
+      "patterns": [],
+      "hokeiGroups": [],
+      "jissenMinutes": null,
+      "minMonthsSincePreviousRank": 72
+    },
+    {
+      "setId": "8f3d6a52-6f0e-4d8b-9c11-5a7e2b9c4d01",
+      "rankSlug": "7-dan",
+      "kihon": [],
+      "patterns": [],
+      "hokeiGroups": [],
+      "jissenMinutes": null,
+      "minMonthsSincePreviousRank": 96
+    },
+    {
+      "setId": "8f3d6a52-6f0e-4d8b-9c11-5a7e2b9c4d01",
+      "rankSlug": "8-dan",
+      "kihon": [],
+      "patterns": [],
+      "hokeiGroups": [],
+      "jissenMinutes": null,
+      "minMonthsSincePreviousRank": 120
+    }
+  ]
+}
