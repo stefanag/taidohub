@@ -14,15 +14,15 @@ jobs:
     name: lint • typecheck • arch • build • test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
         with: { version: 11.1.2 }
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         with:
           path: .turbo
           key: turbo-${{ runner.os }}-${{ github.sha }}
@@ -30,7 +30,7 @@ jobs:
       - run: pnpm turbo run lint typecheck arch build test
       - name: Build Storybook
         run: pnpm --filter frontend build-storybook
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: storybook
           path: apps/frontend/storybook-static
@@ -62,10 +62,10 @@ jobs:
       BETTER_AUTH_URL: http://localhost:3001
       NODE_ENV: test
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
         with: { version: 11.1.2 }
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: pnpm
@@ -79,10 +79,10 @@ jobs:
     name: openapi spec is committed
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
         with: { version: 11.1.2 }
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: pnpm
@@ -93,7 +93,7 @@ jobs:
         run: |
           git diff --exit-code packages/contracts/openapi/ \
             || (echo "::error::openapi spec is stale — run 'pnpm --filter backend openapi:generate' and commit." && exit 1)
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: openapi
           path: packages/contracts/openapi/
