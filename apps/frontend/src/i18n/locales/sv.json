@@ -768,7 +768,8 @@
     "atHighest": "Du har nått den högsta graden",
     "noRankYet": "Ingen graderingshistorik än — börja följa framstegen mot din första grad.",
     "loading": "Laddar…",
-    "empty": "Ingen framsteg registrerad än"
+    "empty": "Ingen framsteg registrerad än",
+    "noRequirements": "Inga graderingskrav är inlagda för den här graden än."
   },
   "oauthConsent": {
     "title": "Anslut en AI-klient",

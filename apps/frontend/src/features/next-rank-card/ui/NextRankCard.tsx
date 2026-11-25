@@ -7,6 +7,7 @@ import { useSession } from '@/entities/me';
 import { useProgressListQuery } from '@/entities/progress';
 import { useRequirementsForUserQuery, useRequirementsQuery } from '@/entities/rank-requirement';
 import { useStudentProgressQuery } from '@/entities/student';
+import { rankLabel } from '@/shared/lib/rank-label';
 import { calculateRankProgress } from '@/shared/lib/rankProgress';
 import { Card, CardContent, CardHeader, CardTitle, Progress } from '@/shared/ui';
 
@@ -25,7 +26,7 @@ export interface NextRankCardProps {
  * distinct situations and must not share copy (Task 25 final review).
  */
 export function NextRankCard({ userId: userIdProp }: NextRankCardProps): React.ReactElement {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const session = useSession();
   const actorId = session.data?.user?.id ?? '';
   const userId = userIdProp ?? actorId;
@@ -115,14 +116,27 @@ export function NextRankCard({ userId: userIdProp }: NextRankCardProps): React.R
           </p>
         ) : (
           <>
-            <Progress value={pct} />
-            <p className="text-sm text-on-surface-variant">
-              {t('nextRank.caption', {
-                defaultValue: '{{ready}}/{{total}} requirements ready',
-                ready,
-                total,
-              })}
+            <p className="text-sm font-medium" data-testid="next-rank-name">
+              {rankLabel(nextRank, i18n.language)}
             </p>
+            {total === 0 ? (
+              <p className="text-sm text-on-surface-variant">
+                {t('nextRank.noRequirements', {
+                  defaultValue: 'No grading requirements have been entered for this rank yet.',
+                })}
+              </p>
+            ) : (
+              <>
+                <Progress value={pct} />
+                <p className="text-sm text-on-surface-variant">
+                  {t('nextRank.caption', {
+                    defaultValue: '{{ready}}/{{total}} requirements ready',
+                    ready,
+                    total,
+                  })}
+                </p>
+              </>
+            )}
           </>
         )}
       </CardContent>

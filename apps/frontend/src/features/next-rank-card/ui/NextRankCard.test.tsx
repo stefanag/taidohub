@@ -197,6 +197,44 @@ describe('<NextRankCard>', () => {
     expect(bar).toHaveAttribute('aria-valuenow', '50');
   });
 
+  it('names the next rank', () => {
+    useNextRankSpy.mockReturnValue({
+      currentRank: null,
+      nextRank: NEXT_RANK,
+      isPending: false,
+      isError: false,
+      error: null,
+    });
+    requirementsSpy.mockReturnValue({
+      data: makeRequirements({ kihon: ['t-1'] }),
+      isPending: false,
+      isError: false,
+    });
+
+    renderCard();
+
+    expect(screen.getByTestId('next-rank-name')).toHaveTextContent('Kukyu — 9th Kyu');
+  });
+
+  it('says no requirements are entered, instead of an empty 0/0 bar', () => {
+    useNextRankSpy.mockReturnValue({
+      currentRank: null,
+      nextRank: NEXT_RANK,
+      isPending: false,
+      isError: false,
+      error: null,
+    });
+    requirementsSpy.mockReturnValue({ data: EMPTY_REQUIREMENTS, isPending: false, isError: false });
+
+    renderCard();
+
+    expect(
+      screen.getByText('No grading requirements have been entered for this rank yet.'),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
+    expect(screen.queryByText('0/0 requirements ready')).not.toBeInTheDocument();
+  });
+
   it('renders the "highest rank" empty state when nextRank is null', () => {
     useNextRankSpy.mockReturnValue({
       currentRank: NEXT_RANK,
