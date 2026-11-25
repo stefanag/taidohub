@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { ListAuditLogQuery } from '@/entities/audit-log';
+
 import { AuditLogFilters } from '@/widgets/audit-log-filters';
 import { AuditLogTable } from '@/widgets/audit-log-table';
 

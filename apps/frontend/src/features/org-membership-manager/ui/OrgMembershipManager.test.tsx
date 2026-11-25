@@ -4,14 +4,17 @@ import * as React from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { OrgMembershipManager } from './OrgMembershipManager.js';
+
 import type {
   ListMembershipsResponse,
   OrganisationMembership,
 } from '@/entities/membership';
+
+import i18n from '@/i18n';
 import { HttpError } from '@/shared/api';
 import { AbilityProvider, type AppAbility } from '@/shared/lib/casl';
 
-import i18n from '@/i18n';
 
 const ORG_ID = 'org-1';
 const ACTOR_ID = 'actor-user';
@@ -46,8 +49,6 @@ vi.mock('@/entities/membership', () => ({
 vi.mock('@/features/auth-by-email', () => ({
   useSession: () => ({ data: { user: { id: ACTOR_ID, role: 'sysadmin' } } }),
 }));
-
-import { OrgMembershipManager } from './OrgMembershipManager.js';
 
 function makeAbility(opts: {
   canCreate?: boolean;

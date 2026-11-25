@@ -1,13 +1,14 @@
 import { randomUUID } from 'node:crypto';
 
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import type { SetInitialPasswordInput } from '@repo/contracts/users';
 import { and, eq } from 'drizzle-orm';
 
 import { BETTER_AUTH, type Auth } from '../../infrastructure/auth/better-auth.js';
 import { VerificationTokenService } from '../../infrastructure/auth/verification-token.service.js';
 import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
 import { account, user } from '../../infrastructure/database/schema/index.js';
+
+import type { SetInitialPasswordInput } from '@repo/contracts/users';
 
 /** Token-identifier prefixes the set-password flow accepts. */
 const TOKEN_PREFIXES = ['invite:', 'admin-reset:'] as const;

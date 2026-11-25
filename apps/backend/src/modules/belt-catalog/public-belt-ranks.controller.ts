@@ -1,6 +1,6 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
-import type { PublicRankResponse } from '@repo/contracts/ranks';
+
 
 import { ErrorEnvelopeDto } from '../../common/dto/error-envelope.dto.js';
 import { ApiEndpoint } from '../../common/swagger/api-endpoint.decorator.js';
@@ -8,6 +8,8 @@ import { Public } from '../../infrastructure/auth/public.decorator.js';
 
 import { BeltRanksService } from './belt-ranks.service.js';
 import { PublicRankResponseDto } from './dto/public-rank-response.dto.js';
+
+import type { PublicRankResponse } from '@repo/contracts/ranks';
 
 @ApiTags('public-ranks')
 @Controller('public/ranks')

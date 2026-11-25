@@ -4,12 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import type {
-  BeltRank,
-  CreateBeltRankInput,
-  PublicRankResponse,
-  UpdateBeltRankInput,
-} from '@repo/contracts/ranks';
+
 
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import {
@@ -21,6 +16,13 @@ import { RequirementSetsService } from '../grading-requirements/requirement-sets
 
 import { BeltRankPatch, BeltRanksRepository } from './belt-ranks.repository.js';
 import { LookupTableService } from './lookup-table.service.js';
+
+import type {
+  BeltRank,
+  CreateBeltRankInput,
+  PublicRankResponse,
+  UpdateBeltRankInput,
+} from '@repo/contracts/ranks';
 
 /**
  * CRUD for `belt_ranks` — the bespoke member of the belt-catalog

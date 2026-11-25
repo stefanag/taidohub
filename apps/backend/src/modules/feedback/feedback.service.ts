@@ -1,10 +1,19 @@
 import {
   ConflictException,
   ForbiddenException,
-  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+
+import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
+import {
+  type DbFeedbackComment,
+  type DbFeedbackReaction,
+  type DbFeedbackThread,
+} from '../../infrastructure/database/schema/index.js';
+
+import { FeedbackAccessPolicy } from './feedback.access-policy.js';
+import { FeedbackRepository } from './feedback.repository.js';
 
 import type {
   CreateFeedbackCommentInput,
@@ -19,16 +28,6 @@ import type {
   SetFeedbackReactionInput,
   UpdateFeedbackCommentInput,
 } from '@repo/contracts/feedback';
-
-import {
-  type DbFeedbackComment,
-  type DbFeedbackReaction,
-  type DbFeedbackThread,
-} from '../../infrastructure/database/schema/index.js';
-import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
-
-import { FeedbackAccessPolicy } from './feedback.access-policy.js';
-import { FeedbackRepository } from './feedback.repository.js';
 
 const EDIT_WINDOW_MS = 24 * 60 * 60 * 1000;
 
@@ -372,6 +371,5 @@ export class FeedbackService {
    * later (e.g. a unique-violation race-condition handler for thread
    * upsert).
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private readonly _conflictReserved = ConflictException;
 }

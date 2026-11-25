@@ -1,12 +1,4 @@
-import type { CreatePatternInput } from '@repo/contracts/patterns';
 import { describe, expect, it, vi } from 'vitest';
-
-vi.mock('@/shared/api', async (orig) => {
-  const actual = await orig<typeof import('@/shared/api')>();
-  return { ...actual, httpClient: vi.fn() };
-});
-
-import { httpClient } from '@/shared/api';
 
 import {
   createPattern,
@@ -14,6 +6,15 @@ import {
   getPattern,
   getPatterns,
 } from './pattern.api.js';
+
+import type { CreatePatternInput } from '@repo/contracts/patterns';
+
+import { httpClient } from '@/shared/api';
+
+vi.mock('@/shared/api', async (orig) => {
+  const actual = await orig<typeof import('@/shared/api')>();
+  return { ...actual, httpClient: vi.fn() };
+});
 
 const STUB_PATTERN = {
   id: '550e8400-e29b-41d4-a716-446655440000',

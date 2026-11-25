@@ -48,7 +48,6 @@ export function TechniqueListItem({
     resolved === 'sv' || resolved === 'fi' ? resolved : 'en';
 
   const localised = pickLocalisedName(technique, lang);
-  const showRomaji = technique.nameRomaji && technique.nameRomaji !== localised;
   const showJa = Boolean(technique.nameJa);
 
   const liClass = onClick

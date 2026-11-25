@@ -1,6 +1,7 @@
+import { Input } from './input.js';
+
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Input } from './input.js';
 
 const meta = {
   title: 'Shared/Input',

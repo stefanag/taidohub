@@ -1,9 +1,10 @@
 import { createRoute, redirect } from '@tanstack/react-router';
 
+import { appLayoutRoute } from './_app.js';
+
 import { authClient } from '@/features/auth-by-email';
 import { AdminBeltCatalogPage } from '@/pages/admin-belt-catalog';
 
-import { appLayoutRoute } from './_app.js';
 
 /**
  * Admin-only route mounting the belt-catalog hub. Sits under `_app` so the

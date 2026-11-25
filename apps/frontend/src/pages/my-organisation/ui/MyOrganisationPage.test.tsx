@@ -4,6 +4,8 @@ import * as React from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { MyOrganisationPage } from './MyOrganisationPage.js';
+
 import type { Membership as MeMembership } from '@/entities/me';
 import type {
   ListMembershipsResponse,
@@ -14,9 +16,10 @@ import type {
   Organisation,
 } from '@/entities/organisation';
 import type { OrganisationStats } from '@repo/contracts/statistics';
-import { AbilityProvider, type AppAbility } from '@/shared/lib/casl';
 
 import i18n from '@/i18n';
+import { AbilityProvider, type AppAbility } from '@/shared/lib/casl';
+
 
 // jsdom missing pointer APIs for Radix Dialog/Sheet/Select/Tabs.
 window.HTMLElement.prototype.hasPointerCapture ??= vi.fn(() => false);
@@ -100,8 +103,6 @@ vi.mock('@/entities/statistic', () => ({
 vi.mock('@/features/auth-by-email', () => ({
   useSession: () => ({ data: { user: { id: ACTOR_ID, role: 'sysadmin' } } }),
 }));
-
-import { MyOrganisationPage } from './MyOrganisationPage.js';
 
 function org(over: Partial<Organisation> = {}): Organisation {
   return {

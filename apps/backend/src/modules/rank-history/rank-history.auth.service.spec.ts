@@ -1,5 +1,5 @@
 import { Test } from '@nestjs/testing';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { DRIZZLE } from '../../infrastructure/database/client.js';
 import { type DbRankHistory } from '../../infrastructure/database/schema/index.js';

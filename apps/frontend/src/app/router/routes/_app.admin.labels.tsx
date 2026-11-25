@@ -1,9 +1,10 @@
 import { createRoute, redirect } from '@tanstack/react-router';
 
+import { appLayoutRoute } from './_app.js';
+
 import { authClient } from '@/features/auth-by-email';
 import { AdminLabelsPage } from '@/pages/admin-labels';
 
-import { appLayoutRoute } from './_app.js';
 
 /**
  * Admin-only route mounting the system-wide labels admin page. Sysadmin

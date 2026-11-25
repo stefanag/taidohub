@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import type { ClassificationCategory } from '@repo/contracts/classification-category';
 
 import { Button } from './button.js';
 import { Label } from './label.js';
+
+import type { ClassificationCategory } from '@repo/contracts/classification-category';
 
 /**
  * A flex-wrapped, chip-style multi-selector backed by a list of taxonomy

@@ -2,6 +2,8 @@ import { MessageCircle } from 'lucide-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { FeedbackThread } from './FeedbackThread.js';
+
 import type { FeedbackEntityType } from '@repo/contracts/feedback';
 
 import { FeatureFlag } from '@/shared/lib/feature-flags';
@@ -15,7 +17,6 @@ import {
   SheetTrigger,
 } from '@/shared/ui/sheet.js';
 
-import { FeedbackThread } from './FeedbackThread.js';
 
 export interface FeedbackThreadSheetProps {
   entityType: FeedbackEntityType;

@@ -2,6 +2,9 @@ import { useQuery } from '@tanstack/react-query';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { OrgMembershipEditor } from './OrgMembershipEditor.js';
+
+import { useSession } from '@/entities/me';
 import {
   listMembershipsQueryOptions,
   useCreateMembership,
@@ -9,12 +12,10 @@ import {
   type MembershipRole,
   type OrganisationMembership,
 } from '@/entities/membership';
-import { useSession } from '@/entities/me';
 import { HttpError } from '@/shared/api';
 import { AbilityContext } from '@/shared/lib/casl';
 import { Button } from '@/shared/ui';
 
-import { OrgMembershipEditor } from './OrgMembershipEditor.js';
 
 export interface OrgMembershipManagerProps {
   organisationId: string;

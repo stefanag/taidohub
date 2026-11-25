@@ -14,14 +14,15 @@ import {
   verifyRankHistory,
 } from '../api/rank-history.api.js';
 
-import { refreshSession } from '@/entities/me';
-
 import type {
   CreateRankHistoryInput,
   GradingHistoryResponse,
   RankHistory,
   UpdateRankHistoryInput,
 } from '@repo/contracts/rank-history';
+
+import { refreshSession } from '@/entities/me';
+
 
 /**
  * Cache key registry for the rank-history entity. `unified(userId)` keys the

@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import type { GradingRequirements, Progress } from '@repo/contracts';
+
 import { calculateRankProgress } from './rankProgress.js';
+
+import type { GradingRequirements, Progress } from '@repo/contracts';
 
 const empty: GradingRequirements = {
   rankId: 'r', setId: null,
@@ -21,18 +23,18 @@ describe('calculateRankProgress', () => {
   });
 
   it('counts grading_ready techniques as ready', () => {
-    const techProg: Progress[] = [{ contentType: 'technique', techniqueId: 't1', status: 'grading_ready' } as any];
+    const techProg: Progress[] = [{ contentType: 'technique', techniqueId: 't1', status: 'grading_ready' } as never];
     expect(calculateRankProgress({ ...empty, kihon: ['t1', 't2'] }, techProg, [])).toEqual({ ready: 1, total: 2, pct: 50 });
   });
 
   it('flattens hokei group patterns into total', () => {
-    const r: GradingRequirements = { ...empty, hokeiGroups: [{ id: 'g1', groupOrder: 0, pickCount: 1, isTested: false, patternIds: ['p1', 'p2'] }] as any };
+    const r: GradingRequirements = { ...empty, hokeiGroups: [{ id: 'g1', groupOrder: 0, pickCount: 1, isTested: false, patternIds: ['p1', 'p2'] }] as never };
     expect(calculateRankProgress(r, [], [])).toEqual({ ready: 0, total: 2, pct: 0 });
   });
 
   it('rounds percentage', () => {
     const r: GradingRequirements = { ...empty, kihon: ['t1', 't2', 't3'] };
-    const tp: Progress[] = [{ contentType: 'technique', techniqueId: 't1', status: 'grading_ready' } as any];
+    const tp: Progress[] = [{ contentType: 'technique', techniqueId: 't1', status: 'grading_ready' } as never];
     expect(calculateRankProgress(r, tp, []).pct).toBe(33);
   });
 });

@@ -8,7 +8,7 @@ describe('ConsoleEmailService', () => {
   });
 
   it('logs the set-password URL when sending an invite', async () => {
-    const spy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const spy = vi.spyOn(console, 'info').mockImplementation(() => {});
     const service = new ConsoleEmailService();
     await service.sendInvite({
       to: 'new@example.com',
@@ -23,7 +23,7 @@ describe('ConsoleEmailService', () => {
   });
 
   it('logs the reset URL when sending a self-service reset', async () => {
-    const spy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const spy = vi.spyOn(console, 'info').mockImplementation(() => {});
     const service = new ConsoleEmailService();
     await service.sendPasswordReset({
       to: 'u@example.com',
@@ -35,7 +35,7 @@ describe('ConsoleEmailService', () => {
   });
 
   it('logs the reset URL when sending an admin-triggered reset', async () => {
-    const spy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const spy = vi.spyOn(console, 'info').mockImplementation(() => {});
     const service = new ConsoleEmailService();
     await service.sendAdminPasswordReset({
       to: 'u@example.com',

@@ -1,10 +1,10 @@
+import { ShogoTitlesRoutes } from '@repo/contracts/routes';
 import {
   ShogoTitleSchema,
   type ShogoTitle,
   type CreateShogoTitleInput,
   type UpdateShogoTitleInput,
 } from '@repo/contracts/shogo-titles';
-import { ShogoTitlesRoutes } from '@repo/contracts/routes';
 
 import { httpClient } from '@/shared/api';
 

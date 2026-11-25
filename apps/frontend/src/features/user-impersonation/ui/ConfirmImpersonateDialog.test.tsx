@@ -5,6 +5,8 @@ import * as React from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { ConfirmImpersonateDialog } from './ConfirmImpersonateDialog.js';
+
 import i18n from '@/i18n';
 
 const startSpy = vi.fn().mockResolvedValue(undefined);
@@ -20,8 +22,6 @@ vi.mock('@/shared/api', async (orig) => {
     },
   };
 });
-
-import { ConfirmImpersonateDialog } from './ConfirmImpersonateDialog.js';
 
 function renderDialog() {
   const onOpenChange = vi.fn();

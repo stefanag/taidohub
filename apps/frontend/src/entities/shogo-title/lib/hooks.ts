@@ -4,11 +4,6 @@ import {
   useQueryClient,
   type UseMutationOptions,
 } from '@tanstack/react-query';
-import type {
-  ShogoTitle,
-  CreateShogoTitleInput,
-  UpdateShogoTitleInput,
-} from '@repo/contracts/shogo-titles';
 
 import {
   createShogoTitle,
@@ -16,6 +11,13 @@ import {
   getShogoTitles,
   updateShogoTitle,
 } from '../api/shogo-title.api.js';
+
+import type {
+  ShogoTitle,
+  CreateShogoTitleInput,
+  UpdateShogoTitleInput,
+} from '@repo/contracts/shogo-titles';
+
 
 export const shogoTitleKeys = {
   all: ['shogo-titles'] as const,

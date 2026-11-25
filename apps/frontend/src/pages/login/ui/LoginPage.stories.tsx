@@ -1,6 +1,7 @@
+import { LoginPage } from './LoginPage.js';
+
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { LoginPage } from './LoginPage.js';
 
 const meta = {
   title: 'Pages/Login',

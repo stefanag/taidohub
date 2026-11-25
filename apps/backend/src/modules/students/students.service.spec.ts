@@ -1,20 +1,21 @@
 import { AbilityBuilder, createMongoAbility } from '@casl/ability';
 import { ForbiddenException } from '@nestjs/common';
-import type { StudentRosterRow } from '@repo/contracts/students';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
+import { type AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
 import { type AppAbility } from '../../infrastructure/ability/ability.types.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import {
-  ProgressRepository,
+  type ProgressRepository,
   type ProgressRow,
 } from '../progress/progress.repository.js';
-import { ProgressService } from '../progress/progress.service.js';
+import { type ProgressService } from '../progress/progress.service.js';
 
 import { StudentAbilityRules } from './students.abilities.js';
-import { StudentsRepository } from './students.repository.js';
+import { type StudentsRepository } from './students.repository.js';
 import { StudentsService } from './students.service.js';
+
+import type { StudentRosterRow } from '@repo/contracts/students';
 
 // ── Shared fixtures ────────────────────────────────────────────────────
 function makeUser(overrides: Partial<AuthenticatedUser> = {}): AuthenticatedUser {

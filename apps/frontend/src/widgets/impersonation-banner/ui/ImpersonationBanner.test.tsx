@@ -4,6 +4,8 @@ import * as React from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { ImpersonationBanner } from './ImpersonationBanner.js';
+
 import * as authApi from '@/features/auth-by-email';
 import i18n from '@/i18n';
 
@@ -11,8 +13,6 @@ const stopMutate = vi.fn();
 vi.mock('@/features/user-impersonation', () => ({
   useStopImpersonating: () => ({ mutate: stopMutate, isPending: false }),
 }));
-
-import { ImpersonationBanner } from './ImpersonationBanner.js';
 
 function renderBanner(): ReturnType<typeof render> {
   const qc = new QueryClient();

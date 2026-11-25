@@ -1,10 +1,11 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
 import { FeatureFlagMapSchema } from '@repo/contracts/feature-flags';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import * as React from 'react';
+
+import { DEFAULT_FLAGS, type FeatureFlagMap } from './flags.js';
 
 import { httpClient } from '@/shared/api';
 
-import { DEFAULT_FLAGS, type FeatureFlagMap } from './flags.js';
 
 /**
  * Context that exposes the resolved `FeatureFlagMap`. Defaults to the all-off

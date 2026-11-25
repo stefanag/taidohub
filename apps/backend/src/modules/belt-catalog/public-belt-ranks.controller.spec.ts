@@ -1,10 +1,11 @@
 import { Test } from '@nestjs/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import type { PublicRankResponse } from '@repo/contracts/ranks';
 
 import { BeltRanksService } from './belt-ranks.service.js';
 import { PublicBeltRanksController } from './public-belt-ranks.controller.js';
+
+import type { PublicRankResponse } from '@repo/contracts/ranks';
 
 /**
  * The public controller is one endpoint — `GET /public/ranks/:slug`,

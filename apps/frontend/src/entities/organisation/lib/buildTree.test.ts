@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { buildTree, type OrganisationNode } from './buildTree.js';
+
 import type { Organisation } from '@repo/contracts/organisations';
 
 const ROW = (id: string, parentId: string | null, nameEn: string): Organisation => ({

@@ -10,17 +10,19 @@ import { Reflector } from '@nestjs/core';
 import { fromNodeHeaders } from 'better-auth/node';
 import { eq } from 'drizzle-orm';
 import { type Request } from 'express';
-import type { Role } from '@repo/contracts/users';
-import type { MembershipRole } from '@repo/contracts/memberships';
+
 
 import { DRIZZLE, type DrizzleDb } from '../database/client.js';
 import { organisationMembership, user as userTable } from '../database/schema/index.js';
 
 import { AuthUserCache, type CachedAuthUser } from './auth-user.cache.js';
+import { type AuthenticatedUser } from './auth.types.js';
 import { type Auth, BETTER_AUTH } from './better-auth.js';
 import { IS_PUBLIC_KEY } from './public.decorator.js';
-import { type AuthenticatedUser } from './auth.types.js';
 import { UserContextService } from './user-context.service.js';
+
+import type { MembershipRole } from '@repo/contracts/memberships';
+import type { Role } from '@repo/contracts/users';
 
 /**
  * Global guard that turns the better-auth session cookie into `req.user`.

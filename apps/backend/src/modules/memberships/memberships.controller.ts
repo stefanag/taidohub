@@ -21,16 +21,13 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import type {
-  ListMembershipsResponse,
-  OrganisationMembership,
-} from '@repo/contracts/memberships';
+
 
 import { ErrorEnvelopeDto } from '../../common/dto/error-envelope.dto.js';
 import { ApiEndpoint } from '../../common/swagger/api-endpoint.decorator.js';
-import { CurrentUser } from '../../infrastructure/auth/current-user.decorator.js';
-import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import { CheckAbility } from '../../infrastructure/ability/check-ability.decorator.js';
+import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
+import { CurrentUser } from '../../infrastructure/auth/current-user.decorator.js';
 
 import { CreateMembershipDto } from './dto/create-membership.dto.js';
 import { DeleteMembershipQueryDto } from './dto/delete-membership-query.dto.js';
@@ -39,6 +36,11 @@ import { ListMembershipsResponseDto } from './dto/list-memberships-response.dto.
 import { OrganisationMembershipDto } from './dto/organisation-membership.dto.js';
 import { UpdateMembershipDto } from './dto/update-membership.dto.js';
 import { MembershipsService } from './memberships.service.js';
+
+import type {
+  ListMembershipsResponse,
+  OrganisationMembership,
+} from '@repo/contracts/memberships';
 
 @ApiTags('memberships')
 @ApiCookieAuth('session')

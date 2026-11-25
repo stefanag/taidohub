@@ -1,12 +1,13 @@
 import { Test } from '@nestjs/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import type { BeltRank } from '@repo/contracts/ranks';
 
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 
 import { BeltRanksController } from './belt-ranks.controller.js';
 import { BeltRanksService } from './belt-ranks.service.js';
+
+import type { BeltRank } from '@repo/contracts/ranks';
 
 /**
  * BeltRanks is the bespoke one — its service carries level-collision

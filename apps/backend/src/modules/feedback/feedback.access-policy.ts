@@ -1,14 +1,15 @@
 import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 
-import type { FeedbackEntityType } from '@repo/contracts/feedback';
 
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
-import { rankHistory } from '../../infrastructure/database/schema/rank-history.js';
 import { type DbFeedbackThread } from '../../infrastructure/database/schema/index.js';
+import { rankHistory } from '../../infrastructure/database/schema/rank-history.js';
 
 import { FeedbackRepository } from './feedback.repository.js';
+
+import type { FeedbackEntityType } from '@repo/contracts/feedback';
 
 /**
  * Access policy for the instructor-feedback feature.

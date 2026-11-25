@@ -4,11 +4,6 @@ import {
   useQueryClient,
   type UseMutationOptions,
 } from '@tanstack/react-query';
-import type {
-  BeltRank,
-  CreateBeltRankInput,
-  UpdateBeltRankInput,
-} from '@repo/contracts/ranks';
 
 import {
   createBeltRank,
@@ -18,6 +13,13 @@ import {
   getPublicRank,
   updateBeltRank,
 } from '../api/belt-rank.api.js';
+
+import type {
+  BeltRank,
+  CreateBeltRankInput,
+  UpdateBeltRankInput,
+} from '@repo/contracts/ranks';
+
 
 export const beltRankKeys = {
   all: ['belt-ranks'] as const,

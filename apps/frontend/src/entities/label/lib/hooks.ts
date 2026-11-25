@@ -4,13 +4,14 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 
+import * as api from '../api/labels.api.js';
+
 import type {
   TaggableType,
   UpdateCategoryInput,
   UpdateTagInput,
 } from '@repo/contracts/labels';
 
-import * as api from '../api/labels.api.js';
 
 /**
  * React Query hooks for the Labels module.

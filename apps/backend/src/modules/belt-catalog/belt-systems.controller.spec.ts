@@ -1,12 +1,13 @@
 import { Test } from '@nestjs/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import type { BeltSystem } from '@repo/contracts/belt-systems';
 
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 
 import { BeltSystemsController } from './belt-systems.controller.js';
 import { BeltSystemsService } from './belt-systems.service.js';
+
+import type { BeltSystem } from '@repo/contracts/belt-systems';
 
 /**
  * Thin controller: five routes, all delegate. Each test pins one

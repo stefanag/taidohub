@@ -1,7 +1,8 @@
-import type { UpsertInstructorProgressInput } from '@repo/contracts/progress';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import * as api from '../api/student.api.js';
+
+import type { UpsertInstructorProgressInput } from '@repo/contracts/progress';
 
 /**
  * React Query hooks for the Students module.

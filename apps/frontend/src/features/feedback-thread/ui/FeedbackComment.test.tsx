@@ -4,6 +4,8 @@ import * as React from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { FeedbackComment } from './FeedbackComment.js';
+
 import type { FeedbackComment as FeedbackCommentType } from '@repo/contracts/feedback';
 
 import i18n from '@/i18n';
@@ -45,8 +47,6 @@ vi.mock('@/entities/feedback', () => ({
 vi.mock('@/entities/me', () => ({
   useSession: () => sessionMock(),
 }));
-
-import { FeedbackComment } from './FeedbackComment.js';
 
 /**
  * `FeedbackComment` carries the per-row action surface for the

@@ -1,8 +1,8 @@
-import { describe, expect, it } from 'vitest';
 import {
   FEEDBACK_ENTITY_TYPES,
   FEEDBACK_REACTIONS,
 } from '@repo/contracts/feedback';
+import { describe, expect, it } from 'vitest';
 
 import {
   feedbackEntityType,

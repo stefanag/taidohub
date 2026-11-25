@@ -1,18 +1,21 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  DateStringSchema,
+  type CreateRankHistoryInput,
+} from '@repo/contracts/rank-history';
 import { useQuery } from '@tanstack/react-query';
 import * as React from 'react';
-import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { z } from 'zod';
 
 import { listBeltRanksQueryOptions } from '@/entities/belt-rank';
-import { listShogoTitlesQueryOptions } from '@/entities/shogo-title';
 import {
   useCreateRankHistory,
   useUpdateRankHistory,
   type GradingHistoryRow,
 } from '@/entities/rank-history';
-
+import { listShogoTitlesQueryOptions } from '@/entities/shogo-title';
 import { HttpError } from '@/shared/api';
 import { rankLabel, type Lang } from '@/shared/lib/rank-label';
 import {
@@ -34,10 +37,6 @@ import {
   SelectValue,
 } from '@/shared/ui';
 
-import {
-  DateStringSchema,
-  type CreateRankHistoryInput,
-} from '@repo/contracts/rank-history';
 
 /**
  * Form-layer schema: validates string fields with empty strings allowed for

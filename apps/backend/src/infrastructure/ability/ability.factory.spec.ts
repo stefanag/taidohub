@@ -67,8 +67,8 @@ describe('AbilityFactory — plain user (no memberships)', () => {
     const factory = await makeFactory();
     const ability = factory.createForUser(baseUser({ id: 'u-1', role: 'user' }));
 
-    expect(ability.can('read', { __caslSubjectType__: 'User', id: 'u-1' } as any)).toBe(true);
-    expect(ability.can('read', { __caslSubjectType__: 'User', id: 'u-2' } as any)).toBe(false);
+    expect(ability.can('read', { __caslSubjectType__: 'User', id: 'u-1' } as never)).toBe(true);
+    expect(ability.can('read', { __caslSubjectType__: 'User', id: 'u-2' } as never)).toBe(false);
     expect(ability.can('manage', 'User')).toBe(false);
     expect(ability.can('manage', 'Organisation')).toBe(false);
     expect(ability.can('read', 'AuditLog')).toBe(false);
@@ -87,10 +87,10 @@ describe('AbilityFactory — orgadmin', () => {
     );
 
     expect(
-      ability.can('manage', { __caslSubjectType__: 'Organisation', id: 'org-A' } as any),
+      ability.can('manage', { __caslSubjectType__: 'Organisation', id: 'org-A' } as never),
     ).toBe(true);
     expect(
-      ability.can('manage', { __caslSubjectType__: 'Organisation', id: 'org-B' } as any),
+      ability.can('manage', { __caslSubjectType__: 'Organisation', id: 'org-B' } as never),
     ).toBe(false);
     expect(ability.can('manage', 'User')).toBe(false);
     expect(ability.can('manage', 'OrganisationMembership')).toBe(false);
@@ -109,14 +109,14 @@ describe('AbilityFactory — orgadmin', () => {
         __caslSubjectType__: 'AuditLog',
         entityType: 'organisation',
         entityId: 'org-A',
-      } as any),
+      } as never),
     ).toBe(true);
     expect(
       ability.can('read', {
         __caslSubjectType__: 'AuditLog',
         entityType: 'organisation',
         entityId: 'org-B',
-      } as any),
+      } as never),
     ).toBe(false);
   });
 });
@@ -131,10 +131,10 @@ describe('AbilityFactory — instructor', () => {
     );
 
     expect(
-      ability.can('read', { __caslSubjectType__: 'Organisation', id: 'club-X' } as any),
+      ability.can('read', { __caslSubjectType__: 'Organisation', id: 'club-X' } as never),
     ).toBe(true);
     expect(
-      ability.can('manage', { __caslSubjectType__: 'Organisation', id: 'club-X' } as any),
+      ability.can('manage', { __caslSubjectType__: 'Organisation', id: 'club-X' } as never),
     ).toBe(false);
     expect(ability.can('read', 'AuditLog')).toBe(false);
   });

@@ -1,12 +1,12 @@
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
+import { type AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
-import { AuditLogService } from '../audit-log/audit-log.service.js';
+import { type AuditLogService } from '../audit-log/audit-log.service.js';
 
 import {
-  ProgressRepository,
+  type ProgressRepository,
   type ProgressRow,
 } from './progress.repository.js';
 import { ProgressService } from './progress.service.js';

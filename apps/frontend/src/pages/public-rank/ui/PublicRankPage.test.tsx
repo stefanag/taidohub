@@ -28,10 +28,11 @@ vi.mock('@tanstack/react-router', async (orig) => {
   };
 });
 
+import { PublicRankPage } from './PublicRankPage.js';
+
 import { getPublicRank } from '@/entities/belt-rank/api/belt-rank.api.js';
 import i18n from '@/i18n';
 
-import { PublicRankPage } from './PublicRankPage.js';
 
 type GetPublicRankMock = ReturnType<typeof vi.fn>;
 

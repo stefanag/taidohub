@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { MembershipEditor } from './MembershipEditor.js';
 
 import type { Role, UpdateUserInput, User } from '@/entities/user';
+import type { IsoAlpha3 } from '@repo/contracts/organisations';
 
 import { listBeltRanksQueryOptions, type BeltRank } from '@/entities/belt-rank';
 import { listBeltSystemsQueryOptions } from '@/entities/belt-system';
@@ -25,7 +26,9 @@ import {
   type GradingHistoryRow,
 } from '@/entities/rank-history';
 import { listShogoTitlesQueryOptions, type ShogoTitle } from '@/entities/shogo-title';
-import type { IsoAlpha3 } from '@repo/contracts/organisations';
+import { GradingTimeline } from '@/features/grading-timeline';
+import { RankHistoryFormDialog } from '@/features/rank-history-form';
+import { ImpersonateActionButton } from '@/features/user-impersonation';
 import { HttpError } from '@/shared/api';
 import { FeatureFlag, useFeatureFlag } from '@/shared/lib/feature-flags';
 import { Button, FormField, FormMessage, Input, Label, QuillViewer, isEmpty, type Delta } from '@/shared/ui';
@@ -38,9 +41,6 @@ import {
 } from '@/shared/ui/select.js';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs.js';
 
-import { GradingTimeline } from '@/features/grading-timeline';
-import { RankHistoryFormDialog } from '@/features/rank-history-form';
-import { ImpersonateActionButton } from '@/features/user-impersonation';
 
 export interface UserFormProps {
   /** The user being edited. */

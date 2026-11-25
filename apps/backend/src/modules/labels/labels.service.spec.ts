@@ -1,10 +1,11 @@
 import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import type { AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 
-import { LabelsRepository, type CategoryRow, type TagRow } from './labels.repository.js';
+import { type LabelsRepository, type CategoryRow, type TagRow } from './labels.repository.js';
 import { LabelsService } from './labels.service.js';
+
+import type { AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 
 function userFixture(overrides: Partial<AuthenticatedUser> = {}): AuthenticatedUser {
   return {

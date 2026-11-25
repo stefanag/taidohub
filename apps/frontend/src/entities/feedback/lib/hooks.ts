@@ -5,6 +5,8 @@ import {
   type UseQueryResult,
 } from '@tanstack/react-query';
 
+import * as api from '../api/feedback.api.js';
+
 import type {
   CreateFeedbackCommentInput,
   CreateFeedbackThreadInput,
@@ -18,7 +20,6 @@ import type {
   UpdateFeedbackCommentInput,
 } from '@repo/contracts/feedback';
 
-import * as api from '../api/feedback.api.js';
 
 /**
  * React Query hooks for the Feedback module.

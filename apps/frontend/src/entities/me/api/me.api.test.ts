@@ -5,9 +5,10 @@ vi.mock('@/shared/api', async (orig) => {
   return { ...actual, httpClient: vi.fn() };
 });
 
+import { getMyMemberships } from './me.api.js';
+
 import { httpClient } from '@/shared/api';
 
-import { getMyMemberships } from './me.api.js';
 
 const ORG_ID_A = '0e2e8c4b-7a9a-46e1-9d1e-54b8f7d3a2e0';
 const ORG_ID_B = '7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5';

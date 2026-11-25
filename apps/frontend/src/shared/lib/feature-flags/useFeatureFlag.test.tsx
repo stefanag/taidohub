@@ -3,8 +3,8 @@ import { render, renderHook, screen } from '@testing-library/react';
 import * as React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { DEFAULT_FLAGS, type FeatureFlagMap } from './flags.js';
 import { FeatureFlag } from './FeatureFlag.js';
+import { DEFAULT_FLAGS, type FeatureFlagMap } from './flags.js';
 import { FeatureFlagsProvider } from './provider.js';
 import { useFeatureFlag } from './useFeatureFlag.js';
 

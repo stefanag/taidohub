@@ -1,8 +1,8 @@
 import { ForbiddenException, Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 
-import { type Auth, BETTER_AUTH } from '../../infrastructure/auth/better-auth.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
+import { type Auth, BETTER_AUTH } from '../../infrastructure/auth/better-auth.js';
 import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
 import { user as userTable } from '../../infrastructure/database/schema/users.js';
 import { AuditLogService } from '../audit-log/audit-log.service.js';

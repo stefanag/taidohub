@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
+
 import { StatisticsRepository } from './statistics.repository.js';
 
 @Injectable()
@@ -16,7 +17,7 @@ export class StatisticsCronService {
     await this.repo.refreshActivityStats();
     await this.repo.recomputeAvgGapPerRank();
     await this.repo.captureMonthlyIfNewMonth();
-    // NB: Logger.log calls console under the hood; the test asserts on that.
-    console.log(`[statistics] rebuild_all completed in ${durationMs}ms`);
+    // The spec asserts on this line through a console.info spy.
+    console.info(`[statistics] rebuild_all completed in ${durationMs}ms`);
   }
 }

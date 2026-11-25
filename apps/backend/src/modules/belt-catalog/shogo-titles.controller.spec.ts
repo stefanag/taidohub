@@ -1,12 +1,13 @@
 import { Test } from '@nestjs/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import type { ShogoTitle } from '@repo/contracts/shogo-titles';
 
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 
 import { ShogoTitlesController } from './shogo-titles.controller.js';
 import { ShogoTitlesService } from './shogo-titles.service.js';
+
+import type { ShogoTitle } from '@repo/contracts/shogo-titles';
 
 /**
  * Thin controller: four routes (no `findByCode` exposed). Each test

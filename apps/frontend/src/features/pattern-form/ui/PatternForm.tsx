@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import type { RootCode } from '@repo/contracts/classification-category';
+import type { CreatePatternInput, Pattern } from '@repo/contracts/patterns';
+
 import { useClassificationCategoriesByRootQuery } from '@/entities/classification-category';
 import {
   useCreatePatternMutation,
   useUpdatePatternMutation,
 } from '@/entities/pattern';
-import type { RootCode } from '@repo/contracts/classification-category';
-import type { CreatePatternInput, Pattern } from '@repo/contracts/patterns';
-
 import {
   Button,
   ClassificationMultiSelect,

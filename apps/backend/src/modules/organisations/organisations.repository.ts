@@ -1,13 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { and, count, eq, ilike, inArray, isNull, or, sql, type SQL } from 'drizzle-orm';
+
+import { DRIZZLE, type DrizzleDb, type DrizzleExecutor } from '../../infrastructure/database/client.js';
+import { organisations, type DbOrganisation } from '../../infrastructure/database/schema/index.js';
+
 import type {
   CreateOrganisationInput,
   ListOrganisationsQuery,
   UpdateOrganisationInput,
 } from '@repo/contracts/organisations';
-import { and, count, eq, ilike, inArray, isNull, or, sql, type SQL } from 'drizzle-orm';
-
-import { DRIZZLE, type DrizzleDb, type DrizzleExecutor } from '../../infrastructure/database/client.js';
-import { organisations, type DbOrganisation } from '../../infrastructure/database/schema/index.js';
 
 @Injectable()
 export class OrganisationsRepository {

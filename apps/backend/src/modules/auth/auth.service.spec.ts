@@ -8,8 +8,6 @@ import { DRIZZLE } from '../../infrastructure/database/client.js';
 
 import { AuthService } from './auth.service.js';
 
-const FAKE_TX = { __tx: true } as any;
-
 const TARGET_USER = {
   id: 'u-target',
   email: 'target@example.com',
@@ -49,7 +47,7 @@ function dbStub(opts: {
 }) {
   let selectCall = 0;
   const makeSelectBuilder = (rows: unknown[]) => {
-    const builder: any = {
+    const builder: Record<string, unknown> = {
       from: () => builder,
       where: () => builder,
       limit: () => Promise.resolve(rows),

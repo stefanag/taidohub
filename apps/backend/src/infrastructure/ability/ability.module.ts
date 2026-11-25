@@ -8,15 +8,15 @@ import { FeatureFlagsAbilityRules } from '../../modules/feature-flags/feature-fl
 import { FeedbackAbilityRules } from '../../modules/feedback/feedback.abilities.js';
 import { GradingRequirementsAbilityRules } from '../../modules/grading-requirements/grading-requirements.ability-rules.js';
 import { LabelsAbilityRules } from '../../modules/labels/labels.abilities.js';
+import { McpAbilityRules } from '../../modules/mcp/mcp.abilities.js';
 import { MembershipsAbilityRules } from '../../modules/memberships/memberships.abilities.js';
 import { OrganisationsAbilityRules } from '../../modules/organisations/organisations.abilities.js';
 import { PatternAbilityRules } from '../../modules/pattern/pattern.abilities.js';
+import { PendingOperationAbilityRules } from '../../modules/pending-operations/pending-operations.abilities.js';
 import { ProgressAbilityRules } from '../../modules/progress/progress.abilities.js';
 import { RankHistoryAbilityRules } from '../../modules/rank-history/rank-history.abilities.js';
 import { StatisticsAbilityRules } from '../../modules/statistics/statistics.abilities.js';
 import { StudentAbilityRules } from '../../modules/students/students.abilities.js';
-import { McpAbilityRules } from '../../modules/mcp/mcp.abilities.js';
-import { PendingOperationAbilityRules } from '../../modules/pending-operations/pending-operations.abilities.js';
 import { TechniqueAbilityRules } from '../../modules/technique/technique.abilities.js';
 import { UsersAbilityRules } from '../../modules/users/users.abilities.js';
 

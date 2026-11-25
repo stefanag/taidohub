@@ -1,6 +1,8 @@
+import { SignUpWithEmailSchema } from '@repo/contracts/auth';
 import * as React from 'react';
 
-import { SignUpWithEmailSchema } from '@repo/contracts/auth';
+
+import { signUpWithEmail } from '../api/auth.api.js';
 
 import {
   Button,
@@ -11,7 +13,6 @@ import {
   useZodForm,
 } from '@/shared/ui';
 
-import { signUpWithEmail } from '../api/auth.api.js';
 
 export interface SignupFormProps {
   onSuccess?: () => void;

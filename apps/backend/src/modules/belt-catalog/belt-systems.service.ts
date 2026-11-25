@@ -1,9 +1,5 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import type {
-  BeltSystem,
-  CreateBeltSystemInput,
-  UpdateBeltSystemInput,
-} from '@repo/contracts/belt-systems';
+
 
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import {
@@ -13,6 +9,12 @@ import {
 
 import { BeltSystemPatch, BeltSystemsRepository } from './belt-systems.repository.js';
 import { LookupTableService } from './lookup-table.service.js';
+
+import type {
+  BeltSystem,
+  CreateBeltSystemInput,
+  UpdateBeltSystemInput,
+} from '@repo/contracts/belt-systems';
 
 /**
  * CRUD for `belt_systems` — the system catalogue (kyu/dan,

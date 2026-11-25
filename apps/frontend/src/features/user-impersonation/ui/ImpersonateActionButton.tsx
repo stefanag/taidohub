@@ -2,9 +2,10 @@ import { UserCog } from 'lucide-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { ConfirmImpersonateDialog } from './ConfirmImpersonateDialog.js';
+
 import { Button } from '@/shared/ui';
 
-import { ConfirmImpersonateDialog } from './ConfirmImpersonateDialog.js';
 
 export interface ImpersonateActionButtonProps {
   user: { id: string; name: string | null; email: string; role: string };

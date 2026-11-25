@@ -1,4 +1,4 @@
-import { BeltColor } from '@/shared/lib/belt-visuals';
+import { type BeltColor } from '@/shared/lib/belt-visuals';
 
 /**
  * Mirrors the `BeltVisuals` contract from `@repo/contracts/ranks` with all

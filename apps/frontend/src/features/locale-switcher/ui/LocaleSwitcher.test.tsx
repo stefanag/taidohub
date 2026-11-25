@@ -2,6 +2,8 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 
+import { LocaleSwitcher } from './LocaleSwitcher.js';
+
 import * as authApi from '@/features/auth-by-email';
 import i18n from '@/i18n';
 
@@ -22,8 +24,6 @@ vi.mock('@/features/auth-by-email', async () => {
     },
   };
 });
-
-import { LocaleSwitcher } from './LocaleSwitcher.js';
 
 describe('<LocaleSwitcher>', () => {
   beforeEach(async () => {

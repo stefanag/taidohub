@@ -19,22 +19,24 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import type { AddUserResponse, ListUsersResponse, User } from '@repo/contracts/users';
+
 
 import { ErrorEnvelopeDto } from '../../common/dto/error-envelope.dto.js';
 import { ApiEndpoint } from '../../common/swagger/api-endpoint.decorator.js';
-import { CurrentUser } from '../../infrastructure/auth/current-user.decorator.js';
-import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import { CheckAbility } from '../../infrastructure/ability/check-ability.decorator.js';
+import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
+import { CurrentUser } from '../../infrastructure/auth/current-user.decorator.js';
 
-import { AddUserDto } from './dto/add-user.dto.js';
 import { AddUserResponseDto } from './dto/add-user-response.dto.js';
+import { AddUserDto } from './dto/add-user.dto.js';
 import { InviteUserDto } from './dto/invite-user.dto.js';
 import { ListUsersQueryDto } from './dto/list-users-query.dto.js';
 import { ListUsersResponseDto } from './dto/list-users-response.dto.js';
 import { UpdateUserDto } from './dto/update-user.dto.js';
 import { UserDto } from './dto/user.dto.js';
 import { UsersService } from './users.service.js';
+
+import type { AddUserResponse, ListUsersResponse, User } from '@repo/contracts/users';
 
 @ApiTags('users')
 @ApiCookieAuth('session')

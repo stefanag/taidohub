@@ -66,9 +66,9 @@ function usersRepoStub() {
   };
 }
 
-const FAKE_TX = { __tx: true } as any;
+const FAKE_TX = { __tx: true } as never;
 const fakeDb = {
-  transaction: vi.fn(async (cb: (tx: any) => Promise<unknown>) => cb(FAKE_TX)),
+  transaction: vi.fn(async (cb: (tx: unknown) => Promise<unknown>) => cb(FAKE_TX)),
 };
 
 async function makeService(

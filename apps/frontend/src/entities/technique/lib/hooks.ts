@@ -1,10 +1,11 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
+import * as api from '../api/technique.api.js';
+
 import type {
   CreateTechniqueInput,
   UpdateTechniqueInput,
 } from '@repo/contracts/techniques';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-
-import * as api from '../api/technique.api.js';
 
 /**
  * React Query hooks for the Technique module.

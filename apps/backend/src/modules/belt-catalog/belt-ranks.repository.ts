@@ -148,7 +148,6 @@ export class BeltRanksRepository {
    * placeholder so `BeltRanksService.delete` can call it unconditionally
    * without a code change when D4 ships.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async countUserProfilesUsingRank(_rankId: string, _tx?: DrizzleExecutor): Promise<number> {
     return 0;
   }

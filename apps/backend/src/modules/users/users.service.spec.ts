@@ -1,21 +1,21 @@
+import { ConflictException, ForbiddenException, NotFoundException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { DiscoveryModule } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
-import { ConflictException, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { ConfigService } from '@nestjs/config';
 
 import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
 import { AuthUserCache } from '../../infrastructure/auth/auth-user.cache.js';
-import { UserContextService } from '../../infrastructure/auth/user-context.service.js';
-import { DRIZZLE } from '../../infrastructure/database/client.js';
 import { BETTER_AUTH } from '../../infrastructure/auth/better-auth.js';
+import { UserContextService } from '../../infrastructure/auth/user-context.service.js';
 import { VerificationTokenService } from '../../infrastructure/auth/verification-token.service.js';
+import { DRIZZLE } from '../../infrastructure/database/client.js';
 import { EMAIL_SERVICE } from '../../infrastructure/email/email.types.js';
 import { AuditLogAbilityRules } from '../audit-log/audit-log.abilities.js';
 import { AuditLogService } from '../audit-log/audit-log.service.js';
-import { OrganisationsAbilityRules } from '../organisations/organisations.abilities.js';
 import { MembershipsAbilityRules } from '../memberships/memberships.abilities.js';
+import { OrganisationsAbilityRules } from '../organisations/organisations.abilities.js';
 
 import { UsersAbilityRules } from './users.abilities.js';
 import { UsersRepository } from './users.repository.js';
@@ -107,9 +107,9 @@ function configStub() {
 }
 
 // Drizzle db.transaction(cb) calls cb(tx) and returns its result. Fake it.
-const FAKE_TX = { __tx: true } as any;
+const FAKE_TX = { __tx: true } as never;
 const fakeDb = {
-  transaction: vi.fn(async (cb: (tx: any) => Promise<unknown>) => cb(FAKE_TX)),
+  transaction: vi.fn(async (cb: (tx: unknown) => Promise<unknown>) => cb(FAKE_TX)),
 };
 
 async function makeService(

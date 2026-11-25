@@ -15,7 +15,6 @@ import {
   useUpsertStudentPatternProgressMutation,
   useUpsertStudentTechniqueProgressMutation,
 } from '@/entities/student';
-
 import {
   Button,
   DatePicker,

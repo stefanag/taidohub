@@ -20,22 +20,22 @@ import { renderPasswordResetEmail } from './templates/password-reset.template.js
 export class ConsoleEmailService implements EmailService {
   async sendInvite(args: SendInviteArgs): Promise<void> {
     const rendered = renderInviteEmail(args);
-    console.log(`[email] invite to=${args.to} url=${args.setPasswordUrl}`);
-    console.log(`[email] subject: ${rendered.subject}`);
-    console.log(rendered.body);
+    console.info(`[email] invite to=${args.to} url=${args.setPasswordUrl}`);
+    console.info(`[email] subject: ${rendered.subject}`);
+    console.info(rendered.body);
   }
 
   async sendPasswordReset(args: SendPasswordResetArgs): Promise<void> {
     const rendered = renderPasswordResetEmail(args);
-    console.log(`[email] password-reset to=${args.to} url=${args.resetUrl}`);
-    console.log(`[email] subject: ${rendered.subject}`);
-    console.log(rendered.body);
+    console.info(`[email] password-reset to=${args.to} url=${args.resetUrl}`);
+    console.info(`[email] subject: ${rendered.subject}`);
+    console.info(rendered.body);
   }
 
   async sendAdminPasswordReset(args: SendAdminPasswordResetArgs): Promise<void> {
     const rendered = renderAdminPasswordResetEmail(args);
-    console.log(`[email] admin-password-reset to=${args.to} url=${args.resetUrl}`);
-    console.log(`[email] subject: ${rendered.subject}`);
-    console.log(rendered.body);
+    console.info(`[email] admin-password-reset to=${args.to} url=${args.resetUrl}`);
+    console.info(`[email] subject: ${rendered.subject}`);
+    console.info(rendered.body);
   }
 }

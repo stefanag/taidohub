@@ -9,6 +9,7 @@ import { ProfileForm } from './ProfileForm.js';
 
 import type { UserProfile } from '@/entities/profile';
 
+import { updateMyProfile } from '@/entities/profile/api/profile.api.js';
 import i18n from '@/i18n';
 
 // Mock the deep entity-api module so the mutation hook picks up the stub.
@@ -21,8 +22,6 @@ vi.mock('@/entities/profile/api/profile.api.js', async (orig) => {
     ),
   };
 });
-
-import { updateMyProfile } from '@/entities/profile/api/profile.api.js';
 
 const EMPTY_PROFILE: UserProfile = {
   userId: 'u-1',

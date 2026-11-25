@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { FeedbackComment } from './FeedbackComment.js';
+
 import type {
   FeedbackComment as FeedbackCommentType,
   FeedbackEntityType,
 } from '@repo/contracts/feedback';
 
-import { useSession } from '@/entities/me';
 import {
   useCreateFeedbackCommentMutation,
   useCreateFeedbackThreadMutation,
@@ -14,10 +15,10 @@ import {
   useFeedbackThreadQuery,
   useMarkFeedbackThreadReadMutation,
 } from '@/entities/feedback';
+import { useSession } from '@/entities/me';
 import { FeatureFlag } from '@/shared/lib/feature-flags';
 import { Button } from '@/shared/ui';
 
-import { FeedbackComment } from './FeedbackComment.js';
 
 export interface FeedbackThreadProps {
   entityType: FeedbackEntityType;

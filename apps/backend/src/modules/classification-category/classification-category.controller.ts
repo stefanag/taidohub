@@ -10,8 +10,8 @@ import {
 import { ZodValidationPipe } from 'nestjs-zod';
 
 import { CheckAbility } from '../../infrastructure/ability/check-ability.decorator.js';
-import { CurrentUser } from '../../infrastructure/auth/current-user.decorator.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
+import { CurrentUser } from '../../infrastructure/auth/current-user.decorator.js';
 
 import { ClassificationCategoryService } from './classification-category.service.js';
 

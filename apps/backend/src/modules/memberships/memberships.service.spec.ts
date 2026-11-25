@@ -1,22 +1,23 @@
-import { DiscoveryModule } from '@nestjs/core';
-import { Test } from '@nestjs/testing';
 import {
   BadRequestException,
   ConflictException,
   ForbiddenException,
   NotFoundException,
 } from '@nestjs/common';
+import { DiscoveryModule } from '@nestjs/core';
+import { Test } from '@nestjs/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
 import { AuthUserCache } from '../../infrastructure/auth/auth-user.cache.js';
 import { UserContextService } from '../../infrastructure/auth/user-context.service.js';
 import { DRIZZLE } from '../../infrastructure/database/client.js';
-import { AuditLogService } from '../audit-log/audit-log.service.js';
 import { AuditLogAbilityRules } from '../audit-log/audit-log.abilities.js';
-import { OrganisationsRepository } from '../organisations/organisations.repository.js';
+import { AuditLogService } from '../audit-log/audit-log.service.js';
 import { OrganisationsAbilityRules } from '../organisations/organisations.abilities.js';
+import { OrganisationsRepository } from '../organisations/organisations.repository.js';
 import { UsersAbilityRules } from '../users/users.abilities.js';
+
 import { MembershipsAbilityRules } from './memberships.abilities.js';
 import { MembershipsRepository } from './memberships.repository.js';
 import { MembershipsService } from './memberships.service.js';
@@ -81,9 +82,9 @@ function auditStub() {
   return { record: vi.fn().mockResolvedValue(undefined), list: vi.fn() };
 }
 
-const FAKE_TX = { __tx: true } as any;
+const FAKE_TX = { __tx: true } as never;
 const fakeDb = {
-  transaction: vi.fn(async (cb: (tx: any) => Promise<unknown>) => cb(FAKE_TX)),
+  transaction: vi.fn(async (cb: (tx: unknown) => Promise<unknown>) => cb(FAKE_TX)),
 };
 
 async function makeService(

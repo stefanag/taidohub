@@ -1,3 +1,7 @@
+import {
+  FEEDBACK_ENTITY_TYPES,
+  FEEDBACK_REACTIONS,
+} from '@repo/contracts/feedback';
 import { sql } from 'drizzle-orm';
 import {
   boolean,
@@ -12,10 +16,6 @@ import {
   type AnyPgColumn,
 } from 'drizzle-orm/pg-core';
 
-import {
-  FEEDBACK_ENTITY_TYPES,
-  FEEDBACK_REACTIONS,
-} from '@repo/contracts/feedback';
 
 import { user } from './users.js';
 

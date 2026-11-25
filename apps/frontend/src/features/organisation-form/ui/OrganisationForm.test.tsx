@@ -3,10 +3,12 @@ import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { OrganisationForm } from './OrganisationForm.js';
+
 import type { CreateOrganisationInput, Organisation } from '@/entities/organisation';
+
 import i18n from '@/i18n';
 
-import { OrganisationForm } from './OrganisationForm.js';
 
 const PARENT_CANDIDATE: Organisation = {
   id: '7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5',

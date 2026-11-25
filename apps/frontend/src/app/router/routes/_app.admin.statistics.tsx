@@ -1,9 +1,10 @@
 import { createRoute, redirect } from '@tanstack/react-router';
 
+import { appLayoutRoute } from './_app.js';
+
 import { authClient } from '@/features/auth-by-email';
 import { AdminStatisticsPage } from '@/pages/admin-statistics';
 
-import { appLayoutRoute } from './_app.js';
 
 /**
  * Admin-only route mounting the platform statistics page. Sits under `_app`

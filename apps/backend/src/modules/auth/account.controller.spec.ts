@@ -1,9 +1,11 @@
 import { Test } from '@nestjs/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type { Response } from 'express';
+
 
 import { AccountController } from './account.controller.js';
 import { AuthService } from './auth.service.js';
+
+import type { Response } from 'express';
 
 /**
  * `AccountController` is one of the few controllers in the codebase

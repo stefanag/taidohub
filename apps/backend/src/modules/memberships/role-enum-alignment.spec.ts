@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
 import { MembershipRoleSchema } from '@repo/contracts/memberships';
 import { RoleSchema } from '@repo/contracts/users';
+import { describe, expect, it } from 'vitest';
 
 import { membershipRole } from '../../infrastructure/database/schema/memberships.js';
 import { USER_ROLES } from '../../infrastructure/database/schema/users.js';

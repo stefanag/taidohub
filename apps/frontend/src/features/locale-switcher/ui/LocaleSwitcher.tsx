@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { LOCALE_OPTIONS, type LocaleCode, useChangeLocale } from '../model/use-change-locale.js';
+
 import { cn } from '@/shared/lib/utils';
 
-import { LOCALE_OPTIONS, type LocaleCode, useChangeLocale } from '../model/use-change-locale.js';
 
 export interface LocaleSwitcherProps {
   /** `default` reads on white surfaces; `onDark` reads on the navy hero. */

@@ -1,8 +1,9 @@
 import { createRoute } from '@tanstack/react-router';
 
+import { appLayoutRoute } from './_app.js';
+
 import { GradingHistoryPage } from '@/pages/grading-history';
 
-import { appLayoutRoute } from './_app.js';
 
 /**
  * Authenticated `/grading-history` route. Mounts under the existing `_app`

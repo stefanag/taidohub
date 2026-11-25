@@ -1,10 +1,11 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
+import * as api from '../api/feature-flags.api.js';
+
 import type {
   FeatureFlagCode,
   UpdateFeatureFlagInput,
 } from '@repo/contracts/feature-flags';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-
-import * as api from '../api/feature-flags.api.js';
 
 /**
  * React Query hooks for the Feature Flags module.

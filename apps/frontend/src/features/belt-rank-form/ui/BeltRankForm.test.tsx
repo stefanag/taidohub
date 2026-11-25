@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import * as React from 'react';
 import { I18nextProvider } from 'react-i18next';
@@ -66,10 +66,9 @@ vi.mock('@/entities/organisation/api/organisation.api.js', async (orig) => {
   return { ...actual, listOrganisations: vi.fn().mockResolvedValue({ data: [], total: 0 }) };
 });
 
-import { createBeltRank } from '@/entities/belt-rank/api/belt-rank.api.js';
-
 import { BeltRankForm } from './BeltRankForm.js';
 
+import { createBeltRank } from '@/entities/belt-rank/api/belt-rank.api.js';
 import i18n from '@/i18n';
 
 const mockedCreate = vi.mocked(createBeltRank);

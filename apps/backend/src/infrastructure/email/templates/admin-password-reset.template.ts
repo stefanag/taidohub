@@ -1,5 +1,6 @@
-import type { RenderedEmail, SendAdminPasswordResetArgs } from '../email.types.js';
 import { normaliseLocale } from './locale.util.js';
+
+import type { RenderedEmail, SendAdminPasswordResetArgs } from '../email.types.js';
 
 /**
  * Renders the admin-triggered password-reset email — sent when a sysadmin

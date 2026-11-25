@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
+import { currentRank } from './currentRank.js';
+
 import type { UserStatsRankCoverage } from '@repo/contracts/statistics';
 
-import { currentRank } from './currentRank.js';
 
 function coverage(sortOrder: number, id = `r-${sortOrder}`): UserStatsRankCoverage {
   return {

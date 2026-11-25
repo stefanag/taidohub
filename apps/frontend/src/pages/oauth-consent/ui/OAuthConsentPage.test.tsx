@@ -2,10 +2,11 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { OAuthConsentPage } from './OAuthConsentPage.js';
+
 import * as authFeature from '@/features/auth-by-email';
 import i18n from '@/i18n';
 
-import { OAuthConsentPage } from './OAuthConsentPage.js';
 
 const CLIENT_ID = 'https://claude.ai/oauth/mcp-client-metadata';
 

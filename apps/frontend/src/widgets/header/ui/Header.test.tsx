@@ -2,6 +2,8 @@ import { render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { Header } from './Header.js';
+
 import i18n from '@/i18n';
 
 // Stub the locale switcher — it has its own QueryClient + feature
@@ -24,8 +26,6 @@ vi.mock('@tanstack/react-router', async (orig) => {
     ),
   };
 });
-
-import { Header } from './Header.js';
 
 /**
  * Tiny widget — public-facing top bar. The behaviour worth pinning

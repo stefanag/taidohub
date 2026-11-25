@@ -30,10 +30,9 @@ vi.mock('@/entities/organisation/api/organisation.api.js', async (orig) => {
   };
 });
 
-import { createBeltSystem } from '@/entities/belt-system/api/belt-system.api.js';
-
 import { BeltSystemForm } from './BeltSystemForm.js';
 
+import { createBeltSystem } from '@/entities/belt-system/api/belt-system.api.js';
 import i18n from '@/i18n';
 
 const mockedCreate = vi.mocked(createBeltSystem);

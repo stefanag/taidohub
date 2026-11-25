@@ -4,11 +4,6 @@ import {
   useQueryClient,
   type UseMutationOptions,
 } from '@tanstack/react-query';
-import type {
-  BeltSystem,
-  CreateBeltSystemInput,
-  UpdateBeltSystemInput,
-} from '@repo/contracts/belt-systems';
 
 import {
   createBeltSystem,
@@ -16,6 +11,13 @@ import {
   getBeltSystems,
   updateBeltSystem,
 } from '../api/belt-system.api.js';
+
+import type {
+  BeltSystem,
+  CreateBeltSystemInput,
+  UpdateBeltSystemInput,
+} from '@repo/contracts/belt-systems';
+
 
 export const beltSystemKeys = {
   all: ['belt-systems'] as const,

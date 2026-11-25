@@ -18,7 +18,6 @@ import { FeatureFlagsModule } from './modules/feature-flags/feature-flags.module
 import { FeedbackModule } from './modules/feedback/feedback.module.js';
 import { GradingHistoryProjectionModule } from './modules/grading-history-projection/grading-history.module.js';
 import { GradingRequirementsModule } from './modules/grading-requirements/grading-requirements.module.js';
-import { RankHistoryModule } from './modules/rank-history/rank-history.module.js';
 import { HealthModule } from './modules/health/health.module.js';
 import { LabelsModule } from './modules/labels/labels.module.js';
 import { McpModule } from './modules/mcp/mcp.module.js';
@@ -28,6 +27,7 @@ import { PatternModule } from './modules/pattern/pattern.module.js';
 import { PendingOperationsModule } from './modules/pending-operations/pending-operations.module.js';
 import { ProfileModule } from './modules/profile/profile.module.js';
 import { ProgressModule } from './modules/progress/progress.module.js';
+import { RankHistoryModule } from './modules/rank-history/rank-history.module.js';
 import { StatisticsModule } from './modules/statistics/statistics.module.js';
 import { StudentsModule } from './modules/students/students.module.js';
 import { TechniqueModule } from './modules/technique/technique.module.js';

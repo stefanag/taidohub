@@ -3,11 +3,12 @@ import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { UsersFilters } from './UsersFilters.js';
+
 import type { ListUsersQuery } from '@/entities/user';
 
 import i18n from '@/i18n';
 
-import { UsersFilters } from './UsersFilters.js';
 
 /**
  * `UsersFilters` is a pure-prop widget (value + onChange). The

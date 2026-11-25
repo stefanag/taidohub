@@ -1,16 +1,4 @@
-import type {
-  CloneRequirementSetInput,
-  CreateRequirementSetInput,
-  UpdateRequirementSetInput,
-} from '@repo/contracts';
 import { describe, expect, it, vi } from 'vitest';
-
-vi.mock('@/shared/api', async (orig) => {
-  const actual = await orig<typeof import('@/shared/api')>();
-  return { ...actual, httpClient: vi.fn() };
-});
-
-import { httpClient } from '@/shared/api';
 
 import {
   activateRequirementSet,
@@ -22,6 +10,19 @@ import {
   getRequirementSets,
   updateRequirementSet,
 } from './requirement-set.api.js';
+
+import type {
+  CloneRequirementSetInput,
+  CreateRequirementSetInput,
+  UpdateRequirementSetInput,
+} from '@repo/contracts';
+
+import { httpClient } from '@/shared/api';
+
+vi.mock('@/shared/api', async (orig) => {
+  const actual = await orig<typeof import('@/shared/api')>();
+  return { ...actual, httpClient: vi.fn() };
+});
 
 const STUB_REQUIREMENT_SET = {
   id: '550e8400-e29b-41d4-a716-446655440000',

@@ -1,10 +1,11 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
+import * as api from '../api/progress.api.js';
+
 import type {
   ContentType,
   UpsertProgressInput,
 } from '@repo/contracts/progress';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-
-import * as api from '../api/progress.api.js';
 
 /**
  * React Query hooks for the Progress module.

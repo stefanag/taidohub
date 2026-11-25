@@ -4,12 +4,6 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import type {
-  ContentType,
-  Progress,
-  UpsertInstructorProgressInput,
-  UpsertProgressInput,
-} from '@repo/contracts/progress';
 import { eq } from 'drizzle-orm';
 
 import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
@@ -27,6 +21,13 @@ import {
   type NewProgressRow,
   type ProgressRow,
 } from './progress.repository.js';
+
+import type {
+  ContentType,
+  Progress,
+  UpsertInstructorProgressInput,
+  UpsertProgressInput,
+} from '@repo/contracts/progress';
 
 /**
  * Business logic for `user_content_progress`.

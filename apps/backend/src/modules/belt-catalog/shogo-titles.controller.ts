@@ -18,7 +18,7 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import type { ShogoTitle } from '@repo/contracts/shogo-titles';
+
 
 import { ErrorEnvelopeDto } from '../../common/dto/error-envelope.dto.js';
 import { ApiEndpoint } from '../../common/swagger/api-endpoint.decorator.js';
@@ -30,6 +30,8 @@ import { CreateShogoTitleDto } from './dto/create-shogo-title.dto.js';
 import { ShogoTitleDto } from './dto/shogo-title.dto.js';
 import { UpdateShogoTitleDto } from './dto/update-shogo-title.dto.js';
 import { ShogoTitlesService } from './shogo-titles.service.js';
+
+import type { ShogoTitle } from '@repo/contracts/shogo-titles';
 
 @ApiTags('shogo-titles')
 @ApiCookieAuth('session')

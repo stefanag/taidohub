@@ -40,7 +40,6 @@ import { z } from 'zod';
 import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import { CurrentUser } from '../../infrastructure/auth/current-user.decorator.js';
-
 import { OrganisationsRepository } from '../organisations/organisations.repository.js';
 
 import { LabelsService } from './labels.service.js';

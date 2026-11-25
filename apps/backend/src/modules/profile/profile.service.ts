@@ -1,5 +1,5 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import type { UpdateUserProfileInput, UserProfile } from '@repo/contracts/profile';
+
 
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
@@ -7,6 +7,8 @@ import { type DbUserProfile } from '../../infrastructure/database/schema/index.j
 import { UsersRepository } from '../users/users.repository.js';
 
 import { ProfilePatch, ProfileRepository } from './profile.repository.js';
+
+import type { UpdateUserProfileInput, UserProfile } from '@repo/contracts/profile';
 
 @Injectable()
 export class ProfileService {

@@ -4,13 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import type {
-  CreateCategoryInput,
-  CreateTagInput,
-  TaggableType,
-  UpdateCategoryInput,
-  UpdateTagInput,
-} from '@repo/contracts/labels';
+
 
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 
@@ -21,6 +15,14 @@ import {
   type TagAttachmentRow,
   type TagRow,
 } from './labels.repository.js';
+
+import type {
+  CreateCategoryInput,
+  CreateTagInput,
+  TaggableType,
+  UpdateCategoryInput,
+  UpdateTagInput,
+} from '@repo/contracts/labels';
 
 /**
  * Service — owns the label business rules:

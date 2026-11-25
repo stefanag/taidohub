@@ -1,8 +1,9 @@
 import { createRoute } from '@tanstack/react-router';
 
+import { publicLayoutRoute } from './_public.js';
+
 import { PublicRankPage } from '@/pages/public-rank';
 
-import { publicLayoutRoute } from './_public.js';
 
 /**
  * Anonymous, public rank page. Mounted under the existing `_public` layout

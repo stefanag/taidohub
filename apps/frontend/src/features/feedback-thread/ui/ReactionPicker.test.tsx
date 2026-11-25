@@ -1,13 +1,14 @@
+import { FEEDBACK_REACTIONS } from '@repo/contracts/feedback';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { FEEDBACK_REACTIONS } from '@repo/contracts/feedback';
+
+import { ReactionPicker } from './ReactionPicker.js';
 
 import i18n from '@/i18n';
 
-import { ReactionPicker } from './ReactionPicker.js';
 
 /**
  * `ReactionPicker` is the smallest feature in this slice — pure UI, no

@@ -2,15 +2,17 @@ import { ForbiddenException } from '@nestjs/common';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
+
+
+import { FeedbackAccessPolicy } from './feedback.access-policy.js';
+import { type FeedbackRepository } from './feedback.repository.js';
+import { FeedbackService } from './feedback.service.js';
+
 import type {
   DbFeedbackComment,
   DbFeedbackReaction,
   DbFeedbackThread,
 } from '../../infrastructure/database/schema/index.js';
-
-import { FeedbackAccessPolicy } from './feedback.access-policy.js';
-import { FeedbackRepository } from './feedback.repository.js';
-import { FeedbackService } from './feedback.service.js';
 
 /**
  * Acceptance tests for the instructor-feedback feature — 17 cases pulled

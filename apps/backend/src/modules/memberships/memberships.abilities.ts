@@ -2,11 +2,11 @@ import { type AbilityBuilder } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
 
 import { AbilityContributor } from '../../infrastructure/ability/ability-contributor.decorator.js';
-import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import {
   type AbilityRuleContributor,
   type AppAbility,
 } from '../../infrastructure/ability/ability.types.js';
+import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 
 /**
  * Sysadmin can manage all OrganisationMembership rows. An orgadmin can read

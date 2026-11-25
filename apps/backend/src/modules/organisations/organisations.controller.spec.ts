@@ -1,15 +1,16 @@
 import { Test } from '@nestjs/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import type {
-  ListOrganisationsResponse,
-  Organisation,
-} from '@repo/contracts/organisations';
 
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 
 import { OrganisationsController } from './organisations.controller.js';
 import { OrganisationsService } from './organisations.service.js';
+
+import type {
+  ListOrganisationsResponse,
+  Organisation,
+} from '@repo/contracts/organisations';
 
 /**
  * Thin controller — five routes that all delegate to the service.

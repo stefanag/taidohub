@@ -1,10 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
-import type { FeatureFlagCode } from '@repo/contracts/feature-flags';
+
 
 import { DRIZZLE, type DrizzleDb, type DrizzleExecutor } from '../../infrastructure/database/client.js';
 import { featureFlag } from '../../infrastructure/database/schema/feature-flag.js';
 import { user } from '../../infrastructure/database/schema/users.js';
+
+import type { FeatureFlagCode } from '@repo/contracts/feature-flags';
 
 export type FeatureFlagRow = typeof featureFlag.$inferSelect;
 

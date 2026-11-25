@@ -1,9 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-import type {
-  CreateMembershipInput,
-  ListMembershipsQuery,
-  UpdateMembershipInput,
-} from '@repo/contracts/memberships';
 import { and, count, eq, type SQL } from 'drizzle-orm';
 
 import {
@@ -16,6 +11,12 @@ import {
   user,
   type DbOrganisationMembership,
 } from '../../infrastructure/database/schema/index.js';
+
+import type {
+  CreateMembershipInput,
+  ListMembershipsQuery,
+  UpdateMembershipInput,
+} from '@repo/contracts/memberships';
 
 /**
  * A membership row joined with the user's `name` and `email` for the

@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 
+import { FeatureFlagGuard } from './feature-flag.guard.js';
 import {
   FeatureFlagsAdminController,
   FeatureFlagsPublicController,
 } from './feature-flags.controller.js';
 import { FeatureFlagsRepository } from './feature-flags.repository.js';
 import { FeatureFlagsService } from './feature-flags.service.js';
-import { FeatureFlagGuard } from './feature-flag.guard.js';
 
 /**
  * `DatabaseModule` (Drizzle), `AbilityModule`, and `AuditLogModule` are all

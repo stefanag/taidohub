@@ -1,8 +1,9 @@
 import { createRoute } from '@tanstack/react-router';
 
+import { settingsRoute } from './_app.settings.js';
+
 import { SettingsPage } from '@/pages/settings';
 
-import { settingsRoute } from './_app.settings.js';
 
 /**
  * Index of `/settings` — the hub page. The parent

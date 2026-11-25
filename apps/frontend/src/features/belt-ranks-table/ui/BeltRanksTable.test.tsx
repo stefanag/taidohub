@@ -13,10 +13,9 @@ vi.mock('@/entities/belt-rank/api/belt-rank.api.js', async (orig) => {
   };
 });
 
-import { deleteBeltRank } from '@/entities/belt-rank/api/belt-rank.api.js';
-
 import { BeltRanksTable } from './BeltRanksTable.js';
 
+import { deleteBeltRank } from '@/entities/belt-rank/api/belt-rank.api.js';
 import i18n from '@/i18n';
 
 const mockedDelete = vi.mocked(deleteBeltRank);

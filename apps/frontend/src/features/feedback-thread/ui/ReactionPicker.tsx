@@ -1,10 +1,10 @@
-import * as React from 'react';
-import { useTranslation } from 'react-i18next';
-
 import {
   FEEDBACK_REACTIONS,
   type FeedbackReaction,
 } from '@repo/contracts/feedback';
+import * as React from 'react';
+import { useTranslation } from 'react-i18next';
+
 
 import { Button } from '@/shared/ui';
 
@@ -34,7 +34,6 @@ if (
   process.env['NODE_ENV'] !== 'production' &&
   EMOJI_REACTIONS.length + TEXT_REACTIONS.length !== FEEDBACK_REACTIONS.length
 ) {
-  // eslint-disable-next-line no-console
   console.warn(
     '[ReactionPicker] partition mismatch — emoji + text counts ≠ FEEDBACK_REACTIONS length',
   );

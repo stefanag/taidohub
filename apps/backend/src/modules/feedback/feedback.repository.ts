@@ -483,6 +483,5 @@ export class FeedbackRepository {
 
   // Silence unused-import warnings for utilities reserved for future tweaks
   // of the unread-count queries (NULL handling, distinct-or-not toggles).
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private readonly _unusedDirectives = [or, isNotNull, isNull];
 }

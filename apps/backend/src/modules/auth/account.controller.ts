@@ -1,11 +1,13 @@
 import { Body, Controller, HttpCode, HttpStatus, Post, Res } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import type { Response } from 'express';
+
 
 import { Public } from '../../infrastructure/auth/public.decorator.js';
 
 import { AuthService } from './auth.service.js';
 import { SetInitialPasswordDto } from './dto/set-initial-password.dto.js';
+
+import type { Response } from 'express';
 
 /**
  * Public self-service account actions handled by NestJS.

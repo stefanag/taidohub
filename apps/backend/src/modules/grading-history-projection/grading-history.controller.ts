@@ -1,6 +1,6 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { ApiCookieAuth, ApiParam, ApiTags } from '@nestjs/swagger';
-import type { GradingHistoryResponse } from '@repo/contracts/rank-history';
+
 
 import { ErrorEnvelopeDto } from '../../common/dto/error-envelope.dto.js';
 import { ApiEndpoint } from '../../common/swagger/api-endpoint.decorator.js';
@@ -9,6 +9,8 @@ import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js'
 import { CurrentUser } from '../../infrastructure/auth/current-user.decorator.js';
 
 import { GradingHistoryService } from './grading-history.service.js';
+
+import type { GradingHistoryResponse } from '@repo/contracts/rank-history';
 
 @ApiTags('grading-history')
 @ApiCookieAuth('session')

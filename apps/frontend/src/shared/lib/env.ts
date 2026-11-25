@@ -14,7 +14,6 @@ const parsed = EnvSchema.safeParse({
 });
 
 if (!parsed.success) {
-  // eslint-disable-next-line no-console
   console.error('Invalid environment variables:', parsed.error.flatten().fieldErrors);
   throw new Error('Invalid frontend environment. See console for details.');
 }

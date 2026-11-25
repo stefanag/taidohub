@@ -1,8 +1,9 @@
 import { createRoute } from '@tanstack/react-router';
 
+import { publicLayoutRoute } from './_public.js';
+
 import { LoginPage } from '@/pages/login';
 
-import { publicLayoutRoute } from './_public.js';
 
 export const loginRoute = createRoute({
   getParentRoute: () => publicLayoutRoute,

@@ -2,11 +2,12 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import i18n from '@/i18n';
 
 import * as authApi from '../api/auth.api';
 
 import { LoginForm } from './LoginForm.js';
+
+import i18n from '@/i18n';
 
 describe('<LoginForm>', () => {
   beforeEach(async () => {

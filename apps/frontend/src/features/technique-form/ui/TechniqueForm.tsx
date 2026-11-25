@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import type { RootCode } from '@repo/contracts/classification-category';
+import type {
+  CreateTechniqueInput,
+  Technique,
+} from '@repo/contracts/techniques';
+
 import { useClassificationCategoriesByRootQuery } from '@/entities/classification-category';
 import {
   useCreateTechniqueMutation,
   useUpdateTechniqueMutation,
 } from '@/entities/technique';
-import type {
-  CreateTechniqueInput,
-  Technique,
-} from '@repo/contracts/techniques';
-import type { RootCode } from '@repo/contracts/classification-category';
-
 import {
   Button,
   ClassificationMultiSelect,

@@ -57,7 +57,6 @@ async function main(): Promise<void> {
   writeFileSync(resolve(outDir, 'openapi.json'), `${JSON.stringify(document, null, 2)}\n`, 'utf8');
   writeFileSync(resolve(outDir, 'openapi.yaml'), yaml.stringify(document), 'utf8');
 
-  // eslint-disable-next-line no-console
   console.info(`[openapi] wrote ${outDir}/openapi.{json,yaml}`);
 
   await app.close();
@@ -65,7 +64,6 @@ async function main(): Promise<void> {
 }
 
 main().catch((err: unknown) => {
-  // eslint-disable-next-line no-console
   console.error('[openapi] failed:', err);
   process.exit(1);
 });

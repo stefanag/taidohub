@@ -1,12 +1,13 @@
 import { createRoute, Outlet, redirect } from '@tanstack/react-router';
 import * as React from 'react';
 
+import { rootRoute } from './__root.js';
+
 import { authClient } from '@/features/auth-by-email';
 import { SidebarProvider, SidebarTrigger } from '@/shared/ui/sidebar';
 import { AppSidebar } from '@/widgets/appsidebar';
 import { FeedbackBadge } from '@/widgets/feedback-badge';
 
-import { rootRoute } from './__root.js';
 
 /**
  * Auth-gated layout. Every route under this parent runs through the

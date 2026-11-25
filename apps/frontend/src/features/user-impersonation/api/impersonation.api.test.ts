@@ -5,9 +5,10 @@ vi.mock('@/shared/api', async (orig) => {
   return { ...actual, httpClient: vi.fn().mockResolvedValue({}) };
 });
 
+import { startImpersonating, stopImpersonating } from './impersonation.api.js';
+
 import { httpClient } from '@/shared/api';
 
-import { startImpersonating, stopImpersonating } from './impersonation.api.js';
 
 describe('impersonation api', () => {
   it('POSTs to /api/admin/impersonate-user with userId in the body', async () => {

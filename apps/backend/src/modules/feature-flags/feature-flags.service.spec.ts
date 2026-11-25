@@ -1,11 +1,11 @@
 import { NotFoundException } from '@nestjs/common';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { FeatureFlagSchema } from '@repo/contracts/feature-flags';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import { type AuditLogService } from '../audit-log/audit-log.service.js';
 
-import { FeatureFlagsRepository, type FeatureFlagRow } from './feature-flags.repository.js';
+import { type FeatureFlagsRepository, type FeatureFlagRow } from './feature-flags.repository.js';
 import { FeatureFlagsService } from './feature-flags.service.js';
 
 function makeUser(overrides: Partial<AuthenticatedUser> = {}): AuthenticatedUser {

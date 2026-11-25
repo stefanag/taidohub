@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useStartImpersonating } from '../lib/hooks.js';
+
 import {
   Button,
   Dialog,
@@ -10,7 +12,6 @@ import {
   DialogTitle,
 } from '@/shared/ui';
 
-import { useStartImpersonating } from '../lib/hooks.js';
 
 export interface ConfirmImpersonateDialogProps {
   open: boolean;

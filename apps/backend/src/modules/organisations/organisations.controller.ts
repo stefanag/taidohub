@@ -20,15 +20,12 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import type {
-  ListOrganisationsResponse,
-  Organisation,
-} from '@repo/contracts/organisations';
+
 
 import { ErrorEnvelopeDto } from '../../common/dto/error-envelope.dto.js';
 import { ApiEndpoint } from '../../common/swagger/api-endpoint.decorator.js';
-import { CurrentUser } from '../../infrastructure/auth/current-user.decorator.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
+import { CurrentUser } from '../../infrastructure/auth/current-user.decorator.js';
 
 import { CreateOrganisationDto } from './dto/create-organisation.dto.js';
 import { ListOrganisationsQueryDto } from './dto/list-organisations-query.dto.js';
@@ -36,6 +33,11 @@ import { ListOrganisationsResponseDto } from './dto/list-organisations-response.
 import { OrganisationDto } from './dto/organisation.dto.js';
 import { UpdateOrganisationDto } from './dto/update-organisation.dto.js';
 import { OrganisationsService } from './organisations.service.js';
+
+import type {
+  ListOrganisationsResponse,
+  Organisation,
+} from '@repo/contracts/organisations';
 
 @ApiTags('organisations')
 @ApiCookieAuth('session')

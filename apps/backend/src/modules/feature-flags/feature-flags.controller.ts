@@ -9,15 +9,15 @@ import {
 } from '@repo/contracts/feature-flags';
 import { ZodValidationPipe } from 'nestjs-zod';
 
+import { CheckAbility } from '../../infrastructure/ability/check-ability.decorator.js';
+import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import { CurrentUser } from '../../infrastructure/auth/current-user.decorator.js';
 import { Public } from '../../infrastructure/auth/public.decorator.js';
-import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
-import { CheckAbility } from '../../infrastructure/ability/check-ability.decorator.js';
 
-import { FeatureFlagsService } from './feature-flags.service.js';
 import {
   type FeatureFlagRowWithUpdater,
 } from './feature-flags.repository.js';
+import { FeatureFlagsService } from './feature-flags.service.js';
 
 /**
  * Public, unauthenticated endpoint that feeds the SPA's `FeatureFlagsProvider`

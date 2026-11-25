@@ -3,11 +3,12 @@ import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { PatternListItem } from './PatternListItem.js';
+
 import type { Pattern } from '@repo/contracts/patterns';
 
 import i18n from '@/i18n';
 
-import { PatternListItem } from './PatternListItem.js';
 
 /**
  * Mirror of `TechniqueListItem.test.tsx`. Same behaviours pinned:

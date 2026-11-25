@@ -1,8 +1,8 @@
 import { randomUUID } from 'node:crypto';
 
+import { ForbiddenError } from '@casl/ability';
 import { ConflictException, ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ForbiddenError } from '@casl/ability';
 import {
   type AddUserInput,
   type AddUserResponse,
@@ -14,13 +14,13 @@ import {
   type User,
 } from '@repo/contracts/users';
 
+import { type Env } from '../../config/env.schema.js';
 import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
 import { AuthUserCache } from '../../infrastructure/auth/auth-user.cache.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import { VerificationTokenService } from '../../infrastructure/auth/verification-token.service.js';
 import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
 import { EMAIL_SERVICE, type EmailService } from '../../infrastructure/email/email.types.js';
-import { type Env } from '../../config/env.schema.js';
 import { AuditLogService } from '../audit-log/audit-log.service.js';
 
 import { UsersRepository } from './users.repository.js';

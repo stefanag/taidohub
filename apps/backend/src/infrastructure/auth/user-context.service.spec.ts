@@ -4,8 +4,8 @@ import {
   type AppAbility,
   type AppSubjectName,
 } from '../ability/ability.types.js';
-import { type AuthenticatedUser } from './auth.types.js';
 
+import { type AuthenticatedUser } from './auth.types.js';
 import { UserContextService } from './user-context.service.js';
 
 /**

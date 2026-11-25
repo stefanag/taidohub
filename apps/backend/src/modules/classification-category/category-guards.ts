@@ -1,5 +1,4 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import type { RootCode } from '@repo/contracts/classification-category';
 import {
   PATTERN_ALLOWED_ROOTS,
   PATTERN_REQUIRED_ROOT,
@@ -10,6 +9,7 @@ import {
 } from '@repo/contracts/techniques';
 
 import type { ClassificationCategoryService } from './classification-category.service.js';
+import type { RootCode } from '@repo/contracts/classification-category';
 
 /**
  * Polymorphic entity kinds that consume the classification-category taxonomy

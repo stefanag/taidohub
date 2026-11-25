@@ -1,8 +1,8 @@
 import { AbilityBuilder, createMongoAbility } from '@casl/ability';
 
+import type { AppAbility } from './ability-context.js';
 import type { Role, User } from '@repo/contracts/users';
 
-import type { AppAbility } from './ability-context.js';
 
 /**
  * Shape of the user object handed to `defineAbilityFor`. `null`/`undefined`
