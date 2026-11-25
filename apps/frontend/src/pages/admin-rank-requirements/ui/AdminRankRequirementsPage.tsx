@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import type { BeltRank } from '@repo/contracts/ranks';
 
-import { listBeltRanksQueryOptions } from '@/entities/belt-rank';
+import { listBeltRanksQueryOptions, ranksForOrganisation } from '@/entities/belt-rank';
 import { useRequirementSetsQuery } from '@/entities/requirement-set';
 import { RankRequirementsEditor } from '@/features/rank-requirements-editor';
 import {
@@ -53,9 +53,18 @@ export function AdminRankRequirementsPage(): React.ReactElement {
   const { data: sets = [] } = useRequirementSetsQuery();
   const { data: ranks = [] } = useQuery(listBeltRanksQueryOptions());
 
+  // Only the ladder the selected set resolves against (its organisation's
+  // own ranks, else the global ones): the catalogue holds several ladders
+  // with same-named ranks, so listing every rank shows duplicates.
+  const selectedSet = sets.find((s) => s.id === setId);
   const sortedRanks = React.useMemo(
-    () => [...ranks].sort((a, b) => a.sortOrder - b.sortOrder),
-    [ranks],
+    () =>
+      selectedSet
+        ? ranksForOrganisation(ranks, selectedSet.organisationId).sort(
+            (a, b) => a.sortOrder - b.sortOrder,
+          )
+        : [],
+    [ranks, selectedSet],
   );
 
   const setSetId = (nextSetId: string): void => {
@@ -100,7 +109,7 @@ export function AdminRankRequirementsPage(): React.ReactElement {
         </div>
 
         <div className="min-w-[240px]">
-          <Select value={rankId ?? ''} onValueChange={setRankId}>
+          <Select value={rankId ?? ''} onValueChange={setRankId} disabled={!selectedSet}>
             <SelectTrigger aria-label={t('admin.rankRequirements.selectRank')}>
               <SelectValue placeholder={t('admin.rankRequirements.selectRank')} />
             </SelectTrigger>

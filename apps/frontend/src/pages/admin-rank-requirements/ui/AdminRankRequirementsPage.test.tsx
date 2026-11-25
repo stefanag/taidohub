@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import * as React from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -10,6 +11,7 @@ import type { RequirementSet } from '@repo/contracts';
 import type { BeltRank } from '@repo/contracts/ranks';
 
 import i18n from '@/i18n';
+import { stubRadixPointerEvents } from '@/shared/test/radix';
 
 const SET_ID = 'aaaaaaaa-0000-4000-8000-000000000001';
 const RANK_ID = 'bbbbbbbb-0000-4000-8000-000000000002';
@@ -141,5 +143,42 @@ describe('<AdminRankRequirementsPage>', () => {
 
     await screen.findByLabelText(/select a requirement set/i);
     expect(screen.queryByTestId('rank-requirements-editor')).not.toBeInTheDocument();
+  });
+
+  it('keeps the rank selector disabled until a requirement set is chosen', async () => {
+    renderPage();
+
+    await screen.findByLabelText(/select a requirement set/i);
+    expect(screen.getByLabelText(/select a rank/i)).toBeDisabled();
+  });
+
+  it("lists only the ranks of the selected set's ladder, so no rank appears twice", async () => {
+    const SWETA = 'cccccccc-0000-4000-8000-000000000003';
+    const dan = (id: string, organisationId: string | null): BeltRank => ({
+      ...BELT_RANK,
+      id,
+      organisationId,
+      nameRomaji: 'Shodan',
+      nameEn: '1st Dan',
+      nameSv: '1:a Dan',
+      nameFi: '1. Dan',
+    });
+    getRequirementSets.mockResolvedValue([{ ...REQUIREMENT_SET, organisationId: SWETA }]);
+    getBeltRanks.mockResolvedValue([
+      dan('dddddddd-0000-4000-8000-000000000001', null),
+      dan('dddddddd-0000-4000-8000-000000000002', SWETA),
+    ]);
+    currentSearch = { setId: SET_ID };
+    stubRadixPointerEvents();
+    const user = userEvent.setup();
+    renderPage();
+
+    const trigger = await screen.findByLabelText(/select a rank/i);
+    await vi.waitFor(() => expect(trigger).toBeEnabled());
+    await user.click(trigger);
+
+    const listbox = await screen.findByRole('listbox');
+    expect(within(listbox).getAllByRole('option')).toHaveLength(1);
+    expect(within(listbox).getByRole('option', { name: '1st Dan' })).toBeInTheDocument();
   });
 });

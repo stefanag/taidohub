@@ -136,11 +136,17 @@ export function ShogoTitleForm({
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {ranks.map((r) => (
-              <SelectItem key={r.id} value={r.id}>
-                {rankLabel(r, i18n.language)}
-              </SelectItem>
-            ))}
+            {/* Shogo titles are federation-wide, so their minimum rank comes
+                from the global ladder; a stored choice outside it still shows. */}
+            {ranks
+              .filter(
+                (r) => r.organisationId === null || r.id === form.getValues('minRankId'),
+              )
+              .map((r) => (
+                <SelectItem key={r.id} value={r.id}>
+                  {rankLabel(r, i18n.language)}
+                </SelectItem>
+              ))}
           </SelectContent>
         </Select>
         <FormMessage message={form.formState.errors.minRankId?.message} />
