@@ -9,8 +9,8 @@ import { Header } from '@/widgets/header';
 /**
  * Public-facing layout. Used for anonymous pages: `/`, `/login`, and any
  * future marketing route. Renders the global `Header` except on auth pages
- * (`/login`, `/signup`, `/set-password`, `/oauth/consent`) — those carry their
- * own chrome.
+ * (`/login`, `/signup`, `/set-password`, `/oauth/consent`, `/forgot-password`,
+ * `/reset-password`) — those carry their own chrome.
  */
 function PublicLayout(): React.ReactElement {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -18,7 +18,9 @@ function PublicLayout(): React.ReactElement {
     pathname === '/login' ||
     pathname === '/signup' ||
     pathname === '/set-password' ||
-    pathname === '/oauth/consent';
+    pathname === '/oauth/consent' ||
+    pathname === '/forgot-password' ||
+    pathname === '/reset-password';
   return (
     <>
       {isAuthPage ? null : <Header />}

@@ -7,7 +7,8 @@
       "passwordLabel": "Salasana",
       "submit": "Kirjaudu sisään",
       "submitting": "Kirjaudutaan…",
-      "failed": "Kirjautuminen epäonnistui."
+      "failed": "Kirjautuminen epäonnistui.",
+      "forgotPassword": "Unohditko salasanasi?"
     },
     "motto": "Kun mieli on keskittynyt, mikään ei ole mahdotonta.",
     "setPassword": {
@@ -18,6 +19,26 @@
       "submit": "Aseta salasana",
       "invalidToken": "Tämä linkki on virheellinen tai vanhentunut. Pyydä ylläpitäjää lähettämään uusi.",
       "mismatch": "Salasanat eivät täsmää."
+    },
+    "forgotPassword": {
+      "title": "Palauta salasana",
+      "description": "Anna sähköpostiosoitteesi, niin lähetämme linkin, jolla voit valita uuden salasanan.",
+      "submit": "Lähetä linkki",
+      "submitting": "Lähetetään…",
+      "sent": "Jos osoitteelle {{email}} on tili, olemme lähettäneet linkin uuden salasanan valitsemiseen. Linkki on voimassa tunnin.",
+      "invalidEmail": "Anna kelvollinen sähköpostiosoite.",
+      "failed": "Linkkiä ei voitu lähettää. Yritä hetken kuluttua uudelleen.",
+      "backToLogin": "Takaisin kirjautumiseen"
+    },
+    "resetPassword": {
+      "title": "Valitse uusi salasana",
+      "description": "Kirjoita uusi salasanasi kahdesti.",
+      "submit": "Tallenna salasana",
+      "done": "Salasanasi on vaihdettu.",
+      "toLogin": "Kirjaudu sisään",
+      "invalidLink": "Linkki on virheellinen tai vanhentunut.",
+      "requestNew": "Lähetä uusi linkki",
+      "failed": "Salasanaa ei voitu vaihtaa. Yritä uudelleen."
     }
   },
   "common": {

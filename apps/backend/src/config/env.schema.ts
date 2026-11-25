@@ -1,6 +1,13 @@
 import { z } from 'zod';
 
 /**
+ * Docker Compose passes `${VAR:-}` as an empty string when the variable is not
+ * set in .env; treat that the same as unset.
+ */
+const unsetIfEmpty = <T extends z.ZodType>(schema: T) =>
+  z.preprocess((v) => (v === '' ? undefined : v), schema);
+
+/**
  * Backend environment schema.
  *
  * Parsed once at boot by `ConfigModule` (see `./config.module.ts`). A failure
@@ -51,6 +58,19 @@ export const EnvSchema = z.object({
   ENABLE_SWAGGER: z
     .union([z.literal('true'), z.literal('false')])
     .optional(),
+
+  /**
+   * Outgoing email over SMTP (e.g. Brevo: smtp-relay.brevo.com:587). When
+   * SMTP_HOST is unset, emails are written to stdout instead (local
+   * development and tests). Port 465 uses implicit TLS; other ports
+   * upgrade with STARTTLS, which is required.
+   */
+  SMTP_HOST: unsetIfEmpty(z.string().min(1).optional()),
+  SMTP_PORT: unsetIfEmpty(z.coerce.number().int().positive().default(587)),
+  SMTP_USER: unsetIfEmpty(z.string().min(1).optional()),
+  SMTP_PASSWORD: unsetIfEmpty(z.string().min(1).optional()),
+  /** Sender of every email, as `Name <address>`. */
+  EMAIL_FROM: unsetIfEmpty(z.string().min(3).default('TaidoHub <noreply@taidohub.se>')),
 
   /**
    * Seed-only: identity for the sysadmin user created by

@@ -96,3 +96,39 @@ export async function signOut(): Promise<void> {
 }
 
 export type { Session };
+
+/** Where better-auth sends the user from the emailed reset link. */
+export const RESET_PASSWORD_PATH = '/reset-password';
+
+/**
+ * Ask for a password-reset email. better-auth answers the same whether or not
+ * the address has an account, so this resolves in both cases and the UI must
+ * not say which. The link in the email lands on {@link RESET_PASSWORD_PATH}
+ * with `?token=` (or `?error=INVALID_TOKEN` once expired).
+ */
+export async function requestPasswordReset(email: string): Promise<void> {
+  const result = await authClient.requestPasswordReset({
+    email,
+    redirectTo: `${window.location.origin}${RESET_PASSWORD_PATH}`,
+  });
+  if (result.error) {
+    throw new Error(result.error.message ?? 'Could not request a password reset.');
+  }
+}
+
+/** The reset token is unknown, used or expired. */
+export class InvalidResetTokenError extends Error {
+  constructor() {
+    super('INVALID_TOKEN');
+    this.name = 'InvalidResetTokenError';
+  }
+}
+
+/** Set a new password with the token from a reset link. */
+export async function resetPassword(token: string, newPassword: string): Promise<void> {
+  const result = await authClient.resetPassword({ token, newPassword });
+  if (result.error) {
+    if (result.error.code === 'INVALID_TOKEN') throw new InvalidResetTokenError();
+    throw new Error(result.error.message ?? 'Could not reset the password.');
+  }
+}

@@ -28,7 +28,10 @@ describe('renderInviteEmail', () => {
 
   it('uses a generic inviter when inviterName is null', () => {
     const out = renderInviteEmail({ ...base, locale: 'en', inviterName: null });
-    expect(out.body).toContain('a system administrator');
+    expect(out.body).toContain('A system administrator has invited you');
+    expect(renderInviteEmail({ ...base, locale: 'sv', inviterName: null }).body).toContain(
+      'En systemadministratör har bjudit in dig',
+    );
   });
 });
 
@@ -75,6 +78,9 @@ describe('renderAdminPasswordResetEmail', () => {
 
   it('uses a generic admin when adminName is null', () => {
     const out = renderAdminPasswordResetEmail({ ...base, locale: 'en', adminName: null });
-    expect(out.body).toContain('a system administrator');
+    expect(out.body).toContain('A system administrator');
+    expect(renderAdminPasswordResetEmail({ ...base, locale: 'fi', adminName: null }).body).toContain(
+      'Järjestelmänvalvoja on',
+    );
   });
 });

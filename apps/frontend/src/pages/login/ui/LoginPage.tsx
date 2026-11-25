@@ -1,4 +1,4 @@
-import { useNavigate } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 
 import { LoginForm } from '@/features/auth-by-email';
@@ -59,6 +59,11 @@ export function LoginPage(): React.ReactElement {
                 void navigate({ to: APP_LANDING_ROUTE });
               }}
             />
+            <p className="mt-4 text-center text-sm">
+              <Link to="/forgot-password" className="text-primary hover:underline">
+                {t('auth.login.forgotPassword')}
+              </Link>
+            </p>
           </CardContent>
         </Card>
         <LocaleSwitcher variant="onDark" className="self-start" />

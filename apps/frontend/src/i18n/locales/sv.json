@@ -7,7 +7,8 @@
       "passwordLabel": "Lösenord",
       "submit": "Logga in",
       "submitting": "Loggar in…",
-      "failed": "Inloggning misslyckades."
+      "failed": "Inloggning misslyckades.",
+      "forgotPassword": "Glömt lösenordet?"
     },
     "motto": "Där sinnet är samlat är inget omöjligt.",
     "setPassword": {
@@ -18,6 +19,26 @@
       "submit": "Ange lösenord",
       "invalidToken": "Den här länken är ogiltig eller har upphört att gälla. Be en administratör skicka en ny.",
       "mismatch": "Lösenorden matchar inte."
+    },
+    "forgotPassword": {
+      "title": "Återställ lösenord",
+      "description": "Ange din e-postadress så skickar vi en länk där du kan välja ett nytt lösenord.",
+      "submit": "Skicka länk",
+      "submitting": "Skickar…",
+      "sent": "Om det finns ett konto för {{email}} har vi skickat en länk där du kan välja ett nytt lösenord. Den gäller i en timme.",
+      "invalidEmail": "Ange en giltig e-postadress.",
+      "failed": "Länken kunde inte skickas. Försök igen om en stund.",
+      "backToLogin": "Tillbaka till inloggningen"
+    },
+    "resetPassword": {
+      "title": "Välj nytt lösenord",
+      "description": "Skriv ditt nya lösenord två gånger.",
+      "submit": "Spara lösenord",
+      "done": "Ditt lösenord är ändrat.",
+      "toLogin": "Logga in",
+      "invalidLink": "Länken är ogiltig eller har slutat gälla.",
+      "requestNew": "Skicka en ny länk",
+      "failed": "Lösenordet kunde inte ändras. Försök igen."
     }
   },
   "common": {
