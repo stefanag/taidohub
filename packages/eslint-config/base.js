@@ -59,4 +59,16 @@ export default [
       ],
     },
   },
+  {
+    // Vitest's documented partial-mock pattern types the original module with
+    // `typeof import('…')` (e.g. `orig<typeof import('@/shared/api')>()`),
+    // which no `import type` can express. Allow it in tests only.
+    files: ['**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}'],
+    rules: {
+      '@typescript-eslint/consistent-type-imports': [
+        'warn',
+        { prefer: 'type-imports', fixStyle: 'inline-type-imports', disallowTypeAnnotations: false },
+      ],
+    },
+  },
 ];
