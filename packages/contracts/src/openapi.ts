@@ -4,30 +4,31 @@
  * Zod 4 has `.meta({...})` built-in, so no prototype extension is required.
  * Schema → OpenAPI conversion is delegated to `zod-openapi`'s `createSchema`.
  */
-import type { OpenAPIObject, SchemaObject, ReferenceObject } from 'openapi3-ts/oas31';
 import { type ZodTypeAny } from 'zod';
 import { createSchema } from 'zod-openapi';
 
 import { AuditLogOpenApiRegistry } from './audit-log.js';
 import { AuthOpenApiRegistry } from './auth.js';
-import { BeltRanksOpenApiRegistry } from './ranks.js';
 import { BeltSystemsOpenApiRegistry } from './belt-systems.js';
 import { ClassificationCategoryOpenApiRegistry } from './classification-category.js';
 import { ErrorEnvelopeOpenApiRegistry } from './errors.js';
 import { FeatureFlagsOpenApiRegistry } from './feature-flags.js';
+import { GradingRequirementsOpenApiRegistry } from './grading-requirements.js';
 import { LabelsOpenApiRegistry } from './labels.js';
 import { OrganisationsOpenApiRegistry } from './organisations.js';
-import { ProfileOpenApiRegistry } from './profile.js';
-import { RankHistoryOpenApiRegistry } from './rank-history.js';
-import { ShogoTitlesOpenApiRegistry } from './shogo-titles.js';
 import { PatternOpenApiRegistry } from './patterns.js';
 import { PendingOperationsOpenApiRegistry } from './pending-operations.js';
+import { ProfileOpenApiRegistry } from './profile.js';
 import { ProgressOpenApiRegistry } from './progress.js';
+import { RankHistoryOpenApiRegistry } from './rank-history.js';
+import { BeltRanksOpenApiRegistry } from './ranks.js';
+import { ShogoTitlesOpenApiRegistry } from './shogo-titles.js';
 import { StatisticsOpenApiRegistry } from './statistics.js';
 import { StudentsOpenApiRegistry } from './students.js';
 import { TechniqueOpenApiRegistry } from './techniques.js';
 import { UsersOpenApiRegistry } from './users.js';
-import { GradingRequirementsOpenApiRegistry } from './grading-requirements.js';
+
+import type { OpenAPIObject, SchemaObject, ReferenceObject } from 'openapi3-ts/oas31';
 
 /**
  * A registry maps OpenAPI component names to the Zod schemas that describe them.
