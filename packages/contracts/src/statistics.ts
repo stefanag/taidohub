@@ -7,6 +7,8 @@ export const StatsRankRowSchema = z
       id: z.string().uuid(),
       nameRomaji: z.string(),
       nameEn: z.string(),
+      nameSv: z.string(),
+      nameFi: z.string(),
       sortOrder: z.number().int().nonnegative(),
     }),
     count: z.number().int().nonnegative(),
@@ -54,6 +56,8 @@ export const UserStatsRankCoverageSchema = z
       id: z.string().uuid(),
       nameRomaji: z.string(),
       nameEn: z.string(),
+      nameSv: z.string(),
+      nameFi: z.string(),
       sortOrder: z.number().int().nonnegative(),
     }),
     /** 0..100. */

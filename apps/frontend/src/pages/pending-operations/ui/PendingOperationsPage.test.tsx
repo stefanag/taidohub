@@ -12,6 +12,12 @@ const approve = vi.fn();
 const reject = vi.fn();
 let operations: unknown[] = [];
 
+let ranks: unknown[] = [];
+vi.mock('@/entities/belt-rank', () => ({
+  listBeltRanksQueryOptions: () =>
+    queryOptions({ queryKey: ['belt-ranks'], queryFn: async () => ranks }),
+}));
+
 // Mock the entity barrel (not deep paths) so the FSD public-API rule holds.
 vi.mock('@/entities/pending-operation', () => ({
   pendingOperationsQueryOptions: () =>
@@ -61,7 +67,23 @@ function renderPage(): void {
 describe('<PendingOperationsPage>', () => {
   beforeEach(async () => {
     vi.clearAllMocks();
+    ranks = [];
     await i18n.changeLanguage('en');
+  });
+
+  it('names the rank in the UI language, not as stored in the proposal', async () => {
+    operations = [op('op-3', 'pending')];
+    ranks = [
+      { id: preview.rankId, nameRomaji: 'Yonkyu', nameEn: '4th Kyu', nameSv: '4 Kyu', nameFi: '4. Kyu' },
+    ];
+    await i18n.changeLanguage('sv');
+    try {
+      renderPage();
+      expect(await screen.findByText(/Registrera Yonkyu — 4 Kyu för Aino Virtanen/)).toBeInTheDocument();
+      expect(screen.queryByText(/4th Kyu/)).not.toBeInTheDocument();
+    } finally {
+      await i18n.changeLanguage('en');
+    }
   });
 
   it('says so when nothing is waiting', async () => {

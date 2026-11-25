@@ -11,6 +11,8 @@ function coverage(sortOrder: number, id = `r-${sortOrder}`): UserStatsRankCovera
       id,
       nameRomaji: `rank-${sortOrder}`,
       nameEn: `Rank ${sortOrder}`,
+      nameSv: `Grad ${sortOrder}`,
+      nameFi: `Arvo ${sortOrder}`,
       sortOrder,
     },
     coveragePct: 50,

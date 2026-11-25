@@ -1,6 +1,10 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import type { StatsRankRow } from '@repo/contracts/statistics';
+
+import { rankLocalName } from '@/shared/lib/rank-label';
+
 
 export interface RankBreakdownProps {
   ranks: StatsRankRow[];
@@ -12,6 +16,7 @@ export interface RankBreakdownProps {
  * `rank.sortOrder`.
  */
 export function RankBreakdown({ ranks }: RankBreakdownProps): React.ReactElement {
+  const { i18n } = useTranslation();
   const sorted = React.useMemo(
     () => [...ranks].sort((a, b) => a.rank.sortOrder - b.rank.sortOrder),
     [ranks],
@@ -25,7 +30,7 @@ export function RankBreakdown({ ranks }: RankBreakdownProps): React.ReactElement
           <span className="h-4 w-1 shrink-0 rounded-full bg-primary" aria-hidden="true" />
           <span className="flex-1 text-sm">
             <span className="font-medium">{rank.nameRomaji}</span>{' '}
-            <span className="text-on-surface-variant">{rank.nameEn}</span>
+            <span className="text-on-surface-variant">{rankLocalName(rank, i18n.language)}</span>
           </span>
           <span className="text-sm font-semibold tabular-nums">{count}</span>
         </li>

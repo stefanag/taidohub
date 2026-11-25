@@ -13,8 +13,8 @@ const PLATFORM_STATS: PlatformStats = {
     feedbackThreadsOpenedMonthToDate: 7,
   },
   ranks: [
-    { rank: { id: 'r1', nameRomaji: 'Shodan', nameEn: '1st Dan', sortOrder: 10 }, count: 5 },
-    { rank: { id: 'r2', nameRomaji: 'Nidan', nameEn: '2nd Dan', sortOrder: 20 }, count: 2 },
+    { rank: { id: 'r1', nameRomaji: 'Shodan', nameEn: '1st Dan', nameSv: '1st Dan', nameFi: '1st Dan', sortOrder: 10 }, count: 5 },
+    { rank: { id: 'r2', nameRomaji: 'Nidan', nameEn: '2nd Dan', nameSv: '2nd Dan', nameFi: '2nd Dan', sortOrder: 20 }, count: 2 },
   ],
   updatedAt: '2026-07-01T00:00:00.000Z',
 };

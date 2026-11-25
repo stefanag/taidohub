@@ -559,7 +559,10 @@ describe('StatisticsService', () => {
       const result = await service.getOrganisationStats('org-x', caller);
 
       expect(result.ranks).toEqual([
-        { rank: { id: 'rank-a', nameRomaji: 'Jukyu', nameEn: '9th Kyu', sortOrder: 10 }, count: 0 },
+        {
+          rank: { id: 'rank-a', nameRomaji: 'Jukyu', nameEn: '9th Kyu', nameSv: '9:e Kyu', nameFi: '9. Kyu', sortOrder: 10 },
+          count: 0,
+        },
       ]);
     });
   });

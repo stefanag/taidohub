@@ -21,9 +21,13 @@ function narrowLang(raw: string): Lang {
   return 'en';
 }
 
-export function rankLabel(rank: RankLabelInput, rawLang: string): string {
+/** The rank's name in the UI language alone (may be empty), without the romaji. */
+export function rankLocalName(rank: RankLabelInput, rawLang: string): string {
   const lang = narrowLang(rawLang);
-  const localised =
-    lang === 'en' ? rank.nameEn : lang === 'fi' ? rank.nameFi : rank.nameSv;
+  return lang === 'en' ? rank.nameEn : lang === 'fi' ? rank.nameFi : rank.nameSv;
+}
+
+export function rankLabel(rank: RankLabelInput, rawLang: string): string {
+  const localised = rankLocalName(rank, rawLang);
   return localised ? `${rank.nameRomaji} — ${localised}` : rank.nameRomaji;
 }
