@@ -233,7 +233,7 @@ export class StatisticsService {
       .map((c) => {
         const rank = rankById.get(c.rankId)!;
         return {
-          rank: { id: rank.id, nameRomaji: rank.nameRomaji, nameEn: rank.nameEn, sortOrder: rank.sortOrder },
+          rank: { id: rank.id, nameRomaji: rank.nameRomaji, nameEn: rank.nameEn, nameSv: rank.nameSv, nameFi: rank.nameFi, sortOrder: rank.sortOrder },
           coveragePct: c.coveragePct,
         };
       })
@@ -263,7 +263,7 @@ export class StatisticsService {
 
     return allRanks
       .map((rank) => ({
-        rank: { id: rank.id, nameRomaji: rank.nameRomaji, nameEn: rank.nameEn, sortOrder: rank.sortOrder },
+        rank: { id: rank.id, nameRomaji: rank.nameRomaji, nameEn: rank.nameEn, nameSv: rank.nameSv, nameFi: rank.nameFi, sortOrder: rank.sortOrder },
         count: countByRankId.get(rank.id) ?? 0,
       }))
       .sort((a, b) => a.rank.sortOrder - b.rank.sortOrder);

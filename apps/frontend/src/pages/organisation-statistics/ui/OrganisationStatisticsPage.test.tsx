@@ -50,7 +50,7 @@ const ORG_STATS: OrganisationStats = {
     activeUsersLast30Days: 30,
     feedbackThreadsOpenedMonthToDate: 3,
   },
-  ranks: [{ rank: { id: 'r1', nameRomaji: 'Shodan', nameEn: '1st Dan', sortOrder: 10 }, count: 4 }],
+  ranks: [{ rank: { id: 'r1', nameRomaji: 'Shodan', nameEn: '1st Dan', nameSv: '1st Dan', nameFi: '1st Dan', sortOrder: 10 }, count: 4 }],
   updatedAt: '2026-07-01T00:00:00.000Z',
 };
 

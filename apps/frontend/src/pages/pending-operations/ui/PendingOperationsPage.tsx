@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { listBeltRanksQueryOptions } from '@/entities/belt-rank';
 import {
   pendingOperationsQueryOptions,
   useApprovePendingOperation,
@@ -9,6 +10,7 @@ import {
   type PendingOperation,
   type PendingOperationStatus,
 } from '@/entities/pending-operation';
+import { rankLabel } from '@/shared/lib/rank-label';
 import {
   Badge,
   Button,
@@ -121,8 +123,14 @@ function OperationCard({
   operation: PendingOperation;
   children?: React.ReactNode;
 }): React.ReactElement {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { preview } = operation;
+  // The preview stores the rank's name as it was when proposed (English).
+  // Show it in the UI language from the catalogue; fall back to the stored
+  // name if the rank is gone or the catalogue has not loaded.
+  const ranks = useQuery(listBeltRanksQueryOptions());
+  const rank = ranks.data?.find((r) => r.id === preview.rankId);
+  const rankName = rank ? rankLabel(rank, i18n.language) : preview.rankName;
   const details: [string, string | null][] = [
     [t('pendingOperations.fields.date'), preview.date],
     [t('pendingOperations.fields.examiner'), preview.examinerName],
@@ -137,7 +145,7 @@ function OperationCard({
         <div className="flex items-start justify-between gap-4">
           <CardTitle className="text-base">
             {t('pendingOperations.rankEntry', {
-              rank: preview.rankName,
+              rank: rankName,
               student: preview.studentName ?? preview.studentUserId,
             })}
           </CardTitle>

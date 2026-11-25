@@ -14,6 +14,7 @@ import type { z } from 'zod';
 import { listBeltRanksQueryOptions } from '@/entities/belt-rank';
 import { useCreateShogoTitle, useUpdateShogoTitle } from '@/entities/shogo-title';
 import { HttpError } from '@/shared/api';
+import { rankLabel } from '@/shared/lib/rank-label';
 import { Button, FormField, FormMessage, Input, Label } from '@/shared/ui';
 import { BeltGraphic } from '@/shared/ui/belt-graphic';
 import {
@@ -39,7 +40,7 @@ export function ShogoTitleForm({
   onSaved,
   onCancel,
 }: ShogoTitleFormProps): React.ReactElement {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const ranksQuery = useQuery(listBeltRanksQueryOptions());
 
   const form = useForm<ShogoTitleFormValues>({
@@ -137,7 +138,7 @@ export function ShogoTitleForm({
           <SelectContent>
             {ranks.map((r) => (
               <SelectItem key={r.id} value={r.id}>
-                {r.nameRomaji} (level {r.level})
+                {rankLabel(r, i18n.language)}
               </SelectItem>
             ))}
           </SelectContent>

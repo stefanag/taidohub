@@ -20,6 +20,7 @@ import { listBeltSystemsQueryOptions } from '@/entities/belt-system';
 import { listOrganisationsQueryOptions } from '@/entities/organisation';
 import { HttpError } from '@/shared/api';
 import { getBeltVisuals } from '@/shared/lib/belt-visuals';
+import { rankLabel } from '@/shared/lib/rank-label';
 import { Button, FormField, FormMessage, Input, Label } from '@/shared/ui';
 import { BeltGraphic } from '@/shared/ui/belt-graphic';
 import {
@@ -48,7 +49,7 @@ export function BeltRankForm({
   onSaved,
   onCancel,
 }: BeltRankFormProps): React.ReactElement {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const systemsQuery = useQuery(listBeltSystemsQueryOptions());
   const ranksQuery = useQuery(listBeltRanksQueryOptions());
   const orgsQuery = useQuery(listOrganisationsQueryOptions());
@@ -319,7 +320,7 @@ export function BeltRankForm({
               .filter((r) => !rank || r.id !== rank.id)
               .map((r) => (
                 <SelectItem key={r.id} value={r.id}>
-                  {r.nameRomaji} (level {r.level})
+                  {rankLabel(r, i18n.language)}
                 </SelectItem>
               ))}
           </SelectContent>

@@ -9,7 +9,7 @@ import {
   UserStatsSchema,
 } from '../statistics.js';
 
-const RANK = { id: '00000000-0000-4000-8000-000000000001', nameRomaji: 'shodan', nameEn: 'Shodan', sortOrder: 10 };
+const RANK = { id: '00000000-0000-4000-8000-000000000001', nameRomaji: 'shodan', nameEn: '1st Dan', nameSv: '1 Dan', nameFi: '1. Dan', sortOrder: 10 };
 const OK_ORG = {
   scope: { type: 'organisation', id: '00000000-0000-4000-8000-000000000010', name: 'Stockholm Club' },
   metrics: {

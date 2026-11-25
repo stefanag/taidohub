@@ -9,6 +9,7 @@ import { authClient } from '@/features/auth-by-email';
 import { CoverageMeter } from '@/features/coverage-meter';
 import { ProfileForm } from '@/features/profile-form';
 import { TrendSparkline } from '@/features/trend-sparkline';
+import { rankLabel } from '@/shared/lib/rank-label';
 import {
   Card,
   CardContent,
@@ -29,7 +30,7 @@ import {
  * no history to plot yet but still has a current coverage pct worth showing.
  */
 function ProgressionSection({ userId }: { userId: string }): React.ReactElement | null {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const statsQuery = useUserStatsQuery(userId);
 
   const rank = currentRank(statsQuery.data?.coverageByRank ?? []);
@@ -52,7 +53,7 @@ function ProgressionSection({ userId }: { userId: string }): React.ReactElement 
         <CardTitle>{t('profile.progression.heading', { defaultValue: 'Your progression' })}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <CoverageMeter label={rank.rank.nameEn} pct={rank.coveragePct} />
+        <CoverageMeter label={rankLabel(rank.rank, i18n.language)} pct={rank.coveragePct} />
         {trendsQuery.data && trendsQuery.data.points.length > 0 ? (
           <TrendSparkline points={trendsQuery.data.points} />
         ) : null}

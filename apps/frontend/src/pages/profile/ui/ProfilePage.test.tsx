@@ -86,11 +86,11 @@ describe('<ProfilePage>', () => {
         scope: { type: 'user', id: USER_ID, name: 'Aiko Tanaka' },
         coverageByRank: [
           {
-            rank: { id: 'r-5kyu', nameRomaji: 'Gokyu', nameEn: '5th Kyu', sortOrder: 5 },
+            rank: { id: 'r-5kyu', nameRomaji: 'Gokyu', nameEn: '5th Kyu', nameSv: '5 Kyu', nameFi: '5. Kyu', sortOrder: 5 },
             coveragePct: 90,
           },
           {
-            rank: { id: 'r-4kyu', nameRomaji: 'Yonkyu', nameEn: '4th Kyu', sortOrder: 10 },
+            rank: { id: 'r-4kyu', nameRomaji: 'Yonkyu', nameEn: '4th Kyu', nameSv: '4 Kyu', nameFi: '4. Kyu', sortOrder: 10 },
             coveragePct: 62,
           },
         ],
@@ -103,7 +103,8 @@ describe('<ProfilePage>', () => {
     renderPage();
 
     expect(screen.getByText('Your progression')).toBeInTheDocument();
-    const meter = screen.getByRole('progressbar', { name: '4th Kyu' });
+    // Labelled "{romaji} — {name in the UI language}", like the rest of the app.
+    const meter = screen.getByRole('progressbar', { name: 'Yonkyu — 4th Kyu' });
     expect(meter).toHaveAttribute('aria-valuenow', '62');
     expect(screen.getByText('62%')).toBeInTheDocument();
     // Once a current rank has resolved, the trend query is enabled and

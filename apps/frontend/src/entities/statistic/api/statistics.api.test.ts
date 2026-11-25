@@ -20,6 +20,8 @@ const RANK = {
   id: '11111111-1111-4111-8111-111111111111',
   nameRomaji: 'Kyu 9',
   nameEn: '9th Kyu',
+  nameSv: '9 Kyu',
+  nameFi: '9. Kyu',
   sortOrder: 0,
 };
 

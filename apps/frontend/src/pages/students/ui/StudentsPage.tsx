@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { currentRank, useUserStatsQuery } from '@/entities/statistic';
 import { useStudentsQuery } from '@/entities/student';
 import { CoverageMeter } from '@/features/coverage-meter';
+import { rankLabel } from '@/shared/lib/rank-label';
 import { Badge } from '@/shared/ui';
 
 /**
@@ -18,6 +19,7 @@ import { Badge } from '@/shared/ui';
  * in this slot.
  */
 function StudentCoverageCell({ userId }: { userId: string }): React.ReactElement | null {
+  const { i18n } = useTranslation();
   const statsQuery = useUserStatsQuery(userId);
 
   const rank = currentRank(statsQuery.data?.coverageByRank ?? []);
@@ -25,7 +27,7 @@ function StudentCoverageCell({ userId }: { userId: string }): React.ReactElement
   if (statsQuery.isLoading) return null;
   if (!rank) return null;
 
-  return <CoverageMeter label={rank.rank.nameEn} pct={rank.coveragePct} />;
+  return <CoverageMeter label={rankLabel(rank.rank, i18n.language)} pct={rank.coveragePct} />;
 }
 
 /**
