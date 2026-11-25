@@ -768,7 +768,8 @@
     "atHighest": "Olet saavuttanut korkeimman arvon",
     "noRankYet": "Ei vielä arviointihistoriaa — ala seurata edistymistä kohti ensimmäistä arvoasi.",
     "loading": "Ladataan…",
-    "empty": "Ei vielä kirjattua edistymistä"
+    "empty": "Ei vielä kirjattua edistymistä",
+    "noRequirements": "Tälle arvolle ei ole vielä kirjattu vyökoevaatimuksia."
   },
   "oauthConsent": {
     "title": "Yhdistä tekoälyasiakas",

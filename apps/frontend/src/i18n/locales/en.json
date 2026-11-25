@@ -785,7 +785,8 @@
     "atHighest": "You've reached the highest rank",
     "noRankYet": "No grading history yet — start tracking progress toward your first rank.",
     "loading": "Loading…",
-    "empty": "No progress recorded yet"
+    "empty": "No progress recorded yet",
+    "noRequirements": "No grading requirements have been entered for this rank yet."
   },
   "oauthConsent": {
     "title": "Connect an AI client",
