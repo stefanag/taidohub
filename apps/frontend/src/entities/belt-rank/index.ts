@@ -23,3 +23,5 @@ export {
   useDeleteBeltRank,
   useUpdateBeltRank,
 } from './lib/hooks.js';
+
+export { ranksForOrganisation } from './lib/ladder.js';

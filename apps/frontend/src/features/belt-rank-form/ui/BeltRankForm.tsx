@@ -13,6 +13,7 @@ import type { z } from 'zod';
 
 import {
   listBeltRanksQueryOptions,
+  ranksForOrganisation,
   useCreateBeltRank,
   useUpdateBeltRank,
 } from '@/entities/belt-rank';
@@ -316,7 +317,7 @@ export function BeltRankForm({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value={NONE}>{t('admin.beltCatalog.noNextRank')}</SelectItem>
-            {ranks
+            {ranksForOrganisation(ranks, form.watch('organisationId') ?? null)
               .filter((r) => !rank || r.id !== rank.id)
               .map((r) => (
                 <SelectItem key={r.id} value={r.id}>
