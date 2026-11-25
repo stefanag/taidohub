@@ -1,8 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
+import * as api from '../api/statistics.api.js';
+
 import type { StatsTrendQuery } from '@repo/contracts/statistics';
 
-import * as api from '../api/statistics.api.js';
 
 /**
  * React Query hooks for the Statistics module.

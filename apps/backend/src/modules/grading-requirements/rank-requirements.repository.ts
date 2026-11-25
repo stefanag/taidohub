@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { and, eq, inArray, isNull, sql } from 'drizzle-orm';
-import type { AnyColumn } from 'drizzle-orm';
+
 
 import {
   DRIZZLE,
@@ -14,6 +14,8 @@ import {
   rankRequirementPattern,
   rankRequirementTechnique,
 } from '../../infrastructure/database/schema/grading-requirements.js';
+
+import type { AnyColumn } from 'drizzle-orm';
 
 // ---------------------------------------------------------------------------
 // Row types

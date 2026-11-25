@@ -5,7 +5,7 @@ import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js'
 import { type DbFeedbackThread } from '../../infrastructure/database/schema/index.js';
 
 import { FeedbackAccessPolicy } from './feedback.access-policy.js';
-import { FeedbackRepository } from './feedback.repository.js';
+import { type FeedbackRepository } from './feedback.repository.js';
 
 /**
  * Dedicated acceptance tests for the 5-path access matrix on

@@ -3,6 +3,13 @@ import 'reflect-metadata';
 import { Test } from '@nestjs/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+
+import { CHECK_ABILITY_KEY } from '../../infrastructure/ability/check-ability.decorator.js';
+import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
+
+import { StatisticsAdminController, StatisticsController } from './statistics.controller.js';
+import { StatisticsService } from './statistics.service.js';
+
 import type {
   OrganisationStats,
   PlatformStats,
@@ -10,12 +17,6 @@ import type {
   StatsTrendResponse,
   UserStats,
 } from '@repo/contracts/statistics';
-
-import { CHECK_ABILITY_KEY } from '../../infrastructure/ability/check-ability.decorator.js';
-import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
-
-import { StatisticsAdminController, StatisticsController } from './statistics.controller.js';
-import { StatisticsService } from './statistics.service.js';
 
 /**
  * Pins the routing layer: six handlers across two controllers, each

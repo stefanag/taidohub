@@ -1,7 +1,8 @@
-import * as React from 'react';
 
 import { type FeatureFlagCode } from './flags.js';
 import { useFeatureFlag } from './useFeatureFlag.js';
+
+import type * as React from 'react';
 
 export interface FeatureFlagProps {
   code: FeatureFlagCode;

@@ -19,7 +19,7 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import type { RankHistory } from '@repo/contracts/rank-history';
+
 
 import { ErrorEnvelopeDto } from '../../common/dto/error-envelope.dto.js';
 import { ApiEndpoint } from '../../common/swagger/api-endpoint.decorator.js';
@@ -32,6 +32,8 @@ import { CreateRankHistoryDto } from './dto/create-rank-history.dto.js';
 import { RankHistoryDto } from './dto/rank-history.dto.js';
 import { UpdateRankHistoryDto } from './dto/update-rank-history.dto.js';
 import { RankHistoryService } from './rank-history.service.js';
+
+import type { RankHistory } from '@repo/contracts/rank-history';
 
 @ApiTags('rank-history')
 @ApiCookieAuth('session')

@@ -8,6 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+
 import type { z } from 'zod';
 
 import { listBeltRanksQueryOptions } from '@/entities/belt-rank';

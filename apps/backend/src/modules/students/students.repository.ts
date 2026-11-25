@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { PROGRESS_STATUSES } from '@repo/contracts/progress';
-import type { StudentRosterRow } from '@repo/contracts/students';
 import { eq, inArray, sql } from 'drizzle-orm';
 
 import {
@@ -11,6 +10,8 @@ import { organisationMembership } from '../../infrastructure/database/schema/mem
 import { organisations } from '../../infrastructure/database/schema/organisations.js';
 import { userContentProgress } from '../../infrastructure/database/schema/user-content-progress.js';
 import { user } from '../../infrastructure/database/schema/users.js';
+
+import type { StudentRosterRow } from '@repo/contracts/students';
 
 type ProgressStatus = (typeof PROGRESS_STATUSES)[number];
 

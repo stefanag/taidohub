@@ -3,8 +3,8 @@ import { eq } from 'drizzle-orm';
 import request from 'supertest';
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
-import { BETTER_AUTH, type Auth } from '../../src/infrastructure/auth/better-auth.js';
 import { type AuthenticatedUser } from '../../src/infrastructure/auth/auth.types.js';
+import { BETTER_AUTH, type Auth } from '../../src/infrastructure/auth/better-auth.js';
 import { DRIZZLE, type DrizzleDb } from '../../src/infrastructure/database/client.js';
 import { user as userTable } from '../../src/infrastructure/database/schema/users.js';
 import { UsersService } from '../../src/modules/users/users.service.js';
@@ -65,7 +65,7 @@ describe.skipIf(!hasDatabase())('Invitation flow (integration)', () => {
 
   it('invites a user, sets their password via POST /api/account/set-password, and signs them in', async () => {
     const email = `invitee-${Date.now()}@example.com`;
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const logSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
 
     const created = await users.invite({ email, name: 'Invited User' }, SYSADMIN);
     expect(created.email).toBe(email);

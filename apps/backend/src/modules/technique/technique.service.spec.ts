@@ -5,14 +5,14 @@ import {
 } from '@nestjs/common';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
+import { type AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
-import { AuditLogService } from '../audit-log/audit-log.service.js';
-import { ClassificationCategoryRepository } from '../classification-category/classification-category.repository.js';
-import { ClassificationCategoryService } from '../classification-category/classification-category.service.js';
+import { type AuditLogService } from '../audit-log/audit-log.service.js';
+import { type ClassificationCategoryRepository } from '../classification-category/classification-category.repository.js';
+import { type ClassificationCategoryService } from '../classification-category/classification-category.service.js';
 
 import {
-  TechniqueRepository,
+  type TechniqueRepository,
   type TechniqueRow,
 } from './technique.repository.js';
 import { TechniqueService } from './technique.service.js';

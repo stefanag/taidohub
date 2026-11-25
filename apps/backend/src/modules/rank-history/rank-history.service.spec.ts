@@ -25,7 +25,6 @@ const sysadmin = {
   memberships: [],
 };
 const user = { ...sysadmin, id: 'u-actor', role: 'user' as const };
-const owner = { ...sysadmin, id: 'u-subject', role: 'user' as const };
 
 const UUID = '11111111-1111-1111-1111-111111111111';
 
@@ -103,9 +102,9 @@ const FAKE_TX = {
   update: vi.fn().mockReturnValue({
     set: vi.fn().mockReturnValue({ where: vi.fn().mockResolvedValue([]) }),
   }),
-} as any;
+} as never;
 const fakeDb = {
-  transaction: vi.fn(async (cb: (tx: any) => Promise<unknown>) => cb(FAKE_TX)),
+  transaction: vi.fn(async (cb: (tx: unknown) => Promise<unknown>) => cb(FAKE_TX)),
 };
 
 async function makeService(

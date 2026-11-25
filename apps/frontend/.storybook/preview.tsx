@@ -1,10 +1,11 @@
 import { QueryClientProvider } from '@tanstack/react-query';
-import type { Preview } from '@storybook/react-vite';
 import { initialize, mswLoader } from 'msw-storybook-addon';
 
+import { createQueryClient } from '../src/shared/api/queryClient';
 import { AbilityProvider } from '../src/shared/lib/casl/ability-context';
 import { defineAbilityFor } from '../src/shared/lib/casl/defineAbilityFor';
-import { createQueryClient } from '../src/shared/api/queryClient';
+
+import type { Preview } from '@storybook/react-vite';
 
 import '../src/app/styles/globals.css';
 

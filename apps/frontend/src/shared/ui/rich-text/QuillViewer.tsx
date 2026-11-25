@@ -1,9 +1,10 @@
 import * as React from 'react';
 import ReactQuill from 'react-quill-new';
 
+import type { Delta } from './delta.js';
+
 import { cn } from '@/shared/lib/utils';
 
-import type { Delta } from './delta.js';
 
 export interface QuillViewerProps {
   value: Delta;

@@ -1,8 +1,9 @@
 import { createRoute } from '@tanstack/react-router';
 
+import { appLayoutRoute } from './_app.js';
+
 import { SettingsLabelsPage } from '@/pages/settings-labels';
 
-import { appLayoutRoute } from './_app.js';
 
 /**
  * `/settings/labels` — admin surface for tags and categories. Lives under the

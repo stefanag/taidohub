@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { and, eq, inArray, isNull, or, sql } from 'drizzle-orm';
-import type { TaggableType } from '@repo/contracts/labels';
+
 
 import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
 import {
@@ -9,6 +9,8 @@ import {
   tag,
   tagAttachment,
 } from '../../infrastructure/database/schema/index.js';
+
+import type { TaggableType } from '@repo/contracts/labels';
 
 export type TagRow = typeof tag.$inferSelect;
 export type CategoryRow = typeof category.$inferSelect;

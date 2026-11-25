@@ -4,6 +4,8 @@ import * as React from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { PatternForm } from './PatternForm.js';
+
 import i18n from '@/i18n';
 
 const TYPE_HOKEI = { id: 'type-hokei', code: 'hokei', nameEn: 'Hokei', nameSv: 'Hokei', nameFi: 'Hokei', nameJa: null, rootCode: 'pattern_type', parentId: null, sortOrder: 0, isActive: true };
@@ -33,8 +35,6 @@ vi.mock('@/entities/pattern', () => ({
     isPending: hooks.updateIsPending,
   }),
 }));
-
-import { PatternForm } from './PatternForm.js';
 
 /**
  * `PatternForm` parallels `TechniqueForm` (create / edit with

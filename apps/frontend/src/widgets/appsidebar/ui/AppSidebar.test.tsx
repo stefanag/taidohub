@@ -3,6 +3,8 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { AppSidebar } from './AppSidebar.js';
+
 import * as authApi from '@/features/auth-by-email';
 import i18n from '@/i18n';
 import { AbilityProvider, defineAbilityFor } from '@/shared/lib/casl';
@@ -68,8 +70,6 @@ vi.mock('@tanstack/react-router', async (orig) => {
       opts.select({ location: { pathname: useRouterStateMock() } }),
   };
 });
-
-import { AppSidebar } from './AppSidebar.js';
 
 // `useSignOut` (called from `NavUser`) reads the React Query cache via
 // `useQueryClient`, so the sidebar now requires a `QueryClientProvider`

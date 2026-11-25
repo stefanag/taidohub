@@ -1,8 +1,8 @@
 import { Link } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 
-import { Button } from '@/shared/ui';
 import { LocaleSwitcher } from '@/features/locale-switcher';
+import { Button } from '@/shared/ui';
 
 /**
  * Public-facing top navigation bar. Only rendered inside the `_public`

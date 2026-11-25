@@ -1,10 +1,11 @@
-import type { UpdateUserProfileInput, UserProfile } from '@/entities/profile';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useUpdateMyProfile } from '@/entities/profile';
-import { countryName, ISO_3166_ALPHA3_CODES } from '@/entities/organisation';
+import type { UpdateUserProfileInput, UserProfile } from '@/entities/profile';
 import type { IsoAlpha3 } from '@repo/contracts/organisations';
+
+import { countryName, ISO_3166_ALPHA3_CODES } from '@/entities/organisation';
+import { useUpdateMyProfile } from '@/entities/profile';
 import { HttpError } from '@/shared/api';
 import {
   Button,

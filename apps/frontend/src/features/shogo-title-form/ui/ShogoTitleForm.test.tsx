@@ -59,10 +59,9 @@ vi.mock('@/entities/belt-rank/api/belt-rank.api.js', async (orig) => {
   };
 });
 
-import { createShogoTitle } from '@/entities/shogo-title/api/shogo-title.api.js';
-
 import { ShogoTitleForm } from './ShogoTitleForm.js';
 
+import { createShogoTitle } from '@/entities/shogo-title/api/shogo-title.api.js';
 import i18n from '@/i18n';
 
 const mockedCreate = vi.mocked(createShogoTitle);

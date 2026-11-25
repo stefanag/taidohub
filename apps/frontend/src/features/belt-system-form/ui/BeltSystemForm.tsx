@@ -6,6 +6,7 @@ import {
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+
 import type { z } from 'zod';
 
 import { useCreateBeltSystem, useUpdateBeltSystem } from '@/entities/belt-system';

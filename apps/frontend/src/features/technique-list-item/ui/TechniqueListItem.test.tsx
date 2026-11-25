@@ -3,11 +3,12 @@ import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { TechniqueListItem } from './TechniqueListItem.js';
+
 import type { Technique } from '@repo/contracts/techniques';
 
 import i18n from '@/i18n';
 
-import { TechniqueListItem } from './TechniqueListItem.js';
 
 /**
  * `TechniqueListItem` is a pure-prop row component — no hooks, no

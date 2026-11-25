@@ -1,9 +1,10 @@
 import { createRoute, redirect } from '@tanstack/react-router';
 
+import { appLayoutRoute } from './_app.js';
+
 import { authClient } from '@/features/auth-by-email';
 import { AdminAuditLogPage } from '@/pages/admin-audit-log';
 
-import { appLayoutRoute } from './_app.js';
 
 /**
  * Admin-only route mounting the audit-log page. Sits under `_app` so the

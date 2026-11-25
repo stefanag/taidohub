@@ -1,5 +1,6 @@
-import type { RenderedEmail, SendPasswordResetArgs } from '../email.types.js';
 import { normaliseLocale } from './locale.util.js';
+
+import type { RenderedEmail, SendPasswordResetArgs } from '../email.types.js';
 
 /**
  * Renders the self-service password-reset email — sent by better-auth's

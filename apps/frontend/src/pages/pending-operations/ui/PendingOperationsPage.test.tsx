@@ -4,6 +4,8 @@ import userEvent from '@testing-library/user-event';
 import * as React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { PendingOperationsPage } from './PendingOperationsPage.js';
+
 import i18n from '@/i18n';
 
 const approve = vi.fn();
@@ -17,8 +19,6 @@ vi.mock('@/entities/pending-operation', () => ({
   useApprovePendingOperation: () => ({ mutate: approve, isPending: false, isError: false }),
   useRejectPendingOperation: () => ({ mutate: reject, isPending: false, isError: false }),
 }));
-
-import { PendingOperationsPage } from './PendingOperationsPage.js';
 
 const preview = {
   studentUserId: 'u-2',

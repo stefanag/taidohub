@@ -2,15 +2,17 @@ import { Smile } from 'lucide-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { ReactionPicker } from './ReactionPicker.js';
+
 import type { FeedbackComment, FeedbackReaction } from '@repo/contracts/feedback';
 
-import { useSession } from '@/entities/me';
 import {
   useDeleteFeedbackCommentMutation,
   useRemoveFeedbackReactionMutation,
   useSetFeedbackReactionMutation,
   useUpdateFeedbackCommentMutation,
 } from '@/entities/feedback';
+import { useSession } from '@/entities/me';
 import { formatDate } from '@/i18n/formatters';
 import {
   Badge,
@@ -28,7 +30,6 @@ import {
   PopoverTrigger,
 } from '@/shared/ui/popover.js';
 
-import { ReactionPicker } from './ReactionPicker.js';
 
 const EDIT_WINDOW_MS = 24 * 60 * 60 * 1000;
 

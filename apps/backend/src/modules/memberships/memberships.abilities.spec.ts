@@ -2,11 +2,16 @@ import { AbilityBuilder, createMongoAbility } from '@casl/ability';
 import { describe, it, expect } from 'vitest';
 
 import { type AppAbility } from '../../infrastructure/ability/ability.types.js';
+import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
+
 import { MembershipsAbilityRules } from './memberships.abilities.js';
 
-function buildFor(user: any): AppAbility {
+/** The rules read only `id`, `role` and `memberships`; the tests pass just those. */
+type RuleUser = Pick<AuthenticatedUser, 'id' | 'role' | 'memberships'>;
+
+function buildFor(user: RuleUser | null): AppAbility {
   const builder = new AbilityBuilder<AppAbility>(createMongoAbility);
-  new MembershipsAbilityRules().contributeTo(builder, user);
+  new MembershipsAbilityRules().contributeTo(builder, user as AuthenticatedUser | null);
   return builder.build();
 }
 

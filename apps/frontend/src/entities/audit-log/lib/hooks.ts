@@ -1,8 +1,9 @@
 import { queryOptions } from '@tanstack/react-query';
 
+import { listAuditLog } from '../api/audit-log.api.js';
+
 import type { ListAuditLogQuery } from '@repo/contracts/audit-log';
 
-import { listAuditLog } from '../api/audit-log.api.js';
 
 export const auditLogKeys = {
   all: ['audit-log'] as const,

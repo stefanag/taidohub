@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { GradingTimelineEntry } from './GradingTimelineEntry.js';
+
 import type { BeltRank } from '@/entities/belt-rank';
 import type { GradingHistoryRow } from '@/entities/rank-history';
 import type { ShogoTitle } from '@/entities/shogo-title';
 
-import { GradingTimelineEntry } from './GradingTimelineEntry.js';
 
 export interface GradingTimelineProps {
   /**

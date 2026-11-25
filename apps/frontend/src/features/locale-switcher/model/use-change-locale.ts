@@ -33,7 +33,6 @@ export function useChangeLocale(): {
         updateUser: (input: { locale: string }) => Promise<unknown>;
       };
       client.updateUser({ locale: next }).catch((err) => {
-        // eslint-disable-next-line no-console
         console.warn('[locale] failed to persist locale to user record', err);
       });
     }

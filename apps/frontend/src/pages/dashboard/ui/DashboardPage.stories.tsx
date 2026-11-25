@@ -1,6 +1,7 @@
+import { DashboardPage } from './DashboardPage.js';
+
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { DashboardPage } from './DashboardPage.js';
 
 const meta = {
   title: 'Pages/Dashboard',

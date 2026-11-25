@@ -1,14 +1,15 @@
-import { Reflector } from '@nestjs/core';
-import type { ExecutionContext } from '@nestjs/common';
+import { type Reflector } from '@nestjs/core';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import type { DrizzleDb } from '../database/client.js';
 
-import { AuthGuard } from './auth.guard.js';
 import { AuthUserCache } from './auth-user.cache.js';
+import { AuthGuard } from './auth.guard.js';
 import { type AuthenticatedUser } from './auth.types.js';
 import { type Auth } from './better-auth.js';
 import { UserContextService } from './user-context.service.js';
+
+import type { DrizzleDb } from '../database/client.js';
+import type { ExecutionContext } from '@nestjs/common';
 
 type Req = { headers: Record<string, string>; user?: AuthenticatedUser };
 

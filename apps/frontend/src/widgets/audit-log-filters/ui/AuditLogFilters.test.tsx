@@ -2,9 +2,10 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { AuditLogFilters } from './AuditLogFilters.js';
+
 import i18n from '@/i18n';
 
-import { AuditLogFilters } from './AuditLogFilters.js';
 
 describe('<AuditLogFilters>', () => {
   beforeEach(async () => {

@@ -13,10 +13,9 @@ vi.mock('@/entities/shogo-title/api/shogo-title.api.js', async (orig) => {
   };
 });
 
-import { deleteShogoTitle } from '@/entities/shogo-title/api/shogo-title.api.js';
-
 import { ShogoTitlesTable } from './ShogoTitlesTable.js';
 
+import { deleteShogoTitle } from '@/entities/shogo-title/api/shogo-title.api.js';
 import i18n from '@/i18n';
 
 const mockedDelete = vi.mocked(deleteShogoTitle);

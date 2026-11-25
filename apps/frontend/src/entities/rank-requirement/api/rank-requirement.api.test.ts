@@ -1,12 +1,4 @@
-import type { SetGradingRequirementsInput } from '@repo/contracts';
 import { describe, expect, it, vi } from 'vitest';
-
-vi.mock('@/shared/api', async (orig) => {
-  const actual = await orig<typeof import('@/shared/api')>();
-  return { ...actual, httpClient: vi.fn() };
-});
-
-import { httpClient } from '@/shared/api';
 
 import {
   clearRequirements,
@@ -15,6 +7,15 @@ import {
   getRequirementsForUser,
   setRequirements,
 } from './rank-requirement.api.js';
+
+import type { SetGradingRequirementsInput } from '@repo/contracts';
+
+import { httpClient } from '@/shared/api';
+
+vi.mock('@/shared/api', async (orig) => {
+  const actual = await orig<typeof import('@/shared/api')>();
+  return { ...actual, httpClient: vi.fn() };
+});
 
 const RANK_ID = '550e8400-e29b-41d4-a716-446655440000';
 const SET_ID = '550e8400-e29b-41d4-a716-446655440001';

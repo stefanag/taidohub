@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-import type { RootCode } from '@repo/contracts/classification-category';
 import { and, asc, eq, exists, inArray, notInArray, sql, type SQL } from 'drizzle-orm';
 
 import {
@@ -12,6 +11,8 @@ import {
   pattern,
   patternClassification,
 } from '../../infrastructure/database/schema/pattern.js';
+
+import type { RootCode } from '@repo/contracts/classification-category';
 
 export type PatternRow = typeof pattern.$inferSelect;
 export type NewPatternRow = typeof pattern.$inferInsert;

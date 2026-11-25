@@ -1,5 +1,6 @@
-import type { RenderedEmail, SendInviteArgs } from '../email.types.js';
 import { normaliseLocale } from './locale.util.js';
+
+import type { RenderedEmail, SendInviteArgs } from '../email.types.js';
 
 /**
  * Renders the "you've been invited" email. Plain text only (spec §6.3) —

@@ -4,6 +4,8 @@ import * as React from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { TechniqueForm } from './TechniqueForm.js';
+
 import type { Technique } from '@repo/contracts/techniques';
 
 import i18n from '@/i18n';
@@ -35,8 +37,6 @@ vi.mock('@/entities/technique', () => ({
     isPending: hooks.updateIsPending,
   }),
 }));
-
-import { TechniqueForm } from './TechniqueForm.js';
 
 /**
  * `TechniqueForm` is the create / edit form for catalogue techniques.

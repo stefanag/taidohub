@@ -4,6 +4,8 @@ import * as React from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { FeedbackThread } from './FeedbackThread.js';
+
 import i18n from '@/i18n';
 import { FeatureFlagsProvider } from '@/shared/lib/feature-flags';
 
@@ -70,8 +72,6 @@ vi.mock('./FeedbackComment.js', () => ({
     </div>
   ),
 }));
-
-import { FeedbackThread } from './FeedbackThread.js';
 
 /**
  * `FeedbackThread` is the heart of the feedback feature: it composes 5

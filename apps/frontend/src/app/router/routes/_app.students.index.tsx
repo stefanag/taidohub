@@ -1,8 +1,9 @@
 import { createRoute } from '@tanstack/react-router';
 
+import { studentsRoute } from './_app.students.js';
+
 import { StudentsPage } from '@/pages/students';
 
-import { studentsRoute } from './_app.students.js';
 
 /**
  * Index of `/students` — the roster. The parent (`_app.students.tsx`)

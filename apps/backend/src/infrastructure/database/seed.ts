@@ -17,8 +17,8 @@ import { seedSysadmin, type SeedDeps } from './seed-sysadmin.js';
 import { seedBeltCatalog } from './seeds/belt-catalog.seed.js';
 import { seedClassifications } from './seeds/classifications.seed.js';
 import { seedClubMembers } from './seeds/club-members.seed.js';
-import { seedGradingRequirements } from './seeds/grading-requirements.seed.js';
 import { assertDemoSeedAllowed, seedDemoData } from './seeds/demo-data.seed.js';
+import { seedGradingRequirements } from './seeds/grading-requirements.seed.js';
 import { seedOrganisations } from './seeds/organisations.seed.js';
 import { seedPatterns } from './seeds/patterns.seed.js';
 import { seedTechniques } from './seeds/techniques.seed.js';
@@ -60,17 +60,14 @@ async function main(): Promise<void> {
     name: 'Sysadmin',
   });
 
-  // eslint-disable-next-line no-console
   console.info(
     `[seed] sysadmin: ${env.SYSADMIN_EMAIL} (role=sysadmin, created=${result.created}, promoted=${result.promoted})`,
   );
 
   const orgs = await seedOrganisations(db);
-  // eslint-disable-next-line no-console
   console.info(`[seed] organisations: inserted=${orgs.inserted}, updated=${orgs.updated}`);
 
   const belts = await seedBeltCatalog(db);
-  // eslint-disable-next-line no-console
   console.info(
     `[seed] belt catalog: systems(+${belts.systems.inserted}/~${belts.systems.updated}) ` +
       `ranks(+${belts.ranks.inserted}/~${belts.ranks.updated}) ` +
@@ -80,21 +77,18 @@ async function main(): Promise<void> {
   // Classifications must seed before techniques — the technique seeder
   // resolves `(rootCode, code) → uuid` against the live taxonomy.
   const classifications = await seedClassifications(db);
-  // eslint-disable-next-line no-console
   console.info(
     `[seed] classifications: roots(+${classifications.roots.inserted}/~${classifications.roots.updated}) ` +
       `children(+${classifications.children.inserted}/~${classifications.children.updated})`,
   );
 
   const techniques = await seedTechniques(db);
-  // eslint-disable-next-line no-console
   console.info(
     `[seed] techniques: rows(+${techniques.techniques.inserted}/~${techniques.techniques.updated}) ` +
       `edges(+${techniques.edges.inserted})`,
   );
 
   const patterns = await seedPatterns(db);
-  // eslint-disable-next-line no-console
   console.info(
     `[seed] patterns: rows(+${patterns.patterns.inserted}/~${patterns.patterns.updated}) ` +
       `edges(+${patterns.edges.inserted})`,
@@ -103,7 +97,6 @@ async function main(): Promise<void> {
   // Grading requirements reference ranks, techniques and patterns by id, so
   // they seed after all three catalogues.
   const requirements = await seedGradingRequirements(db);
-  // eslint-disable-next-line no-console
   console.info(
     `[seed] grading requirements: sets(+${requirements.sets.inserted}/~${requirements.sets.updated}) ` +
       `ranks(~${requirements.ranks})`,
@@ -125,7 +118,6 @@ async function main(): Promise<void> {
       signUpEmail: deps.signUpEmail,
       sysadminEmail: env.SYSADMIN_EMAIL,
     });
-    // eslint-disable-next-line no-console
     console.info(
       `[seed] club members (STAF): users(+${clubMembers.users.inserted}/~${clubMembers.users.updated}) ` +
         `profiles(+${clubMembers.profiles.inserted}/~${clubMembers.profiles.updated}) ` +
@@ -133,7 +125,6 @@ async function main(): Promise<void> {
         `rank_history(+${clubMembers.rankHistory.inserted}/~${clubMembers.rankHistory.updated})`,
     );
   } else {
-    // eslint-disable-next-line no-console
     console.info('[seed] club members (STAF): skipped (SEED_CLUB_MEMBERS=false)');
   }
 
@@ -149,7 +140,6 @@ async function main(): Promise<void> {
       sysadminEmail: env.SYSADMIN_EMAIL,
       password: env.DEMO_PASSWORD,
     });
-    // eslint-disable-next-line no-console
     console.info(
       `[seed] demo data: club=${demo.club} users(+${demo.users.inserted}/=${demo.users.existing}) ` +
         `memberships(+${demo.memberships}) rank_history(+${demo.rankHistory}) progress(+${demo.progress})`,
@@ -164,7 +154,6 @@ async function main(): Promise<void> {
 main()
   .then(() => process.exit(0))
   .catch((err: unknown) => {
-    // eslint-disable-next-line no-console
     console.error('[seed] failed:', err);
     process.exit(1);
   });

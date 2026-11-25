@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-import type { ContentType } from '@repo/contracts/progress';
 import { and, eq } from 'drizzle-orm';
 
 import {
@@ -8,6 +7,8 @@ import {
   type DrizzleExecutor,
 } from '../../infrastructure/database/client.js';
 import { userContentProgress } from '../../infrastructure/database/schema/user-content-progress.js';
+
+import type { ContentType } from '@repo/contracts/progress';
 
 export type ProgressRow = typeof userContentProgress.$inferSelect;
 export type NewProgressRow = typeof userContentProgress.$inferInsert;

@@ -15,7 +15,7 @@ import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { and, eq, inArray, isNull, sql, type SQL } from 'drizzle-orm';
+import { eq, inArray, sql } from 'drizzle-orm';
 
 import { type DrizzleDb } from '../client.js';
 import {
@@ -82,10 +82,6 @@ export interface BeltCatalogSeedResult {
   systems: { inserted: number; updated: number };
   ranks: { inserted: number; updated: number };
   shogos: { inserted: number; updated: number };
-}
-
-function orgScopeOnRank(orgId: string | null | undefined): SQL {
-  return orgId == null ? isNull(beltRanks.organisationId) : eq(beltRanks.organisationId, orgId);
 }
 
 export async function seedBeltCatalog(db: DrizzleDb): Promise<BeltCatalogSeedResult> {

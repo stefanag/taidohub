@@ -1,13 +1,13 @@
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
+import { type AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
-import { OrganisationsRepository } from '../organisations/organisations.repository.js';
+import { type OrganisationsRepository } from '../organisations/organisations.repository.js';
 
-import { RankRequirementsService } from './rank-requirements.service.js';
+import { type RankRequirementsService } from './rank-requirements.service.js';
 import {
-  RequirementSetsRepository,
+  type RequirementSetsRepository,
   type RequirementSetRow,
 } from './requirement-sets.repository.js';
 import { RequirementSetsService } from './requirement-sets.service.js';

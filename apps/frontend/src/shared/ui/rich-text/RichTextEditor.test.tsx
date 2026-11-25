@@ -1,8 +1,8 @@
 import { render } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { RichTextEditor } from './RichTextEditor.js';
 import { emptyDelta, type Delta } from './delta.js';
+import { RichTextEditor } from './RichTextEditor.js';
 
 const HELLO_BOLD: Delta = {
   ops: [

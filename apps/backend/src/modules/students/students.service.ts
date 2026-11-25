@@ -1,10 +1,5 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import type {
-  ContentType,
-  Progress,
-  UpsertInstructorProgressInput,
-} from '@repo/contracts/progress';
-import type { StudentRosterRow } from '@repo/contracts/students';
+
 
 import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
@@ -12,6 +7,13 @@ import { ProgressRepository } from '../progress/progress.repository.js';
 import { ProgressService } from '../progress/progress.service.js';
 
 import { StudentsRepository } from './students.repository.js';
+
+import type {
+  ContentType,
+  Progress,
+  UpsertInstructorProgressInput,
+} from '@repo/contracts/progress';
+import type { StudentRosterRow } from '@repo/contracts/students';
 
 /**
  * Business logic for the instructor's view of students.

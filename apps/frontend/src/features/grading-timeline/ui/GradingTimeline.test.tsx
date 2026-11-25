@@ -7,11 +7,11 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { GradingTimeline } from './GradingTimeline.js';
 
 import type { BeltRank } from '@/entities/belt-rank';
-import type { ShogoTitle } from '@/entities/shogo-title';
 import type { GradingHistoryRow } from '@/entities/rank-history';
+import type { ShogoTitle } from '@/entities/shogo-title';
 
-import { DEFAULT_FLAGS, FeatureFlagsProvider, type FeatureFlagMap } from '@/shared/lib/feature-flags';
 import i18n from '@/i18n';
+import { DEFAULT_FLAGS, FeatureFlagsProvider, type FeatureFlagMap } from '@/shared/lib/feature-flags';
 
 const RANK: BeltRank = {
   id: 'rank-shodan',

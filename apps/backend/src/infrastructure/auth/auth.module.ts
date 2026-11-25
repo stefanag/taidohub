@@ -3,11 +3,11 @@ import { ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 
 import { type Env } from '../../config/env.schema.js';
-
 import { DRIZZLE, type DrizzleDb } from '../database/client.js';
 import { EMAIL_SERVICE, type EmailService } from '../email/email.types.js';
-import { AuthGuard } from './auth.guard.js';
+
 import { AuthUserCache } from './auth-user.cache.js';
+import { AuthGuard } from './auth.guard.js';
 import { BETTER_AUTH, buildBetterAuth } from './better-auth.js';
 import { UserContextService } from './user-context.service.js';
 import { VerificationTokenService } from './verification-token.service.js';

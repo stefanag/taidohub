@@ -6,6 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { SetPasswordForm } from './SetPasswordForm.js';
 
+import { setInitialPassword } from '@/entities/user/api/user.api.js';
 import i18n from '@/i18n';
 import { HttpError } from '@/shared/api';
 
@@ -13,8 +14,6 @@ vi.mock('@/entities/user/api/user.api.js', async (orig) => {
   const actual = await orig<typeof import('@/entities/user/api/user.api.js')>();
   return { ...actual, setInitialPassword: vi.fn() };
 });
-
-import { setInitialPassword } from '@/entities/user/api/user.api.js';
 
 const mockedSet = vi.mocked(setInitialPassword);
 

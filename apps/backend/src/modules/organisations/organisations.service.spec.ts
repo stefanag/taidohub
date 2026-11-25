@@ -1,6 +1,6 @@
+import { ConflictException, ForbiddenException, NotFoundException, BadRequestException } from '@nestjs/common';
 import { DiscoveryModule } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
-import { ConflictException, ForbiddenException, NotFoundException, BadRequestException } from '@nestjs/common';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
@@ -11,6 +11,7 @@ import { AuditLogAbilityRules } from '../audit-log/audit-log.abilities.js';
 import { AuditLogService } from '../audit-log/audit-log.service.js';
 import { LabelsService } from '../labels/labels.service.js';
 import { UsersAbilityRules } from '../users/users.abilities.js';
+
 import { OrganisationsAbilityRules } from './organisations.abilities.js';
 import { OrganisationsRepository } from './organisations.repository.js';
 import { OrganisationsService } from './organisations.service.js';
@@ -75,9 +76,9 @@ function labelsStub() {
 }
 
 // Drizzle db.transaction(cb) calls cb(tx) and returns its result. Fake it.
-const FAKE_TX = { __tx: true } as any;
+const FAKE_TX = { __tx: true } as never;
 const fakeDb = {
-  transaction: vi.fn(async (cb: (tx: any) => Promise<unknown>) => cb(FAKE_TX)),
+  transaction: vi.fn(async (cb: (tx: unknown) => Promise<unknown>) => cb(FAKE_TX)),
 };
 
 async function makeService(
@@ -122,47 +123,47 @@ describe('OrganisationsService — hierarchy', () => {
 
   it('creates an IF with parentId=null', async () => {
     repo.create.mockResolvedValue(IF_ROW);
-    const out = await service.create({ ...IF_ROW, parentId: null, type: 'international_federation' } as any, admin);
+    const out = await service.create({ ...IF_ROW, parentId: null, type: 'international_federation' } as never, admin);
     expect(out.id).toBe('if-1');
   });
 
   it('rejects an IF with a parent', async () => {
     await expect(
-      service.create({ ...IF_ROW, parentId: 'nf-1', type: 'international_federation' } as any, admin),
+      service.create({ ...IF_ROW, parentId: 'nf-1', type: 'international_federation' } as never, admin),
     ).rejects.toThrow(BadRequestException);
   });
 
   it('rejects an NF without a parent', async () => {
     await expect(
-      service.create({ ...NF_ROW, parentId: null, type: 'national_federation' } as any, admin),
+      service.create({ ...NF_ROW, parentId: null, type: 'national_federation' } as never, admin),
     ).rejects.toThrow(BadRequestException);
   });
 
   it('rejects an NF whose parent is not an IF', async () => {
     repo.findById.mockResolvedValue(NF_ROW);
     await expect(
-      service.create({ ...NF_ROW, parentId: 'nf-1', type: 'national_federation' } as any, admin),
+      service.create({ ...NF_ROW, parentId: 'nf-1', type: 'national_federation' } as never, admin),
     ).rejects.toThrow(BadRequestException);
   });
 
   it('accepts an NF whose parent is an IF', async () => {
     repo.findById.mockResolvedValue(IF_ROW);
     repo.create.mockResolvedValue(NF_ROW);
-    const out = await service.create({ ...NF_ROW, parentId: 'if-1', type: 'national_federation' } as any, admin);
+    const out = await service.create({ ...NF_ROW, parentId: 'if-1', type: 'national_federation' } as never, admin);
     expect(out.type).toBe('national_federation');
   });
 
   it('accepts a club whose parent is another club', async () => {
     repo.findById.mockResolvedValue(CLUB_ROW);
     repo.create.mockResolvedValue(SUBCLUB_ROW);
-    const out = await service.create({ ...SUBCLUB_ROW, parentId: 'club-1', type: 'club' } as any, admin);
+    const out = await service.create({ ...SUBCLUB_ROW, parentId: 'club-1', type: 'club' } as never, admin);
     expect(out.type).toBe('club');
   });
 
   it('rejects a club whose parent is an IF', async () => {
     repo.findById.mockResolvedValue(IF_ROW);
     await expect(
-      service.create({ ...CLUB_ROW, parentId: 'if-1', type: 'club' } as any, admin),
+      service.create({ ...CLUB_ROW, parentId: 'if-1', type: 'club' } as never, admin),
     ).rejects.toThrow(BadRequestException);
   });
 });
@@ -177,7 +178,7 @@ describe('OrganisationsService — country/type rule on update', () => {
 
   it('rejects setting a country on an international federation', async () => {
     repo.findById.mockResolvedValue(IF_ROW);
-    await expect(service.update('if-1', { country: 'JPN' as any }, admin)).rejects.toThrow(
+    await expect(service.update('if-1', { country: 'JPN' as never }, admin)).rejects.toThrow(
       BadRequestException,
     );
   });
@@ -192,7 +193,7 @@ describe('OrganisationsService — country/type rule on update', () => {
   it('accepts a country change between two valid ISO codes on a club', async () => {
     repo.findById.mockResolvedValue(CLUB_ROW);
     repo.update.mockResolvedValue({ ...CLUB_ROW, country: 'FIN' });
-    const out = await service.update('club-1', { country: 'FIN' as any }, admin);
+    const out = await service.update('club-1', { country: 'FIN' as never }, admin);
     expect(out.country).toBe('FIN');
   });
 });
@@ -247,7 +248,7 @@ describe('OrganisationsService — authorization', () => {
     const repo = repoStub();
     const { service } = await makeService(repo, undefined, undefined, civilian);
     await expect(
-      service.create({ ...IF_ROW, parentId: null, type: 'international_federation' } as any, civilian),
+      service.create({ ...IF_ROW, parentId: null, type: 'international_federation' } as never, civilian),
     ).rejects.toThrow(ForbiddenException);
   });
 });
@@ -288,7 +289,7 @@ describe('OrganisationsService — org-scoped authorization', () => {
     const repo = repoStub();
     const { service } = await makeService(repo, undefined, undefined, orgadminOfClub1);
     await expect(
-      service.create({ ...CLUB_ROW, parentId: 'nf-1', type: 'club' } as any, orgadminOfClub1),
+      service.create({ ...CLUB_ROW, parentId: 'nf-1', type: 'club' } as never, orgadminOfClub1),
     ).rejects.toThrow(ForbiddenException);
   });
 
@@ -311,7 +312,7 @@ describe('OrganisationsService — org-scoped authorization', () => {
     const repo = repoStub();
     repo.list.mockResolvedValue({ data: [CLUB_ROW, NF_ROW], total: 2 });
     const { service } = await makeService(repo, undefined, undefined, orgadminOfClub1);
-    const out = await service.list({} as any, orgadminOfClub1);
+    const out = await service.list({} as never, orgadminOfClub1);
     expect(out.data.map((o) => o.id)).toEqual(['club-1']);
     expect(out.total).toBe(1);
   });
@@ -320,7 +321,7 @@ describe('OrganisationsService — org-scoped authorization', () => {
     const repo = repoStub();
     repo.list.mockResolvedValue({ data: [CLUB_ROW, NF_ROW], total: 2 });
     const { service } = await makeService(repo);
-    const out = await service.list({} as any, admin);
+    const out = await service.list({} as never, admin);
     expect(out.data.map((o) => o.id)).toEqual(['club-1', 'nf-1']);
     expect(out.total).toBe(2);
   });
@@ -334,7 +335,7 @@ describe('OrganisationsService — audit', () => {
     const { service } = await makeService(repo, audit);
 
     await service.create(
-      { ...IF_ROW, parentId: null, type: 'international_federation' } as any,
+      { ...IF_ROW, parentId: null, type: 'international_federation' } as never,
       admin,
     );
 
@@ -406,7 +407,7 @@ describe('OrganisationsService — labels integration', () => {
     const { service } = await makeService(repo, auditStub(), labels);
 
     await service.list(
-      { tag: ['t-1'], category: ['c-1'] } as any,
+      { tag: ['t-1'], category: ['c-1'] } as never,
       admin,
     );
 
@@ -427,7 +428,7 @@ describe('OrganisationsService — labels integration', () => {
     repo.list.mockResolvedValue({ data: [], total: 0 });
     const { service } = await makeService(repo, auditStub(), labels);
 
-    await service.list({} as any, admin);
+    await service.list({} as never, admin);
 
     expect(repo.list).toHaveBeenCalledWith(expect.anything(), undefined);
   });

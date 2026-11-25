@@ -6,22 +6,19 @@ import { useTranslation } from 'react-i18next';
 import { listBeltRanksQueryOptions, type BeltRank } from '@/entities/belt-rank';
 import { listBeltSystemsQueryOptions } from '@/entities/belt-system';
 import { gradingHistoryQueryOptions, type GradingHistoryRow } from '@/entities/rank-history';
-import { listShogoTitlesQueryOptions, type ShogoTitle } from '@/entities/shogo-title';
-
-import { useSession } from '@/features/auth-by-email';
-import { GradingTimeline } from '@/features/grading-timeline';
-import { RankHistoryFormDialog } from '@/features/rank-history-form';
-import { NextRankCard } from '@/features/next-rank-card';
-
-import { FeatureFlag, useFeatureFlag } from '@/shared/lib/feature-flags';
-import { Button } from '@/shared/ui';
-
-import { ClubCard } from '@/widgets/club-card';
-
 import {
   useUnverifyRankHistory,
   useVerifyRankHistory,
 } from '@/entities/rank-history';
+import { listShogoTitlesQueryOptions, type ShogoTitle } from '@/entities/shogo-title';
+import { useSession } from '@/features/auth-by-email';
+import { GradingTimeline } from '@/features/grading-timeline';
+import { NextRankCard } from '@/features/next-rank-card';
+import { RankHistoryFormDialog } from '@/features/rank-history-form';
+import { FeatureFlag, useFeatureFlag } from '@/shared/lib/feature-flags';
+import { Button } from '@/shared/ui';
+import { ClubCard } from '@/widgets/club-card';
+
 
 /**
  * Self-service grading-history page. Two-column layout:

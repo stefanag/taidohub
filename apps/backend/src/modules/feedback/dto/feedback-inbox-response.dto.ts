@@ -1,6 +1,6 @@
+import { FeedbackInboxResponseSchema } from '@repo/contracts/feedback';
 import { createZodDto } from 'nestjs-zod';
 
-import { FeedbackInboxResponseSchema } from '@repo/contracts/feedback';
 
 /**
  * `GET /api/feedback/inbox` response shape — the `Paginated<T>`

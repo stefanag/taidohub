@@ -87,7 +87,7 @@ const techProgressSpy = vi.fn(
 const patProgressSpy = vi.fn(
   (_options?: { enabled?: boolean }) => ({ data: [] as Progress[], isPending: false, isError: false }),
 );
-const studentProgressSpy = vi.fn((userId: string | null) => ({
+const studentProgressSpy = vi.fn((_userId: string | null) => ({
   data: [] as Progress[],
   isPending: false,
   isError: false,

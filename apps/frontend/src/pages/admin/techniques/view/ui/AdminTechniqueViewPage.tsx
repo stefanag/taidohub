@@ -1,13 +1,13 @@
-import { useNavigate, useParams } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
+import { useNavigate, useParams } from '@tanstack/react-router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { listOrganisationsQueryOptions } from '@/entities/organisation';
 import {
   useDeleteTechniqueMutation,
   useTechniqueQuery,
 } from '@/entities/technique';
-import { listOrganisationsQueryOptions } from '@/entities/organisation';
 import { formatDate } from '@/i18n/formatters';
 import { Button } from '@/shared/ui';
 

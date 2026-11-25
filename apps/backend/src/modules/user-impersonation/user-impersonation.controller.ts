@@ -1,10 +1,12 @@
 import { Body, Controller, Post, Req, Res } from '@nestjs/common';
-import type { Request, Response as ExpressResponse } from 'express';
 
-import { CurrentUser } from '../../infrastructure/auth/current-user.decorator.js';
+
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
+import { CurrentUser } from '../../infrastructure/auth/current-user.decorator.js';
 
 import { UserImpersonationService } from './user-impersonation.service.js';
+
+import type { Request, Response as ExpressResponse } from 'express';
 
 /**
  * Sysadmin-only impersonation endpoints. Bridge between Express's req/res

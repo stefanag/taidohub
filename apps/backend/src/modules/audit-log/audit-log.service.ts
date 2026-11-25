@@ -1,15 +1,17 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
+
+
+import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
+import { type DrizzleExecutor } from '../../infrastructure/database/client.js';
+
+import { AuditLogRepository, type DbAuditLogWithUser } from './audit-log.repository.js';
+
 import type {
   AuditLogAction,
   AuditLogEntry,
   ListAuditLogQuery,
   ListAuditLogResponse,
 } from '@repo/contracts/audit-log';
-
-import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
-import { type DrizzleExecutor } from '../../infrastructure/database/client.js';
-
-import { AuditLogRepository, type DbAuditLogWithUser } from './audit-log.repository.js';
 
 export interface RecordInput {
   tx: DrizzleExecutor;

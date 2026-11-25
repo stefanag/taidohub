@@ -1,9 +1,5 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import type {
-  CreateShogoTitleInput,
-  ShogoTitle,
-  UpdateShogoTitleInput,
-} from '@repo/contracts/shogo-titles';
+
 
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import {
@@ -13,6 +9,12 @@ import {
 
 import { LookupTableService } from './lookup-table.service.js';
 import { ShogoTitlePatch, ShogoTitlesRepository } from './shogo-titles.repository.js';
+
+import type {
+  CreateShogoTitleInput,
+  ShogoTitle,
+  UpdateShogoTitleInput,
+} from '@repo/contracts/shogo-titles';
 
 /**
  * CRUD for `shogo_titles` — Renshi, Kyoshi, Hanshi (sortable

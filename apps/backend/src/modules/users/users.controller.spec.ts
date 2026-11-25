@@ -1,12 +1,13 @@
 import { Test } from '@nestjs/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import type { AddUserResponse, ListUsersResponse, User } from '@repo/contracts/users';
 
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 
 import { UsersController } from './users.controller.js';
 import { UsersService } from './users.service.js';
+
+import type { AddUserResponse, ListUsersResponse, User } from '@repo/contracts/users';
 
 /**
  * The users controller is a thin façade with nine endpoints. Only the

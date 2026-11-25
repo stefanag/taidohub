@@ -14,9 +14,9 @@ import {
   useDeleteOrganisation,
   useUpdateOrganisation,
 } from '@/entities/organisation';
+import { OrgMembershipManager } from '@/features/org-membership-manager';
 import { OrganisationDeleteDialog } from '@/features/organisation-delete-dialog';
 import { OrganisationMoveDialog } from '@/features/organisation-move-dialog';
-import { OrgMembershipManager } from '@/features/org-membership-manager';
 import { formatDate } from '@/i18n/formatters';
 import { Badge, Button } from '@/shared/ui';
 import {

@@ -14,11 +14,6 @@ import {
   Res,
 } from '@nestjs/common';
 import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
-
-import { ErrorEnvelopeDto } from '../../common/dto/error-envelope.dto.js';
-import { ApiEndpoint } from '../../common/swagger/api-endpoint.decorator.js';
-import { FeedbackInboxResponseDto } from './dto/feedback-inbox-response.dto.js';
-import type { Response } from 'express';
 import {
   CreateFeedbackCommentSchema,
   CreateFeedbackThreadSchema,
@@ -38,11 +33,16 @@ import {
 } from '@repo/contracts/feedback';
 import { ZodValidationPipe } from 'nestjs-zod';
 
+import { ErrorEnvelopeDto } from '../../common/dto/error-envelope.dto.js';
+import { ApiEndpoint } from '../../common/swagger/api-endpoint.decorator.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import { CurrentUser } from '../../infrastructure/auth/current-user.decorator.js';
 import { RequireFeatureFlag } from '../feature-flags/require-feature-flag.decorator.js';
 
+import { FeedbackInboxResponseDto } from './dto/feedback-inbox-response.dto.js';
 import { FeedbackService } from './feedback.service.js';
+
+import type { Response } from 'express';
 
 /**
  * REST surface for the instructor-feedback feature.

@@ -13,12 +13,12 @@
  * covers the failure path so a future tweak to the regex / file
  * walk can't silently let the bug pattern back in.
  */
+import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync, copyFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import test from 'node:test';
-import assert from 'node:assert/strict';
 
 const HERE = resolve(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]):/, '$1:'), '..');
 const CHECKER = resolve(HERE, 'check-route-mount.mjs');

@@ -13,10 +13,9 @@ vi.mock('@/entities/belt-system/api/belt-system.api.js', async (orig) => {
   };
 });
 
-import { deleteBeltSystem } from '@/entities/belt-system/api/belt-system.api.js';
-
 import { BeltSystemsTable } from './BeltSystemsTable.js';
 
+import { deleteBeltSystem } from '@/entities/belt-system/api/belt-system.api.js';
 import i18n from '@/i18n';
 
 const mockedDelete = vi.mocked(deleteBeltSystem);

@@ -1,6 +1,7 @@
+import { Badge } from './badge.js';
+
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Badge } from './badge.js';
 
 const meta = {
   title: 'Shared/Badge',

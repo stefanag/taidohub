@@ -6,8 +6,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { AdminRankRequirementsPage } from './AdminRankRequirementsPage.js';
 
-import type { BeltRank } from '@repo/contracts/ranks';
 import type { RequirementSet } from '@repo/contracts';
+import type { BeltRank } from '@repo/contracts/ranks';
 
 import i18n from '@/i18n';
 

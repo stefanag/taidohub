@@ -19,7 +19,7 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import type { BeltSystem } from '@repo/contracts/belt-systems';
+
 
 import { ErrorEnvelopeDto } from '../../common/dto/error-envelope.dto.js';
 import { ApiEndpoint } from '../../common/swagger/api-endpoint.decorator.js';
@@ -27,10 +27,12 @@ import { CheckAbility } from '../../infrastructure/ability/check-ability.decorat
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import { CurrentUser } from '../../infrastructure/auth/current-user.decorator.js';
 
+import { BeltSystemsService } from './belt-systems.service.js';
 import { BeltSystemDto } from './dto/belt-system.dto.js';
 import { CreateBeltSystemDto } from './dto/create-belt-system.dto.js';
 import { UpdateBeltSystemDto } from './dto/update-belt-system.dto.js';
-import { BeltSystemsService } from './belt-systems.service.js';
+
+import type { BeltSystem } from '@repo/contracts/belt-systems';
 
 @ApiTags('belt-systems')
 @ApiCookieAuth('session')

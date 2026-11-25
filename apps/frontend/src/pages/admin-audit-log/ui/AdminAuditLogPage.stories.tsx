@@ -1,6 +1,7 @@
+import { AdminAuditLogPage } from './AdminAuditLogPage.js';
+
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { AdminAuditLogPage } from './AdminAuditLogPage.js';
 
 const meta = {
   title: 'Pages/AdminAuditLog',

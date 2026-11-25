@@ -28,16 +28,16 @@ import { eq } from 'drizzle-orm';
 import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
-import { BETTER_AUTH, type Auth } from '../../src/infrastructure/auth/better-auth.js';
 import { type AuthenticatedUser } from '../../src/infrastructure/auth/auth.types.js';
+import { BETTER_AUTH, type Auth } from '../../src/infrastructure/auth/better-auth.js';
 import { DRIZZLE, type DrizzleDb } from '../../src/infrastructure/database/client.js';
-import { user as userTable } from '../../src/infrastructure/database/schema/users.js';
-import { organisations } from '../../src/infrastructure/database/schema/organisations.js';
-import { beltSystems } from '../../src/infrastructure/database/schema/belt-systems.js';
 import { beltRanks } from '../../src/infrastructure/database/schema/belt-ranks.js';
+import { beltSystems } from '../../src/infrastructure/database/schema/belt-systems.js';
 import { organisationMembership } from '../../src/infrastructure/database/schema/memberships.js';
-import { RequirementSetsService } from '../../src/modules/grading-requirements/requirement-sets.service.js';
+import { organisations } from '../../src/infrastructure/database/schema/organisations.js';
+import { user as userTable } from '../../src/infrastructure/database/schema/users.js';
 import { RankRequirementsService } from '../../src/modules/grading-requirements/rank-requirements.service.js';
+import { RequirementSetsService } from '../../src/modules/grading-requirements/requirement-sets.service.js';
 import { buildTestApp, hasDatabase } from '../helpers/app-factory.js';
 import { resetDatabase } from '../helpers/db-reset.js';
 

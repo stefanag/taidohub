@@ -1,8 +1,9 @@
 import { createRoute } from '@tanstack/react-router';
 
+import { appLayoutRoute } from './_app.js';
+
 import { MyOrganisationPage } from '@/pages/my-organisation';
 
-import { appLayoutRoute } from './_app.js';
 
 /**
  * Orgadmin-facing self-service page. Mounts under the existing `_app`

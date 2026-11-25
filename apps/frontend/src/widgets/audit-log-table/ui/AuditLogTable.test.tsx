@@ -4,6 +4,8 @@ import userEvent from '@testing-library/user-event';
 import * as React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { AuditLogTable } from './AuditLogTable.js';
+
 import { listAuditLog } from '@/entities/audit-log';
 import i18n from '@/i18n';
 
@@ -17,8 +19,6 @@ vi.mock('@/entities/audit-log/api/audit-log.api.js', async (orig) => {
   const actual = await orig<typeof import('@/entities/audit-log/api/audit-log.api.js')>();
   return { ...actual, listAuditLog: vi.fn() };
 });
-
-import { AuditLogTable } from './AuditLogTable.js';
 
 function renderWithProviders(ui: React.ReactElement): ReturnType<typeof render> {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });

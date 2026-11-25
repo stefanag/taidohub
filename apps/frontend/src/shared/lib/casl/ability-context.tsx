@@ -1,7 +1,7 @@
-import type { MongoAbility } from '@casl/ability';
 import { Can, AbilityProvider as CaslAbilityProvider } from '@casl/react';
 import * as React from 'react';
 
+import type { MongoAbility } from '@casl/ability';
 import type { AppAbilityTuple } from '@repo/contracts/casl';
 
 export type AppAbility = MongoAbility<AppAbilityTuple>;

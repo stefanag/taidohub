@@ -1,11 +1,12 @@
 import * as React from 'react';
 
+import { useClassificationCategoriesByRootQuery } from './hooks.js';
+
 import type {
   ClassificationCategory,
   RootCode,
 } from '@repo/contracts/classification-category';
 
-import { useClassificationCategoriesByRootQuery } from './hooks.js';
 
 export interface ClassificationCodeFilter {
   /**

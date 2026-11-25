@@ -1,9 +1,10 @@
 import { AbilityBuilder, createMongoAbility } from '@casl/ability';
 import { describe, expect, it } from 'vitest';
 
+import { GradingRequirementsAbilityRules } from './grading-requirements.ability-rules.js';
+
 import type { AppAbility } from '../../infrastructure/ability/ability.types.js';
 import type { AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
-import { GradingRequirementsAbilityRules } from './grading-requirements.ability-rules.js';
 
 function build(user: AuthenticatedUser | null): AppAbility {
   const builder = new AbilityBuilder<AppAbility>(createMongoAbility);

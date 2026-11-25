@@ -6,12 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { ErrorCodes } from '@repo/contracts/errors';
-import type {
-  CloneRequirementSetInput,
-  CreateRequirementSetInput,
-  RequirementSet,
-  UpdateRequirementSetInput,
-} from '@repo/contracts/grading-requirements';
+
 
 import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
@@ -23,6 +18,13 @@ import {
   RequirementSetsRepository,
   type RequirementSetRow,
 } from './requirement-sets.repository.js';
+
+import type {
+  CloneRequirementSetInput,
+  CreateRequirementSetInput,
+  RequirementSet,
+  UpdateRequirementSetInput,
+} from '@repo/contracts/grading-requirements';
 
 // ── Row → API mapper ─────────────────────────────────────────────────────
 

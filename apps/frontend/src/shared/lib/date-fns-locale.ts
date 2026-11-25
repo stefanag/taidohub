@@ -1,8 +1,9 @@
 import { enUS } from 'date-fns/locale/en-US';
 import { fi } from 'date-fns/locale/fi';
 import { sv } from 'date-fns/locale/sv';
-import type { Locale } from 'date-fns';
 import { useTranslation } from 'react-i18next';
+
+import type { Locale } from 'date-fns';
 
 const LOCALES: Record<string, Locale> = {
   en: enUS,

@@ -1,3 +1,4 @@
+import { sql } from 'drizzle-orm';
 import {
   boolean,
   check,
@@ -5,7 +6,6 @@ import {
   text,
   timestamp,
 } from 'drizzle-orm/pg-core';
-import { sql } from 'drizzle-orm';
 
 /**
  * better-auth's required tables. Names and columns match the official

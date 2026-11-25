@@ -1,11 +1,12 @@
 import { NotFoundException } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
-import type { ExecutionContext } from '@nestjs/common';
+import { type Reflector } from '@nestjs/core';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { FeatureFlagGuard } from './feature-flag.guard.js';
-import { FeatureFlagsService } from './feature-flags.service.js';
+import { type FeatureFlagsService } from './feature-flags.service.js';
 import { FEATURE_FLAG_KEY } from './require-feature-flag.decorator.js';
+
+import type { ExecutionContext } from '@nestjs/common';
 
 function fakeCtx(): ExecutionContext {
   return {

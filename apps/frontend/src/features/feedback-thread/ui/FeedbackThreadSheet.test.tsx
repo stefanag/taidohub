@@ -2,6 +2,8 @@ import { render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { FeedbackThreadSheet } from './FeedbackThreadSheet.js';
+
 import i18n from '@/i18n';
 import { FeatureFlagsProvider } from '@/shared/lib/feature-flags';
 
@@ -18,8 +20,6 @@ vi.mock('./FeedbackThread.js', () => ({
     return <div data-testid="feedback-thread-mounted" />;
   },
 }));
-
-import { FeedbackThreadSheet } from './FeedbackThreadSheet.js';
 
 /**
  * `FeedbackThreadSheet` is the lazy entry point to the feedback feature

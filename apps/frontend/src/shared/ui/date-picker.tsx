@@ -6,9 +6,9 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useDateFnsLocale } from '@/shared/lib/date-fns-locale.js';
+import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import { Calendar } from '@/shared/ui/calendar';
-import { cn } from '@/shared/lib/utils';
 import {
   Popover,
   PopoverContent,

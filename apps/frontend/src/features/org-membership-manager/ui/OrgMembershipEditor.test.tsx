@@ -4,6 +4,8 @@ import * as React from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { OrgMembershipEditor } from './OrgMembershipEditor.js';
+
 import type { MembershipRole } from '@/entities/membership';
 
 import i18n from '@/i18n';
@@ -57,8 +59,6 @@ vi.mock('@/entities/user', async (orig) => {
     }),
   };
 });
-
-import { OrgMembershipEditor } from './OrgMembershipEditor.js';
 
 /**
  * Open a Radix Select trigger in jsdom. Same stubs as MembershipEditor.test.tsx.

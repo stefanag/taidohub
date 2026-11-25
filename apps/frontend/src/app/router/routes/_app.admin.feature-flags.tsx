@@ -1,9 +1,10 @@
 import { createRoute, redirect } from '@tanstack/react-router';
 
+import { appLayoutRoute } from './_app.js';
+
 import { authClient } from '@/features/auth-by-email';
 import { AdminFeatureFlagsPage } from '@/pages/admin-feature-flags';
 
-import { appLayoutRoute } from './_app.js';
 
 /**
  * Admin-only route mounting the feature-flag admin page. Sits under `_app` so

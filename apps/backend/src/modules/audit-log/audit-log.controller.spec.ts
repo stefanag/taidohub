@@ -1,12 +1,13 @@
 import { Test } from '@nestjs/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import type { ListAuditLogResponse } from '@repo/contracts/audit-log';
 
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 
 import { AuditLogController } from './audit-log.controller.js';
 import { AuditLogService } from './audit-log.service.js';
+
+import type { ListAuditLogResponse } from '@repo/contracts/audit-log';
 
 /**
  * The controller is thin — its only job is to route the query DTO +

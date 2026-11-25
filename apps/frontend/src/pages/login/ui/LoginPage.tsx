@@ -2,6 +2,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 
 import { LoginForm } from '@/features/auth-by-email';
+import { LocaleSwitcher } from '@/features/locale-switcher';
 import { APP_LANDING_ROUTE } from '@/shared/lib/routes';
 import {
   Card,
@@ -10,7 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/shared/ui';
-import { LocaleSwitcher } from '@/features/locale-switcher';
 
 /**
  * Sign-in page. Wraps the `LoginForm` feature in a centered Card and

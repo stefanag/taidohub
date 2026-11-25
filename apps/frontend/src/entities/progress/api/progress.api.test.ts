@@ -1,12 +1,4 @@
-import type { UpsertProgressInput } from '@repo/contracts/progress';
 import { describe, expect, it, vi } from 'vitest';
-
-vi.mock('@/shared/api', async (orig) => {
-  const actual = await orig<typeof import('@/shared/api')>();
-  return { ...actual, httpClient: vi.fn() };
-});
-
-import { HttpError, httpClient } from '@/shared/api';
 
 import {
   deletePatternProgress,
@@ -14,6 +6,15 @@ import {
   getTechniqueProgress,
   upsertTechniqueProgress,
 } from './progress.api.js';
+
+import type { UpsertProgressInput } from '@repo/contracts/progress';
+
+import { HttpError, httpClient } from '@/shared/api';
+
+vi.mock('@/shared/api', async (orig) => {
+  const actual = await orig<typeof import('@/shared/api')>();
+  return { ...actual, httpClient: vi.fn() };
+});
 
 const TECHNIQUE_ID = '550e8400-e29b-41d4-a716-446655440001';
 

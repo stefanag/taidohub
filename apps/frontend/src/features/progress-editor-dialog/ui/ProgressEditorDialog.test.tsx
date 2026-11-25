@@ -3,6 +3,8 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import * as React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { ProgressEditorDialog } from './ProgressEditorDialog.js';
+
 import type { Progress } from '@repo/contracts/progress';
 
 // Radix UI Select uses pointer-capture and scrollIntoView APIs that jsdom
@@ -42,8 +44,6 @@ vi.mock('@/entities/progress', () => ({
     isPending: false,
   }),
 }));
-
-import { ProgressEditorDialog } from './ProgressEditorDialog.js';
 
 function renderDialog(
   props: Partial<React.ComponentProps<typeof ProgressEditorDialog>> = {},

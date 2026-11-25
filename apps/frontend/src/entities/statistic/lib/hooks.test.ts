@@ -3,13 +3,6 @@ import { act, renderHook, waitFor } from '@testing-library/react';
 import * as React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
-import type {
-  OrganisationStats,
-  PlatformStats,
-  RebuildStatsResponse,
-  StatsTrendResponse,
-  UserStats,
-} from '@repo/contracts/statistics';
 
 import * as api from '../api/statistics.api.js';
 
@@ -22,6 +15,14 @@ import {
   useUserStatsQuery,
   useUserTrendsQuery,
 } from './hooks.js';
+
+import type {
+  OrganisationStats,
+  PlatformStats,
+  RebuildStatsResponse,
+  StatsTrendResponse,
+  UserStats,
+} from '@repo/contracts/statistics';
 
 /**
  * Pattern 1 from `docs/frontend-test-recipe.md`: `renderHook` +

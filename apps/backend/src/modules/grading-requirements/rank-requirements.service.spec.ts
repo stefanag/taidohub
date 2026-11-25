@@ -1,14 +1,14 @@
 import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
+import { type AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
-import { MembershipsRepository } from '../memberships/memberships.repository.js';
-import { OrganisationsRepository } from '../organisations/organisations.repository.js';
+import { type MembershipsRepository } from '../memberships/memberships.repository.js';
+import { type OrganisationsRepository } from '../organisations/organisations.repository.js';
 
-import { RankRequirementsRepository } from './rank-requirements.repository.js';
+import { type RankRequirementsRepository } from './rank-requirements.repository.js';
 import { RankRequirementsService } from './rank-requirements.service.js';
-import { RequirementSetsRepository } from './requirement-sets.repository.js';
+import { type RequirementSetsRepository } from './requirement-sets.repository.js';
 
 // ── Fixtures ────────────────────────────────────────────────────────────────
 
@@ -455,7 +455,7 @@ describe('RankRequirementsService.replace', () => {
   it('rejects 400 when setId is missing', async () => {
     const { svc } = build();
     const user = makeUser();
-    await expect(svc.replace('rank-1', { setId: '' } as any, user)).rejects.toBeInstanceOf(
+    await expect(svc.replace('rank-1', { setId: '' } as never, user)).rejects.toBeInstanceOf(
       BadRequestException,
     );
   });
@@ -463,7 +463,7 @@ describe('RankRequirementsService.replace', () => {
   it('rejects 400 when setId is undefined', async () => {
     const { svc } = build();
     const user = makeUser();
-    await expect(svc.replace('rank-1', {} as any, user)).rejects.toBeInstanceOf(
+    await expect(svc.replace('rank-1', {} as never, user)).rejects.toBeInstanceOf(
       BadRequestException,
     );
   });
@@ -473,7 +473,7 @@ describe('RankRequirementsService.replace', () => {
     sets.findById = vi.fn().mockResolvedValue({ id: 's-1', organisationId: 'orgB' });
     abilities.createForUser.mockReturnValue({ can: vi.fn().mockReturnValue(false) });
     const user = makeUser();
-    await expect(svc.replace('rank-1', { setId: 's-1' } as any, user)).rejects.toBeInstanceOf(
+    await expect(svc.replace('rank-1', { setId: 's-1' } as never, user)).rejects.toBeInstanceOf(
       ForbiddenException,
     );
   });
@@ -482,7 +482,7 @@ describe('RankRequirementsService.replace', () => {
     const { svc, sets } = build();
     sets.findById = vi.fn().mockResolvedValue(null);
     const user = makeUser();
-    await expect(svc.replace('rank-1', { setId: 's-missing' } as any, user)).rejects.toBeInstanceOf(
+    await expect(svc.replace('rank-1', { setId: 's-missing' } as never, user)).rejects.toBeInstanceOf(
       NotFoundException,
     );
   });

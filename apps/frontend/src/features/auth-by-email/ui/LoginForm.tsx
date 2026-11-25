@@ -1,7 +1,9 @@
+import { SignInWithEmailSchema } from '@repo/contracts/auth';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { SignInWithEmailSchema } from '@repo/contracts/auth';
+
+import { signInWithEmail } from '../api/auth.api.js';
 
 import {
   Button,
@@ -12,7 +14,6 @@ import {
   useZodForm,
 } from '@/shared/ui';
 
-import { signInWithEmail } from '../api/auth.api.js';
 
 export interface LoginFormProps {
   /**

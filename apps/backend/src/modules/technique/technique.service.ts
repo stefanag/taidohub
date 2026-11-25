@@ -5,32 +5,33 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import type {
-  ClassificationCategory,
-  RootCode,
-} from '@repo/contracts/classification-category';
 import { ROOT_CODES } from '@repo/contracts/classification-category';
-import type {
-  CreateTechniqueInput,
-  Technique,
-  UpdateTechniqueInput,
-} from '@repo/contracts/techniques';
 
 import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
 import { AuditLogService } from '../audit-log/audit-log.service.js';
+import { validateCategoryLinks } from '../classification-category/category-guards.js';
 import {
   ClassificationCategoryRepository,
   type ClassificationCategoryRow,
 } from '../classification-category/classification-category.repository.js';
-import { validateCategoryLinks } from '../classification-category/category-guards.js';
 import { ClassificationCategoryService } from '../classification-category/classification-category.service.js';
 
 import {
   TechniqueRepository,
   type TechniqueRow,
 } from './technique.repository.js';
+
+import type {
+  ClassificationCategory,
+  RootCode,
+} from '@repo/contracts/classification-category';
+import type {
+  CreateTechniqueInput,
+  Technique,
+  UpdateTechniqueInput,
+} from '@repo/contracts/techniques';
 
 /**
  * Business logic for techniques.

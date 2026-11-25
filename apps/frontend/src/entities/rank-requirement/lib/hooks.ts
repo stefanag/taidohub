@@ -1,7 +1,8 @@
-import type { SetGradingRequirementsInput } from '@repo/contracts';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import * as api from '../api/rank-requirement.api.js';
+
+import type { SetGradingRequirementsInput } from '@repo/contracts';
 
 /**
  * React Query hooks for the RankRequirement module.

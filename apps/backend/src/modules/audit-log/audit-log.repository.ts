@@ -1,9 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
-import type { ListAuditLogQuery } from '@repo/contracts/audit-log';
 import { and, count, desc, eq, gte, inArray, lte, type SQL } from 'drizzle-orm';
 
 import { DRIZZLE, type DrizzleDb, type DrizzleExecutor } from '../../infrastructure/database/client.js';
 import { auditLog, user, type DbAuditLog, type DbNewAuditLog } from '../../infrastructure/database/schema/index.js';
+
+import type { ListAuditLogQuery } from '@repo/contracts/audit-log';
 
 export interface DbAuditLogWithUser extends DbAuditLog {
   user: { id: string; name: string | null; email: string } | null;

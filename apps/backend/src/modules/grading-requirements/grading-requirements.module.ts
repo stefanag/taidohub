@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 
-import { OrganisationsModule } from '../organisations/organisations.module.js';
 import { MembershipsModule } from '../memberships/memberships.module.js';
+import { OrganisationsModule } from '../organisations/organisations.module.js';
 
 import { GradingRequirementsAbilityRules } from './grading-requirements.ability-rules.js';
 import { RankRequirementsController } from './rank-requirements.controller.js';

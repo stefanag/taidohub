@@ -1,10 +1,11 @@
 import { createRoute, Link, redirect } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 
+import { publicLayoutRoute } from './_public.js';
+
 import { authClient } from '@/features/auth-by-email';
 import { Button } from '@/shared/ui';
 
-import { publicLayoutRoute } from './_public.js';
 
 function IndexComponent(): React.ReactElement {
   const { t } = useTranslation();

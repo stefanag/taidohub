@@ -3,6 +3,8 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { GradingHistoryPage } from './GradingHistoryPage';
 
+import type { ComponentProps } from 'react';
+
 // Mock NextRankCard to avoid complex query dependencies
 vi.mock('@/features/next-rank-card', () => ({
   NextRankCard: () => <div data-testid="next-rank-card" />,
@@ -16,7 +18,7 @@ vi.mock('@/widgets/club-card', () => ({
 // Mock react-i18next
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
-    t: (key: string, optionsOrDefault?: any) => {
+    t: (key: string, optionsOrDefault?: string | { defaultValue?: string }) => {
       if (typeof optionsOrDefault === 'string') {
         return optionsOrDefault;
       }
@@ -37,10 +39,10 @@ vi.mock('@/features/auth-by-email', () => ({
 
 // Mock react-query properly to include queryOptions
 vi.mock('@tanstack/react-query', async (importOriginal) => {
-  const actual = (await importOriginal()) as any;
+  const actual = await importOriginal<typeof import('@tanstack/react-query')>();
   return {
     ...actual,
-    useQuery: (queryOptions: any) => {
+    useQuery: (queryOptions: { queryKey?: readonly unknown[] }) => {
       // Return appropriate data structure based on query
       if (queryOptions?.queryKey?.[0] === 'gradingHistory') {
         return { data: { data: [] }, isPending: false, isError: false };
@@ -68,7 +70,9 @@ vi.mock('@/shared/lib/feature-flags', () => ({
 
 // Mock button
 vi.mock('@/shared/ui', () => ({
-  Button: ({ children, ...props }: any) => <button {...props}>{children}</button>,
+  Button: ({ children, ...props }: ComponentProps<'button'>) => (
+    <button {...props}>{children}</button>
+  ),
 }));
 
 // Mock rank history mutations and query options

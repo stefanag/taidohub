@@ -9,7 +9,6 @@ import { usePatternsQuery } from '@/entities/pattern';
 import { useProgressListQuery } from '@/entities/progress';
 import { useRequirementsQuery } from '@/entities/rank-requirement';
 import { useTechniquesQuery } from '@/entities/technique';
-
 import { NextRankCard, useNextRank } from '@/features/next-rank-card';
 import { RankRequirementsDisplay } from '@/features/rank-requirements-display';
 

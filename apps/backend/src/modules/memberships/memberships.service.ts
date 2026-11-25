@@ -1,3 +1,4 @@
+import { ForbiddenError } from '@casl/ability';
 import {
   BadRequestException,
   ConflictException,
@@ -6,7 +7,17 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ForbiddenError } from '@casl/ability';
+
+import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
+import { AuthUserCache } from '../../infrastructure/auth/auth-user.cache.js';
+import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
+import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
+import { type DbOrganisationMembership } from '../../infrastructure/database/schema/index.js';
+import { AuditLogService } from '../audit-log/audit-log.service.js';
+import { OrganisationsRepository } from '../organisations/organisations.repository.js';
+
+import { MembershipsRepository } from './memberships.repository.js';
+
 import type {
   CreateMembershipInput,
   ListMembershipsQuery,
@@ -14,16 +25,6 @@ import type {
   OrganisationMembership,
   UpdateMembershipInput,
 } from '@repo/contracts/memberships';
-
-import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
-import { AuthUserCache } from '../../infrastructure/auth/auth-user.cache.js';
-import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
-import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
-import { type DbOrganisationMembership } from '../../infrastructure/database/schema/index.js';
-import { OrganisationsRepository } from '../organisations/organisations.repository.js';
-import { AuditLogService } from '../audit-log/audit-log.service.js';
-
-import { MembershipsRepository } from './memberships.repository.js';
 
 @Injectable()
 export class MembershipsService {

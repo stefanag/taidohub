@@ -15,13 +15,14 @@ import {
   UpsertInstructorProgressSchema,
   type UpsertInstructorProgressInput,
 } from '@repo/contracts/progress';
-import type { StudentRosterRow } from '@repo/contracts/students';
 import { ZodValidationPipe } from 'nestjs-zod';
 
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import { CurrentUser } from '../../infrastructure/auth/current-user.decorator.js';
 
 import { StudentsService } from './students.service.js';
+
+import type { StudentRosterRow } from '@repo/contracts/students';
 
 /**
  * Instructor view of students.

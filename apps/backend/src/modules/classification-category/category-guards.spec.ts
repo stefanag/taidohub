@@ -2,6 +2,7 @@ import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { describe, expect, it, vi } from 'vitest';
 
 import { validateCategoryLinks } from './category-guards.js';
+
 import type { ClassificationCategoryService } from './classification-category.service.js';
 
 function makeSvc(map: Record<string, string | null>): ClassificationCategoryService {

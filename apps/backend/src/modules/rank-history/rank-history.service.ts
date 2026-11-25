@@ -6,11 +6,6 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import type {
-  CreateRankHistoryInput,
-  RankHistory,
-  UpdateRankHistoryInput,
-} from '@repo/contracts/rank-history';
 import { eq } from 'drizzle-orm';
 
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
@@ -29,6 +24,12 @@ import {
   RankHistoryRepository,
   type RankHistoryWritePatch,
 } from './rank-history.repository.js';
+
+import type {
+  CreateRankHistoryInput,
+  RankHistory,
+  UpdateRankHistoryInput,
+} from '@repo/contracts/rank-history';
 
 @Injectable()
 export class RankHistoryService {

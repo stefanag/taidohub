@@ -4,6 +4,8 @@ import * as React from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { FeedbackBadge } from './FeedbackBadge.js';
+
 import i18n from '@/i18n';
 import { FeatureFlagsProvider } from '@/shared/lib/feature-flags';
 import { stubRadixPointerEvents } from '@/shared/test/radix';
@@ -51,8 +53,6 @@ vi.mock('@tanstack/react-router', async (orig) => {
     useNavigate: () => navigateMock,
   };
 });
-
-import { FeedbackBadge } from './FeedbackBadge.js';
 
 /**
  * `FeedbackBadge` is the bell-icon entry point to the feedback

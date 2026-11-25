@@ -5,9 +5,10 @@ import * as React from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { LabelsFilterBar } from './LabelsFilterBar.js';
+
 import i18n from '@/i18n';
 
-import { LabelsFilterBar } from './LabelsFilterBar.js';
 
 // `vi.mock` is hoisted above all top-level consts, so the fixtures the mock
 // factory needs have to live inside `vi.hoisted` (which is also hoisted but

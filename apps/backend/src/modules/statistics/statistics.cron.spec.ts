@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
+
 import { StatisticsCronService } from './statistics.cron.js';
 
 describe('StatisticsCronService.runNightly', () => {
@@ -16,7 +17,7 @@ describe('StatisticsCronService.runNightly', () => {
   });
 
   it('logs the rebuildAll durationMs', async () => {
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const logSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
     const repo = {
       refreshActivityStats: vi.fn(),
       recomputeAvgGapPerRank: vi.fn(),

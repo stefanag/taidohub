@@ -1,5 +1,5 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import type { GradingHistoryRow } from '@repo/contracts/rank-history';
+
 
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import {
@@ -10,6 +10,8 @@ import {
   RankHistoryRepository,
   type JoinedRankHistoryRow,
 } from '../rank-history/rank-history.repository.js';
+
+import type { GradingHistoryRow } from '@repo/contracts/rank-history';
 
 /**
  * Unified grading-history projection. Joins `rank_history` with `belt_ranks`

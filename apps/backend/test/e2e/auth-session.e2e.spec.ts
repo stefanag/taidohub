@@ -106,7 +106,7 @@ describe.skipIf(!hasDatabase())('better-auth sessions (integration)', () => {
   });
 
   it('resets a password through the emailed link and signs in with the new one', async () => {
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const logSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
 
     const requested = await request(app.getHttpServer())
       .post('/api/auth/request-password-reset')

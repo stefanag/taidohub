@@ -9,8 +9,13 @@ import { UserForm } from './UserForm.js';
 
 import type { User } from '@/entities/user';
 
-import { HttpError } from '@/shared/api';
+import {
+  deleteMembership as deleteMembershipApi,
+  listMemberships as listMembershipsApi,
+} from '@/entities/membership/api/membership.api.js';
+import { getUserProfile } from '@/entities/profile/api/profile.api.js';
 import i18n from '@/i18n';
+import { HttpError } from '@/shared/api';
 
 // Mock the underlying API modules so the query-options factories pick up the
 // stubs. Mocking the barrel alone wouldn't reach the captured references.
@@ -45,12 +50,6 @@ vi.mock('@/entities/profile/api/profile.api.js', async (orig) => {
     }),
   };
 });
-
-import { getUserProfile } from '@/entities/profile/api/profile.api.js';
-import {
-  deleteMembership as deleteMembershipApi,
-  listMemberships as listMembershipsApi,
-} from '@/entities/membership/api/membership.api.js';
 
 const PROFILE_FIXTURE = {
   userId: '11111111-1111-4111-8111-111111111111',

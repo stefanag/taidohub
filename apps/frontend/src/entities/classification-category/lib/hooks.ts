@@ -1,10 +1,11 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
+import * as api from '../api/classification-category.api.js';
+
 import type {
   RootCode,
   UpdateClassificationCategoryInput,
 } from '@repo/contracts/classification-category';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-
-import * as api from '../api/classification-category.api.js';
 
 /**
  * React Query hooks for the Classification Category module.

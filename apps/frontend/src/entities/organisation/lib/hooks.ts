@@ -6,13 +6,6 @@ import {
   type UseMutationOptions,
 } from '@tanstack/react-query';
 
-import type {
-  CreateOrganisationInput,
-  ListOrganisationsQuery,
-  Organisation,
-  UpdateOrganisationInput,
-} from '@repo/contracts/organisations';
-
 import {
   createOrganisation,
   deleteOrganisation,
@@ -20,6 +13,14 @@ import {
   listOrganisations,
   updateOrganisation,
 } from '../api/organisation.api.js';
+
+import type {
+  CreateOrganisationInput,
+  ListOrganisationsQuery,
+  Organisation,
+  UpdateOrganisationInput,
+} from '@repo/contracts/organisations';
+
 
 /**
  * TanStack Query options + mutation hooks for the Organisation entity.

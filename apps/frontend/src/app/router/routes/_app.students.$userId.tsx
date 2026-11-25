@@ -1,8 +1,9 @@
 import { createRoute } from '@tanstack/react-router';
 
+import { appLayoutRoute } from './_app.js';
+
 import { StudentDetailPage } from '@/pages/student-detail';
 
-import { appLayoutRoute } from './_app.js';
 
 /**
  * Per-student progress view. The backend returns 403 if the calling

@@ -59,7 +59,6 @@ export interface GradingTimelineEntryProps {
 export function GradingTimelineEntry({
   entry,
   rank,
-  systemCodeMap,
   shogoTitleMap,
   isLatest,
   subjectUserId,
@@ -89,7 +88,6 @@ export function GradingTimelineEntry({
   // rankLabel returns "{romaji} — {localised}"; if `nameJa` exists, append it.
   const rankTitle = rank?.nameJa ? `${localised} ${rank.nameJa}`.trim() : localised;
 
-  const systemCode = rank ? systemCodeMap.get(rank.systemId) ?? '' : '';
   const beltVisuals = rank?.visuals ?? null;
 
   let nodeClass: string;

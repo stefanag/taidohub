@@ -1,9 +1,6 @@
 import { BadRequestException, ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { ErrorCodes } from '@repo/contracts/errors';
-import type {
-  GradingRequirements,
-  SetGradingRequirementsInput,
-} from '@repo/contracts/grading-requirements';
+
 
 import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
@@ -13,6 +10,11 @@ import { OrganisationsRepository } from '../organisations/organisations.reposito
 
 import { type HokeiGroupWithPatternsRow, RankRequirementsRepository } from './rank-requirements.repository.js';
 import { RequirementSetsRepository } from './requirement-sets.repository.js';
+
+import type {
+  GradingRequirements,
+  SetGradingRequirementsInput,
+} from '@repo/contracts/grading-requirements';
 
 // ---------------------------------------------------------------------------
 // Service

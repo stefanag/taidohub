@@ -1,7 +1,7 @@
 import { AbilityBuilder, createMongoAbility, type MongoAbility } from '@casl/ability';
+import { type AppAbilityTuple } from '@repo/contracts/casl';
 import { describe, expect, it } from 'vitest';
 
-import { type AppAbilityTuple } from '@repo/contracts/casl';
 
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 

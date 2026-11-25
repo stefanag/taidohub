@@ -1,3 +1,4 @@
+import { ForbiddenError } from '@casl/ability';
 import {
   BadRequestException,
   ConflictException,
@@ -7,16 +8,6 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ForbiddenError } from '@casl/ability';
-import type {
-  CreateOrganisationInput,
-  IsoAlpha3,
-  ListOrganisationsQuery,
-  ListOrganisationsResponse,
-  Organisation,
-  OrganisationType,
-  UpdateOrganisationInput,
-} from '@repo/contracts/organisations';
 
 import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
@@ -26,6 +17,16 @@ import { AuditLogService } from '../audit-log/audit-log.service.js';
 import { LabelsService } from '../labels/labels.service.js';
 
 import { OrganisationsRepository } from './organisations.repository.js';
+
+import type {
+  CreateOrganisationInput,
+  IsoAlpha3,
+  ListOrganisationsQuery,
+  ListOrganisationsResponse,
+  Organisation,
+  OrganisationType,
+  UpdateOrganisationInput,
+} from '@repo/contracts/organisations';
 
 @Injectable()
 export class OrganisationsService {

@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-import type { RootCode } from '@repo/contracts/classification-category';
 import { and, asc, eq, exists, inArray, notInArray, sql, type SQL } from 'drizzle-orm';
 
 import {
@@ -12,6 +11,8 @@ import {
   technique,
   techniqueClassification,
 } from '../../infrastructure/database/schema/technique.js';
+
+import type { RootCode } from '@repo/contracts/classification-category';
 
 export type TechniqueRow = typeof technique.$inferSelect;
 export type NewTechniqueRow = typeof technique.$inferInsert;

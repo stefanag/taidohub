@@ -1,5 +1,5 @@
-import type { Role } from '@repo/contracts/users';
 import type { MembershipRole } from '@repo/contracts/memberships';
+import type { Role } from '@repo/contracts/users';
 
 /**
  * The shape the rest of the app reads off `req.user`. Derived from the

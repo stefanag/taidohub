@@ -1,6 +1,7 @@
+import { LoginForm } from './LoginForm.js';
+
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { LoginForm } from './LoginForm.js';
 
 const meta = {
   title: 'Features/Auth/LoginForm',

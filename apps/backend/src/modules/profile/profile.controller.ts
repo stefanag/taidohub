@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Patch } from '@nestjs/common';
 import { ApiCookieAuth, ApiParam, ApiTags } from '@nestjs/swagger';
-import type { UserProfile } from '@repo/contracts/profile';
+
 
 import { ErrorEnvelopeDto } from '../../common/dto/error-envelope.dto.js';
 import { ApiEndpoint } from '../../common/swagger/api-endpoint.decorator.js';
@@ -11,6 +11,8 @@ import { CurrentUser } from '../../infrastructure/auth/current-user.decorator.js
 import { UpdateUserProfileDto } from './dto/update-user-profile.dto.js';
 import { UserProfileDto } from './dto/user-profile.dto.js';
 import { ProfileService } from './profile.service.js';
+
+import type { UserProfile } from '@repo/contracts/profile';
 
 /**
  * Profile endpoints. Shares the `/users` prefix with `UsersController` —
