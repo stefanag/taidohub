@@ -288,6 +288,16 @@
         "types": "./dist/mcp.d.cts",
         "default": "./dist/mcp.cjs"
       }
+    },
+    "./legal-documents": {
+      "import": {
+        "types": "./dist/legal-documents.d.ts",
+        "default": "./dist/legal-documents.js"
+      },
+      "require": {
+        "types": "./dist/legal-documents.d.cts",
+        "default": "./dist/legal-documents.cjs"
+      }
     }
   },
   "files": [

@@ -39,6 +39,14 @@ export class OrganisationsService {
     private readonly labels: LabelsService,
   ) {}
 
+  /**
+   * `[self, parent, …, root]` for another module's resolution logic (legal
+   * texts, requirement sets). Empty when the organisation does not exist.
+   */
+  async getAncestorIds(orgId: string): Promise<string[]> {
+    return this.repo.getAncestorIds(orgId);
+  }
+
   async list(query: ListOrganisationsQuery, user: AuthenticatedUser | null): Promise<ListOrganisationsResponse> {
     const { tag, category, ...rest } = query;
     const labelFilter: { tagIds?: string[]; categoryIds?: string[] } = {};

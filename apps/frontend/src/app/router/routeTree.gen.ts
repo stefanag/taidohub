@@ -30,6 +30,7 @@ import { Route as AppAdminAuditLogRouteImport } from './routes/_app.admin.audit-
 import { Route as AppAdminBeltCatalogRouteImport } from './routes/_app.admin.belt-catalog'
 import { Route as AppAdminFeatureFlagsRouteImport } from './routes/_app.admin.feature-flags'
 import { Route as AppAdminLabelsRouteImport } from './routes/_app.admin.labels'
+import { Route as AppAdminLegalDocumentsRouteImport } from './routes/_app.admin.legal-documents'
 import { Route as AppAdminOrganisationsRouteImport } from './routes/_app.admin.organisations'
 import { Route as AppAdminPatternsRouteImport } from './routes/_app.admin.patterns'
 import { Route as AppAdminRankRequirementsRouteImport } from './routes/_app.admin.rank-requirements'
@@ -55,6 +56,7 @@ import { Route as AppAdminTechniquesIndexRouteImport } from './routes/_app.admin
 import { Route as AppAdminTechniquesTechniqueIdRouteImport } from './routes/_app.admin.techniques.$techniqueId'
 import { Route as AppAdminTechniquesNewRouteImport } from './routes/_app.admin.techniques.new'
 import { Route as AppOrganisationIdStatisticsRouteImport } from './routes/_app.organisation.$id.statistics'
+import { Route as PublicLegalOwnerKindRouteImport } from './routes/_public.legal.$owner.$kind'
 import { Route as AppAdminOrganisationsOrganisationIdIndexRouteImport } from './routes/_app.admin.organisations.$organisationId.index'
 import { Route as AppAdminOrganisationsOrganisationIdEditRouteImport } from './routes/_app.admin.organisations.$organisationId.edit'
 import { Route as AppAdminPatternsPatternIdIndexRouteImport } from './routes/_app.admin.patterns.$patternId.index'
@@ -163,6 +165,11 @@ const AppAdminFeatureFlagsRoute = AppAdminFeatureFlagsRouteImport.update({
 const AppAdminLabelsRoute = AppAdminLabelsRouteImport.update({
   id: '/admin/labels',
   path: '/admin/labels',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAdminLegalDocumentsRoute = AppAdminLegalDocumentsRouteImport.update({
+  id: '/admin/legal-documents',
+  path: '/admin/legal-documents',
   getParentRoute: () => AppRoute,
 } as any)
 const AppAdminOrganisationsRoute = AppAdminOrganisationsRouteImport.update({
@@ -299,6 +306,11 @@ const AppOrganisationIdStatisticsRoute =
     path: '/organisation/$id/statistics',
     getParentRoute: () => AppRoute,
   } as any)
+const PublicLegalOwnerKindRoute = PublicLegalOwnerKindRouteImport.update({
+  id: '/legal/$owner/$kind',
+  path: '/legal/$owner/$kind',
+  getParentRoute: () => PublicRoute,
+} as any)
 const AppAdminOrganisationsOrganisationIdIndexRoute =
   AppAdminOrganisationsOrganisationIdIndexRouteImport.update({
     id: '/',
@@ -356,6 +368,7 @@ export interface FileRoutesByFullPath {
   '/admin/belt-catalog': typeof AppAdminBeltCatalogRoute
   '/admin/feature-flags': typeof AppAdminFeatureFlagsRoute
   '/admin/labels': typeof AppAdminLabelsRoute
+  '/admin/legal-documents': typeof AppAdminLegalDocumentsRoute
   '/admin/organisations': typeof AppAdminOrganisationsRouteWithChildren
   '/admin/patterns': typeof AppAdminPatternsRouteWithChildren
   '/admin/rank-requirements': typeof AppAdminRankRequirementsRouteWithChildren
@@ -376,6 +389,7 @@ export interface FileRoutesByFullPath {
   '/admin/techniques/$techniqueId': typeof AppAdminTechniquesTechniqueIdRouteWithChildren
   '/admin/techniques/new': typeof AppAdminTechniquesNewRoute
   '/organisation/$id/statistics': typeof AppOrganisationIdStatisticsRoute
+  '/legal/$owner/$kind': typeof PublicLegalOwnerKindRoute
   '/admin/organisations/': typeof AppAdminOrganisationsIndexRoute
   '/admin/patterns/': typeof AppAdminPatternsIndexRoute
   '/admin/rank-requirements/': typeof AppAdminRankRequirementsIndexRoute
@@ -406,6 +420,7 @@ export interface FileRoutesByTo {
   '/admin/belt-catalog': typeof AppAdminBeltCatalogRoute
   '/admin/feature-flags': typeof AppAdminFeatureFlagsRoute
   '/admin/labels': typeof AppAdminLabelsRoute
+  '/admin/legal-documents': typeof AppAdminLegalDocumentsRoute
   '/admin/statistics': typeof AppAdminStatisticsRoute
   '/admin/users': typeof AppAdminUsersRoute
   '/settings/labels': typeof AppSettingsLabelsRoute
@@ -418,6 +433,7 @@ export interface FileRoutesByTo {
   '/admin/patterns/new': typeof AppAdminPatternsNewRoute
   '/admin/techniques/new': typeof AppAdminTechniquesNewRoute
   '/organisation/$id/statistics': typeof AppOrganisationIdStatisticsRoute
+  '/legal/$owner/$kind': typeof PublicLegalOwnerKindRoute
   '/admin/organisations': typeof AppAdminOrganisationsIndexRoute
   '/admin/patterns': typeof AppAdminPatternsIndexRoute
   '/admin/rank-requirements': typeof AppAdminRankRequirementsIndexRoute
@@ -453,6 +469,7 @@ export interface FileRoutesById {
   '/_app/admin/belt-catalog': typeof AppAdminBeltCatalogRoute
   '/_app/admin/feature-flags': typeof AppAdminFeatureFlagsRoute
   '/_app/admin/labels': typeof AppAdminLabelsRoute
+  '/_app/admin/legal-documents': typeof AppAdminLegalDocumentsRoute
   '/_app/admin/organisations': typeof AppAdminOrganisationsRouteWithChildren
   '/_app/admin/patterns': typeof AppAdminPatternsRouteWithChildren
   '/_app/admin/rank-requirements': typeof AppAdminRankRequirementsRouteWithChildren
@@ -473,6 +490,7 @@ export interface FileRoutesById {
   '/_app/admin/techniques/$techniqueId': typeof AppAdminTechniquesTechniqueIdRouteWithChildren
   '/_app/admin/techniques/new': typeof AppAdminTechniquesNewRoute
   '/_app/organisation/$id/statistics': typeof AppOrganisationIdStatisticsRoute
+  '/_public/legal/$owner/$kind': typeof PublicLegalOwnerKindRoute
   '/_app/admin/organisations/': typeof AppAdminOrganisationsIndexRoute
   '/_app/admin/patterns/': typeof AppAdminPatternsIndexRoute
   '/_app/admin/rank-requirements/': typeof AppAdminRankRequirementsIndexRoute
@@ -507,6 +525,7 @@ export interface FileRouteTypes {
     | '/admin/belt-catalog'
     | '/admin/feature-flags'
     | '/admin/labels'
+    | '/admin/legal-documents'
     | '/admin/organisations'
     | '/admin/patterns'
     | '/admin/rank-requirements'
@@ -527,6 +546,7 @@ export interface FileRouteTypes {
     | '/admin/techniques/$techniqueId'
     | '/admin/techniques/new'
     | '/organisation/$id/statistics'
+    | '/legal/$owner/$kind'
     | '/admin/organisations/'
     | '/admin/patterns/'
     | '/admin/rank-requirements/'
@@ -557,6 +577,7 @@ export interface FileRouteTypes {
     | '/admin/belt-catalog'
     | '/admin/feature-flags'
     | '/admin/labels'
+    | '/admin/legal-documents'
     | '/admin/statistics'
     | '/admin/users'
     | '/settings/labels'
@@ -569,6 +590,7 @@ export interface FileRouteTypes {
     | '/admin/patterns/new'
     | '/admin/techniques/new'
     | '/organisation/$id/statistics'
+    | '/legal/$owner/$kind'
     | '/admin/organisations'
     | '/admin/patterns'
     | '/admin/rank-requirements'
@@ -603,6 +625,7 @@ export interface FileRouteTypes {
     | '/_app/admin/belt-catalog'
     | '/_app/admin/feature-flags'
     | '/_app/admin/labels'
+    | '/_app/admin/legal-documents'
     | '/_app/admin/organisations'
     | '/_app/admin/patterns'
     | '/_app/admin/rank-requirements'
@@ -623,6 +646,7 @@ export interface FileRouteTypes {
     | '/_app/admin/techniques/$techniqueId'
     | '/_app/admin/techniques/new'
     | '/_app/organisation/$id/statistics'
+    | '/_public/legal/$owner/$kind'
     | '/_app/admin/organisations/'
     | '/_app/admin/patterns/'
     | '/_app/admin/rank-requirements/'
@@ -788,6 +812,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/labels'
       fullPath: '/admin/labels'
       preLoaderRoute: typeof AppAdminLabelsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/admin/legal-documents': {
+      id: '/_app/admin/legal-documents'
+      path: '/admin/legal-documents'
+      fullPath: '/admin/legal-documents'
+      preLoaderRoute: typeof AppAdminLegalDocumentsRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/admin/organisations': {
@@ -964,6 +995,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/organisation/$id/statistics'
       preLoaderRoute: typeof AppOrganisationIdStatisticsRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/_public/legal/$owner/$kind': {
+      id: '/_public/legal/$owner/$kind'
+      path: '/legal/$owner/$kind'
+      fullPath: '/legal/$owner/$kind'
+      preLoaderRoute: typeof PublicLegalOwnerKindRouteImport
+      parentRoute: typeof PublicRoute
     }
     '/_app/admin/organisations/$organisationId/': {
       id: '/_app/admin/organisations/$organisationId/'
@@ -1182,6 +1220,7 @@ interface AppRouteChildren {
   AppAdminBeltCatalogRoute: typeof AppAdminBeltCatalogRoute
   AppAdminFeatureFlagsRoute: typeof AppAdminFeatureFlagsRoute
   AppAdminLabelsRoute: typeof AppAdminLabelsRoute
+  AppAdminLegalDocumentsRoute: typeof AppAdminLegalDocumentsRoute
   AppAdminOrganisationsRoute: typeof AppAdminOrganisationsRouteWithChildren
   AppAdminPatternsRoute: typeof AppAdminPatternsRouteWithChildren
   AppAdminRankRequirementsRoute: typeof AppAdminRankRequirementsRouteWithChildren
@@ -1207,6 +1246,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppAdminBeltCatalogRoute: AppAdminBeltCatalogRoute,
   AppAdminFeatureFlagsRoute: AppAdminFeatureFlagsRoute,
   AppAdminLabelsRoute: AppAdminLabelsRoute,
+  AppAdminLegalDocumentsRoute: AppAdminLegalDocumentsRoute,
   AppAdminOrganisationsRoute: AppAdminOrganisationsRouteWithChildren,
   AppAdminPatternsRoute: AppAdminPatternsRouteWithChildren,
   AppAdminRankRequirementsRoute: AppAdminRankRequirementsRouteWithChildren,
@@ -1227,6 +1267,7 @@ interface PublicRouteChildren {
   PublicIndexRoute: typeof PublicIndexRoute
   PublicOauthConsentRoute: typeof PublicOauthConsentRoute
   PublicRanksSlugRoute: typeof PublicRanksSlugRoute
+  PublicLegalOwnerKindRoute: typeof PublicLegalOwnerKindRoute
 }
 
 const PublicRouteChildren: PublicRouteChildren = {
@@ -1237,6 +1278,7 @@ const PublicRouteChildren: PublicRouteChildren = {
   PublicIndexRoute: PublicIndexRoute,
   PublicOauthConsentRoute: PublicOauthConsentRoute,
   PublicRanksSlugRoute: PublicRanksSlugRoute,
+  PublicLegalOwnerKindRoute: PublicLegalOwnerKindRoute,
 }
 
 const PublicRouteWithChildren =

@@ -37,6 +37,16 @@ export class MembershipsService {
     private readonly authUserCache: AuthUserCache,
   ) {}
 
+  /**
+   * The organisations a user belongs to, for another module's resolution
+   * logic (legal texts). Not an authorization check: callers decide what the
+   * caller may see.
+   */
+  async listOrganisationIdsForUser(userId: string): Promise<string[]> {
+    const { data } = await this.repo.list({ userId });
+    return [...new Set(data.map((m) => m.organisationId))];
+  }
+
   async list(
     query: ListMembershipsQuery,
     user: AuthenticatedUser | null,

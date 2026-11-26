@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { type PublishedLegalDocument } from '@/entities/legal-document';
 import { setInitialPassword } from '@/entities/user';
 import { HttpError } from '@/shared/api';
 import { Button, FormField, FormMessage, Input, Label } from '@/shared/ui';
@@ -8,6 +9,15 @@ import { Button, FormField, FormMessage, Input, Label } from '@/shared/ui';
 export interface SetPasswordFormProps {
   /** One-time token from the `?token=` query parameter. */
   token: string;
+  /**
+   * Terms to accept and privacy notices to acknowledge before the password can
+   * be set (invitations). Empty or absent for password resets.
+   */
+  legalTexts?: PublishedLegalDocument[];
+}
+
+function legalHref(doc: PublishedLegalDocument): string {
+  return `/legal/${doc.organisationId ?? 'platform'}/${doc.kind}`;
 }
 
 /**
@@ -16,8 +26,12 @@ export interface SetPasswordFormProps {
  * set-initial-password endpoint. On success it does a full-page navigation to
  * `/dashboard` so the freshly issued session cookie is picked up.
  */
-export function SetPasswordForm({ token }: SetPasswordFormProps): React.ReactElement {
+export function SetPasswordForm({ token, legalTexts = [] }: SetPasswordFormProps): React.ReactElement {
   const { t } = useTranslation();
+  const terms = legalTexts.filter((d) => d.kind === 'terms');
+  const privacy = legalTexts.filter((d) => d.kind === 'privacy');
+  const [acceptedTerms, setAcceptedTerms] = React.useState(false);
+  const [readPrivacy, setReadPrivacy] = React.useState(false);
   const [password, setPassword] = React.useState('');
   const [confirm, setConfirm] = React.useState('');
   const [error, setError] = React.useState<string | undefined>();
@@ -38,9 +52,20 @@ export function SetPasswordForm({ token }: SetPasswordFormProps): React.ReactEle
       return;
     }
 
+    if ((terms.length > 0 && !acceptedTerms) || (privacy.length > 0 && !readPrivacy)) {
+      setError(t('legal.acknowledgeRequired'));
+      return;
+    }
+
     setSubmitting(true);
     try {
-      await setInitialPassword({ token, password });
+      await setInitialPassword({
+        token,
+        password,
+        ...(legalTexts.length > 0 && {
+          acknowledgements: legalTexts.map((d) => ({ versionId: d.versionId, locale: d.translation.locale })),
+        }),
+      });
       // Full navigation so the new session cookie is applied to the next load.
       window.location.assign('/dashboard');
     } catch (err) {
@@ -90,11 +115,70 @@ export function SetPasswordForm({ token }: SetPasswordFormProps): React.ReactEle
         />
       </FormField>
 
+      {terms.length > 0 ? (
+        <LegalCheckbox
+          id="set-password-terms"
+          checked={acceptedTerms}
+          onChange={setAcceptedTerms}
+          label={t('legal.acceptTerms')}
+          documents={terms}
+        />
+      ) : null}
+      {privacy.length > 0 ? (
+        <LegalCheckbox
+          id="set-password-privacy"
+          checked={readPrivacy}
+          onChange={setReadPrivacy}
+          label={t('legal.readPrivacy')}
+          documents={privacy}
+        />
+      ) : null}
+
       <FormMessage message={error} />
 
       <Button type="submit" disabled={submitting} className="w-full">
         {t('auth.setPassword.submit', { defaultValue: 'Set password' })}
       </Button>
     </form>
+  );
+}
+
+function LegalCheckbox({
+  id,
+  checked,
+  onChange,
+  label,
+  documents,
+}: {
+  id: string;
+  checked: boolean;
+  onChange: (value: boolean) => void;
+  label: string;
+  documents: PublishedLegalDocument[];
+}): React.ReactElement {
+  return (
+    <div className="space-y-1">
+      <div className="flex items-start gap-2">
+        <input
+          id={id}
+          type="checkbox"
+          className="mt-1"
+          checked={checked}
+          onChange={(e) => onChange(e.target.checked)}
+        />
+        <Label htmlFor={id} className="font-normal">
+          {label}
+        </Label>
+      </div>
+      <ul className="ml-6 list-disc text-sm">
+        {documents.map((doc) => (
+          <li key={doc.versionId}>
+            <a href={legalHref(doc)} target="_blank" rel="noreferrer" className="underline">
+              {doc.translation.title}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }

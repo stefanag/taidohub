@@ -8,6 +8,7 @@ import { FeatureFlagsAbilityRules } from '../../modules/feature-flags/feature-fl
 import { FeedbackAbilityRules } from '../../modules/feedback/feedback.abilities.js';
 import { GradingRequirementsAbilityRules } from '../../modules/grading-requirements/grading-requirements.ability-rules.js';
 import { LabelsAbilityRules } from '../../modules/labels/labels.abilities.js';
+import { LegalDocumentsAbilityRules } from '../../modules/legal-documents/legal-documents.abilities.js';
 import { McpAbilityRules } from '../../modules/mcp/mcp.abilities.js';
 import { MembershipsAbilityRules } from '../../modules/memberships/memberships.abilities.js';
 import { OrganisationsAbilityRules } from '../../modules/organisations/organisations.abilities.js';
@@ -54,6 +55,7 @@ import { AbilityGuard } from './ability.guard.js';
     FeedbackAbilityRules,
     GradingRequirementsAbilityRules,
     LabelsAbilityRules,
+    LegalDocumentsAbilityRules,
     McpAbilityRules,
     MembershipsAbilityRules,
     OrganisationsAbilityRules,

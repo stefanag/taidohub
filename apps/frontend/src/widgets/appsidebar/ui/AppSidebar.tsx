@@ -1,5 +1,5 @@
 import { Link, useRouterState } from '@tanstack/react-router';
-import { Award, BarChart3, BookOpen, Bot, Building2, ClipboardCheck, ClipboardList, Flag, GraduationCap, History, LayoutDashboard, LibraryBig, ScrollText, Swords, Tag, TrendingUp, UserRound, Users, Wrench } from 'lucide-react';
+import { Award, BarChart3, BookOpen, Bot, Building2, ClipboardCheck, ClipboardList, Flag, GraduationCap, History, LayoutDashboard, LibraryBig, Scale, ScrollText, Swords, Tag, TrendingUp, UserRound, Users, Wrench } from 'lucide-react';
 import * as React from 'react';
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -154,6 +154,19 @@ export function AppSidebar(): React.ReactElement {
                       <Link to="/admin/organisations">
                         <Building2 />
                         <span>{t('nav.adminOrganisations')}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ) : null}
+                {ability?.can('manage', 'all') || isOrgAdmin ? (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={pathname.startsWith('/admin/legal-documents')}
+                    >
+                      <Link to="/admin/legal-documents">
+                        <Scale />
+                        <span>{t('nav.adminLegalDocuments')}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

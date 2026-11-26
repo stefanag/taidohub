@@ -75,4 +75,57 @@ describe('<SetPasswordForm>', () => {
     await user.click(screen.getByRole('button', { name: /set password/i }));
     expect(await screen.findByRole('alert')).toHaveTextContent(/invalid or has expired/i);
   });
+
+  it('requires the applicable terms and privacy notice and sends what was shown', async () => {
+    mockedSet.mockResolvedValueOnce(undefined);
+    vi.stubGlobal('location', { ...window.location, assign: vi.fn() });
+    const doc = (kind: 'terms' | 'privacy', versionId: string, title: string) => ({
+      documentId: versionId,
+      kind,
+      audience: 'members' as const,
+      organisationId: kind === 'terms' ? null : 'c5a1d6f0-9f3a-4b2c-8d4e-6f7a8b9c0d1e',
+      versionId,
+      version: 1,
+      publishedAt: '2026-11-26T10:00:00.000Z',
+      authoritativeLocale: 'sv' as const,
+      availableLocales: ['sv' as const],
+      translation: { locale: 'sv' as const, revision: 1, title, body: { ops: [] } },
+      isFallback: false,
+    });
+    render(
+      <I18nextProvider i18n={i18n}>
+        <SetPasswordForm
+          token="tok-abc"
+          legalTexts={[
+            doc('terms', '11111111-1111-4111-8111-111111111111', 'Villkor'),
+            doc('privacy', '22222222-2222-4222-8222-222222222222', 'Integritet'),
+          ]}
+        />
+      </I18nextProvider>,
+    );
+    const user = userEvent.setup();
+    expect(screen.getByRole('link', { name: 'Integritet' })).toHaveAttribute(
+      'href',
+      '/legal/c5a1d6f0-9f3a-4b2c-8d4e-6f7a8b9c0d1e/privacy',
+    );
+    await user.type(screen.getByLabelText(/^password$/i), 'longenough1');
+    await user.type(screen.getByLabelText(/confirm password/i), 'longenough1');
+    await user.click(screen.getByRole('button', { name: /set password/i }));
+    expect(await screen.findByRole('alert')).toHaveTextContent(/accept the terms/i);
+    expect(mockedSet).not.toHaveBeenCalled();
+
+    await user.click(screen.getByLabelText('I accept the terms of use'));
+    await user.click(screen.getByLabelText('I have read the privacy notice'));
+    await user.click(screen.getByRole('button', { name: /set password/i }));
+    await waitFor(() =>
+      expect(mockedSet).toHaveBeenCalledWith({
+        token: 'tok-abc',
+        password: 'longenough1',
+        acknowledgements: [
+          { versionId: '11111111-1111-4111-8111-111111111111', locale: 'sv' },
+          { versionId: '22222222-2222-4222-8222-222222222222', locale: 'sv' },
+        ],
+      }),
+    );
+  });
 });

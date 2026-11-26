@@ -35,3 +35,4 @@ export * from './feedback.js';
 export * from './grading-requirements.js';
 export * from './pending-operations.js';
 export * from './mcp.js';
+export * from './legal-documents.js';

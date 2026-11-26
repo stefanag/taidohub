@@ -28,6 +28,7 @@ export default defineConfig({
     feedback: 'src/feedback.ts',
     'grading-requirements': 'src/grading-requirements.ts',
     statistics: 'src/statistics.ts',
+    'legal-documents': 'src/legal-documents.ts',
     'pending-operations': 'src/pending-operations.ts',
     mcp: 'src/mcp.ts',
   },

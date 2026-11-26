@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 
+import { LegalDocumentsModule } from '../legal-documents/legal-documents.module.js';
+
 import { AccountController } from './account.controller.js';
 import { AuthController } from './auth.controller.js';
 import { AuthService } from './auth.service.js';
@@ -11,6 +13,7 @@ import { AuthService } from './auth.service.js';
  * `AuthService`.
  */
 @Module({
+  imports: [LegalDocumentsModule],
   controllers: [AuthController, AccountController],
   providers: [AuthService],
 })

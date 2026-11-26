@@ -15,6 +15,7 @@ import { ErrorEnvelopeOpenApiRegistry } from './errors.js';
 import { FeatureFlagsOpenApiRegistry } from './feature-flags.js';
 import { GradingRequirementsOpenApiRegistry } from './grading-requirements.js';
 import { LabelsOpenApiRegistry } from './labels.js';
+import { LegalDocumentsOpenApiRegistry } from './legal-documents.js';
 import { OrganisationsOpenApiRegistry } from './organisations.js';
 import { PatternOpenApiRegistry } from './patterns.js';
 import { PendingOperationsOpenApiRegistry } from './pending-operations.js';
@@ -69,6 +70,7 @@ export function registerContractSchemas(
     GradingRequirementsOpenApiRegistry,
     StatisticsOpenApiRegistry,
     PendingOperationsOpenApiRegistry,
+    LegalDocumentsOpenApiRegistry,
   ],
 ): OpenAPIObject {
   document.components ??= {};
@@ -113,4 +115,5 @@ export const ContractRegistries = {
   students: StudentsOpenApiRegistry,
   gradingRequirements: GradingRequirementsOpenApiRegistry,
   statistics: StatisticsOpenApiRegistry,
+  legalDocuments: LegalDocumentsOpenApiRegistry,
 } as const;

@@ -62,6 +62,22 @@ export class VerificationTokenService {
     return { identifier: row.identifier };
   }
 
+  /**
+   * Look up a token without consuming it: its `identifier` when the value is
+   * known and unexpired, otherwise null. Lets a page show what a link is for
+   * before the user submits it.
+   */
+  async peekToken(value: string): Promise<{ identifier: string } | null> {
+    const rows = await this.db
+      .select()
+      .from(verification)
+      .where(eq(verification.value, value))
+      .limit(1);
+    const row = rows[0];
+    if (!row || row.expiresAt.getTime() < Date.now()) return null;
+    return { identifier: row.identifier };
+  }
+
   /** True iff `identifier` currently has a token that has not yet expired. */
   async hasUnexpiredToken(identifier: string): Promise<boolean> {
     const rows = await this.db

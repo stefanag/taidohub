@@ -7,6 +7,7 @@ import { BETTER_AUTH, type Auth } from '../../infrastructure/auth/better-auth.js
 import { VerificationTokenService } from '../../infrastructure/auth/verification-token.service.js';
 import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
 import { account, user } from '../../infrastructure/database/schema/index.js';
+import { LegalDocumentsService } from '../legal-documents/legal-documents.service.js';
 
 import type { SetInitialPasswordInput } from '@repo/contracts/users';
 
@@ -19,6 +20,7 @@ export class AuthService {
     private readonly tokens: VerificationTokenService,
     @Inject(BETTER_AUTH) private readonly auth: Auth,
     @Inject(DRIZZLE) private readonly db: DrizzleDb,
+    private readonly legal: LegalDocumentsService,
   ) {}
 
   /**
@@ -28,6 +30,23 @@ export class AuthService {
    * in and returns the resulting `Headers` (set-cookie carried by the caller).
    */
   async setInitialPassword(input: SetInitialPasswordInput): Promise<Headers> {
+    // An invitation must accept the terms and acknowledge the privacy notices
+    // that apply to the invited user. Checked before the token is consumed so
+    // a missing checkbox does not cost the user their link. Reset links ask
+    // for nothing.
+    const peeked = await this.tokens.peekToken(input.token);
+    const invitedUserId = peeked?.identifier.startsWith('invite:')
+      ? peeked.identifier.slice('invite:'.length)
+      : null;
+    const acknowledgements = invitedUserId
+      ? await this.legal.prepareAcknowledgements(
+          invitedUserId,
+          await this.legal.applicableForMember(invitedUserId),
+          input.acknowledgements ?? [],
+          'invitation',
+        )
+      : [];
+
     // NOTE: the token is consumed (deleted) here before any other work. If the
     // subsequent credential-write transaction fails, the token is already spent
     // and the user must be re-invited or issued a new reset link.
@@ -94,6 +113,9 @@ export class AuthService {
         .update(user)
         .set({ emailVerified: true, updatedAt: now })
         .where(eq(user.id, userId));
+      if (prefix === 'invite:' && userId === invitedUserId) {
+        await this.legal.recordAcknowledgements(tx, acknowledgements);
+      }
     });
 
     const { headers } = await this.auth.api.signInEmail({
