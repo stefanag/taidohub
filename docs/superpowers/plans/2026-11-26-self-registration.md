@@ -53,18 +53,20 @@ Flag: `self-registration`.
 
 - `user_profile.reference_federation_id` (uuid, nullable, FK `organisations.id`). The service
   checks the referenced organisation has `type = 'national_federation'`.
-- `user_consent` table: user id, document (`terms` | `privacy`), version, accepted at. Versioned so
-  a new privacy text can ask for consent again.
+- Terms and privacy texts, and the log of what each user accepted or acknowledged, come from the
+  legal documents plan (`2026-11-26-legal-documents.md`, branch `plan/legal-documents`). Its
+  phase 1 must ship before this phase.
 - `user_profile.date_of_birth` already exists; registration makes it required for self-registered
   users.
 
 ### Backend
 
 - New `registration` module (via `/add-module`): `POST /api/registration` (public, rate limited)
-  with a contract holding name, email, password, locale, date of birth, federation id and consent
-  versions. It validates age ≥ 13 on the day of registration, that the federation exists and is a
-  national federation, and the consent versions, then calls `auth.api.signUpEmail` server-side and
-  writes profile and consent in the same flow.
+  with a contract holding name, email, password, locale, date of birth, federation id and the ids of
+  the platform text versions shown. It validates age ≥ 13 on the day of registration, that the
+  federation exists and is a national federation, and that the versions are the current platform
+  `self_registered` texts, then calls `auth.api.signUpEmail` server-side and records profile, terms
+  acceptance and privacy receipt in the same flow.
 - `GET /api/registration/federations` (public): the national federations to choose from.
 - better-auth: `disabledPaths` gains `/sign-up/email`; `emailVerification` with
   `sendVerificationEmail` through `EmailService` (new localised template) and
@@ -81,7 +83,8 @@ Flag: `self-registration`.
 
 ### Frontend
 
-- `/register` page: form, consent checkboxes with links to the terms and privacy texts, age
+- `/register` page: form, "I accept the terms" and "I have read the privacy notice" checkboxes
+  with links to the platform texts (a privacy notice is acknowledged, not consented to), age
   validation with a clear message, a "check your email" view after submit. A link from the login
   page.
 - `/verify-email` landing page for the link in the email (success, expired link → send a new one).
@@ -94,8 +97,8 @@ Flag: `self-registration`.
 
 ### Open questions for phase 1
 
-- The terms and privacy texts themselves: who writes them, and are they the same for all
-  federations?
+- The platform texts themselves and who operates TaidoHub formally: see the open decisions in the
+  legal documents plan.
 
 ## Phase 2: Training and grading readiness
 
