@@ -39,6 +39,7 @@ export const SubjectSchema = z
     'Statistics',
     'Mcp',
     'PendingOperation',
+    'LegalDocument',
     'all',
   ])
   .meta({
@@ -237,6 +238,13 @@ export type PendingOperationSubjectShape = {
  * instance-level rules and for dispatching on a real row passed to
  * `throwUnlessCan`).
  */
+export type LegalDocumentSubjectShape = {
+  readonly __caslSubjectType__: 'LegalDocument';
+  id?: string;
+  /** Null for the platform's own texts. */
+  organisationId?: string | null;
+};
+
 export type AppSubject =
   | AppSubjectName
   | UserSubjectShape
@@ -261,7 +269,8 @@ export type AppSubject =
   | FeedbackThreadSubjectShape
   | StatisticsSubjectShape
   | McpSubjectShape
-  | PendingOperationSubjectShape;
+  | PendingOperationSubjectShape
+  | LegalDocumentSubjectShape;
 
 /**
  * Tuple type compatible with `MongoAbility<[AppAction, AppSubject]>` from

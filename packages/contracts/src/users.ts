@@ -2,6 +2,7 @@
  * User schemas. Mirrors the better-auth `user` table fields the API exposes to
  * clients (we deliberately do NOT expose password hashes, internal flags, etc.).
  */
+import { LegalAcknowledgementInputSchema } from './legal-documents.js';
 import { z } from './zod-openapi.js';
 
 export const RoleSchema = z
@@ -112,6 +113,11 @@ export const SetInitialPasswordSchema = z
   .object({
     token: z.string().min(1),
     password: z.string().min(8).max(200),
+    /**
+     * The terms accepted and privacy notices acknowledged on the set-password
+     * page. Required for invitations when texts apply; ignored for resets.
+     */
+    acknowledgements: z.array(LegalAcknowledgementInputSchema).max(50).optional(),
   })
   .meta({ id: 'SetInitialPasswordInput' });
 

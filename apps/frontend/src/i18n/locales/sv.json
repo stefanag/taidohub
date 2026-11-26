@@ -57,6 +57,7 @@
     "signOut": "Logga ut"
   },
   "nav": {
+    "adminLegalDocuments": "Villkor och integritet",
     "dashboard": "Översikt",
     "adminOrganisations": "Organisationer",
     "adminAuditLog": "Granskningslogg",
@@ -828,6 +829,60 @@
       "organisation": "Organisation",
       "shogoTitle": "Shogo-titel",
       "notes": "Anteckningar"
+    }
+  },
+  "legal": {
+    "languages": "Språk",
+    "binding": "Legalt gällande",
+    "notAvailableInLanguage": "Texten finns inte på ditt språk. Den visas på {{language}}, som är det legalt gällande språket.",
+    "translationNotice": "Detta är en översättning. Versionen på {{language}} är legalt gällande och har företräde om versionerna skiljer sig åt.",
+    "showBinding": "Visa versionen på {{language}}",
+    "versionLine": "Version {{version}}, publicerad {{date}}",
+    "notPublished": "Texten har inte publicerats.",
+    "acknowledgeRequired": "Godkänn villkoren och bekräfta att du har tagit del av integritetstexten för att fortsätta.",
+    "acceptTerms": "Jag godkänner användarvillkoren",
+    "readPrivacy": "Jag har tagit del av integritetstexten",
+    "kind": {
+      "terms": "Användarvillkor",
+      "privacy": "Integritetstext",
+      "dpa": "Personuppgiftsbiträdesavtal"
+    },
+    "audience": {
+      "members": "Medlemmar",
+      "self_registered": "Självregistrerade användare",
+      "organisations": "Organisationer"
+    },
+    "editor": {
+      "pageTitle": "Villkor och integritet",
+      "pageDescription": "Användarvillkor och integritetstexter som medlemmarna ser. En text kan skrivas på flera språk; ett av dem är legalt gällande och har företräde framför översättningarna.",
+      "owner": "Texter för",
+      "platform": "TaidoHub (plattformen)",
+      "nothingToManage": "Du administrerar ingen organisation.",
+      "noTexts": "Inga texter än.",
+      "addText": "Lägg till en text",
+      "published": "Publicerad version",
+      "publishedLine": "Version {{version}}, publicerad {{date}}. Legalt gällande språk: {{language}}.",
+      "openPublic": "Öppna den publika sidan",
+      "notPublishedYet": "Inget publicerat än.",
+      "correctTranslations": "Rätta en översättning",
+      "draft": "Utkast",
+      "startDraft": "Börja skriva",
+      "newVersion": "Påbörja en ny version",
+      "bindingLanguage": "Legalt gällande språk",
+      "requiresReacceptance": "Väsentlig ändring: användarna måste godkänna igen",
+      "changeSummary": "Vad har ändrats",
+      "publish": "Publicera",
+      "confirmPublish": "Publicera den här versionen? Texten på det legalt gällande språket kan inte ändras efteråt.",
+      "discardDraft": "Släng utkastet",
+      "title": "Rubrik",
+      "body": "Text",
+      "textRequired": "Skriv en rubrik och en text först.",
+      "needsReview": "Kopierad, ej granskad",
+      "saveReviewed": "Spara som granskad",
+      "removeLanguage": "Ta bort språket",
+      "revision": "Revision {{revision}}",
+      "missing": "Ingen text på {{language}} än.",
+      "bindingLocked": "Detta är den legalt gällande texten i en publicerad version och kan inte ändras. Påbörja en ny version för att ändra den."
     }
   }
 }

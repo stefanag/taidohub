@@ -253,6 +253,13 @@
       "when": 1795553454198,
       "tag": "0035_goofy_darkstar",
       "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "7",
+      "when": 1795711540397,
+      "tag": "0036_goofy_jimmy_woo",
+      "breakpoints": true
     }
   ]
 }

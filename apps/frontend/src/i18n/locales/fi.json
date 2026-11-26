@@ -57,6 +57,7 @@
     "signOut": "Kirjaudu ulos"
   },
   "nav": {
+    "adminLegalDocuments": "Ehdot ja tietosuoja",
     "dashboard": "Kojelauta",
     "adminOrganisations": "Organisaatiot",
     "adminAuditLog": "Auditointiloki",
@@ -828,6 +829,60 @@
       "organisation": "Organisaatio",
       "shogoTitle": "Shogo-arvonimi",
       "notes": "Muistiinpanot"
+    }
+  },
+  "legal": {
+    "languages": "Kielet",
+    "binding": "Oikeudellisesti sitova",
+    "notAvailableInLanguage": "Tekstiä ei ole saatavilla kielelläsi. Se näytetään oikeudellisesti sitovalla kielellä ({{language}}).",
+    "translationNotice": "Tämä on käännös. Oikeudellisesti sitova on versio kielellä {{language}}, ja se on etusijalla, jos versiot poikkeavat toisistaan.",
+    "showBinding": "Näytä versio kielellä {{language}}",
+    "versionLine": "Versio {{version}}, julkaistu {{date}}",
+    "notPublished": "Tekstiä ei ole julkaistu.",
+    "acknowledgeRequired": "Hyväksy käyttöehdot ja vahvista, että olet lukenut tietosuojaselosteen, jatkaaksesi.",
+    "acceptTerms": "Hyväksyn käyttöehdot",
+    "readPrivacy": "Olen lukenut tietosuojaselosteen",
+    "kind": {
+      "terms": "Käyttöehdot",
+      "privacy": "Tietosuojaseloste",
+      "dpa": "Henkilötietojen käsittelysopimus"
+    },
+    "audience": {
+      "members": "Jäsenet",
+      "self_registered": "Itse rekisteröityneet käyttäjät",
+      "organisations": "Organisaatiot"
+    },
+    "editor": {
+      "pageTitle": "Ehdot ja tietosuoja",
+      "pageDescription": "Jäsenille näytettävät käyttöehdot ja tietosuojaselosteet. Tekstin voi kirjoittaa usealla kielellä; yksi niistä on oikeudellisesti sitova ja on etusijalla käännöksiin nähden.",
+      "owner": "Tekstien omistaja",
+      "platform": "TaidoHub (alusta)",
+      "nothingToManage": "Et ylläpidä yhtään organisaatiota.",
+      "noTexts": "Ei vielä tekstejä.",
+      "addText": "Lisää teksti",
+      "published": "Julkaistu versio",
+      "publishedLine": "Versio {{version}}, julkaistu {{date}}. Oikeudellisesti sitova kieli: {{language}}.",
+      "openPublic": "Avaa julkinen sivu",
+      "notPublishedYet": "Mitään ei ole vielä julkaistu.",
+      "correctTranslations": "Korjaa käännös",
+      "draft": "Luonnos",
+      "startDraft": "Aloita kirjoittaminen",
+      "newVersion": "Aloita uusi versio",
+      "bindingLanguage": "Oikeudellisesti sitova kieli",
+      "requiresReacceptance": "Olennainen muutos: käyttäjien on hyväksyttävä uudelleen",
+      "changeSummary": "Mitä muuttui",
+      "publish": "Julkaise",
+      "confirmPublish": "Julkaistaanko tämä versio? Oikeudellisesti sitovan kielen tekstiä ei voi muuttaa julkaisun jälkeen.",
+      "discardDraft": "Hylkää luonnos",
+      "title": "Otsikko",
+      "body": "Teksti",
+      "textRequired": "Kirjoita ensin otsikko ja teksti.",
+      "needsReview": "Kopioitu, ei tarkistettu",
+      "saveReviewed": "Tallenna tarkistettuna",
+      "removeLanguage": "Poista tämä kieli",
+      "revision": "Revisio {{revision}}",
+      "missing": "Ei vielä tekstiä kielellä {{language}}.",
+      "bindingLocked": "Tämä on julkaistun version oikeudellisesti sitova teksti, eikä sitä voi muuttaa. Aloita uusi versio muuttaaksesi sitä."
     }
   }
 }

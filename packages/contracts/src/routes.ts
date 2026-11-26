@@ -21,6 +21,18 @@ export const AccountRoutes = {
   setPassword: '/api/account/set-password',
 } as const;
 
+export const LegalRoutes = {
+  published: '/api/legal/published',
+  invitation: '/api/legal/invitation',
+  documents: '/api/legal-documents',
+  document: (id: string) => `/api/legal-documents/${id}` as const,
+  versions: (documentId: string) => `/api/legal-documents/${documentId}/versions` as const,
+  version: (versionId: string) => `/api/legal-documents/versions/${versionId}` as const,
+  translation: (versionId: string, locale: string) =>
+    `/api/legal-documents/versions/${versionId}/translations/${locale}` as const,
+  publish: (versionId: string) => `/api/legal-documents/versions/${versionId}/publish` as const,
+} as const;
+
 export const UsersRoutes = {
   base: '/api/users',
   me: '/api/users/me',

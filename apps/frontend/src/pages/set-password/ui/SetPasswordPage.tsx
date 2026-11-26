@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useInvitationLegalTextsQuery, type LegalLocale, LEGAL_LOCALES } from '@/entities/legal-document';
 import { SetPasswordForm } from '@/features/set-password-form';
 
 export interface SetPasswordPageProps {
@@ -19,7 +20,11 @@ export interface SetPasswordPageProps {
  * triggered flow and not a primary marketing/auth surface.
  */
 export function SetPasswordPage({ token }: SetPasswordPageProps): React.ReactElement {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const base = i18n.language.split('-')[0] ?? '';
+  const locale = (LEGAL_LOCALES as readonly string[]).includes(base) ? (base as LegalLocale) : undefined;
+  // The terms and privacy notices that apply to an invited user; none for resets.
+  const legal = useInvitationLegalTextsQuery(token, locale);
 
   return (
     <main className="flex min-h-screen items-center justify-center p-4">
@@ -34,7 +39,18 @@ export function SetPasswordPage({ token }: SetPasswordPageProps): React.ReactEle
             })}
           </p>
         </div>
-        <SetPasswordForm token={token} />
+        {legal.isPending ? (
+          <p className="text-center text-sm text-on-surface-variant">{t('common.loading')}</p>
+        ) : legal.isError ? (
+          <p role="alert" className="text-center text-sm">
+            {t('auth.setPassword.invalidToken', {
+              defaultValue:
+                'This link is invalid or has expired. Ask an administrator to send a new one.',
+            })}
+          </p>
+        ) : (
+          <SetPasswordForm token={token} legalTexts={legal.data.documents} />
+        )}
       </div>
     </main>
   );

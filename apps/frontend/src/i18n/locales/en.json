@@ -57,6 +57,7 @@
     "signOut": "Sign out"
   },
   "nav": {
+    "adminLegalDocuments": "Terms and privacy",
     "dashboard": "Dashboard",
     "adminOrganisations": "Organisations",
     "adminAuditLog": "Audit log",
@@ -845,6 +846,60 @@
       "organisation": "Organisation",
       "shogoTitle": "Shogo title",
       "notes": "Notes"
+    }
+  },
+  "legal": {
+    "languages": "Languages",
+    "binding": "Legally binding",
+    "notAvailableInLanguage": "This text is not available in your language. It is shown in {{language}}, the legally binding language.",
+    "translationNotice": "This is a translation. The {{language}} version is legally binding and takes precedence if the versions differ.",
+    "showBinding": "Show the {{language}} version",
+    "versionLine": "Version {{version}}, published {{date}}",
+    "notPublished": "This text has not been published.",
+    "acknowledgeRequired": "Accept the terms and confirm that you have read the privacy notice to continue.",
+    "acceptTerms": "I accept the terms of use",
+    "readPrivacy": "I have read the privacy notice",
+    "kind": {
+      "terms": "Terms of use",
+      "privacy": "Privacy notice",
+      "dpa": "Data processing agreement"
+    },
+    "audience": {
+      "members": "Members",
+      "self_registered": "Self-registered users",
+      "organisations": "Organisations"
+    },
+    "editor": {
+      "pageTitle": "Terms and privacy",
+      "pageDescription": "The terms of use and privacy notices members see. A text can be written in several languages; one of them is legally binding and takes precedence over the translations.",
+      "owner": "Texts of",
+      "platform": "TaidoHub (the platform)",
+      "nothingToManage": "You do not administer any organisation.",
+      "noTexts": "No texts yet.",
+      "addText": "Add a text",
+      "published": "Published version",
+      "publishedLine": "Version {{version}}, published {{date}}. Legally binding language: {{language}}.",
+      "openPublic": "Open the public page",
+      "notPublishedYet": "Nothing published yet.",
+      "correctTranslations": "Correct a translation",
+      "draft": "Draft",
+      "startDraft": "Start writing",
+      "newVersion": "Start a new version",
+      "bindingLanguage": "Legally binding language",
+      "requiresReacceptance": "Material change: users must accept again",
+      "changeSummary": "What changed",
+      "publish": "Publish",
+      "confirmPublish": "Publish this version? The text in the legally binding language can no longer be changed afterwards.",
+      "discardDraft": "Discard draft",
+      "title": "Title",
+      "body": "Text",
+      "textRequired": "Write a title and a text first.",
+      "needsReview": "Copied, not reviewed",
+      "saveReviewed": "Save as reviewed",
+      "removeLanguage": "Remove this language",
+      "revision": "Revision {{revision}}",
+      "missing": "No {{language}} text yet.",
+      "bindingLocked": "This is the legally binding text of a published version and cannot be changed. Start a new version to change it."
     }
   }
 }

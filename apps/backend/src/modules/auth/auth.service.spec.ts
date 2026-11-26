@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { BETTER_AUTH } from '../../infrastructure/auth/better-auth.js';
 import { VerificationTokenService } from '../../infrastructure/auth/verification-token.service.js';
 import { DRIZZLE } from '../../infrastructure/database/client.js';
+import { LegalDocumentsService } from '../legal-documents/legal-documents.service.js';
 
 import { AuthService } from './auth.service.js';
 
@@ -22,10 +23,21 @@ const TARGET_USER = {
 };
 
 function tokensStub() {
-  return {
+  const stub = {
     issueToken: vi.fn(),
     consumeToken: vi.fn(),
+    // By default a peek sees what a consume would return, without consuming.
+    peekToken: vi.fn((value: string) => stub.consumeToken.getMockImplementation()?.(value) ?? stub.consumeToken(value)),
     hasUnexpiredToken: vi.fn(),
+  };
+  return stub;
+}
+
+function legalStub() {
+  return {
+    applicableForMember: vi.fn().mockResolvedValue({ documents: [] }),
+    prepareAcknowledgements: vi.fn().mockResolvedValue([]),
+    recordAcknowledgements: vi.fn().mockResolvedValue(undefined),
   };
 }
 
@@ -85,6 +97,7 @@ async function makeService(
   tokens: ReturnType<typeof tokensStub>,
   auth: ReturnType<typeof authStub>,
   db: ReturnType<typeof dbStub>,
+  legal: ReturnType<typeof legalStub> = legalStub(),
 ) {
   const module = await Test.createTestingModule({
     providers: [
@@ -92,6 +105,7 @@ async function makeService(
       { provide: VerificationTokenService, useValue: tokens },
       { provide: BETTER_AUTH, useValue: auth },
       { provide: DRIZZLE, useValue: db },
+      { provide: LegalDocumentsService, useValue: legal },
     ],
   }).compile();
   return module.get(AuthService);
@@ -175,5 +189,51 @@ describe('AuthService — setInitialPassword', () => {
     expect(db.__txInsert).not.toHaveBeenCalled();
     expect(db.__txUpdate).not.toHaveBeenCalled();
     expect(auth.api.signInEmail).not.toHaveBeenCalled();
+  });
+
+  it('records the accepted texts of an invitation in the password transaction', async () => {
+    tokens.consumeToken.mockResolvedValue({ identifier: 'invite:u-target' });
+    const db = dbStub({ userRows: [TARGET_USER], accountRows: [] });
+    const legal = legalStub();
+    const rows = [{ userId: 'u-target', versionId: 'v-1' }];
+    legal.prepareAcknowledgements.mockResolvedValue(rows);
+    const service = await makeService(tokens, auth, db, legal);
+    const acknowledgements = [{ versionId: '0b0c2c1e-8f0a-4c41-9a3e-2b8f7e6d5c4b', locale: 'sv' as const }];
+
+    await service.setInitialPassword({ token: 'tok', password: 'longenough', acknowledgements });
+
+    expect(legal.applicableForMember).toHaveBeenCalledWith('u-target');
+    expect(legal.prepareAcknowledgements).toHaveBeenCalledWith(
+      'u-target',
+      { documents: [] },
+      acknowledgements,
+      'invitation',
+    );
+    expect(legal.recordAcknowledgements).toHaveBeenCalledWith(expect.anything(), rows);
+  });
+
+  it('keeps the invitation link when the texts were not accepted', async () => {
+    tokens.consumeToken.mockResolvedValue({ identifier: 'invite:u-target' });
+    const db = dbStub({ userRows: [TARGET_USER], accountRows: [] });
+    const legal = legalStub();
+    legal.prepareAcknowledgements.mockRejectedValue(new BadRequestException('LEGAL_ACKNOWLEDGEMENT_REQUIRED'));
+    const service = await makeService(tokens, auth, db, legal);
+
+    await expect(service.setInitialPassword({ token: 'tok', password: 'longenough' })).rejects.toThrow(
+      BadRequestException,
+    );
+    expect(tokens.consumeToken).not.toHaveBeenCalled();
+  });
+
+  it('asks for no texts on a password reset', async () => {
+    tokens.consumeToken.mockResolvedValue({ identifier: 'admin-reset:u-target' });
+    const db = dbStub({ userRows: [TARGET_USER], accountRows: [] });
+    const legal = legalStub();
+    const service = await makeService(tokens, auth, db, legal);
+
+    await service.setInitialPassword({ token: 'tok', password: 'longenough' });
+
+    expect(legal.applicableForMember).not.toHaveBeenCalled();
+    expect(legal.recordAcknowledgements).not.toHaveBeenCalled();
   });
 });
