@@ -1,6 +1,9 @@
 {
   "auth": {
     "login": {
+      "google": "Kirjaudu Googlella",
+      "googleUnknownAccount": "Tälle Google-osoitteelle ei ole vielä tiliä.",
+      "googleFailed": "Kirjautuminen Googlella ei onnistunut. Yritä uudelleen tai käytä sähköpostia ja salasanaa.",
       "emailNotVerified": "Vahvista ensin sähköpostiosoitteesi. Avaa linkki, jonka lähetimme sinulle.",
       "resendVerification": "Lähetä uusi vahvistuslinkki",
       "verificationResent": "Jos osoite kuuluu vahvistusta odottavaan tiliin, uusi linkki on tulossa.",
@@ -894,6 +897,9 @@
     }
   },
   "register": {
+    "withGoogle": "Rekisteröidy Googlella",
+    "googleHint": "Tai käytä Google-tiliäsi sähköpostin ja salasanan sijaan. Syntymäaika, liitto ja yllä olevat ehdot koskevat silti.",
+    "googleFailed": "Rekisteröityminen Googlella ei onnistunut. Linkki on voinut vanhentua; yritä uudelleen.",
     "title": "Luo tili",
     "description": "Harrastajille, jotka eivät vielä kuulu seuraan. Voit pitää kirjaa vyökokeistasi ja seurata edistymistäsi.",
     "closed": "Rekisteröityminen ei ole vielä avoinna.",

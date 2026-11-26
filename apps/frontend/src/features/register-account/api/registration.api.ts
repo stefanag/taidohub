@@ -5,9 +5,12 @@ import {
 } from '@repo/contracts/legal-documents';
 import {
   RegisterResponseSchema,
+  RegistrationIntentSchema,
   RegistrationFederationSchema,
   type RegisterInput,
   type RegisterResponse,
+  type RegisterWithGoogleInput,
+  type RegistrationIntent,
   type RegistrationFederation,
 } from '@repo/contracts/registration';
 import { RegistrationRoutes } from '@repo/contracts/routes';
@@ -31,5 +34,12 @@ export async function getRegistrationLegalTexts(
 export async function registerAccount(input: RegisterInput): Promise<RegisterResponse> {
   return RegisterResponseSchema.parse(
     await httpClient(RegistrationRoutes.register, { method: 'POST', body: input }),
+  );
+}
+
+/** Runs the registration checks and returns the intent for a Google sign-up. */
+export async function createGoogleRegistrationIntent(input: RegisterWithGoogleInput): Promise<RegistrationIntent> {
+  return RegistrationIntentSchema.parse(
+    await httpClient(RegistrationRoutes.googleIntent, { method: 'POST', body: input }),
   );
 }

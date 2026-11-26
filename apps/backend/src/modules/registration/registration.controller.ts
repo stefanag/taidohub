@@ -9,6 +9,8 @@ import { RequireFeatureFlag } from '../feature-flags/require-feature-flag.decora
 import {
   RegisterInputDto,
   RegisterResponseDto,
+  RegisterWithGoogleDto,
+  RegistrationIntentDto,
   RegistrationFederationDto,
   RegistrationLegalTextsDto,
   RegistrationLegalTextsQueryDto,
@@ -16,7 +18,11 @@ import {
 import { RegistrationService } from './registration.service.js';
 
 import type { ApplicableLegalTexts } from '@repo/contracts/legal-documents';
-import type { RegisterResponse, RegistrationFederation } from '@repo/contracts/registration';
+import type {
+  RegisterResponse,
+  RegistrationFederation,
+  RegistrationIntent,
+} from '@repo/contracts/registration';
 import type { Request } from 'express';
 
 /**
@@ -49,6 +55,22 @@ export class RegistrationController {
   })
   register(@Body() body: RegisterInputDto, @Req() req: Request): Promise<RegisterResponse> {
     return this.service.register(body, clientKey(req));
+  }
+
+  @Post('google-intent')
+  @Public()
+  @RequireFeatureFlag('self-registration')
+  @HttpCode(HttpStatus.OK)
+  @ApiEndpoint({
+    summary:
+      'Check age, federation and accepted texts before a Google sign-up, and return the intent to pass to the Google sign-in.',
+    operationId: 'RegistrationController_googleIntent',
+    ok: RegistrationIntentDto,
+    errorType: ErrorEnvelopeDto,
+    errors: ['400', '404'],
+  })
+  googleIntent(@Body() body: RegisterWithGoogleDto, @Req() req: Request): Promise<RegistrationIntent> {
+    return this.service.createGoogleIntent(body, clientKey(req));
   }
 
   @Get('federations')

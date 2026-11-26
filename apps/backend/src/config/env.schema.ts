@@ -70,6 +70,12 @@ export const EnvSchema = z.object({
   SMTP_USER: unsetIfEmpty(z.string().min(1).optional()),
   SMTP_PASSWORD: unsetIfEmpty(z.string().min(1).optional()),
   /** Sender of every email, as `Name <address>`. */
+  /**
+   * Google sign-in. Both set → "Sign in with Google" is available; either
+   * missing → it is not. One OAuth client per environment (see the deploy README).
+   */
+  GOOGLE_CLIENT_ID: unsetIfEmpty(z.string().min(1).optional()),
+  GOOGLE_CLIENT_SECRET: unsetIfEmpty(z.string().min(1).optional()),
   EMAIL_FROM: unsetIfEmpty(z.string().min(3).default('TaidoHub <noreply@emails.taidohub.se>')),
 
   /**

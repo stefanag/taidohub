@@ -256,6 +256,21 @@
         ]
       }
     },
+    "/api/account/sign-in-providers": {
+      "get": {
+        "operationId": "AccountController_signInProviders",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "`{ google: boolean }`"
+          }
+        },
+        "summary": "Which sign-in methods besides email and password this environment offers.",
+        "tags": [
+          "account"
+        ]
+      }
+    },
     "/api/account/set-password": {
       "post": {
         "description": "Consumes the token, sets the password, marks the email verified, and signs the user in by appending the better-auth session cookie.",
@@ -5543,6 +5558,58 @@
           }
         },
         "summary": "Create an account without a club. Sends a confirmation email; the account can sign in once confirmed. Answers the same for an address that already has an account.",
+        "tags": [
+          "registration"
+        ]
+      }
+    },
+    "/api/registration/google-intent": {
+      "post": {
+        "operationId": "RegistrationController_googleIntent",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterWithGoogleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationIntentDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Check age, federation and accepted texts before a Google sign-up, and return the intent to pass to the Google sign-in.",
         "tags": [
           "registration"
         ]
@@ -25790,6 +25857,186 @@
           "status"
         ]
       },
+      "RegisterWithGoogleDto": {
+        "type": "object",
+        "properties": {
+          "locale": {
+            "$ref": "#/$defs/LegalLocale",
+            "type": "",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "LegalLocale": {
+                "type": "string",
+                "enum": [
+                  "sv",
+                  "en",
+                  "fi"
+                ],
+                "description": "A language a legal text can be written in."
+              },
+              "LegalAcknowledgementInput": {
+                "type": "object",
+                "properties": {
+                  "versionId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "locale": {
+                    "$ref": "#/$defs/LegalLocale"
+                  }
+                },
+                "required": [
+                  "versionId",
+                  "locale"
+                ]
+              }
+            },
+            "x-nestjs_zod-parent-id": "RegisterWithGoogleInput",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Checks age, federation and accepted texts before a Google sign-up."
+            }
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "LegalLocale": {
+                "type": "string",
+                "enum": [
+                  "sv",
+                  "en",
+                  "fi"
+                ],
+                "description": "A language a legal text can be written in."
+              },
+              "LegalAcknowledgementInput": {
+                "type": "object",
+                "properties": {
+                  "versionId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "locale": {
+                    "$ref": "#/$defs/LegalLocale"
+                  }
+                },
+                "required": [
+                  "versionId",
+                  "locale"
+                ]
+              }
+            },
+            "x-nestjs_zod-parent-id": "RegisterWithGoogleInput",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Checks age, federation and accepted texts before a Google sign-up."
+            }
+          },
+          "federationId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "LegalLocale": {
+                "type": "string",
+                "enum": [
+                  "sv",
+                  "en",
+                  "fi"
+                ],
+                "description": "A language a legal text can be written in."
+              },
+              "LegalAcknowledgementInput": {
+                "type": "object",
+                "properties": {
+                  "versionId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "locale": {
+                    "$ref": "#/$defs/LegalLocale"
+                  }
+                },
+                "required": [
+                  "versionId",
+                  "locale"
+                ]
+              }
+            },
+            "x-nestjs_zod-parent-id": "RegisterWithGoogleInput",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Checks age, federation and accepted texts before a Google sign-up."
+            }
+          },
+          "acknowledgements": {
+            "maxItems": 10,
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/LegalAcknowledgementInput"
+            },
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "LegalLocale": {
+                "type": "string",
+                "enum": [
+                  "sv",
+                  "en",
+                  "fi"
+                ],
+                "description": "A language a legal text can be written in."
+              },
+              "LegalAcknowledgementInput": {
+                "type": "object",
+                "properties": {
+                  "versionId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "locale": {
+                    "$ref": "#/$defs/LegalLocale"
+                  }
+                },
+                "required": [
+                  "versionId",
+                  "locale"
+                ]
+              }
+            },
+            "x-nestjs_zod-parent-id": "RegisterWithGoogleInput",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Checks age, federation and accepted texts before a Google sign-up."
+            }
+          }
+        },
+        "required": [
+          "locale",
+          "dateOfBirth",
+          "federationId"
+        ]
+      },
+      "RegistrationIntentDto": {
+        "type": "object",
+        "properties": {
+          "intent": {
+            "type": "string",
+            "minLength": 1,
+            "x-nestjs_zod-parent-id": "RegistrationIntent",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "An opaque, one-hour token to pass as `additionalData.registrationIntent` to the Google sign-in with `requestSignUp: true`."
+            }
+          }
+        },
+        "required": [
+          "intent"
+        ]
+      },
       "RegistrationFederationDto": {
         "type": "object",
         "properties": {
@@ -28708,6 +28955,9 @@
       "Session": {
         "$ref": "#/components/schemas/Session"
       },
+      "SignInProviders": {
+        "$ref": "#/components/schemas/SignInProviders"
+      },
       "Role": {
         "$ref": "#/components/schemas/Role"
       },
@@ -29025,6 +29275,12 @@
       },
       "RegisterResponse": {
         "$ref": "#/components/schemas/RegisterResponse"
+      },
+      "RegisterWithGoogleInput": {
+        "$ref": "#/components/schemas/RegisterWithGoogleInput"
+      },
+      "RegistrationIntent": {
+        "$ref": "#/components/schemas/RegistrationIntent"
       },
       "RegistrationFederation": {
         "$ref": "#/components/schemas/RegistrationFederation"

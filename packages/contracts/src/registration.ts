@@ -45,6 +45,30 @@ export const RegisterInputSchema = z
   });
 export type RegisterInput = z.infer<typeof RegisterInputSchema>;
 
+/**
+ * The checks of a registration without name, email and password, which come
+ * from Google. Answered with an intent to pass through the Google sign-in.
+ */
+export const RegisterWithGoogleSchema = RegisterInputSchema.pick({
+  locale: true,
+  dateOfBirth: true,
+  federationId: true,
+  acknowledgements: true,
+}).meta({
+  id: 'RegisterWithGoogleInput',
+  description: 'Checks age, federation and accepted texts before a Google sign-up.',
+});
+export type RegisterWithGoogleInput = z.infer<typeof RegisterWithGoogleSchema>;
+
+export const RegistrationIntentSchema = z
+  .object({ intent: z.string().min(1) })
+  .meta({
+    id: 'RegistrationIntent',
+    description:
+      'An opaque, one-hour token to pass as `additionalData.registrationIntent` to the Google sign-in with `requestSignUp: true`.',
+  });
+export type RegistrationIntent = z.infer<typeof RegistrationIntentSchema>;
+
 export const RegisterResponseSchema = z.object({ status: z.literal('verification_sent') }).meta({
   id: 'RegisterResponse',
   description:
@@ -79,6 +103,8 @@ export type DeleteOwnAccountInput = z.infer<typeof DeleteOwnAccountSchema>;
 export const RegistrationOpenApiRegistry = {
   RegisterInput: RegisterInputSchema,
   RegisterResponse: RegisterResponseSchema,
+  RegisterWithGoogleInput: RegisterWithGoogleSchema,
+  RegistrationIntent: RegistrationIntentSchema,
   RegistrationFederation: RegistrationFederationSchema,
   RegistrationLegalTextsQuery: RegistrationLegalTextsQuerySchema,
   DeleteOwnAccountInput: DeleteOwnAccountSchema,

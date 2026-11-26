@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -55,10 +56,25 @@ function makeHeadersStub(cookies: string[]): Headers {
 async function makeController(service: ReturnType<typeof serviceStub>) {
   const module = await Test.createTestingModule({
     controllers: [AccountController],
-    providers: [{ provide: AuthService, useValue: service }],
+    providers: [
+      { provide: AuthService, useValue: service },
+      { provide: ConfigService, useValue: { get: (key: string) => googleConfig[key] } },
+    ],
   }).compile();
   return module.get(AccountController);
 }
+
+let googleConfig: Record<string, string | undefined> = {};
+
+describe('AccountController.signInProviders', () => {
+  it('offers Google only when both credentials are configured', async () => {
+    googleConfig = { GOOGLE_CLIENT_ID: 'id' };
+    expect((await makeController(serviceStub())).signInProviders()).toEqual({ google: false });
+    googleConfig = { GOOGLE_CLIENT_ID: 'id', GOOGLE_CLIENT_SECRET: 'secret' };
+    expect((await makeController(serviceStub())).signInProviders()).toEqual({ google: true });
+    googleConfig = {};
+  });
+});
 
 describe('AccountController.setPassword', () => {
   let service: ReturnType<typeof serviceStub>;

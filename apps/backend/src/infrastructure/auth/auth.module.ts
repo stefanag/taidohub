@@ -7,6 +7,7 @@ import { DRIZZLE, type DrizzleDb } from '../database/client.js';
 import { EMAIL_SERVICE, type EmailService } from '../email/email.types.js';
 
 import { AuthUserCache } from './auth-user.cache.js';
+import { AuthHooksRegistry } from './auth-hooks.registry.js';
 import { AuthGuard } from './auth.guard.js';
 import { BETTER_AUTH, buildBetterAuth } from './better-auth.js';
 import { UserContextService } from './user-context.service.js';
@@ -14,13 +15,16 @@ import { VerificationTokenService } from './verification-token.service.js';
 
 const betterAuthProvider: Provider = {
   provide: BETTER_AUTH,
-  inject: [ConfigService, EMAIL_SERVICE, DRIZZLE],
+  inject: [ConfigService, EMAIL_SERVICE, DRIZZLE, AuthHooksRegistry],
   useFactory: (
     config: ConfigService<Env, true>,
     emailService: EmailService,
     db: DrizzleDb,
+    hooks: AuthHooksRegistry,
   ) => {
     const backendUrl = config.get('BACKEND_URL', { infer: true });
+    const googleClientId = config.get('GOOGLE_CLIENT_ID', { infer: true });
+    const googleClientSecret = config.get('GOOGLE_CLIENT_SECRET', { infer: true });
     const enableSwagger = config.get('ENABLE_SWAGGER', { infer: true });
     const env: Env = {
       NODE_ENV: config.get('NODE_ENV', { infer: true }),
@@ -39,8 +43,10 @@ const betterAuthProvider: Provider = {
       RESET_TOKEN_TTL_HOURS: config.get('RESET_TOKEN_TTL_HOURS', { infer: true }),
       ...(backendUrl !== undefined ? { BACKEND_URL: backendUrl } : {}),
       ...(enableSwagger !== undefined ? { ENABLE_SWAGGER: enableSwagger } : {}),
+      ...(googleClientId !== undefined ? { GOOGLE_CLIENT_ID: googleClientId } : {}),
+      ...(googleClientSecret !== undefined ? { GOOGLE_CLIENT_SECRET: googleClientSecret } : {}),
     };
-    return buildBetterAuth(db, env, emailService);
+    return buildBetterAuth(db, env, emailService, hooks);
   },
 };
 
@@ -58,6 +64,7 @@ const betterAuthProvider: Provider = {
 @Global()
 @Module({
   providers: [
+    AuthHooksRegistry,
     betterAuthProvider,
     AuthGuard,
     AuthUserCache,
@@ -66,6 +73,7 @@ const betterAuthProvider: Provider = {
     { provide: APP_GUARD, useClass: AuthGuard },
   ],
   exports: [
+    AuthHooksRegistry,
     betterAuthProvider,
     AuthGuard,
     AuthUserCache,

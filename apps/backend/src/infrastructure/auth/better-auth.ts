@@ -3,7 +3,7 @@ import { fetchClientMetadataResource } from '@better-auth/cimd/node';
 import { mcp } from '@better-auth/mcp';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-import { APIError, createAuthMiddleware, getSessionFromCtx } from 'better-auth/api';
+import { APIError, createAuthMiddleware, getOAuthState, getSessionFromCtx } from 'better-auth/api';
 import { admin, jwt } from 'better-auth/plugins';
 import { adminAc, userAc } from 'better-auth/plugins/admin/access';
 
@@ -12,6 +12,7 @@ import { type DrizzleDb } from '../database/client.js';
 import * as schema from '../database/schema/index.js';
 import { type EmailService } from '../email/email.types.js';
 
+import { AuthHooksRegistry } from './auth-hooks.registry.js';
 import { canConnectMcpClient, mcpResource } from './mcp-access.js';
 import { isSelfRegistered, isUnverifiedSelfRegistered } from './self-registration.js';
 
@@ -34,7 +35,12 @@ const MCP_GRANT_PATHS = new Set(['/oauth2/authorize', '/oauth2/consent']);
  * can wire it against the same `ConfigService`-validated env that the rest of
  * the app uses, and so test setups can rebuild it against a fresh database.
  */
-export function buildBetterAuth(db: DrizzleDb, env: Env, emailService: EmailService) {
+export function buildBetterAuth(
+  db: DrizzleDb,
+  env: Env,
+  emailService: EmailService,
+  hooks: AuthHooksRegistry = new AuthHooksRegistry(),
+) {
   const isProd = env.NODE_ENV === 'production';
   const trustedOrigins = env.WEB_ORIGIN.split(',').map((s) => s.trim()).filter(Boolean);
 
@@ -110,6 +116,44 @@ export function buildBetterAuth(db: DrizzleDb, env: Env, emailService: EmailServ
           locale: (user as { locale?: string }).locale ?? 'en',
           resetUrl: url,
         });
+      },
+    },
+    // Google sign-in, when both credentials are configured. It never creates
+    // an account by accident: the sign-in button gets `signup_disabled` for an
+    // unknown address, and sign-up only happens from the registration page
+    // (requestSignUp) with a registration intent checked in databaseHooks.
+    // Existing users are linked by their verified Google email.
+    ...(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET
+      ? {
+          socialProviders: {
+            google: {
+              clientId: env.GOOGLE_CLIENT_ID,
+              clientSecret: env.GOOGLE_CLIENT_SECRET,
+              disableImplicitSignUp: true,
+              prompt: 'select_account' as const,
+            },
+          },
+        }
+      : {}),
+    databaseHooks: {
+      user: {
+        create: {
+          // Accounts created by a social sign-in callback need a registration
+          // intent (age, federation and accepted terms, checked when it was
+          // issued). Email sign-up goes through RegistrationService instead.
+          before: async (_user, ctx) => {
+            if (!ctx?.path?.startsWith('/callback')) return;
+            const intent = ((await getOAuthState()) as { registrationIntent?: unknown } | null)
+              ?.registrationIntent;
+            if (!hooks.socialSignUp || !(await hooks.socialSignUp.allow(intent))) return false;
+          },
+          after: async (created, ctx) => {
+            if (!ctx?.path?.startsWith('/callback') || !hooks.socialSignUp) return;
+            const intent = ((await getOAuthState()) as { registrationIntent?: unknown } | null)
+              ?.registrationIntent;
+            await hooks.socialSignUp.complete(created.id, intent);
+          },
+        },
       },
     },
     emailVerification: {
