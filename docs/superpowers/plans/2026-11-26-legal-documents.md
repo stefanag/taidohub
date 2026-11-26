@@ -15,6 +15,11 @@ notices, and are asked again when a text changes materially.
 - Texts can differ per club, per federation and for self-registration.
 - Texts can have several language variants; exactly one language per version is legally binding
   and takes precedence over translations.
+- TaidoHub is operated by Stefan Agnvall as a private individual for now; this may change (see
+  "Operator").
+- Data processing agreements with clubs and federations are accepted in TaidoHub.
+- No simplified version of the texts for users aged 13–17.
+- The owner arranges legal review of the texts; Claude may draft starting points.
 
 ## Principles (not legal advice; have them reviewed)
 
@@ -31,9 +36,10 @@ notices, and are asked again when a text changes materially.
 ## Data
 
 - `legal_document`
-  - `id`, `kind` (`terms` | `privacy`)
+  - `id`, `kind` (`terms` | `privacy` | `dpa`; `dpa` = data processing agreement, platform only)
   - `organisation_id` (null = the platform; otherwise a club or national/international federation)
-  - `audience` (`members` | `self_registered`; `self_registered` only allowed for the platform)
+  - `audience` (`members` | `self_registered` | `organisations`; the last two only for the
+    platform, `organisations` only with `kind = 'dpa'`)
   - `mandatory_for_descendants` (boolean, federations only; see "Which texts apply")
   - unique on (`kind`, `organisation_id`, `audience`)
 - `legal_document_version`
@@ -55,6 +61,15 @@ notices, and are asked again when a text changes materially.
     (the membership that made the text apply; null for platform texts), `acknowledged_at`
   - kept when the user leaves a club; deleted only with the user account
 
+- `organisation_agreement_acceptance` (append-only): `organisation_id`, `version_id` (a `dpa`
+  version), `accepted_by_user_id` (an orgadmin of that organisation at the time),
+  `displayed_locale`, `displayed_content_hash`, `authoritative_locale`,
+  `authoritative_content_hash`, `operator_snapshot` (operator details in force, see below),
+  `accepted_at`.
+- `platform_operator` (single current row plus history): legal name, type (`private_individual` |
+  `organisation`), organisation number if any, postal address, contact email, valid from. Edited
+  by sysadmin only.
+
 Supported content locales: start with the app locales (sv, en, fi), but keep `locale` a validated
 BCP 47 tag from a configured list so a federation can add another language without a migration.
 
@@ -75,6 +90,37 @@ BCP 47 tag from a configured list so a federation can add another language witho
 - **New version:** the editor can copy the previous version's translations as a starting point;
   copied translations are flagged "needs review" until saved, and only reviewed translations are
   shown to users. A version can be published with the authoritative translation alone.
+
+## Operator
+
+TaidoHub's operator is controller for self-registered users and processor for clubs and
+federations, so the operator is named in the platform texts and the data processing agreement.
+Because the operator can change (today a private individual, later perhaps an association or
+company):
+
+- Platform texts and the DPA refer to the operator through placeholders (`{{operator.name}}`,
+  `{{operator.contact}}` …) filled from `platform_operator` when rendered; the hash covers the
+  rendered text, so the evidence shows the operator as it was.
+- Changing the operator is a material change: it requires publishing new versions of the platform
+  terms, the self-registration privacy notice and the DPA with `requires_reacceptance`, and the
+  editor refuses to save an operator change without them. Users then accept the new terms, and
+  orgadmins accept the new DPA, through the normal flows.
+- The privacy notice must say where the operator's contact details are; with a private individual
+  as operator, use a dedicated contact address rather than a private one.
+
+## Data processing agreement
+
+- One platform document of kind `dpa`, audience `organisations`, versioned and multilingual like
+  every other text.
+- An organisation is **covered** when it, or an ancestor whose texts it inherits, has accepted the
+  current DPA version. This matches text inheritance: whoever's privacy notice applies is the
+  controller, and that organisation signs.
+- An orgadmin of an organisation that is not covered sees an interstitial asking them to accept on
+  the organisation's behalf. Acceptance is recorded in `organisation_agreement_acceptance` and the
+  audit log.
+- Until covered, the organisation cannot invite or add members, approve join requests or create
+  students; existing data stays readable so nothing is lost. (Default; easy to relax.)
+- Sysadmin sees every organisation's DPA status in the admin area.
 
 ## Which texts apply
 
@@ -136,8 +182,10 @@ BCP 47 tag from a configured list so a federation can add another language witho
    (`2026-11-26-self-registration.md`), which uses these texts.
 2. **Change handling:** pending/acknowledge endpoints, the re-acceptance interstitial and guard,
    the dashboard notice, "My acknowledgements", `mandatory_for_descendants`.
-3. **Templates and agreements:** platform templates that organisations copy and adapt; the data
-   processing agreement flow if decided below.
+3. **Operator and agreements:** `platform_operator` with placeholders and the operator-change
+   rule, the DPA flow and its gate on member administration, the sysadmin DPA overview, and
+   platform templates that organisations copy and adapt. Phase 3 must be in place before a club
+   that is not run by the operator uses TaidoHub with real member data.
 
 ## Tests
 
@@ -150,14 +198,11 @@ BCP 47 tag from a configured list so a federation can add another language witho
   blocks only for pending terms with `requires_reacceptance`.
 - e2e: registration and invitation each record the right acknowledgements; publishing a material
   terms change blocks API access until accepted.
+- DPA: coverage through an ancestor; invitations refused for an uncovered organisation and allowed
+  after an orgadmin accepts; only an orgadmin of that organisation can accept; an operator change
+  without new versions is refused.
 
 ## Open decisions
 
-1. Who formally operates TaidoHub (a person, an association, a federation)? That party is
-   controller for self-registered users and is named in the platform texts.
-2. Data processing agreements with clubs and federations: accepted digitally by an orgadmin in
-   TaidoHub (phase 3), or signed outside the system?
-3. Users aged 13–17: is the same text enough, or should there be a simplified version for them
-   (the GDPR requires information to children to be understandable to them)?
-4. Who writes the platform texts and templates? They should be written or reviewed by someone with
-   legal knowledge; Claude can draft a starting point.
+None at the moment. The texts themselves (platform terms, privacy notices, DPA and templates) are
+written and legally reviewed outside this plan before phase 1 ships to production.
