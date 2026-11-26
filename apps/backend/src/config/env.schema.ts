@@ -70,7 +70,7 @@ export const EnvSchema = z.object({
   SMTP_USER: unsetIfEmpty(z.string().min(1).optional()),
   SMTP_PASSWORD: unsetIfEmpty(z.string().min(1).optional()),
   /** Sender of every email, as `Name <address>`. */
-  EMAIL_FROM: unsetIfEmpty(z.string().min(3).default('TaidoHub <noreply@taidohub.se>')),
+  EMAIL_FROM: unsetIfEmpty(z.string().min(3).default('TaidoHub <noreply@emails.taidohub.se>')),
 
   /**
    * Seed-only: identity for the sysadmin user created by

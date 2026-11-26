@@ -194,22 +194,26 @@ Invitations, admin-triggered password resets and "Forgot password?" links are se
 through Brevo (free tier: 300 emails a day). Without `SMTP_HOST` the app still starts, but emails
 only end up in `docker compose logs app`.
 
-1. Create an account at brevo.com and add the domain `taidohub.se` under **Senders, domains and
-   dedicated IPs → Domains**.
-2. Brevo shows the DNS records to add at the registrar. They look like this; copy the exact values
-   from Brevo:
+1. Create an account at brevo.com and add the domain `emails.taidohub.se` (the subdomain, not
+   `taidohub.se`) under **Senders, domains and dedicated IPs → Domains**. Sending from a subdomain
+   keeps Brevo's reputation and DNS records apart from any other mail on `taidohub.se`.
+2. Brevo shows the DNS records to add in the `taidohub.se` zone at the registrar. They look like
+   this; copy the exact values from Brevo and choose the two-CNAME DKIM option if offered:
 
    ```
-   taidohub.se              TXT   brevo-code:<code from Brevo>
-   brevo1._domainkey        CNAME b1.taidohub-se.dkim.brevo.com
-   brevo2._domainkey        CNAME b2.taidohub-se.dkim.brevo.com
-   _dmarc                   TXT   v=DMARC1; p=none; rua=mailto:admin@taidohub.se
+   emails                       TXT    brevo-code:<code from Brevo>
+   brevo1._domainkey.emails     CNAME  b1.<value from Brevo>.dkim.brevo.com
+   brevo2._domainkey.emails     CNAME  b2.<value from Brevo>.dkim.brevo.com
+   _dmarc.emails                TXT    v=DMARC1; p=none; rua=mailto:admin@taidohub.se
    ```
 
-   If `taidohub.se` already has an SPF record (`v=spf1 ...`) for other mail, add
-   `include:spf.brevo.com` to it instead of creating a second one. Start DMARC with `p=none` and
-   tighten it to `quarantine` once Brevo's reports look clean.
-3. Wait until Brevo marks the domain as authenticated, then add `noreply@taidohub.se` as a sender.
+   Most DNS editors append `.taidohub.se` to the name themselves, so enter `emails`, not
+   `emails.taidohub.se`. No SPF record is needed on Brevo's shared IPs: DMARC passes through DKIM.
+   Start DMARC with `p=none` and tighten it to `quarantine` once Brevo's reports look clean; the
+   record covers only the subdomain.
+3. Wait until Brevo marks the domain as authenticated, then add `noreply@emails.taidohub.se` as a
+   sender. If Brevo asks for a code sent to that address, forward it to a real mailbox for the
+   verification.
 4. Under **SMTP & API → SMTP**, create an SMTP key. Put the login and key in `/opt/taidohub/.env`
    on each server (`SMTP_USER`, `SMTP_PASSWORD`), never in the repo or a workflow.
 5. Restart the app: `docker compose up -d app`. Test with **Forgot password?** on the sign-in page

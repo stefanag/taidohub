@@ -6,7 +6,7 @@ import { type Env } from '../../config/env.schema.js';
 
 import { SmtpEmailService } from './smtp-email.service.js';
 
-const FROM = 'TaidoHub <noreply@taidohub.se>';
+const FROM = 'TaidoHub <noreply@emails.taidohub.se>';
 
 function build() {
   const sendMail = vi.fn().mockResolvedValue({ messageId: 'id-1' });

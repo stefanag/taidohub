@@ -54,7 +54,7 @@ services:
       SMTP_PORT: ${SMTP_PORT:-587}
       SMTP_USER: ${SMTP_USER:-}
       SMTP_PASSWORD: ${SMTP_PASSWORD:-}
-      EMAIL_FROM: ${EMAIL_FROM:-TaidoHub <noreply@taidohub.se>}
+      EMAIL_FROM: ${EMAIL_FROM:-TaidoHub <noreply@emails.taidohub.se>}
     depends_on:
       db:
         condition: service_healthy
