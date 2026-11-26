@@ -1,6 +1,6 @@
 # Plan: Sign in with Google
 
-Status: **on hold** (parked 2026-11-26, revisit around 2026-12-03). Nothing is implemented yet.
+Status: **on hold** (parked 2026-11-26, revisit around 2026-12-03; implement after self-registration phase 1). Nothing is implemented yet.
 
 ## Goal
 
@@ -9,20 +9,26 @@ Let users sign in with their Google account as an alternative to email and passw
 ## Global constraints
 
 - better-auth 1.7 has Google built in (`socialProviders.google`); no new dependency.
-- Users join by invitation only; there is no sign-up page. Google sign-in must therefore not create
-  accounts: it only signs in users that already exist (`disableSignUp: true`).
+- Users join either by invitation or by self-registration (see
+  `2026-11-26-self-registration.md`, branch `plan/self-registration`). Self-registration requires
+  age ≥ 13, a chosen national federation and accepted terms. Google must not become a way around
+  those checks.
+- **Depends on phase 1 of the self-registration plan.** Implement that first.
 - better-auth links a Google sign-in to the existing user with the same email when Google reports
   the address as verified (`oauth2/link-account.mjs`). An invited user can thus pick Google instead
   of setting a password.
 - One origin per environment; the callback is `https://<site>/api/auth/callback/google`.
 - Secrets only in `/opt/taidohub/.env`.
 
+## Decisions
+
+- 2026-11-26: Google must support self-registration, not only invited users.
+
 ## Open decisions (ask before starting)
 
-1. Google only for existing (invited) users? Recommended: yes.
-2. Include phase 2 (link/unlink on the profile page) now or later?
-3. Close the open email sign-up endpoint in a separate PR? (see "Found along the way")
-4. Mention Google as a sub-processor in the privacy text?
+1. Include phase 2 (link/unlink on the profile page) now or later?
+2. Mention Google as a sub-processor in the privacy text? (The privacy text is written in the
+   self-registration plan.)
 
 ## Phase 1: sign in for existing users
 
@@ -41,8 +47,17 @@ Let users sign in with their Google account as an alternative to email and passw
 - `env.schema.ts`: optional `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`, empty counts as unset
   (`unsetIfEmpty`). Also pass them through `auth.module.ts` and `openapi/swagger.ts`, which build
   the Env object by hand.
-- `better-auth.ts`: add `socialProviders.google` with `disableSignUp: true`, only when both
-  variables are set.
+- `better-auth.ts`: add `socialProviders.google` only when both variables are set, with
+  `disableImplicitSignUp: true`: the "Sign in with Google" button never creates an account by
+  accident; only the registration page asks for sign-up (`requestSignUp: true`).
+- Google sign-up goes through the same checks as email registration. Recommended approach: the
+  account is created **incomplete** (`registration_completed_at` is null) and every API route
+  except profile completion, sign-out and account deletion refuses it until the user has given
+  date of birth (at least 13), national federation and consent on a "Complete your registration"
+  page. Under 13: the account is deleted again with an explanation. Alternative considered:
+  collecting those fields before the Google round trip and carrying them in a short-lived
+  verification row; more moving parts, same result.
+- Google reports the email as verified, so these accounts skip the verification email.
 - New public endpoint `GET /api/auth/providers` → `{ google: boolean }`, so the frontend knows
   whether to show the button (the image is shared between environments, so build-time Vite env
   won't do). Zod contract in `@repo/contracts`; regenerate the OpenAPI spec.
@@ -54,8 +69,10 @@ Let users sign in with their Google account as an alternative to email and passw
   providers endpoint says so.
 - `authClient.signIn.social({ provider: 'google', callbackURL, errorCallbackURL })`, with
   `errorCallbackURL` back to `/login`.
-- Map the returned `?error=` codes to messages, e.g. `signup_disabled` → "There is no user with
-  that Google address. Ask your club administrator for an invitation."
+- Map the returned `?error=` codes to messages, e.g. `signup_disabled` from the login button:
+  "There is no account for that Google address yet. Register first.", with a link to `/register`.
+- `/register` gets a "Register with Google" button; afterwards the user lands on the
+  "Complete your registration" page.
 - New strings in en, sv and fi.
 - Invitation email: one line saying Google sign-in also works.
 
@@ -63,7 +80,8 @@ Let users sign in with their Google account as an alternative to email and passw
 
 - Backend unit: Google enabled only when both variables are set.
 - e2e: `POST /api/auth/sign-in/social` returns a Google URL with the right `redirect_uri`; the
-  providers endpoint answers correctly in both configurations.
+  providers endpoint answers correctly in both configurations; an incomplete account is refused
+  by a normal API route and accepted after completion.
 - Frontend: button shown/hidden; error messages per code.
 - Real Google sign-in and linking to an invited account are tested by hand on staging.
 
@@ -82,7 +100,5 @@ Let users sign in with their Google account as an alternative to email and passw
 
 ## Found along the way
 
-`emailAndPassword` has no `disableSignUp`, so `POST /api/auth/sign-up/email` is open: anyone can
-create an account without an invitation, although no page links to it. Proposed fix in its own PR:
-`disableSignUp: true`, then confirm the invitation e2e tests still pass (invites create users
-through `UsersService`, not the sign-up endpoint).
+The open `POST /api/auth/sign-up/email` endpoint is closed as part of the self-registration plan
+(phase 1), which replaces it with a checked registration endpoint.
