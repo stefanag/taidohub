@@ -13,6 +13,7 @@ import * as schema from '../database/schema/index.js';
 import { type EmailService } from '../email/email.types.js';
 
 import { canConnectMcpClient, mcpResource } from './mcp-access.js';
+import { isSelfRegistered, isUnverifiedSelfRegistered } from './self-registration.js';
 
 /**
  * OAuth endpoints where a user grants an AI client access. Only users allowed
@@ -61,11 +62,25 @@ export function buildBetterAuth(db: DrizzleDb, env: Env, emailService: EmailServ
     }),
     // The JWT plugin's /token route would hand out session JWTs signed with
     // the same key as MCP access tokens; the MCP plugin docs require it off.
-    disabledPaths: ['/token'],
+    // Sign-up goes through POST /api/registration instead, which checks age,
+    // federation and the platform's terms before calling signUpEmail
+    // server-side (disabledPaths only blocks HTTP, not auth.api calls).
+    disabledPaths: ['/token', '/sign-up/email'],
     hooks: {
       // Only sysadmins and orgadmins may connect an AI client. Checked on the
       // grant endpoints so no authorization code is ever issued to anyone else.
       before: createAuthMiddleware(async (ctx) => {
+        // A self-registered account signs in only after confirming its email.
+        if (ctx.path === '/sign-in/email') {
+          const email = (ctx.body as { email?: unknown } | undefined)?.email;
+          if (typeof email === 'string' && (await isUnverifiedSelfRegistered(db, email))) {
+            throw new APIError('FORBIDDEN', {
+              code: 'EMAIL_NOT_VERIFIED',
+              message: 'Confirm your email address first. We have sent you a link.',
+            });
+          }
+          return;
+        }
         if (!MCP_GRANT_PATHS.has(ctx.path)) return;
         const session = await getSessionFromCtx(ctx);
         if (!session) return; // not signed in yet: authorize redirects to the login page
@@ -94,6 +109,29 @@ export function buildBetterAuth(db: DrizzleDb, env: Env, emailService: EmailServ
           to: user.email,
           locale: (user as { locale?: string }).locale ?? 'en',
           resetUrl: url,
+        });
+      },
+    },
+    emailVerification: {
+      // Sent explicitly by RegistrationService and by better-auth's
+      // send-verification-email route, never on sign-up.
+      sendOnSignUp: false,
+      autoSignInAfterVerification: true,
+      expiresIn: 60 * 60 * 24,
+      sendVerificationEmail: async ({ user, url }): Promise<void> => {
+        // Only self-registered accounts verify this way; invited users confirm
+        // through their set-password link, after accepting the texts.
+        if (!(await isSelfRegistered(db, user.id))) return;
+        // Same trusted-origin guard as password resets: the link redirects
+        // to its callbackURL, which must be one of our own origins.
+        if (!isResetLinkForTrustedOrigin(url, trustedOrigins)) {
+          console.warn('[auth] email verification refused: redirect is not a trusted origin');
+          return;
+        }
+        await emailService.sendEmailVerification({
+          to: user.email,
+          locale: (user as { locale?: string }).locale ?? 'en',
+          verifyUrl: url,
         });
       },
     },

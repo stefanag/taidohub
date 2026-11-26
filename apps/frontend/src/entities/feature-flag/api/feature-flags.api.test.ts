@@ -24,6 +24,7 @@ const FLAG_MAP = {
   'grading-history': false,
   'grading-history-verification': false,
   'instructor-feedback': true,
+  'self-registration': false,
 };
 
 const mockedHttp = vi.mocked(httpClient);

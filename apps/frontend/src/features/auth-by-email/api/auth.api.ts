@@ -1,11 +1,7 @@
 import { oauthProviderClient } from '@better-auth/oauth-provider/client';
 import { createAuthClient } from 'better-auth/react';
 
-import type {
-  Session,
-  SignInWithEmailInput,
-  SignUpWithEmailInput,
-} from '@repo/contracts/auth';
+import type { Session, SignInWithEmailInput } from '@repo/contracts/auth';
 
 import { env } from '@/shared/lib/env';
 
@@ -49,9 +45,18 @@ export async function signInWithEmail(input: SignInWithEmailInput): Promise<stri
     password: input.password,
   });
   if (result.error) {
+    if (result.error.code === 'EMAIL_NOT_VERIFIED') throw new EmailNotVerifiedError();
     throw new Error(result.error.message ?? 'Sign in failed.');
   }
   return redirectTarget(result.data);
+}
+
+/** Thrown by {@link signInWithEmail} when a self-registered account has not confirmed its email. */
+export class EmailNotVerifiedError extends Error {
+  constructor() {
+    super('EMAIL_NOT_VERIFIED');
+    this.name = 'EmailNotVerifiedError';
+  }
 }
 
 /** Thrown by {@link respondToOAuthConsent} when the user may not grant access. */
@@ -80,15 +85,19 @@ export async function respondToOAuthConsent(accept: boolean): Promise<string> {
   return url;
 }
 
-export async function signUpWithEmail(input: SignUpWithEmailInput): Promise<void> {
-  const result = await authClient.signUp.email({
-    email: input.email,
-    password: input.password,
-    name: input.name ?? '',
+/** Where the email confirmation link lands (see the verify-email page). */
+export const VERIFY_EMAIL_PATH = '/verify-email';
+
+/**
+ * Sends a new confirmation link to a self-registered account. better-auth
+ * answers the same whether or not the address is known.
+ */
+export async function resendVerificationEmail(email: string): Promise<void> {
+  const result = await authClient.sendVerificationEmail({
+    email,
+    callbackURL: `${window.location.origin}${VERIFY_EMAIL_PATH}`,
   });
-  if (result.error) {
-    throw new Error(result.error.message ?? 'Sign up failed.');
-  }
+  if (result.error) throw new Error(result.error.message ?? 'Could not send the link.');
 }
 
 export async function signOut(): Promise<void> {

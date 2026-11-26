@@ -8,6 +8,9 @@ vi.mock('@/features/next-rank-card', () => ({
   NextRankCard: () => <div data-testid="next-rank-card" />,
 }));
 
+const memberships = vi.hoisted(() => ({ value: { isSuccess: true, data: [{ role: 'student' }] } }));
+vi.mock('@/entities/me', () => ({ useMyMembershipsQuery: () => memberships.value }));
+
 // Mock react-i18next
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -24,5 +27,17 @@ describe('DashboardPage', () => {
   it('renders NextRankCard', () => {
     render(<DashboardPage />);
     expect(screen.getByTestId('next-rank-card')).toBeInTheDocument();
+  });
+
+  it('tells a user without a club that their gradings are self-reported', () => {
+    memberships.value = { isSuccess: true, data: [] };
+    render(<DashboardPage />);
+    expect(screen.getByRole('note')).toHaveTextContent('dashboard.withoutClub');
+  });
+
+  it('says nothing about clubs to club members', () => {
+    memberships.value = { isSuccess: true, data: [{ role: 'student' }] };
+    render(<DashboardPage />);
+    expect(screen.queryByRole('note')).not.toBeInTheDocument();
   });
 });

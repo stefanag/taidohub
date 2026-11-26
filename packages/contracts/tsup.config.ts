@@ -29,6 +29,7 @@ export default defineConfig({
     'grading-requirements': 'src/grading-requirements.ts',
     statistics: 'src/statistics.ts',
     'legal-documents': 'src/legal-documents.ts',
+    registration: 'src/registration.ts',
     'pending-operations': 'src/pending-operations.ts',
     mcp: 'src/mcp.ts',
   },

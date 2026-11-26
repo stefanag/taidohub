@@ -47,6 +47,18 @@ export class OrganisationsService {
     return this.repo.getAncestorIds(orgId);
   }
 
+  /** National federations, for choosing one at self-registration. Public data. */
+  async listNationalFederations(): Promise<DbOrganisation[]> {
+    const { data } = await this.repo.list({ type: 'national_federation' });
+    return data;
+  }
+
+  /** True when `id` is an existing national federation. */
+  async isNationalFederation(id: string): Promise<boolean> {
+    const row = await this.repo.findById(id);
+    return row?.type === 'national_federation';
+  }
+
   async list(query: ListOrganisationsQuery, user: AuthenticatedUser | null): Promise<ListOrganisationsResponse> {
     const { tag, category, ...rest } = query;
     const labelFilter: { tagIds?: string[]; categoryIds?: string[] } = {};

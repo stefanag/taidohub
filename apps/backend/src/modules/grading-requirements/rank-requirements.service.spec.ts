@@ -5,6 +5,7 @@ import { type AbilityFactory } from '../../infrastructure/ability/ability.factor
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
 import { type MembershipsRepository } from '../memberships/memberships.repository.js';
 import { type OrganisationsRepository } from '../organisations/organisations.repository.js';
+import { type ProfileService } from '../profile/profile.service.js';
 
 import { type RankRequirementsRepository } from './rank-requirements.repository.js';
 import { RankRequirementsService } from './rank-requirements.service.js';
@@ -69,6 +70,7 @@ interface Harness {
   memberships: { list: ReturnType<typeof vi.fn> };
   abilities: { createForUser: ReturnType<typeof vi.fn> };
   fakeDb: { transaction: ReturnType<typeof vi.fn> };
+  profiles: { getReferenceFederationId: ReturnType<typeof vi.fn> };
 }
 
 function build(opts: { canRead?: boolean; canManage?: boolean } = {}): Harness {
@@ -116,6 +118,10 @@ function build(opts: { canRead?: boolean; canManage?: boolean } = {}): Harness {
     transaction: vi.fn(async (cb: (tx: unknown) => Promise<unknown>) => cb(FAKE_TX)),
   };
 
+  const profiles = {
+    getReferenceFederationId: vi.fn().mockResolvedValue(null),
+  };
+
   const svc = new RankRequirementsService(
     fakeDb as never,
     repo as unknown as RankRequirementsRepository,
@@ -123,9 +129,10 @@ function build(opts: { canRead?: boolean; canManage?: boolean } = {}): Harness {
     orgs as unknown as OrganisationsRepository,
     memberships as unknown as MembershipsRepository,
     abilities as unknown as AbilityFactory,
+    profiles as unknown as ProfileService,
   );
 
-  return { svc, repo, sets, orgs, memberships, abilities, fakeDb };
+  return { svc, repo, sets, orgs, memberships, abilities, fakeDb, profiles };
 }
 
 // ── Tests: fetchForScope ─────────────────────────────────────────────────────
@@ -223,7 +230,40 @@ describe('RankRequirementsService.resolveForUser', () => {
     vi.clearAllMocks();
   });
 
-  it('returns emptyRequirements when target has no student membership', async () => {
+  it('uses the chosen national federation when the target has no student membership', async () => {
+    const { svc, repo, sets, orgs, memberships, profiles } = build();
+    memberships.list.mockResolvedValue({ data: [], total: 0 });
+    profiles.getReferenceFederationId.mockResolvedValue('org-nf');
+    orgs.getAncestorIds.mockResolvedValue(['org-nf', 'org-if']);
+    sets.findActiveByOrg.mockImplementation((orgId: string | null) =>
+      Promise.resolve(orgId === 'org-nf' ? { id: 's-nf', organisationId: 'org-nf', isActive: true } : null),
+    );
+    repo.fetchScalar.mockImplementation((rankId: string, setId: string | null) =>
+      Promise.resolve(setId === 's-nf' ? scalarRow({ rankId, setId: 's-nf' }) : null),
+    );
+
+    const out = await svc.resolveForUser('rank-1', 'u-target', makeUser({ id: 'u-target' }));
+
+    expect(orgs.getAncestorIds).toHaveBeenCalledWith('org-nf');
+    expect(out.setId).toBe('s-nf');
+  });
+
+  it('falls back to the global set without a club or a chosen federation', async () => {
+    const { svc, repo, sets, memberships } = build();
+    memberships.list.mockResolvedValue({ data: [], total: 0 });
+    sets.findActiveByOrg.mockImplementation((orgId: string | null) =>
+      Promise.resolve(orgId === null ? { id: 's-global', organisationId: null, isActive: true } : null),
+    );
+    repo.fetchScalar.mockImplementation((rankId: string, setId: string | null) =>
+      Promise.resolve(setId === 's-global' ? scalarRow({ rankId, setId: 's-global' }) : null),
+    );
+
+    const out = await svc.resolveForUser('rank-1', 'u-target', makeUser({ id: 'u-target' }));
+
+    expect(out.setId).toBe('s-global');
+  });
+
+  it('returns emptyRequirements when target has no student membership and nothing applies', async () => {
     const { svc, memberships } = build();
     // Only instructor membership, no student
     memberships.list.mockResolvedValue({

@@ -298,6 +298,16 @@
         "types": "./dist/legal-documents.d.cts",
         "default": "./dist/legal-documents.cjs"
       }
+    },
+    "./registration": {
+      "import": {
+        "types": "./dist/registration.d.ts",
+        "default": "./dist/registration.js"
+      },
+      "require": {
+        "types": "./dist/registration.d.cts",
+        "default": "./dist/registration.cjs"
+      }
     }
   },
   "files": [

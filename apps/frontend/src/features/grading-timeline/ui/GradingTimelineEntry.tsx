@@ -169,11 +169,13 @@ export function GradingTimelineEntry({
                 <ShieldCheck className="h-4 w-4 text-primary" />
               </span>
             ) : null}
-            {verificationEnabled && !entry.verified && isExternal ? (
+            {!entry.verified && isExternal ? (
+              // Shown whether or not verification is switched on: a
+              // self-reported grading is never presented as confirmed.
               <span className="ml-2 inline-flex items-center gap-1 rounded-sm bg-amber-100 px-2 py-0.5 text-[0.7rem] font-bold uppercase tracking-wide text-amber-900">
                 <Shield className="h-3 w-3" />
-                {t('gradingHistory.timeline.pendingVerification', {
-                  defaultValue: 'Pending verification',
+                {t('gradingHistory.timeline.selfReported', {
+                  defaultValue: 'Self-reported, not verified',
                 })}
               </span>
             ) : null}

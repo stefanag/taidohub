@@ -21,6 +21,14 @@ export const AccountRoutes = {
   setPassword: '/api/account/set-password',
 } as const;
 
+export const RegistrationRoutes = {
+  register: '/api/registration',
+  federations: '/api/registration/federations',
+  legalTexts: '/api/registration/legal-texts',
+  /** Delete the signed-in user's own account. */
+  ownAccount: '/api/account',
+} as const;
+
 export const LegalRoutes = {
   published: '/api/legal/published',
   invitation: '/api/legal/invitation',

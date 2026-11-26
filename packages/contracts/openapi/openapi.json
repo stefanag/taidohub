@@ -34,38 +34,6 @@
         ]
       }
     },
-    "/api/auth/sign-up/email": {
-      "post": {
-        "operationId": "AuthController_signUpEmail",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SignUpWithEmailDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SessionDto"
-                }
-              }
-            }
-          }
-        },
-        "summary": "Create a new account with email + password.",
-        "tags": [
-          "auth"
-        ]
-      }
-    },
     "/api/auth/sign-out": {
       "post": {
         "operationId": "AuthController_signOut",
@@ -5528,6 +5496,212 @@
         ]
       }
     },
+    "/api/registration": {
+      "post": {
+        "operationId": "RegistrationController_register",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Create an account without a club. Sends a confirmation email; the account can sign in once confirmed. Answers the same for an address that already has an account.",
+        "tags": [
+          "registration"
+        ]
+      }
+    },
+    "/api/registration/federations": {
+      "get": {
+        "operationId": "RegistrationController_federations",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationFederationDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "The national federations to choose from at registration.",
+        "tags": [
+          "registration"
+        ]
+      }
+    },
+    "/api/registration/legal-texts": {
+      "get": {
+        "operationId": "RegistrationController_legalTexts",
+        "parameters": [
+          {
+            "name": "locale",
+            "required": false,
+            "in": "query",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "LegalLocale": {
+                "type": "string",
+                "enum": [
+                  "sv",
+                  "en",
+                  "fi"
+                ],
+                "description": "A language a legal text can be written in."
+              }
+            },
+            "x-nestjs_zod-parent-id": "RegistrationLegalTextsQuery",
+            "schema": {
+              "$ref": "#/$defs/LegalLocale"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationLegalTextsDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "The platform's terms and privacy notice for self-registered users.",
+        "tags": [
+          "registration"
+        ]
+      }
+    },
+    "/api/account": {
+      "delete": {
+        "operationId": "OwnAccountController_delete",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteOwnAccountDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Delete your own account and your own data, after confirming your password.",
+        "tags": [
+          "account"
+        ]
+      }
+    },
     "/api/classification-categories": {
       "get": {
         "operationId": "ClassificationCategoryController_list",
@@ -7397,58 +7571,6 @@
         "required": [
           "user",
           "session"
-        ]
-      },
-      "SignUpWithEmailDto": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "format": "email",
-            "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$",
-            "description": "Email address to register.",
-            "x-nestjs_zod-parent-id": "SignUpWithEmail",
-            "x-nestjs_zod-parent-metadata": {
-              "description": "Payload for `POST /api/auth/sign-up/email`.",
-              "example": {
-                "email": "ada@example.com",
-                "password": "correct-horse-battery-staple",
-                "name": "Ada Lovelace"
-              }
-            }
-          },
-          "password": {
-            "type": "string",
-            "minLength": 8,
-            "description": "New account password (8+ chars).",
-            "x-nestjs_zod-parent-id": "SignUpWithEmail",
-            "x-nestjs_zod-parent-metadata": {
-              "description": "Payload for `POST /api/auth/sign-up/email`.",
-              "example": {
-                "email": "ada@example.com",
-                "password": "correct-horse-battery-staple",
-                "name": "Ada Lovelace"
-              }
-            }
-          },
-          "name": {
-            "description": "Optional display name.",
-            "type": "string",
-            "minLength": 1,
-            "x-nestjs_zod-parent-id": "SignUpWithEmail",
-            "x-nestjs_zod-parent-metadata": {
-              "description": "Payload for `POST /api/auth/sign-up/email`.",
-              "example": {
-                "email": "ada@example.com",
-                "password": "correct-horse-battery-staple",
-                "name": "Ada Lovelace"
-              }
-            }
-          }
-        },
-        "required": [
-          "email",
-          "password"
         ]
       },
       "SetInitialPasswordDto": {
@@ -19296,7 +19418,8 @@
                       "insert": "Started taido in 2015 …\n"
                     }
                   ]
-                }
+                },
+                "referenceFederationId": null
               }
             }
           },
@@ -19331,7 +19454,8 @@
                       "insert": "Started taido in 2015 …\n"
                     }
                   ]
-                }
+                },
+                "referenceFederationId": null
               }
             }
           },
@@ -19366,7 +19490,8 @@
                       "insert": "Started taido in 2015 …\n"
                     }
                   ]
-                }
+                },
+                "referenceFederationId": null
               }
             }
           },
@@ -19406,7 +19531,8 @@
                       "insert": "Started taido in 2015 …\n"
                     }
                   ]
-                }
+                },
+                "referenceFederationId": null
               }
             }
           },
@@ -19446,7 +19572,8 @@
                       "insert": "Started taido in 2015 …\n"
                     }
                   ]
-                }
+                },
+                "referenceFederationId": null
               }
             }
           },
@@ -19481,7 +19608,8 @@
                       "insert": "Started taido in 2015 …\n"
                     }
                   ]
-                }
+                },
+                "referenceFederationId": null
               }
             }
           },
@@ -19516,7 +19644,8 @@
                       "insert": "Started taido in 2015 …\n"
                     }
                   ]
-                }
+                },
+                "referenceFederationId": null
               }
             }
           },
@@ -19551,7 +19680,8 @@
                       "insert": "Started taido in 2015 …\n"
                     }
                   ]
-                }
+                },
+                "referenceFederationId": null
               }
             }
           },
@@ -19586,7 +19716,8 @@
                       "insert": "Started taido in 2015 …\n"
                     }
                   ]
-                }
+                },
+                "referenceFederationId": null
               }
             }
           },
@@ -19619,7 +19750,8 @@
                       "insert": "Started taido in 2015 …\n"
                     }
                   ]
-                }
+                },
+                "referenceFederationId": null
               }
             }
           },
@@ -19666,7 +19798,49 @@
                       "insert": "Started taido in 2015 …\n"
                     }
                   ]
-                }
+                },
+                "referenceFederationId": null
+              }
+            }
+          },
+          "referenceFederationId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-id": "UserProfile",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A user's self-service profile — personal and taido-training details.",
+              "example": {
+                "userId": "u-1",
+                "firstName": "Ada",
+                "lastName": "Lovelace",
+                "dateOfBirth": "1990-12-10",
+                "taidoStartDate": "2015-09-01",
+                "addressStreet": "12 Analytical Way",
+                "addressPostalCode": "11122",
+                "addressCity": "Stockholm",
+                "addressCountry": "SWE",
+                "citizenships": [
+                  "SWE",
+                  "GBR"
+                ],
+                "aboutMe": {
+                  "ops": [
+                    {
+                      "insert": "Started taido in 2015 …\n"
+                    }
+                  ]
+                },
+                "referenceFederationId": null
               }
             }
           }
@@ -19682,7 +19856,8 @@
           "addressCity",
           "addressCountry",
           "citizenships",
-          "aboutMe"
+          "aboutMe",
+          "referenceFederationId"
         ]
       },
       "UpdateUserProfileDto": {
@@ -19918,6 +20093,32 @@
                 "required": [
                   "ops"
                 ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-id": "UpdateUserProfileInput",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A partial profile patch — omit a field to leave it unchanged.",
+              "example": {
+                "firstName": "Ada",
+                "lastName": "Lovelace",
+                "citizenships": [
+                  "SWE",
+                  "GBR"
+                ]
+              }
+            }
+          },
+          "referenceFederationId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
               },
               {
                 "type": "null"
@@ -25192,6 +25393,661 @@
           "documents"
         ]
       },
+      "RegisterInputDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "LegalLocale": {
+                "type": "string",
+                "enum": [
+                  "sv",
+                  "en",
+                  "fi"
+                ],
+                "description": "A language a legal text can be written in."
+              },
+              "LegalAcknowledgementInput": {
+                "type": "object",
+                "properties": {
+                  "versionId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "locale": {
+                    "$ref": "#/$defs/LegalLocale"
+                  }
+                },
+                "required": [
+                  "versionId",
+                  "locale"
+                ]
+              }
+            },
+            "x-nestjs_zod-parent-id": "RegisterInput",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create an account without a club. The account must verify its email before signing in.",
+              "example": {
+                "name": "Ada Lovelace",
+                "email": "ada@example.com",
+                "password": "a-long-password",
+                "locale": "sv",
+                "dateOfBirth": "1990-12-10",
+                "federationId": "c5a1d6f0-9f3a-4b2c-8d4e-6f7a8b9c0d1e",
+                "acknowledgements": [
+                  {
+                    "versionId": "c5a1d6f0-9f3a-4b2c-8d4e-6f7a8b9c0d1f",
+                    "locale": "sv"
+                  }
+                ]
+              }
+            }
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 254,
+            "format": "email",
+            "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "LegalLocale": {
+                "type": "string",
+                "enum": [
+                  "sv",
+                  "en",
+                  "fi"
+                ],
+                "description": "A language a legal text can be written in."
+              },
+              "LegalAcknowledgementInput": {
+                "type": "object",
+                "properties": {
+                  "versionId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "locale": {
+                    "$ref": "#/$defs/LegalLocale"
+                  }
+                },
+                "required": [
+                  "versionId",
+                  "locale"
+                ]
+              }
+            },
+            "x-nestjs_zod-parent-id": "RegisterInput",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create an account without a club. The account must verify its email before signing in.",
+              "example": {
+                "name": "Ada Lovelace",
+                "email": "ada@example.com",
+                "password": "a-long-password",
+                "locale": "sv",
+                "dateOfBirth": "1990-12-10",
+                "federationId": "c5a1d6f0-9f3a-4b2c-8d4e-6f7a8b9c0d1e",
+                "acknowledgements": [
+                  {
+                    "versionId": "c5a1d6f0-9f3a-4b2c-8d4e-6f7a8b9c0d1f",
+                    "locale": "sv"
+                  }
+                ]
+              }
+            }
+          },
+          "password": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 200,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "LegalLocale": {
+                "type": "string",
+                "enum": [
+                  "sv",
+                  "en",
+                  "fi"
+                ],
+                "description": "A language a legal text can be written in."
+              },
+              "LegalAcknowledgementInput": {
+                "type": "object",
+                "properties": {
+                  "versionId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "locale": {
+                    "$ref": "#/$defs/LegalLocale"
+                  }
+                },
+                "required": [
+                  "versionId",
+                  "locale"
+                ]
+              }
+            },
+            "x-nestjs_zod-parent-id": "RegisterInput",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create an account without a club. The account must verify its email before signing in.",
+              "example": {
+                "name": "Ada Lovelace",
+                "email": "ada@example.com",
+                "password": "a-long-password",
+                "locale": "sv",
+                "dateOfBirth": "1990-12-10",
+                "federationId": "c5a1d6f0-9f3a-4b2c-8d4e-6f7a8b9c0d1e",
+                "acknowledgements": [
+                  {
+                    "versionId": "c5a1d6f0-9f3a-4b2c-8d4e-6f7a8b9c0d1f",
+                    "locale": "sv"
+                  }
+                ]
+              }
+            }
+          },
+          "locale": {
+            "$ref": "#/$defs/LegalLocale",
+            "type": "",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "LegalLocale": {
+                "type": "string",
+                "enum": [
+                  "sv",
+                  "en",
+                  "fi"
+                ],
+                "description": "A language a legal text can be written in."
+              },
+              "LegalAcknowledgementInput": {
+                "type": "object",
+                "properties": {
+                  "versionId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "locale": {
+                    "$ref": "#/$defs/LegalLocale"
+                  }
+                },
+                "required": [
+                  "versionId",
+                  "locale"
+                ]
+              }
+            },
+            "x-nestjs_zod-parent-id": "RegisterInput",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create an account without a club. The account must verify its email before signing in.",
+              "example": {
+                "name": "Ada Lovelace",
+                "email": "ada@example.com",
+                "password": "a-long-password",
+                "locale": "sv",
+                "dateOfBirth": "1990-12-10",
+                "federationId": "c5a1d6f0-9f3a-4b2c-8d4e-6f7a8b9c0d1e",
+                "acknowledgements": [
+                  {
+                    "versionId": "c5a1d6f0-9f3a-4b2c-8d4e-6f7a8b9c0d1f",
+                    "locale": "sv"
+                  }
+                ]
+              }
+            }
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "LegalLocale": {
+                "type": "string",
+                "enum": [
+                  "sv",
+                  "en",
+                  "fi"
+                ],
+                "description": "A language a legal text can be written in."
+              },
+              "LegalAcknowledgementInput": {
+                "type": "object",
+                "properties": {
+                  "versionId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "locale": {
+                    "$ref": "#/$defs/LegalLocale"
+                  }
+                },
+                "required": [
+                  "versionId",
+                  "locale"
+                ]
+              }
+            },
+            "x-nestjs_zod-parent-id": "RegisterInput",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create an account without a club. The account must verify its email before signing in.",
+              "example": {
+                "name": "Ada Lovelace",
+                "email": "ada@example.com",
+                "password": "a-long-password",
+                "locale": "sv",
+                "dateOfBirth": "1990-12-10",
+                "federationId": "c5a1d6f0-9f3a-4b2c-8d4e-6f7a8b9c0d1e",
+                "acknowledgements": [
+                  {
+                    "versionId": "c5a1d6f0-9f3a-4b2c-8d4e-6f7a8b9c0d1f",
+                    "locale": "sv"
+                  }
+                ]
+              }
+            }
+          },
+          "federationId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "LegalLocale": {
+                "type": "string",
+                "enum": [
+                  "sv",
+                  "en",
+                  "fi"
+                ],
+                "description": "A language a legal text can be written in."
+              },
+              "LegalAcknowledgementInput": {
+                "type": "object",
+                "properties": {
+                  "versionId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "locale": {
+                    "$ref": "#/$defs/LegalLocale"
+                  }
+                },
+                "required": [
+                  "versionId",
+                  "locale"
+                ]
+              }
+            },
+            "x-nestjs_zod-parent-id": "RegisterInput",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create an account without a club. The account must verify its email before signing in.",
+              "example": {
+                "name": "Ada Lovelace",
+                "email": "ada@example.com",
+                "password": "a-long-password",
+                "locale": "sv",
+                "dateOfBirth": "1990-12-10",
+                "federationId": "c5a1d6f0-9f3a-4b2c-8d4e-6f7a8b9c0d1e",
+                "acknowledgements": [
+                  {
+                    "versionId": "c5a1d6f0-9f3a-4b2c-8d4e-6f7a8b9c0d1f",
+                    "locale": "sv"
+                  }
+                ]
+              }
+            }
+          },
+          "acknowledgements": {
+            "maxItems": 10,
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/LegalAcknowledgementInput"
+            },
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "LegalLocale": {
+                "type": "string",
+                "enum": [
+                  "sv",
+                  "en",
+                  "fi"
+                ],
+                "description": "A language a legal text can be written in."
+              },
+              "LegalAcknowledgementInput": {
+                "type": "object",
+                "properties": {
+                  "versionId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "locale": {
+                    "$ref": "#/$defs/LegalLocale"
+                  }
+                },
+                "required": [
+                  "versionId",
+                  "locale"
+                ]
+              }
+            },
+            "x-nestjs_zod-parent-id": "RegisterInput",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Create an account without a club. The account must verify its email before signing in.",
+              "example": {
+                "name": "Ada Lovelace",
+                "email": "ada@example.com",
+                "password": "a-long-password",
+                "locale": "sv",
+                "dateOfBirth": "1990-12-10",
+                "federationId": "c5a1d6f0-9f3a-4b2c-8d4e-6f7a8b9c0d1e",
+                "acknowledgements": [
+                  {
+                    "versionId": "c5a1d6f0-9f3a-4b2c-8d4e-6f7a8b9c0d1f",
+                    "locale": "sv"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "password",
+          "locale",
+          "dateOfBirth",
+          "federationId"
+        ]
+      },
+      "RegisterResponseDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "const": "verification_sent",
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-id": "RegisterResponse",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Always the same answer, also when the address already has an account, so the endpoint does not reveal who is registered."
+            }
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "RegistrationFederationDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-id": "RegistrationFederation",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A national federation to choose at registration."
+            }
+          },
+          "nameEn": {
+            "type": "string",
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-id": "RegistrationFederation",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A national federation to choose at registration."
+            }
+          },
+          "nameSv": {
+            "type": "string",
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-id": "RegistrationFederation",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A national federation to choose at registration."
+            }
+          },
+          "nameFi": {
+            "type": "string",
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-id": "RegistrationFederation",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A national federation to choose at registration."
+            }
+          },
+          "country": {
+            "type": "",
+            "x-nestjs_zod-type-array": [
+              "string",
+              "null"
+            ],
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-parent-id": "RegistrationFederation",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A national federation to choose at registration."
+            }
+          }
+        },
+        "required": [
+          "id",
+          "nameEn",
+          "nameSv",
+          "nameFi",
+          "country"
+        ]
+      },
+      "RegistrationLegalTextsDto": {
+        "type": "object",
+        "properties": {
+          "documents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/PublishedLegalDocument"
+            },
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "PublishedLegalDocument": {
+                "type": "object",
+                "properties": {
+                  "documentId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "kind": {
+                    "$ref": "#/$defs/LegalDocumentKind"
+                  },
+                  "audience": {
+                    "$ref": "#/$defs/LegalAudience"
+                  },
+                  "organisationId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "versionId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "version": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "publishedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                  },
+                  "authoritativeLocale": {
+                    "$ref": "#/$defs/LegalLocale"
+                  },
+                  "availableLocales": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/LegalLocale"
+                    }
+                  },
+                  "translation": {
+                    "type": "object",
+                    "properties": {
+                      "locale": {
+                        "$ref": "#/$defs/LegalLocale"
+                      },
+                      "revision": {
+                        "type": "integer",
+                        "exclusiveMinimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "body": {
+                        "$ref": "#/$defs/LegalBody"
+                      }
+                    },
+                    "required": [
+                      "locale",
+                      "revision",
+                      "title",
+                      "body"
+                    ]
+                  },
+                  "isFallback": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "documentId",
+                  "kind",
+                  "audience",
+                  "organisationId",
+                  "versionId",
+                  "version",
+                  "publishedAt",
+                  "authoritativeLocale",
+                  "availableLocales",
+                  "translation",
+                  "isFallback"
+                ],
+                "description": "A published text in one language. When `translation.locale` differs from `authoritativeLocale`, the text is a translation and the authoritative language takes precedence.",
+                "example": {
+                  "documentId": "c5a1d6f0-9f3a-4b2c-8d4e-6f7a8b9c0d1e",
+                  "kind": "terms",
+                  "audience": "members",
+                  "organisationId": null,
+                  "versionId": "c5a1d6f0-9f3a-4b2c-8d4e-6f7a8b9c0d1e",
+                  "version": 1,
+                  "publishedAt": "2026-11-26T10:00:00.000Z",
+                  "authoritativeLocale": "sv",
+                  "availableLocales": [
+                    "sv",
+                    "en"
+                  ],
+                  "translation": {
+                    "locale": "en",
+                    "revision": 1,
+                    "title": "Terms of use",
+                    "body": {
+                      "ops": [
+                        {
+                          "insert": "Terms …\n"
+                        }
+                      ]
+                    }
+                  },
+                  "isFallback": false
+                }
+              },
+              "LegalDocumentKind": {
+                "type": "string",
+                "enum": [
+                  "terms",
+                  "privacy",
+                  "dpa"
+                ],
+                "description": "`terms` are accepted, `privacy` notices are acknowledged as received, `dpa` is a data processing agreement (platform only, not yet in use)."
+              },
+              "LegalAudience": {
+                "type": "string",
+                "enum": [
+                  "members",
+                  "self_registered",
+                  "organisations"
+                ],
+                "description": "Who a text is for. `self_registered` and `organisations` are only allowed for platform texts."
+              },
+              "LegalLocale": {
+                "type": "string",
+                "enum": [
+                  "sv",
+                  "en",
+                  "fi"
+                ],
+                "description": "A language a legal text can be written in."
+              },
+              "LegalBody": {
+                "type": "object",
+                "properties": {
+                  "ops": {
+                    "type": "array",
+                    "items": {}
+                  }
+                },
+                "required": [
+                  "ops"
+                ],
+                "description": "A Quill Delta."
+              }
+            },
+            "x-nestjs_zod-parent-id": "ApplicableLegalTexts",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "The texts a user must accept (terms) or acknowledge (privacy) for an action. Empty when nothing is published."
+            }
+          }
+        },
+        "required": [
+          "documents"
+        ]
+      },
+      "DeleteOwnAccountDto": {
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "x-nestjs_zod-parent-id": "DeleteOwnAccountInput",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "The current password, to confirm."
+            }
+          }
+        },
+        "required": [
+          "password"
+        ]
+      },
       "FeedbackInboxResponseDto": {
         "type": "object",
         "properties": {
@@ -28163,6 +29019,21 @@
       },
       "LegalAcknowledgementInput": {
         "$ref": "#/components/schemas/LegalAcknowledgementInput"
+      },
+      "RegisterInput": {
+        "$ref": "#/components/schemas/RegisterInput"
+      },
+      "RegisterResponse": {
+        "$ref": "#/components/schemas/RegisterResponse"
+      },
+      "RegistrationFederation": {
+        "$ref": "#/components/schemas/RegistrationFederation"
+      },
+      "RegistrationLegalTextsQuery": {
+        "$ref": "#/components/schemas/RegistrationLegalTextsQuery"
+      },
+      "DeleteOwnAccountInput": {
+        "$ref": "#/components/schemas/DeleteOwnAccountInput"
       }
     }
   }

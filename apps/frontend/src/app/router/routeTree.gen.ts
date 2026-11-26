@@ -24,8 +24,10 @@ import { Route as AppTechniquesRouteImport } from './routes/_app.techniques'
 import { Route as PublicIndexRouteImport } from './routes/_public.index'
 import { Route as PublicForgotPasswordRouteImport } from './routes/_public.forgot-password'
 import { Route as PublicLoginRouteImport } from './routes/_public.login'
+import { Route as PublicRegisterRouteImport } from './routes/_public.register'
 import { Route as PublicResetPasswordRouteImport } from './routes/_public.reset-password'
 import { Route as PublicSetPasswordRouteImport } from './routes/_public.set-password'
+import { Route as PublicVerifyEmailRouteImport } from './routes/_public.verify-email'
 import { Route as AppAdminAuditLogRouteImport } from './routes/_app.admin.audit-log'
 import { Route as AppAdminBeltCatalogRouteImport } from './routes/_app.admin.belt-catalog'
 import { Route as AppAdminFeatureFlagsRouteImport } from './routes/_app.admin.feature-flags'
@@ -137,6 +139,11 @@ const PublicLoginRoute = PublicLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => PublicRoute,
 } as any)
+const PublicRegisterRoute = PublicRegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => PublicRoute,
+} as any)
 const PublicResetPasswordRoute = PublicResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
@@ -145,6 +152,11 @@ const PublicResetPasswordRoute = PublicResetPasswordRouteImport.update({
 const PublicSetPasswordRoute = PublicSetPasswordRouteImport.update({
   id: '/set-password',
   path: '/set-password',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicVerifyEmailRoute = PublicVerifyEmailRouteImport.update({
+  id: '/verify-email',
+  path: '/verify-email',
   getParentRoute: () => PublicRoute,
 } as any)
 const AppAdminAuditLogRoute = AppAdminAuditLogRouteImport.update({
@@ -362,8 +374,10 @@ export interface FileRoutesByFullPath {
   '/techniques': typeof AppTechniquesRoute
   '/forgot-password': typeof PublicForgotPasswordRoute
   '/login': typeof PublicLoginRoute
+  '/register': typeof PublicRegisterRoute
   '/reset-password': typeof PublicResetPasswordRoute
   '/set-password': typeof PublicSetPasswordRoute
+  '/verify-email': typeof PublicVerifyEmailRoute
   '/admin/audit-log': typeof AppAdminAuditLogRoute
   '/admin/belt-catalog': typeof AppAdminBeltCatalogRoute
   '/admin/feature-flags': typeof AppAdminFeatureFlagsRoute
@@ -414,8 +428,10 @@ export interface FileRoutesByTo {
   '/techniques': typeof AppTechniquesRoute
   '/forgot-password': typeof PublicForgotPasswordRoute
   '/login': typeof PublicLoginRoute
+  '/register': typeof PublicRegisterRoute
   '/reset-password': typeof PublicResetPasswordRoute
   '/set-password': typeof PublicSetPasswordRoute
+  '/verify-email': typeof PublicVerifyEmailRoute
   '/admin/audit-log': typeof AppAdminAuditLogRoute
   '/admin/belt-catalog': typeof AppAdminBeltCatalogRoute
   '/admin/feature-flags': typeof AppAdminFeatureFlagsRoute
@@ -462,8 +478,10 @@ export interface FileRoutesById {
   '/_app/techniques': typeof AppTechniquesRoute
   '/_public/forgot-password': typeof PublicForgotPasswordRoute
   '/_public/login': typeof PublicLoginRoute
+  '/_public/register': typeof PublicRegisterRoute
   '/_public/reset-password': typeof PublicResetPasswordRoute
   '/_public/set-password': typeof PublicSetPasswordRoute
+  '/_public/verify-email': typeof PublicVerifyEmailRoute
   '/_public/': typeof PublicIndexRoute
   '/_app/admin/audit-log': typeof AppAdminAuditLogRoute
   '/_app/admin/belt-catalog': typeof AppAdminBeltCatalogRoute
@@ -519,8 +537,10 @@ export interface FileRouteTypes {
     | '/techniques'
     | '/forgot-password'
     | '/login'
+    | '/register'
     | '/reset-password'
     | '/set-password'
+    | '/verify-email'
     | '/admin/audit-log'
     | '/admin/belt-catalog'
     | '/admin/feature-flags'
@@ -571,8 +591,10 @@ export interface FileRouteTypes {
     | '/techniques'
     | '/forgot-password'
     | '/login'
+    | '/register'
     | '/reset-password'
     | '/set-password'
+    | '/verify-email'
     | '/admin/audit-log'
     | '/admin/belt-catalog'
     | '/admin/feature-flags'
@@ -618,8 +640,10 @@ export interface FileRouteTypes {
     | '/_app/techniques'
     | '/_public/forgot-password'
     | '/_public/login'
+    | '/_public/register'
     | '/_public/reset-password'
     | '/_public/set-password'
+    | '/_public/verify-email'
     | '/_public/'
     | '/_app/admin/audit-log'
     | '/_app/admin/belt-catalog'
@@ -772,6 +796,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicLoginRouteImport
       parentRoute: typeof PublicRoute
     }
+    '/_public/register': {
+      id: '/_public/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof PublicRegisterRouteImport
+      parentRoute: typeof PublicRoute
+    }
     '/_public/reset-password': {
       id: '/_public/reset-password'
       path: '/reset-password'
@@ -784,6 +815,13 @@ declare module '@tanstack/react-router' {
       path: '/set-password'
       fullPath: '/set-password'
       preLoaderRoute: typeof PublicSetPasswordRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/verify-email': {
+      id: '/_public/verify-email'
+      path: '/verify-email'
+      fullPath: '/verify-email'
+      preLoaderRoute: typeof PublicVerifyEmailRouteImport
       parentRoute: typeof PublicRoute
     }
     '/_app/admin/audit-log': {
@@ -1262,8 +1300,10 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 interface PublicRouteChildren {
   PublicForgotPasswordRoute: typeof PublicForgotPasswordRoute
   PublicLoginRoute: typeof PublicLoginRoute
+  PublicRegisterRoute: typeof PublicRegisterRoute
   PublicResetPasswordRoute: typeof PublicResetPasswordRoute
   PublicSetPasswordRoute: typeof PublicSetPasswordRoute
+  PublicVerifyEmailRoute: typeof PublicVerifyEmailRoute
   PublicIndexRoute: typeof PublicIndexRoute
   PublicOauthConsentRoute: typeof PublicOauthConsentRoute
   PublicRanksSlugRoute: typeof PublicRanksSlugRoute
@@ -1273,8 +1313,10 @@ interface PublicRouteChildren {
 const PublicRouteChildren: PublicRouteChildren = {
   PublicForgotPasswordRoute: PublicForgotPasswordRoute,
   PublicLoginRoute: PublicLoginRoute,
+  PublicRegisterRoute: PublicRegisterRoute,
   PublicResetPasswordRoute: PublicResetPasswordRoute,
   PublicSetPasswordRoute: PublicSetPasswordRoute,
+  PublicVerifyEmailRoute: PublicVerifyEmailRoute,
   PublicIndexRoute: PublicIndexRoute,
   PublicOauthConsentRoute: PublicOauthConsentRoute,
   PublicRanksSlugRoute: PublicRanksSlugRoute,

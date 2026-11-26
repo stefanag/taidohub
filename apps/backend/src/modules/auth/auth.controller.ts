@@ -12,12 +12,11 @@ import { Public } from '../../infrastructure/auth/public.decorator.js';
 
 import { SessionDto } from './dto/session.dto.js';
 import { SignInWithEmailDto } from './dto/sign-in.dto.js';
-import { SignUpWithEmailDto } from './dto/sign-up.dto.js';
 
 /**
  * Auth controller — documentation-only.
  *
- * Every route here (`sign-in/email`, `sign-up/email`, `sign-out`,
+ * Every route here (`sign-in/email`, `sign-out`,
  * `get-session`) is a stub: the real handlers are mounted as an Express
  * sub-application in `main.ts` via `app.use('/api/auth', toNodeHandler(auth))`,
  * which intercepts `/api/auth/*` before Nest's router, so these stub methods
@@ -43,18 +42,6 @@ export class AuthController {
   @ApiBody({ type: SignInWithEmailDto })
   @ApiOkResponse({ type: SessionDto })
   signInEmail(): void {
-    /* handled by better-auth */
-  }
-
-  @Public()
-  @Post('sign-up/email')
-  @ApiOperation({
-    summary: 'Create a new account with email + password.',
-    operationId: 'AuthController_signUpEmail',
-  })
-  @ApiBody({ type: SignUpWithEmailDto })
-  @ApiOkResponse({ type: SessionDto })
-  signUpEmail(): void {
     /* handled by better-auth */
   }
 

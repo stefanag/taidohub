@@ -39,6 +39,15 @@ export class RankHistoryService {
     @Inject(DRIZZLE) private readonly db: DrizzleDb,
   ) {}
 
+  /**
+   * Removes a user's own grading history when they delete their account.
+   * `recorded_by_user_id` is ON DELETE RESTRICT, which Postgres checks before
+   * the user row's cascade runs, so the rows must go first.
+   */
+  async deleteAllForUser(userId: string, tx: DrizzleExecutor): Promise<number> {
+    return this.repo.deleteAllForUser(userId, tx);
+  }
+
   async list(subjectUserId: string, actor: AuthenticatedUser): Promise<RankHistory[]> {
     const allowed = await this.auth.canRead(actor, subjectUserId);
     if (!allowed) {

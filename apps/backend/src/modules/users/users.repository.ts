@@ -6,7 +6,7 @@ import {
   type DrizzleDb,
   type DrizzleExecutor,
 } from '../../infrastructure/database/client.js';
-import { user, type DbUser } from '../../infrastructure/database/schema/index.js';
+import { account, user, type DbUser } from '../../infrastructure/database/schema/index.js';
 
 export interface ListUsersFilter {
   q?: string;
@@ -145,5 +145,15 @@ export class UsersRepository {
   async delete(id: string, tx?: DrizzleExecutor): Promise<void> {
     const conn = tx ?? this.db;
     await conn.delete(user).where(eq(user.id, id));
+  }
+
+  /** The password hash of the user's email/password login, if they have one. */
+  async findPasswordHash(userId: string): Promise<string | null> {
+    const rows = await this.db
+      .select({ password: account.password })
+      .from(account)
+      .where(and(eq(account.userId, userId), eq(account.providerId, 'credential')))
+      .limit(1);
+    return rows[0]?.password ?? null;
   }
 }
