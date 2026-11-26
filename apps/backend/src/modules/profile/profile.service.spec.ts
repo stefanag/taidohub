@@ -3,6 +3,7 @@ import { Test } from '@nestjs/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { DRIZZLE } from '../../infrastructure/database/client.js';
+import { OrganisationsService } from '../organisations/organisations.service.js';
 import { UsersRepository } from '../users/users.repository.js';
 
 import { ProfileRepository } from './profile.repository.js';
@@ -67,6 +68,7 @@ function usersRepoStub() {
 }
 
 const FAKE_TX = { __tx: true } as never;
+const organisations = { isNationalFederation: vi.fn().mockResolvedValue(true) };
 const fakeDb = {
   transaction: vi.fn(async (cb: (tx: unknown) => Promise<unknown>) => cb(FAKE_TX)),
 };
@@ -81,6 +83,7 @@ async function makeService(
       { provide: ProfileRepository, useValue: repo },
       { provide: UsersRepository, useValue: usersRepo },
       { provide: DRIZZLE, useValue: fakeDb },
+      { provide: OrganisationsService, useValue: organisations },
     ],
   }).compile();
   return module.get(ProfileService);
@@ -112,6 +115,7 @@ describe('ProfileService — getOwn', () => {
       addressCountry: null,
       citizenships: [],
       aboutMe: null,
+      referenceFederationId: null,
     });
   });
 
@@ -223,5 +227,25 @@ describe('ProfileService — updateOwn', () => {
 
     // Returned API object exposes aboutMe.
     expect(result.aboutMe).toEqual(aboutMe);
+  });
+
+  describe('reference federation', () => {
+    it('refuses an organisation that is not a national federation', async () => {
+      organisations.isNationalFederation.mockResolvedValueOnce(false);
+      await expect(
+        service.updateOwn(caller, { referenceFederationId: '22222222-2222-4222-8222-222222222222' }),
+      ).rejects.toMatchObject({ response: { error: { code: 'VALIDATION_FAILED' } } });
+      expect(repo.upsert).not.toHaveBeenCalled();
+    });
+
+    it('stores a national federation and lets it be cleared', async () => {
+      repo.upsert.mockResolvedValue({ ...PROFILE_ROW, referenceFederationId: null });
+      await service.updateOwn(caller, { referenceFederationId: '22222222-2222-4222-8222-222222222222' });
+      expect(repo.upsert.mock.calls.at(-1)?.[1]).toEqual({
+        referenceFederationId: '22222222-2222-4222-8222-222222222222',
+      });
+      await service.updateOwn(caller, { referenceFederationId: null });
+      expect(repo.upsert.mock.calls.at(-1)?.[1]).toEqual({ referenceFederationId: null });
+    });
   });
 });

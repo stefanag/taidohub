@@ -21,6 +21,7 @@ const PROFILE_RESPONSE = {
   addressCountry: 'SWE',
   citizenships: ['SWE', 'GBR'],
   aboutMe: null,
+  referenceFederationId: null,
 };
 
 const mockedHttp = vi.mocked(httpClient);

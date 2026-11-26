@@ -4,6 +4,7 @@ export const FEATURE_FLAG_CODES = [
   'grading-history',
   'grading-history-verification',
   'instructor-feedback',
+  'self-registration',
 ] as const;
 
 export const FeatureFlagCodeSchema = z.enum(FEATURE_FLAG_CODES);

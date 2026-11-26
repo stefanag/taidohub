@@ -1,0 +1,3 @@
+ALTER TABLE "user_profile" ADD COLUMN "reference_federation_id" uuid;--> statement-breakpoint
+ALTER TABLE "user_profile" ADD COLUMN "self_registered_at" timestamp with time zone;--> statement-breakpoint
+ALTER TABLE "user_profile" ADD CONSTRAINT "user_profile_reference_federation_id_organisations_id_fk" FOREIGN KEY ("reference_federation_id") REFERENCES "public"."organisations"("id") ON DELETE set null ON UPDATE no action;

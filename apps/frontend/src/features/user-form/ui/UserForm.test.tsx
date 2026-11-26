@@ -47,6 +47,7 @@ vi.mock('@/entities/profile/api/profile.api.js', async (orig) => {
       addressCountry: 'SWE',
       citizenships: ['SWE', 'GBR'],
       aboutMe: null,
+      referenceFederationId: null,
     }),
   };
 });
@@ -63,6 +64,7 @@ const PROFILE_FIXTURE = {
   addressCountry: 'SWE',
   citizenships: ['SWE', 'GBR'],
   aboutMe: null,
+  referenceFederationId: null,
 };
 
 const mockedGetProfile = vi.mocked(getUserProfile);
@@ -333,6 +335,7 @@ describe('<UserForm>', () => {
       addressCountry: null,
       citizenships: [],
       aboutMe: { ops: [{ insert: 'Just a bio\n' }] },
+      referenceFederationId: null,
     };
     mockedGetProfile.mockResolvedValueOnce(profileOnlyBio);
 

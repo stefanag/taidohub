@@ -22,25 +22,6 @@ paths:
       summary: Sign in with email + password.
       tags: &a1
         - auth
-  /api/auth/sign-up/email:
-    post:
-      operationId: AuthController_signUpEmail
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/SignUpWithEmailDto"
-      responses:
-        "200":
-          description: ""
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/SessionDto"
-      summary: Create a new account with email + password.
-      tags: *a1
   /api/auth/sign-out:
     post:
       operationId: AuthController_signOut
@@ -3026,6 +3007,135 @@ paths:
       summary: The texts to accept on the set-password page of an invitation link.
         Empty for password resets.
       tags: *a32
+  /api/registration:
+    post:
+      operationId: RegistrationController_register
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterInputDto"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegisterResponseDto"
+        "400":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
+      summary: Create an account without a club. Sends a confirmation email; the
+        account can sign in once confirmed. Answers the same for an address that
+        already has an account.
+      tags: &a33
+        - registration
+  /api/registration/federations:
+    get:
+      operationId: RegistrationController_federations
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegistrationFederationDto"
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
+      summary: The national federations to choose from at registration.
+      tags: *a33
+  /api/registration/legal-texts:
+    get:
+      operationId: RegistrationController_legalTexts
+      parameters:
+        - name: locale
+          required: false
+          in: query
+          x-nestjs_zod-parent-has-refs: true
+          x-nestjs_zod-empty-type: true
+          x-nestjs_zod-$defs:
+            LegalLocale:
+              type: string
+              enum:
+                - sv
+                - en
+                - fi
+              description: A language a legal text can be written in.
+          x-nestjs_zod-parent-id: RegistrationLegalTextsQuery
+          schema:
+            $ref: "#/$defs/LegalLocale"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegistrationLegalTextsDto"
+        "400":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
+      summary: The platform's terms and privacy notice for self-registered users.
+      tags: *a33
+  /api/account:
+    delete:
+      operationId: OwnAccountController_delete
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeleteOwnAccountDto"
+      responses:
+        "400":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
+        "401":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
+        "409":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelopeDto"
+      security:
+        - session: []
+      summary: Delete your own account and your own data, after confirming your
+        password.
+      tags:
+        - account
   /api/classification-categories:
     get:
       operationId: ClassificationCategoryController_list
@@ -3043,9 +3153,9 @@ paths:
       responses:
         "200":
           description: ""
-      security: &a33
+      security: &a34
         - session: []
-      tags: &a34
+      tags: &a35
         - classification-categories
   /api/classification-categories/{id}:
     patch:
@@ -3059,8 +3169,8 @@ paths:
       responses:
         "200":
           description: ""
-      security: *a33
-      tags: *a34
+      security: *a34
+      tags: *a35
   /api/techniques:
     get:
       operationId: TechniqueController_list
@@ -3088,9 +3198,9 @@ paths:
       responses:
         "200":
           description: ""
-      security: &a35
+      security: &a36
         - session: []
-      tags: &a36
+      tags: &a37
         - techniques
     post:
       operationId: TechniqueController_create
@@ -3098,8 +3208,8 @@ paths:
       responses:
         "201":
           description: ""
-      security: *a35
-      tags: *a36
+      security: *a36
+      tags: *a37
   /api/techniques/{id}:
     get:
       operationId: TechniqueController_findOne
@@ -3112,8 +3222,8 @@ paths:
       responses:
         "200":
           description: ""
-      security: *a35
-      tags: *a36
+      security: *a36
+      tags: *a37
     patch:
       operationId: TechniqueController_update
       parameters:
@@ -3125,8 +3235,8 @@ paths:
       responses:
         "200":
           description: ""
-      security: *a35
-      tags: *a36
+      security: *a36
+      tags: *a37
     delete:
       operationId: TechniqueController_delete
       parameters:
@@ -3138,8 +3248,8 @@ paths:
       responses:
         "204":
           description: ""
-      security: *a35
-      tags: *a36
+      security: *a36
+      tags: *a37
   /api/patterns:
     get:
       operationId: PatternController_list
@@ -3167,9 +3277,9 @@ paths:
       responses:
         "200":
           description: ""
-      security: &a37
+      security: &a38
         - session: []
-      tags: &a38
+      tags: &a39
         - patterns
     post:
       operationId: PatternController_create
@@ -3177,8 +3287,8 @@ paths:
       responses:
         "201":
           description: ""
-      security: *a37
-      tags: *a38
+      security: *a38
+      tags: *a39
   /api/patterns/{id}:
     get:
       operationId: PatternController_findOne
@@ -3191,8 +3301,8 @@ paths:
       responses:
         "200":
           description: ""
-      security: *a37
-      tags: *a38
+      security: *a38
+      tags: *a39
     patch:
       operationId: PatternController_update
       parameters:
@@ -3204,8 +3314,8 @@ paths:
       responses:
         "200":
           description: ""
-      security: *a37
-      tags: *a38
+      security: *a38
+      tags: *a39
     delete:
       operationId: PatternController_delete
       parameters:
@@ -3217,8 +3327,8 @@ paths:
       responses:
         "204":
           description: ""
-      security: *a37
-      tags: *a38
+      security: *a38
+      tags: *a39
   /api/progress:
     get:
       operationId: ProgressController_list
@@ -3231,9 +3341,9 @@ paths:
       responses:
         "200":
           description: ""
-      security: &a39
+      security: &a40
         - session: []
-      tags: &a40
+      tags: &a41
         - progress
   /api/progress/techniques/{id}:
     get:
@@ -3247,8 +3357,8 @@ paths:
       responses:
         "200":
           description: ""
-      security: *a39
-      tags: *a40
+      security: *a40
+      tags: *a41
     put:
       operationId: ProgressController_upsertTechnique
       parameters:
@@ -3260,8 +3370,8 @@ paths:
       responses:
         "200":
           description: ""
-      security: *a39
-      tags: *a40
+      security: *a40
+      tags: *a41
     delete:
       operationId: ProgressController_deleteTechnique
       parameters:
@@ -3273,8 +3383,8 @@ paths:
       responses:
         "204":
           description: ""
-      security: *a39
-      tags: *a40
+      security: *a40
+      tags: *a41
   /api/progress/patterns/{id}:
     get:
       operationId: ProgressController_getPattern
@@ -3287,8 +3397,8 @@ paths:
       responses:
         "200":
           description: ""
-      security: *a39
-      tags: *a40
+      security: *a40
+      tags: *a41
     put:
       operationId: ProgressController_upsertPattern
       parameters:
@@ -3300,8 +3410,8 @@ paths:
       responses:
         "200":
           description: ""
-      security: *a39
-      tags: *a40
+      security: *a40
+      tags: *a41
     delete:
       operationId: ProgressController_deletePattern
       parameters:
@@ -3313,8 +3423,8 @@ paths:
       responses:
         "204":
           description: ""
-      security: *a39
-      tags: *a40
+      security: *a40
+      tags: *a41
   /api/me/memberships:
     get:
       operationId: StudentsController_myMemberships
@@ -3322,9 +3432,9 @@ paths:
       responses:
         "200":
           description: ""
-      security: &a41
+      security: &a42
         - session: []
-      tags: &a42
+      tags: &a43
         - students
   /api/students:
     get:
@@ -3333,8 +3443,8 @@ paths:
       responses:
         "200":
           description: ""
-      security: *a41
-      tags: *a42
+      security: *a42
+      tags: *a43
   /api/students/{userId}/progress:
     get:
       operationId: StudentsController_getStudentProgress
@@ -3347,8 +3457,8 @@ paths:
       responses:
         "200":
           description: ""
-      security: *a41
-      tags: *a42
+      security: *a42
+      tags: *a43
   /api/students/{userId}/progress/techniques/{contentId}:
     put:
       operationId: StudentsController_upsertTechnique
@@ -3366,8 +3476,8 @@ paths:
       responses:
         "200":
           description: ""
-      security: *a41
-      tags: *a42
+      security: *a42
+      tags: *a43
     delete:
       operationId: StudentsController_deleteTechnique
       parameters:
@@ -3384,8 +3494,8 @@ paths:
       responses:
         "204":
           description: ""
-      security: *a41
-      tags: *a42
+      security: *a42
+      tags: *a43
   /api/students/{userId}/progress/patterns/{contentId}:
     put:
       operationId: StudentsController_upsertPattern
@@ -3403,8 +3513,8 @@ paths:
       responses:
         "200":
           description: ""
-      security: *a41
-      tags: *a42
+      security: *a42
+      tags: *a43
     delete:
       operationId: StudentsController_deletePattern
       parameters:
@@ -3421,8 +3531,8 @@ paths:
       responses:
         "204":
           description: ""
-      security: *a41
-      tags: *a42
+      security: *a42
+      tags: *a43
   /api/feature-flags:
     get:
       operationId: FeatureFlagsPublicController_resolveMap
@@ -3439,9 +3549,9 @@ paths:
       responses:
         "200":
           description: ""
-      security: &a43
+      security: &a44
         - session: []
-      tags: &a44
+      tags: &a45
         - feature-flags
   /api/admin/feature-flags/{code}:
     patch:
@@ -3455,8 +3565,8 @@ paths:
       responses:
         "200":
           description: ""
-      security: *a43
-      tags: *a44
+      security: *a44
+      tags: *a45
   /api/feedback/threads:
     get:
       operationId: FeedbackController_getThread
@@ -3464,9 +3574,9 @@ paths:
       responses:
         "200":
           description: ""
-      security: &a45
+      security: &a46
         - session: []
-      tags: &a46
+      tags: &a47
         - feedback
     post:
       operationId: FeedbackController_createThread
@@ -3474,8 +3584,8 @@ paths:
       responses:
         "201":
           description: ""
-      security: *a45
-      tags: *a46
+      security: *a46
+      tags: *a47
   /api/feedback/threads/student/{studentId}:
     get:
       operationId: FeedbackController_listByStudent
@@ -3488,8 +3598,8 @@ paths:
       responses:
         "200":
           description: ""
-      security: *a45
-      tags: *a46
+      security: *a46
+      tags: *a47
   /api/feedback/threads/{threadId}/comments:
     get:
       operationId: FeedbackController_listComments
@@ -3502,8 +3612,8 @@ paths:
       responses:
         "200":
           description: ""
-      security: *a45
-      tags: *a46
+      security: *a46
+      tags: *a47
     post:
       operationId: FeedbackController_createComment
       parameters:
@@ -3515,8 +3625,8 @@ paths:
       responses:
         "201":
           description: ""
-      security: *a45
-      tags: *a46
+      security: *a46
+      tags: *a47
   /api/feedback/comments/{commentId}:
     patch:
       operationId: FeedbackController_updateComment
@@ -3529,8 +3639,8 @@ paths:
       responses:
         "200":
           description: ""
-      security: *a45
-      tags: *a46
+      security: *a46
+      tags: *a47
     delete:
       operationId: FeedbackController_deleteComment
       parameters:
@@ -3542,8 +3652,8 @@ paths:
       responses:
         "200":
           description: ""
-      security: *a45
-      tags: *a46
+      security: *a46
+      tags: *a47
   /api/feedback/comments/{commentId}/reactions:
     put:
       operationId: FeedbackController_setReaction
@@ -3556,8 +3666,8 @@ paths:
       responses:
         "200":
           description: ""
-      security: *a45
-      tags: *a46
+      security: *a46
+      tags: *a47
     delete:
       operationId: FeedbackController_removeReaction
       parameters:
@@ -3569,8 +3679,8 @@ paths:
       responses:
         "200":
           description: ""
-      security: *a45
-      tags: *a46
+      security: *a46
+      tags: *a47
   /api/feedback/threads/{threadId}/read:
     post:
       operationId: FeedbackController_markRead
@@ -3583,8 +3693,8 @@ paths:
       responses:
         "201":
           description: ""
-      security: *a45
-      tags: *a46
+      security: *a46
+      tags: *a47
   /api/feedback/unread-count:
     get:
       operationId: FeedbackController_unreadCount
@@ -3592,8 +3702,8 @@ paths:
       responses:
         "200":
           description: ""
-      security: *a45
-      tags: *a46
+      security: *a46
+      tags: *a47
   /api/feedback/inbox:
     get:
       operationId: FeedbackController_inbox
@@ -3611,10 +3721,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorEnvelopeDto"
-      security: *a45
+      security: *a46
       summary: List unread feedback threads for the actor, ordered by `lastActivityAt`
         DESC.
-      tags: *a46
+      tags: *a47
   /api/admin/impersonate-user:
     post:
       operationId: UserImpersonationController_start
@@ -3622,7 +3732,7 @@ paths:
       responses:
         "201":
           description: ""
-      tags: &a47
+      tags: &a48
         - UserImpersonation
   /api/admin/stop-impersonating:
     post:
@@ -3631,7 +3741,7 @@ paths:
       responses:
         "201":
           description: ""
-      tags: *a47
+      tags: *a48
   /api/statistics/platform:
     get:
       operationId: StatisticsController_getPlatform
@@ -3639,9 +3749,9 @@ paths:
       responses:
         "200":
           description: ""
-      security: &a48
+      security: &a49
         - session: []
-      tags: &a49
+      tags: &a50
         - statistics
   /api/statistics/organisation/{id}:
     get:
@@ -3655,8 +3765,8 @@ paths:
       responses:
         "200":
           description: ""
-      security: *a48
-      tags: *a49
+      security: *a49
+      tags: *a50
   /api/statistics/organisation/{id}/trends:
     get:
       operationId: StatisticsController_getOrganisationTrends
@@ -3669,8 +3779,8 @@ paths:
       responses:
         "200":
           description: ""
-      security: *a48
-      tags: *a49
+      security: *a49
+      tags: *a50
   /api/statistics/user/{id}:
     get:
       operationId: StatisticsController_getUser
@@ -3683,8 +3793,8 @@ paths:
       responses:
         "200":
           description: ""
-      security: *a48
-      tags: *a49
+      security: *a49
+      tags: *a50
   /api/statistics/user/{id}/trends:
     get:
       operationId: StatisticsController_getUserTrends
@@ -3697,8 +3807,8 @@ paths:
       responses:
         "200":
           description: ""
-      security: *a48
-      tags: *a49
+      security: *a49
+      tags: *a50
   /api/admin/statistics/rebuild:
     post:
       operationId: StatisticsAdminController_rebuild
@@ -3745,10 +3855,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorEnvelopeDto"
-      security: &a50
+      security: &a51
         - session: []
       summary: List the caller's own proposals from AI clients, newest first.
-      tags: &a51
+      tags: &a52
         - pending-operations
   /api/pending-operations/{id}/approve:
     post:
@@ -3791,10 +3901,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorEnvelopeDto"
-      security: *a50
+      security: *a51
       summary: Approve one of your proposals and perform the write. Returns status
         `failed` with the reason if the write is refused.
-      tags: *a51
+      tags: *a52
   /api/pending-operations/{id}/reject:
     post:
       operationId: PendingOperationsController_reject
@@ -3830,9 +3940,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorEnvelopeDto"
-      security: *a50
+      security: *a51
       summary: Reject one of your proposals. Nothing is written.
-      tags: *a51
+      tags: *a52
 info:
   title: taidohub API
   description: HTTP boundary for taidohub — schemas derived from
@@ -3876,7 +3986,7 @@ components:
           x-nestjs_zod-parent-id: SignInWithEmail
           x-nestjs_zod-parent-metadata:
             description: Payload for `POST /api/auth/sign-in/email`.
-            example: &a52
+            example: &a53
               email: ada@example.com
               password: correct-horse-battery-staple
         password:
@@ -3886,7 +3996,7 @@ components:
           x-nestjs_zod-parent-id: SignInWithEmail
           x-nestjs_zod-parent-metadata:
             description: Payload for `POST /api/auth/sign-in/email`.
-            example: *a52
+            example: *a53
       required:
         - email
         - password
@@ -3898,7 +4008,7 @@ components:
           type: ""
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: &a53
+          x-nestjs_zod-$defs: &a54
             User:
               type: object
               properties:
@@ -3978,7 +4088,7 @@ components:
           x-nestjs_zod-parent-metadata:
             description: The session payload returned by `GET /api/auth/get-session` for an
               authenticated request.
-            example: &a54
+            example: &a55
               user:
                 id: 4a3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5
                 email: ada@example.com
@@ -4006,49 +4116,15 @@ components:
             - expiresAt
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-self-required: true
-          x-nestjs_zod-$defs: *a53
+          x-nestjs_zod-$defs: *a54
           x-nestjs_zod-parent-id: Session
           x-nestjs_zod-parent-metadata:
             description: The session payload returned by `GET /api/auth/get-session` for an
               authenticated request.
-            example: *a54
+            example: *a55
       required:
         - user
         - session
-    SignUpWithEmailDto:
-      type: object
-      properties:
-        email:
-          type: string
-          format: email
-          pattern: ^(?:[A-Za-z0-9_'+\-]+\.)*[A-Za-z0-9_'+\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$
-          description: Email address to register.
-          x-nestjs_zod-parent-id: SignUpWithEmail
-          x-nestjs_zod-parent-metadata:
-            description: Payload for `POST /api/auth/sign-up/email`.
-            example: &a55
-              email: ada@example.com
-              password: correct-horse-battery-staple
-              name: Ada Lovelace
-        password:
-          type: string
-          minLength: 8
-          description: New account password (8+ chars).
-          x-nestjs_zod-parent-id: SignUpWithEmail
-          x-nestjs_zod-parent-metadata:
-            description: Payload for `POST /api/auth/sign-up/email`.
-            example: *a55
-        name:
-          description: Optional display name.
-          type: string
-          minLength: 1
-          x-nestjs_zod-parent-id: SignUpWithEmail
-          x-nestjs_zod-parent-metadata:
-            description: Payload for `POST /api/auth/sign-up/email`.
-            example: *a55
-      required:
-        - email
-        - password
     SetInitialPasswordDto:
       type: object
       properties:
@@ -6850,6 +6926,7 @@ components:
                 ops:
                   - insert: |
                       Started taido in 2015 …
+              referenceFederationId: null
         firstName:
           type: ""
           x-nestjs_zod-type-array:
@@ -6975,6 +7052,19 @@ components:
             description: A user's self-service profile — personal and taido-training
               details.
             example: *a75
+        referenceFederationId:
+          anyOf:
+            - type: string
+              format: uuid
+              pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+            - type: "null"
+          x-nestjs_zod-uses-3-point-1-syntax: true
+          x-nestjs_zod-empty-type: true
+          x-nestjs_zod-parent-id: UserProfile
+          x-nestjs_zod-parent-metadata:
+            description: A user's self-service profile — personal and taido-training
+              details.
+            example: *a75
       required:
         - userId
         - firstName
@@ -6987,6 +7077,7 @@ components:
         - addressCountry
         - citizenships
         - aboutMe
+        - referenceFederationId
     UpdateUserProfileDto:
       type: object
       properties:
@@ -7103,6 +7194,18 @@ components:
                   items: {}
               required:
                 - ops
+            - type: "null"
+          x-nestjs_zod-uses-3-point-1-syntax: true
+          x-nestjs_zod-empty-type: true
+          x-nestjs_zod-parent-id: UpdateUserProfileInput
+          x-nestjs_zod-parent-metadata:
+            description: A partial profile patch — omit a field to leave it unchanged.
+            example: *a76
+        referenceFederationId:
+          anyOf:
+            - type: string
+              format: uuid
+              pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
             - type: "null"
           x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-empty-type: true
@@ -8819,6 +8922,332 @@ components:
               an action. Empty when nothing is published.
       required:
         - documents
+    RegisterInputDto:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+          x-nestjs_zod-parent-has-refs: true
+          x-nestjs_zod-$defs: &a93
+            LegalLocale:
+              type: string
+              enum:
+                - sv
+                - en
+                - fi
+              description: A language a legal text can be written in.
+            LegalAcknowledgementInput:
+              type: object
+              properties:
+                versionId:
+                  type: string
+                  format: uuid
+                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                locale:
+                  $ref: "#/$defs/LegalLocale"
+              required:
+                - versionId
+                - locale
+          x-nestjs_zod-parent-id: RegisterInput
+          x-nestjs_zod-parent-metadata:
+            description: Create an account without a club. The account must verify its email
+              before signing in.
+            example: &a94
+              name: Ada Lovelace
+              email: ada@example.com
+              password: a-long-password
+              locale: sv
+              dateOfBirth: 1990-12-10
+              federationId: c5a1d6f0-9f3a-4b2c-8d4e-6f7a8b9c0d1e
+              acknowledgements:
+                - versionId: c5a1d6f0-9f3a-4b2c-8d4e-6f7a8b9c0d1f
+                  locale: sv
+        email:
+          type: string
+          maxLength: 254
+          format: email
+          pattern: ^(?:[A-Za-z0-9_'+\-]+\.)*[A-Za-z0-9_'+\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$
+          x-nestjs_zod-parent-has-refs: true
+          x-nestjs_zod-$defs: *a93
+          x-nestjs_zod-parent-id: RegisterInput
+          x-nestjs_zod-parent-metadata:
+            description: Create an account without a club. The account must verify its email
+              before signing in.
+            example: *a94
+        password:
+          type: string
+          minLength: 8
+          maxLength: 200
+          x-nestjs_zod-parent-has-refs: true
+          x-nestjs_zod-$defs: *a93
+          x-nestjs_zod-parent-id: RegisterInput
+          x-nestjs_zod-parent-metadata:
+            description: Create an account without a club. The account must verify its email
+              before signing in.
+            example: *a94
+        locale:
+          $ref: "#/$defs/LegalLocale"
+          type: ""
+          x-nestjs_zod-parent-has-refs: true
+          x-nestjs_zod-empty-type: true
+          x-nestjs_zod-$defs: *a93
+          x-nestjs_zod-parent-id: RegisterInput
+          x-nestjs_zod-parent-metadata:
+            description: Create an account without a club. The account must verify its email
+              before signing in.
+            example: *a94
+        dateOfBirth:
+          type: string
+          format: date
+          pattern: ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))$
+          x-nestjs_zod-parent-has-refs: true
+          x-nestjs_zod-$defs: *a93
+          x-nestjs_zod-parent-id: RegisterInput
+          x-nestjs_zod-parent-metadata:
+            description: Create an account without a club. The account must verify its email
+              before signing in.
+            example: *a94
+        federationId:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+          x-nestjs_zod-parent-has-refs: true
+          x-nestjs_zod-$defs: *a93
+          x-nestjs_zod-parent-id: RegisterInput
+          x-nestjs_zod-parent-metadata:
+            description: Create an account without a club. The account must verify its email
+              before signing in.
+            example: *a94
+        acknowledgements:
+          maxItems: 10
+          type: array
+          items:
+            $ref: "#/$defs/LegalAcknowledgementInput"
+          x-nestjs_zod-parent-has-refs: true
+          x-nestjs_zod-$defs: *a93
+          x-nestjs_zod-parent-id: RegisterInput
+          x-nestjs_zod-parent-metadata:
+            description: Create an account without a club. The account must verify its email
+              before signing in.
+            example: *a94
+      required:
+        - name
+        - email
+        - password
+        - locale
+        - dateOfBirth
+        - federationId
+    RegisterResponseDto:
+      type: object
+      properties:
+        status:
+          type: string
+          const: verification_sent
+          x-nestjs_zod-uses-3-point-1-syntax: true
+          x-nestjs_zod-parent-id: RegisterResponse
+          x-nestjs_zod-parent-metadata:
+            description: Always the same answer, also when the address already has an
+              account, so the endpoint does not reveal who is registered.
+      required:
+        - status
+    RegistrationFederationDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+          x-nestjs_zod-uses-3-point-1-syntax: true
+          x-nestjs_zod-parent-id: RegistrationFederation
+          x-nestjs_zod-parent-metadata:
+            description: A national federation to choose at registration.
+        nameEn:
+          type: string
+          x-nestjs_zod-uses-3-point-1-syntax: true
+          x-nestjs_zod-parent-id: RegistrationFederation
+          x-nestjs_zod-parent-metadata:
+            description: A national federation to choose at registration.
+        nameSv:
+          type: string
+          x-nestjs_zod-uses-3-point-1-syntax: true
+          x-nestjs_zod-parent-id: RegistrationFederation
+          x-nestjs_zod-parent-metadata:
+            description: A national federation to choose at registration.
+        nameFi:
+          type: string
+          x-nestjs_zod-uses-3-point-1-syntax: true
+          x-nestjs_zod-parent-id: RegistrationFederation
+          x-nestjs_zod-parent-metadata:
+            description: A national federation to choose at registration.
+        country:
+          type: ""
+          x-nestjs_zod-type-array:
+            - string
+            - "null"
+          x-nestjs_zod-uses-3-point-1-syntax: true
+          x-nestjs_zod-empty-type: true
+          x-nestjs_zod-parent-id: RegistrationFederation
+          x-nestjs_zod-parent-metadata:
+            description: A national federation to choose at registration.
+      required:
+        - id
+        - nameEn
+        - nameSv
+        - nameFi
+        - country
+    RegistrationLegalTextsDto:
+      type: object
+      properties:
+        documents:
+          type: array
+          items:
+            $ref: "#/$defs/PublishedLegalDocument"
+          x-nestjs_zod-parent-has-refs: true
+          x-nestjs_zod-$defs:
+            PublishedLegalDocument:
+              type: object
+              properties:
+                documentId:
+                  type: string
+                  format: uuid
+                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                kind:
+                  $ref: "#/$defs/LegalDocumentKind"
+                audience:
+                  $ref: "#/$defs/LegalAudience"
+                organisationId:
+                  anyOf:
+                    - type: string
+                      format: uuid
+                      pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                    - type: "null"
+                versionId:
+                  type: string
+                  format: uuid
+                  pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                version:
+                  type: integer
+                  exclusiveMinimum: 0
+                  maximum: 9007199254740991
+                publishedAt:
+                  type: string
+                  format: date-time
+                  pattern: ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z))$
+                authoritativeLocale:
+                  $ref: "#/$defs/LegalLocale"
+                availableLocales:
+                  type: array
+                  items:
+                    $ref: "#/$defs/LegalLocale"
+                translation:
+                  type: object
+                  properties:
+                    locale:
+                      $ref: "#/$defs/LegalLocale"
+                    revision:
+                      type: integer
+                      exclusiveMinimum: 0
+                      maximum: 9007199254740991
+                    title:
+                      type: string
+                    body:
+                      $ref: "#/$defs/LegalBody"
+                  required:
+                    - locale
+                    - revision
+                    - title
+                    - body
+                isFallback:
+                  type: boolean
+              required:
+                - documentId
+                - kind
+                - audience
+                - organisationId
+                - versionId
+                - version
+                - publishedAt
+                - authoritativeLocale
+                - availableLocales
+                - translation
+                - isFallback
+              description: A published text in one language. When `translation.locale` differs
+                from `authoritativeLocale`, the text is a translation and the
+                authoritative language takes precedence.
+              example:
+                documentId: c5a1d6f0-9f3a-4b2c-8d4e-6f7a8b9c0d1e
+                kind: terms
+                audience: members
+                organisationId: null
+                versionId: c5a1d6f0-9f3a-4b2c-8d4e-6f7a8b9c0d1e
+                version: 1
+                publishedAt: 2026-11-26T10:00:00.000Z
+                authoritativeLocale: sv
+                availableLocales:
+                  - sv
+                  - en
+                translation:
+                  locale: en
+                  revision: 1
+                  title: Terms of use
+                  body:
+                    ops:
+                      - insert: |
+                          Terms …
+                isFallback: false
+            LegalDocumentKind:
+              type: string
+              enum:
+                - terms
+                - privacy
+                - dpa
+              description: "`terms` are accepted, `privacy` notices are acknowledged as
+                received, `dpa` is a data processing agreement (platform only,
+                not yet in use)."
+            LegalAudience:
+              type: string
+              enum:
+                - members
+                - self_registered
+                - organisations
+              description: Who a text is for. `self_registered` and `organisations` are only
+                allowed for platform texts.
+            LegalLocale:
+              type: string
+              enum:
+                - sv
+                - en
+                - fi
+              description: A language a legal text can be written in.
+            LegalBody:
+              type: object
+              properties:
+                ops:
+                  type: array
+                  items: {}
+              required:
+                - ops
+              description: A Quill Delta.
+          x-nestjs_zod-parent-id: ApplicableLegalTexts
+          x-nestjs_zod-parent-metadata:
+            description: The texts a user must accept (terms) or acknowledge (privacy) for
+              an action. Empty when nothing is published.
+      required:
+        - documents
+    DeleteOwnAccountDto:
+      type: object
+      properties:
+        password:
+          type: string
+          minLength: 1
+          maxLength: 200
+          x-nestjs_zod-parent-id: DeleteOwnAccountInput
+          x-nestjs_zod-parent-metadata:
+            description: The current password, to confirm.
+      required:
+        - password
     FeedbackInboxResponseDto:
       type: object
       properties:
@@ -8828,7 +9257,7 @@ components:
             $ref: "#/$defs/FeedbackInboxItem"
           x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: &a93
+          x-nestjs_zod-$defs: &a95
             FeedbackInboxItem:
               type: object
               properties:
@@ -8903,7 +9332,7 @@ components:
           x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a93
+          x-nestjs_zod-$defs: *a95
           x-nestjs_zod-parent-id: FeedbackInboxResponse
           x-nestjs_zod-parent-metadata:
             description: GET /api/feedback/inbox — unread threads for the actor, ordered by
@@ -9117,7 +9546,7 @@ components:
           pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
           x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: &a94
+          x-nestjs_zod-$defs: &a96
             PendingOperationType:
               type: string
               enum:
@@ -9226,7 +9655,7 @@ components:
           x-nestjs_zod-parent-metadata:
             description: A write proposed by an AI client. Nothing is written until the user
               who proposed it approves it in the web app.
-            example: &a95
+            example: &a97
               id: 7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5
               type: rank_history.create
               status: pending
@@ -9256,70 +9685,70 @@ components:
           x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a94
+          x-nestjs_zod-$defs: *a96
           x-nestjs_zod-parent-id: PendingOperation
           x-nestjs_zod-parent-metadata:
             description: A write proposed by an AI client. Nothing is written until the user
               who proposed it approves it in the web app.
-            example: *a95
+            example: *a97
         status:
           $ref: "#/$defs/PendingOperationStatus"
           type: ""
           x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a94
+          x-nestjs_zod-$defs: *a96
           x-nestjs_zod-parent-id: PendingOperation
           x-nestjs_zod-parent-metadata:
             description: A write proposed by an AI client. Nothing is written until the user
               who proposed it approves it in the web app.
-            example: *a95
+            example: *a97
         params:
           $ref: "#/$defs/ProposeRankEntryInput"
           type: ""
           x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a94
+          x-nestjs_zod-$defs: *a96
           x-nestjs_zod-parent-id: PendingOperation
           x-nestjs_zod-parent-metadata:
             description: A write proposed by an AI client. Nothing is written until the user
               who proposed it approves it in the web app.
-            example: *a95
+            example: *a97
         preview:
           $ref: "#/$defs/RankEntryPreview"
           type: ""
           x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a94
+          x-nestjs_zod-$defs: *a96
           x-nestjs_zod-parent-id: PendingOperation
           x-nestjs_zod-parent-metadata:
             description: A write proposed by an AI client. Nothing is written until the user
               who proposed it approves it in the web app.
-            example: *a95
+            example: *a97
         createdByUserId:
           type: string
           x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a94
+          x-nestjs_zod-$defs: *a96
           x-nestjs_zod-parent-id: PendingOperation
           x-nestjs_zod-parent-metadata:
             description: A write proposed by an AI client. Nothing is written until the user
               who proposed it approves it in the web app.
-            example: *a95
+            example: *a97
         createdVia:
           $ref: "#/$defs/PendingOperationVia"
           type: ""
           x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a94
+          x-nestjs_zod-$defs: *a96
           x-nestjs_zod-parent-id: PendingOperation
           x-nestjs_zod-parent-metadata:
             description: A write proposed by an AI client. Nothing is written until the user
               who proposed it approves it in the web app.
-            example: *a95
+            example: *a97
         resultEntityId:
           anyOf:
             - type: string
@@ -9329,12 +9758,12 @@ components:
           x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a94
+          x-nestjs_zod-$defs: *a96
           x-nestjs_zod-parent-id: PendingOperation
           x-nestjs_zod-parent-metadata:
             description: A write proposed by an AI client. Nothing is written until the user
               who proposed it approves it in the web app.
-            example: *a95
+            example: *a97
         error:
           type: ""
           x-nestjs_zod-type-array:
@@ -9343,24 +9772,24 @@ components:
           x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a94
+          x-nestjs_zod-$defs: *a96
           x-nestjs_zod-parent-id: PendingOperation
           x-nestjs_zod-parent-metadata:
             description: A write proposed by an AI client. Nothing is written until the user
               who proposed it approves it in the web app.
-            example: *a95
+            example: *a97
         createdAt:
           type: string
           format: date-time
           pattern: ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z))$
           x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
-          x-nestjs_zod-$defs: *a94
+          x-nestjs_zod-$defs: *a96
           x-nestjs_zod-parent-id: PendingOperation
           x-nestjs_zod-parent-metadata:
             description: A write proposed by an AI client. Nothing is written until the user
               who proposed it approves it in the web app.
-            example: *a95
+            example: *a97
         decidedAt:
           anyOf:
             - type: string
@@ -9370,12 +9799,12 @@ components:
           x-nestjs_zod-uses-3-point-1-syntax: true
           x-nestjs_zod-parent-has-refs: true
           x-nestjs_zod-empty-type: true
-          x-nestjs_zod-$defs: *a94
+          x-nestjs_zod-$defs: *a96
           x-nestjs_zod-parent-id: PendingOperation
           x-nestjs_zod-parent-metadata:
             description: A write proposed by an AI client. Nothing is written until the user
               who proposed it approves it in the web app.
-            example: *a95
+            example: *a97
       required:
         - id
         - type
@@ -9606,3 +10035,13 @@ components:
       $ref: "#/components/schemas/ApplicableLegalTexts"
     LegalAcknowledgementInput:
       $ref: "#/components/schemas/LegalAcknowledgementInput"
+    RegisterInput:
+      $ref: "#/components/schemas/RegisterInput"
+    RegisterResponse:
+      $ref: "#/components/schemas/RegisterResponse"
+    RegistrationFederation:
+      $ref: "#/components/schemas/RegistrationFederation"
+    RegistrationLegalTextsQuery:
+      $ref: "#/components/schemas/RegistrationLegalTextsQuery"
+    DeleteOwnAccountInput:
+      $ref: "#/components/schemas/DeleteOwnAccountInput"

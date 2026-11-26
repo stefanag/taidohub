@@ -63,6 +63,7 @@ function renderSheet({
           'instructor-feedback': instructorFeedback,
           'grading-history': true,
           'grading-history-verification': true,
+          'self-registration': false,
         }}
       >
         <FeedbackThreadSheet

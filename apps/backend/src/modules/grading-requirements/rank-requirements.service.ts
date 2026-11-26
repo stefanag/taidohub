@@ -7,6 +7,7 @@ import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js'
 import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
 import { MembershipsRepository } from '../memberships/memberships.repository.js';
 import { OrganisationsRepository } from '../organisations/organisations.repository.js';
+import { ProfileService } from '../profile/profile.service.js';
 
 import { type HokeiGroupWithPatternsRow, RankRequirementsRepository } from './rank-requirements.repository.js';
 import { RequirementSetsRepository } from './requirement-sets.repository.js';
@@ -29,6 +30,7 @@ export class RankRequirementsService {
     private readonly orgs: OrganisationsRepository,
     private readonly memberships: MembershipsRepository,
     private readonly abilityFactory: AbilityFactory,
+    private readonly profiles: ProfileService,
   ) {}
 
   // ── Pure helper ──────────────────────────────────────────────────────────
@@ -184,15 +186,17 @@ export class RankRequirementsService {
       }
     }
 
-    // 3. Resolve student org via the most-recently-updated student membership
-    const studentOrg = allMemberships
-      .filter((m) => m.role === 'student')
-      .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())[0]?.organisationId ?? null;
-
-    if (!studentOrg) return this.emptyRequirements(rankId, null);
+    // 3. Resolve student org via the most-recently-updated student membership.
+    //    Without one (e.g. a self-registered user), start from the national
+    //    federation the user chose; with neither, only the global set applies.
+    const studentOrg =
+      allMemberships
+        .filter((m) => m.role === 'student')
+        .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())[0]?.organisationId ??
+      (await this.profiles.getReferenceFederationId(targetUserId));
 
     // 4. Walk ancestors self → root; return on first org with an active set that has this rank
-    const ancestors = await this.orgs.getAncestorIds(studentOrg);
+    const ancestors = studentOrg ? await this.orgs.getAncestorIds(studentOrg) : [];
     for (const orgId of ancestors) {
       const active = await this.sets.findActiveByOrg(orgId);
       if (!active) continue;

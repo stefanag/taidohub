@@ -1,9 +1,10 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 
 
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
-import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
+import { DRIZZLE, type DrizzleDb, type DrizzleExecutor } from '../../infrastructure/database/client.js';
 import { type DbUserProfile } from '../../infrastructure/database/schema/index.js';
+import { OrganisationsService } from '../organisations/organisations.service.js';
 import { UsersRepository } from '../users/users.repository.js';
 
 import { ProfilePatch, ProfileRepository } from './profile.repository.js';
@@ -16,7 +17,40 @@ export class ProfileService {
     private readonly repo: ProfileRepository,
     private readonly usersRepo: UsersRepository,
     @Inject(DRIZZLE) private readonly db: DrizzleDb,
+    private readonly organisations: OrganisationsService,
   ) {}
+
+  /**
+   * The national federation whose grading requirements apply to a user
+   * without a student membership. For another module's resolution logic.
+   */
+  async getReferenceFederationId(userId: string): Promise<string | null> {
+    const row = await this.repo.findByUserId(userId);
+    return row?.referenceFederationId ?? null;
+  }
+
+  /** True when the user registered themselves (and so must verify their email). */
+  async isSelfRegistered(userId: string): Promise<boolean> {
+    const row = await this.repo.findByUserId(userId);
+    return row?.selfRegisteredAt != null;
+  }
+
+  /** Writes the profile of a self-registered user inside the registration transaction. */
+  async initialiseSelfRegistered(
+    userId: string,
+    input: { dateOfBirth: string; referenceFederationId: string },
+    tx: DrizzleExecutor,
+  ): Promise<void> {
+    await this.repo.upsert(
+      userId,
+      {
+        dateOfBirth: input.dateOfBirth,
+        referenceFederationId: input.referenceFederationId,
+        selfRegisteredAt: new Date(),
+      },
+      tx,
+    );
+  }
 
   /** Return the caller's own profile — the empty shape if no row exists yet. */
   async getOwn(user: AuthenticatedUser): Promise<UserProfile> {
@@ -47,6 +81,11 @@ export class ProfileService {
    * joined "First Last" value (left unchanged when both are empty).
    */
   async updateOwn(user: AuthenticatedUser, input: UpdateUserProfileInput): Promise<UserProfile> {
+    if (input.referenceFederationId && !(await this.organisations.isNationalFederation(input.referenceFederationId))) {
+      throw new BadRequestException({
+        error: { code: 'VALIDATION_FAILED', message: 'Choose a national federation.' },
+      });
+    }
     return this.db.transaction(async (tx) => {
       const existing = await this.repo.findByUserId(user.id, tx);
       const patch = this.buildPatch(input);
@@ -87,6 +126,7 @@ export class ProfileService {
     if ('addressCountry' in input) patch.addressCountry = input.addressCountry ?? null;
     if ('citizenships' in input && input.citizenships) patch.citizenships = input.citizenships;
     if ('aboutMe' in input) patch.aboutMe = input.aboutMe ?? null;
+    if ('referenceFederationId' in input) patch.referenceFederationId = input.referenceFederationId ?? null;
     return patch;
   }
 
@@ -103,6 +143,7 @@ export class ProfileService {
       addressCountry: null,
       citizenships: [],
       aboutMe: null,
+      referenceFederationId: null,
     };
   }
 
@@ -119,6 +160,7 @@ export class ProfileService {
       addressCountry: row.addressCountry,
       citizenships: row.citizenships,
       aboutMe: row.aboutMe ?? null,
+      referenceFederationId: row.referenceFederationId,
     };
   }
 }

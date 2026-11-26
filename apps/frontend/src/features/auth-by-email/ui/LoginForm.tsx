@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 
-import { signInWithEmail } from '../api/auth.api.js';
+import { EmailNotVerifiedError, resendVerificationEmail, signInWithEmail } from '../api/auth.api.js';
 
 import {
   Button,
@@ -33,10 +33,14 @@ export function LoginForm({ onSuccess }: LoginFormProps): React.ReactElement {
   const { t } = useTranslation();
   const [submitting, setSubmitting] = React.useState(false);
   const [submitError, setSubmitError] = React.useState<string | undefined>();
+  const [unverified, setUnverified] = React.useState(false);
+  const [resent, setResent] = React.useState(false);
 
   const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSubmitError(undefined);
+    setUnverified(false);
+    setResent(false);
     const result = form.validate();
     if (!result.ok) return;
     setSubmitting(true);
@@ -44,6 +48,10 @@ export function LoginForm({ onSuccess }: LoginFormProps): React.ReactElement {
       const redirectTo = await signInWithEmail(result.data);
       onSuccess?.(redirectTo);
     } catch (err) {
+      if (err instanceof EmailNotVerifiedError) {
+        setUnverified(true);
+        return;
+      }
       setSubmitError(err instanceof Error ? err.message : t('auth.login.failed'));
     } finally {
       setSubmitting(false);
@@ -91,6 +99,25 @@ export function LoginForm({ onSuccess }: LoginFormProps): React.ReactElement {
       </FormField>
 
       <FormMessage message={submitError} />
+      {unverified ? (
+        <div role="alert" className="space-y-2 text-sm">
+          <p>{t('auth.login.emailNotVerified')}</p>
+          {resent ? (
+            <p role="status">{t('auth.login.verificationResent')}</p>
+          ) : (
+            <Button
+              type="button"
+              variant="link"
+              className="h-auto p-0"
+              onClick={() => {
+                void resendVerificationEmail(String(form.values.email ?? '')).then(() => setResent(true));
+              }}
+            >
+              {t('auth.login.resendVerification')}
+            </Button>
+          )}
+        </div>
+      ) : null}
 
       <Button type="submit" disabled={submitting} className="inline-flex items-center justify-center gap-2 rounded-sm transition-all disabled:opacity-50 outline-hidden font-bold tracking-wide px-5 py-2.5 text-sm bg-primary text-on-primary hover:bg-primary/90 w-full mt-2">
         {submitting ? t('auth.login.submitting') : t('auth.login.submit')}

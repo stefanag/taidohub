@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 
 import { MembershipsModule } from '../memberships/memberships.module.js';
 import { OrganisationsModule } from '../organisations/organisations.module.js';
+import { ProfileModule } from '../profile/profile.module.js';
 
 import { GradingRequirementsAbilityRules } from './grading-requirements.ability-rules.js';
 import { RankRequirementsController } from './rank-requirements.controller.js';
@@ -40,7 +41,7 @@ import { RequirementSetsService } from './requirement-sets.service.js';
  * `RankRequirementsController` is registered alongside `RequirementSetsController`.
  */
 @Module({
-  imports: [OrganisationsModule, MembershipsModule],
+  imports: [OrganisationsModule, MembershipsModule, ProfileModule],
   controllers: [RequirementSetsController, RankRequirementsController],
   providers: [
     RequirementSetsRepository,

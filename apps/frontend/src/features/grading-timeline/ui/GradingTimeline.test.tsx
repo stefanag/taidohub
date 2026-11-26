@@ -114,14 +114,14 @@ describe('<GradingTimeline>', () => {
     expect(screen.getByText(/failed/i)).toBeInTheDocument();
   });
 
-  it('hides Pending verification badge when flag is off', () => {
+  it('marks external unverified rows as self-reported even when verification is off', () => {
     renderTimeline([baseRow]);
-    expect(screen.queryByText(/pending verification/i)).not.toBeInTheDocument();
+    expect(screen.getByText(/self-reported, not verified/i)).toBeInTheDocument();
   });
 
-  it('shows Pending verification badge for external unverified rows when flag is on', () => {
+  it('marks external unverified rows as self-reported when verification is on', () => {
     renderTimeline([baseRow], { ...DEFAULT_FLAGS, 'grading-history-verification': true });
-    expect(screen.getByText(/pending verification/i)).toBeInTheDocument();
+    expect(screen.getByText(/self-reported, not verified/i)).toBeInTheDocument();
   });
 
   it('shows Verified shield for verified rows when flag is on', () => {

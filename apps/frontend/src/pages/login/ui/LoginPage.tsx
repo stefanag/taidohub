@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { LoginForm } from '@/features/auth-by-email';
 import { LocaleSwitcher } from '@/features/locale-switcher';
+import { useFeatureFlag } from '@/shared/lib/feature-flags';
 import { APP_LANDING_ROUTE } from '@/shared/lib/routes';
 import {
   Card,
@@ -22,6 +23,7 @@ import {
 export function LoginPage(): React.ReactElement {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const selfRegistration = useFeatureFlag('self-registration');
   return (
     <main className="min-h-screen flex">
       {/* Left hero panel */}
@@ -64,6 +66,13 @@ export function LoginPage(): React.ReactElement {
                 {t('auth.login.forgotPassword')}
               </Link>
             </p>
+            {selfRegistration ? (
+              <p className="mt-2 text-center text-sm">
+                <Link to="/register" className="text-primary hover:underline">
+                  {t('auth.login.createAccount')}
+                </Link>
+              </p>
+            ) : null}
           </CardContent>
         </Card>
         <LocaleSwitcher variant="onDark" className="self-start" />

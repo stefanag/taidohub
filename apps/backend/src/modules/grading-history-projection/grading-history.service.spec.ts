@@ -77,6 +77,7 @@ function repoStub() {
     update: vi.fn(),
     delete: vi.fn(),
     findHighestVerifiedShogo: vi.fn(),
+    deleteAllForUser: vi.fn(),
   } satisfies Record<keyof RankHistoryRepository, ReturnType<typeof vi.fn>>;
 }
 
