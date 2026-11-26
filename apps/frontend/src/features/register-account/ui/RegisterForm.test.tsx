@@ -4,12 +4,14 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('../api/registration.api.js', () => ({
+  createGoogleRegistrationIntent: vi.fn(),
   getRegistrationFederations: vi.fn(),
   getRegistrationLegalTexts: vi.fn(),
   registerAccount: vi.fn(),
 }));
 
 import {
+  createGoogleRegistrationIntent,
   getRegistrationFederations,
   getRegistrationLegalTexts,
   registerAccount,
@@ -30,11 +32,11 @@ function yearsAgo(years: number, plusDays = 0): string {
   return d.toISOString().slice(0, 10);
 }
 
-function renderForm() {
+function renderForm(onRegisterWithGoogle?: (intent: string) => Promise<void>) {
   const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   render(
     <QueryClientProvider client={qc}>
-      <RegisterForm />
+      <RegisterForm onRegisterWithGoogle={onRegisterWithGoogle} />
     </QueryClientProvider>,
   );
   return userEvent.setup();
@@ -130,5 +132,36 @@ describe('<RegisterForm>', () => {
     await user.click(await screen.findByLabelText('I accept the terms of use'));
     await user.click(screen.getByRole('button', { name: 'Create account' }));
     expect(await screen.findByText(/at least 13/)).toBeInTheDocument();
+  });
+
+  it('offers Google only when the page supplies it', async () => {
+    renderForm();
+    await screen.findByRole('option', { name: 'Swedish Taido Federation' });
+    expect(screen.queryByRole('button', { name: 'Register with Google' })).not.toBeInTheDocument();
+  });
+
+  it('checks age, federation and terms before handing the intent to Google', async () => {
+    vi.mocked(createGoogleRegistrationIntent).mockResolvedValue({ intent: 'intent-1' });
+    const onGoogle = vi.fn().mockResolvedValue(undefined);
+    const user = renderForm(onGoogle);
+    await screen.findByRole('option', { name: 'Swedish Taido Federation' });
+
+    await user.click(screen.getByRole('button', { name: 'Register with Google' }));
+    expect(screen.getByText('Fill in every field.')).toBeInTheDocument();
+    expect(createGoogleRegistrationIntent).not.toHaveBeenCalled();
+
+    await user.type(screen.getByLabelText('Date of birth'), '1990-12-10');
+    await user.selectOptions(screen.getByLabelText('National federation'), FED);
+    await user.click(await screen.findByLabelText('I accept the terms of use'));
+    await user.click(screen.getByRole('button', { name: 'Register with Google' }));
+
+    await waitFor(() => expect(onGoogle).toHaveBeenCalledWith('intent-1'));
+    expect(createGoogleRegistrationIntent).toHaveBeenCalledWith({
+      locale: 'en',
+      dateOfBirth: '1990-12-10',
+      federationId: FED,
+      acknowledgements: [{ versionId: TERMS, locale: 'sv' }],
+    });
+    expect(registerAccount).not.toHaveBeenCalled();
   });
 });

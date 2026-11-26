@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 
+import { FeatureFlagsModule } from '../feature-flags/feature-flags.module.js';
 import { LegalDocumentsModule } from '../legal-documents/legal-documents.module.js';
 import { OrganisationsModule } from '../organisations/organisations.module.js';
 import { ProfileModule } from '../profile/profile.module.js';
@@ -16,6 +17,9 @@ import { RegistrationService } from './registration.service.js';
  * the self-registered profile (profile), the platform's texts and the
  * acknowledgement log (legal-documents), and, for account deletion, the
  * user's own grading history and the user row (rank-history, users).
+ * `FeatureFlagsModule` provides `FeatureFlagsService`, which the Google
+ * sign-up hook consults (it runs outside any controller, so the flag guard
+ * cannot).
  * `DatabaseModule` (used only for the transaction), the infrastructure
  * `AuthModule` (better-auth), `AuditLogModule` and `FeatureFlagsModule`'s
  * guard are global. No CASL subject: registration is public, and account
@@ -23,6 +27,7 @@ import { RegistrationService } from './registration.service.js';
  */
 @Module({
   imports: [
+    FeatureFlagsModule,
     LegalDocumentsModule,
     OrganisationsModule,
     ProfileModule,

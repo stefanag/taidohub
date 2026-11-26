@@ -40,6 +40,9 @@ function setup() {
     forgetCachedUser: vi.fn(),
   };
   const rankHistory = { deleteAllForUser: vi.fn() };
+  const tokens = { issueToken: vi.fn().mockResolvedValue('intent-token'), peekToken: vi.fn(), consumeToken: vi.fn() };
+  const hooks = { socialSignUp: null as unknown };
+  const flags = { isEnabled: vi.fn().mockResolvedValue(true) };
   const service = new RegistrationService(
     auth as never,
     db as never,
@@ -49,8 +52,11 @@ function setup() {
     profiles as never,
     users as never,
     rankHistory as never,
+    tokens as never,
+    hooks as never,
+    flags as never,
   );
-  return { service, auth, internalAdapter, db, legal, organisations, profiles, users, rankHistory };
+  return { service, auth, internalAdapter, db, legal, organisations, profiles, users, rankHistory, tokens, hooks, flags };
 }
 
 const input = (over: Record<string, unknown> = {}) => ({
@@ -185,6 +191,60 @@ describe('RegistrationService', () => {
       ctx.users.verifyOwnPassword.mockResolvedValue(true);
       ctx.users.deleteOwnAccount.mockRejectedValue({ cause: { code: '23503' } });
       await expect(ctx.service.deleteOwnAccount(actor, 'right')).rejects.toThrow(ConflictException);
+    });
+  });
+
+  describe('Google registration', () => {
+    const intentInput = { locale: 'sv' as const, dateOfBirth: isoYearsAgo(30), federationId: FED, acknowledgements: [] };
+
+    it('registers itself with better-auth at startup', () => {
+      ctx.service.onModuleInit();
+      expect(ctx.hooks.socialSignUp).toBe(ctx.service);
+    });
+
+    it('runs the same checks before handing out an intent', async () => {
+      await expect(
+        ctx.service.createGoogleIntent({ ...intentInput, dateOfBirth: isoYearsAgo(12) }, 'ip'),
+      ).rejects.toThrow(BadRequestException);
+      expect(ctx.tokens.issueToken).not.toHaveBeenCalled();
+
+      await expect(ctx.service.createGoogleIntent(intentInput, 'ip')).resolves.toEqual({ intent: 'intent-token' });
+      const [identifier, ttl] = ctx.tokens.issueToken.mock.calls[0]!;
+      expect(identifier).toMatch(/^registration-intent:/);
+      expect(identifier).toContain(FED);
+      expect(ttl).toBe(1);
+    });
+
+    it('allows an account only for a live intent while registration is open', async () => {
+      ctx.tokens.peekToken.mockResolvedValue({ identifier: 'registration-intent:x:{}' });
+      await expect(ctx.service.allow('tok')).resolves.toBe(true);
+      await expect(ctx.service.allow(undefined)).resolves.toBe(false);
+      ctx.tokens.peekToken.mockResolvedValue({ identifier: 'invite:u-1' });
+      await expect(ctx.service.allow('tok')).resolves.toBe(false);
+      ctx.tokens.peekToken.mockResolvedValue({ identifier: 'registration-intent:x:{}' });
+      ctx.flags.isEnabled.mockResolvedValue(false);
+      await expect(ctx.service.allow('tok')).resolves.toBe(false);
+    });
+
+    it('completes the account from the intent', async () => {
+      const payload = { locale: 'sv', dateOfBirth: '1990-12-10', federationId: FED, acknowledgements: [] };
+      ctx.tokens.consumeToken.mockResolvedValue({
+        identifier: `registration-intent:abc:${JSON.stringify(payload)}`,
+      });
+      await ctx.service.complete('u-google', 'tok');
+      expect(ctx.legal.prepareAcknowledgements).toHaveBeenCalledWith('u-google', { documents: [] }, [], 'registration');
+      expect(ctx.profiles.initialiseSelfRegistered).toHaveBeenCalledWith(
+        'u-google',
+        { dateOfBirth: '1990-12-10', referenceFederationId: FED },
+        'tx',
+      );
+      expect(ctx.internalAdapter.deleteUser).not.toHaveBeenCalled();
+    });
+
+    it('removes the account when the intent is gone or the texts changed', async () => {
+      ctx.tokens.consumeToken.mockResolvedValue(null);
+      await expect(ctx.service.complete('u-google', 'tok')).rejects.toThrow();
+      expect(ctx.internalAdapter.deleteUser).toHaveBeenCalledWith('u-google');
     });
   });
 });

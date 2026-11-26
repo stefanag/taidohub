@@ -19,12 +19,14 @@ export const AuthRoutes = {
  */
 export const AccountRoutes = {
   setPassword: '/api/account/set-password',
+  signInProviders: '/api/account/sign-in-providers',
 } as const;
 
 export const RegistrationRoutes = {
   register: '/api/registration',
   federations: '/api/registration/federations',
   legalTexts: '/api/registration/legal-texts',
+  googleIntent: '/api/registration/google-intent',
   /** Delete the signed-in user's own account. */
   ownAccount: '/api/account',
 } as const;

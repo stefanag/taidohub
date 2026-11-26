@@ -1,6 +1,9 @@
 {
   "auth": {
     "login": {
+      "google": "Sign in with Google",
+      "googleUnknownAccount": "There is no account for that Google address yet.",
+      "googleFailed": "Signing in with Google did not work. Try again or use your email and password.",
       "emailNotVerified": "Confirm your email address first. Open the link we sent you.",
       "resendVerification": "Send a new confirmation link",
       "verificationResent": "If the address belongs to an account waiting for confirmation, a new link is on its way.",
@@ -911,6 +914,9 @@
     }
   },
   "register": {
+    "withGoogle": "Register with Google",
+    "googleHint": "Or use your Google account instead of an email and password. Date of birth, federation and the terms above still apply.",
+    "googleFailed": "Registering with Google did not work. The link may have expired; try again.",
     "title": "Create an account",
     "description": "For practitioners who are not in a club yet. You can keep your grading history and follow your progress.",
     "closed": "Registration is not open yet.",

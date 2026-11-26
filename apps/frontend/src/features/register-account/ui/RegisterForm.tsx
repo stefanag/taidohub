@@ -4,6 +4,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
+  createGoogleRegistrationIntent,
   getRegistrationFederations,
   getRegistrationLegalTexts,
   registerAccount,
@@ -39,7 +40,15 @@ function textHref(doc: PublishedLegalDocument): string {
  * terms and privacy notice. Ends with "check your email": the account can
  * sign in once the address is confirmed.
  */
-export function RegisterForm(): React.ReactElement {
+export interface RegisterFormProps {
+  /**
+   * Continues a Google sign-up with the intent the server issued. Supplied by
+   * the page when Google is available; without it the Google option is hidden.
+   */
+  onRegisterWithGoogle?: ((intent: string) => Promise<void>) | undefined;
+}
+
+export function RegisterForm({ onRegisterWithGoogle }: RegisterFormProps = {}): React.ReactElement {
   const { t, i18n } = useTranslation();
   const locale = currentLocale(i18n.language);
   const federations = useQuery({
@@ -67,11 +76,59 @@ export function RegisterForm(): React.ReactElement {
   const terms = documents.filter((d) => d.kind === 'terms');
   const privacy = documents.filter((d) => d.kind === 'privacy');
 
+  /** The checks an email and a Google registration share; returns an error message or undefined. */
+  const commonError = (): string | undefined => {
+    const today = new Date().toISOString().slice(0, 10);
+    if (!dateOfBirth || !federationId) return t('register.fillEverything');
+    if (dateOfBirth > today || ageOn(dateOfBirth, today) < SELF_REGISTRATION_MIN_AGE) {
+      return t('register.tooYoung', { age: SELF_REGISTRATION_MIN_AGE });
+    }
+    if ((terms.length > 0 && !acceptedTerms) || (privacy.length > 0 && !readPrivacy)) {
+      return t('legal.acknowledgeRequired');
+    }
+    return undefined;
+  };
+
+  const acknowledgements = () => documents.map((d) => ({ versionId: d.versionId, locale: d.translation.locale }));
+
+  const serverError = (err: unknown): string => {
+    const code = err instanceof HttpError ? err.payload.code : undefined;
+    if (code === 'LEGAL_ACKNOWLEDGEMENT_REQUIRED') void texts.refetch();
+    return code === 'TOO_YOUNG'
+      ? t('register.tooYoung', { age: SELF_REGISTRATION_MIN_AGE })
+      : code === 'RATE_LIMITED'
+        ? t('register.rateLimited')
+        : code === 'LEGAL_ACKNOWLEDGEMENT_REQUIRED'
+          ? t('register.textsChanged')
+          : t('register.failed');
+  };
+
+  const onGoogle = async (): Promise<void> => {
+    setError(undefined);
+    const problem = commonError();
+    if (problem) {
+      setError(problem);
+      return;
+    }
+    setSubmitting(true);
+    try {
+      const { intent } = await createGoogleRegistrationIntent({
+        locale,
+        dateOfBirth,
+        federationId,
+        acknowledgements: acknowledgements(),
+      });
+      await onRegisterWithGoogle?.(intent);
+    } catch (err) {
+      setError(serverError(err));
+      setSubmitting(false);
+    }
+  };
+
   const onSubmit = async (event: React.SyntheticEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
     setError(undefined);
-    const today = new Date().toISOString().slice(0, 10);
-    if (!name.trim() || !email.trim() || !dateOfBirth || !federationId) {
+    if (!name.trim() || !email.trim()) {
       setError(t('register.fillEverything'));
       return;
     }
@@ -83,12 +140,9 @@ export function RegisterForm(): React.ReactElement {
       setError(t('auth.setPassword.mismatch'));
       return;
     }
-    if (dateOfBirth > today || ageOn(dateOfBirth, today) < SELF_REGISTRATION_MIN_AGE) {
-      setError(t('register.tooYoung', { age: SELF_REGISTRATION_MIN_AGE }));
-      return;
-    }
-    if ((terms.length > 0 && !acceptedTerms) || (privacy.length > 0 && !readPrivacy)) {
-      setError(t('legal.acknowledgeRequired'));
+    const problem = commonError();
+    if (problem) {
+      setError(problem);
       return;
     }
     setSubmitting(true);
@@ -100,24 +154,11 @@ export function RegisterForm(): React.ReactElement {
         locale,
         dateOfBirth,
         federationId,
-        acknowledgements: documents.map((d) => ({
-          versionId: d.versionId,
-          locale: d.translation.locale,
-        })),
+        acknowledgements: acknowledgements(),
       });
       setDone(true);
     } catch (err) {
-      const code = err instanceof HttpError ? err.payload.code : undefined;
-      setError(
-        code === 'TOO_YOUNG'
-          ? t('register.tooYoung', { age: SELF_REGISTRATION_MIN_AGE })
-          : code === 'RATE_LIMITED'
-            ? t('register.rateLimited')
-            : code === 'LEGAL_ACKNOWLEDGEMENT_REQUIRED'
-              ? t('register.textsChanged')
-              : t('register.failed'),
-      );
-      if (code === 'LEGAL_ACKNOWLEDGEMENT_REQUIRED') void texts.refetch();
+      setError(serverError(err));
     } finally {
       setSubmitting(false);
     }
@@ -222,6 +263,20 @@ export function RegisterForm(): React.ReactElement {
       <Button type="submit" disabled={submitting} className="w-full">
         {submitting ? t('register.submitting') : t('register.submit')}
       </Button>
+      {onRegisterWithGoogle ? (
+        <>
+          <p className="text-center text-xs text-on-surface-variant">{t('register.googleHint')}</p>
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            disabled={submitting}
+            onClick={() => void onGoogle()}
+          >
+            {t('register.withGoogle')}
+          </Button>
+        </>
+      ) : null}
     </form>
   );
 }

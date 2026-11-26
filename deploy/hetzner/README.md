@@ -222,6 +222,29 @@ only end up in `docker compose logs app`.
 Use the same Brevo account and domain for staging and production; each server gets its own SMTP
 key, so one can be revoked without affecting the other.
 
+## 8. Google sign-in
+
+Optional. With `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` set, the sign-in page offers "Sign in
+with Google" and, while `self-registration` is on, the registration page offers "Register with
+Google". Google only signs in existing accounts (linked by their verified email); a new account
+can only be created from the registration page, after date of birth, federation and the platform's
+texts are checked.
+
+1. In Google Cloud Console, create a project (for example `taidohub`) and set up the **OAuth
+   consent screen**: type External, app name TaidoHub, support email, authorised domain
+   `taidohub.se`, links to `https://taidohub.se/legal/platform/privacy?audience=self_registered`
+   and the terms. Scopes: only `openid`, `email` and `profile`, which need no Google review.
+2. Under **Credentials → Create credentials → OAuth client ID**, create a **Web application**
+   client per environment:
+   - staging: authorised redirect URI `https://staging.taidohub.se/api/auth/callback/google`
+   - production: `https://taidohub.se/api/auth/callback/google`
+3. Put the client ID and secret in `/opt/taidohub/.env` on that server (`GOOGLE_CLIENT_ID`,
+   `GOOGLE_CLIENT_SECRET`), never in the repo or a workflow. They take effect at the next deploy,
+   or with `docker compose up -d app`.
+4. Publish the consent screen (status "In production") once it works on staging; while it is in
+   "Testing", only the test users listed there can sign in.
+5. Mention Google as a way to sign in in the platform's privacy notice.
+
 ## Day-to-day operations
 
 ```bash

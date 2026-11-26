@@ -1,7 +1,10 @@
 import { oauthProviderClient } from '@better-auth/oauth-provider/client';
 import { createAuthClient } from 'better-auth/react';
 
-import type { Session, SignInWithEmailInput } from '@repo/contracts/auth';
+import { SignInProvidersSchema, type Session, type SignInProviders, type SignInWithEmailInput } from '@repo/contracts/auth';
+import { AccountRoutes } from '@repo/contracts/routes';
+
+import { httpClient } from '@/shared/api';
 
 import { env } from '@/shared/lib/env';
 
@@ -83,6 +86,43 @@ export async function respondToOAuthConsent(accept: boolean): Promise<string> {
   const url = redirectTarget(result.data);
   if (!url) throw new Error('Consent failed.');
   return url;
+}
+
+/** Which sign-in methods besides email and password this environment offers. */
+export async function getSignInProviders(): Promise<SignInProviders> {
+  return SignInProvidersSchema.parse(await httpClient(AccountRoutes.signInProviders));
+}
+
+/**
+ * Sends the browser to Google. Only signs in existing users: an unknown
+ * address comes back to `errorPath?error=signup_disabled`.
+ */
+export async function signInWithGoogle(errorPath = '/login'): Promise<void> {
+  const origin = window.location.origin;
+  const result = await authClient.signIn.social({
+    provider: 'google',
+    callbackURL: `${origin}/dashboard`,
+    errorCallbackURL: `${origin}${errorPath}`,
+  });
+  if (result.error) throw new Error(result.error.message ?? 'Google sign-in failed.');
+}
+
+/**
+ * Sends the browser to Google to create an account, carrying the
+ * registration intent the server issued after checking age, federation and
+ * the accepted texts.
+ */
+export async function registerWithGoogle(intent: string): Promise<void> {
+  const origin = window.location.origin;
+  const result = await authClient.signIn.social({
+    provider: 'google',
+    requestSignUp: true,
+    additionalData: { registrationIntent: intent },
+    callbackURL: `${origin}/dashboard`,
+    newUserCallbackURL: `${origin}/dashboard`,
+    errorCallbackURL: `${origin}/register`,
+  });
+  if (result.error) throw new Error(result.error.message ?? 'Google sign-up failed.');
 }
 
 /** Where the email confirmation link lands (see the verify-email page). */

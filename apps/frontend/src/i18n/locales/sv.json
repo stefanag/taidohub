@@ -1,6 +1,9 @@
 {
   "auth": {
     "login": {
+      "google": "Logga in med Google",
+      "googleUnknownAccount": "Det finns inget konto för den Google-adressen än.",
+      "googleFailed": "Inloggningen med Google fungerade inte. Försök igen eller använd e-post och lösenord.",
       "emailNotVerified": "Bekräfta din e-postadress först. Öppna länken vi skickade till dig.",
       "resendVerification": "Skicka en ny bekräftelselänk",
       "verificationResent": "Om adressen hör till ett konto som väntar på bekräftelse är en ny länk på väg.",
@@ -894,6 +897,9 @@
     }
   },
   "register": {
+    "withGoogle": "Registrera med Google",
+    "googleHint": "Eller använd ditt Google-konto i stället för e-post och lösenord. Födelsedatum, förbund och villkoren ovan gäller ändå.",
+    "googleFailed": "Registreringen med Google fungerade inte. Länken kan ha gått ut; försök igen.",
     "title": "Skapa ett konto",
     "description": "För utövare som inte är med i en klubb än. Du kan föra din graderingshistorik och följa din utveckling.",
     "closed": "Registreringen är inte öppen än.",
