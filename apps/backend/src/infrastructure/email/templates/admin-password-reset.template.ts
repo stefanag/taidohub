@@ -1,4 +1,4 @@
-import { normaliseLocale } from './locale.util.js';
+import { genericAdmin, normaliseLocale } from './locale.util.js';
 
 import type { RenderedEmail, SendAdminPasswordResetArgs } from '../email.types.js';
 
@@ -10,8 +10,9 @@ import type { RenderedEmail, SendAdminPasswordResetArgs } from '../email.types.j
 export function renderAdminPasswordResetEmail(
   args: SendAdminPasswordResetArgs,
 ): RenderedEmail {
-  const admin = args.adminName ?? 'a system administrator';
-  switch (normaliseLocale(args.locale)) {
+  const locale = normaliseLocale(args.locale);
+  const admin = args.adminName ?? genericAdmin(locale);
+  switch (locale) {
     case 'sv':
       return {
         subject: 'Ditt TaidoHub-lösenord har återställts',

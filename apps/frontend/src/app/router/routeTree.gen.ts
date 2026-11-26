@@ -22,7 +22,9 @@ import { Route as AppSettingsRouteImport } from './routes/_app.settings'
 import { Route as AppStudentsRouteImport } from './routes/_app.students'
 import { Route as AppTechniquesRouteImport } from './routes/_app.techniques'
 import { Route as PublicIndexRouteImport } from './routes/_public.index'
+import { Route as PublicForgotPasswordRouteImport } from './routes/_public.forgot-password'
 import { Route as PublicLoginRouteImport } from './routes/_public.login'
+import { Route as PublicResetPasswordRouteImport } from './routes/_public.reset-password'
 import { Route as PublicSetPasswordRouteImport } from './routes/_public.set-password'
 import { Route as AppAdminAuditLogRouteImport } from './routes/_app.admin.audit-log'
 import { Route as AppAdminBeltCatalogRouteImport } from './routes/_app.admin.belt-catalog'
@@ -123,9 +125,19 @@ const PublicIndexRoute = PublicIndexRouteImport.update({
   path: '/',
   getParentRoute: () => PublicRoute,
 } as any)
+const PublicForgotPasswordRoute = PublicForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => PublicRoute,
+} as any)
 const PublicLoginRoute = PublicLoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicResetPasswordRoute = PublicResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => PublicRoute,
 } as any)
 const PublicSetPasswordRoute = PublicSetPasswordRouteImport.update({
@@ -336,7 +348,9 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AppSettingsRouteWithChildren
   '/students': typeof AppStudentsRouteWithChildren
   '/techniques': typeof AppTechniquesRoute
+  '/forgot-password': typeof PublicForgotPasswordRoute
   '/login': typeof PublicLoginRoute
+  '/reset-password': typeof PublicResetPasswordRoute
   '/set-password': typeof PublicSetPasswordRoute
   '/admin/audit-log': typeof AppAdminAuditLogRoute
   '/admin/belt-catalog': typeof AppAdminBeltCatalogRoute
@@ -384,7 +398,9 @@ export interface FileRoutesByTo {
   '/profile': typeof AppProfileRoute
   '/progression': typeof AppProgressionRoute
   '/techniques': typeof AppTechniquesRoute
+  '/forgot-password': typeof PublicForgotPasswordRoute
   '/login': typeof PublicLoginRoute
+  '/reset-password': typeof PublicResetPasswordRoute
   '/set-password': typeof PublicSetPasswordRoute
   '/admin/audit-log': typeof AppAdminAuditLogRoute
   '/admin/belt-catalog': typeof AppAdminBeltCatalogRoute
@@ -428,7 +444,9 @@ export interface FileRoutesById {
   '/_app/settings': typeof AppSettingsRouteWithChildren
   '/_app/students': typeof AppStudentsRouteWithChildren
   '/_app/techniques': typeof AppTechniquesRoute
+  '/_public/forgot-password': typeof PublicForgotPasswordRoute
   '/_public/login': typeof PublicLoginRoute
+  '/_public/reset-password': typeof PublicResetPasswordRoute
   '/_public/set-password': typeof PublicSetPasswordRoute
   '/_public/': typeof PublicIndexRoute
   '/_app/admin/audit-log': typeof AppAdminAuditLogRoute
@@ -481,7 +499,9 @@ export interface FileRouteTypes {
     | '/settings'
     | '/students'
     | '/techniques'
+    | '/forgot-password'
     | '/login'
+    | '/reset-password'
     | '/set-password'
     | '/admin/audit-log'
     | '/admin/belt-catalog'
@@ -529,7 +549,9 @@ export interface FileRouteTypes {
     | '/profile'
     | '/progression'
     | '/techniques'
+    | '/forgot-password'
     | '/login'
+    | '/reset-password'
     | '/set-password'
     | '/admin/audit-log'
     | '/admin/belt-catalog'
@@ -572,7 +594,9 @@ export interface FileRouteTypes {
     | '/_app/settings'
     | '/_app/students'
     | '/_app/techniques'
+    | '/_public/forgot-password'
     | '/_public/login'
+    | '/_public/reset-password'
     | '/_public/set-password'
     | '/_public/'
     | '/_app/admin/audit-log'
@@ -710,11 +734,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicIndexRouteImport
       parentRoute: typeof PublicRoute
     }
+    '/_public/forgot-password': {
+      id: '/_public/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof PublicForgotPasswordRouteImport
+      parentRoute: typeof PublicRoute
+    }
     '/_public/login': {
       id: '/_public/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof PublicLoginRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/reset-password': {
+      id: '/_public/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof PublicResetPasswordRouteImport
       parentRoute: typeof PublicRoute
     }
     '/_public/set-password': {
@@ -1182,7 +1220,9 @@ const AppRouteChildren: AppRouteChildren = {
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 interface PublicRouteChildren {
+  PublicForgotPasswordRoute: typeof PublicForgotPasswordRoute
   PublicLoginRoute: typeof PublicLoginRoute
+  PublicResetPasswordRoute: typeof PublicResetPasswordRoute
   PublicSetPasswordRoute: typeof PublicSetPasswordRoute
   PublicIndexRoute: typeof PublicIndexRoute
   PublicOauthConsentRoute: typeof PublicOauthConsentRoute
@@ -1190,7 +1230,9 @@ interface PublicRouteChildren {
 }
 
 const PublicRouteChildren: PublicRouteChildren = {
+  PublicForgotPasswordRoute: PublicForgotPasswordRoute,
   PublicLoginRoute: PublicLoginRoute,
+  PublicResetPasswordRoute: PublicResetPasswordRoute,
   PublicSetPasswordRoute: PublicSetPasswordRoute,
   PublicIndexRoute: PublicIndexRoute,
   PublicOauthConsentRoute: PublicOauthConsentRoute,

@@ -188,6 +188,40 @@ Retention is 14 daily, 8 weekly and 12 monthly snapshots. At worst one day of da
 hours). If that is not good enough later, add WAL archiving (for example WAL-G); it is not needed to
 start.
 
+## 7. Email through Brevo
+
+Invitations, admin-triggered password resets and "Forgot password?" links are sent over SMTP
+through Brevo (free tier: 300 emails a day). Without `SMTP_HOST` the app still starts, but emails
+only end up in `docker compose logs app`.
+
+1. Create an account at brevo.com and add the domain `emails.taidohub.se` (the subdomain, not
+   `taidohub.se`) under **Senders, domains and dedicated IPs → Domains**. Sending from a subdomain
+   keeps Brevo's reputation and DNS records apart from any other mail on `taidohub.se`.
+2. Brevo shows the DNS records to add in the `taidohub.se` zone at the registrar. They look like
+   this; copy the exact values from Brevo and choose the two-CNAME DKIM option if offered:
+
+   ```
+   emails                       TXT    brevo-code:<code from Brevo>
+   brevo1._domainkey.emails     CNAME  b1.<value from Brevo>.dkim.brevo.com
+   brevo2._domainkey.emails     CNAME  b2.<value from Brevo>.dkim.brevo.com
+   _dmarc.emails                TXT    v=DMARC1; p=none; rua=mailto:admin@taidohub.se
+   ```
+
+   Most DNS editors append `.taidohub.se` to the name themselves, so enter `emails`, not
+   `emails.taidohub.se`. No SPF record is needed on Brevo's shared IPs: DMARC passes through DKIM.
+   Start DMARC with `p=none` and tighten it to `quarantine` once Brevo's reports look clean; the
+   record covers only the subdomain.
+3. Wait until Brevo marks the domain as authenticated, then add `noreply@emails.taidohub.se` as a
+   sender. If Brevo asks for a code sent to that address, forward it to a real mailbox for the
+   verification.
+4. Under **SMTP & API → SMTP**, create an SMTP key. Put the login and key in `/opt/taidohub/.env`
+   on each server (`SMTP_USER`, `SMTP_PASSWORD`), never in the repo or a workflow.
+5. Restart the app: `docker compose up -d app`. Test with **Forgot password?** on the sign-in page
+   and with an invitation from **Admin → Users**.
+
+Use the same Brevo account and domain for staging and production; each server gets its own SMTP
+key, so one can be revoked without affecting the other.
+
 ## Day-to-day operations
 
 ```bash
@@ -205,7 +239,8 @@ ssh -N -L 5433:127.0.0.1:5432 deploy@<ip>
 
 ## Before real member data goes in
 
-- [ ] Email works (separate change).
+- [ ] Email works: Brevo is set up as in section 7 and an invitation and a password reset
+      have been received on both servers.
 - [ ] A data processing agreement (AVV) with Hetzner is signed in Hetzner Console.
 - [ ] A restore from the Storage Box has been tested on staging.
 - [ ] External monitoring of `https://taidohub.se/api/health` (for example Better Stack or

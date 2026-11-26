@@ -7,7 +7,8 @@
       "passwordLabel": "Password",
       "submit": "Sign in",
       "submitting": "Signing in…",
-      "failed": "Sign in failed."
+      "failed": "Sign in failed.",
+      "forgotPassword": "Forgot your password?"
     },
     "motto": "Where the mind is concentrated, nothing is impossible.",
     "setPassword": {
@@ -18,6 +19,26 @@
       "submit": "Set password",
       "invalidToken": "This link is invalid or has expired. Ask an administrator to send a new one.",
       "mismatch": "The passwords do not match."
+    },
+    "forgotPassword": {
+      "title": "Reset your password",
+      "description": "Enter your email address and we will send you a link to choose a new password.",
+      "submit": "Send link",
+      "submitting": "Sending…",
+      "sent": "If there is an account for {{email}}, we have sent a link to choose a new password. It is valid for one hour.",
+      "invalidEmail": "Enter a valid email address.",
+      "failed": "The link could not be sent. Try again in a moment.",
+      "backToLogin": "Back to sign in"
+    },
+    "resetPassword": {
+      "title": "Choose a new password",
+      "description": "Enter your new password twice.",
+      "submit": "Save password",
+      "done": "Your password has been changed.",
+      "toLogin": "Sign in",
+      "invalidLink": "This link is invalid or has expired.",
+      "requestNew": "Send a new link",
+      "failed": "The password could not be changed. Try again."
     }
   },
   "common": {

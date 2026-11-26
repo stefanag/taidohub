@@ -1,4 +1,4 @@
-import { normaliseLocale } from './locale.util.js';
+import { genericAdmin, normaliseLocale } from './locale.util.js';
 
 import type { RenderedEmail, SendInviteArgs } from '../email.types.js';
 
@@ -8,8 +8,9 @@ import type { RenderedEmail, SendInviteArgs } from '../email.types.js';
  * mail client, followed by an expiry note.
  */
 export function renderInviteEmail(args: SendInviteArgs): RenderedEmail {
-  const inviter = args.inviterName ?? 'a system administrator';
-  switch (normaliseLocale(args.locale)) {
+  const locale = normaliseLocale(args.locale);
+  const inviter = args.inviterName ?? genericAdmin(locale);
+  switch (locale) {
     case 'sv':
       return {
         subject: 'Du har bjudits in till TaidoHub',

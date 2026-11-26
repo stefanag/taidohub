@@ -48,6 +48,13 @@ services:
       WEB_ORIGIN: https://${SITE_DOMAIN}
       WEB_APP_URL: https://${SITE_DOMAIN}
       ENABLE_SWAGGER: ${ENABLE_SWAGGER:-false}
+      # Outgoing email (Brevo SMTP, see README). Without SMTP_HOST, emails are
+      # only written to the container log.
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      EMAIL_FROM: ${EMAIL_FROM:-TaidoHub <noreply@emails.taidohub.se>}
     depends_on:
       db:
         condition: service_healthy

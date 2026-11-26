@@ -83,6 +83,13 @@ export function buildBetterAuth(db: DrizzleDb, env: Env, emailService: EmailServ
       // Self-service reset only — admin-triggered resets bypass this callback
       // and go through UsersService.sendPasswordReset directly.
       sendResetPassword: async ({ user, url }): Promise<void> => {
+        // better-auth checks `redirectTo` against trustedOrigins, but skips that
+        // check whenever NODE_ENV=test. A link that sends the token to another
+        // site would hand it to whoever requested the reset, so check here too.
+        if (!isResetLinkForTrustedOrigin(url, trustedOrigins)) {
+          console.warn('[auth] password reset refused: redirect is not a trusted origin');
+          return;
+        }
         await emailService.sendPasswordReset({
           to: user.email,
           locale: (user as { locale?: string }).locale ?? 'en',
@@ -160,3 +167,30 @@ export type Auth = ReturnType<typeof buildBetterAuth>;
 
 /** DI token for `Auth`. */
 export const BETTER_AUTH = Symbol('BETTER_AUTH');
+
+/**
+ * True when the reset link's `callbackURL`, which receives the token, is a
+ * relative path or lies on one of the trusted web origins.
+ */
+export function isResetLinkForTrustedOrigin(resetUrl: string, trustedOrigins: readonly string[]): boolean {
+  let callback: string | null;
+  try {
+    callback = new URL(resetUrl).searchParams.get('callbackURL');
+  } catch {
+    return false;
+  }
+  if (!callback) return true;
+  if (callback.startsWith('/') && !callback.startsWith('//') && !callback.startsWith('/\\')) return true;
+  try {
+    const origin = new URL(callback).origin;
+    return trustedOrigins.some((trusted) => {
+      try {
+        return new URL(trusted).origin === origin;
+      } catch {
+        return false;
+      }
+    });
+  } catch {
+    return false;
+  }
+}
