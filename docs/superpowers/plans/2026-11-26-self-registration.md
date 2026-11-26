@@ -1,0 +1,134 @@
+# Plan: Self-registration and use without a club
+
+Status: **planned**, not started. Decisions recorded 2026-11-26 (see "Decisions").
+
+## Goal
+
+Let an individual register on their own and use TaidoHub without belonging to a club: keep a
+grading history, follow their progress towards the next rank, and use the training features below.
+Joining a club later must keep that history and let the club verify it.
+
+## Decisions (owner, 2026-11-26)
+
+1. Minimum age for self-registration: **13 years** (the Swedish age of consent for information
+   society services). Younger users are only added by a club through an invitation.
+2. Users without a club get grading requirements from a **national federation they choose**, and
+   can change that choice later.
+3. Self-reported gradings are **clearly marked as not verified** everywhere, including for a club
+   the user joins later.
+4. The Google plan (`plan/google-sign-in`) must support self-registration (see that plan).
+5. All features below are equally important; the order below is an engineering choice so that each
+   phase builds on the previous one.
+
+## What already works without a club (verified in code)
+
+- Own grading history: any signed-in user can create, edit and delete their own `external`
+  rank-history rows (`RankHistoryAuthService.canEdit`); rows start `verified = false` and only a
+  head instructor or sysadmin can verify them. `organisation_name` is free text.
+- Training progress per technique and pattern (`user_content_progress`: status, student notes,
+  `last_practiced_at`).
+- Techniques, patterns and the public rank pages are readable by any signed-in user.
+- Org-scoped CASL rules already keep a user without memberships away from other members, students
+  and statistics.
+
+## Global constraints
+
+- **The federation choice is not a membership.** `RankHistoryAuthService.loadRoleContext` treats
+  users who share any organisation as able to read each other's history, so an "individual"
+  membership in a federation would expose every individual's history to every other one. Store the
+  choice on the profile instead.
+- **Requirement resolution changes need the `taido-domain` rules**: walk ancestors with
+  `OrganisationsRepository.getAncestorIds()`, null-aware `setId` filters, fall back to the global set.
+- better-auth's `disabledPaths` only blocks HTTP routes; server-side `auth.api.signUpEmail` still
+  works. Use that to close the public `/sign-up/email` route while our own endpoint registers users.
+- No new dependency without asking (relevant for PDF export, see phase 3).
+- Every new string in en, sv and fi; contracts in `@repo/contracts`; migrations via `db:generate`.
+- Each phase ships behind its own feature flag and is tried on staging first.
+
+## Phase 1: Register and use the system without a club
+
+Flag: `self-registration`.
+
+### Data
+
+- `user_profile.reference_federation_id` (uuid, nullable, FK `organisations.id`). The service
+  checks the referenced organisation has `type = 'national_federation'`.
+- `user_consent` table: user id, document (`terms` | `privacy`), version, accepted at. Versioned so
+  a new privacy text can ask for consent again.
+- `user_profile.date_of_birth` already exists; registration makes it required for self-registered
+  users.
+
+### Backend
+
+- New `registration` module (via `/add-module`): `POST /api/registration` (public, rate limited)
+  with a contract holding name, email, password, locale, date of birth, federation id and consent
+  versions. It validates age ≥ 13 on the day of registration, that the federation exists and is a
+  national federation, and the consent versions, then calls `auth.api.signUpEmail` server-side and
+  writes profile and consent in the same flow.
+- `GET /api/registration/federations` (public): the national federations to choose from.
+- better-auth: `disabledPaths` gains `/sign-up/email`; `emailVerification` with
+  `sendVerificationEmail` through `EmailService` (new localised template) and
+  `requireEmailVerification: true` for sign-in. Invited users are unaffected: they get
+  `emailVerified` when they set their password through the invitation link (confirm in e2e).
+- Requirement resolution (`RankRequirementsService`): when the user has no student membership,
+  use `reference_federation_id` as the starting organisation (ancestors → global set). With neither,
+  fall back to the global set instead of returning empty requirements as today.
+- Profile: read and change the reference federation.
+- Delete my account: `DELETE /api/me` with password confirmation. It removes the user and their
+  own data; rows other users depend on (`recorded_by_user_id`, audit log) are kept as the schema's
+  FK rules dictate. Needed once anyone can register. (Check every `onDelete: 'restrict'` FK to
+  `user` before implementing.)
+
+### Frontend
+
+- `/register` page: form, consent checkboxes with links to the terms and privacy texts, age
+  validation with a clear message, a "check your email" view after submit. A link from the login
+  page.
+- `/verify-email` landing page for the link in the email (success, expired link → send a new one).
+- No-club state: dashboard and sidebar show my grading history, my progression, techniques,
+  patterns and profile; club-only entries hidden. A small hint on the dashboard: "You are not in a
+  club. Your gradings are self-reported."
+- Grading history: an "unverified, self-reported" badge on every unverified row, also where
+  instructors and admins see a student's history.
+- Profile: choose or change the national federation; delete my account (with confirmation).
+
+### Open questions for phase 1
+
+- The terms and privacy texts themselves: who writes them, and are they the same for all
+  federations?
+
+## Phase 2: Training and grading readiness
+
+Order: readiness first (uses data that already exists), then the training log, then what builds
+on it.
+
+1. **Grading readiness** (flag `grading-readiness`): one view against the next rank's
+   requirements: share of techniques and patterns marked done, time in current rank against the
+   minimum, and the minimum age, giving "earliest possible grading: <date>". Uses the existing
+   requirement data (time and age scalars) and progress rows.
+2. **Training log** (flag `training-log`): new `training_session` table (user, date, duration,
+   kind: club session / own training / camp / seminar, notes) and a link table to the techniques and
+   patterns practised. Saving a session updates `last_practiced_at` for those items.
+3. **Practice reminders**: "You have not practised X for 4 weeks", from `last_practiced_at`; shown
+   on the dashboard and the progression page. No email at first.
+4. **Personal goals**: target rank by date, sessions per week; progress shown on the dashboard.
+
+## Phase 3: Joining a club, export, self-test
+
+1. **Join a club** (flag `club-join-requests`): a user without a club searches for a club and sends
+   a request; the club's orgadmin approves or declines (reuse the pending-operations pattern if it
+   fits). On approval the user gets a student membership; the head instructor can then verify the
+   self-reported history with the existing verify action.
+2. **Export** of grading history and training log for the user's own use and GDPR data
+   portability: JSON download first, then a printable page (browser print to PDF, no new
+   dependency). A server-generated PDF would need a library: ask first.
+3. **Self-test** (flag `self-test`): multiple-choice and flashcards on terminology and pattern
+   order, generated from the technique and pattern catalogue; results not stored at first.
+
+## Tests (every phase)
+
+- Unit specs for every new service rule: age limit at the boundary (12 years 364 days / 13 years),
+  federation type check, resolution order (student membership → reference federation → global).
+- e2e: registration → verification email → sign in; refusal under 13; `/api/auth/sign-up/email`
+  returns 404; invited user can still set a password and sign in; account deletion.
+- Frontend tests for the register form, the no-club sidebar and the unverified badge.
