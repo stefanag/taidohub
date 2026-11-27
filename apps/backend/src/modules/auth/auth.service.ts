@@ -65,7 +65,11 @@ export class AuthService {
     }
     const userId = consumed.identifier.slice(prefix.length);
 
-    const userRows = await this.db.select().from(user).where(eq(user.id, userId)).limit(1);
+    const userRows = await this.db
+      .select()
+      .from(user)
+      .where(eq(user.id, userId))
+      .limit(1);
     const target = userRows[0];
     if (!target) {
       throw new BadRequestException({
@@ -105,7 +109,10 @@ export class AuthService {
           updatedAt: now,
         });
       }
-      await tx.update(user).set({ emailVerified: true, updatedAt: now }).where(eq(user.id, userId));
+      await tx
+        .update(user)
+        .set({ emailVerified: true, updatedAt: now })
+        .where(eq(user.id, userId));
       if (prefix === 'invite:' && userId === invitedUserId) {
         await this.legal.recordAcknowledgements(tx, acknowledgements);
       }
