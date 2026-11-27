@@ -72,8 +72,18 @@ export type SignInWithEmailInput = z.infer<typeof SignInWithEmailSchema>;
 export type SignUpWithEmailInput = z.infer<typeof SignUpWithEmailSchema>;
 export type Session = z.infer<typeof SessionSchema>;
 
+export const SignInProvidersSchema = z
+  .object({ google: z.boolean() })
+  .meta({
+    id: 'SignInProviders',
+    description: 'Which sign-in methods besides email and password this environment offers.',
+    example: { google: true },
+  });
+export type SignInProviders = z.infer<typeof SignInProvidersSchema>;
+
 export const AuthOpenApiRegistry = {
   SignInWithEmail: SignInWithEmailSchema,
   SignUpWithEmail: SignUpWithEmailSchema,
   Session: SessionSchema,
+  SignInProviders: SignInProvidersSchema,
 } as const;

@@ -1,6 +1,13 @@
 {
   "auth": {
     "login": {
+      "google": "Kirjaudu Googlella",
+      "googleUnknownAccount": "Tälle Google-osoitteelle ei ole vielä tiliä.",
+      "googleFailed": "Kirjautuminen Googlella ei onnistunut. Yritä uudelleen tai käytä sähköpostia ja salasanaa.",
+      "emailNotVerified": "Vahvista ensin sähköpostiosoitteesi. Avaa linkki, jonka lähetimme sinulle.",
+      "resendVerification": "Lähetä uusi vahvistuslinkki",
+      "verificationResent": "Jos osoite kuuluu vahvistusta odottavaan tiliin, uusi linkki on tulossa.",
+      "createAccount": "Etkö kuulu seuraan? Luo tili",
       "title": "Kirjaudu sisään",
       "description": "Kirjaudu sisään sähköpostiosoitteellasi.",
       "emailLabel": "Sähköposti",
@@ -82,6 +89,7 @@
     "progression": "Eteneminen"
   },
   "dashboard": {
+    "withoutClub": "Et kuulu mihinkään seuraan. Itse lisäämäsi vyökokeet näytetään itse ilmoitettuina, kunnes seura vahvistaa ne, ja vyökoevaatimuksesi tulevat valitsemaltasi kansalliselta liitolta.",
     "title": "Kojelauta"
   },
   "myOrganisation": {
@@ -148,9 +156,12 @@
     "detach": "Irrota"
   },
   "profile": {
+    "federationNone": "Liittoa ei ole valittu",
+    "federationHelp": "Käytetään vyökoevaatimuksiisi niin kauan kuin et kuulu seuraan.",
     "title": "Oma profiili",
     "description": "Henkilökohtaiset tietosi ja taidoharjoittelun tiedot.",
     "fields": {
+      "referenceFederation": "Kansallinen liitto",
       "firstName": "Etunimi",
       "lastName": "Sukunimi",
       "dateOfBirth": "Syntymäaika",
@@ -185,7 +196,7 @@
       "noEntriesYet": "Ei merkintöjä vielä.",
       "failed": "Hylätty",
       "external": "Ulkoinen",
-      "pendingVerification": "Odottaa varmistusta",
+      "selfReported": "Itse ilmoitettu, ei vahvistettu",
       "verifiedBy": "varmentanut {{name}} {{date}}",
       "verifiedFallback": "Varmistettu",
       "edit": "Muokkaa",
@@ -884,5 +895,48 @@
       "missing": "Ei vielä tekstiä kielellä {{language}}.",
       "bindingLocked": "Tämä on julkaistun version oikeudellisesti sitova teksti, eikä sitä voi muuttaa. Aloita uusi versio muuttaaksesi sitä."
     }
+  },
+  "register": {
+    "withGoogle": "Rekisteröidy Googlella",
+    "googleHint": "Tai käytä Google-tiliäsi sähköpostin ja salasanan sijaan. Syntymäaika, liitto ja yllä olevat ehdot koskevat silti.",
+    "googleFailed": "Rekisteröityminen Googlella ei onnistunut. Linkki on voinut vanhentua; yritä uudelleen.",
+    "title": "Luo tili",
+    "description": "Harrastajille, jotka eivät vielä kuulu seuraan. Voit pitää kirjaa vyökokeistasi ja seurata edistymistäsi.",
+    "closed": "Rekisteröityminen ei ole vielä avoinna.",
+    "haveAccount": "Onko sinulla jo tili? Kirjaudu sisään",
+    "name": "Nimi",
+    "email": "Sähköposti",
+    "password": "Salasana",
+    "confirmPassword": "Vahvista salasana",
+    "dateOfBirth": "Syntymäaika",
+    "federation": "Kansallinen liitto",
+    "chooseFederation": "Valitse liitto",
+    "federationHelp": "Sen vyökoevaatimukset koskevat sinua. Voit vaihtaa sen myöhemmin profiilissasi.",
+    "fillEverything": "Täytä kaikki kentät.",
+    "tooYoung": "Sinun on oltava vähintään {{age}}-vuotias rekisteröityäksesi itse. Pyydä seuraasi kutsumaan sinut.",
+    "rateLimited": "Liian monta yritystä. Yritä myöhemmin uudelleen.",
+    "textsChanged": "Ehdot muuttuivat juuri. Lue ne uudelleen ja hyväksy jatkaaksesi.",
+    "failed": "Tiliä ei voitu luoda. Yritä myöhemmin uudelleen.",
+    "submit": "Luo tili",
+    "submitting": "Luodaan tiliä…",
+    "checkEmail": "Tarkista saapuneet viestisi. Lähetimme linkin osoitteeseen {{email}}; avaa se vahvistaaksesi osoitteen ja kirjautuaksesi sisään."
+  },
+  "verifyEmail": {
+    "doneTitle": "Sähköposti vahvistettu",
+    "done": "Sähköpostiosoitteesi on vahvistettu ja olet kirjautunut sisään.",
+    "continue": "Jatka TaidoHubiin",
+    "failedTitle": "Linkki ei toiminut",
+    "failed": "Linkki on virheellinen tai vanhentunut. Anna sähköpostiosoitteesi saadaksesi uuden."
+  },
+  "deleteAccount": {
+    "title": "Poista tili",
+    "description": "Poistaa tilisi, profiilisi ja itse lisäämäsi vyökokeet. Tätä ei voi perua.",
+    "open": "Poista tilini",
+    "confirmTitle": "Poistetaanko tilisi?",
+    "confirmDescription": "Vahvista antamalla salasanasi. Tilisi ja omat tietosi poistetaan heti, eikä niitä voi palauttaa.",
+    "password": "Salasana",
+    "confirm": "Poista pysyvästi",
+    "wrongPassword": "Salasana ei ole oikein.",
+    "inUse": "Tiliä ei voi poistaa täällä. Ota yhteyttä ylläpitäjään."
   }
 }

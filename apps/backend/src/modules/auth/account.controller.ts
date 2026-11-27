@@ -1,12 +1,15 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Res } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 
+import { type Env } from '../../config/env.schema.js';
 import { Public } from '../../infrastructure/auth/public.decorator.js';
 
 import { AuthService } from './auth.service.js';
 import { SetInitialPasswordDto } from './dto/set-initial-password.dto.js';
 
+import type { SignInProviders } from '@repo/contracts/auth';
 import type { Response } from 'express';
 
 /**
@@ -20,7 +23,26 @@ import type { Response } from 'express';
 @ApiTags('account')
 @Controller('account')
 export class AccountController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly config: ConfigService<Env, true>,
+  ) {}
+
+  @Public()
+  @Get('sign-in-providers')
+  @ApiOperation({
+    summary: 'Which sign-in methods besides email and password this environment offers.',
+    operationId: 'AccountController_signInProviders',
+  })
+  @ApiOkResponse({ description: '`{ google: boolean }`' })
+  signInProviders(): SignInProviders {
+    return {
+      google: Boolean(
+        this.config.get('GOOGLE_CLIENT_ID', { infer: true }) &&
+          this.config.get('GOOGLE_CLIENT_SECRET', { infer: true }),
+      ),
+    };
+  }
 
   @Public()
   @Post('set-password')

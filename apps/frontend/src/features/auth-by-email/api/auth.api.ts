@@ -1,11 +1,10 @@
 import { oauthProviderClient } from '@better-auth/oauth-provider/client';
 import { createAuthClient } from 'better-auth/react';
 
-import type {
-  Session,
-  SignInWithEmailInput,
-  SignUpWithEmailInput,
-} from '@repo/contracts/auth';
+import { SignInProvidersSchema, type Session, type SignInProviders, type SignInWithEmailInput } from '@repo/contracts/auth';
+import { AccountRoutes } from '@repo/contracts/routes';
+
+import { httpClient } from '@/shared/api';
 
 import { env } from '@/shared/lib/env';
 
@@ -49,9 +48,18 @@ export async function signInWithEmail(input: SignInWithEmailInput): Promise<stri
     password: input.password,
   });
   if (result.error) {
+    if (result.error.code === 'EMAIL_NOT_VERIFIED') throw new EmailNotVerifiedError();
     throw new Error(result.error.message ?? 'Sign in failed.');
   }
   return redirectTarget(result.data);
+}
+
+/** Thrown by {@link signInWithEmail} when a self-registered account has not confirmed its email. */
+export class EmailNotVerifiedError extends Error {
+  constructor() {
+    super('EMAIL_NOT_VERIFIED');
+    this.name = 'EmailNotVerifiedError';
+  }
 }
 
 /** Thrown by {@link respondToOAuthConsent} when the user may not grant access. */
@@ -80,15 +88,56 @@ export async function respondToOAuthConsent(accept: boolean): Promise<string> {
   return url;
 }
 
-export async function signUpWithEmail(input: SignUpWithEmailInput): Promise<void> {
-  const result = await authClient.signUp.email({
-    email: input.email,
-    password: input.password,
-    name: input.name ?? '',
+/** Which sign-in methods besides email and password this environment offers. */
+export async function getSignInProviders(): Promise<SignInProviders> {
+  return SignInProvidersSchema.parse(await httpClient(AccountRoutes.signInProviders));
+}
+
+/**
+ * Sends the browser to Google. Only signs in existing users: an unknown
+ * address comes back to `errorPath?error=signup_disabled`.
+ */
+export async function signInWithGoogle(errorPath = '/login'): Promise<void> {
+  const origin = window.location.origin;
+  const result = await authClient.signIn.social({
+    provider: 'google',
+    callbackURL: `${origin}/dashboard`,
+    errorCallbackURL: `${origin}${errorPath}`,
   });
-  if (result.error) {
-    throw new Error(result.error.message ?? 'Sign up failed.');
-  }
+  if (result.error) throw new Error(result.error.message ?? 'Google sign-in failed.');
+}
+
+/**
+ * Sends the browser to Google to create an account, carrying the
+ * registration intent the server issued after checking age, federation and
+ * the accepted texts.
+ */
+export async function registerWithGoogle(intent: string): Promise<void> {
+  const origin = window.location.origin;
+  const result = await authClient.signIn.social({
+    provider: 'google',
+    requestSignUp: true,
+    additionalData: { registrationIntent: intent },
+    callbackURL: `${origin}/dashboard`,
+    newUserCallbackURL: `${origin}/dashboard`,
+    errorCallbackURL: `${origin}/register`,
+  });
+  if (result.error) throw new Error(result.error.message ?? 'Google sign-up failed.');
+}
+
+/** Where the email confirmation link lands (see the verify-email page). */
+export const VERIFY_EMAIL_PATH = '/verify-email';
+
+/**
+ * Sends a new confirmation link to a self-registered account. better-auth
+ * answers the same whether or not the address is known.
+ */
+export async function resendVerificationEmail(email: string): Promise<void> {
+  const result = await authClient.sendVerificationEmail({
+    email,
+    callbackURL: `${window.location.origin}${VERIFY_EMAIL_PATH}`,
+  });
+  if (result.error) throw new Error(result.error.message ?? 'Could not send the link.');
 }
 
 export async function signOut(): Promise<void> {

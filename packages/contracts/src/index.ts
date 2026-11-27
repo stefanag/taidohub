@@ -36,3 +36,4 @@ export * from './grading-requirements.js';
 export * from './pending-operations.js';
 export * from './mcp.js';
 export * from './legal-documents.js';
+export * from './registration.js';

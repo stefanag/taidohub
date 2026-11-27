@@ -1,6 +1,13 @@
 {
   "auth": {
     "login": {
+      "google": "Sign in with Google",
+      "googleUnknownAccount": "There is no account for that Google address yet.",
+      "googleFailed": "Signing in with Google did not work. Try again or use your email and password.",
+      "emailNotVerified": "Confirm your email address first. Open the link we sent you.",
+      "resendVerification": "Send a new confirmation link",
+      "verificationResent": "If the address belongs to an account waiting for confirmation, a new link is on its way.",
+      "createAccount": "Not in a club? Create an account",
       "title": "Sign in",
       "description": "Sign in with your email address.",
       "emailLabel": "Email",
@@ -82,6 +89,7 @@
     "progression": "Progression"
   },
   "dashboard": {
+    "withoutClub": "You are not in a club. The gradings you add yourself are shown as self-reported until a club verifies them, and your grading requirements come from the national federation you chose.",
     "title": "Dashboard"
   },
   "myOrganisation": {
@@ -148,9 +156,12 @@
     "detach": "Detach"
   },
   "profile": {
+    "federationNone": "No federation chosen",
+    "federationHelp": "Used for your grading requirements while you are not in a club.",
     "title": "My profile",
     "description": "Your personal and taido-training details.",
     "fields": {
+      "referenceFederation": "National federation",
       "firstName": "First name",
       "lastName": "Last name",
       "dateOfBirth": "Date of birth",
@@ -185,7 +196,7 @@
       "noEntriesYet": "No entries yet.",
       "failed": "Failed",
       "external": "External",
-      "pendingVerification": "Pending verification",
+      "selfReported": "Self-reported, not verified",
       "verifiedBy": "verified by {{name}} on {{date}}",
       "verifiedFallback": "Verified",
       "edit": "Edit",
@@ -901,5 +912,48 @@
       "missing": "No {{language}} text yet.",
       "bindingLocked": "This is the legally binding text of a published version and cannot be changed. Start a new version to change it."
     }
+  },
+  "register": {
+    "withGoogle": "Register with Google",
+    "googleHint": "Or use your Google account instead of an email and password. Date of birth, federation and the terms above still apply.",
+    "googleFailed": "Registering with Google did not work. The link may have expired; try again.",
+    "title": "Create an account",
+    "description": "For practitioners who are not in a club yet. You can keep your grading history and follow your progress.",
+    "closed": "Registration is not open yet.",
+    "haveAccount": "Already have an account? Sign in",
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "dateOfBirth": "Date of birth",
+    "federation": "National federation",
+    "chooseFederation": "Choose a federation",
+    "federationHelp": "Its grading requirements apply to you. You can change it later in your profile.",
+    "fillEverything": "Fill in every field.",
+    "tooYoung": "You must be at least {{age}} to register yourself. Ask your club to invite you instead.",
+    "rateLimited": "Too many attempts. Try again later.",
+    "textsChanged": "The terms have just changed. Read them again and accept to continue.",
+    "failed": "The account could not be created. Try again later.",
+    "submit": "Create account",
+    "submitting": "Creating account…",
+    "checkEmail": "Check your inbox. We have sent a link to {{email}}; open it to confirm your address and sign in."
+  },
+  "verifyEmail": {
+    "doneTitle": "Email confirmed",
+    "done": "Your email address is confirmed and you are signed in.",
+    "continue": "Continue to TaidoHub",
+    "failedTitle": "The link did not work",
+    "failed": "The link is invalid or has expired. Enter your email address to get a new one."
+  },
+  "deleteAccount": {
+    "title": "Delete account",
+    "description": "Deletes your account, your profile and the gradings you have added yourself. This cannot be undone.",
+    "open": "Delete my account",
+    "confirmTitle": "Delete your account?",
+    "confirmDescription": "Enter your password to confirm. Your account and your own data are deleted at once and cannot be restored.",
+    "password": "Password",
+    "confirm": "Delete permanently",
+    "wrongPassword": "The password is not correct.",
+    "inUse": "Your account cannot be deleted here. Ask an administrator."
   }
 }

@@ -76,4 +76,23 @@ describe('<LoginForm>', () => {
 
     signInSpy.mockRestore();
   });
+
+  it('explains an unconfirmed email and sends a new link on request', async () => {
+    const signInSpy = vi.spyOn(authApi, 'signInWithEmail').mockRejectedValue(new authApi.EmailNotVerifiedError());
+    const resendSpy = vi.spyOn(authApi, 'resendVerificationEmail').mockResolvedValue();
+    const user = userEvent.setup();
+    render(<LoginForm />);
+
+    await user.type(screen.getByLabelText(/e-post/i), 'ada@example.com');
+    await user.type(screen.getByLabelText(/lösenord/i), 'correct-horse-battery-staple');
+    await user.click(screen.getByRole('button', { name: /logga in/i }));
+
+    expect(await screen.findByText(/bekräfta din e-postadress först/i)).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: /skicka en ny bekräftelselänk/i }));
+    expect(resendSpy).toHaveBeenCalledWith('ada@example.com');
+    expect(await screen.findByText(/en ny länk på väg/i)).toBeInTheDocument();
+
+    signInSpy.mockRestore();
+    resendSpy.mockRestore();
+  });
 });

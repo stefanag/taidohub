@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { renderAdminPasswordResetEmail } from './admin-password-reset.template.js';
+import { renderEmailVerificationEmail } from './email-verification.template.js';
 import { renderInviteEmail } from './invite.template.js';
 import { renderPasswordResetEmail } from './password-reset.template.js';
 
@@ -82,5 +83,21 @@ describe('renderAdminPasswordResetEmail', () => {
     expect(renderAdminPasswordResetEmail({ ...base, locale: 'fi', adminName: null }).body).toContain(
       'Järjestelmänvalvoja on',
     );
+  });
+});
+
+describe('renderEmailVerificationEmail', () => {
+  const verifyUrl = 'https://app.example.com/api/auth/verify-email?token=abc';
+
+  for (const locale of ['en', 'sv', 'fi']) {
+    it(`renders a subject and a body containing the URL for locale=${locale}`, () => {
+      const out = renderEmailVerificationEmail({ to: 'a@b.c', locale, verifyUrl });
+      expect(out.subject.length).toBeGreaterThan(0);
+      expect(out.body).toContain(verifyUrl);
+    });
+  }
+
+  it('falls back to English for an unknown locale', () => {
+    expect(renderEmailVerificationEmail({ to: 'a@b.c', locale: 'xx', verifyUrl }).subject).toMatch(/Confirm/);
   });
 });

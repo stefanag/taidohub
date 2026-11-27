@@ -69,6 +69,7 @@ function repoStub() {
     deactivate: vi.fn(),
     reactivate: vi.fn(),
     delete: vi.fn(),
+    findPasswordHash: vi.fn(),
   } satisfies Record<keyof UsersRepository, ReturnType<typeof vi.fn>>;
 }
 

@@ -14,6 +14,7 @@ const FULL_PROFILE = {
   addressCountry: 'SWE',
   citizenships: ['SWE', 'GBR'],
   aboutMe: null,
+  referenceFederationId: null,
 };
 
 const EMPTY_PROFILE = {
@@ -28,6 +29,7 @@ const EMPTY_PROFILE = {
   addressCountry: null,
   citizenships: [],
   aboutMe: null,
+  referenceFederationId: null,
 };
 
 describe('UserProfileSchema', () => {
@@ -99,6 +101,7 @@ describe('UserProfileSchema — aboutMe', () => {
     addressCity: 'Stockholm',
     addressCountry: 'SWE' as const,
     citizenships: ['SWE', 'GBR'],
+    referenceFederationId: null,
   };
 
   it('accepts aboutMe: null', () => {

@@ -10,11 +10,12 @@ import {
 } from '../feature-flags.js';
 
 describe('FEATURE_FLAG_CODES', () => {
-  it('exposes the three current codes', () => {
+  it('exposes the current codes', () => {
     expect(FEATURE_FLAG_CODES).toEqual([
       'grading-history',
       'grading-history-verification',
       'instructor-feedback',
+      'self-registration',
     ]);
   });
 });

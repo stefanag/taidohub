@@ -399,6 +399,17 @@ export class LegalDocumentsService {
     };
   }
 
+  /** The platform's texts for people who register themselves. */
+  async applicableForSelfRegistration(locale?: LegalLocale): Promise<ApplicableLegalTexts> {
+    const published = await this.repo.listPublishedFor([null], 'self_registered');
+    const translations = await this.repo.latestTranslations(published.map((p) => p.version.id));
+    return {
+      documents: published
+        .map((p) => this.toPublished(p.document, p.version, translations, locale))
+        .sort((a, b) => this.order(a) - this.order(b)),
+    };
+  }
+
   /**
    * The texts shown on the set-password page of an invitation. Password-reset
    * links ask for nothing. An unknown or expired token is refused.

@@ -1,6 +1,13 @@
 {
   "auth": {
     "login": {
+      "google": "Logga in med Google",
+      "googleUnknownAccount": "Det finns inget konto för den Google-adressen än.",
+      "googleFailed": "Inloggningen med Google fungerade inte. Försök igen eller använd e-post och lösenord.",
+      "emailNotVerified": "Bekräfta din e-postadress först. Öppna länken vi skickade till dig.",
+      "resendVerification": "Skicka en ny bekräftelselänk",
+      "verificationResent": "Om adressen hör till ett konto som väntar på bekräftelse är en ny länk på väg.",
+      "createAccount": "Inte med i en klubb? Skapa ett konto",
       "title": "Logga in",
       "description": "Logga in med din e-postadress.",
       "emailLabel": "E-post",
@@ -82,6 +89,7 @@
     "progression": "Utveckling"
   },
   "dashboard": {
+    "withoutClub": "Du är inte med i någon klubb. Graderingar du lägger in själv visas som självrapporterade tills en klubb verifierar dem, och dina graderingskrav kommer från det nationella förbund du valt.",
     "title": "Översikt"
   },
   "myOrganisation": {
@@ -148,9 +156,12 @@
     "detach": "Koppla bort"
   },
   "profile": {
+    "federationNone": "Inget förbund valt",
+    "federationHelp": "Används för dina graderingskrav så länge du inte är med i en klubb.",
     "title": "Min profil",
     "description": "Dina personliga uppgifter och uppgifter om taidoträning.",
     "fields": {
+      "referenceFederation": "Nationellt förbund",
       "firstName": "Förnamn",
       "lastName": "Efternamn",
       "dateOfBirth": "Födelsedatum",
@@ -185,7 +196,7 @@
       "noEntriesYet": "Inga poster ännu.",
       "failed": "Underkänd",
       "external": "Extern",
-      "pendingVerification": "Väntar på verifiering",
+      "selfReported": "Självrapporterad, ej verifierad",
       "verifiedBy": "verifierad av {{name}} den {{date}}",
       "verifiedFallback": "Verifierad",
       "edit": "Redigera",
@@ -884,5 +895,48 @@
       "missing": "Ingen text på {{language}} än.",
       "bindingLocked": "Detta är den legalt gällande texten i en publicerad version och kan inte ändras. Påbörja en ny version för att ändra den."
     }
+  },
+  "register": {
+    "withGoogle": "Registrera med Google",
+    "googleHint": "Eller använd ditt Google-konto i stället för e-post och lösenord. Födelsedatum, förbund och villkoren ovan gäller ändå.",
+    "googleFailed": "Registreringen med Google fungerade inte. Länken kan ha gått ut; försök igen.",
+    "title": "Skapa ett konto",
+    "description": "För utövare som inte är med i en klubb än. Du kan föra din graderingshistorik och följa din utveckling.",
+    "closed": "Registreringen är inte öppen än.",
+    "haveAccount": "Har du redan ett konto? Logga in",
+    "name": "Namn",
+    "email": "E-post",
+    "password": "Lösenord",
+    "confirmPassword": "Bekräfta lösenord",
+    "dateOfBirth": "Födelsedatum",
+    "federation": "Nationellt förbund",
+    "chooseFederation": "Välj ett förbund",
+    "federationHelp": "Förbundets graderingskrav gäller för dig. Du kan byta senare i din profil.",
+    "fillEverything": "Fyll i alla fält.",
+    "tooYoung": "Du måste vara minst {{age}} år för att registrera dig själv. Be din klubb att bjuda in dig i stället.",
+    "rateLimited": "För många försök. Försök igen senare.",
+    "textsChanged": "Villkoren har precis ändrats. Läs dem igen och godkänn för att fortsätta.",
+    "failed": "Kontot kunde inte skapas. Försök igen senare.",
+    "submit": "Skapa konto",
+    "submitting": "Skapar konto…",
+    "checkEmail": "Titta i din inkorg. Vi har skickat en länk till {{email}}; öppna den för att bekräfta adressen och logga in."
+  },
+  "verifyEmail": {
+    "doneTitle": "E-postadressen är bekräftad",
+    "done": "Din e-postadress är bekräftad och du är inloggad.",
+    "continue": "Fortsätt till TaidoHub",
+    "failedTitle": "Länken fungerade inte",
+    "failed": "Länken är ogiltig eller har gått ut. Ange din e-postadress för att få en ny."
+  },
+  "deleteAccount": {
+    "title": "Radera konto",
+    "description": "Raderar ditt konto, din profil och graderingar du själv har lagt in. Det går inte att ångra.",
+    "open": "Radera mitt konto",
+    "confirmTitle": "Radera ditt konto?",
+    "confirmDescription": "Ange ditt lösenord för att bekräfta. Kontot och dina egna uppgifter raderas direkt och kan inte återställas.",
+    "password": "Lösenord",
+    "confirm": "Radera för gott",
+    "wrongPassword": "Lösenordet är inte rätt.",
+    "inUse": "Kontot kan inte raderas här. Kontakta en administratör."
   }
 }

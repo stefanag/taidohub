@@ -1,5 +1,6 @@
-import { date, jsonb, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { date, jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
+import { organisations } from './organisations.js';
 import { shogoTitles } from './shogo-titles.js';
 import { user } from './users.js';
 
@@ -30,6 +31,17 @@ export const userProfile = pgTable('user_profile', {
     onDelete: 'set null',
   }),
   aboutMe: jsonb('about_me').$type<{ ops: unknown[] } | null>(),
+  /**
+   * The national federation whose grading requirements apply when the user has
+   * no student membership. Not a membership: it grants no visibility of other
+   * users. Must reference an organisation of type `national_federation`
+   * (checked in the service).
+   */
+  referenceFederationId: uuid('reference_federation_id').references(() => organisations.id, {
+    onDelete: 'set null',
+  }),
+  /** Set when the user registered themselves; such accounts must verify their email. */
+  selfRegisteredAt: timestamp('self_registered_at', { withTimezone: true, mode: 'date' }),
   createdAt: timestamp('created_at', { withTimezone: true, mode: 'date' })
     .notNull()
     .defaultNow(),

@@ -18,8 +18,9 @@ import { type Env } from '../../config/env.schema.js';
 import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
 import { AuthUserCache } from '../../infrastructure/auth/auth-user.cache.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
+import { BETTER_AUTH, type Auth } from '../../infrastructure/auth/better-auth.js';
 import { VerificationTokenService } from '../../infrastructure/auth/verification-token.service.js';
-import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
+import { DRIZZLE, type DrizzleDb, type DrizzleExecutor } from '../../infrastructure/database/client.js';
 import { EMAIL_SERVICE, type EmailService } from '../../infrastructure/email/email.types.js';
 import { AuditLogService } from '../audit-log/audit-log.service.js';
 
@@ -36,7 +37,53 @@ export class UsersService {
     private readonly tokens: VerificationTokenService,
     @Inject(EMAIL_SERVICE) private readonly email: EmailService,
     private readonly authUserCache: AuthUserCache,
+    @Inject(BETTER_AUTH) private readonly auth: Auth,
   ) {}
+
+  /** True when `password` is the user's current email/password login password. */
+  async verifyOwnPassword(userId: string, password: string): Promise<boolean> {
+    const hash = await this.repo.findPasswordHash(userId);
+    if (!hash) return false;
+    const ctx = await this.auth.$context;
+    return ctx.password.verify({ hash, password });
+  }
+
+  /**
+   * Deletes the signed-in user's own account inside the caller's transaction
+   * (which first removes data other modules keep about them). The last active
+   * sysadmin cannot delete themselves.
+   */
+  async deleteOwnAccount(actor: AuthenticatedUser, tx: DrizzleExecutor): Promise<void> {
+    const existing = await this.repo.findById(actor.id);
+    if (!existing) {
+      throw new NotFoundException({ error: { code: 'NOT_FOUND', message: 'User not found.' } });
+    }
+    if (existing.role === 'sysadmin' && existing.deactivatedAt === null) {
+      const remaining = await this.repo.countActiveSysadmins(tx);
+      if (remaining <= 1) {
+        throw new ConflictException({
+          error: { code: 'LAST_SYSADMIN', message: 'Cannot delete the last active sysadmin.' },
+        });
+      }
+    }
+    await this.audit.record({
+      tx,
+      entityType: 'user',
+      entityId: actor.id,
+      action: 'delete',
+      userId: actor.id,
+      impersonatedById: actor.impersonatedBy ?? null,
+      actingUserId: null,
+      before: this.toApi(existing),
+      after: null,
+    });
+    await this.repo.delete(actor.id, tx);
+  }
+
+  /** Forget cached auth state after an account is gone. */
+  forgetCachedUser(userId: string): void {
+    this.authUserCache.invalidate(userId);
+  }
 
   async findOne(id: string, user: AuthenticatedUser | null): Promise<User> {
     const row = await this.repo.findById(id);

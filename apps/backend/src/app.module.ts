@@ -21,6 +21,7 @@ import { GradingRequirementsModule } from './modules/grading-requirements/gradin
 import { HealthModule } from './modules/health/health.module.js';
 import { LabelsModule } from './modules/labels/labels.module.js';
 import { LegalDocumentsModule } from './modules/legal-documents/legal-documents.module.js';
+import { RegistrationModule } from './modules/registration/registration.module.js';
 import { McpModule } from './modules/mcp/mcp.module.js';
 import { MembershipsModule } from './modules/memberships/memberships.module.js';
 import { OrganisationsModule } from './modules/organisations/organisations.module.js';
@@ -56,6 +57,7 @@ import { UsersModule } from './modules/users/users.module.js';
     AuditLogModule,
     LabelsModule,
     LegalDocumentsModule,
+    RegistrationModule,
     ClassificationCategoryModule,
     TechniqueModule,
     PatternModule,

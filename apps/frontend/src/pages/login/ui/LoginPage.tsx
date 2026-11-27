@@ -1,8 +1,9 @@
 import { Link, useNavigate } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 
-import { LoginForm } from '@/features/auth-by-email';
+import { GoogleSignInButton, LoginForm } from '@/features/auth-by-email';
 import { LocaleSwitcher } from '@/features/locale-switcher';
+import { useFeatureFlag } from '@/shared/lib/feature-flags';
 import { APP_LANDING_ROUTE } from '@/shared/lib/routes';
 import {
   Card,
@@ -22,6 +23,12 @@ import {
 export function LoginPage(): React.ReactElement {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const selfRegistration = useFeatureFlag('self-registration');
+  const params = new URLSearchParams(window.location.search);
+  // Mid-way through connecting an AI client (OAuth authorize), only the email
+  // form resumes that flow, so Google is not offered there.
+  const connectingClient = params.has('client_id');
+  const googleError = params.get('error');
   return (
     <main className="min-h-screen flex">
       {/* Left hero panel */}
@@ -59,11 +66,38 @@ export function LoginPage(): React.ReactElement {
                 void navigate({ to: APP_LANDING_ROUTE });
               }}
             />
+            {googleError ? (
+              <p role="alert" className="mt-4 text-sm">
+                {googleError === 'signup_disabled'
+                  ? t('auth.login.googleUnknownAccount')
+                  : t('auth.login.googleFailed')}
+                {googleError === 'signup_disabled' && selfRegistration ? (
+                  <>
+                    {' '}
+                    <Link to="/register" className="text-primary hover:underline">
+                      {t('auth.login.createAccount')}
+                    </Link>
+                  </>
+                ) : null}
+              </p>
+            ) : null}
+            {connectingClient ? null : (
+              <div className="mt-4">
+                <GoogleSignInButton />
+              </div>
+            )}
             <p className="mt-4 text-center text-sm">
               <Link to="/forgot-password" className="text-primary hover:underline">
                 {t('auth.login.forgotPassword')}
               </Link>
             </p>
+            {selfRegistration ? (
+              <p className="mt-2 text-center text-sm">
+                <Link to="/register" className="text-primary hover:underline">
+                  {t('auth.login.createAccount')}
+                </Link>
+              </p>
+            ) : null}
           </CardContent>
         </Card>
         <LocaleSwitcher variant="onDark" className="self-start" />

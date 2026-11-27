@@ -3,10 +3,12 @@ import { Injectable } from '@nestjs/common';
 import {
   type EmailService,
   type SendAdminPasswordResetArgs,
+  type SendEmailVerificationArgs,
   type SendInviteArgs,
   type SendPasswordResetArgs,
 } from './email.types.js';
 import { renderAdminPasswordResetEmail } from './templates/admin-password-reset.template.js';
+import { renderEmailVerificationEmail } from './templates/email-verification.template.js';
 import { renderInviteEmail } from './templates/invite.template.js';
 import { renderPasswordResetEmail } from './templates/password-reset.template.js';
 
@@ -35,6 +37,13 @@ export class ConsoleEmailService implements EmailService {
   async sendAdminPasswordReset(args: SendAdminPasswordResetArgs): Promise<void> {
     const rendered = renderAdminPasswordResetEmail(args);
     console.info(`[email] admin-password-reset to=${args.to} url=${args.resetUrl}`);
+    console.info(`[email] subject: ${rendered.subject}`);
+    console.info(rendered.body);
+  }
+
+  async sendEmailVerification(args: SendEmailVerificationArgs): Promise<void> {
+    const rendered = renderEmailVerificationEmail(args);
+    console.info(`[email] email-verification to=${args.to} url=${args.verifyUrl}`);
     console.info(`[email] subject: ${rendered.subject}`);
     console.info(rendered.body);
   }
