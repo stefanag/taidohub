@@ -1,5 +1,5 @@
 import { Link, useRouterState } from '@tanstack/react-router';
-import { Award, BarChart3, BookOpen, Bot, Dumbbell, Building2, ClipboardCheck, ClipboardList, Flag, GraduationCap, History, LayoutDashboard, LibraryBig, Scale, ScrollText, Swords, Tag, TrendingUp, UserRound, Users, Wrench } from 'lucide-react';
+import { Award, BarChart3, BookOpen, Bot, BrainCircuit, Dumbbell, Building2, ClipboardCheck, ClipboardList, Flag, GraduationCap, History, LayoutDashboard, LibraryBig, Scale, ScrollText, Swords, Tag, TrendingUp, UserRound, Users, Wrench } from 'lucide-react';
 import * as React from 'react';
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -42,6 +42,7 @@ export function AppSidebar(): React.ReactElement {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const ability = useContext(AbilityContext);
   const showTrainingLog = useFeatureFlag('training-log');
+  const showSelfTest = useFeatureFlag('self-test');
 
   // Students entry is visible to instructors (org-scoped role from
   // /api/me/memberships) and to sysadmins (CASL `manage all`). The
@@ -92,6 +93,16 @@ export function AppSidebar(): React.ReactElement {
                     <Link to="/training">
                       <Dumbbell />
                       <span>{t('nav.training')}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ) : null}
+              {showSelfTest ? (
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild isActive={pathname.startsWith('/self-test')}>
+                    <Link to="/self-test">
+                      <BrainCircuit />
+                      <span>{t('nav.selfTest')}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

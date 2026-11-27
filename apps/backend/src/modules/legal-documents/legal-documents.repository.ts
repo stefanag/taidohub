@@ -22,6 +22,8 @@ export type LegalAudience = DbLegalDocument['audience'];
 export type NewAcknowledgement = typeof userDocumentAcknowledgements.$inferInsert;
 
 /** The only file in the legal-documents module that touches Drizzle. */
+export type DbAcknowledgementRow = typeof userDocumentAcknowledgements.$inferSelect;
+
 @Injectable()
 export class LegalDocumentsRepository {
   constructor(@Inject(DRIZZLE) private readonly db: DrizzleDb) {}
@@ -234,6 +236,14 @@ export class LegalDocumentsRepository {
   }
 
   // ── Acknowledgements ───────────────────────────────────────────────────
+
+  async listAcknowledgementsByUser(userId: string): Promise<DbAcknowledgementRow[]> {
+    return this.db
+      .select()
+      .from(userDocumentAcknowledgements)
+      .where(eq(userDocumentAcknowledgements.userId, userId))
+      .orderBy(desc(userDocumentAcknowledgements.acknowledgedAt));
+  }
 
   /** Inserts acknowledgements; a user acknowledges a version at most once. */
   async insertAcknowledgements(tx: DrizzleExecutor, rows: NewAcknowledgement[]): Promise<void> {

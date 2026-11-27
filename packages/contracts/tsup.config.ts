@@ -31,6 +31,8 @@ export default defineConfig({
     'legal-documents': 'src/legal-documents.ts',
     registration: 'src/registration.ts',
     'training-log': 'src/training-log.ts',
+    'club-join-requests': 'src/club-join-requests.ts',
+    'account-export': 'src/account-export.ts',
     'pending-operations': 'src/pending-operations.ts',
     mcp: 'src/mcp.ts',
   },

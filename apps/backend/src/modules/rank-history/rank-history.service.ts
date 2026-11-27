@@ -48,6 +48,16 @@ export class RankHistoryService {
     return this.repo.deleteAllForUser(userId, tx);
   }
 
+  /**
+   * The rank on the user's latest passed grading, verified or not, for another
+   * module to show (a club join request). Not an authorization check.
+   */
+  async latestPassedRankId(userId: string): Promise<string | null> {
+    const rows = await this.repo.listByUser(userId);
+    const passed = rows.filter((r) => r.result === 'pass').sort((a, b) => b.date.localeCompare(a.date));
+    return passed[0]?.rankId ?? null;
+  }
+
   async list(subjectUserId: string, actor: AuthenticatedUser): Promise<RankHistory[]> {
     const allowed = await this.auth.canRead(actor, subjectUserId);
     if (!allowed) {

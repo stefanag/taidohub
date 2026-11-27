@@ -41,6 +41,7 @@ export const SubjectSchema = z
     'PendingOperation',
     'LegalDocument',
     'TrainingSession',
+    'ClubJoinRequest',
     'all',
   ])
   .meta({
@@ -252,6 +253,14 @@ export type TrainingSessionSubjectShape = {
   userId?: string;
 };
 
+export type ClubJoinRequestSubjectShape = {
+  readonly __caslSubjectType__: 'ClubJoinRequest';
+  /** The applicant. */
+  userId?: string;
+  /** The club asked to join. */
+  organisationId?: string;
+};
+
 export type AppSubject =
   | AppSubjectName
   | UserSubjectShape
@@ -278,7 +287,8 @@ export type AppSubject =
   | McpSubjectShape
   | PendingOperationSubjectShape
   | LegalDocumentSubjectShape
-  | TrainingSessionSubjectShape;
+  | TrainingSessionSubjectShape
+  | ClubJoinRequestSubjectShape;
 
 /**
  * Tuple type compatible with `MongoAbility<[AppAction, AppSubject]>` from

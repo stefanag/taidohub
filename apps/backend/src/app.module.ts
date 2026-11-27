@@ -10,10 +10,12 @@ import { AbilityModule } from './infrastructure/ability/ability.module.js';
 import { InfraAuthModule } from './infrastructure/auth/auth.module.js';
 import { DatabaseModule } from './infrastructure/database/database.module.js';
 import { EmailModule } from './infrastructure/email/email.module.js';
+import { AccountExportModule } from './modules/account-export/account-export.module.js';
 import { AuditLogModule } from './modules/audit-log/audit-log.module.js';
 import { AuthDocsModule } from './modules/auth/auth.module.js';
 import { BeltCatalogModule } from './modules/belt-catalog/belt-catalog.module.js';
 import { ClassificationCategoryModule } from './modules/classification-category/classification-category.module.js';
+import { ClubJoinRequestsModule } from './modules/club-join-requests/club-join-requests.module.js';
 import { FeatureFlagsModule } from './modules/feature-flags/feature-flags.module.js';
 import { FeedbackModule } from './modules/feedback/feedback.module.js';
 import { GradingHistoryProjectionModule } from './modules/grading-history-projection/grading-history.module.js';
@@ -64,6 +66,8 @@ import { UsersModule } from './modules/users/users.module.js';
     PatternModule,
     ProgressModule,
     TrainingLogModule,
+    ClubJoinRequestsModule,
+    AccountExportModule,
     StudentsModule,
     FeatureFlagsModule,
     FeedbackModule,

@@ -14,11 +14,13 @@ import { TrainingLogService } from './training-log.service.js';
  * Imports: ProgressModule for ProgressService.markPracticed (a session moves
  * "last practised" up), BeltCatalogModule for BeltRanksService (validating a
  * goal's target rank). DatabaseModule, AbilityModule and the feature-flag
- * guard are global. Nothing is exported: no other module reads a training log.
+ * guard are global. TrainingLogService is exported for the user's own data
+ * export only; no other module reads someone's training log.
  */
 @Module({
   imports: [ProgressModule, BeltCatalogModule],
   controllers: [TrainingLogController],
   providers: [TrainingLogRepository, TrainingLogService, TrainingLogAbilityRules],
+  exports: [TrainingLogService],
 })
 export class TrainingLogModule {}

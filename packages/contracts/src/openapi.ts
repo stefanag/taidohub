@@ -18,6 +18,8 @@ import { LabelsOpenApiRegistry } from './labels.js';
 import { LegalDocumentsOpenApiRegistry } from './legal-documents.js';
 import { RegistrationOpenApiRegistry } from './registration.js';
 import { TrainingLogOpenApiRegistry } from './training-log.js';
+import { ClubJoinRequestsOpenApiRegistry } from './club-join-requests.js';
+import { AccountExportOpenApiRegistry } from './account-export.js';
 import { OrganisationsOpenApiRegistry } from './organisations.js';
 import { PatternOpenApiRegistry } from './patterns.js';
 import { PendingOperationsOpenApiRegistry } from './pending-operations.js';
@@ -75,6 +77,8 @@ export function registerContractSchemas(
     LegalDocumentsOpenApiRegistry,
     RegistrationOpenApiRegistry,
     TrainingLogOpenApiRegistry,
+    ClubJoinRequestsOpenApiRegistry,
+    AccountExportOpenApiRegistry,
   ],
 ): OpenAPIObject {
   document.components ??= {};
@@ -122,4 +126,6 @@ export const ContractRegistries = {
   legalDocuments: LegalDocumentsOpenApiRegistry,
   registration: RegistrationOpenApiRegistry,
   trainingLog: TrainingLogOpenApiRegistry,
+  clubJoinRequests: ClubJoinRequestsOpenApiRegistry,
+  accountExport: AccountExportOpenApiRegistry,
 } as const;

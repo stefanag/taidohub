@@ -46,8 +46,9 @@ export class MembershipsRepository {
     userId: string,
     organisationId: string,
     role: 'orgadmin' | 'instructor' | 'student',
+    tx?: DrizzleExecutor,
   ): Promise<DbOrganisationMembership | null> {
-    const rows = await this.db
+    const rows = await (tx ?? this.db)
       .select()
       .from(organisationMembership)
       .where(

@@ -1,7 +1,9 @@
 import { useTranslation } from 'react-i18next';
 
 import { useMyMembershipsQuery } from '@/entities/me';
+import { JoinClubCard } from '@/features/join-club';
 import { NextRankCard, PracticeReminders } from '@/features/next-rank-card';
+import { JoinRequestsReview } from '@/features/review-join-requests';
 import { TrainingGoalCard } from '@/features/training-goal';
 
 /**
@@ -28,6 +30,8 @@ export function DashboardPage(): React.ReactElement {
       ) : null}
 
       <div className="mb-6 grid gap-4 md:grid-cols-2">
+        <JoinRequestsReview />
+        <JoinClubCard />
         <NextRankCard />
         <TrainingGoalCard />
         <PracticeReminders />

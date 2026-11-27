@@ -18,6 +18,8 @@ describe('FEATURE_FLAG_CODES', () => {
       'self-registration',
       'grading-readiness',
       'training-log',
+      'club-join-requests',
+      'self-test',
     ]);
   });
 });

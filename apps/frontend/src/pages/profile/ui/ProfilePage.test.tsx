@@ -18,6 +18,7 @@ const USER_ID = 'user-1';
 // covered by `ProfileForm.test.tsx`); this file only exercises the new
 // "Your progression" section, which renders independently of the profile
 // query's state.
+vi.mock('@/features/export-own-data', () => ({ ExportOwnDataSection: () => null }));
 vi.mock('@tanstack/react-query', async (orig) => {
   const actual = await orig<typeof import('@tanstack/react-query')>();
   return {

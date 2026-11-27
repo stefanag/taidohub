@@ -8,6 +8,7 @@ import { currentRank, useUserStatsQuery, useUserTrendsQuery } from '@/entities/s
 import { authClient } from '@/features/auth-by-email';
 import { CoverageMeter } from '@/features/coverage-meter';
 import { DeleteOwnAccountSection } from '@/features/delete-own-account';
+import { ExportOwnDataSection } from '@/features/export-own-data';
 import { ProfileForm } from '@/features/profile-form';
 import { TrendSparkline } from '@/features/trend-sparkline';
 import { rankLabel } from '@/shared/lib/rank-label';
@@ -102,6 +103,11 @@ export function ProfilePage(): React.ReactElement {
         </CardContent>
       </Card>
       {currentUserId ? <ProgressionSection userId={currentUserId} /> : null}
+      <Card>
+        <CardContent className="pt-6">
+          <ExportOwnDataSection />
+        </CardContent>
+      </Card>
       <Card>
         <CardContent className="pt-6">
           <DeleteOwnAccountSection />

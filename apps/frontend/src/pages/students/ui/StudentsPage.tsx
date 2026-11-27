@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { currentRank, useUserStatsQuery } from '@/entities/statistic';
 import { useStudentsQuery } from '@/entities/student';
 import { CoverageMeter } from '@/features/coverage-meter';
+import { JoinRequestsReview } from '@/features/review-join-requests';
 import { rankLabel } from '@/shared/lib/rank-label';
 import { Badge } from '@/shared/ui';
 
@@ -53,6 +54,9 @@ export function StudentsPage(): React.ReactElement {
       <p className="mt-2 max-w-2xl text-on-surface-variant">
         {t('students.description')}
       </p>
+      <div className="mt-6 max-w-3xl">
+        <JoinRequestsReview />
+      </div>
 
       <section className="mt-8">
         {isPending ? (

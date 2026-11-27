@@ -53,6 +53,17 @@ export class OrganisationsService {
     return data;
   }
 
+  /** Every club, for choosing one to ask to join. Public-to-authenticated data. */
+  async listClubs(): Promise<DbOrganisation[]> {
+    const { data } = await this.repo.list({ type: 'club' });
+    return data;
+  }
+
+  /** The organisation row, or null; no authorization check (callers decide). */
+  async findById(id: string): Promise<DbOrganisation | null> {
+    return this.repo.findById(id);
+  }
+
   /** True when `id` is an existing national federation. */
   async isNationalFederation(id: string): Promise<boolean> {
     const row = await this.repo.findById(id);

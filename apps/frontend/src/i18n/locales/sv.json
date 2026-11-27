@@ -68,6 +68,7 @@
     "signOut": "Logga ut"
   },
   "nav": {
+    "selfTest": "Självtest",
     "training": "Träningsdagbok",
     "adminLegalDocuments": "Villkor och integritet",
     "dashboard": "Översikt",
@@ -1047,5 +1048,81 @@
     "daysLeft_other": "({{count}} dagar kvar)",
     "datePassed": "(datumet har passerat)",
     "openLog": "Öppna träningsdagboken"
+  },
+  "joinClub": {
+    "title": "Gå med i en klubb",
+    "intro": "Tränar du i en klubb? Be klubben lägga till dig. När klubben godkänner blir du elev där och klubben kan verifiera din graderingshistorik.",
+    "club": "Klubb",
+    "chooseClub": "Välj klubb",
+    "message": "Meddelande till klubben (valfritt)",
+    "shared": "Klubben ser ditt namn, din e-postadress, din nuvarande grad och ditt meddelande.",
+    "send": "Skicka förfrågan",
+    "pending": "Din förfrågan till {{club}} skickades {{date}}. Väntar på svar från klubben.",
+    "cancel": "Dra tillbaka förfrågan",
+    "declined": "{{club}} avböjde din förfrågan. Du kan fråga igen eller välja en annan klubb."
+  },
+  "joinRequests": {
+    "title_one": "{{count}} förfrågan om medlemskap",
+    "title_other": "{{count}} förfrågningar om medlemskap",
+    "details": "{{club}} · nuvarande grad: {{rank}} · skickad {{date}}",
+    "noRank": "ingen registrerad",
+    "approve": "Godkänn",
+    "decline": "Avböj",
+    "confirmDecline": "Avböja förfrågan?",
+    "afterApproval": "Godkänner du blir personen elev i klubben. Egenrapporterade graderingar förblir markerade som ej verifierade tills du verifierar dem."
+  },
+  "exportData": {
+    "title": "Dina uppgifter",
+    "intro": "Ladda ner allt TaidoHub sparar om dig som en JSON-fil, eller öppna en utskriftsvänlig sammanställning av graderingar och träningsdagbok.",
+    "download": "Ladda ner mina uppgifter (JSON)",
+    "printable": "Utskriftsvänlig sammanställning"
+  },
+  "myData": {
+    "title": "Mina uppgifter",
+    "exportedAt": "exporterad {{date}}",
+    "print": "Skriv ut eller spara som PDF",
+    "gradingHistory": "Graderingshistorik",
+    "noGradings": "Inga graderingar registrerade.",
+    "trainingLog": "Träningsdagbok",
+    "noSessions": "Inga pass loggade.",
+    "date": "Datum",
+    "rank": "Grad",
+    "result": "Resultat",
+    "status": "Status",
+    "results": {
+      "pass": "Godkänd",
+      "fail": "Ej godkänd"
+    },
+    "verified": "Verifierad",
+    "selfReported": "Egenrapporterad"
+  },
+  "selfTest": {
+    "title": "Självtest",
+    "intro": "Öva terminologi: de japanska namnen på tekniker och hokei. Inget sparas.",
+    "unavailable": "Självtestet är inte tillgängligt än.",
+    "scope": "Öva på",
+    "scopes": {
+      "all": "Tekniker och hokei",
+      "technique": "Tekniker",
+      "pattern": "Hokei"
+    },
+    "direction": "Riktning",
+    "directions": {
+      "jaToLocal": "Japanska → mitt språk",
+      "localToJa": "Mitt språk → japanska"
+    },
+    "tooFew": "Det finns för få namn översatta till ditt språk för att bygga ett test.",
+    "quiz": "Flerval",
+    "flashcards": "Minneskort",
+    "progress": "{{current}} av {{total}}",
+    "correct": "Rätt!",
+    "wrong": "Inte riktigt. Rätt svar är {{answer}}.",
+    "next": "Nästa",
+    "previous": "Föregående",
+    "score": "Du hade {{score}} av {{total}} rätt.",
+    "again": "Ny omgång",
+    "flip": "Vänd kortet",
+    "tapToFlip": "Tryck för att visa svaret",
+    "shuffle": "Blanda"
   }
 }

@@ -1,6 +1,6 @@
 # Plan: Self-registration and use without a club
 
-Status: **phase 1 shipped; phase 2 built** (PR feat/training-readiness). Decisions recorded 2026-11-26 (see "Decisions").
+Status: **phases 1 and 2 shipped; phase 3 built** (PR feat/club-join-export-self-test). Decisions recorded 2026-11-26 (see "Decisions").
 
 ## Goal
 
@@ -168,6 +168,30 @@ on it.
    dependency). A server-generated PDF would need a library: ask first.
 3. **Self-test** (flag `self-test`): multiple-choice and flashcards on terminology and pattern
    order, generated from the technique and pattern catalogue; results not stored at first.
+
+### Phase 3 decisions (owner, 2026-11-27) and as built (feat/club-join-export-self-test)
+
+- **Who decides a join request: the club's orgadmin or instructor** (and sysadmin). Not an orgadmin
+  of a parent federation. Only a user **without any membership** may ask, with one pending request
+  at a time. The club sees **name, e-mail, current rank (latest passed grading, self-reported) and
+  the message**; the grading history only after approval, through the existing membership rules.
+- Built as module `club-join-requests` (table `club_join_request`, migration 0041; flags
+  `club-join-requests` and `self-test` in 0042), not on pending operations: those are AI proposals
+  with their own approval flow. CASL subject `ClubJoinRequest`: applicant create/read/delete own;
+  club orgadmin/instructor read/update by `organisationId`; sysadmin manage. Approval runs
+  `MembershipsService.addStudentForJoinRequest` in the same transaction as the status change
+  (a conditional update, so a request is decided once), then drops the applicant's cached
+  memberships. This is the first path where an orgadmin or instructor creates a *student*
+  membership; it exists only through an approved request.
+- No e-mail notifications yet: the request shows on the dashboard and students page of whoever
+  decides, and the applicant sees the outcome on their dashboard. Club legal texts are not accepted
+  as part of joining yet (`context: 'club_join'` exists for that; legal phase 2).
+- **Export**: `GET /api/account/export` (module `account-export`, no flag: access to one's own data
+  is a right). It reads through each owning module's service with the user as actor. The printable
+  page `/my-data` uses the browser's print dialog for PDF; no PDF library.
+- **Self-test** (flag `self-test`): **terminology only**, as decided: Japanese name against the
+  name in the reader's language, from techniques and patterns, multiple choice and flashcards.
+  The catalogue has no movement sequences, so "pattern order" is not tested. Nothing is stored.
 
 ## Tests (every phase)
 

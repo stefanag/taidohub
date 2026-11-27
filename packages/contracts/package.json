@@ -318,6 +318,26 @@
         "types": "./dist/training-log.d.cts",
         "default": "./dist/training-log.cjs"
       }
+    },
+    "./club-join-requests": {
+      "import": {
+        "types": "./dist/club-join-requests.d.ts",
+        "default": "./dist/club-join-requests.js"
+      },
+      "require": {
+        "types": "./dist/club-join-requests.d.cts",
+        "default": "./dist/club-join-requests.cjs"
+      }
+    },
+    "./account-export": {
+      "import": {
+        "types": "./dist/account-export.d.ts",
+        "default": "./dist/account-export.js"
+      },
+      "require": {
+        "types": "./dist/account-export.d.cts",
+        "default": "./dist/account-export.cjs"
+      }
     }
   },
   "files": [
