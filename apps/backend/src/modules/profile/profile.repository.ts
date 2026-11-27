@@ -30,6 +30,8 @@ export type ProfilePatch = Partial<
     | 'addressCountry'
     | 'citizenships'
     | 'aboutMe'
+    | 'referenceFederationId'
+    | 'selfRegisteredAt'
   >
 >;
 

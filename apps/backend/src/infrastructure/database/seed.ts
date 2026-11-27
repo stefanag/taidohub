@@ -32,6 +32,7 @@ async function main(): Promise<void> {
     sendInvite: async () => undefined,
     sendPasswordReset: async () => undefined,
     sendAdminPasswordReset: async () => undefined,
+    sendEmailVerification: async () => undefined,
   };
   const auth = buildBetterAuth(db, env, noopEmail);
 

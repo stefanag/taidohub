@@ -1,10 +1,16 @@
+import { useQuery } from '@tanstack/react-query';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { UpdateUserProfileInput, UserProfile } from '@/entities/profile';
 import type { IsoAlpha3 } from '@repo/contracts/organisations';
 
-import { countryName, ISO_3166_ALPHA3_CODES } from '@/entities/organisation';
+import {
+  countryName,
+  displayName,
+  ISO_3166_ALPHA3_CODES,
+  listOrganisationsQueryOptions,
+} from '@/entities/organisation';
 import { useUpdateMyProfile } from '@/entities/profile';
 import { HttpError } from '@/shared/api';
 import {
@@ -63,6 +69,10 @@ export function ProfileForm({ profile, onSaved }: ProfileFormProps): React.React
   const [addressCountry, setAddressCountry] = React.useState<string>(
     profile.addressCountry ?? NONE,
   );
+  const [federationId, setFederationId] = React.useState<string>(
+    profile.referenceFederationId ?? NONE,
+  );
+  const federations = useQuery(listOrganisationsQueryOptions({ type: 'national_federation' }));
   const [citizenships, setCitizenships] = React.useState<string[]>(profile.citizenships);
   const [pendingCitizenship, setPendingCitizenship] = React.useState<string>('');
   const [aboutMe, setAboutMe] = React.useState<Delta>(
@@ -131,6 +141,7 @@ export function ProfileForm({ profile, onSaved }: ProfileFormProps): React.React
       addressPostalCode: orNull(addressPostalCode),
       addressCity: orNull(addressCity),
       addressCountry: addressCountry === NONE ? null : addressCountry,
+      referenceFederationId: federationId === NONE ? null : federationId,
       citizenships,
       aboutMe: isEmpty(aboutMe) ? null : aboutMe,
     };
@@ -219,6 +230,24 @@ export function ProfileForm({ profile, onSaved }: ProfileFormProps): React.React
             ))}
           </SelectContent>
         </Select>
+      </FormField>
+
+      <FormField>
+        <Label htmlFor="profile-federation">{t('profile.fields.referenceFederation')}</Label>
+        <Select value={federationId} onValueChange={setFederationId}>
+          <SelectTrigger id="profile-federation" aria-label={t('profile.fields.referenceFederation')}>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value={NONE}>{t('profile.federationNone')}</SelectItem>
+            {(federations.data?.data ?? []).map((o) => (
+              <SelectItem key={o.id} value={o.id}>
+                {displayName(o, locale)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <p className="text-xs text-on-surface-variant">{t('profile.federationHelp')}</p>
       </FormField>
 
       <FormField>

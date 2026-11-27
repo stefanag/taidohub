@@ -8,10 +8,12 @@ import {
   type EmailService,
   type RenderedEmail,
   type SendAdminPasswordResetArgs,
+  type SendEmailVerificationArgs,
   type SendInviteArgs,
   type SendPasswordResetArgs,
 } from './email.types.js';
 import { renderAdminPasswordResetEmail } from './templates/admin-password-reset.template.js';
+import { renderEmailVerificationEmail } from './templates/email-verification.template.js';
 import { renderInviteEmail } from './templates/invite.template.js';
 import { renderPasswordResetEmail } from './templates/password-reset.template.js';
 
@@ -49,6 +51,10 @@ export class SmtpEmailService implements EmailService {
 
   sendAdminPasswordReset(args: SendAdminPasswordResetArgs): Promise<void> {
     return this.send('admin-password-reset', args.to, renderAdminPasswordResetEmail(args));
+  }
+
+  sendEmailVerification(args: SendEmailVerificationArgs): Promise<void> {
+    return this.send('email-verification', args.to, renderEmailVerificationEmail(args));
   }
 
   private async send(kind: string, to: string, email: RenderedEmail): Promise<void> {

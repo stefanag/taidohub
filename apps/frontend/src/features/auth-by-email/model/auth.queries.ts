@@ -1,6 +1,6 @@
 import { queryOptions } from '@tanstack/react-query';
 
-import { authClient, type Session } from '../api/auth.api.js';
+import { authClient, getSignInProviders, type Session } from '../api/auth.api.js';
 
 /**
  * TanStack Query options for the current session. The cookie is sent
@@ -20,5 +20,14 @@ export function sessionQueryOptions() {
       return result.data as unknown as Session;
     },
     staleTime: 60_000,
+  });
+}
+
+/** Which sign-in methods the server offers; changes only with a deploy. */
+export function signInProvidersQueryOptions() {
+  return queryOptions({
+    queryKey: ['auth', 'sign-in-providers'] as const,
+    queryFn: getSignInProviders,
+    staleTime: Infinity,
   });
 }

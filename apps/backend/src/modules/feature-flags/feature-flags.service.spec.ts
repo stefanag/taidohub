@@ -71,6 +71,7 @@ describe('FeatureFlagsService', () => {
         'grading-history': false,
         'grading-history-verification': false,
         'instructor-feedback': false,
+        'self-registration': false,
       });
     });
 
@@ -92,6 +93,7 @@ describe('FeatureFlagsService', () => {
         'grading-history',
         'grading-history-verification',
         'instructor-feedback',
+        'self-registration',
       ]);
     });
   });

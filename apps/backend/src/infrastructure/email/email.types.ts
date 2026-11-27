@@ -33,11 +33,19 @@ export interface SendAdminPasswordResetArgs {
   adminName: string | null;
 }
 
+export interface SendEmailVerificationArgs {
+  to: string;
+  locale: string;
+  /** Absolute URL that confirms the address (better-auth's verify-email route). */
+  verifyUrl: string;
+}
+
 /** The abstraction the app depends on. v1 impl: `ConsoleEmailService`. */
 export interface EmailService {
   sendInvite(args: SendInviteArgs): Promise<void>;
   sendPasswordReset(args: SendPasswordResetArgs): Promise<void>;
   sendAdminPasswordReset(args: SendAdminPasswordResetArgs): Promise<void>;
+  sendEmailVerification(args: SendEmailVerificationArgs): Promise<void>;
 }
 
 /** DI token for injecting the `EmailService` implementation. */

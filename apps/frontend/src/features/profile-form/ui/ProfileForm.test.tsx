@@ -35,6 +35,7 @@ const EMPTY_PROFILE: UserProfile = {
   addressCountry: null,
   citizenships: [],
   aboutMe: null,
+  referenceFederationId: null,
 };
 
 const SEEDED: UserProfile = {

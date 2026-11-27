@@ -42,6 +42,11 @@ export const UserProfileSchema = z
     addressCountry: CountryCodeSchema.nullable(),
     citizenships: CountryCodeSchema.array(),
     aboutMe: DeltaSchema.nullable(),
+    /**
+     * The national federation whose grading requirements apply when the user
+     * belongs to no club. Not a membership.
+     */
+    referenceFederationId: z.uuid().nullable(),
   })
   .meta({
     id: 'UserProfile',
@@ -58,6 +63,7 @@ export const UserProfileSchema = z
       addressCountry: 'SWE',
       citizenships: ['SWE', 'GBR'],
       aboutMe: { ops: [{ insert: 'Started taido in 2015 …\n' }] },
+      referenceFederationId: null,
     },
   });
 
@@ -86,6 +92,8 @@ export const UpdateUserProfileSchema = z
         { message: 'aboutMe exceeds 50 KB.' },
       )
       .optional(),
+    /** Must be a national federation; null clears it. */
+    referenceFederationId: z.uuid().nullable().optional(),
   })
   .meta({
     id: 'UpdateUserProfileInput',

@@ -149,6 +149,16 @@ export class RankHistoryRepository {
     await conn.delete(rankHistory).where(eq(rankHistory.id, id));
   }
 
+  /** Deletes every row about `userId`; returns how many were removed. */
+  async deleteAllForUser(userId: string, tx?: DrizzleExecutor): Promise<number> {
+    const conn = tx ?? this.db;
+    const rows = await conn
+      .delete(rankHistory)
+      .where(eq(rankHistory.userId, userId))
+      .returning({ id: rankHistory.id });
+    return rows.length;
+  }
+
   /**
    * Find the highest verified shogo across a user's history (ordered by
    * `shogo_titles.sort_order DESC`, breaking ties by `date DESC`). Returns
