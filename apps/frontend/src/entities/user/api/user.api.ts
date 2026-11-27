@@ -8,6 +8,7 @@ import {
   type InviteUserInput,
   type ListUsersQuery,
   type ListUsersResponse,
+  type AcceptLinkWithGoogleInput,
   type SetInitialPasswordInput,
   type UpdateUserInput,
   type User,
@@ -65,4 +66,13 @@ export async function sendPasswordReset(id: string): Promise<void> {
 
 export async function setInitialPassword(input: SetInitialPasswordInput): Promise<void> {
   await httpClient(AccountRoutes.setPassword, { method: 'POST', body: input });
+}
+
+/**
+ * Uses an invite or reset link to confirm the email (and accept the texts of
+ * an invitation) instead of choosing a password; the caller then signs in
+ * with Google, which links the Google account with that address.
+ */
+export async function acceptLinkWithGoogle(input: AcceptLinkWithGoogleInput): Promise<void> {
+  await httpClient(AccountRoutes.acceptWithGoogle, { method: 'POST', body: input });
 }

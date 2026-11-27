@@ -1,7 +1,9 @@
+import { useQuery } from '@tanstack/react-query';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useInvitationLegalTextsQuery, type LegalLocale, LEGAL_LOCALES } from '@/entities/legal-document';
+import { signInProvidersQueryOptions, signInWithGoogle } from '@/features/auth-by-email';
 import { SetPasswordForm } from '@/features/set-password-form';
 
 export interface SetPasswordPageProps {
@@ -25,6 +27,7 @@ export function SetPasswordPage({ token }: SetPasswordPageProps): React.ReactEle
   const locale = (LEGAL_LOCALES as readonly string[]).includes(base) ? (base as LegalLocale) : undefined;
   // The terms and privacy notices that apply to an invited user; none for resets.
   const legal = useInvitationLegalTextsQuery(token, locale);
+  const providers = useQuery(signInProvidersQueryOptions());
 
   return (
     <main className="flex min-h-screen items-center justify-center p-4">
@@ -49,7 +52,11 @@ export function SetPasswordPage({ token }: SetPasswordPageProps): React.ReactEle
             })}
           </p>
         ) : (
-          <SetPasswordForm token={token} legalTexts={legal.data.documents} />
+          <SetPasswordForm
+            token={token}
+            legalTexts={legal.data.documents}
+            onContinueWithGoogle={providers.data?.google ? () => signInWithGoogle() : undefined}
+          />
         )}
       </div>
     </main>

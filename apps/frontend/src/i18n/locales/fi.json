@@ -1,6 +1,7 @@
 {
   "auth": {
     "login": {
+      "googleNotActivated": "Tiliäsi ei ole vielä aktivoitu. Avaa ensin kutsusähköposti ja seuraa linkkiä; sen jälkeen voit kirjautua Googlella.",
       "google": "Kirjaudu Googlella",
       "googleUnknownAccount": "Tälle Google-osoitteelle ei ole vielä tiliä.",
       "googleFailed": "Kirjautuminen Googlella ei onnistunut. Yritä uudelleen tai käytä sähköpostia ja salasanaa.",
@@ -19,6 +20,9 @@
     },
     "motto": "Kun mieli on keskittynyt, mikään ei ole mahdotonta.",
     "setPassword": {
+      "continueWithGoogle": "Jatka Googlella",
+      "googleHint": "Tai ohita salasana ja kirjaudu Googlella. Käytä sen sähköpostiosoitteen Google-tiliä, johon kutsu lähetettiin.",
+      "googleFailed": "Googlella jatkaminen ei onnistunut. Yritä uudelleen tai valitse salasana.",
       "title": "Aseta salasanasi",
       "description": "Valitse salasana viimeistelläksesi tilisi käyttöönoton.",
       "passwordLabel": "Salasana",

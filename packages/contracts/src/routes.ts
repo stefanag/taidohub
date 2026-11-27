@@ -20,6 +20,7 @@ export const AuthRoutes = {
 export const AccountRoutes = {
   setPassword: '/api/account/set-password',
   signInProviders: '/api/account/sign-in-providers',
+  acceptWithGoogle: '/api/account/accept-with-google',
 } as const;
 
 export const RegistrationRoutes = {

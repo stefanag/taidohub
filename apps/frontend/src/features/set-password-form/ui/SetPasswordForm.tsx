@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { type PublishedLegalDocument } from '@/entities/legal-document';
-import { setInitialPassword } from '@/entities/user';
+import { acceptLinkWithGoogle, setInitialPassword } from '@/entities/user';
 import { HttpError } from '@/shared/api';
 import { Button, FormField, FormMessage, Input, Label } from '@/shared/ui';
 
@@ -14,6 +14,11 @@ export interface SetPasswordFormProps {
    * be set (invitations). Empty or absent for password resets.
    */
   legalTexts?: PublishedLegalDocument[];
+  /**
+   * Continues with Google instead of a password. Supplied by the page when
+   * Google sign-in is available; without it the option is hidden.
+   */
+  onContinueWithGoogle?: (() => Promise<void>) | undefined;
 }
 
 function legalHref(doc: PublishedLegalDocument): string {
@@ -26,7 +31,11 @@ function legalHref(doc: PublishedLegalDocument): string {
  * set-initial-password endpoint. On success it does a full-page navigation to
  * `/dashboard` so the freshly issued session cookie is picked up.
  */
-export function SetPasswordForm({ token, legalTexts = [] }: SetPasswordFormProps): React.ReactElement {
+export function SetPasswordForm({
+  token,
+  legalTexts = [],
+  onContinueWithGoogle,
+}: SetPasswordFormProps): React.ReactElement {
   const { t } = useTranslation();
   const terms = legalTexts.filter((d) => d.kind === 'terms');
   const privacy = legalTexts.filter((d) => d.kind === 'privacy');
@@ -36,6 +45,35 @@ export function SetPasswordForm({ token, legalTexts = [] }: SetPasswordFormProps
   const [confirm, setConfirm] = React.useState('');
   const [error, setError] = React.useState<string | undefined>();
   const [submitting, setSubmitting] = React.useState(false);
+
+  const acknowledgements = () =>
+    legalTexts.length > 0
+      ? { acknowledgements: legalTexts.map((d) => ({ versionId: d.versionId, locale: d.translation.locale })) }
+      : {};
+
+  const linkError = (err: unknown): string =>
+    err instanceof HttpError && err.payload.code === 'INVALID_TOKEN'
+      ? t('auth.setPassword.invalidToken', {
+          defaultValue: 'This link is invalid or has expired. Ask an administrator to send a new one.',
+        })
+      : t('auth.setPassword.googleFailed');
+
+  /** Accept the link (and texts) without a password, then go to Google. */
+  const handleGoogle = async (): Promise<void> => {
+    setError(undefined);
+    if ((terms.length > 0 && !acceptedTerms) || (privacy.length > 0 && !readPrivacy)) {
+      setError(t('legal.acknowledgeRequired'));
+      return;
+    }
+    setSubmitting(true);
+    try {
+      await acceptLinkWithGoogle({ token, ...acknowledgements() });
+      await onContinueWithGoogle?.();
+    } catch (err) {
+      setError(linkError(err));
+      setSubmitting(false);
+    }
+  };
 
   const handleSubmit = async (event: React.SyntheticEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
@@ -139,6 +177,20 @@ export function SetPasswordForm({ token, legalTexts = [] }: SetPasswordFormProps
       <Button type="submit" disabled={submitting} className="w-full">
         {t('auth.setPassword.submit', { defaultValue: 'Set password' })}
       </Button>
+      {onContinueWithGoogle ? (
+        <>
+          <p className="text-center text-xs text-on-surface-variant">{t('auth.setPassword.googleHint')}</p>
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            disabled={submitting}
+            onClick={() => void handleGoogle()}
+          >
+            {t('auth.setPassword.continueWithGoogle')}
+          </Button>
+        </>
+      ) : null}
     </form>
   );
 }

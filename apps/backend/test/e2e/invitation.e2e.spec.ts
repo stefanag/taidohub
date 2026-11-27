@@ -100,4 +100,33 @@ describe.skipIf(!hasDatabase())('Invitation flow (integration)', () => {
       await users.delete(created.id, SYSADMIN);
     }
   });
+
+  it('accepts an invitation with Google instead of a password: confirms the email, sets no password', async () => {
+    const email = `invitee-google-${Date.now()}@example.com`;
+    const logSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
+    const created = await users.invite({ email, name: 'Google Invitee' }, SYSADMIN);
+    try {
+      const output = logSpy.mock.calls.map((c) => c.join(' ')).join('\n');
+      const token = output.match(/set-password\?token=([0-9a-f]{64})/)![1]!;
+
+      const res = await request(app.getHttpServer()).post('/api/account/accept-with-google').send({ token });
+      expect(res.status).toBe(200);
+      expect(res.headers['set-cookie']).toBeUndefined();
+
+      // better-auth links a Google account only to a user whose email is confirmed.
+      const db = app.get<DrizzleDb>(DRIZZLE);
+      const [row] = await db.select().from(userTable).where(eq(userTable.id, created.id));
+      expect(row?.emailVerified).toBe(true);
+
+      // The link is spent, and no password was set.
+      const again = await request(app.getHttpServer()).post('/api/account/accept-with-google').send({ token });
+      expect(again.status).toBe(400);
+      await expect(
+        betterAuth.api.signInEmail({ body: { email, password: 'anything-at-all-123' } }),
+      ).rejects.toBeDefined();
+    } finally {
+      logSpy.mockRestore();
+      await users.delete(created.id, SYSADMIN);
+    }
+  });
 });
