@@ -938,5 +938,33 @@
     "confirm": "Poista pysyvästi",
     "wrongPassword": "Salasana ei ole oikein.",
     "inUse": "Tiliä ei voi poistaa täällä. Ota yhteyttä ylläpitäjään."
+  },
+  "richText": {
+    "textStyle": "Tekstityyli",
+    "normal": "Normaali",
+    "heading1": "Otsikko 1",
+    "heading2": "Otsikko 2",
+    "heading3": "Otsikko 3",
+    "heading4": "Otsikko 4",
+    "bold": "Lihavointi",
+    "italic": "Kursivointi",
+    "underline": "Alleviivaus",
+    "strike": "Yliviivaus",
+    "orderedList": "Numeroitu luettelo",
+    "bulletList": "Luettelomerkit",
+    "outdent": "Pienennä sisennystä",
+    "indent": "Suurenna sisennystä",
+    "quote": "Lainaus",
+    "code": "Koodi",
+    "link": "Linkki",
+    "clean": "Poista muotoilu",
+    "table": {
+      "insert": "Lisää taulukko (3 × 3)",
+      "addRow": "Lisää rivi alle",
+      "addColumn": "Lisää sarake oikealle",
+      "deleteRow": "Poista rivi",
+      "deleteColumn": "Poista sarake",
+      "delete": "Poista taulukko"
+    }
   }
 }

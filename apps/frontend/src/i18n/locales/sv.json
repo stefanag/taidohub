@@ -938,5 +938,33 @@
     "confirm": "Radera för gott",
     "wrongPassword": "Lösenordet är inte rätt.",
     "inUse": "Kontot kan inte raderas här. Kontakta en administratör."
+  },
+  "richText": {
+    "textStyle": "Textstil",
+    "normal": "Normal",
+    "heading1": "Rubrik 1",
+    "heading2": "Rubrik 2",
+    "heading3": "Rubrik 3",
+    "heading4": "Rubrik 4",
+    "bold": "Fetstil",
+    "italic": "Kursiv",
+    "underline": "Understruken",
+    "strike": "Genomstruken",
+    "orderedList": "Numrerad lista",
+    "bulletList": "Punktlista",
+    "outdent": "Minska indrag",
+    "indent": "Öka indrag",
+    "quote": "Citat",
+    "code": "Kod",
+    "link": "Länk",
+    "clean": "Ta bort formatering",
+    "table": {
+      "insert": "Infoga tabell (3 × 3)",
+      "addRow": "Lägg till rad under",
+      "addColumn": "Lägg till kolumn till höger",
+      "deleteRow": "Ta bort rad",
+      "deleteColumn": "Ta bort kolumn",
+      "delete": "Ta bort tabell"
+    }
   }
 }

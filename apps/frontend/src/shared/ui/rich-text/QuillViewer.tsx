@@ -1,17 +1,20 @@
 import * as React from 'react';
 import ReactQuill from 'react-quill-new';
 
+import { DOCUMENT_FORMATS } from './RichTextEditor.js';
+
 import type { Delta } from './delta.js';
 
 import { cn } from '@/shared/lib/utils';
-
 
 export interface QuillViewerProps {
   value: Delta;
   className?: string;
 }
 
-const FORMATS = ['header', 'bold', 'italic', 'list', 'blockquote', 'code', 'link'];
+/** Everything either toolbar can produce, so documents with tables render too. */
+const FORMATS = DOCUMENT_FORMATS;
+const MODULES = { toolbar: false, table: true };
 
 /**
  * Read-only twin of {@link RichTextEditor}. Renders a Quill instance with
@@ -24,13 +27,7 @@ const FORMATS = ['header', 'bold', 'italic', 'list', 'blockquote', 'code', 'link
 export function QuillViewer({ value, className }: QuillViewerProps): React.ReactElement {
   return (
     <div className={cn('ql-viewer', className)}>
-      <ReactQuill
-        value={value}
-        readOnly
-        theme="snow"
-        formats={FORMATS}
-        modules={{ toolbar: false }}
-      />
+      <ReactQuill value={value} readOnly theme="snow" formats={FORMATS} modules={MODULES} />
     </div>
   );
 }

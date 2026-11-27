@@ -99,6 +99,7 @@ export function TranslationEditor({ version, locale }: TranslationEditorProps): 
           onChange={setBody}
           readOnly={locked}
           ariaLabel={t('legal.editor.body')}
+          toolbar="document"
         />
       </FormField>
       <FormMessage message={error} />

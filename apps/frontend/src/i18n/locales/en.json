@@ -955,5 +955,33 @@
     "confirm": "Delete permanently",
     "wrongPassword": "The password is not correct.",
     "inUse": "Your account cannot be deleted here. Ask an administrator."
+  },
+  "richText": {
+    "textStyle": "Text style",
+    "normal": "Normal",
+    "heading1": "Heading 1",
+    "heading2": "Heading 2",
+    "heading3": "Heading 3",
+    "heading4": "Heading 4",
+    "bold": "Bold",
+    "italic": "Italic",
+    "underline": "Underline",
+    "strike": "Strikethrough",
+    "orderedList": "Numbered list",
+    "bulletList": "Bulleted list",
+    "outdent": "Decrease indent",
+    "indent": "Increase indent",
+    "quote": "Quote",
+    "code": "Code",
+    "link": "Link",
+    "clean": "Clear formatting",
+    "table": {
+      "insert": "Insert table (3 × 3)",
+      "addRow": "Add row below",
+      "addColumn": "Add column to the right",
+      "deleteRow": "Delete row",
+      "deleteColumn": "Delete column",
+      "delete": "Delete table"
+    }
   }
 }
