@@ -4,6 +4,8 @@ import { describe, expect, it, vi } from 'vitest';
 import { emptyDelta, type Delta } from './delta.js';
 import { RichTextEditor } from './RichTextEditor.js';
 
+import i18n from '@/i18n';
+
 const HELLO_BOLD: Delta = {
   ops: [
     { insert: 'Hello ' },
@@ -73,5 +75,52 @@ describe('<RichTextEditor>', () => {
       />,
     );
     expect(container.querySelector('[aria-label="Description"]')).not.toBeNull();
+  });
+});
+
+describe('<RichTextEditor toolbar="document">', () => {
+  it('offers more heading levels, more formatting and table tools', () => {
+    const { container } = render(
+      <RichTextEditor value={emptyDelta()} onChange={vi.fn()} toolbar="document" />,
+    );
+    const values = Array.from(container.querySelectorAll('.ql-header .ql-picker-item')).map((el) =>
+      el.getAttribute('data-value'),
+    );
+    expect(values).toEqual(['1', '2', '3', '4', null]);
+    for (const name of ['underline', 'strike', 'indent', 'align', 'table', 'table-row', 'table-column', 'table-delete']) {
+      expect(container.querySelector(`.ql-toolbar .ql-${name}`), name).not.toBeNull();
+    }
+    expect(container.querySelector('.ql-toolbar .ql-table-row svg')).not.toBeNull();
+  });
+
+  it('names the toolbar in the interface language', async () => {
+    await i18n.changeLanguage('sv');
+    const { container } = render(
+      <RichTextEditor value={emptyDelta()} onChange={vi.fn()} toolbar="document" />,
+    );
+    expect(container.querySelector('.ql-header .ql-picker-item[data-value="1"]')?.getAttribute('data-label')).toBe(
+      'Rubrik 1',
+    );
+    expect(container.querySelector<HTMLButtonElement>('button.ql-table')?.title).toBe('Infoga tabell (3 × 3)');
+    await i18n.changeLanguage('en');
+  });
+
+  it('inserts a table', async () => {
+    const onChange = vi.fn();
+    const { container } = render(<RichTextEditor value={emptyDelta()} onChange={onChange} toolbar="document" />);
+    container.querySelector<HTMLButtonElement>('button.ql-table')!.click();
+    await vi.waitFor(() => expect(onChange).toHaveBeenCalled());
+    const delta = onChange.mock.calls.at(-1)![0] as Delta;
+    // One newline per cell carries the table attribute; Quill merges a row's cells into one op.
+    const cells = delta.ops
+      .filter((op) => op.attributes?.table)
+      .reduce((n, op) => n + (typeof op.insert === 'string' ? op.insert.length : 0), 0);
+    expect(cells).toBe(9);
+  });
+
+  it('keeps the standard toolbar unchanged', () => {
+    const { container } = render(<RichTextEditor value={emptyDelta()} onChange={vi.fn()} />);
+    expect(container.querySelector('.ql-toolbar .ql-table')).toBeNull();
+    expect(container.querySelector('.ql-toolbar .ql-underline')).toBeNull();
   });
 });

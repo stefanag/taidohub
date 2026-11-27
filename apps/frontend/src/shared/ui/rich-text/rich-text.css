@@ -14,26 +14,26 @@
 
 .ql-snow.ql-toolbar,
 .ql-snow .ql-toolbar {
-  background-color: var(--surface-container-low);
-  border: 1px solid var(--border);
+  background-color: var(--color-surface-container-low);
+  border: 1px solid hsl(var(--border));
   border-bottom: none;
-  border-top-left-radius: var(--radius);
-  border-top-right-radius: var(--radius);
+  border-top-left-radius: var(--radius-md);
+  border-top-right-radius: var(--radius-md);
 }
 
 .ql-snow.ql-container,
 .ql-snow .ql-container {
-  border: 1px solid var(--border);
-  border-bottom-left-radius: var(--radius);
-  border-bottom-right-radius: var(--radius);
+  border: 1px solid hsl(var(--border));
+  border-bottom-left-radius: var(--radius-md);
+  border-bottom-right-radius: var(--radius-md);
   font-family: inherit;
-  background-color: var(--background);
-  color: var(--on-surface, var(--foreground));
+  background-color: var(--color-surface-container-lowest);
+  color: var(--color-on-surface);
 }
 
 /* Focus ring on the editor body. Snow has no focus state by default. */
 .ql-snow.ql-container:focus-within {
-  outline: 2px solid var(--ring);
+  outline: 2px solid hsl(var(--ring));
   outline-offset: -1px;
 }
 
@@ -43,21 +43,21 @@
 
 .ql-snow .ql-toolbar button,
 .ql-snow .ql-toolbar .ql-picker-label {
-  color: var(--on-surface-variant, var(--muted-foreground));
+  color: var(--color-on-surface-variant);
 }
 
 .ql-snow .ql-toolbar button:hover,
 .ql-snow .ql-toolbar button:focus,
 .ql-snow .ql-toolbar .ql-picker-label:hover {
-  color: var(--on-surface, var(--foreground));
+  color: var(--color-on-surface);
 }
 
 .ql-snow .ql-toolbar button.ql-active,
 .ql-snow .ql-toolbar .ql-picker-label.ql-active,
 .ql-snow .ql-toolbar .ql-picker-item.ql-selected {
-  color: var(--on-secondary-container);
-  background-color: var(--secondary-container);
-  border-radius: calc(var(--radius) - 4px);
+  color: var(--color-on-secondary-container);
+  background-color: var(--color-secondary-container);
+  border-radius: var(--radius-xs);
 }
 
 /* SVG icon strokes inherit the button text colour. */
@@ -72,14 +72,28 @@
 }
 
 /* ──────────────────────────────────────────────────────────────────────
- * Picker dropdown (heading select)
+ * Picker dropdown (heading, alignment)
+ *
+ * The toolbar gets its own stacking layer above the editor body, so an
+ * open dropdown always covers the text below it.
  * ────────────────────────────────────────────────────────────────────── */
 
+.ql-snow.ql-toolbar,
+.ql-snow .ql-toolbar {
+  position: relative;
+  z-index: 20;
+}
+
+.ql-snow .ql-picker.ql-expanded .ql-picker-options {
+  z-index: 30;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 12%);
+}
+
 .ql-snow .ql-picker-options {
-  background-color: var(--surface-container-high);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  color: var(--on-surface, var(--foreground));
+  background-color: var(--color-surface-container-high);
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius-md);
+  color: var(--color-on-surface);
 }
 
 /* ──────────────────────────────────────────────────────────────────────
@@ -87,18 +101,18 @@
  * ────────────────────────────────────────────────────────────────────── */
 
 .ql-snow .ql-tooltip {
-  background-color: var(--surface-container-high);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  color: var(--on-surface, var(--foreground));
+  background-color: var(--color-surface-container-high);
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius-md);
+  color: var(--color-on-surface);
   box-shadow: 0 4px 12px rgb(0 0 0 / 12%);
 }
 
 .ql-snow .ql-tooltip input[type='text'] {
-  background-color: var(--background);
-  border: 1px solid var(--border);
-  border-radius: calc(var(--radius) - 4px);
-  color: var(--on-surface, var(--foreground));
+  background-color: var(--color-surface-container-lowest);
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius-xs);
+  color: var(--color-on-surface);
 }
 
 /* ──────────────────────────────────────────────────────────────────────
@@ -119,6 +133,20 @@
   margin-bottom: 0.5rem;
 }
 
+.ql-snow .ql-editor h1 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-top: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.ql-snow .ql-editor h4 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
 .ql-snow .ql-editor h3 {
   font-size: 1.25rem;
   font-weight: 600;
@@ -127,14 +155,14 @@
 }
 
 .ql-snow .ql-editor blockquote {
-  border-left: 4px solid var(--border);
+  border-left: 4px solid hsl(var(--border));
   padding-left: 1rem;
-  color: var(--on-surface-variant, var(--muted-foreground));
+  color: var(--color-on-surface-variant);
   font-style: italic;
 }
 
 .ql-snow .ql-editor code {
-  background-color: var(--surface-container-high);
+  background-color: var(--color-surface-container-high);
   padding: 0.1em 0.35em;
   border-radius: 0.25rem;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -142,13 +170,26 @@
 }
 
 .ql-snow .ql-editor a {
-  color: var(--primary);
+  color: var(--color-primary);
   text-decoration: underline;
+}
+
+/* Tables (document toolbar). */
+.ql-snow .ql-editor table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0.5rem 0;
+}
+
+.ql-snow .ql-editor td {
+  border: 1px solid hsl(var(--border));
+  padding: 0.35rem 0.5rem;
+  vertical-align: top;
 }
 
 /* Placeholder text colour. */
 .ql-snow .ql-editor.ql-blank::before {
-  color: var(--on-surface-variant, var(--muted-foreground));
+  color: var(--color-on-surface-variant);
   font-style: italic;
   opacity: 0.7;
 }
