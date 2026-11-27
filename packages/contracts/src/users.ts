@@ -123,6 +123,19 @@ export const SetInitialPasswordSchema = z
 
 export type SetInitialPasswordInput = z.infer<typeof SetInitialPasswordSchema>;
 
+export const AcceptLinkWithGoogleSchema = z
+  .object({
+    token: z.string().min(1),
+    /** As for set-password: required for invitations when texts apply. */
+    acknowledgements: z.array(LegalAcknowledgementInputSchema).max(50).optional(),
+  })
+  .meta({
+    id: 'AcceptLinkWithGoogleInput',
+    description:
+      'Use an invitation or reset link to confirm the email address and accept the texts, then sign in with Google instead of choosing a password.',
+  });
+export type AcceptLinkWithGoogleInput = z.infer<typeof AcceptLinkWithGoogleSchema>;
+
 export const UsersOpenApiRegistry = {
   Role: RoleSchema,
   User: UserSchema,

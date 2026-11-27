@@ -236,4 +236,60 @@ describe('AuthService — setInitialPassword', () => {
     expect(legal.applicableForMember).not.toHaveBeenCalled();
     expect(legal.recordAcknowledgements).not.toHaveBeenCalled();
   });
+
+  describe('acceptLinkWithGoogle', () => {
+    it('confirms the email and records the texts of an invitation, without a password', async () => {
+      tokens.consumeToken.mockResolvedValue({ identifier: 'invite:u-target' });
+      const db = dbStub({ userRows: [TARGET_USER], accountRows: [] });
+      const legal = legalStub();
+      const rows = [{ userId: 'u-target', versionId: 'v-1' }];
+      legal.prepareAcknowledgements.mockResolvedValue(rows);
+      const service = await makeService(tokens, auth, db, legal);
+
+      await service.acceptLinkWithGoogle({ token: 'tok', acknowledgements: [] });
+
+      expect(tokens.consumeToken).toHaveBeenCalledWith('tok');
+      expect(db.__txUpdate).toHaveBeenCalledTimes(1);
+      expect(db.__txInsert).not.toHaveBeenCalled();
+      expect(legal.recordAcknowledgements).toHaveBeenCalledWith(expect.anything(), rows);
+      expect(auth.api.signInEmail).not.toHaveBeenCalled();
+    });
+
+    it('keeps the link when the texts were not accepted', async () => {
+      tokens.consumeToken.mockResolvedValue({ identifier: 'invite:u-target' });
+      const db = dbStub({ userRows: [TARGET_USER], accountRows: [] });
+      const legal = legalStub();
+      legal.prepareAcknowledgements.mockRejectedValue(new BadRequestException('LEGAL_ACKNOWLEDGEMENT_REQUIRED'));
+      const service = await makeService(tokens, auth, db, legal);
+
+      await expect(service.acceptLinkWithGoogle({ token: 'tok' })).rejects.toThrow(BadRequestException);
+      expect(tokens.consumeToken).not.toHaveBeenCalled();
+    });
+
+    it('accepts a reset link too, asking for no texts', async () => {
+      tokens.consumeToken.mockResolvedValue({ identifier: 'admin-reset:u-target' });
+      const db = dbStub({ userRows: [TARGET_USER], accountRows: [] });
+      const legal = legalStub();
+      const service = await makeService(tokens, auth, db, legal);
+
+      await service.acceptLinkWithGoogle({ token: 'tok' });
+
+      expect(legal.applicableForMember).not.toHaveBeenCalled();
+      expect(db.__txUpdate).toHaveBeenCalledTimes(1);
+    });
+
+    it('refuses an unknown link and a deactivated user', async () => {
+      tokens.consumeToken.mockResolvedValue(null);
+      const service = await makeService(tokens, auth, dbStub({ userRows: [TARGET_USER], accountRows: [] }));
+      await expect(service.acceptLinkWithGoogle({ token: 'bad' })).rejects.toThrow(BadRequestException);
+
+      tokens.consumeToken.mockResolvedValue({ identifier: 'invite:u-target' });
+      const deactivated = await makeService(
+        tokens,
+        auth,
+        dbStub({ userRows: [{ ...TARGET_USER, deactivatedAt: new Date() }], accountRows: [] }),
+      );
+      await expect(deactivated.acceptLinkWithGoogle({ token: 'tok' })).rejects.toThrow(BadRequestException);
+    });
+  });
 });

@@ -1,6 +1,7 @@
 {
   "auth": {
     "login": {
+      "googleNotActivated": "Ditt konto är inte aktiverat än. Öppna inbjudningsmejlet och följ länken först; därefter kan du logga in med Google.",
       "google": "Logga in med Google",
       "googleUnknownAccount": "Det finns inget konto för den Google-adressen än.",
       "googleFailed": "Inloggningen med Google fungerade inte. Försök igen eller använd e-post och lösenord.",
@@ -19,6 +20,9 @@
     },
     "motto": "Där sinnet är samlat är inget omöjligt.",
     "setPassword": {
+      "continueWithGoogle": "Fortsätt med Google",
+      "googleHint": "Eller hoppa över lösenordet och logga in med Google. Använd Google-kontot för samma e-postadress som inbjudan skickades till.",
+      "googleFailed": "Det gick inte att fortsätta med Google. Försök igen eller välj ett lösenord.",
       "title": "Ange ditt lösenord",
       "description": "Välj ett lösenord för att slutföra konfigurationen av ditt konto.",
       "passwordLabel": "Lösenord",

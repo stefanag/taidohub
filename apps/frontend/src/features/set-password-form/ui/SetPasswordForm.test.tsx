@@ -6,13 +6,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { SetPasswordForm } from './SetPasswordForm.js';
 
-import { setInitialPassword } from '@/entities/user/api/user.api.js';
+import { acceptLinkWithGoogle, setInitialPassword } from '@/entities/user/api/user.api.js';
 import i18n from '@/i18n';
 import { HttpError } from '@/shared/api';
 
 vi.mock('@/entities/user/api/user.api.js', async (orig) => {
   const actual = await orig<typeof import('@/entities/user/api/user.api.js')>();
-  return { ...actual, setInitialPassword: vi.fn() };
+  return { ...actual, setInitialPassword: vi.fn(), acceptLinkWithGoogle: vi.fn() };
 });
 
 const mockedSet = vi.mocked(setInitialPassword);
@@ -127,5 +127,50 @@ describe('<SetPasswordForm>', () => {
         ],
       }),
     );
+  });
+
+  it('offers Google only when the page supplies it', () => {
+    render(
+      <I18nextProvider i18n={i18n}>
+        <SetPasswordForm token="tok-abc" />
+      </I18nextProvider>,
+    );
+    expect(screen.queryByRole('button', { name: /continue with google/i })).not.toBeInTheDocument();
+  });
+
+  it('accepts the link and texts without a password, then continues with Google', async () => {
+    vi.mocked(acceptLinkWithGoogle).mockResolvedValueOnce(undefined);
+    const onGoogle = vi.fn().mockResolvedValue(undefined);
+    const terms = {
+      documentId: '11111111-1111-4111-8111-111111111111',
+      kind: 'terms' as const,
+      audience: 'members' as const,
+      organisationId: null,
+      versionId: '11111111-1111-4111-8111-111111111111',
+      version: 1,
+      publishedAt: '2026-11-26T10:00:00.000Z',
+      authoritativeLocale: 'sv' as const,
+      availableLocales: ['sv' as const],
+      translation: { locale: 'sv' as const, revision: 1, title: 'Villkor', body: { ops: [] } },
+      isFallback: false,
+    };
+    render(
+      <I18nextProvider i18n={i18n}>
+        <SetPasswordForm token="tok-abc" legalTexts={[terms]} onContinueWithGoogle={onGoogle} />
+      </I18nextProvider>,
+    );
+    const user = userEvent.setup();
+    await user.click(screen.getByRole('button', { name: /continue with google/i }));
+    expect(await screen.findByRole('alert')).toHaveTextContent(/accept the terms/i);
+    expect(acceptLinkWithGoogle).not.toHaveBeenCalled();
+
+    await user.click(screen.getByLabelText('I accept the terms of use'));
+    await user.click(screen.getByRole('button', { name: /continue with google/i }));
+    await waitFor(() => expect(onGoogle).toHaveBeenCalled());
+    expect(acceptLinkWithGoogle).toHaveBeenCalledWith({
+      token: 'tok-abc',
+      acknowledgements: [{ versionId: terms.versionId, locale: 'sv' }],
+    });
+    expect(mockedSet).not.toHaveBeenCalled();
   });
 });

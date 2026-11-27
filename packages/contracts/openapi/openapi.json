@@ -297,6 +297,32 @@
         ]
       }
     },
+    "/api/account/accept-with-google": {
+      "post": {
+        "description": "Consumes the token, marks the email verified and, for invitations, records the accepted texts. Sets no password and starts no session: the client then signs in with Google, which links the Google account with the same verified address.",
+        "operationId": "AccountController_acceptWithGoogle",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AcceptLinkWithGoogleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Link accepted; continue with Google."
+          }
+        },
+        "summary": "Use an invite or reset token to continue with Google instead of a password.",
+        "tags": [
+          "account"
+        ]
+      }
+    },
     "/api/belt-systems": {
       "get": {
         "operationId": "BeltSystemsController_list",
@@ -7753,6 +7779,91 @@
         "required": [
           "token",
           "password"
+        ]
+      },
+      "AcceptLinkWithGoogleDto": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "minLength": 1,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "LegalAcknowledgementInput": {
+                "type": "object",
+                "properties": {
+                  "versionId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "locale": {
+                    "$ref": "#/$defs/LegalLocale"
+                  }
+                },
+                "required": [
+                  "versionId",
+                  "locale"
+                ]
+              },
+              "LegalLocale": {
+                "type": "string",
+                "enum": [
+                  "sv",
+                  "en",
+                  "fi"
+                ],
+                "description": "A language a legal text can be written in."
+              }
+            },
+            "x-nestjs_zod-parent-id": "AcceptLinkWithGoogleInput",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Use an invitation or reset link to confirm the email address and accept the texts, then sign in with Google instead of choosing a password."
+            }
+          },
+          "acknowledgements": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/LegalAcknowledgementInput"
+            },
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "LegalAcknowledgementInput": {
+                "type": "object",
+                "properties": {
+                  "versionId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "locale": {
+                    "$ref": "#/$defs/LegalLocale"
+                  }
+                },
+                "required": [
+                  "versionId",
+                  "locale"
+                ]
+              },
+              "LegalLocale": {
+                "type": "string",
+                "enum": [
+                  "sv",
+                  "en",
+                  "fi"
+                ],
+                "description": "A language a legal text can be written in."
+              }
+            },
+            "x-nestjs_zod-parent-id": "AcceptLinkWithGoogleInput",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "Use an invitation or reset link to confirm the email address and accept the texts, then sign in with Google instead of choosing a password."
+            }
+          }
+        },
+        "required": [
+          "token"
         ]
       },
       "ErrorEnvelopeDto": {

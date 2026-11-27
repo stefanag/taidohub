@@ -7,7 +7,7 @@ import { type Env } from '../../config/env.schema.js';
 import { Public } from '../../infrastructure/auth/public.decorator.js';
 
 import { AuthService } from './auth.service.js';
-import { SetInitialPasswordDto } from './dto/set-initial-password.dto.js';
+import { AcceptLinkWithGoogleDto, SetInitialPasswordDto } from './dto/set-initial-password.dto.js';
 
 import type { SignInProviders } from '@repo/contracts/auth';
 import type { Response } from 'express';
@@ -64,6 +64,24 @@ export class AccountController {
     for (const cookie of headers.getSetCookie()) {
       res.append('set-cookie', cookie);
     }
+    return { ok: true };
+  }
+
+  @Public()
+  @Post('accept-with-google')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Use an invite or reset token to continue with Google instead of a password.',
+    operationId: 'AccountController_acceptWithGoogle',
+    description:
+      'Consumes the token, marks the email verified and, for invitations, records the accepted ' +
+      'texts. Sets no password and starts no session: the client then signs in with Google, ' +
+      'which links the Google account with the same verified address.',
+  })
+  @ApiBody({ type: AcceptLinkWithGoogleDto })
+  @ApiOkResponse({ description: 'Link accepted; continue with Google.' })
+  async acceptWithGoogle(@Body() body: AcceptLinkWithGoogleDto): Promise<{ ok: true }> {
+    await this.authService.acceptLinkWithGoogle(body);
     return { ok: true };
   }
 }

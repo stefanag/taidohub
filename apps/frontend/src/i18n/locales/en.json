@@ -1,6 +1,7 @@
 {
   "auth": {
     "login": {
+      "googleNotActivated": "Your account is not activated yet. Open the invitation email and follow the link first; after that you can sign in with Google.",
       "google": "Sign in with Google",
       "googleUnknownAccount": "There is no account for that Google address yet.",
       "googleFailed": "Signing in with Google did not work. Try again or use your email and password.",
@@ -19,6 +20,9 @@
     },
     "motto": "Where the mind is concentrated, nothing is impossible.",
     "setPassword": {
+      "continueWithGoogle": "Continue with Google",
+      "googleHint": "Or skip the password and sign in with Google. Use the Google account for the same email address the invitation was sent to.",
+      "googleFailed": "Could not continue with Google. Try again or choose a password.",
       "title": "Set your password",
       "description": "Choose a password to finish setting up your account.",
       "passwordLabel": "Password",

@@ -18,6 +18,7 @@ export {
   listUsers,
   reactivateUser,
   sendPasswordReset,
+  acceptLinkWithGoogle,
   setInitialPassword,
   updateUser,
 } from './api/user.api.js';

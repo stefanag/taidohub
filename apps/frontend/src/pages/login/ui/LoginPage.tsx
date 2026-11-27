@@ -70,7 +70,9 @@ export function LoginPage(): React.ReactElement {
               <p role="alert" className="mt-4 text-sm">
                 {googleError === 'signup_disabled'
                   ? t('auth.login.googleUnknownAccount')
-                  : t('auth.login.googleFailed')}
+                  : googleError === 'account_not_linked'
+                    ? t('auth.login.googleNotActivated')
+                    : t('auth.login.googleFailed')}
                 {googleError === 'signup_disabled' && selfRegistration ? (
                   <>
                     {' '}
