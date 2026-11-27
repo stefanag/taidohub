@@ -68,6 +68,7 @@
     "signOut": "Sign out"
   },
   "nav": {
+    "training": "Training log",
     "adminLegalDocuments": "Terms and privacy",
     "dashboard": "Dashboard",
     "adminOrganisations": "Organisations",
@@ -987,5 +988,81 @@
       "deleteColumn": "Delete column",
       "delete": "Delete table"
     }
+  },
+  "gradingReadiness": {
+    "timeInRank": "Time in rank: {{months}} of {{min}} months",
+    "minAge": "Minimum age: {{age}} years",
+    "met": "You meet the time and age requirements for this rank.",
+    "earliest": "Earliest possible grading: {{date}}",
+    "missingDateOfBirth": "Add your date of birth on your profile to see when you meet the age requirement.",
+    "missingPass": "Your grading history has no date for your current rank yet, so the time in rank can't be counted."
+  },
+  "practiceReminders": {
+    "title": "Time to practise again",
+    "intro": "Requirements for your next rank that you haven't practised in {{days}} days.",
+    "never": "Not practised yet",
+    "daysAgo_one": "{{count}} day ago",
+    "daysAgo_other": "{{count}} days ago",
+    "more_one": "and {{count}} more",
+    "more_other": "and {{count}} more"
+  },
+  "trainingLog": {
+    "title": "Training log",
+    "unavailable": "The training log is not available yet.",
+    "logSession": "Log session",
+    "sessions": "Sessions",
+    "empty": "No sessions logged yet.",
+    "edit": "Edit session",
+    "delete": "Delete session",
+    "confirmDelete": "Delete this session? This cannot be undone.",
+    "removedItem": "(removed)",
+    "minutes_one": "{{count}} minute",
+    "minutes_other": "{{count}} minutes",
+    "kind": {
+      "club": "Club session",
+      "own": "Own training",
+      "camp": "Camp",
+      "seminar": "Seminar"
+    },
+    "contentType": {
+      "technique": "Technique",
+      "pattern": "Pattern"
+    },
+    "form": {
+      "newTitle": "Log a session",
+      "editTitle": "Edit session",
+      "description": "Techniques and patterns you add here get their \"last practised\" date updated.",
+      "date": "Date",
+      "kind": "Kind",
+      "duration": "Duration (minutes)",
+      "durationInvalid": "Enter a duration between 1 and 1440 minutes, or leave it empty.",
+      "items": "Practised techniques and patterns",
+      "chosenItems": "Chosen techniques and patterns",
+      "searchPlaceholder": "Search by name…",
+      "removeItem": "Remove {{name}}",
+      "notes": "Notes"
+    }
+  },
+  "trainingGoal": {
+    "formTitle": "My goals",
+    "cardTitle": "My training goals",
+    "targetRank": "Target rank",
+    "noTarget": "No target",
+    "targetDate": "Target date",
+    "sessionsPerWeek": "Sessions per week",
+    "saved": "Goals saved.",
+    "perWeekInvalid": "Enter between 1 and 14 sessions a week, or leave it empty.",
+    "none": "You haven't set any goals yet.",
+    "setGoal": "Set goals",
+    "thisWeek": "{{done}} of {{goal}} sessions this week",
+    "thisWeekNoGoal_one": "{{count}} session this week",
+    "thisWeekNoGoal_other": "{{count}} sessions this week",
+    "targetRankBy": "Target: {{rank}} by {{date}}",
+    "targetBy": "Target date: {{date}}",
+    "targetRankOnly": "Target: {{rank}}",
+    "daysLeft_one": "({{count}} day left)",
+    "daysLeft_other": "({{count}} days left)",
+    "datePassed": "(the date has passed)",
+    "openLog": "Open the training log"
   }
 }

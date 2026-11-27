@@ -37,3 +37,4 @@ export * from './pending-operations.js';
 export * from './mcp.js';
 export * from './legal-documents.js';
 export * from './registration.js';
+export * from './training-log.js';

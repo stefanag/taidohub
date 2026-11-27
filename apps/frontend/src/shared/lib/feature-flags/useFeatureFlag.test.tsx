@@ -85,6 +85,8 @@ describe('FeatureFlagsProvider', () => {
           'grading-history-verification': false,
           'instructor-feedback': false,
           'self-registration': false,
+          'grading-readiness': false,
+          'training-log': false,
         }}
       >
         <Probe code="grading-history" />
@@ -100,6 +102,8 @@ describe('FeatureFlagsProvider', () => {
       'grading-history-verification': false,
       'instructor-feedback': false,
       'self-registration': false,
+      'grading-readiness': false,
+      'training-log': false,
     });
 
     renderWithQuery(

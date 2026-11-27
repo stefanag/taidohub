@@ -1,6 +1,6 @@
 # Plan: Self-registration and use without a club
 
-Status: **phase 1 in progress** (PR feat/self-registration). Decisions recorded 2026-11-26 (see "Decisions").
+Status: **phase 1 shipped; phase 2 built** (PR feat/training-readiness). Decisions recorded 2026-11-26 (see "Decisions").
 
 ## Goal
 
@@ -122,7 +122,7 @@ Flag: `self-registration`.
 - The "self-reported, not verified" badge on external unverified gradings is shown whether or not
   the verification flag is on (decision 3).
 
-
+## Phase 2: Training and grading readiness
 
 Order: readiness first (uses data that already exists), then the training log, then what builds
 on it.
@@ -137,6 +137,25 @@ on it.
 3. **Practice reminders**: "You have not practised X for 4 weeks", from `last_practiced_at`; shown
    on the dashboard and the progression page. No email at first.
 4. **Personal goals**: target rank by date, sessions per week; progress shown on the dashboard.
+
+### Phase 2 as built (feat/training-readiness)
+
+- **Readiness** is computed in the frontend (`shared/lib/grading-readiness`), shown inside the
+  next-rank card for the signed-in user only (the age gate needs the user's own date of birth).
+  The earliest date is the later of "last pass + `minMonthsSincePreviousRank`" and "date of birth +
+  `minAge`". When a gate applies but its input is missing (no date of birth, no dated pass), the
+  card says so instead of showing a date.
+- **Training log**: module `training-log` (tables `training_session`, `training_session_item`,
+  `training_goal`, migration 0039; flags in 0040). Routes `/api/training-sessions[/:id]` and
+  `/api/training-goals/me`, each behind `@RequireFeatureFlag('training-log')` (the guard reads
+  method metadata only, so the decorator sits on every endpoint). CASL subject `TrainingSession`:
+  owner only, no sysadmin grant: a training log is private. Someone else's session answers 404.
+- Saving a session calls `ProgressService.markPracticed` in the same transaction: "last
+  practised" moves up to the session date (never back), and an item without a progress row gets
+  one with status `learning`. Deleting a session does not move the date back.
+- **Reminders** and **goals** sit behind `training-log` too (both rely on the log). Reminders list
+  next-rank requirements not practised for 28 days, never-practised first; goals are one row per
+  user, all fields optional; the dashboard card counts sessions from Monday of the current week.
 
 ## Phase 3: Joining a club, export, self-test
 

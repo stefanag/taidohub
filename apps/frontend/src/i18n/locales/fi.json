@@ -68,6 +68,7 @@
     "signOut": "Kirjaudu ulos"
   },
   "nav": {
+    "training": "Harjoituspäiväkirja",
     "adminLegalDocuments": "Ehdot ja tietosuoja",
     "dashboard": "Kojelauta",
     "adminOrganisations": "Organisaatiot",
@@ -970,5 +971,81 @@
       "deleteColumn": "Poista sarake",
       "delete": "Poista taulukko"
     }
+  },
+  "gradingReadiness": {
+    "timeInRank": "Aika vyöarvossa: {{months}}/{{min}} kuukautta",
+    "minAge": "Alaikäraja: {{age}} vuotta",
+    "met": "Täytät tämän vyöarvon aika- ja ikävaatimukset.",
+    "earliest": "Aikaisin mahdollinen vyökoe: {{date}}",
+    "missingDateOfBirth": "Lisää syntymäaikasi profiiliin nähdäksesi, milloin täytät ikävaatimuksen.",
+    "missingPass": "Vyökoehistoriassasi ei ole vielä päivämäärää nykyiselle vyöarvollesi, joten aikaa vyöarvossa ei voi laskea."
+  },
+  "practiceReminders": {
+    "title": "Aika kerrata",
+    "intro": "Seuraavan vyöarvosi vaatimukset, joita et ole harjoitellut {{days}} päivään.",
+    "never": "Ei vielä harjoiteltu",
+    "daysAgo_one": "{{count}} päivä sitten",
+    "daysAgo_other": "{{count}} päivää sitten",
+    "more_one": "ja {{count}} muu",
+    "more_other": "ja {{count}} muuta"
+  },
+  "trainingLog": {
+    "title": "Harjoituspäiväkirja",
+    "unavailable": "Harjoituspäiväkirja ei ole vielä käytettävissä.",
+    "logSession": "Kirjaa harjoitus",
+    "sessions": "Harjoitukset",
+    "empty": "Ei kirjattuja harjoituksia.",
+    "edit": "Muokkaa harjoitusta",
+    "delete": "Poista harjoitus",
+    "confirmDelete": "Poistetaanko harjoitus? Tätä ei voi perua.",
+    "removedItem": "(poistettu)",
+    "minutes_one": "{{count}} minuutti",
+    "minutes_other": "{{count}} minuuttia",
+    "kind": {
+      "club": "Seuran harjoitus",
+      "own": "Oma harjoitus",
+      "camp": "Leiri",
+      "seminar": "Seminaari"
+    },
+    "contentType": {
+      "technique": "Tekniikka",
+      "pattern": "Hokei"
+    },
+    "form": {
+      "newTitle": "Kirjaa harjoitus",
+      "editTitle": "Muokkaa harjoitusta",
+      "description": "Tähän lisäämiesi tekniikoiden ja hokeiden viimeisin harjoittelupäivä päivittyy.",
+      "date": "Päivämäärä",
+      "kind": "Tyyppi",
+      "duration": "Kesto (minuuttia)",
+      "durationInvalid": "Anna kesto väliltä 1–1440 minuuttia tai jätä kenttä tyhjäksi.",
+      "items": "Harjoitellut tekniikat ja hokeit",
+      "chosenItems": "Valitut tekniikat ja hokeit",
+      "searchPlaceholder": "Hae nimellä…",
+      "removeItem": "Poista {{name}}",
+      "notes": "Muistiinpanot"
+    }
+  },
+  "trainingGoal": {
+    "formTitle": "Omat tavoitteet",
+    "cardTitle": "Harjoittelutavoitteeni",
+    "targetRank": "Tavoitevyöarvo",
+    "noTarget": "Ei tavoitetta",
+    "targetDate": "Tavoitepäivä",
+    "sessionsPerWeek": "Harjoituksia viikossa",
+    "saved": "Tavoitteet tallennettu.",
+    "perWeekInvalid": "Anna 1–14 harjoitusta viikossa tai jätä kenttä tyhjäksi.",
+    "none": "Et ole vielä asettanut tavoitteita.",
+    "setGoal": "Aseta tavoitteet",
+    "thisWeek": "{{done}}/{{goal}} harjoitusta tällä viikolla",
+    "thisWeekNoGoal_one": "{{count}} harjoitus tällä viikolla",
+    "thisWeekNoGoal_other": "{{count}} harjoitusta tällä viikolla",
+    "targetRankBy": "Tavoite: {{rank}} viimeistään {{date}}",
+    "targetBy": "Tavoitepäivä: {{date}}",
+    "targetRankOnly": "Tavoite: {{rank}}",
+    "daysLeft_one": "({{count}} päivä jäljellä)",
+    "daysLeft_other": "({{count}} päivää jäljellä)",
+    "datePassed": "(päivä on mennyt)",
+    "openLog": "Avaa harjoituspäiväkirja"
   }
 }

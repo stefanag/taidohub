@@ -308,6 +308,16 @@
         "types": "./dist/registration.d.cts",
         "default": "./dist/registration.cjs"
       }
+    },
+    "./training-log": {
+      "import": {
+        "types": "./dist/training-log.d.ts",
+        "default": "./dist/training-log.js"
+      },
+      "require": {
+        "types": "./dist/training-log.d.cts",
+        "default": "./dist/training-log.cjs"
+      }
     }
   },
   "files": [

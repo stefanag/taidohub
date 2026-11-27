@@ -30,6 +30,7 @@ export default defineConfig({
     statistics: 'src/statistics.ts',
     'legal-documents': 'src/legal-documents.ts',
     registration: 'src/registration.ts',
+    'training-log': 'src/training-log.ts',
     'pending-operations': 'src/pending-operations.ts',
     mcp: 'src/mcp.ts',
   },

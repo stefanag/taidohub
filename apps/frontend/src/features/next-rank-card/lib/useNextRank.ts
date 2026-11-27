@@ -7,6 +7,8 @@ import { gradingHistoryQueryOptions } from '@/entities/rank-history';
 export interface UseNextRankResult {
   /** The user's most recent passed rank, or null (no verified/pass history yet). */
   currentRank: BeltRank | null;
+  /** Date of the pass that gave `currentRank`, or null. */
+  currentRankDate: string | null;
   /** The rank after `currentRank` in the belt system, or null when there is none (highest rank) or data is still loading. */
   nextRank: BeltRank | null;
   isPending: boolean;
@@ -42,15 +44,18 @@ export function useNextRank(userId: string): UseNextRankResult {
     return m;
   }, [ranksQuery.data]);
 
-  const currentRank = React.useMemo<BeltRank | null>(() => {
+  const latestPass = React.useMemo(() => {
     const rows = historyQuery.data?.data ?? [];
     const passed = rows
       .filter((row) => row.result === 'pass')
       .sort((a, b) => b.date.localeCompare(a.date));
-    const latest = passed[0];
-    if (!latest) return null;
-    return rankMap.get(latest.rankId) ?? null;
-  }, [historyQuery.data, rankMap]);
+    return passed[0] ?? null;
+  }, [historyQuery.data]);
+
+  const currentRank = React.useMemo<BeltRank | null>(
+    () => (latestPass ? (rankMap.get(latestPass.rankId) ?? null) : null),
+    [latestPass, rankMap],
+  );
 
   const nextRank = React.useMemo<BeltRank | null>(() => {
     if (!currentRank?.nextRankId) return null;
@@ -59,6 +64,7 @@ export function useNextRank(userId: string): UseNextRankResult {
 
   return {
     currentRank,
+    currentRankDate: currentRank ? latestPass!.date.slice(0, 10) : null,
     nextRank,
     isPending: historyQuery.isPending || ranksQuery.isPending,
     isError: historyQuery.isError || ranksQuery.isError,

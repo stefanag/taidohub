@@ -33,6 +33,7 @@ import { RankHistoryModule } from './modules/rank-history/rank-history.module.js
 import { StatisticsModule } from './modules/statistics/statistics.module.js';
 import { StudentsModule } from './modules/students/students.module.js';
 import { TechniqueModule } from './modules/technique/technique.module.js';
+import { TrainingLogModule } from './modules/training-log/training-log.module.js';
 import { UserImpersonationModule } from './modules/user-impersonation/user-impersonation.module.js';
 import { UsersModule } from './modules/users/users.module.js';
 
@@ -62,6 +63,7 @@ import { UsersModule } from './modules/users/users.module.js';
     TechniqueModule,
     PatternModule,
     ProgressModule,
+    TrainingLogModule,
     StudentsModule,
     FeatureFlagsModule,
     FeedbackModule,

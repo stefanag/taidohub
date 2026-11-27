@@ -3,10 +3,13 @@ import { useTranslation } from 'react-i18next';
 
 import { useNextRank } from '../lib/useNextRank.js';
 
+import { GradingReadinessDetails } from './GradingReadinessDetails.js';
+
 import { useSession } from '@/entities/me';
 import { useProgressListQuery } from '@/entities/progress';
 import { useRequirementsForUserQuery, useRequirementsQuery } from '@/entities/rank-requirement';
 import { useStudentProgressQuery } from '@/entities/student';
+import { useFeatureFlag } from '@/shared/lib/feature-flags';
 import { rankLabel } from '@/shared/lib/rank-label';
 import { calculateRankProgress } from '@/shared/lib/rankProgress';
 import { Card, CardContent, CardHeader, CardTitle, Progress } from '@/shared/ui';
@@ -31,9 +34,12 @@ export function NextRankCard({ userId: userIdProp }: NextRankCardProps): React.R
   const actorId = session.data?.user?.id ?? '';
   const userId = userIdProp ?? actorId;
   const isActor = !userIdProp || userIdProp === actorId;
+  // The date-of-birth half needs the student's own profile, so actor only.
+  const showReadiness = useFeatureFlag('grading-readiness') && isActor;
 
   const {
     currentRank,
+    currentRankDate,
     nextRank,
     isPending: rankPending,
     isError: rankError,
@@ -137,6 +143,13 @@ export function NextRankCard({ userId: userIdProp }: NextRankCardProps): React.R
                 </p>
               </>
             )}
+            {showReadiness && requirementsQuery.data ? (
+              <GradingReadinessDetails
+                lastPassDate={currentRankDate}
+                minMonthsSincePreviousRank={requirementsQuery.data.minMonthsSincePreviousRank}
+                minAge={nextRank.minAge}
+              />
+            ) : null}
           </>
         )}
       </CardContent>

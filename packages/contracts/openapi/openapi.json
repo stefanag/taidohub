@@ -6345,6 +6345,132 @@
         ]
       }
     },
+    "/api/training-sessions": {
+      "get": {
+        "operationId": "TrainingLogController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "training-log"
+        ]
+      },
+      "post": {
+        "operationId": "TrainingLogController_create",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "training-log"
+        ]
+      }
+    },
+    "/api/training-sessions/{id}": {
+      "put": {
+        "operationId": "TrainingLogController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "training-log"
+        ]
+      },
+      "delete": {
+        "operationId": "TrainingLogController_delete",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "training-log"
+        ]
+      }
+    },
+    "/api/training-goals/me": {
+      "get": {
+        "operationId": "TrainingLogController_getGoal",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "training-log"
+        ]
+      },
+      "put": {
+        "operationId": "TrainingLogController_setGoal",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "training-log"
+        ]
+      }
+    },
     "/api/me/memberships": {
       "get": {
         "operationId": "StudentsController_myMemberships",
@@ -29401,6 +29527,24 @@
       },
       "DeleteOwnAccountInput": {
         "$ref": "#/components/schemas/DeleteOwnAccountInput"
+      },
+      "TrainingSessionKind": {
+        "$ref": "#/components/schemas/TrainingSessionKind"
+      },
+      "TrainingSessionItem": {
+        "$ref": "#/components/schemas/TrainingSessionItem"
+      },
+      "TrainingSession": {
+        "$ref": "#/components/schemas/TrainingSession"
+      },
+      "SaveTrainingSessionInput": {
+        "$ref": "#/components/schemas/SaveTrainingSessionInput"
+      },
+      "ListTrainingSessionsQuery": {
+        "$ref": "#/components/schemas/ListTrainingSessionsQuery"
+      },
+      "TrainingGoal": {
+        "$ref": "#/components/schemas/TrainingGoal"
       }
     }
   }
