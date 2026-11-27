@@ -118,6 +118,8 @@ function renderBadge(instructorFeedback = true) {
           'grading-history': true,
           'grading-history-verification': true,
           'self-registration': false,
+          'grading-readiness': false,
+          'training-log': false,
         }}
       >
         <FeedbackBadge />

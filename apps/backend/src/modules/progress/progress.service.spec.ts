@@ -458,3 +458,68 @@ describe('ProgressService.deleteOnBehalfOf', () => {
     expect(harness.audit.record).not.toHaveBeenCalled();
   });
 });
+
+// ── markPracticed ──────────────────────────────────────────────────────
+describe('ProgressService.markPracticed', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('creates a learning row for an item without progress', async () => {
+    const harness = build({ rowOnFind: null });
+    await harness.service.markPracticed(
+      'u-1',
+      [{ contentType: 'pattern', contentId: 'p-1' }],
+      '2026-11-20',
+      FAKE_TX as never,
+    );
+    expect(harness.repo.insert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        userId: 'u-1',
+        contentType: 'pattern',
+        techniqueId: null,
+        patternId: 'p-1',
+        status: 'learning',
+        lastPracticedAt: '2026-11-20',
+      }),
+      FAKE_TX,
+    );
+  });
+
+  it('moves the date up but never back', async () => {
+    const newer = build({ rowOnFind: row({ lastPracticedAt: '2026-11-01' }) });
+    await newer.service.markPracticed(
+      'u-1',
+      [{ contentType: 'technique', contentId: 't-1' }],
+      '2026-11-20',
+      FAKE_TX as never,
+    );
+    expect(newer.repo.update).toHaveBeenCalledWith(
+      'pr-1',
+      expect.objectContaining({ lastPracticedAt: '2026-11-20' }),
+      FAKE_TX,
+    );
+
+    const older = build({ rowOnFind: row({ lastPracticedAt: '2026-11-25' }) });
+    await older.service.markPracticed(
+      'u-1',
+      [{ contentType: 'technique', contentId: 't-1' }],
+      '2026-11-20',
+      FAKE_TX as never,
+    );
+    expect(older.repo.update).not.toHaveBeenCalled();
+    expect(older.repo.insert).not.toHaveBeenCalled();
+  });
+
+  it('rejects an item that is not in the catalogue', async () => {
+    const harness = build({ contentExists: false });
+    await expect(
+      harness.service.markPracticed(
+        'u-1',
+        [{ contentType: 'technique', contentId: 'gone' }],
+        '2026-11-20',
+        FAKE_TX as never,
+      ),
+    ).rejects.toBeInstanceOf(NotFoundException);
+  });
+});

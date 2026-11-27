@@ -72,6 +72,8 @@ describe('FeatureFlagsService', () => {
         'grading-history-verification': false,
         'instructor-feedback': false,
         'self-registration': false,
+        'grading-readiness': false,
+        'training-log': false,
       });
     });
 
@@ -92,8 +94,10 @@ describe('FeatureFlagsService', () => {
       expect(Object.keys(map).sort()).toEqual([
         'grading-history',
         'grading-history-verification',
+        'grading-readiness',
         'instructor-feedback',
         'self-registration',
+        'training-log',
       ]);
     });
   });

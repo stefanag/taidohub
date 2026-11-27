@@ -11,6 +11,7 @@ import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js'
 import {
   DRIZZLE,
   type DrizzleDb,
+  type DrizzleExecutor,
 } from '../../infrastructure/database/client.js';
 import { pattern } from '../../infrastructure/database/schema/pattern.js';
 import { technique } from '../../infrastructure/database/schema/technique.js';
@@ -88,6 +89,48 @@ export class ProgressService {
   }
 
   // ── Mutations ────────────────────────────────────────────────────────
+  /**
+   * Moves "last practised" up to `date` for the items of a training-log
+   * session (never back: an older session does not undo a newer one). An item
+   * without a progress row gets one with status `learning`. For the training
+   * log, inside its transaction; acts on the user's own rows only.
+   */
+  async markPracticed(
+    userId: string,
+    items: { contentType: ContentType; contentId: string }[],
+    date: string,
+    tx: DrizzleExecutor,
+  ): Promise<void> {
+    for (const item of items) {
+      await this.assertContentExists(item.contentType, item.contentId);
+      const existing = await this.repo.findByUserAndContent(
+        userId,
+        item.contentType,
+        item.contentId,
+        tx,
+      );
+      if (existing) {
+        if (existing.lastPracticedAt === null || existing.lastPracticedAt < date) {
+          await this.repo.update(existing.id, { lastPracticedAt: date, updatedAt: new Date() }, tx);
+        }
+      } else {
+        await this.repo.insert(
+          {
+            userId,
+            contentType: item.contentType,
+            techniqueId: item.contentType === 'technique' ? item.contentId : null,
+            patternId: item.contentType === 'pattern' ? item.contentId : null,
+            status: 'learning',
+            studentNotes: '',
+            instructorNotes: '',
+            lastPracticedAt: date,
+          },
+          tx,
+        );
+      }
+    }
+  }
+
   async upsert(
     actor: AuthenticatedUser,
     contentType: ContentType,

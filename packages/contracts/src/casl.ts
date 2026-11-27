@@ -40,6 +40,7 @@ export const SubjectSchema = z
     'Mcp',
     'PendingOperation',
     'LegalDocument',
+    'TrainingSession',
     'all',
   ])
   .meta({
@@ -245,6 +246,12 @@ export type LegalDocumentSubjectShape = {
   organisationId?: string | null;
 };
 
+export type TrainingSessionSubjectShape = {
+  readonly __caslSubjectType__: 'TrainingSession';
+  /** A training log is private: only its owner may touch it. */
+  userId?: string;
+};
+
 export type AppSubject =
   | AppSubjectName
   | UserSubjectShape
@@ -270,7 +277,8 @@ export type AppSubject =
   | StatisticsSubjectShape
   | McpSubjectShape
   | PendingOperationSubjectShape
-  | LegalDocumentSubjectShape;
+  | LegalDocumentSubjectShape
+  | TrainingSessionSubjectShape;
 
 /**
  * Tuple type compatible with `MongoAbility<[AppAction, AppSubject]>` from

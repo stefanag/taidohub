@@ -68,6 +68,7 @@
     "signOut": "Logga ut"
   },
   "nav": {
+    "training": "Träningsdagbok",
     "adminLegalDocuments": "Villkor och integritet",
     "dashboard": "Översikt",
     "adminOrganisations": "Organisationer",
@@ -970,5 +971,81 @@
       "deleteColumn": "Ta bort kolumn",
       "delete": "Ta bort tabell"
     }
+  },
+  "gradingReadiness": {
+    "timeInRank": "Tid i grad: {{months}} av {{min}} månader",
+    "minAge": "Lägsta ålder: {{age}} år",
+    "met": "Du uppfyller kraven på tid och ålder för den här graden.",
+    "earliest": "Tidigast möjliga gradering: {{date}}",
+    "missingDateOfBirth": "Lägg in ditt födelsedatum i profilen för att se när du uppfyller ålderskravet.",
+    "missingPass": "Din graderingshistorik saknar datum för din nuvarande grad, så tiden i grad kan inte räknas."
+  },
+  "practiceReminders": {
+    "title": "Dags att repetera",
+    "intro": "Krav för din nästa grad som du inte har tränat på {{days}} dagar.",
+    "never": "Inte tränat än",
+    "daysAgo_one": "för {{count}} dag sedan",
+    "daysAgo_other": "för {{count}} dagar sedan",
+    "more_one": "och {{count}} till",
+    "more_other": "och {{count}} till"
+  },
+  "trainingLog": {
+    "title": "Träningsdagbok",
+    "unavailable": "Träningsdagboken är inte tillgänglig än.",
+    "logSession": "Logga pass",
+    "sessions": "Pass",
+    "empty": "Inga pass loggade än.",
+    "edit": "Redigera pass",
+    "delete": "Ta bort pass",
+    "confirmDelete": "Ta bort passet? Det går inte att ångra.",
+    "removedItem": "(borttagen)",
+    "minutes_one": "{{count}} minut",
+    "minutes_other": "{{count}} minuter",
+    "kind": {
+      "club": "Klubbträning",
+      "own": "Egen träning",
+      "camp": "Läger",
+      "seminar": "Seminarium"
+    },
+    "contentType": {
+      "technique": "Teknik",
+      "pattern": "Hokei"
+    },
+    "form": {
+      "newTitle": "Logga ett pass",
+      "editTitle": "Redigera pass",
+      "description": "Tekniker och hokei du lägger till här får sitt datum för senaste träning uppdaterat.",
+      "date": "Datum",
+      "kind": "Typ",
+      "duration": "Längd (minuter)",
+      "durationInvalid": "Ange en längd mellan 1 och 1440 minuter, eller lämna fältet tomt.",
+      "items": "Tränade tekniker och hokei",
+      "chosenItems": "Valda tekniker och hokei",
+      "searchPlaceholder": "Sök på namn…",
+      "removeItem": "Ta bort {{name}}",
+      "notes": "Anteckningar"
+    }
+  },
+  "trainingGoal": {
+    "formTitle": "Mina mål",
+    "cardTitle": "Mina träningsmål",
+    "targetRank": "Målgrad",
+    "noTarget": "Inget mål",
+    "targetDate": "Måldatum",
+    "sessionsPerWeek": "Pass per vecka",
+    "saved": "Målen är sparade.",
+    "perWeekInvalid": "Ange mellan 1 och 14 pass i veckan, eller lämna fältet tomt.",
+    "none": "Du har inte satt några mål än.",
+    "setGoal": "Sätt mål",
+    "thisWeek": "{{done}} av {{goal}} pass den här veckan",
+    "thisWeekNoGoal_one": "{{count}} pass den här veckan",
+    "thisWeekNoGoal_other": "{{count}} pass den här veckan",
+    "targetRankBy": "Mål: {{rank}} senast {{date}}",
+    "targetBy": "Måldatum: {{date}}",
+    "targetRankOnly": "Mål: {{rank}}",
+    "daysLeft_one": "({{count}} dag kvar)",
+    "daysLeft_other": "({{count}} dagar kvar)",
+    "datePassed": "(datumet har passerat)",
+    "openLog": "Öppna träningsdagboken"
   }
 }

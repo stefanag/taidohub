@@ -21,6 +21,7 @@ import { Route as AppProgressionRouteImport } from './routes/_app.progression'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
 import { Route as AppStudentsRouteImport } from './routes/_app.students'
 import { Route as AppTechniquesRouteImport } from './routes/_app.techniques'
+import { Route as AppTrainingRouteImport } from './routes/_app.training'
 import { Route as PublicIndexRouteImport } from './routes/_public.index'
 import { Route as PublicForgotPasswordRouteImport } from './routes/_public.forgot-password'
 import { Route as PublicLoginRouteImport } from './routes/_public.login'
@@ -122,6 +123,11 @@ const AppStudentsRoute = AppStudentsRouteImport.update({
 const AppTechniquesRoute = AppTechniquesRouteImport.update({
   id: '/techniques',
   path: '/techniques',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTrainingRoute = AppTrainingRouteImport.update({
+  id: '/training',
+  path: '/training',
   getParentRoute: () => AppRoute,
 } as any)
 const PublicIndexRoute = PublicIndexRouteImport.update({
@@ -372,6 +378,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AppSettingsRouteWithChildren
   '/students': typeof AppStudentsRouteWithChildren
   '/techniques': typeof AppTechniquesRoute
+  '/training': typeof AppTrainingRoute
   '/forgot-password': typeof PublicForgotPasswordRoute
   '/login': typeof PublicLoginRoute
   '/register': typeof PublicRegisterRoute
@@ -426,6 +433,7 @@ export interface FileRoutesByTo {
   '/profile': typeof AppProfileRoute
   '/progression': typeof AppProgressionRoute
   '/techniques': typeof AppTechniquesRoute
+  '/training': typeof AppTrainingRoute
   '/forgot-password': typeof PublicForgotPasswordRoute
   '/login': typeof PublicLoginRoute
   '/register': typeof PublicRegisterRoute
@@ -476,6 +484,7 @@ export interface FileRoutesById {
   '/_app/settings': typeof AppSettingsRouteWithChildren
   '/_app/students': typeof AppStudentsRouteWithChildren
   '/_app/techniques': typeof AppTechniquesRoute
+  '/_app/training': typeof AppTrainingRoute
   '/_public/forgot-password': typeof PublicForgotPasswordRoute
   '/_public/login': typeof PublicLoginRoute
   '/_public/register': typeof PublicRegisterRoute
@@ -535,6 +544,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/students'
     | '/techniques'
+    | '/training'
     | '/forgot-password'
     | '/login'
     | '/register'
@@ -589,6 +599,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/progression'
     | '/techniques'
+    | '/training'
     | '/forgot-password'
     | '/login'
     | '/register'
@@ -638,6 +649,7 @@ export interface FileRouteTypes {
     | '/_app/settings'
     | '/_app/students'
     | '/_app/techniques'
+    | '/_app/training'
     | '/_public/forgot-password'
     | '/_public/login'
     | '/_public/register'
@@ -773,6 +785,13 @@ declare module '@tanstack/react-router' {
       path: '/techniques'
       fullPath: '/techniques'
       preLoaderRoute: typeof AppTechniquesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/training': {
+      id: '/_app/training'
+      path: '/training'
+      fullPath: '/training'
+      preLoaderRoute: typeof AppTrainingRouteImport
       parentRoute: typeof AppRoute
     }
     '/_public/': {
@@ -1254,6 +1273,7 @@ interface AppRouteChildren {
   AppSettingsRoute: typeof AppSettingsRouteWithChildren
   AppStudentsRoute: typeof AppStudentsRouteWithChildren
   AppTechniquesRoute: typeof AppTechniquesRoute
+  AppTrainingRoute: typeof AppTrainingRoute
   AppAdminAuditLogRoute: typeof AppAdminAuditLogRoute
   AppAdminBeltCatalogRoute: typeof AppAdminBeltCatalogRoute
   AppAdminFeatureFlagsRoute: typeof AppAdminFeatureFlagsRoute
@@ -1280,6 +1300,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppSettingsRoute: AppSettingsRouteWithChildren,
   AppStudentsRoute: AppStudentsRouteWithChildren,
   AppTechniquesRoute: AppTechniquesRoute,
+  AppTrainingRoute: AppTrainingRoute,
   AppAdminAuditLogRoute: AppAdminAuditLogRoute,
   AppAdminBeltCatalogRoute: AppAdminBeltCatalogRoute,
   AppAdminFeatureFlagsRoute: AppAdminFeatureFlagsRoute,

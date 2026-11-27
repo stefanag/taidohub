@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
 import { useMyMembershipsQuery } from '@/entities/me';
-import { NextRankCard } from '@/features/next-rank-card';
+import { NextRankCard, PracticeReminders } from '@/features/next-rank-card';
+import { TrainingGoalCard } from '@/features/training-goal';
 
 /**
  * Dashboard landing page. Skeleton — real content lands later.
@@ -28,6 +29,8 @@ export function DashboardPage(): React.ReactElement {
 
       <div className="mb-6 grid gap-4 md:grid-cols-2">
         <NextRankCard />
+        <TrainingGoalCard />
+        <PracticeReminders />
       </div>
     </main>
   );

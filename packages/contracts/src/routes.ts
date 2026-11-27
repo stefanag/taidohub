@@ -32,6 +32,12 @@ export const RegistrationRoutes = {
   ownAccount: '/api/account',
 } as const;
 
+export const TrainingLogRoutes = {
+  sessions: '/api/training-sessions',
+  session: (id: string) => `/api/training-sessions/${id}` as const,
+  goal: '/api/training-goals/me',
+} as const;
+
 export const LegalRoutes = {
   published: '/api/legal/published',
   invitation: '/api/legal/invitation',

@@ -16,6 +16,8 @@ describe('FEATURE_FLAG_CODES', () => {
       'grading-history-verification',
       'instructor-feedback',
       'self-registration',
+      'grading-readiness',
+      'training-log',
     ]);
   });
 });

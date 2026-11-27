@@ -24,3 +24,4 @@ export * from './statistics.js';
 export * from './oauth.js';
 export * from './pending-operations.js';
 export * from './legal-documents.js';
+export * from './training-log.js';

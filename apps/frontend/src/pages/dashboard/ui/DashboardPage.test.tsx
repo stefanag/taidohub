@@ -6,6 +6,10 @@ import { DashboardPage } from './DashboardPage';
 // Mock NextRankCard to avoid complex query dependencies
 vi.mock('@/features/next-rank-card', () => ({
   NextRankCard: () => <div data-testid="next-rank-card" />,
+  PracticeReminders: () => <div data-testid="practice-reminders" />,
+}));
+vi.mock('@/features/training-goal', () => ({
+  TrainingGoalCard: () => <div data-testid="training-goal-card" />,
 }));
 
 const memberships = vi.hoisted(() => ({ value: { isSuccess: true, data: [{ role: 'student' }] } }));
