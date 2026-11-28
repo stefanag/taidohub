@@ -121,6 +121,8 @@ function renderThread(studentId = STUDENT_ID) {
           'self-registration': false,
           'grading-readiness': false,
           'training-log': false,
+          'club-join-requests': false,
+          'self-test': false,
         }}
       >
         <FeedbackThread entityType="technique" entityId="tech-1" studentId={studentId} />
@@ -176,6 +178,8 @@ describe('<FeedbackThread>', () => {
             'self-registration': false,
             'grading-readiness': false,
             'training-log': false,
+            'club-join-requests': false,
+            'self-test': false,
           }}
         >
           <FeedbackThread entityType="technique" entityId="tech-1" studentId={STUDENT_ID} />

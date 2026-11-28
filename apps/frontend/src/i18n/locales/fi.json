@@ -68,6 +68,7 @@
     "signOut": "Kirjaudu ulos"
   },
   "nav": {
+    "selfTest": "Itsetesti",
     "training": "Harjoituspäiväkirja",
     "adminLegalDocuments": "Ehdot ja tietosuoja",
     "dashboard": "Kojelauta",
@@ -1047,5 +1048,81 @@
     "daysLeft_other": "({{count}} päivää jäljellä)",
     "datePassed": "(päivä on mennyt)",
     "openLog": "Avaa harjoituspäiväkirja"
+  },
+  "joinClub": {
+    "title": "Liity seuraan",
+    "intro": "Harjoitteletko seurassa? Pyydä seuraa lisäämään sinut. Kun seura hyväksyy, sinusta tulee sen oppilas ja seura voi vahvistaa vyökoehistoriasi.",
+    "club": "Seura",
+    "chooseClub": "Valitse seura",
+    "message": "Viesti seuralle (vapaaehtoinen)",
+    "shared": "Seura näkee nimesi, sähköpostiosoitteesi, nykyisen vyöarvosi ja viestisi.",
+    "send": "Lähetä pyyntö",
+    "pending": "Pyyntösi seuralle {{club}} lähetettiin {{date}}. Odotetaan seuran vastausta.",
+    "cancel": "Peru pyyntö",
+    "declined": "{{club}} hylkäsi pyyntösi. Voit pyytää uudelleen tai valita toisen seuran."
+  },
+  "joinRequests": {
+    "title_one": "{{count}} liittymispyyntö",
+    "title_other": "{{count}} liittymispyyntöä",
+    "details": "{{club}} · nykyinen vyöarvo: {{rank}} · lähetetty {{date}}",
+    "noRank": "ei kirjattu",
+    "approve": "Hyväksy",
+    "decline": "Hylkää",
+    "confirmDecline": "Hylätäänkö pyyntö?",
+    "afterApproval": "Hyväksymällä henkilöstä tulee seuran oppilas. Itse ilmoitetut vyökokeet pysyvät merkittyinä vahvistamattomiksi, kunnes vahvistat ne."
+  },
+  "exportData": {
+    "title": "Tietosi",
+    "intro": "Lataa kaikki TaidoHubin sinusta tallentamat tiedot JSON-tiedostona tai avaa tulostettava yhteenveto vyökokeistasi ja harjoituspäiväkirjastasi.",
+    "download": "Lataa tietoni (JSON)",
+    "printable": "Tulostettava yhteenveto"
+  },
+  "myData": {
+    "title": "Omat tiedot",
+    "exportedAt": "viety {{date}}",
+    "print": "Tulosta tai tallenna PDF:nä",
+    "gradingHistory": "Vyökoehistoria",
+    "noGradings": "Ei kirjattuja vyökokeita.",
+    "trainingLog": "Harjoituspäiväkirja",
+    "noSessions": "Ei kirjattuja harjoituksia.",
+    "date": "Päivämäärä",
+    "rank": "Vyöarvo",
+    "result": "Tulos",
+    "status": "Tila",
+    "results": {
+      "pass": "Hyväksytty",
+      "fail": "Hylätty"
+    },
+    "verified": "Vahvistettu",
+    "selfReported": "Itse ilmoitettu"
+  },
+  "selfTest": {
+    "title": "Itsetesti",
+    "intro": "Harjoittele termejä: tekniikoiden ja hokeiden japanilaiset nimet. Mitään ei tallenneta.",
+    "unavailable": "Itsetesti ei ole vielä käytettävissä.",
+    "scope": "Harjoittele",
+    "scopes": {
+      "all": "Tekniikat ja hokeit",
+      "technique": "Tekniikat",
+      "pattern": "Hokeit"
+    },
+    "direction": "Suunta",
+    "directions": {
+      "jaToLocal": "Japani → oma kieleni",
+      "localToJa": "Oma kieleni → japani"
+    },
+    "tooFew": "Kielellesi käännettyjä nimiä on liian vähän testin muodostamiseen.",
+    "quiz": "Monivalinta",
+    "flashcards": "Muistikortit",
+    "progress": "{{current}}/{{total}}",
+    "correct": "Oikein!",
+    "wrong": "Ei aivan. Oikea vastaus on {{answer}}.",
+    "next": "Seuraava",
+    "previous": "Edellinen",
+    "score": "Sait {{score}}/{{total}} oikein.",
+    "again": "Uusi kierros",
+    "flip": "Käännä kortti",
+    "tapToFlip": "Napauta nähdäksesi vastauksen",
+    "shuffle": "Sekoita"
   }
 }

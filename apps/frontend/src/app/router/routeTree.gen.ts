@@ -13,11 +13,13 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as PublicRouteImport } from './routes/_public'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
 import { Route as AppGradingHistoryRouteImport } from './routes/_app.grading-history'
+import { Route as AppMyDataRouteImport } from './routes/_app.my-data'
 import { Route as AppMyOrganisationRouteImport } from './routes/_app.my-organisation'
 import { Route as AppPatternsRouteImport } from './routes/_app.patterns'
 import { Route as AppPendingOperationsRouteImport } from './routes/_app.pending-operations'
 import { Route as AppProfileRouteImport } from './routes/_app.profile'
 import { Route as AppProgressionRouteImport } from './routes/_app.progression'
+import { Route as AppSelfTestRouteImport } from './routes/_app.self-test'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
 import { Route as AppStudentsRouteImport } from './routes/_app.students'
 import { Route as AppTechniquesRouteImport } from './routes/_app.techniques'
@@ -85,6 +87,11 @@ const AppGradingHistoryRoute = AppGradingHistoryRouteImport.update({
   path: '/grading-history',
   getParentRoute: () => AppRoute,
 } as any)
+const AppMyDataRoute = AppMyDataRouteImport.update({
+  id: '/my-data',
+  path: '/my-data',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppMyOrganisationRoute = AppMyOrganisationRouteImport.update({
   id: '/my-organisation',
   path: '/my-organisation',
@@ -108,6 +115,11 @@ const AppProfileRoute = AppProfileRouteImport.update({
 const AppProgressionRoute = AppProgressionRouteImport.update({
   id: '/progression',
   path: '/progression',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSelfTestRoute = AppSelfTestRouteImport.update({
+  id: '/self-test',
+  path: '/self-test',
   getParentRoute: () => AppRoute,
 } as any)
 const AppSettingsRoute = AppSettingsRouteImport.update({
@@ -370,11 +382,13 @@ export interface FileRoutesByFullPath {
   '/': typeof PublicIndexRoute
   '/dashboard': typeof AppDashboardRoute
   '/grading-history': typeof AppGradingHistoryRoute
+  '/my-data': typeof AppMyDataRoute
   '/my-organisation': typeof AppMyOrganisationRoute
   '/patterns': typeof AppPatternsRoute
   '/pending-operations': typeof AppPendingOperationsRoute
   '/profile': typeof AppProfileRoute
   '/progression': typeof AppProgressionRoute
+  '/self-test': typeof AppSelfTestRoute
   '/settings': typeof AppSettingsRouteWithChildren
   '/students': typeof AppStudentsRouteWithChildren
   '/techniques': typeof AppTechniquesRoute
@@ -427,11 +441,13 @@ export interface FileRoutesByTo {
   '/': typeof PublicIndexRoute
   '/dashboard': typeof AppDashboardRoute
   '/grading-history': typeof AppGradingHistoryRoute
+  '/my-data': typeof AppMyDataRoute
   '/my-organisation': typeof AppMyOrganisationRoute
   '/patterns': typeof AppPatternsRoute
   '/pending-operations': typeof AppPendingOperationsRoute
   '/profile': typeof AppProfileRoute
   '/progression': typeof AppProgressionRoute
+  '/self-test': typeof AppSelfTestRoute
   '/techniques': typeof AppTechniquesRoute
   '/training': typeof AppTrainingRoute
   '/forgot-password': typeof PublicForgotPasswordRoute
@@ -476,11 +492,13 @@ export interface FileRoutesById {
   '/_public': typeof PublicRouteWithChildren
   '/_app/dashboard': typeof AppDashboardRoute
   '/_app/grading-history': typeof AppGradingHistoryRoute
+  '/_app/my-data': typeof AppMyDataRoute
   '/_app/my-organisation': typeof AppMyOrganisationRoute
   '/_app/patterns': typeof AppPatternsRoute
   '/_app/pending-operations': typeof AppPendingOperationsRoute
   '/_app/profile': typeof AppProfileRoute
   '/_app/progression': typeof AppProgressionRoute
+  '/_app/self-test': typeof AppSelfTestRoute
   '/_app/settings': typeof AppSettingsRouteWithChildren
   '/_app/students': typeof AppStudentsRouteWithChildren
   '/_app/techniques': typeof AppTechniquesRoute
@@ -536,11 +554,13 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/grading-history'
+    | '/my-data'
     | '/my-organisation'
     | '/patterns'
     | '/pending-operations'
     | '/profile'
     | '/progression'
+    | '/self-test'
     | '/settings'
     | '/students'
     | '/techniques'
@@ -593,11 +613,13 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/grading-history'
+    | '/my-data'
     | '/my-organisation'
     | '/patterns'
     | '/pending-operations'
     | '/profile'
     | '/progression'
+    | '/self-test'
     | '/techniques'
     | '/training'
     | '/forgot-password'
@@ -641,11 +663,13 @@ export interface FileRouteTypes {
     | '/_public'
     | '/_app/dashboard'
     | '/_app/grading-history'
+    | '/_app/my-data'
     | '/_app/my-organisation'
     | '/_app/patterns'
     | '/_app/pending-operations'
     | '/_app/profile'
     | '/_app/progression'
+    | '/_app/self-test'
     | '/_app/settings'
     | '/_app/students'
     | '/_app/techniques'
@@ -731,6 +755,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppGradingHistoryRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/my-data': {
+      id: '/_app/my-data'
+      path: '/my-data'
+      fullPath: '/my-data'
+      preLoaderRoute: typeof AppMyDataRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/my-organisation': {
       id: '/_app/my-organisation'
       path: '/my-organisation'
@@ -764,6 +795,13 @@ declare module '@tanstack/react-router' {
       path: '/progression'
       fullPath: '/progression'
       preLoaderRoute: typeof AppProgressionRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/self-test': {
+      id: '/_app/self-test'
+      path: '/self-test'
+      fullPath: '/self-test'
+      preLoaderRoute: typeof AppSelfTestRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/settings': {
@@ -1265,11 +1303,13 @@ const AppAdminTechniquesRouteWithChildren =
 interface AppRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
   AppGradingHistoryRoute: typeof AppGradingHistoryRoute
+  AppMyDataRoute: typeof AppMyDataRoute
   AppMyOrganisationRoute: typeof AppMyOrganisationRoute
   AppPatternsRoute: typeof AppPatternsRoute
   AppPendingOperationsRoute: typeof AppPendingOperationsRoute
   AppProfileRoute: typeof AppProfileRoute
   AppProgressionRoute: typeof AppProgressionRoute
+  AppSelfTestRoute: typeof AppSelfTestRoute
   AppSettingsRoute: typeof AppSettingsRouteWithChildren
   AppStudentsRoute: typeof AppStudentsRouteWithChildren
   AppTechniquesRoute: typeof AppTechniquesRoute
@@ -1292,11 +1332,13 @@ interface AppRouteChildren {
 const AppRouteChildren: AppRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
   AppGradingHistoryRoute: AppGradingHistoryRoute,
+  AppMyDataRoute: AppMyDataRoute,
   AppMyOrganisationRoute: AppMyOrganisationRoute,
   AppPatternsRoute: AppPatternsRoute,
   AppPendingOperationsRoute: AppPendingOperationsRoute,
   AppProfileRoute: AppProfileRoute,
   AppProgressionRoute: AppProgressionRoute,
+  AppSelfTestRoute: AppSelfTestRoute,
   AppSettingsRoute: AppSettingsRouteWithChildren,
   AppStudentsRoute: AppStudentsRouteWithChildren,
   AppTechniquesRoute: AppTechniquesRoute,

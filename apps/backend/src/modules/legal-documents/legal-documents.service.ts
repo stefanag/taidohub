@@ -485,6 +485,18 @@ export class LegalDocumentsService {
   }
 
   /** Stores prepared acknowledgements inside the caller's transaction. */
+  /** The user's own acknowledgements, newest first, for their data export. */
+  async listOwnAcknowledgements(userId: string) {
+    const rows = await this.repo.listAcknowledgementsByUser(userId);
+    return rows.map((r) => ({
+      versionId: r.versionId,
+      type: r.type,
+      displayedLocale: r.displayedLocale,
+      authoritativeContentHash: r.authoritativeContentHash,
+      acknowledgedAt: r.acknowledgedAt.toISOString(),
+    }));
+  }
+
   async recordAcknowledgements(tx: DrizzleExecutor, rows: NewAcknowledgement[]): Promise<void> {
     await this.repo.insertAcknowledgements(tx, rows);
   }

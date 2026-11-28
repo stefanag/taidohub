@@ -68,6 +68,7 @@
     "signOut": "Sign out"
   },
   "nav": {
+    "selfTest": "Self-test",
     "training": "Training log",
     "adminLegalDocuments": "Terms and privacy",
     "dashboard": "Dashboard",
@@ -1064,5 +1065,81 @@
     "daysLeft_other": "({{count}} days left)",
     "datePassed": "(the date has passed)",
     "openLog": "Open the training log"
+  },
+  "joinClub": {
+    "title": "Join a club",
+    "intro": "Training with a club? Ask it to add you. When the club approves, you become a student there and the club can verify your grading history.",
+    "club": "Club",
+    "chooseClub": "Choose a club",
+    "message": "Message to the club (optional)",
+    "shared": "The club will see your name, e-mail address, current rank and your message.",
+    "send": "Send request",
+    "pending": "Your request to {{club}} was sent on {{date}}. Waiting for the club to respond.",
+    "cancel": "Cancel request",
+    "declined": "{{club}} declined your request. You can ask again or choose another club."
+  },
+  "joinRequests": {
+    "title_one": "{{count}} request to join",
+    "title_other": "{{count}} requests to join",
+    "details": "{{club}} · current rank: {{rank}} · sent {{date}}",
+    "noRank": "none recorded",
+    "approve": "Approve",
+    "decline": "Decline",
+    "confirmDecline": "Decline this request?",
+    "afterApproval": "Approving makes the person a student in the club. Their self-reported gradings stay marked as not verified until you verify them."
+  },
+  "exportData": {
+    "title": "Your data",
+    "intro": "Download everything TaidoHub stores about you as a JSON file, or open a printable summary of your gradings and training log.",
+    "download": "Download my data (JSON)",
+    "printable": "Printable summary"
+  },
+  "myData": {
+    "title": "My data",
+    "exportedAt": "exported {{date}}",
+    "print": "Print or save as PDF",
+    "gradingHistory": "Grading history",
+    "noGradings": "No gradings recorded.",
+    "trainingLog": "Training log",
+    "noSessions": "No sessions logged.",
+    "date": "Date",
+    "rank": "Rank",
+    "result": "Result",
+    "status": "Status",
+    "results": {
+      "pass": "Passed",
+      "fail": "Not passed"
+    },
+    "verified": "Verified",
+    "selfReported": "Self-reported"
+  },
+  "selfTest": {
+    "title": "Self-test",
+    "intro": "Practise terminology: the Japanese names of techniques and patterns. Nothing is saved.",
+    "unavailable": "The self-test is not available yet.",
+    "scope": "Practise",
+    "scopes": {
+      "all": "Techniques and patterns",
+      "technique": "Techniques",
+      "pattern": "Patterns"
+    },
+    "direction": "Direction",
+    "directions": {
+      "jaToLocal": "Japanese → my language",
+      "localToJa": "My language → Japanese"
+    },
+    "tooFew": "There are not enough names translated into your language to build a test.",
+    "quiz": "Multiple choice",
+    "flashcards": "Flashcards",
+    "progress": "{{current}} of {{total}}",
+    "correct": "Correct!",
+    "wrong": "Not quite. The answer is {{answer}}.",
+    "next": "Next",
+    "previous": "Previous",
+    "score": "You got {{score}} of {{total}} right.",
+    "again": "New round",
+    "flip": "Flip the card",
+    "tapToFlip": "Tap to show the answer",
+    "shuffle": "Shuffle"
   }
 }

@@ -8,6 +8,8 @@ vi.mock('@/features/next-rank-card', () => ({
   NextRankCard: () => <div data-testid="next-rank-card" />,
   PracticeReminders: () => <div data-testid="practice-reminders" />,
 }));
+vi.mock('@/features/join-club', () => ({ JoinClubCard: () => null }));
+vi.mock('@/features/review-join-requests', () => ({ JoinRequestsReview: () => null }));
 vi.mock('@/features/training-goal', () => ({
   TrainingGoalCard: () => <div data-testid="training-goal-card" />,
 }));

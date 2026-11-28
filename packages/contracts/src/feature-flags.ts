@@ -7,6 +7,8 @@ export const FEATURE_FLAG_CODES = [
   'self-registration',
   'grading-readiness',
   'training-log',
+  'club-join-requests',
+  'self-test',
 ] as const;
 
 export const FeatureFlagCodeSchema = z.enum(FEATURE_FLAG_CODES);

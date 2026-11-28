@@ -288,6 +288,20 @@
       "when": 1795805288248,
       "tag": "0040_training_feature_flags",
       "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "7",
+      "when": 1795810887990,
+      "tag": "0041_green_mikhail_rasputin",
+      "breakpoints": true
+    },
+    {
+      "idx": 42,
+      "version": "7",
+      "when": 1795810904652,
+      "tag": "0042_club_join_and_self_test_flags",
+      "breakpoints": true
     }
   ]
 }

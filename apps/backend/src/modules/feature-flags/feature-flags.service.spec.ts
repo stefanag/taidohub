@@ -74,6 +74,8 @@ describe('FeatureFlagsService', () => {
         'self-registration': false,
         'grading-readiness': false,
         'training-log': false,
+        'club-join-requests': false,
+        'self-test': false,
       });
     });
 
@@ -92,11 +94,13 @@ describe('FeatureFlagsService', () => {
       repo.list.mockResolvedValue([row({ code: 'unknown-future-flag', enabled: true })]);
       const map = await service.resolveMap();
       expect(Object.keys(map).sort()).toEqual([
+        'club-join-requests',
         'grading-history',
         'grading-history-verification',
         'grading-readiness',
         'instructor-feedback',
         'self-registration',
+        'self-test',
         'training-log',
       ]);
     });

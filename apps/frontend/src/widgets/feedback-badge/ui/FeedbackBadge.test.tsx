@@ -120,6 +120,8 @@ function renderBadge(instructorFeedback = true) {
           'self-registration': false,
           'grading-readiness': false,
           'training-log': false,
+          'club-join-requests': false,
+          'self-test': false,
         }}
       >
         <FeedbackBadge />

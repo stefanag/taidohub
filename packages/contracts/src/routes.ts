@@ -38,6 +38,20 @@ export const TrainingLogRoutes = {
   goal: '/api/training-goals/me',
 } as const;
 
+export const ClubJoinRequestRoutes = {
+  clubs: '/api/club-join-requests/clubs',
+  mine: '/api/club-join-requests/mine',
+  create: '/api/club-join-requests',
+  pending: '/api/club-join-requests/pending',
+  cancel: (id: string) => `/api/club-join-requests/${id}` as const,
+  approve: (id: string) => `/api/club-join-requests/${id}/approve` as const,
+  decline: (id: string) => `/api/club-join-requests/${id}/decline` as const,
+} as const;
+
+export const AccountExportRoutes = {
+  export: '/api/account/export',
+} as const;
+
 export const LegalRoutes = {
   published: '/api/legal/published',
   invitation: '/api/legal/invitation',

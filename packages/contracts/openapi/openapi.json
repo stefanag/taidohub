@@ -6471,6 +6471,185 @@
         ]
       }
     },
+    "/api/club-join-requests/clubs": {
+      "get": {
+        "operationId": "ClubJoinRequestsController_clubs",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "club-join-requests"
+        ]
+      }
+    },
+    "/api/club-join-requests/mine": {
+      "get": {
+        "operationId": "ClubJoinRequestsController_mine",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "club-join-requests"
+        ]
+      }
+    },
+    "/api/club-join-requests/pending": {
+      "get": {
+        "operationId": "ClubJoinRequestsController_pending",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "club-join-requests"
+        ]
+      }
+    },
+    "/api/club-join-requests": {
+      "post": {
+        "operationId": "ClubJoinRequestsController_create",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "club-join-requests"
+        ]
+      }
+    },
+    "/api/club-join-requests/{id}": {
+      "delete": {
+        "operationId": "ClubJoinRequestsController_cancel",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "club-join-requests"
+        ]
+      }
+    },
+    "/api/club-join-requests/{id}/approve": {
+      "post": {
+        "operationId": "ClubJoinRequestsController_approve",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "club-join-requests"
+        ]
+      }
+    },
+    "/api/club-join-requests/{id}/decline": {
+      "post": {
+        "operationId": "ClubJoinRequestsController_decline",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "club-join-requests"
+        ]
+      }
+    },
+    "/api/account/export": {
+      "get": {
+        "operationId": "AccountExportController_export",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "account"
+        ]
+      }
+    },
     "/api/me/memberships": {
       "get": {
         "operationId": "StudentsController_myMemberships",
@@ -29545,6 +29724,24 @@
       },
       "TrainingGoal": {
         "$ref": "#/components/schemas/TrainingGoal"
+      },
+      "ClubJoinRequestStatus": {
+        "$ref": "#/components/schemas/ClubJoinRequestStatus"
+      },
+      "JoinableClub": {
+        "$ref": "#/components/schemas/JoinableClub"
+      },
+      "ClubJoinRequest": {
+        "$ref": "#/components/schemas/ClubJoinRequest"
+      },
+      "CreateClubJoinRequestInput": {
+        "$ref": "#/components/schemas/CreateClubJoinRequestInput"
+      },
+      "AccountExportAcknowledgement": {
+        "$ref": "#/components/schemas/AccountExportAcknowledgement"
+      },
+      "AccountExport": {
+        "$ref": "#/components/schemas/AccountExport"
       }
     }
   }

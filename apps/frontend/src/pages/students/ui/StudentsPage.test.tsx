@@ -5,6 +5,7 @@ import * as React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
 // Stub the roster query so the page renders synchronously.
+vi.mock('@/features/review-join-requests', () => ({ JoinRequestsReview: () => null }));
 vi.mock('@/entities/student', () => ({
   useStudentsQuery: () => ({
     data: [

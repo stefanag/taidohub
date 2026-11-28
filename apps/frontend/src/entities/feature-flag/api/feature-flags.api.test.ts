@@ -27,6 +27,8 @@ const FLAG_MAP = {
   'self-registration': false,
   'grading-readiness': false,
   'training-log': false,
+  'club-join-requests': false,
+  'self-test': false,
 };
 
 const mockedHttp = vi.mocked(httpClient);

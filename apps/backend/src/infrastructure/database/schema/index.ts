@@ -25,3 +25,4 @@ export * from './oauth.js';
 export * from './pending-operations.js';
 export * from './legal-documents.js';
 export * from './training-log.js';
+export * from './club-join-requests.js';

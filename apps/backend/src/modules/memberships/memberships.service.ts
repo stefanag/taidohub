@@ -11,7 +11,7 @@ import {
 import { AbilityFactory } from '../../infrastructure/ability/ability.factory.js';
 import { AuthUserCache } from '../../infrastructure/auth/auth-user.cache.js';
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
-import { DRIZZLE, type DrizzleDb } from '../../infrastructure/database/client.js';
+import { DRIZZLE, type DrizzleDb, type DrizzleExecutor } from '../../infrastructure/database/client.js';
 import { type DbOrganisationMembership } from '../../infrastructure/database/schema/index.js';
 import { AuditLogService } from '../audit-log/audit-log.service.js';
 import { OrganisationsRepository } from '../organisations/organisations.repository.js';
@@ -45,6 +45,41 @@ export class MembershipsService {
   async listOrganisationIdsForUser(userId: string): Promise<string[]> {
     const { data } = await this.repo.list({ userId });
     return [...new Set(data.map((m) => m.organisationId))];
+  }
+
+  /**
+   * Adds a student membership for an approved club join request, inside the
+   * caller's transaction. Authorization is the join request's (the club's
+   * orgadmin or instructor decides): this method does not check it. Returns
+   * false when the membership already exists. Call {@link refreshUserCache}
+   * after the transaction commits.
+   */
+  async addStudentForJoinRequest(
+    userId: string,
+    organisationId: string,
+    actor: AuthenticatedUser,
+    tx: DrizzleExecutor,
+  ): Promise<boolean> {
+    const existing = await this.repo.findExact(userId, organisationId, 'student', tx);
+    if (existing) return false;
+    const row = await this.repo.create({ userId, organisationId, role: 'student' }, tx);
+    await this.audit.record({
+      tx,
+      entityType: 'organisation_membership',
+      entityId: row.id,
+      action: 'create',
+      userId: actor.id,
+      impersonatedById: actor.impersonatedBy ?? null,
+      actingUserId: null,
+      before: null,
+      after: this.toApi(row),
+    });
+    return true;
+  }
+
+  /** Drops the cached `req.user.memberships` after a membership change. */
+  refreshUserCache(userId: string): void {
+    this.authUserCache.invalidate(userId);
   }
 
   async list(

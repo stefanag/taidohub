@@ -66,6 +66,8 @@ function renderSheet({
           'self-registration': false,
           'grading-readiness': false,
           'training-log': false,
+          'club-join-requests': false,
+          'self-test': false,
         }}
       >
         <FeedbackThreadSheet
