@@ -125,6 +125,54 @@ export async function registerWithGoogle(intent: string): Promise<void> {
   if (result.error) throw new Error(result.error.message ?? 'Google sign-up failed.');
 }
 
+/** One way to sign in to the account: `credential` (password) or `google`. */
+export interface SignInAccount {
+  id: string;
+  providerId: string;
+}
+
+/** The signed-in user's ways to sign in. */
+export async function listSignInAccounts(): Promise<SignInAccount[]> {
+  const result = await authClient.listAccounts();
+  if (result.error) throw new Error(result.error.message ?? 'Could not list sign-in methods.');
+  return (result.data ?? []).map((a) => ({ id: a.id, providerId: a.providerId }));
+}
+
+/** Where the profile page lands after connecting Google (or failing to). */
+export const PROFILE_PATH = '/profile';
+
+/**
+ * Sends the browser to Google to connect a Google account to the signed-in
+ * user; its address may differ from the TaidoHub address. Comes back to the
+ * profile page with `?linked=google`, or `?error=<code>`.
+ */
+export async function linkGoogle(): Promise<void> {
+  const origin = window.location.origin;
+  const result = await authClient.linkSocial({
+    provider: 'google',
+    callbackURL: `${origin}${PROFILE_PATH}?linked=google`,
+    errorCallbackURL: `${origin}${PROFILE_PATH}`,
+  });
+  if (result.error) throw new Error(result.error.message ?? 'Could not connect Google.');
+}
+
+/** The session is too old for a sensitive change; sign in again first. */
+export class SessionNotFreshError extends Error {
+  constructor() {
+    super('SESSION_NOT_FRESH');
+    this.name = 'SessionNotFreshError';
+  }
+}
+
+/** Removes one way to sign in. The server refuses to remove the last one. */
+export async function unlinkSignInAccount(accountId: string): Promise<void> {
+  const result = await authClient.unlinkAccount({ accountId });
+  if (result.error) {
+    if (result.error.code === 'SESSION_NOT_FRESH') throw new SessionNotFreshError();
+    throw new Error(result.error.message ?? 'Could not remove the sign-in method.');
+  }
+}
+
 /** Where the email confirmation link lands (see the verify-email page). */
 export const VERIFY_EMAIL_PATH = '/verify-email';
 

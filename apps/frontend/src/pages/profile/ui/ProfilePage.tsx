@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useSession } from '@/entities/me';
 import { myProfileQueryOptions } from '@/entities/profile';
 import { currentRank, useUserStatsQuery, useUserTrendsQuery } from '@/entities/statistic';
-import { authClient } from '@/features/auth-by-email';
+import { authClient, SignInMethodsSection } from '@/features/auth-by-email';
 import { CoverageMeter } from '@/features/coverage-meter';
 import { DeleteOwnAccountSection } from '@/features/delete-own-account';
 import { ExportOwnDataSection } from '@/features/export-own-data';
@@ -103,6 +103,13 @@ export function ProfilePage(): React.ReactElement {
         </CardContent>
       </Card>
       {currentUserId ? <ProgressionSection userId={currentUserId} /> : null}
+      {session.data?.user.email ? (
+        <Card className="max-w-2xl">
+          <CardContent className="pt-6">
+            <SignInMethodsSection email={session.data.user.email} />
+          </CardContent>
+        </Card>
+      ) : null}
       <Card>
         <CardContent className="pt-6">
           <ExportOwnDataSection />

@@ -1124,5 +1124,29 @@
     "flip": "Käännä kortti",
     "tapToFlip": "Napauta nähdäksesi vastauksen",
     "shuffle": "Sekoita"
+  },
+  "signInMethods": {
+    "title": "Kirjautumistavat",
+    "password": "Sähköposti ja salasana",
+    "passwordSet": "Salasana on asetettu.",
+    "passwordNotSet": "Ei vielä salasanaa.",
+    "addPassword": "Lisää salasana",
+    "connected": "Yhdistetty",
+    "notConnected": "Ei yhdistetty",
+    "connectGoogle": "Yhdistä Google",
+    "remove": "Poista",
+    "confirmRemove": "Poistetaanko Google kirjautumistavoista? Voit yhdistää sen myöhemmin uudelleen.",
+    "onlyMethod": "Ainoa kirjautumistapasi",
+    "hint": "Google-tilillä voi olla eri osoite kuin TaidoHub-tililläsi. TaidoHub-osoitteesi ei muutu.",
+    "notices": {
+      "linked": "Google on yhdistetty. Voit nyt kirjautua sillä.",
+      "unlinked": "Google on poistettu kirjautumistavoista.",
+      "passwordLinkSent": "Lähetimme sähköpostiisi linkin salasanan valitsemiseen."
+    },
+    "errors": {
+      "linkedToOther": "Tämä Google-tili on jo yhdistetty toiseen TaidoHub-tiliin.",
+      "unableToLink": "Googlea ei voitu yhdistää. Yritä uudelleen.",
+      "signInAgain": "Kirjaudu turvallisuussyistä ulos ja uudelleen sisään ennen kirjautumistavan poistamista."
+    }
   }
 }

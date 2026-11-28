@@ -245,6 +245,10 @@ texts are checked.
    "Testing", only the test users listed there can sign in.
 5. Mention Google as a way to sign in in the platform's privacy notice.
 
+Signed-in users can also connect or remove Google under **Profile → Ways to sign in**, including a
+Google account with another address than their TaidoHub account. Nothing to configure: the same
+redirect URI is used.
+
 ## Day-to-day operations
 
 ```bash

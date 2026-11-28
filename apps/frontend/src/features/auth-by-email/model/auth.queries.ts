@@ -1,6 +1,11 @@
 import { queryOptions } from '@tanstack/react-query';
 
-import { authClient, getSignInProviders, type Session } from '../api/auth.api.js';
+import {
+  authClient,
+  getSignInProviders,
+  listSignInAccounts,
+  type Session,
+} from '../api/auth.api.js';
 
 /**
  * TanStack Query options for the current session. The cookie is sent
@@ -29,5 +34,13 @@ export function signInProvidersQueryOptions() {
     queryKey: ['auth', 'sign-in-providers'] as const,
     queryFn: getSignInProviders,
     staleTime: Infinity,
+  });
+}
+
+/** The signed-in user's ways to sign in (password, Google). */
+export function signInAccountsQueryOptions() {
+  return queryOptions({
+    queryKey: ['auth', 'accounts'] as const,
+    queryFn: listSignInAccounts,
   });
 }

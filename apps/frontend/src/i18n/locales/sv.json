@@ -1124,5 +1124,29 @@
     "flip": "Vänd kortet",
     "tapToFlip": "Tryck för att visa svaret",
     "shuffle": "Blanda"
+  },
+  "signInMethods": {
+    "title": "Sätt att logga in",
+    "password": "E-post och lösenord",
+    "passwordSet": "Ett lösenord är satt.",
+    "passwordNotSet": "Inget lösenord än.",
+    "addPassword": "Lägg till lösenord",
+    "connected": "Kopplat",
+    "notConnected": "Inte kopplat",
+    "connectGoogle": "Koppla Google",
+    "remove": "Ta bort",
+    "confirmRemove": "Ta bort Google som sätt att logga in? Du kan koppla det igen senare.",
+    "onlyMethod": "Ditt enda sätt att logga in",
+    "hint": "Google-kontot kan ha en annan adress än ditt TaidoHub-konto. Din adress i TaidoHub ändras inte.",
+    "notices": {
+      "linked": "Google är kopplat. Nu kan du logga in med det.",
+      "unlinked": "Google är borttaget som sätt att logga in.",
+      "passwordLinkSent": "Vi har skickat en länk för att välja lösenord till din e-postadress."
+    },
+    "errors": {
+      "linkedToOther": "Det Google-kontot är redan kopplat till ett annat TaidoHub-konto.",
+      "unableToLink": "Google kunde inte kopplas. Försök igen.",
+      "signInAgain": "Av säkerhetsskäl behöver du logga ut och in igen innan du tar bort ett sätt att logga in."
+    }
   }
 }
