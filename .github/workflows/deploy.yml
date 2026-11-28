@@ -12,6 +12,9 @@
 # and this variable:
 #   SITE_URL             https://staging.taidohub.se or https://taidohub.se
 # Then set the repository variable DEPLOY_ENABLED=true (Settings › Variables).
+# STAGING_AUTO_DEPLOY=false turns off the automatic staging deploy after CI
+# (manual runs still work), e.g. while there is no staging server; see
+# deploy/hetzner/PROMOTE-STAGING-TO-PRODUCTION.md.
 name: Deploy
 
 on:
@@ -42,7 +45,8 @@ jobs:
     # variables such as SITE_URL are not available in a job-level `if`.)
     if: >-
       vars.DEPLOY_ENABLED == 'true' &&
-      (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success')
+      (github.event_name == 'workflow_dispatch' ||
+       (github.event.workflow_run.conclusion == 'success' && vars.STAGING_AUTO_DEPLOY != 'false'))
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment || 'staging' }}
     env:
