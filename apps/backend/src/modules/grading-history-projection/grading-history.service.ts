@@ -2,6 +2,7 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 
 
 import { type AuthenticatedUser } from '../../infrastructure/auth/auth.types.js';
+import { toJudgedAgainst } from '../rank-history/judged-against.js';
 import {
   RankHistoryAuthService,
   type RoleContext,
@@ -74,6 +75,7 @@ export class GradingHistoryService {
       canEdit: this.auth.canEditWithCtx(actor, r, ctx),
       updatedAt: r.updatedAt ? r.updatedAt.toISOString() : null,
       updatedByUserId: r.updatedByUserId,
+      judgedAgainst: toJudgedAgainst(r),
     };
   }
 }

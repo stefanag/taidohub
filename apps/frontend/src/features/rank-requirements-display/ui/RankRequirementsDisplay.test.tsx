@@ -113,6 +113,10 @@ const EMPTY_REQUIREMENTS: GradingRequirements = {
   minMonthsSincePreviousRank: null,
   requiresTheoricExam: false,
   requiresEssay: false,
+  ageGroup: null,
+  ageGroups: [],
+  ageBasis: 'age_on_grading_date',
+  ageUnknown: false,
 };
 
 function makeProgress(overrides: Partial<Progress>): Progress {
@@ -201,6 +205,10 @@ describe('<RankRequirementsDisplay>', () => {
       ],
       jissenMinutes: 10,
       requiresEssay: true,
+      ageGroup: null,
+      ageGroups: [],
+      ageBasis: 'age_on_grading_date',
+      ageUnknown: false,
     });
 
     expect(screen.getByRole('heading', { name: /kihon/i })).toBeInTheDocument();
@@ -300,6 +308,10 @@ describe('<RankRequirementsDisplay>', () => {
       minMonthsSincePreviousRank: null,
       requiresTheoricExam: false,
       requiresEssay: true,
+      ageGroup: null,
+      ageGroups: [],
+      ageBasis: 'age_on_grading_date',
+      ageUnknown: false,
     });
 
     expect(screen.getByText('Jissen sparring minutes: 15')).toBeInTheDocument();
@@ -312,5 +324,18 @@ describe('<RankRequirementsDisplay>', () => {
     renderDisplay(EMPTY_REQUIREMENTS);
 
     expect(screen.queryByRole('heading', { name: /other requirements/i })).not.toBeInTheDocument();
+  });
+
+  it('names the age group a variant is for, and asks for a date of birth when the age is unknown', () => {
+    const { unmount } = renderDisplay({
+      ...EMPTY_REQUIREMENTS,
+      ageGroup: { id: 'ag-1', ageFrom: 12, ageTo: 15 },
+    });
+    expect(screen.getByTestId('requirements-age-group')).toHaveTextContent('Requirements for 12–15 years');
+    expect(screen.queryByTestId('requirements-age-unknown')).not.toBeInTheDocument();
+    unmount();
+
+    renderDisplay({ ...EMPTY_REQUIREMENTS, ageUnknown: true });
+    expect(screen.getByRole('note')).toHaveTextContent('Add your date of birth');
   });
 });

@@ -199,6 +199,7 @@
       "heading": "Club"
     },
     "timeline": {
+      "judgedAgainst": "Judged against: {{requirements}}",
       "noEntriesYet": "No entries yet.",
       "failed": "Failed",
       "external": "External",
@@ -400,6 +401,24 @@
       "empty": "No requirement sets yet."
     },
     "rankRequirements": {
+      "ageGroups": {
+        "title": "Requirements by age",
+        "manage": "Manage age groups",
+        "allAges": "All ages",
+        "baseHint": "These requirements apply to every age that has no age group of its own.",
+        "variantHint": "These requirements replace the ones for all ages for students in this age group.",
+        "editorHint": "Leave From empty for \"under\", or To empty for \"and older\". Groups must not overlap. A new group starts with a copy of the requirements for all ages; removing a group removes its requirements.",
+        "from": "From age",
+        "to": "To age",
+        "remove": "Remove",
+        "add": "Add age group",
+        "errors": {
+          "overlap": "Age groups must not overlap.",
+          "baseRequired": "Save the requirements for all ages first.",
+          "notAllowed": "Only kyu and dan ranks can have age groups.",
+          "invalid": "Each group needs at least one age between 0 and 120, and From must not be above To."
+        }
+      },
       "title": "Rank requirements",
       "description": "Edit per-rank kihon, kobo, patterns, hokei groups, and grading rules.",
       "selectSet": "Select a requirement set",
@@ -473,6 +492,7 @@
         "club": "Club"
       },
       "fields": {
+        "gradingAgeBasis": "How age is counted for grading",
         "type": "Type",
         "shortCode": "Short code",
         "slug": "Slug",
@@ -991,6 +1011,7 @@
     }
   },
   "gradingReadiness": {
+    "ageGroupChange": "From {{date}} the requirements for {{group}} apply.",
     "timeInRank": "Time in rank: {{months}} of {{min}} months",
     "minAge": "Minimum age: {{age}} years",
     "met": "You meet the time and age requirements for this rank.",
@@ -1165,5 +1186,29 @@
       "unableToLink": "Google could not be connected. Try again.",
       "signInAgain": "For your security, sign out and in again before removing a way to sign in."
     }
+  },
+  "ageGroups": {
+    "title": "Age groups",
+    "allAges": "All ages",
+    "under": "Under {{age}}",
+    "andOlder": "{{age}} and older",
+    "exactly": "{{age}} years",
+    "between": "{{from}}–{{to}} years",
+    "requirementsFor": "Requirements for {{group}}",
+    "ageUnknown": "These requirements differ by age. Add your date of birth on your profile to see the ones for your age."
+  },
+  "gradingAge": {
+    "title": "Age for grading requirements",
+    "intro": "How age is counted when a rank has different requirements for different ages, and for a rank's minimum age. Applies to every club in the federation.",
+    "label": "How age is counted",
+    "bases": {
+      "age_on_grading_date": "Age on the day of the grading",
+      "age_reached_in_grading_year": "Age reached during the grading year"
+    },
+    "hints": {
+      "age_on_grading_date": "A student who turns 12 on 15 June counts as 12 from that day.",
+      "age_reached_in_grading_year": "A student who turns 12 at any time in a year counts as 12 for the whole year."
+    },
+    "saved": "Saved."
   }
 }

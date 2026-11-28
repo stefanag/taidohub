@@ -24,6 +24,8 @@ import { Button, FormMessage, Input, Label } from '@/shared/ui';
 export interface RankRequirementsEditorProps {
   rankId: string;
   setId: string;
+  /** Edit this age group's variant instead of the requirement for all ages. */
+  ageGroupId?: string | null;
 }
 
 /**
@@ -101,11 +103,12 @@ const EMPTY_DEFAULTS: RankRequirementsFormValues = {
 export function RankRequirementsEditor({
   rankId,
   setId,
+  ageGroupId = null,
 }: RankRequirementsEditorProps): React.ReactElement {
   const { t, i18n } = useTranslation();
   const lang = (i18n.resolvedLanguage ?? i18n.language ?? 'en').slice(0, 2);
 
-  const requirementsQuery = useRequirementsForSetQuery(rankId, setId);
+  const requirementsQuery = useRequirementsForSetQuery(rankId, setId, ageGroupId);
   const techniquesQuery = useTechniquesQuery();
   const patternsQuery = usePatternsQuery();
   const saveMut = useSetRequirementsMutation();
@@ -125,7 +128,7 @@ export function RankRequirementsEditor({
   const seededKey = React.useRef<string | undefined>(undefined);
   React.useEffect(() => {
     if (!requirementsQuery.data) return;
-    const key = `${rankId}:${setId}`;
+    const key = `${rankId}:${setId}:${ageGroupId ?? 'base'}`;
     if (seededKey.current === key) return;
     seededKey.current = key;
     const data = requirementsQuery.data;
@@ -153,7 +156,7 @@ export function RankRequirementsEditor({
       requiresEssay: data.requiresEssay,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [requirementsQuery.data, rankId, setId]);
+  }, [requirementsQuery.data, rankId, setId, ageGroupId]);
 
   const hokeiFieldArray = useFieldArray({ control: form.control, name: 'hokeiGroups' });
 
@@ -203,6 +206,7 @@ export function RankRequirementsEditor({
     const body: SetGradingRequirementsInput = SetGradingRequirementsSchema.parse({
       ...normalizedValues,
       setId,
+      ageGroupId,
     });
     try {
       await saveMut.mutateAsync({ rankId, body });

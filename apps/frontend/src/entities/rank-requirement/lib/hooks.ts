@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import * as api from '../api/rank-requirement.api.js';
 
-import type { SetGradingRequirementsInput } from '@repo/contracts';
+import type { SetAgeGroupsInput, SetGradingRequirementsInput } from '@repo/contracts';
 
 /**
  * React Query hooks for the RankRequirement module.
@@ -14,9 +14,9 @@ import type { SetGradingRequirementsInput } from '@repo/contracts';
 export const rankRequirementKeys = {
   all: ['rankRequirement'] as const,
   forActor: (rankId: string) => ['rankRequirement', 'actor', rankId] as const,
-  forUser: (rankId: string, userId: string) =>
-    ['rankRequirement', 'user', rankId, userId] as const,
-  forSet: (rankId: string, setId: string) => ['rankRequirement', 'set', rankId, setId] as const,
+  forUser: (rankId: string, userId: string) => ['rankRequirement', 'user', rankId, userId] as const,
+  forSet: (rankId: string, setId: string, ageGroupId: string | null = null) =>
+    ['rankRequirement', 'set', rankId, setId, ageGroupId ?? 'base'] as const,
 };
 
 export function useRequirementsQuery(rankId: string | null) {
@@ -35,11 +35,26 @@ export function useRequirementsForUserQuery(rankId: string | null, userId: strin
   });
 }
 
-export function useRequirementsForSetQuery(rankId: string | null, setId: string | null) {
+export function useRequirementsForSetQuery(
+  rankId: string | null,
+  setId: string | null,
+  ageGroupId: string | null = null,
+) {
   return useQuery({
-    queryKey: rankRequirementKeys.forSet(rankId ?? '', setId ?? ''),
-    queryFn: () => api.getRequirementsForSet(rankId!, setId!),
+    queryKey: rankRequirementKeys.forSet(rankId ?? '', setId ?? '', ageGroupId),
+    queryFn: () => api.getRequirementsForSet(rankId!, setId!, ageGroupId),
     enabled: !!rankId && !!setId,
+  });
+}
+
+export function useSetAgeGroupsMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ rankId, body }: { rankId: string; body: SetAgeGroupsInput }) =>
+      api.setAgeGroups(rankId, body),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: rankRequirementKeys.all });
+    },
   });
 }
 

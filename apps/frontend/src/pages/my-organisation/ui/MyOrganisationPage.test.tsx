@@ -120,6 +120,7 @@ function org(over: Partial<Organisation> = {}): Organisation {
     address: null,
     contactEmail: null,
     headInstructorId: null,
+    gradingAgeBasis: null,
     createdAt: '2026-01-01T00:00:00.000Z',
     updatedAt: '2026-01-01T00:00:00.000Z',
     ...over,

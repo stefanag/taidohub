@@ -199,6 +199,7 @@
       "heading": "Seura"
     },
     "timeline": {
+      "judgedAgainst": "Arvioitu vaatimuksia vastaan: {{requirements}}",
       "noEntriesYet": "Ei merkintöjä vielä.",
       "failed": "Hylätty",
       "external": "Ulkoinen",
@@ -400,6 +401,24 @@
       "empty": "Ei vielä vaatimuskokoelmia."
     },
     "rankRequirements": {
+      "ageGroups": {
+        "title": "Vaatimukset iän mukaan",
+        "manage": "Hallitse ikäryhmiä",
+        "allAges": "Kaikki iät",
+        "baseHint": "Nämä vaatimukset koskevat kaikkia ikiä, joilla ei ole omaa ikäryhmää.",
+        "variantHint": "Nämä vaatimukset korvaavat kaikkien ikien vaatimukset tämän ikäryhmän oppilailla.",
+        "editorHint": "Jätä Alkaen tyhjäksi, jos ryhmä on \"alle\", tai Asti tyhjäksi, jos \"ja vanhemmat\". Ryhmät eivät saa mennä päällekkäin. Uusi ryhmä alkaa kopiolla kaikkien ikien vaatimuksista; ryhmän poistaminen poistaa sen vaatimukset.",
+        "from": "Alkaen iästä",
+        "to": "Ikään asti",
+        "remove": "Poista",
+        "add": "Lisää ikäryhmä",
+        "errors": {
+          "overlap": "Ikäryhmät eivät saa mennä päällekkäin.",
+          "baseRequired": "Tallenna ensin kaikkien ikien vaatimukset.",
+          "notAllowed": "Vain kyu- ja dan-vyöarvoilla voi olla ikäryhmiä.",
+          "invalid": "Jokaisella ryhmällä on oltava vähintään yksi ikä väliltä 0–120, eikä Alkaen saa olla suurempi kuin Asti."
+        }
+      },
       "title": "Arvovaatimukset",
       "description": "Muokkaa kihonia, koboa, kuvioita, hokei-ryhmiä ja arvovaatimuksia arvoittain.",
       "selectSet": "Valitse vaatimusjoukko",
@@ -473,6 +492,7 @@
         "club": "Seura"
       },
       "fields": {
+        "gradingAgeBasis": "Miten ikä lasketaan vyökokeessa",
         "type": "Tyyppi",
         "shortCode": "Lyhenne",
         "slug": "Slug",
@@ -974,6 +994,7 @@
     }
   },
   "gradingReadiness": {
+    "ageGroupChange": "{{date}} alkaen sovelletaan vaatimuksia: {{group}}.",
     "timeInRank": "Aika vyöarvossa: {{months}}/{{min}} kuukautta",
     "minAge": "Alaikäraja: {{age}} vuotta",
     "met": "Täytät tämän vyöarvon aika- ja ikävaatimukset.",
@@ -1148,5 +1169,29 @@
       "unableToLink": "Googlea ei voitu yhdistää. Yritä uudelleen.",
       "signInAgain": "Kirjaudu turvallisuussyistä ulos ja uudelleen sisään ennen kirjautumistavan poistamista."
     }
+  },
+  "ageGroups": {
+    "title": "Ikäryhmät",
+    "allAges": "Kaikki iät",
+    "under": "Alle {{age}}-vuotiaat",
+    "andOlder": "{{age}}-vuotiaat ja vanhemmat",
+    "exactly": "{{age}}-vuotiaat",
+    "between": "{{from}}–{{to}}-vuotiaat",
+    "requirementsFor": "Vaatimukset: {{group}}",
+    "ageUnknown": "Vaatimukset vaihtelevat iän mukaan. Lisää syntymäaikasi profiiliin nähdäksesi ikäsi vaatimukset."
+  },
+  "gradingAge": {
+    "title": "Ikä vyökoevaatimuksissa",
+    "intro": "Miten ikä lasketaan, kun vyöarvolla on eri vaatimukset eri ikäisille, ja vyöarvon alaikärajassa. Koskee kaikkia liiton seuroja.",
+    "label": "Miten ikä lasketaan",
+    "bases": {
+      "age_on_grading_date": "Ikä vyökoepäivänä",
+      "age_reached_in_grading_year": "Ikä, jonka täyttää vyökoevuonna"
+    },
+    "hints": {
+      "age_on_grading_date": "Oppilas, joka täyttää 12 vuotta 15. kesäkuuta, on 12-vuotias siitä päivästä alkaen.",
+      "age_reached_in_grading_year": "Oppilas, joka täyttää 12 vuotta jonakin päivänä vuoden aikana, lasketaan 12-vuotiaaksi koko vuoden."
+    },
+    "saved": "Tallennettu."
   }
 }

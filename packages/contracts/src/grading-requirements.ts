@@ -1,3 +1,4 @@
+import { GradingAgeBasisSchema } from './grading-age.js';
 import { z } from './zod-openapi.js';
 
 const ISO_DATE_SCHEMA = z
@@ -32,9 +33,48 @@ export const HokeiGroupSchema = HokeiGroupInputSchema.extend({
 
 export type HokeiGroup = z.infer<typeof HokeiGroupSchema>;
 
+const AgeBound = z.number().int().min(0).max(120).nullable();
+
+export const AgeGroupSchema = z
+  .object({ id: z.string().uuid(), ageFrom: AgeBound, ageTo: AgeBound })
+  .meta({
+    id: 'RequirementAgeGroup',
+    description:
+      'An age group of one rank in one requirement set. Both bounds inclusive; null = unbounded on that side.',
+  });
+export type AgeGroup = z.infer<typeof AgeGroupSchema>;
+
+export const AgeGroupInputSchema = z
+  .object({
+    /** An existing group keeps its variant; omit for a new group. */
+    id: z.string().uuid().optional(),
+    ageFrom: AgeBound,
+    ageTo: AgeBound,
+  })
+  .refine((g) => g.ageFrom !== null || g.ageTo !== null, { message: 'An age group needs at least one bound.' })
+  .refine((g) => g.ageFrom === null || g.ageTo === null || g.ageFrom <= g.ageTo, {
+    message: 'ageFrom must not be above ageTo.',
+  })
+  .meta({ id: 'RequirementAgeGroupInput' });
+export type AgeGroupInput = z.infer<typeof AgeGroupInputSchema>;
+
+export const SetAgeGroupsSchema = z
+  .object({
+    setId: z.string().uuid(),
+    groups: z.array(AgeGroupInputSchema).max(10),
+  })
+  .meta({
+    id: 'SetRequirementAgeGroupsInput',
+    description:
+      'Whole-list replace of a kyu or dan rank\'s age groups in a set. Groups must not overlap. A new group gets a variant copied from the base requirement; a removed group loses its variant. Needs a base requirement.',
+  });
+export type SetAgeGroupsInput = z.infer<typeof SetAgeGroupsSchema>;
+
 export const SetGradingRequirementsSchema = z
   .object({
     setId: z.string().uuid(),
+    /** Replace this age group's variant instead of the base requirement. */
+    ageGroupId: z.string().uuid().nullable().optional(),
     hokeiGroups: z.array(HokeiGroupInputSchema).default([]),
     kobo: z.array(z.string().uuid()).default([]),
     koboTested: z.array(z.string().uuid()).default([]),
@@ -72,6 +112,14 @@ export const GradingRequirementsSchema = z
     minMonthsSincePreviousRank: z.number().int().nullable(),
     requiresTheoricExam: z.boolean(),
     requiresEssay: z.boolean(),
+    /** The age group whose variant this is; null for the base requirement. */
+    ageGroup: AgeGroupSchema.nullable(),
+    /** Every age group of this rank in this set (empty when it has none). */
+    ageGroups: z.array(AgeGroupSchema),
+    /** How age is counted where this set applies. */
+    ageBasis: GradingAgeBasisSchema,
+    /** True when the rank has age groups but the student's date of birth is unknown (base returned). */
+    ageUnknown: z.boolean(),
   })
   .meta({
     id: 'GradingRequirements',
@@ -126,6 +174,10 @@ export const GradingRequirementsOpenApiRegistry = {
   HokeiGroupInput: HokeiGroupInputSchema,
   SetGradingRequirementsInput: SetGradingRequirementsSchema,
   GradingRequirements: GradingRequirementsSchema,
+  GradingAgeBasis: GradingAgeBasisSchema,
+  RequirementAgeGroup: AgeGroupSchema,
+  RequirementAgeGroupInput: AgeGroupInputSchema,
+  SetRequirementAgeGroupsInput: SetAgeGroupsSchema,
   RequirementSet: RequirementSetSchema,
   CreateRequirementSetInput: CreateRequirementSetSchema,
   UpdateRequirementSetInput: UpdateRequirementSetSchema,

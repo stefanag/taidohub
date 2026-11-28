@@ -3,14 +3,31 @@ import { Check, Clock } from 'lucide-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import type { GradingAgeBasis } from '@repo/contracts/grading-age';
+import type { AgeGroup } from '@repo/contracts/grading-requirements';
+
 import { myProfileQueryOptions } from '@/entities/profile';
-import { computeGradingReadiness, formatIsoDate, todayIso } from '@/shared/lib/grading-readiness';
+import { ageGroupLabel } from '@/entities/rank-requirement';
+import {
+  computeGradingReadiness,
+  daysBetween,
+  formatIsoDate,
+  nextAgeGroupChange,
+  todayIso,
+} from '@/shared/lib/grading-readiness';
 
 export interface GradingReadinessDetailsProps {
   lastPassDate: string | null;
   minMonthsSincePreviousRank: number | null;
   minAge: number | null;
+  /** How the federation counts age; default exact age on the date. */
+  ageBasis?: GradingAgeBasis;
+  /** The next rank's age groups, to warn when other requirements will apply. */
+  ageGroups?: AgeGroup[];
 }
+
+/** Warn about a change of age group this far ahead. */
+const AGE_CHANGE_HORIZON_DAYS = 365;
 
 /**
  * The time-in-rank and age gates for the actor's next rank, and the earliest
@@ -21,6 +38,8 @@ export function GradingReadinessDetails({
   lastPassDate,
   minMonthsSincePreviousRank,
   minAge,
+  ageBasis = 'age_on_grading_date',
+  ageGroups = [],
 }: GradingReadinessDetailsProps): React.ReactElement | null {
   const { t, i18n } = useTranslation();
   const profile = useQuery(myProfileQueryOptions());
@@ -32,9 +51,14 @@ export function GradingReadinessDetails({
     minMonthsSincePreviousRank,
     dateOfBirth: profile.data?.dateOfBirth ?? null,
     minAge,
+    ageBasis,
     today,
   });
-  if (r.timeMet === null && r.ageMet === null && !r.incomplete) return null;
+  const dob = profile.data?.dateOfBirth ?? null;
+  const change = dob ? nextAgeGroupChange(dob, ageGroups, ageBasis, today) : null;
+  const upcoming =
+    change && daysBetween(today, change.date) <= AGE_CHANGE_HORIZON_DAYS ? change : null;
+  if (r.timeMet === null && r.ageMet === null && !r.incomplete && !upcoming) return null;
 
   const mark = (met: boolean) =>
     met ? (
@@ -58,6 +82,16 @@ export function GradingReadinessDetails({
         <p className="flex items-center gap-2">
           {mark(r.ageMet)}
           {t('gradingReadiness.minAge', { age: minAge })}
+        </p>
+      ) : null}
+      {upcoming ? (
+        <p data-testid="grading-readiness-age-change">
+          {t('gradingReadiness.ageGroupChange', {
+            date: formatIsoDate(upcoming.date, i18n.language),
+            group: upcoming.group
+              ? ageGroupLabel(upcoming.group, t)
+              : t('ageGroups.allAges').toLowerCase(),
+          })}
         </p>
       ) : null}
       {r.incomplete ? (

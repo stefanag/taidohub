@@ -302,6 +302,13 @@
       "when": 1795810904652,
       "tag": "0042_club_join_and_self_test_flags",
       "breakpoints": true
+    },
+    {
+      "idx": 43,
+      "version": "7",
+      "when": 1795878975329,
+      "tag": "0043_green_maestro",
+      "breakpoints": true
     }
   ]
 }

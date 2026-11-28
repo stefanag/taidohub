@@ -34,6 +34,12 @@ export type RankHistoryWritePatch = Partial<
     | 'verifiedAt'
     | 'updatedAt'
     | 'updatedByUserId'
+    | 'judgedSetId'
+    | 'judgedSetName'
+    | 'judgedAgeGroupId'
+    | 'judgedAgeFrom'
+    | 'judgedAgeTo'
+    | 'judgedAgeBasis'
   >
 >;
 

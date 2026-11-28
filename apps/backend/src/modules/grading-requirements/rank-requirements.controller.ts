@@ -12,7 +12,9 @@ import {
 import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
 import { ErrorCodes } from '@repo/contracts/errors';
 import {
+  SetAgeGroupsSchema,
   SetGradingRequirementsSchema,
+  type SetAgeGroupsInput,
   type SetGradingRequirementsInput,
   type GradingRequirements,
 } from '@repo/contracts/grading-requirements';
@@ -45,6 +47,8 @@ export class RankRequirementsController {
    * - Neither — resolve for the calling user via the ancestor-walk.
    *
    * `setId` and `forUserId` are mutually exclusive; passing both → 400.
+   * `ageGroupId` (with `setId` only) returns that age group's variant instead
+   * of the base requirement. For a student, the variant is chosen by age.
    */
   @Get(':rankId')
   async get(
@@ -52,6 +56,7 @@ export class RankRequirementsController {
     @CurrentUser() user: AuthenticatedUser,
     @Query('setId', new ParseUUIDPipe({ optional: true })) setId?: string,
     @Query('forUserId') forUserId?: string,
+    @Query('ageGroupId', new ParseUUIDPipe({ optional: true })) ageGroupId?: string,
   ): Promise<GradingRequirements> {
     if (setId && forUserId) {
       throw new BadRequestException({
@@ -61,7 +66,12 @@ export class RankRequirementsController {
         },
       });
     }
-    if (setId) return this.svc.resolveForSet(rankId, setId, user);
+    if (ageGroupId && !setId) {
+      throw new BadRequestException({
+        error: { code: ErrorCodes.VALIDATION_FAILED, message: 'ageGroupId needs setId' },
+      });
+    }
+    if (setId) return this.svc.resolveForSet(rankId, setId, user, ageGroupId ?? null);
     return this.svc.resolveForUser(rankId, forUserId ?? user.id, user);
   }
 
@@ -82,7 +92,21 @@ export class RankRequirementsController {
   }
 
   /**
-   * Clear all requirements for a rank within a specific set scope.
+   * Whole-list replace of a kyu or dan rank's age groups in a set. Returns the
+   * base requirement, whose `ageGroups` lists the result.
+   */
+  @Put(':rankId/age-groups')
+  async putAgeGroups(
+    @Param('rankId', new ParseUUIDPipe()) rankId: string,
+    @CurrentUser() user: AuthenticatedUser,
+    @Body(new ZodValidationPipe(SetAgeGroupsSchema)) body: SetAgeGroupsInput,
+  ): Promise<GradingRequirements> {
+    return this.svc.setAgeGroups(rankId, body, user);
+  }
+
+  /**
+   * Clear all requirements for a rank within a specific set scope: the base,
+   * every age group and their variants.
    *
    * `?setId=` is required — omitting it → 400.
    */

@@ -1,3 +1,4 @@
+import { GradingAgeBasisSchema } from './grading-age.js';
 import { z } from './zod-openapi.js';
 
 const UUID_EXAMPLE = '7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5';
@@ -65,6 +66,27 @@ export const UpdateRankHistorySchema = z
 export type UpdateRankHistoryInput = z.infer<typeof UpdateRankHistorySchema>;
 
 /**
+ * Which requirement a verified grading was judged against, as it was at
+ * verification time (a snapshot: survives later edits to the set or group).
+ * Null on unverified rows.
+ */
+export const JudgedAgainstSchema = z
+  .object({
+    requirementSetId: z.string().uuid().nullable(),
+    requirementSetName: z.string().nullable(),
+    ageGroupId: z.string().uuid().nullable(),
+    ageFrom: z.number().int().nullable(),
+    ageTo: z.number().int().nullable(),
+    ageBasis: GradingAgeBasisSchema.nullable(),
+  })
+  .meta({
+    id: 'GradingJudgedAgainst',
+    description:
+      'The requirement set and age group (null = base requirement) a verified grading was judged against.',
+  });
+export type JudgedAgainst = z.infer<typeof JudgedAgainstSchema>;
+
+/**
  * Full read-row shape for a single `rank_history` record. Used by the
  * direct `GET /api/rank-history/:userId` admin endpoint (no projection
  * hydration). The unified projection uses `GradingHistoryRowSchema` instead.
@@ -89,6 +111,7 @@ export const RankHistorySchema = z
     createdAt: z.string().datetime(),
     updatedAt: z.string().datetime().nullable(),
     updatedByUserId: z.string().nullable(),
+    judgedAgainst: JudgedAgainstSchema.nullable(),
   })
   .meta({
     id: 'RankHistory',
@@ -112,6 +135,7 @@ export const RankHistorySchema = z
       createdAt: ISO_DATETIME_EXAMPLE,
       updatedAt: null,
       updatedByUserId: null,
+      judgedAgainst: null,
     },
   });
 
@@ -145,6 +169,7 @@ export const GradingHistoryRowSchema = z
     canEdit: z.boolean(),
     updatedAt: z.string().datetime().nullable(),
     updatedByUserId: z.string().nullable(),
+    judgedAgainst: JudgedAgainstSchema.nullable(),
   })
   .meta({
     id: 'GradingHistoryRow',
@@ -171,5 +196,6 @@ export const RankHistoryOpenApiRegistry = {
   CreateRankHistoryInput: CreateRankHistorySchema,
   UpdateRankHistoryInput: UpdateRankHistorySchema,
   GradingHistoryRow: GradingHistoryRowSchema,
+  GradingJudgedAgainst: JudgedAgainstSchema,
   GradingHistoryResponse: GradingHistoryResponseSchema,
 } as const;

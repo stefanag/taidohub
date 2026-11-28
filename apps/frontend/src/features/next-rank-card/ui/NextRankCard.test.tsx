@@ -55,6 +55,10 @@ const EMPTY_REQUIREMENTS: GradingRequirements = {
   minMonthsSincePreviousRank: null,
   requiresTheoricExam: false,
   requiresEssay: false,
+  ageGroup: null,
+  ageGroups: [],
+  ageBasis: 'age_on_grading_date',
+  ageUnknown: false,
 };
 
 function makeRequirements(overrides: Partial<GradingRequirements>): GradingRequirements {

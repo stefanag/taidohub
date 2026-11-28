@@ -2,6 +2,7 @@ import {
   GradingRequirementsSchema,
   RankRequirementsRoutes,
   type GradingRequirements,
+  type SetAgeGroupsInput,
   type SetGradingRequirementsInput,
 } from '@repo/contracts';
 
@@ -35,13 +36,25 @@ export async function getRequirementsForUser(
   return GradingRequirementsSchema.parse(raw);
 }
 
+/** Within a set: the base requirement, or one age group's variant. */
 export async function getRequirementsForSet(
   rankId: string,
   setId: string,
+  ageGroupId: string | null = null,
 ): Promise<GradingRequirements> {
+  const group = ageGroupId ? `&ageGroupId=${encodeURIComponent(ageGroupId)}` : '';
   const raw = await httpClient(
-    `${RankRequirementsRoutes.byRankId(rankId)}?setId=${encodeURIComponent(setId)}`,
+    `${RankRequirementsRoutes.byRankId(rankId)}?setId=${encodeURIComponent(setId)}${group}`,
   );
+  return GradingRequirementsSchema.parse(raw);
+}
+
+/** Whole-list replace of a kyu or dan rank's age groups in a set. */
+export async function setAgeGroups(rankId: string, body: SetAgeGroupsInput): Promise<GradingRequirements> {
+  const raw = await httpClient(`${RankRequirementsRoutes.byRankId(rankId)}/age-groups`, {
+    method: 'PUT',
+    body,
+  });
   return GradingRequirementsSchema.parse(raw);
 }
 

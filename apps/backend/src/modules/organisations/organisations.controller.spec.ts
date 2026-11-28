@@ -48,6 +48,7 @@ const sampleOrg: Organisation = {
   address: null,
   contactEmail: null,
   headInstructorId: null,
+  gradingAgeBasis: null,
   createdAt: '2026-01-01T00:00:00.000Z',
   updatedAt: '2026-01-01T00:00:00.000Z',
 };
@@ -110,6 +111,7 @@ describe('OrganisationsController', () => {
       logoUrl: null,
       address: null,
       headInstructorId: null,
+      gradingAgeBasis: null,
     };
     const out = await controller.create(body, sysadmin);
     expect(service.create).toHaveBeenCalledWith(body, sysadmin);

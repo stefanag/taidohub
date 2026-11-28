@@ -1906,6 +1906,14 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "ageGroupId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1963,6 +1971,34 @@
             "name": "setId",
             "required": true,
             "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "tags": [
+          "grading-requirements"
+        ]
+      }
+    },
+    "/api/requirements/{rankId}/age-groups": {
+      "put": {
+        "operationId": "RankRequirementsController_putAgeGroups",
+        "parameters": [
+          {
+            "name": "rankId",
+            "required": true,
+            "in": "path",
             "schema": {
               "type": "string"
             }
@@ -16081,6 +16117,28 @@
                   },
                   "requiresEssay": {
                     "type": "boolean"
+                  },
+                  "ageGroup": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/RequirementAgeGroup"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageGroups": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/RequirementAgeGroup"
+                    }
+                  },
+                  "ageBasis": {
+                    "$ref": "#/$defs/GradingAgeBasis"
+                  },
+                  "ageUnknown": {
+                    "type": "boolean"
                   }
                 },
                 "required": [
@@ -16097,7 +16155,11 @@
                   "jissenTested",
                   "minMonthsSincePreviousRank",
                   "requiresTheoricExam",
-                  "requiresEssay"
+                  "requiresEssay",
+                  "ageGroup",
+                  "ageGroups",
+                  "ageBasis",
+                  "ageUnknown"
                 ],
                 "description": "Projected requirements for one rank within a single scope. Returned as a fully-formed empty object when no requirements exist for the scope (NOT 404)."
               },
@@ -16173,6 +16235,54 @@
                   "id"
                 ],
                 "description": "A hokei group as returned by the resolution endpoint."
+              },
+              "RequirementAgeGroup": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "ageFrom": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 120
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageTo": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 120
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "id",
+                  "ageFrom",
+                  "ageTo"
+                ],
+                "description": "An age group of one rank in one requirement set. Both bounds inclusive; null = unbounded on that side."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "PublicRankResponse",
@@ -16560,6 +16670,28 @@
                   },
                   "requiresEssay": {
                     "type": "boolean"
+                  },
+                  "ageGroup": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/RequirementAgeGroup"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageGroups": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/RequirementAgeGroup"
+                    }
+                  },
+                  "ageBasis": {
+                    "$ref": "#/$defs/GradingAgeBasis"
+                  },
+                  "ageUnknown": {
+                    "type": "boolean"
                   }
                 },
                 "required": [
@@ -16576,7 +16708,11 @@
                   "jissenTested",
                   "minMonthsSincePreviousRank",
                   "requiresTheoricExam",
-                  "requiresEssay"
+                  "requiresEssay",
+                  "ageGroup",
+                  "ageGroups",
+                  "ageBasis",
+                  "ageUnknown"
                 ],
                 "description": "Projected requirements for one rank within a single scope. Returned as a fully-formed empty object when no requirements exist for the scope (NOT 404)."
               },
@@ -16652,6 +16788,54 @@
                   "id"
                 ],
                 "description": "A hokei group as returned by the resolution endpoint."
+              },
+              "RequirementAgeGroup": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "ageFrom": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 120
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageTo": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 120
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "id",
+                  "ageFrom",
+                  "ageTo"
+                ],
+                "description": "An age group of one rank in one requirement set. Both bounds inclusive; null = unbounded on that side."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "PublicRankResponse",
@@ -17046,6 +17230,28 @@
                   },
                   "requiresEssay": {
                     "type": "boolean"
+                  },
+                  "ageGroup": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/RequirementAgeGroup"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageGroups": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/RequirementAgeGroup"
+                    }
+                  },
+                  "ageBasis": {
+                    "$ref": "#/$defs/GradingAgeBasis"
+                  },
+                  "ageUnknown": {
+                    "type": "boolean"
                   }
                 },
                 "required": [
@@ -17062,7 +17268,11 @@
                   "jissenTested",
                   "minMonthsSincePreviousRank",
                   "requiresTheoricExam",
-                  "requiresEssay"
+                  "requiresEssay",
+                  "ageGroup",
+                  "ageGroups",
+                  "ageBasis",
+                  "ageUnknown"
                 ],
                 "description": "Projected requirements for one rank within a single scope. Returned as a fully-formed empty object when no requirements exist for the scope (NOT 404)."
               },
@@ -17138,6 +17348,54 @@
                   "id"
                 ],
                 "description": "A hokei group as returned by the resolution endpoint."
+              },
+              "RequirementAgeGroup": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "ageFrom": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 120
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageTo": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 120
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "id",
+                  "ageFrom",
+                  "ageTo"
+                ],
+                "description": "An age group of one rank in one requirement set. Both bounds inclusive; null = unbounded on that side."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "PublicRankResponse",
@@ -17506,6 +17764,28 @@
                   },
                   "requiresEssay": {
                     "type": "boolean"
+                  },
+                  "ageGroup": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/RequirementAgeGroup"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageGroups": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/RequirementAgeGroup"
+                    }
+                  },
+                  "ageBasis": {
+                    "$ref": "#/$defs/GradingAgeBasis"
+                  },
+                  "ageUnknown": {
+                    "type": "boolean"
                   }
                 },
                 "required": [
@@ -17522,7 +17802,11 @@
                   "jissenTested",
                   "minMonthsSincePreviousRank",
                   "requiresTheoricExam",
-                  "requiresEssay"
+                  "requiresEssay",
+                  "ageGroup",
+                  "ageGroups",
+                  "ageBasis",
+                  "ageUnknown"
                 ],
                 "description": "Projected requirements for one rank within a single scope. Returned as a fully-formed empty object when no requirements exist for the scope (NOT 404)."
               },
@@ -17598,6 +17882,584 @@
                   "id"
                 ],
                 "description": "A hokei group as returned by the resolution endpoint."
+              },
+              "RequirementAgeGroup": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "ageFrom": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 120
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageTo": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 120
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "id",
+                  "ageFrom",
+                  "ageTo"
+                ],
+                "description": "An age group of one rank in one requirement set. Both bounds inclusive; null = unbounded on that side."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
+              }
+            },
+            "x-nestjs_zod-parent-id": "PublicRankResponse",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A publicly-visible rank plus its system, an (optional) organisation summary, and the resolved grading requirements for its active requirement set (null when none is active)."
+            }
+          },
+          "ageVariants": {
+            "default": [],
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/GradingRequirements"
+            },
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "BeltRank": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "organisationId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "systemId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "level": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "sortOrder": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "nameJa": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "nameRomaji": {
+                    "type": "string"
+                  },
+                  "nameEn": {
+                    "type": "string"
+                  },
+                  "nameSv": {
+                    "type": "string"
+                  },
+                  "nameFi": {
+                    "type": "string"
+                  },
+                  "beltColor": {
+                    "type": "string"
+                  },
+                  "visuals": {
+                    "$ref": "#/$defs/BeltVisuals"
+                  },
+                  "imageUrl": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "descriptionEn": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "descriptionSv": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "descriptionFi": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "publiclyVisible": {
+                    "type": "boolean"
+                  },
+                  "slug": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "minAge": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "nextRankId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                  },
+                  "updatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                  }
+                },
+                "required": [
+                  "id",
+                  "organisationId",
+                  "systemId",
+                  "level",
+                  "sortOrder",
+                  "nameJa",
+                  "nameRomaji",
+                  "nameEn",
+                  "nameSv",
+                  "nameFi",
+                  "beltColor",
+                  "visuals",
+                  "imageUrl",
+                  "descriptionEn",
+                  "descriptionSv",
+                  "descriptionFi",
+                  "publiclyVisible",
+                  "slug",
+                  "minAge",
+                  "nextRankId",
+                  "createdAt",
+                  "updatedAt"
+                ],
+                "description": "A specific rank inside a belt system.",
+                "example": {
+                  "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "organisationId": null,
+                  "systemId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                  "level": 1,
+                  "sortOrder": 10,
+                  "nameJa": null,
+                  "nameRomaji": "Jukyu",
+                  "nameEn": "10th Kyu",
+                  "nameSv": "10 Kyu",
+                  "nameFi": "10. Kyu",
+                  "beltColor": "#FFFFFF",
+                  "visuals": {
+                    "gradient": "white"
+                  },
+                  "imageUrl": null,
+                  "descriptionEn": null,
+                  "descriptionSv": null,
+                  "descriptionFi": null,
+                  "publiclyVisible": false,
+                  "slug": null,
+                  "minAge": null,
+                  "nextRankId": null,
+                  "createdAt": "2026-05-24T08:00:00.000Z",
+                  "updatedAt": "2026-05-24T08:00:00.000Z"
+                }
+              },
+              "BeltVisuals": {
+                "type": "object",
+                "properties": {
+                  "gradient": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "badge": {
+                    "type": "boolean"
+                  },
+                  "stripe": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLine": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  },
+                  "midLineGradient": {
+                    "type": "boolean"
+                  },
+                  "overlayTopHalf": {
+                    "type": "string",
+                    "enum": [
+                      "yellow",
+                      "magenta",
+                      "green",
+                      "brown",
+                      "black",
+                      "white"
+                    ]
+                  }
+                },
+                "required": [
+                  "gradient"
+                ],
+                "description": "Visual specification for a belt rank graphic.",
+                "example": {
+                  "gradient": "yellow",
+                  "badge": true
+                }
+              },
+              "GradingRequirements": {
+                "type": "object",
+                "properties": {
+                  "rankId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "setId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "hokeiGroups": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/HokeiGroup"
+                    }
+                  },
+                  "kobo": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "koboTested": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "otherPatterns": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "otherPatternsTested": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "kihon": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "kihonTested": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "jissenMinutes": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "jissenTested": {
+                    "type": "boolean"
+                  },
+                  "minMonthsSincePreviousRank": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "requiresTheoricExam": {
+                    "type": "boolean"
+                  },
+                  "requiresEssay": {
+                    "type": "boolean"
+                  },
+                  "ageGroup": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/RequirementAgeGroup"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageGroups": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/RequirementAgeGroup"
+                    }
+                  },
+                  "ageBasis": {
+                    "$ref": "#/$defs/GradingAgeBasis"
+                  },
+                  "ageUnknown": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "rankId",
+                  "setId",
+                  "hokeiGroups",
+                  "kobo",
+                  "koboTested",
+                  "otherPatterns",
+                  "otherPatternsTested",
+                  "kihon",
+                  "kihonTested",
+                  "jissenMinutes",
+                  "jissenTested",
+                  "minMonthsSincePreviousRank",
+                  "requiresTheoricExam",
+                  "requiresEssay",
+                  "ageGroup",
+                  "ageGroups",
+                  "ageBasis",
+                  "ageUnknown"
+                ],
+                "description": "Projected requirements for one rank within a single scope. Returned as a fully-formed empty object when no requirements exist for the scope (NOT 404)."
+              },
+              "HokeiGroup": {
+                "type": "object",
+                "properties": {
+                  "groupOrder": {
+                    "default": 0,
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "pickCount": {
+                    "default": 1,
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "isTested": {
+                    "default": false,
+                    "type": "boolean"
+                  },
+                  "labelEn": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "labelFi": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "labelSv": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "patternIds": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  }
+                },
+                "required": [
+                  "patternIds",
+                  "id"
+                ],
+                "description": "A hokei group as returned by the resolution endpoint."
+              },
+              "RequirementAgeGroup": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "ageFrom": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 120
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageTo": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 120
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "id",
+                  "ageFrom",
+                  "ageTo"
+                ],
+                "description": "An age group of one rank in one requirement set. Both bounds inclusive; null = unbounded on that side."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "PublicRankResponse",
@@ -17735,6 +18597,92 @@
                   "external"
                 ],
                 "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              },
+              "GradingJudgedAgainst": {
+                "type": "object",
+                "properties": {
+                  "requirementSetId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "requirementSetName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "ageGroupId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageFrom": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageTo": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageBasis": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/GradingAgeBasis"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "requirementSetId",
+                  "requirementSetName",
+                  "ageGroupId",
+                  "ageFrom",
+                  "ageTo",
+                  "ageBasis"
+                ],
+                "description": "The requirement set and age group (null = base requirement) a verified grading was judged against."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "RankHistory",
@@ -17758,7 +18706,8 @@
                 "verifiedAt": null,
                 "createdAt": "2026-05-24T08:00:00.000Z",
                 "updatedAt": null,
-                "updatedByUserId": null
+                "updatedByUserId": null,
+                "judgedAgainst": null
               }
             }
           },
@@ -17782,6 +18731,92 @@
                   "external"
                 ],
                 "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              },
+              "GradingJudgedAgainst": {
+                "type": "object",
+                "properties": {
+                  "requirementSetId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "requirementSetName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "ageGroupId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageFrom": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageTo": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageBasis": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/GradingAgeBasis"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "requirementSetId",
+                  "requirementSetName",
+                  "ageGroupId",
+                  "ageFrom",
+                  "ageTo",
+                  "ageBasis"
+                ],
+                "description": "The requirement set and age group (null = base requirement) a verified grading was judged against."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "RankHistory",
@@ -17805,7 +18840,8 @@
                 "verifiedAt": null,
                 "createdAt": "2026-05-24T08:00:00.000Z",
                 "updatedAt": null,
-                "updatedByUserId": null
+                "updatedByUserId": null,
+                "judgedAgainst": null
               }
             }
           },
@@ -17831,6 +18867,92 @@
                   "external"
                 ],
                 "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              },
+              "GradingJudgedAgainst": {
+                "type": "object",
+                "properties": {
+                  "requirementSetId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "requirementSetName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "ageGroupId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageFrom": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageTo": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageBasis": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/GradingAgeBasis"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "requirementSetId",
+                  "requirementSetName",
+                  "ageGroupId",
+                  "ageFrom",
+                  "ageTo",
+                  "ageBasis"
+                ],
+                "description": "The requirement set and age group (null = base requirement) a verified grading was judged against."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "RankHistory",
@@ -17854,7 +18976,8 @@
                 "verifiedAt": null,
                 "createdAt": "2026-05-24T08:00:00.000Z",
                 "updatedAt": null,
-                "updatedByUserId": null
+                "updatedByUserId": null,
+                "judgedAgainst": null
               }
             }
           },
@@ -17883,6 +19006,92 @@
                   "external"
                 ],
                 "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              },
+              "GradingJudgedAgainst": {
+                "type": "object",
+                "properties": {
+                  "requirementSetId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "requirementSetName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "ageGroupId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageFrom": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageTo": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageBasis": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/GradingAgeBasis"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "requirementSetId",
+                  "requirementSetName",
+                  "ageGroupId",
+                  "ageFrom",
+                  "ageTo",
+                  "ageBasis"
+                ],
+                "description": "The requirement set and age group (null = base requirement) a verified grading was judged against."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "RankHistory",
@@ -17906,7 +19115,8 @@
                 "verifiedAt": null,
                 "createdAt": "2026-05-24T08:00:00.000Z",
                 "updatedAt": null,
-                "updatedByUserId": null
+                "updatedByUserId": null,
+                "judgedAgainst": null
               }
             }
           },
@@ -17931,6 +19141,92 @@
                   "external"
                 ],
                 "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              },
+              "GradingJudgedAgainst": {
+                "type": "object",
+                "properties": {
+                  "requirementSetId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "requirementSetName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "ageGroupId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageFrom": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageTo": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageBasis": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/GradingAgeBasis"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "requirementSetId",
+                  "requirementSetName",
+                  "ageGroupId",
+                  "ageFrom",
+                  "ageTo",
+                  "ageBasis"
+                ],
+                "description": "The requirement set and age group (null = base requirement) a verified grading was judged against."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "RankHistory",
@@ -17954,7 +19250,8 @@
                 "verifiedAt": null,
                 "createdAt": "2026-05-24T08:00:00.000Z",
                 "updatedAt": null,
-                "updatedByUserId": null
+                "updatedByUserId": null,
+                "judgedAgainst": null
               }
             }
           },
@@ -17980,6 +19277,92 @@
                   "external"
                 ],
                 "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              },
+              "GradingJudgedAgainst": {
+                "type": "object",
+                "properties": {
+                  "requirementSetId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "requirementSetName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "ageGroupId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageFrom": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageTo": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageBasis": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/GradingAgeBasis"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "requirementSetId",
+                  "requirementSetName",
+                  "ageGroupId",
+                  "ageFrom",
+                  "ageTo",
+                  "ageBasis"
+                ],
+                "description": "The requirement set and age group (null = base requirement) a verified grading was judged against."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "RankHistory",
@@ -18003,7 +19386,8 @@
                 "verifiedAt": null,
                 "createdAt": "2026-05-24T08:00:00.000Z",
                 "updatedAt": null,
-                "updatedByUserId": null
+                "updatedByUserId": null,
+                "judgedAgainst": null
               }
             }
           },
@@ -18029,6 +19413,92 @@
                   "external"
                 ],
                 "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              },
+              "GradingJudgedAgainst": {
+                "type": "object",
+                "properties": {
+                  "requirementSetId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "requirementSetName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "ageGroupId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageFrom": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageTo": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageBasis": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/GradingAgeBasis"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "requirementSetId",
+                  "requirementSetName",
+                  "ageGroupId",
+                  "ageFrom",
+                  "ageTo",
+                  "ageBasis"
+                ],
+                "description": "The requirement set and age group (null = base requirement) a verified grading was judged against."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "RankHistory",
@@ -18052,7 +19522,8 @@
                 "verifiedAt": null,
                 "createdAt": "2026-05-24T08:00:00.000Z",
                 "updatedAt": null,
-                "updatedByUserId": null
+                "updatedByUserId": null,
+                "judgedAgainst": null
               }
             }
           },
@@ -18086,6 +19557,92 @@
                   "external"
                 ],
                 "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              },
+              "GradingJudgedAgainst": {
+                "type": "object",
+                "properties": {
+                  "requirementSetId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "requirementSetName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "ageGroupId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageFrom": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageTo": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageBasis": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/GradingAgeBasis"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "requirementSetId",
+                  "requirementSetName",
+                  "ageGroupId",
+                  "ageFrom",
+                  "ageTo",
+                  "ageBasis"
+                ],
+                "description": "The requirement set and age group (null = base requirement) a verified grading was judged against."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "RankHistory",
@@ -18109,7 +19666,8 @@
                 "verifiedAt": null,
                 "createdAt": "2026-05-24T08:00:00.000Z",
                 "updatedAt": null,
-                "updatedByUserId": null
+                "updatedByUserId": null,
+                "judgedAgainst": null
               }
             }
           },
@@ -18133,6 +19691,92 @@
                   "external"
                 ],
                 "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              },
+              "GradingJudgedAgainst": {
+                "type": "object",
+                "properties": {
+                  "requirementSetId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "requirementSetName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "ageGroupId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageFrom": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageTo": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageBasis": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/GradingAgeBasis"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "requirementSetId",
+                  "requirementSetName",
+                  "ageGroupId",
+                  "ageFrom",
+                  "ageTo",
+                  "ageBasis"
+                ],
+                "description": "The requirement set and age group (null = base requirement) a verified grading was judged against."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "RankHistory",
@@ -18156,7 +19800,8 @@
                 "verifiedAt": null,
                 "createdAt": "2026-05-24T08:00:00.000Z",
                 "updatedAt": null,
-                "updatedByUserId": null
+                "updatedByUserId": null,
+                "judgedAgainst": null
               }
             }
           },
@@ -18185,6 +19830,92 @@
                   "external"
                 ],
                 "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              },
+              "GradingJudgedAgainst": {
+                "type": "object",
+                "properties": {
+                  "requirementSetId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "requirementSetName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "ageGroupId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageFrom": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageTo": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageBasis": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/GradingAgeBasis"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "requirementSetId",
+                  "requirementSetName",
+                  "ageGroupId",
+                  "ageFrom",
+                  "ageTo",
+                  "ageBasis"
+                ],
+                "description": "The requirement set and age group (null = base requirement) a verified grading was judged against."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "RankHistory",
@@ -18208,7 +19939,8 @@
                 "verifiedAt": null,
                 "createdAt": "2026-05-24T08:00:00.000Z",
                 "updatedAt": null,
-                "updatedByUserId": null
+                "updatedByUserId": null,
+                "judgedAgainst": null
               }
             }
           },
@@ -18237,6 +19969,92 @@
                   "external"
                 ],
                 "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              },
+              "GradingJudgedAgainst": {
+                "type": "object",
+                "properties": {
+                  "requirementSetId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "requirementSetName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "ageGroupId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageFrom": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageTo": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageBasis": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/GradingAgeBasis"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "requirementSetId",
+                  "requirementSetName",
+                  "ageGroupId",
+                  "ageFrom",
+                  "ageTo",
+                  "ageBasis"
+                ],
+                "description": "The requirement set and age group (null = base requirement) a verified grading was judged against."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "RankHistory",
@@ -18260,7 +20078,8 @@
                 "verifiedAt": null,
                 "createdAt": "2026-05-24T08:00:00.000Z",
                 "updatedAt": null,
-                "updatedByUserId": null
+                "updatedByUserId": null,
+                "judgedAgainst": null
               }
             }
           },
@@ -18289,6 +20108,92 @@
                   "external"
                 ],
                 "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              },
+              "GradingJudgedAgainst": {
+                "type": "object",
+                "properties": {
+                  "requirementSetId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "requirementSetName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "ageGroupId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageFrom": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageTo": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageBasis": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/GradingAgeBasis"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "requirementSetId",
+                  "requirementSetName",
+                  "ageGroupId",
+                  "ageFrom",
+                  "ageTo",
+                  "ageBasis"
+                ],
+                "description": "The requirement set and age group (null = base requirement) a verified grading was judged against."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "RankHistory",
@@ -18312,7 +20217,8 @@
                 "verifiedAt": null,
                 "createdAt": "2026-05-24T08:00:00.000Z",
                 "updatedAt": null,
-                "updatedByUserId": null
+                "updatedByUserId": null,
+                "judgedAgainst": null
               }
             }
           },
@@ -18336,6 +20242,92 @@
                   "external"
                 ],
                 "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              },
+              "GradingJudgedAgainst": {
+                "type": "object",
+                "properties": {
+                  "requirementSetId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "requirementSetName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "ageGroupId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageFrom": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageTo": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageBasis": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/GradingAgeBasis"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "requirementSetId",
+                  "requirementSetName",
+                  "ageGroupId",
+                  "ageFrom",
+                  "ageTo",
+                  "ageBasis"
+                ],
+                "description": "The requirement set and age group (null = base requirement) a verified grading was judged against."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "RankHistory",
@@ -18359,7 +20351,8 @@
                 "verifiedAt": null,
                 "createdAt": "2026-05-24T08:00:00.000Z",
                 "updatedAt": null,
-                "updatedByUserId": null
+                "updatedByUserId": null,
+                "judgedAgainst": null
               }
             }
           },
@@ -18388,6 +20381,92 @@
                   "external"
                 ],
                 "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              },
+              "GradingJudgedAgainst": {
+                "type": "object",
+                "properties": {
+                  "requirementSetId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "requirementSetName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "ageGroupId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageFrom": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageTo": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageBasis": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/GradingAgeBasis"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "requirementSetId",
+                  "requirementSetName",
+                  "ageGroupId",
+                  "ageFrom",
+                  "ageTo",
+                  "ageBasis"
+                ],
+                "description": "The requirement set and age group (null = base requirement) a verified grading was judged against."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "RankHistory",
@@ -18411,7 +20490,8 @@
                 "verifiedAt": null,
                 "createdAt": "2026-05-24T08:00:00.000Z",
                 "updatedAt": null,
-                "updatedByUserId": null
+                "updatedByUserId": null,
+                "judgedAgainst": null
               }
             }
           },
@@ -18445,6 +20525,92 @@
                   "external"
                 ],
                 "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              },
+              "GradingJudgedAgainst": {
+                "type": "object",
+                "properties": {
+                  "requirementSetId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "requirementSetName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "ageGroupId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageFrom": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageTo": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageBasis": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/GradingAgeBasis"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "requirementSetId",
+                  "requirementSetName",
+                  "ageGroupId",
+                  "ageFrom",
+                  "ageTo",
+                  "ageBasis"
+                ],
+                "description": "The requirement set and age group (null = base requirement) a verified grading was judged against."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "RankHistory",
@@ -18468,7 +20634,8 @@
                 "verifiedAt": null,
                 "createdAt": "2026-05-24T08:00:00.000Z",
                 "updatedAt": null,
-                "updatedByUserId": null
+                "updatedByUserId": null,
+                "judgedAgainst": null
               }
             }
           },
@@ -18494,6 +20661,92 @@
                   "external"
                 ],
                 "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              },
+              "GradingJudgedAgainst": {
+                "type": "object",
+                "properties": {
+                  "requirementSetId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "requirementSetName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "ageGroupId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageFrom": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageTo": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageBasis": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/GradingAgeBasis"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "requirementSetId",
+                  "requirementSetName",
+                  "ageGroupId",
+                  "ageFrom",
+                  "ageTo",
+                  "ageBasis"
+                ],
+                "description": "The requirement set and age group (null = base requirement) a verified grading was judged against."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "RankHistory",
@@ -18517,7 +20770,8 @@
                 "verifiedAt": null,
                 "createdAt": "2026-05-24T08:00:00.000Z",
                 "updatedAt": null,
-                "updatedByUserId": null
+                "updatedByUserId": null,
+                "judgedAgainst": null
               }
             }
           },
@@ -18551,6 +20805,92 @@
                   "external"
                 ],
                 "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              },
+              "GradingJudgedAgainst": {
+                "type": "object",
+                "properties": {
+                  "requirementSetId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "requirementSetName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "ageGroupId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageFrom": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageTo": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageBasis": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/GradingAgeBasis"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "requirementSetId",
+                  "requirementSetName",
+                  "ageGroupId",
+                  "ageFrom",
+                  "ageTo",
+                  "ageBasis"
+                ],
+                "description": "The requirement set and age group (null = base requirement) a verified grading was judged against."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "RankHistory",
@@ -18574,7 +20914,8 @@
                 "verifiedAt": null,
                 "createdAt": "2026-05-24T08:00:00.000Z",
                 "updatedAt": null,
-                "updatedByUserId": null
+                "updatedByUserId": null,
+                "judgedAgainst": null
               }
             }
           },
@@ -18603,6 +20944,92 @@
                   "external"
                 ],
                 "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              },
+              "GradingJudgedAgainst": {
+                "type": "object",
+                "properties": {
+                  "requirementSetId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "requirementSetName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "ageGroupId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageFrom": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageTo": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageBasis": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/GradingAgeBasis"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "requirementSetId",
+                  "requirementSetName",
+                  "ageGroupId",
+                  "ageFrom",
+                  "ageTo",
+                  "ageBasis"
+                ],
+                "description": "The requirement set and age group (null = base requirement) a verified grading was judged against."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "RankHistory",
@@ -18626,7 +21053,150 @@
                 "verifiedAt": null,
                 "createdAt": "2026-05-24T08:00:00.000Z",
                 "updatedAt": null,
-                "updatedByUserId": null
+                "updatedByUserId": null,
+                "judgedAgainst": null
+              }
+            }
+          },
+          "judgedAgainst": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/GradingJudgedAgainst"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "RankHistoryResult": {
+                "type": "string",
+                "enum": [
+                  "pass",
+                  "fail"
+                ],
+                "description": "Outcome of a grading: pass or fail."
+              },
+              "RankHistorySource": {
+                "type": "string",
+                "enum": [
+                  "event",
+                  "external"
+                ],
+                "description": "Origin of a rank-history row: a grading event or a manual external entry."
+              },
+              "GradingJudgedAgainst": {
+                "type": "object",
+                "properties": {
+                  "requirementSetId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "requirementSetName": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "ageGroupId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageFrom": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageTo": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "ageBasis": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/GradingAgeBasis"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "requirementSetId",
+                  "requirementSetName",
+                  "ageGroupId",
+                  "ageFrom",
+                  "ageTo",
+                  "ageBasis"
+                ],
+                "description": "The requirement set and age group (null = base requirement) a verified grading was judged against."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
+              }
+            },
+            "x-nestjs_zod-parent-id": "RankHistory",
+            "x-nestjs_zod-parent-metadata": {
+              "description": "A single grading record (external or event-sourced).",
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "userId": "u-1",
+                "rankId": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "shogoTitle": null,
+                "date": "2024-09-01",
+                "result": "pass",
+                "source": "external",
+                "eventId": null,
+                "recordedByUserId": "u-1",
+                "examinerName": "Sensei Tanaka",
+                "organisationName": "Kobe Dojo",
+                "notes": null,
+                "verified": false,
+                "verifiedByUserId": null,
+                "verifiedAt": null,
+                "createdAt": "2026-05-24T08:00:00.000Z",
+                "updatedAt": null,
+                "updatedByUserId": null,
+                "judgedAgainst": null
               }
             }
           }
@@ -18649,7 +21219,8 @@
           "verifiedAt",
           "createdAt",
           "updatedAt",
-          "updatedByUserId"
+          "updatedByUserId",
+          "judgedAgainst"
         ]
       },
       "UpdateRankHistoryDto": {
@@ -20751,6 +23322,17 @@
                       "null"
                     ]
                   },
+                  "gradingAgeBasis": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/GradingAgeBasis"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "National federations only: how age is counted for grading requirements in its clubs. Null = exact age on the grading date."
+                  },
                   "createdAt": {
                     "type": "string",
                     "format": "date-time",
@@ -20776,6 +23358,7 @@
                   "logoUrl",
                   "address",
                   "headInstructorId",
+                  "gradingAgeBasis",
                   "createdAt",
                   "updatedAt"
                 ],
@@ -20794,6 +23377,7 @@
                   "address": null,
                   "contactEmail": null,
                   "headInstructorId": null,
+                  "gradingAgeBasis": null,
                   "createdAt": "2025-04-02T08:00:00.000Z",
                   "updatedAt": "2025-04-02T08:00:00.000Z"
                 }
@@ -20806,6 +23390,14 @@
                   "club"
                 ],
                 "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "ListOrganisationsResponse"
@@ -20933,6 +23525,17 @@
                       "null"
                     ]
                   },
+                  "gradingAgeBasis": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/GradingAgeBasis"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "National federations only: how age is counted for grading requirements in its clubs. Null = exact age on the grading date."
+                  },
                   "createdAt": {
                     "type": "string",
                     "format": "date-time",
@@ -20958,6 +23561,7 @@
                   "logoUrl",
                   "address",
                   "headInstructorId",
+                  "gradingAgeBasis",
                   "createdAt",
                   "updatedAt"
                 ],
@@ -20976,6 +23580,7 @@
                   "address": null,
                   "contactEmail": null,
                   "headInstructorId": null,
+                  "gradingAgeBasis": null,
                   "createdAt": "2025-04-02T08:00:00.000Z",
                   "updatedAt": "2025-04-02T08:00:00.000Z"
                 }
@@ -20988,6 +23593,14 @@
                   "club"
                 ],
                 "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "ListOrganisationsResponse"
@@ -21017,6 +23630,14 @@
                   "club"
                 ],
                 "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "Organisation",
@@ -21036,6 +23657,7 @@
                 "address": null,
                 "contactEmail": null,
                 "headInstructorId": null,
+                "gradingAgeBasis": null,
                 "createdAt": "2025-04-02T08:00:00.000Z",
                 "updatedAt": "2025-04-02T08:00:00.000Z"
               }
@@ -21065,6 +23687,14 @@
                   "club"
                 ],
                 "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "Organisation",
@@ -21084,6 +23714,7 @@
                 "address": null,
                 "contactEmail": null,
                 "headInstructorId": null,
+                "gradingAgeBasis": null,
                 "createdAt": "2025-04-02T08:00:00.000Z",
                 "updatedAt": "2025-04-02T08:00:00.000Z"
               }
@@ -21104,6 +23735,14 @@
                   "club"
                 ],
                 "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "Organisation",
@@ -21123,6 +23762,7 @@
                 "address": null,
                 "contactEmail": null,
                 "headInstructorId": null,
+                "gradingAgeBasis": null,
                 "createdAt": "2025-04-02T08:00:00.000Z",
                 "updatedAt": "2025-04-02T08:00:00.000Z"
               }
@@ -21144,6 +23784,14 @@
                   "club"
                 ],
                 "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "Organisation",
@@ -21163,6 +23811,7 @@
                 "address": null,
                 "contactEmail": null,
                 "headInstructorId": null,
+                "gradingAgeBasis": null,
                 "createdAt": "2025-04-02T08:00:00.000Z",
                 "updatedAt": "2025-04-02T08:00:00.000Z"
               }
@@ -21192,6 +23841,14 @@
                   "club"
                 ],
                 "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "Organisation",
@@ -21211,6 +23868,7 @@
                 "address": null,
                 "contactEmail": null,
                 "headInstructorId": null,
+                "gradingAgeBasis": null,
                 "createdAt": "2025-04-02T08:00:00.000Z",
                 "updatedAt": "2025-04-02T08:00:00.000Z"
               }
@@ -21239,6 +23897,14 @@
                   "club"
                 ],
                 "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "Organisation",
@@ -21258,6 +23924,7 @@
                 "address": null,
                 "contactEmail": null,
                 "headInstructorId": null,
+                "gradingAgeBasis": null,
                 "createdAt": "2025-04-02T08:00:00.000Z",
                 "updatedAt": "2025-04-02T08:00:00.000Z"
               }
@@ -21278,6 +23945,14 @@
                   "club"
                 ],
                 "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "Organisation",
@@ -21297,6 +23972,7 @@
                 "address": null,
                 "contactEmail": null,
                 "headInstructorId": null,
+                "gradingAgeBasis": null,
                 "createdAt": "2025-04-02T08:00:00.000Z",
                 "updatedAt": "2025-04-02T08:00:00.000Z"
               }
@@ -21317,6 +23993,14 @@
                   "club"
                 ],
                 "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "Organisation",
@@ -21336,6 +24020,7 @@
                 "address": null,
                 "contactEmail": null,
                 "headInstructorId": null,
+                "gradingAgeBasis": null,
                 "createdAt": "2025-04-02T08:00:00.000Z",
                 "updatedAt": "2025-04-02T08:00:00.000Z"
               }
@@ -21356,6 +24041,14 @@
                   "club"
                 ],
                 "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "Organisation",
@@ -21375,6 +24068,7 @@
                 "address": null,
                 "contactEmail": null,
                 "headInstructorId": null,
+                "gradingAgeBasis": null,
                 "createdAt": "2025-04-02T08:00:00.000Z",
                 "updatedAt": "2025-04-02T08:00:00.000Z"
               }
@@ -21402,6 +24096,14 @@
                   "club"
                 ],
                 "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "Organisation",
@@ -21421,6 +24123,7 @@
                 "address": null,
                 "contactEmail": null,
                 "headInstructorId": null,
+                "gradingAgeBasis": null,
                 "createdAt": "2025-04-02T08:00:00.000Z",
                 "updatedAt": "2025-04-02T08:00:00.000Z"
               }
@@ -21448,6 +24151,14 @@
                   "club"
                 ],
                 "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "Organisation",
@@ -21467,6 +24178,7 @@
                 "address": null,
                 "contactEmail": null,
                 "headInstructorId": null,
+                "gradingAgeBasis": null,
                 "createdAt": "2025-04-02T08:00:00.000Z",
                 "updatedAt": "2025-04-02T08:00:00.000Z"
               }
@@ -21490,6 +24202,14 @@
                   "club"
                 ],
                 "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "Organisation",
@@ -21509,6 +24229,7 @@
                 "address": null,
                 "contactEmail": null,
                 "headInstructorId": null,
+                "gradingAgeBasis": null,
                 "createdAt": "2025-04-02T08:00:00.000Z",
                 "updatedAt": "2025-04-02T08:00:00.000Z"
               }
@@ -21537,6 +24258,14 @@
                   "club"
                 ],
                 "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "Organisation",
@@ -21556,6 +24285,7 @@
                 "address": null,
                 "contactEmail": null,
                 "headInstructorId": null,
+                "gradingAgeBasis": null,
                 "createdAt": "2025-04-02T08:00:00.000Z",
                 "updatedAt": "2025-04-02T08:00:00.000Z"
               }
@@ -21579,6 +24309,14 @@
                   "club"
                 ],
                 "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "Organisation",
@@ -21598,6 +24336,62 @@
                 "address": null,
                 "contactEmail": null,
                 "headInstructorId": null,
+                "gradingAgeBasis": null,
+                "createdAt": "2025-04-02T08:00:00.000Z",
+                "updatedAt": "2025-04-02T08:00:00.000Z"
+              }
+            }
+          },
+          "gradingAgeBasis": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/GradingAgeBasis"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "National federations only: how age is counted for grading requirements in its clubs. Null = exact age on the grading date.",
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
+              }
+            },
+            "x-nestjs_zod-parent-id": "Organisation",
+            "x-nestjs_zod-parent-metadata": {
+              "example": {
+                "id": "7d3a2e0e-2e8c-4b7a-9a6e-1f9d1e54b8f5",
+                "parentId": null,
+                "type": "international_federation",
+                "shortCode": "WTF",
+                "slug": "world-taido-federation",
+                "country": null,
+                "nameEn": "World Taido Federation",
+                "nameSv": "Världstaidoförbundet",
+                "nameFi": "Maailman Taidoliitto",
+                "nameJa": "世界躰道連盟",
+                "logoUrl": null,
+                "address": null,
+                "contactEmail": null,
+                "headInstructorId": null,
+                "gradingAgeBasis": null,
                 "createdAt": "2025-04-02T08:00:00.000Z",
                 "updatedAt": "2025-04-02T08:00:00.000Z"
               }
@@ -21618,6 +24412,14 @@
                   "club"
                 ],
                 "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "Organisation",
@@ -21637,6 +24439,7 @@
                 "address": null,
                 "contactEmail": null,
                 "headInstructorId": null,
+                "gradingAgeBasis": null,
                 "createdAt": "2025-04-02T08:00:00.000Z",
                 "updatedAt": "2025-04-02T08:00:00.000Z"
               }
@@ -21657,6 +24460,14 @@
                   "club"
                 ],
                 "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "Organisation",
@@ -21676,6 +24487,7 @@
                 "address": null,
                 "contactEmail": null,
                 "headInstructorId": null,
+                "gradingAgeBasis": null,
                 "createdAt": "2025-04-02T08:00:00.000Z",
                 "updatedAt": "2025-04-02T08:00:00.000Z"
               }
@@ -21696,6 +24508,7 @@
           "logoUrl",
           "address",
           "headInstructorId",
+          "gradingAgeBasis",
           "createdAt",
           "updatedAt"
         ]
@@ -21727,6 +24540,14 @@
                   "club"
                 ],
                 "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "CreateOrganisationInput"
@@ -21746,6 +24567,14 @@
                   "club"
                 ],
                 "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "CreateOrganisationInput"
@@ -21766,6 +24595,14 @@
                   "club"
                 ],
                 "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "CreateOrganisationInput"
@@ -21794,6 +24631,14 @@
                   "club"
                 ],
                 "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "CreateOrganisationInput"
@@ -21821,6 +24666,14 @@
                   "club"
                 ],
                 "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "CreateOrganisationInput"
@@ -21840,6 +24693,14 @@
                   "club"
                 ],
                 "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "CreateOrganisationInput"
@@ -21859,6 +24720,14 @@
                   "club"
                 ],
                 "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "CreateOrganisationInput"
@@ -21878,6 +24747,14 @@
                   "club"
                 ],
                 "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "CreateOrganisationInput"
@@ -21904,6 +24781,14 @@
                   "club"
                 ],
                 "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "CreateOrganisationInput"
@@ -21930,6 +24815,14 @@
                   "club"
                 ],
                 "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "CreateOrganisationInput"
@@ -21952,6 +24845,14 @@
                   "club"
                 ],
                 "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "CreateOrganisationInput"
@@ -21979,6 +24880,14 @@
                   "club"
                 ],
                 "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "CreateOrganisationInput"
@@ -22001,6 +24910,47 @@
                   "club"
                 ],
                 "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
+              }
+            },
+            "x-nestjs_zod-parent-id": "CreateOrganisationInput"
+          },
+          "gradingAgeBasis": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/GradingAgeBasis"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "OrganisationType": {
+                "type": "string",
+                "enum": [
+                  "international_federation",
+                  "national_federation",
+                  "club"
+                ],
+                "description": "Organisation type (immutable after create)."
+              },
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
               }
             },
             "x-nestjs_zod-parent-id": "CreateOrganisationInput"
@@ -22037,7 +24987,18 @@
             ],
             "description": "Parent organisation id, null for international federations.",
             "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
+              }
+            },
             "x-nestjs_zod-parent-id": "UpdateOrganisationInput"
           },
           "shortCode": {
@@ -22046,6 +25007,17 @@
             "maxLength": 20,
             "description": "Short display code, e.g. \"WTF\".",
             "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
+              }
+            },
             "x-nestjs_zod-parent-id": "UpdateOrganisationInput"
           },
           "slug": {
@@ -22061,7 +25033,18 @@
             ],
             "description": "URL-safe full name. Unique when present.",
             "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
+              }
+            },
             "x-nestjs_zod-parent-id": "UpdateOrganisationInput"
           },
           "country": {
@@ -22076,7 +25059,18 @@
             ],
             "description": "ISO 3166-1 alpha-3 country code. Null for international federations.",
             "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
+              }
+            },
             "x-nestjs_zod-parent-id": "UpdateOrganisationInput"
           },
           "nameEn": {
@@ -22084,6 +25078,17 @@
             "minLength": 1,
             "maxLength": 200,
             "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
+              }
+            },
             "x-nestjs_zod-parent-id": "UpdateOrganisationInput"
           },
           "nameSv": {
@@ -22091,6 +25096,17 @@
             "minLength": 1,
             "maxLength": 200,
             "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
+              }
+            },
             "x-nestjs_zod-parent-id": "UpdateOrganisationInput"
           },
           "nameFi": {
@@ -22098,6 +25114,17 @@
             "minLength": 1,
             "maxLength": 200,
             "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-$defs": {
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
+              }
+            },
             "x-nestjs_zod-parent-id": "UpdateOrganisationInput"
           },
           "nameJa": {
@@ -22111,7 +25138,18 @@
               }
             ],
             "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
+              }
+            },
             "x-nestjs_zod-parent-id": "UpdateOrganisationInput"
           },
           "logoUrl": {
@@ -22125,7 +25163,18 @@
               }
             ],
             "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
+              }
+            },
             "x-nestjs_zod-parent-id": "UpdateOrganisationInput"
           },
           "address": {
@@ -22135,7 +25184,18 @@
               "null"
             ],
             "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
+              }
+            },
             "x-nestjs_zod-parent-id": "UpdateOrganisationInput"
           },
           "contactEmail": {
@@ -22150,7 +25210,18 @@
               }
             ],
             "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
+              }
+            },
             "x-nestjs_zod-parent-id": "UpdateOrganisationInput"
           },
           "headInstructorId": {
@@ -22160,7 +25231,43 @@
               "null"
             ],
             "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-has-refs": true,
             "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
+              }
+            },
+            "x-nestjs_zod-parent-id": "UpdateOrganisationInput"
+          },
+          "gradingAgeBasis": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/GradingAgeBasis"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "National federations only: how age is counted for grading requirements in its clubs. Null = exact age on the grading date.",
+            "x-nestjs_zod-uses-3-point-1-syntax": true,
+            "x-nestjs_zod-parent-has-refs": true,
+            "x-nestjs_zod-empty-type": true,
+            "x-nestjs_zod-$defs": {
+              "GradingAgeBasis": {
+                "type": "string",
+                "enum": [
+                  "age_on_grading_date",
+                  "age_reached_in_grading_year"
+                ],
+                "description": "Exact age on the grading date, or the age reached during the grading year."
+              }
+            },
             "x-nestjs_zod-parent-id": "UpdateOrganisationInput"
           }
         }
@@ -29491,6 +32598,9 @@
       "GradingHistoryRow": {
         "$ref": "#/components/schemas/GradingHistoryRow"
       },
+      "GradingJudgedAgainst": {
+        "$ref": "#/components/schemas/GradingJudgedAgainst"
+      },
       "GradingHistoryResponse": {
         "$ref": "#/components/schemas/GradingHistoryResponse"
       },
@@ -29586,6 +32696,18 @@
       },
       "GradingRequirements": {
         "$ref": "#/components/schemas/GradingRequirements"
+      },
+      "GradingAgeBasis": {
+        "$ref": "#/components/schemas/GradingAgeBasis"
+      },
+      "RequirementAgeGroup": {
+        "$ref": "#/components/schemas/RequirementAgeGroup"
+      },
+      "RequirementAgeGroupInput": {
+        "$ref": "#/components/schemas/RequirementAgeGroupInput"
+      },
+      "SetRequirementAgeGroupsInput": {
+        "$ref": "#/components/schemas/SetRequirementAgeGroupsInput"
       },
       "RequirementSet": {
         "$ref": "#/components/schemas/RequirementSet"

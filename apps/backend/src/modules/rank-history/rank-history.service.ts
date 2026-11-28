@@ -18,7 +18,9 @@ import {
   type DbRankHistory,
   userProfile,
 } from '../../infrastructure/database/schema/index.js';
+import { RankRequirementsService } from '../grading-requirements/rank-requirements.service.js';
 
+import { toJudgedAgainst } from './judged-against.js';
 import { RankHistoryAuthService } from './rank-history.auth.service.js';
 import {
   RankHistoryRepository,
@@ -31,13 +33,42 @@ import type {
   UpdateRankHistoryInput,
 } from '@repo/contracts/rank-history';
 
+
+/** No requirement snapshot: the grading is not (or no longer) verified. */
+const CLEARED_SNAPSHOT = {
+  judgedSetId: null,
+  judgedSetName: null,
+  judgedAgeGroupId: null,
+  judgedAgeFrom: null,
+  judgedAgeTo: null,
+  judgedAgeBasis: null,
+} as const;
+
 @Injectable()
 export class RankHistoryService {
   constructor(
     private readonly repo: RankHistoryRepository,
     private readonly auth: RankHistoryAuthService,
     @Inject(DRIZZLE) private readonly db: DrizzleDb,
+    private readonly requirements: RankRequirementsService,
   ) {}
+
+  /**
+   * Which requirement the grading was judged against, resolved now for the
+   * grading's date (plan 2026-11-28-age-based-grading-requirements). Uses the
+   * set active at verification time: there is no history of active sets.
+   */
+  private async judgedSnapshot(row: DbRankHistory) {
+    const scope = await this.requirements.locateForUser(row.rankId, row.userId, row.date);
+    return {
+      judgedSetId: scope?.setId ?? null,
+      judgedSetName: scope?.setName ?? null,
+      judgedAgeGroupId: scope?.ageGroup?.id ?? null,
+      judgedAgeFrom: scope?.ageGroup?.ageFrom ?? null,
+      judgedAgeTo: scope?.ageGroup?.ageTo ?? null,
+      judgedAgeBasis: scope ? scope.ageBasis : null,
+    };
+  }
 
   /**
    * Removes a user's own grading history when they delete their account.
@@ -150,6 +181,7 @@ export class RankHistoryService {
         patch.verified = false;
         patch.verifiedByUserId = null;
         patch.verifiedAt = null;
+        Object.assign(patch, CLEARED_SNAPSHOT);
       }
 
       const updated = await this.repo.update(id, patch, tx);
@@ -218,6 +250,7 @@ export class RankHistoryService {
           verifiedAt: now,
           updatedAt: now,
           updatedByUserId: actor.id,
+          ...(await this.judgedSnapshot(row)),
         },
         tx,
       );
@@ -261,6 +294,7 @@ export class RankHistoryService {
           verifiedAt: null,
           updatedAt: now,
           updatedByUserId: actor.id,
+          ...CLEARED_SNAPSHOT,
         },
         tx,
       );
@@ -316,6 +350,7 @@ export class RankHistoryService {
       createdAt: row.createdAt.toISOString(),
       updatedAt: row.updatedAt ? row.updatedAt.toISOString() : null,
       updatedByUserId: row.updatedByUserId,
+      judgedAgainst: toJudgedAgainst(row),
     };
   }
 }

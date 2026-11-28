@@ -1,3 +1,4 @@
+import { GRADING_AGE_BASES } from '@repo/contracts/grading-age';
 import { Building2, History } from 'lucide-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -61,6 +62,7 @@ const DEFAULTS: CreateOrganisationInput = {
   address: null,
   contactEmail: null,
   headInstructorId: null,
+  gradingAgeBasis: null,
 };
 
 // The keys the form is actually responsible for. The full `Organisation` row
@@ -118,6 +120,7 @@ const FIELD_LABEL_KEYS = {
   address: 'address',
   contactEmail: 'contactEmail',
   headInstructorId: 'headInstructor',
+  gradingAgeBasis: 'gradingAgeBasis',
 } as const;
 
 export interface OrganisationFormProps {
@@ -223,6 +226,8 @@ export function OrganisationForm({
   // matches `DEFAULTS.country`.
   const handleTypeChange = (next: string): void => {
     form.setField('type', next);
+    // Only national federations decide how age is counted for grading.
+    if (next !== 'national_federation') form.setField('gradingAgeBasis', null);
     if (next === 'international_federation' && countryValue !== null) {
       form.setField('country', null);
     } else if (next !== 'international_federation' && countryValue === null) {
@@ -435,6 +440,29 @@ export function OrganisationForm({
         />
         <FormMessage message={form.errors.address} />
       </FormField>
+
+      {/* How age is counted for grading requirements (national federations only) */}
+      {form.values.type === 'national_federation' ? (
+        <FormField>
+          <Label htmlFor="org-grading-age">{t('gradingAge.label')}</Label>
+          <Select
+            value={String(form.values.gradingAgeBasis ?? 'age_on_grading_date')}
+            onValueChange={(v) => form.setField('gradingAgeBasis', v)}
+          >
+            <SelectTrigger id="org-grading-age">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {GRADING_AGE_BASES.map((b) => (
+                <SelectItem key={b} value={b}>
+                  {t(`gradingAge.bases.${b}`)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <p className="text-xs text-on-surface-variant">{t('gradingAge.intro')}</p>
+        </FormField>
+      ) : null}
 
       {/* Head instructor id */}
       <FormField>

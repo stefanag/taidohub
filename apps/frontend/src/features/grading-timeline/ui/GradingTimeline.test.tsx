@@ -71,6 +71,7 @@ const baseRow: GradingHistoryRow = {
   canEdit: false,
   updatedAt: null,
   updatedByUserId: null,
+  judgedAgainst: null,
 };
 
 function renderTimeline(

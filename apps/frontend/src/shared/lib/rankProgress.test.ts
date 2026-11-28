@@ -11,6 +11,7 @@ const empty: GradingRequirements = {
   jissenMinutes: null, jissenTested: false,
   minMonthsSincePreviousRank: null,
   requiresTheoricExam: false, requiresEssay: false,
+  ageGroup: null, ageGroups: [], ageBasis: 'age_on_grading_date', ageUnknown: false,
 };
 
 describe('calculateRankProgress', () => {

@@ -25,6 +25,7 @@ const VALID_BASE = {
   address: null,
   contactEmail: null,
   headInstructorId: null,
+  gradingAgeBasis: null,
 };
 
 const VALID_IF = {

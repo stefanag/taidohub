@@ -27,6 +27,7 @@ export default defineConfig({
     students: 'src/students.ts',
     feedback: 'src/feedback.ts',
     'grading-requirements': 'src/grading-requirements.ts',
+    'grading-age': 'src/grading-age.ts',
     statistics: 'src/statistics.ts',
     'legal-documents': 'src/legal-documents.ts',
     registration: 'src/registration.ts',

@@ -338,6 +338,16 @@
         "types": "./dist/account-export.d.cts",
         "default": "./dist/account-export.cjs"
       }
+    },
+    "./grading-age": {
+      "import": {
+        "types": "./dist/grading-age.d.ts",
+        "default": "./dist/grading-age.js"
+      },
+      "require": {
+        "types": "./dist/grading-age.d.cts",
+        "default": "./dist/grading-age.cjs"
+      }
     }
   },
   "files": [

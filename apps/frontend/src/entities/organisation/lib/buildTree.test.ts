@@ -7,7 +7,7 @@ import type { Organisation } from '@repo/contracts/organisations';
 const ROW = (id: string, parentId: string | null, nameEn: string): Organisation => ({
   id, parentId, type: 'club' as const, shortCode: id.toUpperCase(), slug: null,
   country: 'SWE' as const, nameEn, nameSv: nameEn, nameFi: nameEn, nameJa: null,
-  logoUrl: null, address: null, contactEmail: null, headInstructorId: null,
+  logoUrl: null, address: null, contactEmail: null, headInstructorId: null, gradingAgeBasis: null,
   createdAt: '2025-01-01T00:00:00.000Z', updatedAt: '2025-01-01T00:00:00.000Z',
 });
 

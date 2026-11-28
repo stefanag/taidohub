@@ -131,6 +131,7 @@ vi.mock('@/entities/rank-history/api/rank-history.api.js', async (orig) => {
       createdAt: '2026-05-25T08:00:00.000Z',
       updatedAt: null,
       updatedByUserId: null,
+      judgedAgainst: null,
     }),
     updateRankHistory: vi.fn().mockResolvedValue({
       id: 'd4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a',
@@ -151,6 +152,7 @@ vi.mock('@/entities/rank-history/api/rank-history.api.js', async (orig) => {
       createdAt: '2026-05-25T08:00:00.000Z',
       updatedAt: '2026-05-25T09:00:00.000Z',
       updatedByUserId: 'u-1',
+      judgedAgainst: null,
     }),
   };
 });
@@ -175,6 +177,7 @@ const VERIFIED_ROW: GradingHistoryRow = {
   canEdit: true,
   updatedAt: null,
   updatedByUserId: null,
+  judgedAgainst: null,
 };
 
 function renderDialog(

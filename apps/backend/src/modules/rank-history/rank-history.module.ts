@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 
+import { GradingRequirementsModule } from '../grading-requirements/grading-requirements.module.js';
 import { MembershipsModule } from '../memberships/memberships.module.js';
 import { OrganisationsModule } from '../organisations/organisations.module.js';
 import { UsersModule } from '../users/users.module.js';
@@ -15,7 +16,7 @@ import { RankHistoryService } from './rank-history.service.js';
  * (Task 17) can reuse both without re-querying.
  */
 @Module({
-  imports: [UsersModule, OrganisationsModule, MembershipsModule],
+  imports: [UsersModule, OrganisationsModule, MembershipsModule, GradingRequirementsModule],
   controllers: [RankHistoryController],
   providers: [RankHistoryService, RankHistoryRepository, RankHistoryAuthService],
   exports: [RankHistoryService, RankHistoryRepository, RankHistoryAuthService],

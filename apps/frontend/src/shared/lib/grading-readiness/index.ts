@@ -3,6 +3,7 @@ export {
   computeGradingReadiness,
   daysBetween,
   formatIsoDate,
+  nextAgeGroupChange,
   todayIso,
   wholeMonthsBetween,
   type GradingReadiness,

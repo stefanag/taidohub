@@ -174,7 +174,7 @@ export class BeltRanksService extends LookupTableService<
             nameFi: orgNameFi!,
           }
         : null,
-      requirements: await this.resolvePublicRequirements(row.id, row.organisationId),
+      ...(await this.resolvePublicRequirements(row.id, row.organisationId)),
     };
   }
 
@@ -195,10 +195,13 @@ export class BeltRanksService extends LookupTableService<
   private async resolvePublicRequirements(
     rankId: string,
     organisationId: string | null,
-  ): Promise<PublicRankResponse['requirements']> {
+  ): Promise<Pick<PublicRankResponse, 'requirements' | 'ageVariants'>> {
     const activeSet = await this.requirementSets.findActiveByOrg(organisationId);
-    if (!activeSet) return null;
-    return this.rankRequirements.resolveForSetOrNull(rankId, activeSet.id);
+    if (!activeSet) return { requirements: null, ageVariants: [] };
+    const requirements = await this.rankRequirements.resolveForSetOrNull(rankId, activeSet.id);
+    // Age variants (kyu and dan): every group is shown, since there is no student to pick for.
+    const ageVariants = requirements ? await this.rankRequirements.ageVariantsForSet(rankId, activeSet.id) : [];
+    return { requirements, ageVariants };
   }
 
   protected toApi(row: DbBeltRank): BeltRank {

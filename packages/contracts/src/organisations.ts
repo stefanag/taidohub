@@ -1,3 +1,4 @@
+import { GradingAgeBasisSchema } from './grading-age.js';
 import { isIsoAlpha3 } from './iso-3166-alpha3.js';
 import { LabelFilterSchema } from './labels.js';
 import { z } from './zod-openapi.js';
@@ -39,6 +40,9 @@ const OrganisationObject = z.object({
   address: z.string().nullable(),
   contactEmail: OptionalEmail,
   headInstructorId: z.string().nullable(),
+  gradingAgeBasis: GradingAgeBasisSchema.nullable().describe(
+    'National federations only: how age is counted for grading requirements in its clubs. Null = exact age on the grading date.',
+  ),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
 });
@@ -84,6 +88,7 @@ export const OrganisationSchema = OrganisationObject.superRefine(enforceCountryB
     address: null,
     contactEmail: null,
     headInstructorId: null,
+    gradingAgeBasis: null,
     createdAt: ISO_DATETIME_EXAMPLE,
     updatedAt: ISO_DATETIME_EXAMPLE,
   },
@@ -94,6 +99,7 @@ export const CreateOrganisationSchema = OrganisationObject.omit({
   createdAt: true,
   updatedAt: true,
 })
+  .extend({ gradingAgeBasis: GradingAgeBasisSchema.nullable().optional() })
   .superRefine(enforceCountryByType)
   .meta({ id: 'CreateOrganisationInput' });
 

@@ -6,6 +6,7 @@ import type { BeltRank } from '@/entities/belt-rank';
 import type { GradingHistoryRow } from '@/entities/rank-history';
 import type { ShogoTitle } from '@/entities/shogo-title';
 
+import { ageGroupLabel } from '@/entities/rank-requirement';
 import { FeedbackThreadSheet } from '@/features/feedback-thread';
 import { type BeltColor } from '@/shared/lib/belt-visuals';
 import { useFeatureFlag } from '@/shared/lib/feature-flags';
@@ -233,6 +234,16 @@ export function GradingTimelineEntry({
           ) : null
         ) : null}
 
+        {entry.judgedAgainst?.requirementSetName ? (
+          <p className="mb-2 text-xs text-on-surface-variant" data-testid="timeline-judged-against">
+            {t('gradingHistory.timeline.judgedAgainst', {
+              requirements:
+                entry.judgedAgainst.ageFrom !== null || entry.judgedAgainst.ageTo !== null
+                  ? `${entry.judgedAgainst.requirementSetName}, ${ageGroupLabel(entry.judgedAgainst, t)}`
+                  : entry.judgedAgainst.requirementSetName,
+            })}
+          </p>
+        ) : null}
         {examinerLine ? (
           <p className="mb-4 text-sm italic text-on-surface-variant">— {examinerLine}</p>
         ) : null}

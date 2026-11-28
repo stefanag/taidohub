@@ -25,6 +25,7 @@ const PARENT_CANDIDATE: Organisation = {
   address: null,
   contactEmail: null,
   headInstructorId: null,
+  gradingAgeBasis: null,
   createdAt: '2025-04-02T08:00:00.000Z',
   updatedAt: '2025-04-02T08:00:00.000Z',
 };

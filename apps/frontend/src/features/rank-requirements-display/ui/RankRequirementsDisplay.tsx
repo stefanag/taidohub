@@ -6,6 +6,7 @@ import type { Pattern } from '@repo/contracts/patterns';
 import type { Progress } from '@repo/contracts/progress';
 import type { Technique } from '@repo/contracts/techniques';
 
+import { ageGroupLabel } from '@/entities/rank-requirement';
 import { Badge, Card, CardContent } from '@/shared/ui';
 
 export interface RankRequirementsDisplayLookup {
@@ -193,6 +194,16 @@ export function RankRequirementsDisplay({
 
   return (
     <div className="space-y-8">
+      {requirements.ageGroup ? (
+        <p className="text-sm font-medium" data-testid="requirements-age-group">
+          {t('ageGroups.requirementsFor', { group: ageGroupLabel(requirements.ageGroup, t) })}
+        </p>
+      ) : null}
+      {requirements.ageUnknown ? (
+        <p role="note" className="text-sm text-on-surface-variant" data-testid="requirements-age-unknown">
+          {t('ageGroups.ageUnknown')}
+        </p>
+      ) : null}
       {hasKihon ? (
         <section aria-labelledby="rrd-kihon-heading">
           <h2 id="rrd-kihon-heading" className="mb-2 text-lg font-semibold">

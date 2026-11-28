@@ -29,6 +29,12 @@ export class ProfileService {
     return row?.referenceFederationId ?? null;
   }
 
+  /** The user's date of birth (YYYY-MM-DD), or null; for age-based requirements. */
+  async getDateOfBirth(userId: string): Promise<string | null> {
+    const row = await this.repo.findByUserId(userId);
+    return row?.dateOfBirth ?? null;
+  }
+
   /** True when the user registered themselves (and so must verify their email). */
   async isSelfRegistered(userId: string): Promise<boolean> {
     const row = await this.repo.findByUserId(userId);
