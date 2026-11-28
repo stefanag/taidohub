@@ -18,6 +18,9 @@ Box with restic. Hetzner Backup also takes a daily snapshot of the whole product
 Registry (GHCR) and runs `deploy.sh` on the server over SSH. Staging deploys automatically when CI
 passes on `main`; production is a manual run that needs a reviewer's approval.
 
+Starting with one server and turning staging into production later? See
+[PROMOTE-STAGING-TO-PRODUCTION.md](PROMOTE-STAGING-TO-PRODUCTION.md).
+
 ## Cost
 
 List prices excluding VAT, November 2026.
@@ -124,7 +127,8 @@ echo "<token>" | docker login ghcr.io -u stefanag --password-stdin
    - the variable `SITE_URL`: `https://staging.taidohub.se` and `https://taidohub.se` respectively;
    - for `production`: add yourself under Required reviewers.
 4. Under Settings › Secrets and variables › Actions › Variables, set the repository variable
-   `DEPLOY_ENABLED=true`. Until then the Deploy workflow skips every run.
+   `DEPLOY_ENABLED=true`. Until then the Deploy workflow skips every run. The variable
+   `STAGING_AUTO_DEPLOY=false` turns off only the automatic staging deploy after CI.
 
 ## 5. First deploy
 
