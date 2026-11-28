@@ -1141,5 +1141,29 @@
     "flip": "Flip the card",
     "tapToFlip": "Tap to show the answer",
     "shuffle": "Shuffle"
+  },
+  "signInMethods": {
+    "title": "Ways to sign in",
+    "password": "Email and password",
+    "passwordSet": "A password is set.",
+    "passwordNotSet": "No password yet.",
+    "addPassword": "Add a password",
+    "connected": "Connected",
+    "notConnected": "Not connected",
+    "connectGoogle": "Connect Google",
+    "remove": "Remove",
+    "confirmRemove": "Remove Google as a way to sign in? You can connect it again later.",
+    "onlyMethod": "Your only way to sign in",
+    "hint": "The Google account may use another address than your TaidoHub account. Your TaidoHub address does not change.",
+    "notices": {
+      "linked": "Google is connected. You can now sign in with it.",
+      "unlinked": "Google is removed as a way to sign in.",
+      "passwordLinkSent": "We have sent a link for choosing a password to your email address."
+    },
+    "errors": {
+      "linkedToOther": "That Google account is already connected to another TaidoHub account.",
+      "unableToLink": "Google could not be connected. Try again.",
+      "signInAgain": "For your security, sign out and in again before removing a way to sign in."
+    }
   }
 }

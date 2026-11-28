@@ -36,6 +36,7 @@ vi.mock('@/entities/profile', () => ({
 }));
 
 vi.mock('@/features/auth-by-email', () => ({
+  SignInMethodsSection: () => null,
   authClient: { getSession: vi.fn() },
 }));
 

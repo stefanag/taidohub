@@ -103,13 +103,32 @@ Let users sign in with their Google account as an alternative to email and passw
 - Providers endpoint: `GET /api/account/sign-in-providers` (better-auth owns `/api/auth/*`).
 - The Google button is hidden on the login page while an AI client is being connected (the
   OAuth authorize flow resumes only through the email form).
-- Phase 2 (link/unlink on the profile page) is not part of this PR; still an open decision.
+- Phase 2 (link/unlink on the profile page) shipped separately in PR feat/google-link-unlink; see
+  "Phase 2 as built" below.
 
 
 
 - "Connect Google account" / "Remove connection" (`linkSocial` / `unlinkAccount`), for users whose
   Google address differs from their TaidoHub address.
 - Never allow removing the last sign-in method.
+
+### Phase 2 as built (feat/google-link-unlink, 2026-11-28)
+
+- `better-auth.ts`: `account.accountLinking.allowDifferentEmails: true` and
+  `updateUserInfoOnLink: false`. Linking needs the live session and Google's verified email; the
+  TaidoHub email, name and image never change on link. A Google account already linked to another
+  user is refused by better-auth (`account_already_linked_to_different_user`).
+- Profile page, section "Ways to sign in" (in `features/auth-by-email`, which owns the auth
+  client): password set or not, Google connected or not, "Connect Google" and "Remove". The last
+  way to sign in has no remove button, and better-auth refuses it anyway
+  (`FAILED_TO_UNLINK_LAST_ACCOUNT`). Unlinking needs a fresh session (better-auth's `freshAge`,
+  one day); otherwise the user is asked to sign in again.
+- A Google-only user gets "Add a password", which sends the usual reset link to their TaidoHub
+  address.
+- better-auth 1.7 unlinks by account row id (`accountId`), not by `providerId`.
+- e2e: `link-social` builds the Google redirect for a signed-in user and answers 401 without a
+  session; with a stand-in Google account row, `unlink-account` removes Google and refuses the
+  remaining credential account. The callback itself still needs a manual test on staging.
 
 ## Risks to check during implementation
 

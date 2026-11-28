@@ -135,6 +135,17 @@ export function buildBetterAuth(
           },
         }
       : {}),
+    // Profile page: a signed-in user may connect a Google account whose
+    // address differs from their TaidoHub address (linking needs the live
+    // session, and Google's verified email). The account's own email, name and
+    // image stay as they are. better-auth refuses to unlink the last account,
+    // so nobody can remove their only way to sign in.
+    account: {
+      accountLinking: {
+        allowDifferentEmails: true,
+        updateUserInfoOnLink: false,
+      },
+    },
     databaseHooks: {
       user: {
         create: {
