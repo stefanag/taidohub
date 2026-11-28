@@ -1,3 +1,11 @@
+import {
+  ageForGrading,
+  ageGroupContains,
+  dateAgeReached,
+  type AgeBounds,
+  type GradingAgeBasis,
+} from '@repo/contracts/grading-age';
+
 /**
  * When a student may grade next, from the two hard gates the catalogue
  * records: time since the previous rank (`minMonthsSincePreviousRank` on the
@@ -11,6 +19,8 @@ export interface GradingReadinessInput {
   minMonthsSincePreviousRank: number | null;
   dateOfBirth: string | null;
   minAge: number | null;
+  /** How the federation counts age (default: exact age on the date). */
+  ageBasis?: GradingAgeBasis;
   /** Today as YYYY-MM-DD. */
   today: string;
 }
@@ -54,6 +64,7 @@ export function wholeMonthsBetween(from: string, to: string): number {
 
 export function computeGradingReadiness(input: GradingReadinessInput): GradingReadiness {
   const { lastPassDate, dateOfBirth, today } = input;
+  const basis = input.ageBasis ?? 'age_on_grading_date';
   const minMonths =
     input.minMonthsSincePreviousRank && input.minMonthsSincePreviousRank > 0
       ? input.minMonthsSincePreviousRank
@@ -61,10 +72,10 @@ export function computeGradingReadiness(input: GradingReadinessInput): GradingRe
   const minAge = input.minAge && input.minAge > 0 ? input.minAge : null;
 
   const monthsInRank = lastPassDate ? wholeMonthsBetween(lastPassDate, today) : null;
-  const age = dateOfBirth ? Math.floor(wholeMonthsBetween(dateOfBirth, today) / 12) : null;
+  const age = dateOfBirth ? ageForGrading(dateOfBirth, today, basis) : null;
 
   const timeDate = minMonths !== null && lastPassDate ? addMonths(lastPassDate, minMonths) : null;
-  const ageDate = minAge !== null && dateOfBirth ? addMonths(dateOfBirth, minAge * 12) : null;
+  const ageDate = minAge !== null && dateOfBirth ? dateAgeReached(dateOfBirth, minAge, basis) : null;
 
   const timeMissing = minMonths !== null && !lastPassDate;
   const ageMissing = minAge !== null && !dateOfBirth;
@@ -96,4 +107,34 @@ export function formatIsoDate(isoDate: string, language: string): string {
   return new Intl.DateTimeFormat(language, { dateStyle: 'long', timeZone: 'UTC' }).format(
     new Date(Date.UTC(y, m - 1, d)),
   );
+}
+
+/**
+ * The next date on which a different age group's requirements apply to the
+ * student (or the base requirement, `group: null`), after `today`. Null when
+ * nothing changes: no groups, or the student is past every boundary.
+ */
+export function nextAgeGroupChange(
+  dateOfBirth: string,
+  groups: (AgeBounds & { id: string })[],
+  basis: GradingAgeBasis,
+  today: string,
+): { date: string; group: (AgeBounds & { id: string }) | null } | null {
+  if (groups.length === 0) return null;
+  const groupAt = (date: string) => {
+    const age = ageForGrading(dateOfBirth, date, basis);
+    return groups.find((g) => ageGroupContains(g, age)) ?? null;
+  };
+  const current = groupAt(today);
+  const boundaries = groups
+    .flatMap((g) => [g.ageFrom, g.ageTo === null ? null : g.ageTo + 1])
+    .filter((a): a is number => a !== null)
+    .map((a) => dateAgeReached(dateOfBirth, a, basis))
+    .filter((d) => d > today)
+    .sort();
+  for (const date of boundaries) {
+    const next = groupAt(date);
+    if ((next?.id ?? null) !== (current?.id ?? null)) return { date, group: next };
+  }
+  return null;
 }

@@ -148,6 +148,8 @@ export function NextRankCard({ userId: userIdProp }: NextRankCardProps): React.R
                 lastPassDate={currentRankDate}
                 minMonthsSincePreviousRank={requirementsQuery.data.minMonthsSincePreviousRank}
                 minAge={nextRank.minAge}
+                ageBasis={requirementsQuery.data.ageBasis}
+                ageGroups={requirementsQuery.data.ageGroups}
               />
             ) : null}
           </>

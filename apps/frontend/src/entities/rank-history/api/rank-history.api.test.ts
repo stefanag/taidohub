@@ -34,6 +34,7 @@ const ROW = {
   canEdit: true,
   updatedAt: null,
   updatedByUserId: null,
+  judgedAgainst: null,
 };
 
 const RH_FULL = {
@@ -55,6 +56,7 @@ const RH_FULL = {
   createdAt: '2026-05-25T08:00:00.000Z',
   updatedAt: null,
   updatedByUserId: null,
+  judgedAgainst: null,
 };
 
 const mockedHttp = vi.mocked(httpClient);

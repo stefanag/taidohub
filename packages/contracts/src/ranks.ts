@@ -204,6 +204,8 @@ export const PublicRankResponseSchema = z
       })
       .nullable(),
     requirements: GradingRequirementsSchema.nullable(),
+    /** One variant per age group of the rank in the active set (kyu and dan only). */
+    ageVariants: z.array(GradingRequirementsSchema).default([]),
   })
   .meta({
     id: 'PublicRankResponse',

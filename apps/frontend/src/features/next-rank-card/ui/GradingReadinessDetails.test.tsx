@@ -61,4 +61,20 @@ describe('<GradingReadinessDetails>', () => {
     await new Promise((r) => setTimeout(r, 10));
     expect(container).toBeEmptyDOMElement();
   });
+
+  it("warns when another age group's requirements will apply within a year", async () => {
+    profile.mockReturnValue({ dateOfBirth: '2015-03-10' }); // 11 now, 12 on 2027-03-10
+    renderDetails({
+      lastPassDate: '2026-01-01',
+      minMonthsSincePreviousRank: null,
+      minAge: null,
+      ageGroups: [
+        { id: 'young', ageFrom: null, ageTo: 11 },
+        { id: 'teen', ageFrom: 12, ageTo: 15 },
+      ],
+    });
+    expect(await screen.findByTestId('grading-readiness-age-change')).toHaveTextContent(
+      'From March 10, 2027 the requirements for 12–15 years apply.',
+    );
+  });
 });

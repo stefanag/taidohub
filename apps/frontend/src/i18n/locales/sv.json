@@ -199,6 +199,7 @@
       "heading": "Klubb"
     },
     "timeline": {
+      "judgedAgainst": "Bedömd mot: {{requirements}}",
       "noEntriesYet": "Inga poster ännu.",
       "failed": "Underkänd",
       "external": "Extern",
@@ -400,6 +401,24 @@
       "empty": "Inga kravuppsättningar än."
     },
     "rankRequirements": {
+      "ageGroups": {
+        "title": "Krav efter ålder",
+        "manage": "Hantera åldersgrupper",
+        "allAges": "Alla åldrar",
+        "baseHint": "De här kraven gäller alla åldrar som inte har en egen åldersgrupp.",
+        "variantHint": "De här kraven ersätter kraven för alla åldrar för elever i den här åldersgruppen.",
+        "editorHint": "Lämna Från tomt för \"under\" eller Till tomt för \"och äldre\". Grupperna får inte överlappa. En ny grupp startar med en kopia av kraven för alla åldrar; tar du bort en grupp försvinner dess krav.",
+        "from": "Från ålder",
+        "to": "Till ålder",
+        "remove": "Ta bort",
+        "add": "Lägg till åldersgrupp",
+        "errors": {
+          "overlap": "Åldersgrupperna får inte överlappa.",
+          "baseRequired": "Spara kraven för alla åldrar först.",
+          "notAllowed": "Bara kyu- och dan-grader kan ha åldersgrupper.",
+          "invalid": "Varje grupp behöver minst en ålder mellan 0 och 120, och Från får inte vara högre än Till."
+        }
+      },
       "title": "Gradkrav",
       "description": "Redigera kihon, kobo, mönster, hokei-grupper och gradkrav per grad.",
       "selectSet": "Välj ett kravset",
@@ -473,6 +492,7 @@
         "club": "Klubb"
       },
       "fields": {
+        "gradingAgeBasis": "Hur åldern räknas vid gradering",
         "type": "Typ",
         "shortCode": "Kortkod",
         "slug": "Slug",
@@ -974,6 +994,7 @@
     }
   },
   "gradingReadiness": {
+    "ageGroupChange": "Från {{date}} gäller kraven för {{group}}.",
     "timeInRank": "Tid i grad: {{months}} av {{min}} månader",
     "minAge": "Lägsta ålder: {{age}} år",
     "met": "Du uppfyller kraven på tid och ålder för den här graden.",
@@ -1148,5 +1169,29 @@
       "unableToLink": "Google kunde inte kopplas. Försök igen.",
       "signInAgain": "Av säkerhetsskäl behöver du logga ut och in igen innan du tar bort ett sätt att logga in."
     }
+  },
+  "ageGroups": {
+    "title": "Åldersgrupper",
+    "allAges": "Alla åldrar",
+    "under": "Under {{age}} år",
+    "andOlder": "{{age}} år och äldre",
+    "exactly": "{{age}} år",
+    "between": "{{from}}–{{to}} år",
+    "requirementsFor": "Krav för {{group}}",
+    "ageUnknown": "Kraven skiljer sig mellan åldrar. Lägg in ditt födelsedatum i profilen för att se kraven för din ålder."
+  },
+  "gradingAge": {
+    "title": "Ålder för graderingskrav",
+    "intro": "Hur åldern räknas när en grad har olika krav för olika åldrar, och för en grads lägsta ålder. Gäller alla klubbar i förbundet.",
+    "label": "Hur åldern räknas",
+    "bases": {
+      "age_on_grading_date": "Ålder på graderingsdagen",
+      "age_reached_in_grading_year": "Ålder man fyller under graderingsåret"
+    },
+    "hints": {
+      "age_on_grading_date": "En elev som fyller 12 den 15 juni räknas som 12 från den dagen.",
+      "age_reached_in_grading_year": "En elev som fyller 12 någon gång under året räknas som 12 hela året."
+    },
+    "saved": "Sparat."
   }
 }

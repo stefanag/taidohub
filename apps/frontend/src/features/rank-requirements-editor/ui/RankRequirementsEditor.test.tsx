@@ -128,6 +128,10 @@ const EMPTY_REQUIREMENTS: GradingRequirements = {
   minMonthsSincePreviousRank: null,
   requiresTheoricExam: false,
   requiresEssay: false,
+  ageGroup: null,
+  ageGroups: [],
+  ageBasis: 'age_on_grading_date',
+  ageUnknown: false,
 };
 
 const { hooks } = vi.hoisted(() => ({
@@ -158,12 +162,12 @@ vi.mock('@/entities/pattern/api/pattern.api.js', async (orig) => {
 });
 
 
-function renderEditor(rankId = RANK_ID, setId = SET_ID) {
+function renderEditor(rankId = RANK_ID, setId = SET_ID, ageGroupId: string | null = null) {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   const utils = render(
     <QueryClientProvider client={client}>
       <I18nextProvider i18n={i18n}>
-        <RankRequirementsEditor rankId={rankId} setId={setId} />
+        <RankRequirementsEditor rankId={rankId} setId={setId} ageGroupId={ageGroupId} />
       </I18nextProvider>
     </QueryClientProvider>,
   );
@@ -185,11 +189,21 @@ describe('<RankRequirementsEditor>', () => {
     renderEditor();
 
     await waitFor(() => {
-      expect(hooks.getRequirementsForSet).toHaveBeenCalledWith(RANK_ID, SET_ID);
+      expect(hooks.getRequirementsForSet).toHaveBeenCalledWith(RANK_ID, SET_ID, null);
     });
 
     expect(await screen.findByText('Mae geri')).toBeInTheDocument();
     expect(screen.queryByText('Advanced thing')).not.toBeInTheDocument();
+  });
+
+  it('loads and saves one age group\'s variant', async () => {
+    const AGE_GROUP = '33333333-3333-4333-8333-333333333333';
+    const { user } = renderEditor(RANK_ID, SET_ID, AGE_GROUP);
+    await waitFor(() => expect(hooks.getRequirementsForSet).toHaveBeenCalledWith(RANK_ID, SET_ID, AGE_GROUP));
+    await screen.findByText('Mae geri');
+    await user.click(screen.getByRole('button', { name: /^save$/i }));
+    await waitFor(() => expect(hooks.setRequirements).toHaveBeenCalledTimes(1));
+    expect(hooks.setRequirements.mock.calls[0]![1]).toMatchObject({ setId: SET_ID, ageGroupId: AGE_GROUP });
   });
 
   it('splits patterns into Kobo vs Other sections based on classificationsByRoot.pattern_type code', async () => {

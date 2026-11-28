@@ -36,6 +36,10 @@ const STUB_GRADING_REQUIREMENTS = {
   minMonthsSincePreviousRank: null,
   requiresTheoricExam: false,
   requiresEssay: false,
+  ageGroup: null,
+  ageGroups: [],
+  ageBasis: 'age_on_grading_date',
+  ageUnknown: false,
 };
 
 const mockedHttp = vi.mocked(httpClient);

@@ -96,6 +96,7 @@ export class OrganisationsService {
   async create(input: CreateOrganisationInput, user: AuthenticatedUser): Promise<Organisation> {
     this.assertCan(user, 'create');
     await this.validateHierarchy(input.type, input.parentId);
+    this.validateAgeBasisForType(input.type, input.gradingAgeBasis);
     return this.db.transaction(async (tx) => {
       const row = await this.repo.create(input, tx);
       const after = this.toApi(row);
@@ -129,6 +130,7 @@ export class OrganisationsService {
     // `UpdateOrganisationSchema` — patches don't carry `type` (it's
     // immutable). Apply it here against the existing row's type.
     this.validateCountryForType(existing.type as OrganisationType, input.country);
+    this.validateAgeBasisForType(existing.type as OrganisationType, input.gradingAgeBasis);
 
     return this.db.transaction(async (tx) => {
       const row = await this.repo.update(id, input, tx);
@@ -308,6 +310,24 @@ export class OrganisationsService {
     return { error: { code: 'NOT_FOUND', message: `Organisation ${id} not found.` } };
   }
 
+  /**
+   * How age is counted for grading requirements is a national federation's
+   * choice for its clubs (plan 2026-11-28-age-based-grading-requirements);
+   * other organisation types cannot carry it. Who may change it is the usual
+   * `update` on the federation: its orgadmin or sysadmin.
+   */
+  private validateAgeBasisForType(type: OrganisationType, basis: unknown): void {
+    if (basis !== undefined && basis !== null && type !== 'national_federation') {
+      throw new BadRequestException({
+        error: {
+          code: 'VALIDATION_FAILED',
+          message: 'Only a national federation sets how age is counted for grading.',
+          details: { field: 'gradingAgeBasis' },
+        },
+      });
+    }
+  }
+
   private toApi(row: DbOrganisation): Organisation {
     return {
       id: row.id,
@@ -324,6 +344,7 @@ export class OrganisationsService {
       address: row.address,
       contactEmail: row.contactEmail,
       headInstructorId: row.headInstructorId,
+      gradingAgeBasis: row.gradingAgeBasis,
       createdAt: row.createdAt.toISOString(),
       updatedAt: row.updatedAt.toISOString(),
     };

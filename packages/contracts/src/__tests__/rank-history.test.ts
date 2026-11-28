@@ -93,6 +93,7 @@ describe('RankHistorySchema', () => {
         createdAt: ISO,
         updatedAt: null,
         updatedByUserId: null,
+        judgedAgainst: null,
       }).success,
     ).toBe(true);
   });
@@ -119,6 +120,7 @@ describe('GradingHistoryRowSchema', () => {
         canEdit: true,
         updatedAt: null,
         updatedByUserId: null,
+        judgedAgainst: null,
       }).success,
     ).toBe(true);
   });

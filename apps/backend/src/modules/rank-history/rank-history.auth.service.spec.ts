@@ -44,6 +44,12 @@ function eventRow(overrides: Partial<DbRankHistory> = {}): DbRankHistory {
     createdAt: new Date(),
     updatedAt: null,
     updatedByUserId: null,
+    judgedSetId: null,
+    judgedSetName: null,
+    judgedAgeGroupId: null,
+    judgedAgeFrom: null,
+    judgedAgeTo: null,
+    judgedAgeBasis: null,
     ...overrides,
   };
 }

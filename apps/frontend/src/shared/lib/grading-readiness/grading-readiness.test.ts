@@ -4,6 +4,7 @@ import {
   addMonths,
   computeGradingReadiness,
   daysBetween,
+  nextAgeGroupChange,
   wholeMonthsBetween,
 } from './grading-readiness.js';
 
@@ -59,5 +60,35 @@ describe('computeGradingReadiness', () => {
   it('flags a missing date of birth instead of guessing', () => {
     const r = computeGradingReadiness({ ...base, dateOfBirth: null });
     expect(r).toMatchObject({ ageMet: null, earliestDate: null, incomplete: true, timeMet: false });
+  });
+});
+
+describe('age basis and age groups', () => {
+  it('meets the minimum age on 1 January under birth-year counting', () => {
+    const r = computeGradingReadiness({
+      lastPassDate: null,
+      minMonthsSincePreviousRank: null,
+      dateOfBirth: '2008-11-30',
+      minAge: 18,
+      ageBasis: 'age_reached_in_grading_year',
+      today: '2026-01-15',
+    });
+    expect(r).toMatchObject({ age: 18, ageMet: true, earliestDate: '2026-01-01' });
+  });
+
+  it('finds the next change of age group', () => {
+    const groups = [
+      { id: 'young', ageFrom: null, ageTo: 11 },
+      { id: 'teen', ageFrom: 12, ageTo: 15 },
+    ];
+    expect(nextAgeGroupChange('2014-06-15', groups, 'age_on_grading_date', '2026-01-10')).toEqual({
+      date: '2026-06-15',
+      group: groups[1],
+    });
+    expect(nextAgeGroupChange('2010-06-15', groups, 'age_reached_in_grading_year', '2025-03-01')).toEqual({
+      date: '2026-01-01',
+      group: null,
+    });
+    expect(nextAgeGroupChange('1990-01-01', groups, 'age_on_grading_date', '2026-01-10')).toBeNull();
   });
 });

@@ -185,6 +185,10 @@ describe('PublicRankResponseSchema', () => {
           minMonthsSincePreviousRank: null,
           requiresTheoricExam: false,
           requiresEssay: false,
+          ageGroup: null,
+          ageGroups: [],
+          ageBasis: 'age_on_grading_date',
+          ageUnknown: false,
         },
       }).success,
     ).toBe(true);

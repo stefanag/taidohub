@@ -198,6 +198,30 @@ describe('OrganisationsService — country/type rule on update', () => {
   });
 });
 
+describe('OrganisationsService — grading age basis', () => {
+  let repo: ReturnType<typeof repoStub>;
+  let service: OrganisationsService;
+  beforeEach(async () => {
+    repo = repoStub();
+    ({ service } = await makeService(repo));
+  });
+
+  it('lets a national federation choose how age is counted', async () => {
+    repo.findById.mockResolvedValue(NF_ROW);
+    repo.update.mockResolvedValue({ ...NF_ROW, gradingAgeBasis: 'age_reached_in_grading_year' });
+    const out = await service.update('nf-1', { gradingAgeBasis: 'age_reached_in_grading_year' }, admin);
+    expect(out.gradingAgeBasis).toBe('age_reached_in_grading_year');
+  });
+
+  it('refuses the setting on a club', async () => {
+    repo.findById.mockResolvedValue(CLUB_ROW);
+    await expect(
+      service.update('club-1', { gradingAgeBasis: 'age_reached_in_grading_year' }, admin),
+    ).rejects.toThrow(BadRequestException);
+    expect(repo.update).not.toHaveBeenCalled();
+  });
+});
+
 describe('OrganisationsService — cycle detection', () => {
   let repo: ReturnType<typeof repoStub>;
   let service: OrganisationsService;

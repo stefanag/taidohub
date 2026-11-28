@@ -66,11 +66,11 @@ interface Harness {
   svc: RankRequirementsService;
   repo: { [K in keyof RankRequirementsRepository]: ReturnType<typeof vi.fn> };
   sets: { [K in keyof RequirementSetsRepository]: ReturnType<typeof vi.fn> };
-  orgs: { getAncestorIds: ReturnType<typeof vi.fn> };
+  orgs: { getAncestorIds: ReturnType<typeof vi.fn>; findById: ReturnType<typeof vi.fn> };
   memberships: { list: ReturnType<typeof vi.fn> };
   abilities: { createForUser: ReturnType<typeof vi.fn> };
   fakeDb: { transaction: ReturnType<typeof vi.fn> };
-  profiles: { getReferenceFederationId: ReturnType<typeof vi.fn> };
+  profiles: { getReferenceFederationId: ReturnType<typeof vi.fn>; getDateOfBirth: ReturnType<typeof vi.fn> };
 }
 
 function build(opts: { canRead?: boolean; canManage?: boolean } = {}): Harness {
@@ -88,6 +88,12 @@ function build(opts: { canRead?: boolean; canManage?: boolean } = {}): Harness {
     insertHokeiGroup: vi.fn().mockResolvedValue({ id: 'hg-1' }),
     insertHokeiGroupPatterns: vi.fn().mockResolvedValue(undefined),
     distinctRankIdsForSet: vi.fn().mockResolvedValue([]),
+    listAgeGroups: vi.fn().mockResolvedValue([]),
+    insertAgeGroup: vi.fn().mockResolvedValue({ id: 'ag-new' }),
+    updateAgeGroup: vi.fn().mockResolvedValue(undefined),
+    deleteAgeGroups: vi.fn().mockResolvedValue(undefined),
+    deleteRankFromSet: vi.fn().mockResolvedValue(undefined),
+    rankSystemCode: vi.fn().mockResolvedValue('kyu'),
   };
 
   const sets = {
@@ -103,6 +109,7 @@ function build(opts: { canRead?: boolean; canManage?: boolean } = {}): Harness {
 
   const orgs = {
     getAncestorIds: vi.fn().mockResolvedValue([]),
+    findById: vi.fn().mockResolvedValue(null),
   };
 
   const memberships = {
@@ -120,6 +127,7 @@ function build(opts: { canRead?: boolean; canManage?: boolean } = {}): Harness {
 
   const profiles = {
     getReferenceFederationId: vi.fn().mockResolvedValue(null),
+    getDateOfBirth: vi.fn().mockResolvedValue(null),
   };
 
   const svc = new RankRequirementsService(
@@ -151,6 +159,10 @@ describe('RankRequirementsService.fetchForScope', () => {
     expect(out).toEqual({
       rankId: 'rank-1',
       setId: 'set-1',
+      ageGroup: null,
+      ageGroups: [],
+      ageBasis: 'age_on_grading_date',
+      ageUnknown: false,
       kihon: [],
       kihonTested: [],
       kobo: [],
@@ -636,11 +648,11 @@ describe('RankRequirementsService.clearForScope', () => {
     );
   });
 
-  it('calls deleteScope with correct rankId and setId when authorized', async () => {
+  it('removes the rank from the set (base, age groups and variants) when authorized', async () => {
     const { svc, repo } = build();
     const user = makeUser();
     await svc.clearForScope('rank-1', 's-1', user);
-    expect(repo.deleteScope).toHaveBeenCalledWith('rank-1', 's-1', FAKE_TX);
+    expect(repo.deleteRankFromSet).toHaveBeenCalledWith('rank-1', 's-1', FAKE_TX);
   });
 });
 
@@ -655,7 +667,7 @@ describe('RankRequirementsService.deepCopyDetailsForSet', () => {
     const { svc, repo } = build();
     repo.distinctRankIdsForSet = vi.fn().mockResolvedValue([]);
     await svc.deepCopyDetailsForSet('src-set', 'tgt-set');
-    expect(repo.distinctRankIdsForSet).toHaveBeenCalledWith('src-set', FAKE_TX);
+    expect(repo.distinctRankIdsForSet).toHaveBeenCalledWith('src-set');
   });
 
   it('re-points each detail row to the target set, preserving isTested + groupOrder + pickCount', async () => {
@@ -723,5 +735,140 @@ describe('RankRequirementsService.deepCopyDetailsForSet', () => {
     await svc.deepCopyDetailsForSet('src-set', 'tgt-set');
 
     expect(repo.insertScalar).not.toHaveBeenCalled();
+  });
+});
+
+// ── Age-based requirements ──────────────────────────────────────────────────
+
+describe('RankRequirementsService — age groups', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  const groups = [
+    { id: 'ag-young', rankId: 'rank-1', setId: 's-nf', ageFrom: null, ageTo: 11 },
+    { id: 'ag-teen', rankId: 'rank-1', setId: 's-nf', ageFrom: 12, ageTo: 15 },
+  ];
+
+  /** A student of a club under a national federation that has an active set with groups. */
+  function studentHarness(basis: string | null, dateOfBirth: string | null) {
+    const h = build();
+    h.memberships.list.mockResolvedValue({ data: [membershipRow()], total: 1 });
+    h.orgs.getAncestorIds.mockImplementation((orgId: string) =>
+      Promise.resolve(orgId === 'org-nf' ? ['org-nf', 'org-if'] : ['org-club', 'org-nf', 'org-if']),
+    );
+    h.orgs.findById.mockImplementation((id: string) =>
+      Promise.resolve(
+        id === 'org-nf'
+          ? { id, type: 'national_federation', gradingAgeBasis: basis }
+          : { id, type: id === 'org-club' ? 'club' : 'international_federation', gradingAgeBasis: null },
+      ),
+    );
+    h.sets.findActiveByOrg.mockImplementation((orgId: string | null) =>
+      Promise.resolve(orgId === 'org-nf' ? { id: 's-nf', name: 'STF 2024', organisationId: 'org-nf' } : null),
+    );
+    h.sets.findById.mockResolvedValue({ id: 's-nf', name: 'STF 2024', organisationId: 'org-nf' });
+    h.repo.fetchScalar.mockImplementation((_r: string, setId: string | null) =>
+      Promise.resolve(setId === 's-nf' ? scalarRow({ setId: 's-nf' }) : null),
+    );
+    h.repo.listAgeGroups.mockResolvedValue(groups);
+    h.profiles.getDateOfBirth.mockResolvedValue(dateOfBirth);
+    return h;
+  }
+
+  it('picks the variant for the age on the grading date', async () => {
+    const { svc } = studentHarness(null, '2014-06-15');
+    const scope = await svc.locateForUser('rank-1', 'u-target', '2026-06-14');
+    expect(scope).toMatchObject({ setId: 's-nf', setName: 'STF 2024', ageBasis: 'age_on_grading_date' });
+    expect(scope?.ageGroup?.id).toBe('ag-young'); // still 11
+  });
+
+  it('counts the age reached in the grading year when the federation says so', async () => {
+    const { svc } = studentHarness('age_reached_in_grading_year', '2014-12-31');
+    const scope = await svc.locateForUser('rank-1', 'u-target', '2026-01-02');
+    expect(scope?.ageBasis).toBe('age_reached_in_grading_year');
+    expect(scope?.ageGroup?.id).toBe('ag-teen'); // turns 12 in 2026
+  });
+
+  it('falls back to the base requirement in a gap, and flags an unknown age', async () => {
+    const adult = studentHarness(null, '1990-01-01');
+    expect((await adult.svc.locateForUser('rank-1', 'u-target', '2026-06-01'))?.ageGroup).toBeNull();
+
+    const unknown = studentHarness(null, null);
+    const scope = await unknown.svc.locateForUser('rank-1', 'u-target', '2026-06-01');
+    expect(scope).toMatchObject({ ageGroup: null, ageUnknown: true });
+  });
+
+  it('returns the variant from resolveForUser', async () => {
+    const { svc, repo } = studentHarness(null, '2012-03-01');
+    await svc.resolveForUser('rank-1', 'u-target', makeUser({ id: 'u-target' }), { gradingDate: '2026-06-01' });
+    expect(repo.fetchScalar).toHaveBeenLastCalledWith('rank-1', 's-nf', undefined, 'ag-teen');
+  });
+
+  describe('setAgeGroups', () => {
+    const user = makeUser({ role: 'sysadmin' });
+
+    it('refuses age groups on a mon rank', async () => {
+      const { svc, repo } = build();
+      repo.rankSystemCode.mockResolvedValue('mon');
+      await expect(
+        svc.setAgeGroups('rank-1', { setId: 's-1', groups: [{ ageFrom: null, ageTo: 11 }] }, user),
+      ).rejects.toMatchObject({ response: { error: { code: 'AGE_GROUPS_NOT_ALLOWED' } } });
+    });
+
+    it('refuses overlapping groups', async () => {
+      const { svc } = build();
+      await expect(
+        svc.setAgeGroups(
+          'rank-1',
+          { setId: 's-1', groups: [{ ageFrom: null, ageTo: 12 }, { ageFrom: 12, ageTo: 15 }] },
+          user,
+        ),
+      ).rejects.toMatchObject({ response: { error: { code: 'AGE_GROUPS_OVERLAP' } } });
+    });
+
+    it('needs a base requirement first', async () => {
+      const { svc } = build();
+      await expect(
+        svc.setAgeGroups('rank-1', { setId: 's-1', groups: [{ ageFrom: 16, ageTo: null }] }, user),
+      ).rejects.toMatchObject({ response: { error: { code: 'BASE_REQUIREMENT_REQUIRED' } } });
+    });
+
+    it('keeps listed groups, deletes the rest, and seeds a new group from the base', async () => {
+      const { svc, repo } = build();
+      repo.fetchScalar.mockResolvedValue(scalarRow({ setId: 's-1', jissenMinutes: 20 }));
+      repo.listAgeGroups.mockResolvedValue([
+        { id: 'ag-keep', ageFrom: null, ageTo: 11 },
+        { id: 'ag-drop', ageFrom: 12, ageTo: 15 },
+      ]);
+
+      await svc.setAgeGroups(
+        'rank-1',
+        { setId: 's-1', groups: [{ id: 'ag-keep', ageFrom: null, ageTo: 9 }, { ageFrom: 16, ageTo: null }] },
+        user,
+      );
+
+      expect(repo.deleteAgeGroups).toHaveBeenCalledWith(['ag-drop'], FAKE_TX);
+      expect(repo.updateAgeGroup).toHaveBeenCalledWith('ag-keep', { ageFrom: null, ageTo: 9 }, FAKE_TX);
+      expect(repo.insertAgeGroup).toHaveBeenCalledWith(
+        { rankId: 'rank-1', setId: 's-1', ageFrom: 16, ageTo: null },
+        FAKE_TX,
+      );
+      expect(repo.insertScalar).toHaveBeenCalledWith(
+        expect.objectContaining({ rankId: 'rank-1', setId: 's-1', ageGroupId: 'ag-new', jissenMinutes: 20 }),
+        FAKE_TX,
+      );
+    });
+  });
+
+  it('replaces only the named variant, and refuses a group of another rank or set', async () => {
+    const { svc, repo } = build();
+    repo.listAgeGroups.mockResolvedValue([{ id: 'ag-1', ageFrom: 12, ageTo: 15 }]);
+    await svc.replace('rank-1', { setId: 's-1', ageGroupId: 'ag-1', jissenMinutes: 5 } as never, makeUser({ role: 'sysadmin' }));
+    expect(repo.deleteScope).toHaveBeenCalledWith('rank-1', 's-1', FAKE_TX, 'ag-1');
+
+    await expect(
+      svc.replace('rank-1', { setId: 's-1', ageGroupId: 'ag-other' } as never, makeUser({ role: 'sysadmin' })),
+    ).rejects.toBeInstanceOf(NotFoundException);
   });
 });

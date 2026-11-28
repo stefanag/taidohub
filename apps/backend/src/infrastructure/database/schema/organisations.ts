@@ -24,6 +24,10 @@ export const organisations = pgTable(
     address: text('address'),
     contactEmail: text('contact_email'),
     headInstructorId: text('head_instructor_id').references(() => user.id, { onDelete: 'set null' }),
+    /** National federations only; null = age on the grading date. */
+    gradingAgeBasis: text('grading_age_basis', {
+      enum: ['age_on_grading_date', 'age_reached_in_grading_year'],
+    }),
     createdAt: timestamp('created_at', { withTimezone: true, mode: 'date' }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'date' }).notNull().defaultNow(),
   },

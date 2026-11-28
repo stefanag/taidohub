@@ -4,6 +4,7 @@ import {
   check,
   date,
   index,
+  integer,
   pgEnum,
   pgTable,
   text,
@@ -13,6 +14,7 @@ import {
 } from 'drizzle-orm/pg-core';
 
 import { beltRanks } from './belt-ranks.js';
+import { rankRequirementAgeGroup, requirementSet } from './grading-requirements.js';
 import { shogoTitles } from './shogo-titles.js';
 import { user } from './users.js';
 
@@ -62,6 +64,17 @@ export const rankHistory = pgTable(
     updatedByUserId: text('updated_by_user_id').references(() => user.id, {
       onDelete: 'set null',
     }),
+    // Which requirement a verified grading was judged against, snapshotted at
+    // verification (plan 2026-11-28-age-based-grading-requirements). The ids
+    // may go null when the set or group is deleted; the rest stays.
+    judgedSetId: uuid('judged_set_id').references(() => requirementSet.id, { onDelete: 'set null' }),
+    judgedSetName: text('judged_set_name'),
+    judgedAgeGroupId: uuid('judged_age_group_id').references(() => rankRequirementAgeGroup.id, {
+      onDelete: 'set null',
+    }),
+    judgedAgeFrom: integer('judged_age_from'),
+    judgedAgeTo: integer('judged_age_to'),
+    judgedAgeBasis: text('judged_age_basis', { enum: ['age_on_grading_date', 'age_reached_in_grading_year'] }),
   },
   (table) => ({
     eventUserUnique: uniqueIndex('rank_history_event_id_user_id_unique')

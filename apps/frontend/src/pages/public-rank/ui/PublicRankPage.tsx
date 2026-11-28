@@ -3,9 +3,13 @@ import { Link, useParams } from '@tanstack/react-router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import type { GradingRequirements } from '@repo/contracts/grading-requirements';
+
 import { publicRankQueryOptions } from '@/entities/belt-rank';
+import { ageGroupLabel } from '@/entities/rank-requirement';
 import { RankRequirementsDisplay } from '@/features/rank-requirements-display';
 import { type Lang } from '@/shared/lib/rank-label';
+import { Button } from '@/shared/ui';
 import { BeltGraphic } from '@/shared/ui/belt-graphic';
 
 // The technique/pattern catalogue endpoints require an authenticated
@@ -22,6 +26,46 @@ function pickDescription(
   lang: string,
 ): string | null {
   return lang === 'fi' ? rank.descriptionFi : lang === 'sv' ? rank.descriptionSv : rank.descriptionEn;
+}
+
+/**
+ * The rank's requirements: one tab per age group plus "All ages" when the
+ * rank has age-based variants (no signed-in student to pick one for).
+ */
+function PublicRequirements({
+  base,
+  variants,
+}: {
+  base: GradingRequirements;
+  variants: GradingRequirements[];
+}): React.ReactElement {
+  const { t } = useTranslation();
+  const [selected, setSelected] = React.useState<string | null>(null);
+  const shown = variants.find((v) => v.ageGroup?.id === selected) ?? base;
+  return (
+    <div className="space-y-4">
+      {variants.length > 0 ? (
+        <div className="flex flex-wrap gap-2" role="group" aria-label={t('ageGroups.title')}>
+          {[null, ...variants.map((v) => v.ageGroup!.id)].map((id) => {
+            const group = variants.find((v) => v.ageGroup?.id === id)?.ageGroup;
+            return (
+              <Button
+                key={id ?? 'base'}
+                type="button"
+                size="sm"
+                variant={selected === id ? 'default' : 'outline'}
+                aria-pressed={selected === id}
+                onClick={() => setSelected(id)}
+              >
+                {group ? ageGroupLabel(group, t) : t('ageGroups.allAges')}
+              </Button>
+            );
+          })}
+        </div>
+      ) : null}
+      <RankRequirementsDisplay requirements={shown} techProgress={[]} patProgress={[]} lookup={EMPTY_LOOKUP} />
+    </div>
+  );
 }
 
 export function PublicRankPage(): React.ReactElement {
@@ -99,11 +143,9 @@ export function PublicRankPage(): React.ReactElement {
           <h2 className="mb-4 font-headline text-2xl text-primary">
             {t('students.detail.requirements')}
           </h2>
-          <RankRequirementsDisplay
-            requirements={query.data.requirements}
-            techProgress={[]}
-            patProgress={[]}
-            lookup={EMPTY_LOOKUP}
+          <PublicRequirements
+            base={query.data.requirements}
+            variants={query.data.ageVariants ?? []}
           />
         </section>
       ) : null}

@@ -1,6 +1,6 @@
 # Age-based grading requirements: implementation plan
 
-Status: **planned, not started.** Decisions by the owner on 2026-11-28 (see "Decisions").
+Status: **built** (PR feat/age-based-requirements). Decisions by the owner on 2026-11-28 (see "Decisions"); see "As built" at the end for where the build differs from the design.
 
 ## Goal
 
@@ -222,3 +222,38 @@ means base) for the editor and the public rank page.
 - Whether a club may override its federation's age basis. Not in scope: decision 1 says the
   federation decides for every club.
 - A history of active sets per date, for exact retroactive resolution (see section 5).
+
+## As built (feat/age-based-requirements)
+
+- **Migration:** 0043. The scalar's unique index became the constraint
+  `rank_grading_requirement_by_scope UNIQUE NULLS NOT DISTINCT (rank_id, set_id, age_group_id)`.
+- **A group and its variant are one thing.**
+  - `PUT /api/requirements/:rankId/age-groups` replaces the list of groups (`{ setId, groups }`).
+  - A group listed with its `id` keeps its variant.
+  - A new group gets a copy of the base requirement as its variant.
+  - A group left out is deleted, and its variant goes with it (cascade).
+  - The variant itself is saved with `PUT /api/requirements/:rankId` and `ageGroupId` in the body,
+    and read with `GET ...?setId=&ageGroupId=`.
+  - `DELETE /api/requirements/:rankId?setId=` removes the base, every group and their variants.
+- **Shared helpers** in `@repo/contracts/grading-age`:
+  - `ageForGrading`, `dateAgeReached`, `ageGroupContains`, `ageGroupsOverlap`;
+  - the frontend's readiness helper uses them as well, for both the minimum age and the "other
+    requirements apply from <date>" note.
+- **Resolution:** `RankRequirementsService.locateForUser(rankId, userId, date?)` returns the set,
+  its name, the age group and the age basis. `resolveForUser` uses it, and so does the snapshot
+  on verify.
+- **Snapshot:**
+  - written on `verify`, using the grading's own date;
+  - cleared on `unverify`, and when an edit clears the verification (rank, date or shogo
+    changed);
+  - there is no path today where a grading is recorded already verified (`create` always
+    stores `verified = false`), so verification is the only place that writes it;
+  - API field: `judgedAgainst` on `RankHistory` and `GradingHistoryRow`.
+- **Public rank page:** the response gained `ageVariants`, one variant per group, shown as tabs.
+- **Not done:** the requirements seed format still holds base requirements only. Age groups are
+  entered in the admin UI. Add `ageGroups` to the seed when there is data to seed.
+- **Testing note:** the e2e harness does not bind the request-scoped ability that the
+  organisations HTTP routes read (they answer 500 there; there was no organisations e2e before).
+  The federation setting is therefore tested through `OrganisationsService` inside
+  `UserContextService.run`, and the other paths over HTTP.
+

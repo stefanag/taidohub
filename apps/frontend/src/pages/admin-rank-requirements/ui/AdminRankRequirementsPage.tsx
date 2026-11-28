@@ -6,8 +6,9 @@ import { useTranslation } from 'react-i18next';
 import type { BeltRank } from '@repo/contracts/ranks';
 
 import { listBeltRanksQueryOptions, ranksForOrganisation } from '@/entities/belt-rank';
+import { listBeltSystemsQueryOptions } from '@/entities/belt-system';
 import { useRequirementSetsQuery } from '@/entities/requirement-set';
-import { RankRequirementsEditor } from '@/features/rank-requirements-editor';
+import { AgeGroupsPanel, RankRequirementsEditor } from '@/features/rank-requirements-editor';
 import {
   Select,
   SelectContent,
@@ -31,6 +32,9 @@ interface RankRequirementsSearch {
   rankId?: string;
 }
 
+/** Belt systems whose ranks may have age-based requirements (not `mon`). */
+const AGE_GROUP_SYSTEMS = new Set(['kyu', 'dan']);
+
 /**
  * Admin page for editing a single rank's grading requirements within a
  * requirement set. Two selectors — requirement set and rank — both persist
@@ -52,6 +56,14 @@ export function AdminRankRequirementsPage(): React.ReactElement {
 
   const { data: sets = [] } = useRequirementSetsQuery();
   const { data: ranks = [] } = useQuery(listBeltRanksQueryOptions());
+  const { data: systems = [] } = useQuery(listBeltSystemsQueryOptions());
+  // The age-group tab being edited; reset whenever the set or rank changes.
+  const [ageGroup, setAgeGroup] = React.useState<{ key: string; id: string | null }>({ key: '', id: null });
+  const scopeKey = `${setId ?? ''}:${rankId ?? ''}`;
+  const ageGroupId = ageGroup.key === scopeKey ? ageGroup.id : null;
+  const selectedRank = ranks.find((r) => r.id === rankId);
+  const allowsAgeGroups =
+    !!selectedRank && AGE_GROUP_SYSTEMS.has(systems.find((s) => s.id === selectedRank.systemId)?.code ?? '');
 
   // Only the ladder the selected set resolves against (its organisation's
   // own ranks, else the global ones): the catalogue holds several ladders
@@ -126,7 +138,22 @@ export function AdminRankRequirementsPage(): React.ReactElement {
 
       <section className="mt-8">
         {setId && rankId ? (
-          <RankRequirementsEditor key={`${setId}:${rankId}`} setId={setId} rankId={rankId} />
+          <div className="space-y-6">
+            {allowsAgeGroups ? (
+              <AgeGroupsPanel
+                setId={setId}
+                rankId={rankId}
+                selected={ageGroupId}
+                onSelect={(id) => setAgeGroup({ key: scopeKey, id })}
+              />
+            ) : null}
+            <RankRequirementsEditor
+              key={`${setId}:${rankId}:${ageGroupId ?? 'base'}`}
+              setId={setId}
+              rankId={rankId}
+              ageGroupId={ageGroupId}
+            />
+          </div>
         ) : (
           <p className="text-on-surface-variant">
             {!setId

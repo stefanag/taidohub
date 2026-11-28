@@ -75,6 +75,7 @@ export class OrganisationsRepository {
         address: input.address,
         contactEmail: input.contactEmail ?? null,
         headInstructorId: input.headInstructorId,
+        gradingAgeBasis: input.type === 'national_federation' ? (input.gradingAgeBasis ?? null) : null,
       })
       .returning();
     if (!rows[0]) throw new Error('Insert returned no rows.');
@@ -86,7 +87,7 @@ export class OrganisationsRepository {
     const patch: Record<string, unknown> = { updatedAt: new Date() };
     for (const key of [
       'parentId','shortCode','slug','country','nameEn','nameSv','nameFi','nameJa',
-      'logoUrl','address','contactEmail','headInstructorId',
+      'logoUrl','address','contactEmail','headInstructorId','gradingAgeBasis',
     ] as const) {
       if (input[key] !== undefined) patch[key] = input[key];
     }

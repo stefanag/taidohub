@@ -33,6 +33,7 @@ export * from './progress.js';
 export * from './students.js';
 export * from './feedback.js';
 export * from './grading-requirements.js';
+export * from './grading-age.js';
 export * from './pending-operations.js';
 export * from './mcp.js';
 export * from './legal-documents.js';

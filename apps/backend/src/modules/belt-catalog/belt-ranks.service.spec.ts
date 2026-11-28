@@ -69,6 +69,7 @@ function rankRequirementsStub() {
   return {
     fetchForScope: vi.fn(),
     resolveForSetOrNull: vi.fn(),
+    ageVariantsForSet: vi.fn().mockResolvedValue([]),
   } as unknown as Record<keyof RankRequirementsService, ReturnType<typeof vi.fn>>;
 }
 

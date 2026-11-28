@@ -8,10 +8,23 @@ import { Test } from '@nestjs/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { DRIZZLE } from '../../infrastructure/database/client.js';
+import { RankRequirementsService } from '../grading-requirements/rank-requirements.service.js';
 
 import { RankHistoryAuthService } from './rank-history.auth.service.js';
 import { RankHistoryRepository } from './rank-history.repository.js';
 import { RankHistoryService } from './rank-history.service.js';
+
+/** Requirement resolution used for the verification snapshot. */
+const requirements = {
+  locateForUser: vi.fn().mockResolvedValue({
+    setId: 'set-1',
+    setName: 'STF 2024',
+    ageGroup: { id: 'ag-1', ageFrom: 12, ageTo: 15 },
+    ageGroups: [],
+    ageBasis: 'age_reached_in_grading_year',
+    ageUnknown: false,
+  }),
+};
 
 const sysadmin = {
   id: 'u-sys',
@@ -48,6 +61,12 @@ function externalRow(overrides: Partial<Record<string, unknown>> = {}) {
     createdAt: new Date(),
     updatedAt: null,
     updatedByUserId: null,
+    judgedSetId: null,
+    judgedSetName: null,
+    judgedAgeGroupId: null,
+    judgedAgeFrom: null,
+    judgedAgeTo: null,
+    judgedAgeBasis: null,
     ...overrides,
   };
 }
@@ -118,6 +137,7 @@ async function makeService(
       { provide: RankHistoryRepository, useValue: repo },
       { provide: RankHistoryAuthService, useValue: auth },
       { provide: DRIZZLE, useValue: fakeDb },
+      { provide: RankRequirementsService, useValue: requirements },
     ],
   }).compile();
   return { service: module.get(RankHistoryService), auth };
@@ -183,6 +203,8 @@ describe('RankHistoryService — update', () => {
     expect(patch.verified).toBe(false);
     expect(patch.verifiedByUserId).toBe(null);
     expect(patch.verifiedAt).toBe(null);
+    expect(patch.judgedSetId).toBe(null);
+    expect(patch.judgedAgeGroupId).toBe(null);
   });
 
   it('clears verification when shogo changes on a verified row and recomputes shogo', async () => {
@@ -262,6 +284,24 @@ describe('RankHistoryService — verify', () => {
     expect(patch.verifiedByUserId).toBe(sysadmin.id);
     expect(patch.verifiedAt).toBeInstanceOf(Date);
     expect(repo.findHighestVerifiedShogo).toHaveBeenCalledWith('u-subject', FAKE_TX);
+  });
+
+  it('stores which requirement the grading was judged against, for its own date', async () => {
+    repo.findById.mockResolvedValue(externalRow({ recordedByUserId: 'u-other' }));
+    repo.update.mockResolvedValue(externalRow({ verified: true }));
+
+    await service.verify('r-1', sysadmin);
+
+    const row = externalRow();
+    expect(requirements.locateForUser).toHaveBeenCalledWith(row.rankId, row.userId, row.date);
+    expect(repo.update.mock.calls[0]?.[1]).toMatchObject({
+      judgedSetId: 'set-1',
+      judgedSetName: 'STF 2024',
+      judgedAgeGroupId: 'ag-1',
+      judgedAgeFrom: 12,
+      judgedAgeTo: 15,
+      judgedAgeBasis: 'age_reached_in_grading_year',
+    });
   });
 });
 

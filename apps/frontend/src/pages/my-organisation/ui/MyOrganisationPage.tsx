@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useMyMembershipsQuery } from '@/entities/me';
 import { displayName, listOrganisationsQueryOptions } from '@/entities/organisation';
 import { useOrganisationStatsQuery } from '@/entities/statistic';
+import { GradingAgeSetting } from '@/features/grading-age-setting';
 import { OrgMembershipManager } from '@/features/org-membership-manager';
 import { RankBreakdown } from '@/features/rank-breakdown';
 import { StatTile } from '@/features/stat-tile';
@@ -119,6 +120,11 @@ export function MyOrganisationPage(): React.ReactElement {
     return map;
   }, [orgListResp, i18n.language]);
 
+  const orgById = React.useMemo(
+    () => new Map((orgListResp?.data ?? []).map((org) => [org.id, org] as const)),
+    [orgListResp],
+  );
+
   const labelFor = React.useCallback(
     (id: string): string => orgIndex.get(id) ?? id,
     [orgIndex],
@@ -164,6 +170,7 @@ export function MyOrganisationPage(): React.ReactElement {
         </p>
         <OrgMembershipManager organisationId={id} orgLabel={labelFor(id)} />
         <OrgStatisticsSection orgId={id} />
+        {orgById.get(id) ? <GradingAgeSetting organisation={orgById.get(id)!} /> : null}
       </main>
     );
   }
@@ -194,6 +201,7 @@ export function MyOrganisationPage(): React.ReactElement {
           <TabsContent key={id} value={id}>
             <OrgMembershipManager organisationId={id} orgLabel={labelFor(id)} />
             <OrgStatisticsSection orgId={id} />
+        {orgById.get(id) ? <GradingAgeSetting organisation={orgById.get(id)!} /> : null}
           </TabsContent>
         ))}
       </Tabs>
